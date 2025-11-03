@@ -1,0 +1,56 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+bash: sanitycheck.sh: No such file or directory
+
+scontrol show job 68832
+JobId=68832 JobName=helloworld.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=248785 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=127:0
+   RunTime=00:00:05 TimeLimit=00:01:00 TimeMin=N/A
+   SubmitTime=2025-11-02T01:38:45 EligibleTime=2025-11-02T01:38:45
+   AccrueTime=2025-11-02T01:38:45
+   StartTime=2025-11-02T01:39:01 EndTime=2025-11-02T01:39:06 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-02T01:39:01 Scheduler=Backfill
+   Partition=compute AllocNode:Sid=trig-login01:2125035
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0003
+   BatchHost=trig0003
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/sanitycheck/helloworld.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/sanitycheck
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L helloworld.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/sanitycheck/%N-helloworld-68832.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/sanitycheck/%N-helloworld-68832.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=1
+   
+
+sacct -j 68832
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+68832        helloworl+ def-wangcs   00:00:05                         00:00:00   00:00:00      0:0 
+68832.batch       batch def-wangcs   00:00:05                         00:00:00   00:00:00      0:0 
+68832.extern     extern def-wangcs   00:00:05                         00:00:00   00:00:00      0:0 
+

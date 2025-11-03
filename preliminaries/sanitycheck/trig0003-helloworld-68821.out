@@ -1,0 +1,47 @@
+Error for command "run": requires at least 1 arg(s), only received 0
+
+Usage:
+  apptainer [global options...] run [run options...] <container> [args...]
+
+Run 'apptainer --help' for more detailed usage information.
+/var/spool/slurm/slurmd/job68821/slurm_script: line 13: --env: command not found
+
+scontrol show job 68821
+JobId=68821 JobName=helloworld.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=248785 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=127:0
+   RunTime=00:00:04 TimeLimit=00:01:00 TimeMin=N/A
+   SubmitTime=2025-11-02T01:25:02 EligibleTime=2025-11-02T01:25:02
+   AccrueTime=2025-11-02T01:25:02
+   StartTime=2025-11-02T01:25:30 EndTime=2025-11-02T01:25:34 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-02T01:25:30 Scheduler=Backfill
+   Partition=compute AllocNode:Sid=trig-login01:2125035
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0003
+   BatchHost=trig0003
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/helloworld.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L helloworld.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/%N-helloworld-68821.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/%N-helloworld-68821.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=1
+   
+
+sacct -j 68821
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+68821        helloworl+ def-wangcs   00:00:04                        00:00.059  00:00.095    127:0 
+68821.batch       batch def-wangcs   00:00:04          0     35568K  00:00.059  00:00.095    127:0 
+68821.extern     extern def-wangcs   00:00:04                         00:00:00   00:00:00      0:0 
+

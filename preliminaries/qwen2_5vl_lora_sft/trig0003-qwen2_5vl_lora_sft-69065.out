@@ -1,0 +1,83 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[2025-11-02 03:52:50,518] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 152, in launch
+    run_exp()
+  File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+    _training_function(config={"args": args, "callbacks": callbacks})
+  File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+    model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+                                                                             ^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/hparams/parser.py", line 219, in get_train_args
+    model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+                                                                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/hparams/parser.py", line 197, in _parse_train_args
+    return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/hparams/parser.py", line 79, in _parse_args
+    return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/transformers/hf_argparser.py", line 383, in parse_dict
+    raise ValueError(f"Some keys are not used by the HfArgumentParser: {sorted(unused_keys)}")
+ValueError: Some keys are not used by the HfArgumentParser: ['--debug', '--log_level', '--log_level_replica', '--print_param_status', 'True']
+
+scontrol show job 69065
+JobId=69065 JobName=slurm_qwen2_5vl_lora_sft.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=248785 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:00:19 TimeLimit=00:02:00 TimeMin=N/A
+   SubmitTime=2025-11-02T03:52:08 EligibleTime=2025-11-02T03:52:08
+   AccrueTime=2025-11-02T03:52:08
+   StartTime=2025-11-02T03:52:35 EndTime=2025-11-02T03:52:54 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-02T03:52:35 Scheduler=Backfill
+   Partition=compute AllocNode:Sid=trig-login01:2125035
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0003
+   BatchHost=trig0003
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft/slurm_qwen2_5vl_lora_sft.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L slurm_qwen2_5vl_lora_sft.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft/%N-qwen2_5vl_lora_sft-69065.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft/%N-qwen2_5vl_lora_sft-69065.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=1
+   
+
+sacct -j 69065
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+69065        slurm_qwe+ def-wangcs   00:00:19                         00:00:00   00:00:00      0:0 
+69065.batch       batch def-wangcs   00:00:19                         00:00:00   00:00:00      0:0 
+69065.extern     extern def-wangcs   00:00:19                         00:00:00   00:00:00      0:0 
+

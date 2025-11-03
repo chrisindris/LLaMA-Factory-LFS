@@ -1,0 +1,596 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+Hello, world!
+================================================
+The current directory is /scratch/indrisch/LLaMA-Factory
+================================================
+The environment variables are: SHELL=/bin/bash
+SLURM_GPUS_PER_NODE=h100:1
+NV_LIBCUBLAS_VERSION=12.4.5.8-1
+NVIDIA_VISIBLE_DEVICES=all
+NV_NVML_DEV_VERSION=12.4.127-1
+SLURM_JOB_USER=indrisch
+SLURM_TASKS_PER_NODE=1
+XDG_CONFIG_DIRS=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/etc/xdg:/etc/xdg
+API_PORT=8000
+SLURM_JOB_UID=3122343
+HISTCONTROL=ignoredups
+SLURM_EXPORT_ENV=ALL
+LMOD_FAMILY_APPTAINER=apptainer
+NV_LIBNCCL_DEV_PACKAGE=libnccl-dev=2.21.5-1+cuda12.4
+SLURM_TASK_PID=2798832
+NV_LIBNCCL_DEV_PACKAGE_VERSION=2.21.5-1
+SLURM_JOB_GPUS=3
+SLURM_LOCALID=0
+SLURM_SUBMIT_DIR=/scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck
+LOCAL_SCRATCH=/dev/shm/slurm.indrisch.68852
+HISTSIZE=1000000
+HOSTNAME=trig0003
+SINGULARITY_NAME=llamafactory.sif
+EBVERSIONAPPTAINER=1.3.5
+SLURMD_NODENAME=trig0003
+FPATH=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/local/share/zsh/site-functions:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/site-functions:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Calendar:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Chpwd:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/AIX:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/BSD:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Base:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Cygwin:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Darwin:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Debian:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Linux:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Mandriva:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Redhat:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Solaris:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Unix:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/X:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Zsh:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/openSUSE:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Exceptions:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/MIME:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Math:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Misc:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Newuser:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Prompts:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/TCP:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/VCS_Info:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/VCS_Info/Backends:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Zftp:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Zle:/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/init/ksh_funcs
+NODE_OPTIONS=
+LMOD_FAMILY_BASE_OS=gentoo
+SLURM_JOB_START_TIME=1762067798
+HYDRA_LAUNCHER_EXTRA_ARGS=--external-launcher
+NVIDIA_REQUIRE_CUDA=cuda>=12.4 brand=tesla,driver>=470,driver<471 brand=unknown,driver>=470,driver<471 brand=nvidia,driver>=470,driver<471 brand=nvidiartx,driver>=470,driver<471 brand=geforce,driver>=470,driver<471 brand=geforcertx,driver>=470,driver<471 brand=quadro,driver>=470,driver<471 brand=quadrortx,driver>=470,driver<471 brand=titan,driver>=470,driver<471 brand=titanrtx,driver>=470,driver<471 brand=tesla,driver>=525,driver<526 brand=unknown,driver>=525,driver<526 brand=nvidia,driver>=525,driver<526 brand=nvidiartx,driver>=525,driver<526 brand=geforce,driver>=525,driver<526 brand=geforcertx,driver>=525,driver<526 brand=quadro,driver>=525,driver<526 brand=quadrortx,driver>=525,driver<526 brand=titan,driver>=525,driver<526 brand=titanrtx,driver>=525,driver<526 brand=tesla,driver>=535,driver<536 brand=unknown,driver>=535,driver<536 brand=nvidia,driver>=535,driver<536 brand=nvidiartx,driver>=535,driver<536 brand=geforce,driver>=535,driver<536 brand=geforcertx,driver>=535,driver<536 brand=quadro,driver>=535,driver<536 brand=quadrortx,driver>=535,driver<536 brand=titan,driver>=535,driver<536 brand=titanrtx,driver>=535,driver<536
+_ModuleTable002_=Y3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmUvYXBwdGFpbmVyLzEuMy41Lmx1YSIsCmZ1bGxOYW1lID0gImFwcHRhaW5lci8xLjMuNSIsCmxvYWRPcmRlciA9IDMsCnByb3BUID0ge30sCnN0YWNrRGVwdGggPSAwLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiYXBwdGFpbmVyIiwKd1YgPSAiXjAwMDAwMDAxLjAwMDAwMDAwMy4wMDAwMDAwMDUuKnpmaW5hbCIsCn0sCmdlbnRvbyA9IHsKYWN0aW9uQSA9IHsKCiJwcmVwZW5kX3BhdGgoXCJNT0RVTEVQQVRIXCIsXCIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmVcIikiCiwgInBy
+NV_LIBCUBLAS_DEV_PACKAGE=libcublas-dev-12-4=12.4.5.8-1
+NV_NVTX_VERSION=12.4.127-1
+__LMOD_REF_COUNT_MODULEPATH=/opt/software/modulefiles:1;/home/indrisch/.local/easybuild/modules/2023/x86-64-v4/Compiler/gcccore:1;/home/indrisch/.local/easybuild/modules/2023/x86-64-v3/Core:1;/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore:1;/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core:1;/cvmfs/soft.computecanada.ca/custom/modules:1
+EPREFIX=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3
+LMOD_AVAIL_EXTENSIONS=no
+HISTTIMEFORMAT=%Y-%m-%d %T 
+_ModuleTable005_=YS9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12NC9Db21waWxlci9nY2Njb3JlIgosICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmUiLCAiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5jYS9jdXN0b20vbW9kdWxlcyIsCn0sCnN5c3RlbUJhc2VNUEFUSCA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2N1c3RvbS9tb2R1bGVzIiwKfQo=
+SLURM_BATCH_HOST=trig0003
+NV_CUDA_CUDART_DEV_VERSION=12.4.127-1
+NV_LIBCUSPARSE_VERSION=12.3.1.170-1
+SLURM_CLUSTER_NAME=grillium
+EBVERSIONGENTOO=2023
+SLURM_JOB_END_TIME=1762067858
+NV_LIBNPP_VERSION=12.2.5.30-1
+LMOD_ADMIN_FILE=/cvmfs/soft.computecanada.ca/config/lmod/admin.list
+SLURM_CPUS_ON_NODE=1
+FORGE_LICENSE_FILE=/scinet/common/etc/licences/ddt/License
+EBROOTGENTOO=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr
+LMOD_RC=/cvmfs/soft.computecanada.ca/config/lmod/lmodrc.lua:/cvmfs/soft.computecanada.ca/config/lmod/lmodrc/cache_avx512_2025.lua
+SINGULARITY_ENVIRONMENT=/.singularity.d/env/91-environment.sh
+NCCL_VERSION=2.21.5-1
+SLURM_JOB_CPUS_PER_NODE=1
+LMOD_DIR=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/libexec
+RSNT_ARCH=avx512
+SACCT_FORMAT=JobID%12,User,Account%15,AllocNodes%10,Start,End,Elapsed,AllocTRES%30,CPUTime,NodeList,ExitCode,State%11
+SLURM_GPUS_ON_NODE=1
+PRTE_MCA_plm_slurm_args=--external-launcher
+PWD=/scratch/indrisch/LLaMA-Factory
+SLURM_GTIDS=0
+LMOD_QUIET=1
+LOGNAME=indrisch
+MODULERCFILE=:/cvmfs/soft.computecanada.ca/config/lmod//modulerc_trillium:/cvmfs/soft.computecanada.ca/config/lmod//modulerc
+SLURM_JOB_PARTITION=compute
+MODULESHOME=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod
+NVIDIA_DRIVER_CAPABILITIES=compute,utility
+RSNT_INTERCONNECT=infiniband
+MANPATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/share/man:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/gcc-data/x86_64-pc-linux-gnu/12/man:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/binutils-data/x86_64-pc-linux-gnu/2.40/man:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/man:/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/share/man:/opt/slurm/share/man::/opt/puppetlabs/puppet/share/man
+NV_NVPROF_DEV_PACKAGE=cuda-nvprof-12-4=12.4.127-1
+SLURM_TRES_PER_TASK=cpu=1
+NV_LIBNPP_PACKAGE=libnpp-12-4=12.2.5.30-1
+NV_LIBNCCL_DEV_PACKAGE_NAME=libnccl-dev
+SLURM_JOB_NUM_NODES=1
+VLLM_WORKER_MULTIPROC_METHOD=spawn
+SLURM_JOBID=68852
+NV_LIBCUBLAS_DEV_VERSION=12.4.5.8-1
+PIP_CONFIG_FILE=/cvmfs/soft.computecanada.ca/config/python/pip-x86-64-v4-gentoo2023.conf
+NVIDIA_PRODUCT_NAME=CUDA
+I_MPI_HYDRA_BOOTSTRAP_EXEC_EXTRA_ARGS=--external-launcher
+SLURM_JOB_QOS=normal
+USER_PATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/bin:/home/indrisch/google-cloud-sdk/bin:/home/indrisch/.local/bin:/home/indrisch/bin:/cvmfs/soft.computecanada.ca/easybuild/bin:/cvmfs/soft.computecanada.ca/custom/bin:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin:/cvmfs/soft.computecanada.ca/custom/bin/computecanada:/opt/slurm/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/scinet/trillium/rocky9cc/bin:/opt/puppetlabs/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+NV_LIBCUBLAS_DEV_PACKAGE_NAME=libcublas-dev-12-4
+APPTAINER_ENVIRONMENT=/.singularity.d/env/91-environment.sh
+LMOD_SHORT_TIME=3600
+APPTAINER_APPNAME=
+NV_CUDA_CUDART_VERSION=12.4.127-1
+HOME=/home/indrisch
+_ModuleTable_Sz_=5
+LANG=en_CA.UTF-8
+__LMOD_SET_KSH_FPATH=1
+LMOD_FAMILY_BASE_OS_VERSION=2023
+HISTFILE=/scratch/indrisch/.bash_history
+LS_COLORS=su=00:sg=00:ca=00:ow=00:st=00:tw=00:ex=00:or=00::
+APPTAINER_COMMAND=run
+SLURM_PROCID=0
+SCRATCH=/scratch/indrisch
+CUDA_VERSION=12.4.1
+SINGULARITY_CONTAINER=/scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+NV_LIBCUBLAS_PACKAGE=libcublas-12-4=12.4.5.8-1
+LMOD_SETTARG_FULL_SUPPORT=no
+PYTORCH_VERSION=2.6.0
+NV_CUDA_NSIGHT_COMPUTE_DEV_PACKAGE=cuda-nsight-compute-12-4=12.4.1-1
+TMPDIR=/tmp
+CMAKE_PREFIX_PATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5
+PROMPT_COMMAND=PS1="Apptainer> "; unset PROMPT_COMMAND
+RSNT_CPU_VENDOR_ID=amd
+https_proxy=
+SLURM_CPUS_PER_TASK=1
+SLURM_NTASKS=1
+EBDEVELAPPTAINER=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/easybuild/x86-64-v3-Core-apptainer-1.3.5-easybuild-devel
+SLURM_TOPOLOGY_ADDR=trig0003
+LMOD_VERSION=8.7.47
+NV_LIBNPP_DEV_PACKAGE=libnpp-dev-12-4=12.2.5.30-1
+RSNT_ENABLE_LMOD_CACHE=yes
+CC_CLUSTER=trillium
+__LMOD_Priority_MODULEPATH=/opt/software/modulefiles:-10
+clusterutil=/scinet/trillium/rocky9cc
+SCINET_ONCE=yes
+LMOD_PACKAGE_PATH=/cvmfs/soft.computecanada.ca/config/lmod/
+LMOD_FAMILY_APPTAINER_VERSION=1.3.5
+NV_LIBCUBLAS_PACKAGE_NAME=libcublas-12-4
+BB_JOB_DIR=/BB_JOB_DIR_TEMPORARILY_UNAVAILABLE
+_ModuleTable003_=ZXBlbmRfcGF0aChcIk1PRFVMRVBBVEhcIixcIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvZWFzeWJ1aWxkL21vZHVsZXMvMjAyMy94ODYtNjQtdjQvQ29tcGlsZXIvZ2NjY29yZVwiKSIKLCAicHJlcGVuZF9wYXRoKFwiTU9EVUxFUEFUSFwiLFwiL2hvbWUvaW5kcmlzY2gvLmxvY2FsL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmVcIikiLCAicHJlcGVuZF9wYXRoKFwiTU9EVUxFUEFUSFwiLFwiL2hvbWUvaW5kcmlzY2gvLmxvY2FsL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L0NvbXBpbGVyL2djY2NvcmVcIikiLAp9LApmbiA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2N1c3RvbS9tb2R1bGVzL2dlbnRvby8yMDIzLmx1
+HYDRA_BOOTSTRAP=slurm
+INFOPATH=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/binutils-data/x86_64-pc-linux-gnu/2.40/info::
+NV_LIBNPP_DEV_VERSION=12.2.5.30-1
+MODULEPATH_ROOT=/cvmfs/soft.computecanada.ca/easybuild/modules
+CUDA_VISIBLE_DEVICES=0
+SLURM_TOPOLOGY_ADDR_PATTERN=node
+LMOD_PKG=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod
+APPTAINER_CONTAINER=/scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+SLURM_SCRIPT_CONTEXT=prolog_task
+SLURM_MEM_PER_NODE=192500
+EBROOTAPPTAINER=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5
+PYTHONPATH=/cvmfs/soft.computecanada.ca/custom/python/site-packages
+NV_LIBCUSPARSE_DEV_VERSION=12.3.1.170-1
+FLEXIBLAS=aocl
+LESSOPEN=|lesspipe %s
+USER=indrisch
+BB_NODE_DIR=/BB_NODE_DIR_TEMPORARILY_UNAVAILABLE
+CURL_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt
+LIBRARY_PATH=/usr/local/cuda/lib64/stubs
+SLURM_NODELIST=trig0003
+ENVIRONMENT=BATCH
+ARCH=x86_64
+LOADEDMODULES=CCconfig:gentoo/2023:apptainer/1.3.5
+SLURM_JOB_ACCOUNT=def-wangcs
+SLURM_PRIO_PROCESS=0
+SLURM_NPROCS=1
+SLURM_TMPDIR=/dev/shm/slurm.indrisch.68852
+LMOD_ROOT=/cvmfs/soft.computecanada.ca/custom/software/lmod
+SHLVL=2
+MAX_JOBS=16
+SLURM_NNODES=1
+NV_CUDA_LIB_VERSION=12.4.1-1
+NVARCH=x86_64
+LMOD_sys=Linux
+__LMOD_STACK_LESSOPEN=fGxlc3NwaXBlICVz
+FLEXIBLAS64=aocl
+APPTAINER_NAME=llamafactory.sif
+SINGULARITY_BIND=/scratch/indrisch/LLaMA-Factory,/home/indrisch,/project,/scratch
+CC_RESTRICTED=true
+http_proxy=
+RSNT_CUDA_DRIVER_VERSION=570.172.08
+SLURM_SUBMIT_HOST=trig-login01
+NV_CUDA_COMPAT_PACKAGE=cuda-compat-12-4
+PIP_ROOT_USER_ACTION=ignore
+APPTAINER_BIND=/scratch/indrisch/LLaMA-Factory,/home/indrisch,/project,/scratch
+_ModuleTable001_=X01vZHVsZVRhYmxlXyA9IHsKTVR2ZXJzaW9uID0gMywKY19yZWJ1aWxkVGltZSA9IGZhbHNlLApjX3Nob3J0VGltZSA9IGZhbHNlLApkZXB0aFQgPSB7fSwKZmFtaWx5ID0gewphcHB0YWluZXIgPSAiYXBwdGFpbmVyIiwKYmFzZV9vcyA9ICJnZW50b28iLAp9LAptVCA9IHsKQ0Njb25maWcgPSB7CmZuID0gIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvY3VzdG9tL21vZHVsZXMvQ0Njb25maWcubHVhIiwKZnVsbE5hbWUgPSAiQ0Njb25maWciLApsb2FkT3JkZXIgPSAxLApwcm9wVCA9IHt9LApzdGFja0RlcHRoID0gMCwKc3RhdHVzID0gImFjdGl2ZSIsCnVzZXJOYW1lID0gIkNDY29uZmlnIiwKd1YgPSAiTS4qemZpbmFsIiwKfSwKYXBwdGFpbmVyID0gewpmbiA9ICIv
+CLUSTER_OS=rocky9
+NV_LIBNCCL_PACKAGE=libnccl2=2.21.5-1+cuda12.4
+LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/.singularity.d/libs
+EASYBUILD_CONFIGFILES=/cvmfs/soft.computecanada.ca/easybuild/config.cfg
+EASYBUILD_BUILDPATH=/tmp/indrisch
+SLURM_JOB_ID=68852
+SSL_CERT_FILE=/etc/pki/tls/certs/ca-bundle.crt
+SLURM_NODEID=0
+_ModuleTable004_=YSIsCmZ1bGxOYW1lID0gImdlbnRvby8yMDIzIiwKbG9hZE9yZGVyID0gMiwKcHJvcFQgPSB7Cmxtb2QgPSB7CnN0aWNreSA9IDEsCn0sCn0sCnN0YWNrRGVwdGggPSAwLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiZ2VudG9vLzIwMjMiLAp3ViA9ICIwMDAwMDIwMjMuKnpmaW5hbCIsCn0sCn0sCm1wYXRoQSA9IHsKIi9vcHQvc29mdHdhcmUvbW9kdWxlZmlsZXMiCiwgIi9ob21lL2luZHJpc2NoLy5sb2NhbC9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12NC9Db21waWxlci9nY2Njb3JlIgosICIvaG9tZS9pbmRyaXNjaC8ubG9jYWwvZWFzeWJ1aWxkL21vZHVsZXMvMjAyMy94ODYtNjQtdjMvQ29yZSIKLCAiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5j
+ALLINEA_TOOLS_CONFIG_DIR=/scratch/indrisch/.allinea
+NV_CUDA_NSIGHT_COMPUTE_VERSION=12.4.1-1
+DEBUGINFOD_URLS=https://debuginfod.rockylinux.org/ 
+RSNT_GPU_TYPES=H100
+DEBUGINFOD_IMA_CERT_PATH=/etc/keys/ima:
+SQUEUE_SORT=-t,e,S
+FLASH_ATTENTION_FORCE_BUILD=TRUE
+which_declare=declare -f
+NV_NVPROF_VERSION=12.4.127-1
+HELLO_WORLD=hello_world
+XDG_DATA_DIRS=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/share:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share:/usr/local/share:/usr/share
+__Init_Default_Modules=1
+SLURM_CONF=/opt/slurm/etc/slurm.conf
+PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/opt/conda/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+SLURM_JOB_NAME=helloworld.sh
+MODULEPATH=/opt/software/modulefiles:/home/indrisch/.local/easybuild/modules/2023/x86-64-v4/Compiler/gcccore:/home/indrisch/.local/easybuild/modules/2023/x86-64-v3/Core:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core:/cvmfs/soft.computecanada.ca/custom/modules
+SQUEUE_FORMAT=%.15i %.15u %.14a %.14j %.3t %.10L %.17P %.5D %.15b %N (%r)
+NV_LIBNCCL_PACKAGE_NAME=libnccl2
+HISTFILESIZE=1000000
+SLURM_NTASKS_PER_NODE=1
+_LMFILES_=/cvmfs/soft.computecanada.ca/custom/modules/CCconfig.lua:/cvmfs/soft.computecanada.ca/custom/modules/gentoo/2023.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core/apptainer/1.3.5.lua
+NV_LIBNCCL_PACKAGE_VERSION=2.21.5-1
+LMOD_CMD=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/libexec/lmod
+MAIL=/var/spool/mail/indrisch
+INTEL_LICENSE_FILE=28518@nia-license
+SCANCEL_VERBOSE=T
+GRADIO_SERVER_PORT=7860
+LMOD_SYSTEM_DEFAULT_MODULES=CCconfig gentoo/2023
+OMPI_MCA_plm_slurm_args=--external-launcher
+SLURM_GET_USER_ENV=1
+SLURM_JOB_GID=3122343
+PROJECT=/project/def-wangcs/indrisch
+DEBIAN_FRONTEND=noninteractive
+CLUSTER=trillium
+SLURM_JOB_NODELIST=trig0003
+I_MPI_HYDRA_BOOTSTRAP=slurm
+LMOD_AVAIL_STYLE=grouped:system
+BASH_FUNC_ml%%=() {  eval "$($LMOD_DIR/ml_cmd "$@")"
+}
+BASH_FUNC_which%%=() {  ( alias;
+ eval ${which_declare} ) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot $@
+}
+BASH_FUNC_module%%=() {  if [ -z "${LMOD_SH_DBG_ON+x}" ]; then
+ case "$-" in 
+ *v*x*)
+ __lmod_sh_dbg='vx'
+ ;;
+ *v*)
+ __lmod_sh_dbg='v'
+ ;;
+ *x*)
+ __lmod_sh_dbg='x'
+ ;;
+ esac;
+ fi;
+ if [ -n "${__lmod_sh_dbg:-}" ]; then
+ set +$__lmod_sh_dbg;
+ echo "Shell debugging temporarily silenced: export LMOD_SH_DBG_ON=1 for Lmod's output" 1>&2;
+ fi;
+ eval "$($LMOD_CMD shell "$@")" && eval "$(${LMOD_SETTARG_CMD:-:} -s sh)";
+ __lmod_my_status=$?;
+ if [ -n "${__lmod_sh_dbg:-}" ]; then
+ echo "Shell debugging restarted" 1>&2;
+ set -$__lmod_sh_dbg;
+ fi;
+ unset __lmod_sh_dbg;
+ return $__lmod_my_status
+}
+BASH_FUNC_diskusage_report%%=() {  PATH=$clusterutil/bin:$PATH command diskusage_report "$@"
+}
+BASH_FUNC_sbatch%%=() {  /opt/slurm/bin/sbatch --export=NONE --get-user-env=L "$@"
+}
+BASH_FUNC_diskUsage%%=() {  PATH=$clusterutil/bin:$PATH command diskUsage "$@"
+}
+_=/usr/bin/env
+================================================
+The available GPUs are: Sun Nov  2 02:16:42 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.172.08             Driver Version: 570.172.08     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4C:00.0 Off |                    0 |
+| N/A   37C    P0             68W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+================================================
+The available CPUs are: 1
+================================================
+The available memory is:                total        used        free      shared  buff/cache   available
+Mem:           755Gi        65Gi        31Gi       2.2Gi       658Gi       683Gi
+Swap:             0B          0B          0B
+================================================
+The available disk space is: Filesystem                                             Size  Used Avail Use% Mounted on
+fuse-overlayfs                                          64M   16K   64M   1% /
+tmpfs                                                  566G  536M  566G   1% /dev/shm
+disklessroot                                           566G  7.6G  559G   2% /etc/localtime
+disklessroot                                           566G  7.6G  559G   2% /etc/hosts
+efivarfs                                               256K   72K  180K  29% /sys/firmware/efi/efivars
+172.30.214.1:/trillium_home/indrisch                   110G  6.7G  104G   7% /home/indrisch
+disklessroot                                           566G  7.6G  559G   2% /tmp
+tmpfs                                                   64M   16K   64M   1% /.singularity.d/libs
+tmpfs                                                  378G  112M  378G   1% /run/nvidia-persistenced/socket
+172.30.214.1:/trillium_project                          34P   15P   20P  44% /project
+172.30.214.1:/trillium_scratch                          34P   15P   20P  44% /scratch
+172.30.214.1:/trillium_scratch/indrisch/LLaMA-Factory   28T  373G   28T   2% /scratch/indrisch/LLaMA-Factory
+================================================
+/scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck/sanitycheck.sh: line 19: ip: command not found
+The available network interfaces are: 
+================================================
+/scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck/sanitycheck.sh: line 21: ip: command not found
+The available network routes are: 
+================================================
+================================================
+----------------------------------------------------------------------
+| Usage:                                                             |
+|   llamafactory-cli api -h: launch an OpenAI-style API server       |
+|   llamafactory-cli chat -h: launch a chat interface in CLI         |
+|   llamafactory-cli export -h: merge LoRA adapters and export model |
+|   llamafactory-cli train -h: train models                          |
+|   llamafactory-cli webchat -h: launch a chat interface in Web UI   |
+|   llamafactory-cli webui: launch LlamaBoard                        |
+|   llamafactory-cli env: show environment info                      |
+|   llamafactory-cli version: show version info                      |
+| Hint: You can use `lmf` as a shortcut for `llamafactory-cli`.      |
+----------------------------------------------------------------------
+================================================
+mkdir -p failed for path /home/indrisch/.config/matplotlib: [Errno 13] Permission denied: '/home/indrisch/.config/matplotlib'
+Matplotlib created a temporary cache directory at /tmp/matplotlib-0u_ux71n because there was an issue with the default path (/home/indrisch/.config/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+[2025-11-02 02:16:59,508] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 180, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/dpo_trainer.py", line 47, in <module>
+    from .utils import (
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/utils.py", line 51, in <module>
+    import deepspeed
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/__init__.py", line 25, in <module>
+    from . import ops
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/__init__.py", line 11, in <module>
+    from . import transformer
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/transformer/__init__.py", line 7, in <module>
+    from .inference.config import DeepSpeedInferenceConfig
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/transformer/inference/__init__.py", line 7, in <module>
+    from ....model_implementations.transformers.ds_transformer import DeepSpeedTransformerInference
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/model_implementations/__init__.py", line 6, in <module>
+    from .transformers.ds_transformer import DeepSpeedTransformerInference
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/model_implementations/transformers/ds_transformer.py", line 18, in <module>
+    from deepspeed.ops.transformer.inference.triton.mlp import TritonMLP
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/transformer/inference/triton/__init__.py", line 10, in <module>
+    from .ops import *
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/transformer/inference/triton/ops.py", line 6, in <module>
+    import deepspeed.ops.transformer.inference.triton.matmul_ext as matmul_ext
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/transformer/inference/triton/matmul_ext.py", line 10, in <module>
+    import deepspeed.ops.transformer.inference.triton.triton_matmul_kernel as triton_matmul_kernel
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/transformer/inference/triton/triton_matmul_kernel.py", line 51, in <module>
+    @triton.autotune(
+     ^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/autotuner.py", line 368, in decorator
+    return Autotuner(fn, fn.arg_names, configs, key, reset_to_zero, restore_value, pre_hook=pre_hook,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/autotuner.py", line 130, in __init__
+    self.do_bench = driver.active.get_benchmarker()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/driver.py", line 23, in __getattr__
+    self._initialize_obj()
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/driver.py", line 20, in _initialize_obj
+    self._obj = self._init_fn()
+                ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/driver.py", line 9, in _create_driver
+    return actives[0]()
+           ^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/backends/nvidia/driver.py", line 450, in __init__
+    self.utils = CudaUtils()  # TODO: make static
+                 ^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/backends/nvidia/driver.py", line 80, in __init__
+    mod = compile_module_from_src(Path(os.path.join(dirname, "driver.c")).read_text(), "cuda_utils")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/backends/nvidia/driver.py", line 50, in compile_module_from_src
+    cache = get_cache_manager(key)
+            ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/cache.py", line 277, in get_cache_manager
+    return __cache_cls(_base64(key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/cache.py", line 69, in __init__
+    os.makedirs(self.cache_dir, exist_ok=True)
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 225, in makedirs
+PermissionError: [Errno 13] Permission denied: '/home/indrisch/.triton'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 150, in launch
+    from .train.tuner import run_exp
+  File "/app/src/llamafactory/train/tuner.py", line 31, in <module>
+    from .dpo import run_dpo
+  File "/app/src/llamafactory/train/dpo/__init__.py", line 15, in <module>
+    from .workflow import run_dpo
+  File "/app/src/llamafactory/train/dpo/workflow.py", line 27, in <module>
+    from .trainer import CustomDPOTrainer
+  File "/app/src/llamafactory/train/dpo/trainer.py", line 27, in <module>
+    from trl import DPOTrainer
+  File "<frozen importlib._bootstrap>", line 1229, in _handle_fromlist
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 171, in __getattr__
+    value = getattr(module, name)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 170, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 182, in _get_module
+    raise RuntimeError(
+RuntimeError: Failed to import trl.trainer.dpo_trainer because of the following error (look up to see its traceback):
+[Errno 13] Permission denied: '/home/indrisch/.triton'
+================================================
+----------------------------------------------------------------------
+| Usage:                                                             |
+|   llamafactory-cli api -h: launch an OpenAI-style API server       |
+|   llamafactory-cli chat -h: launch a chat interface in CLI         |
+|   llamafactory-cli export -h: merge LoRA adapters and export model |
+|   llamafactory-cli train -h: train models                          |
+|   llamafactory-cli webchat -h: launch a chat interface in Web UI   |
+|   llamafactory-cli webui: launch LlamaBoard                        |
+|   llamafactory-cli env: show environment info                      |
+|   llamafactory-cli version: show version info                      |
+| Hint: You can use `lmf` as a shortcut for `llamafactory-cli`.      |
+----------------------------------------------------------------------
+================================================
+mkdir -p failed for path /home/indrisch/.config/matplotlib: [Errno 13] Permission denied: '/home/indrisch/.config/matplotlib'
+Matplotlib created a temporary cache directory at /tmp/matplotlib-pg3ftk8w because there was an issue with the default path (/home/indrisch/.config/matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+[2025-11-02 02:17:09,933] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 180, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/dpo_trainer.py", line 47, in <module>
+    from .utils import (
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/utils.py", line 51, in <module>
+    import deepspeed
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/__init__.py", line 25, in <module>
+    from . import ops
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/__init__.py", line 11, in <module>
+    from . import transformer
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/transformer/__init__.py", line 7, in <module>
+    from .inference.config import DeepSpeedInferenceConfig
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/transformer/inference/__init__.py", line 7, in <module>
+    from ....model_implementations.transformers.ds_transformer import DeepSpeedTransformerInference
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/model_implementations/__init__.py", line 6, in <module>
+    from .transformers.ds_transformer import DeepSpeedTransformerInference
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/model_implementations/transformers/ds_transformer.py", line 18, in <module>
+    from deepspeed.ops.transformer.inference.triton.mlp import TritonMLP
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/transformer/inference/triton/__init__.py", line 10, in <module>
+    from .ops import *
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/transformer/inference/triton/ops.py", line 6, in <module>
+    import deepspeed.ops.transformer.inference.triton.matmul_ext as matmul_ext
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/transformer/inference/triton/matmul_ext.py", line 10, in <module>
+    import deepspeed.ops.transformer.inference.triton.triton_matmul_kernel as triton_matmul_kernel
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/transformer/inference/triton/triton_matmul_kernel.py", line 51, in <module>
+    @triton.autotune(
+     ^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/autotuner.py", line 368, in decorator
+    return Autotuner(fn, fn.arg_names, configs, key, reset_to_zero, restore_value, pre_hook=pre_hook,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/autotuner.py", line 130, in __init__
+    self.do_bench = driver.active.get_benchmarker()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/driver.py", line 23, in __getattr__
+    self._initialize_obj()
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/driver.py", line 20, in _initialize_obj
+    self._obj = self._init_fn()
+                ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/driver.py", line 9, in _create_driver
+    return actives[0]()
+           ^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/backends/nvidia/driver.py", line 450, in __init__
+    self.utils = CudaUtils()  # TODO: make static
+                 ^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/backends/nvidia/driver.py", line 80, in __init__
+    mod = compile_module_from_src(Path(os.path.join(dirname, "driver.c")).read_text(), "cuda_utils")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/backends/nvidia/driver.py", line 50, in compile_module_from_src
+    cache = get_cache_manager(key)
+            ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/cache.py", line 277, in get_cache_manager
+    return __cache_cls(_base64(key))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/triton/runtime/cache.py", line 69, in __init__
+    os.makedirs(self.cache_dir, exist_ok=True)
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 225, in makedirs
+PermissionError: [Errno 13] Permission denied: '/home/indrisch/.triton'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 150, in launch
+    from .train.tuner import run_exp
+  File "/app/src/llamafactory/train/tuner.py", line 31, in <module>
+    from .dpo import run_dpo
+  File "/app/src/llamafactory/train/dpo/__init__.py", line 15, in <module>
+    from .workflow import run_dpo
+  File "/app/src/llamafactory/train/dpo/workflow.py", line 27, in <module>
+    from .trainer import CustomDPOTrainer
+  File "/app/src/llamafactory/train/dpo/trainer.py", line 27, in <module>
+    from trl import DPOTrainer
+  File "<frozen importlib._bootstrap>", line 1229, in _handle_fromlist
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 171, in __getattr__
+    value = getattr(module, name)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 170, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 182, in _get_module
+    raise RuntimeError(
+RuntimeError: Failed to import trl.trainer.dpo_trainer because of the following error (look up to see its traceback):
+[Errno 13] Permission denied: '/home/indrisch/.triton'
+================================================
+
+scontrol show job 68852
+JobId=68852 JobName=helloworld.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=248785 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=None Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:32 TimeLimit=00:01:00 TimeMin=N/A
+   SubmitTime=2025-11-02T02:16:31 EligibleTime=2025-11-02T02:16:31
+   AccrueTime=2025-11-02T02:16:31
+   StartTime=2025-11-02T02:16:38 EndTime=2025-11-02T02:17:10 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-02T02:16:38 Scheduler=Backfill
+   Partition=compute AllocNode:Sid=trig-login01:2125035
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0003
+   BatchHost=trig0003
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck/helloworld.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L helloworld.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck/%N-helloworld-68852.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck/%N-helloworld-68852.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=1
+   
+
+sacct -j 68852
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+68852        helloworl+ def-wangcs   00:00:33                         00:00:00   00:00:00      0:0 
+68852.batch       batch def-wangcs   00:00:33                         00:00:00   00:00:00      0:0 
+68852.extern     extern def-wangcs   00:00:33                         00:00:00   00:00:00      0:0 
+
