@@ -1,0 +1,56 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+/opt/nvidia/nvidia_entrypoint.sh: line 67: exec: FORCE_TORCHRUN=1: not found
+
+scontrol show job 85940
+JobId=85940 JobName=slurm_qwen2_5vl_lora_sft_SQA3D.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=330135 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=127:0
+   RunTime=00:00:04 TimeLimit=00:02:00 TimeMin=N/A
+   SubmitTime=2025-11-13T04:45:40 EligibleTime=2025-11-13T04:45:40
+   AccrueTime=2025-11-13T04:45:40
+   StartTime=2025-11-13T04:53:07 EndTime=2025-11-13T04:53:11 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-13T04:53:07 Scheduler=Backfill
+   Partition=compute_full_node AllocNode:Sid=trig-login01:731173
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0042
+   BatchHost=trig0042
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=./slurm_qwen2_5vl_lora_sft_SQA3D.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L ./slurm_qwen2_5vl_lora_sft_SQA3D.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D-85940.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D-85940.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+sacct -j 85940
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+85940        slurm_qwe+ def-wangcs   00:00:04                         00:00:00   00:00:00      0:0 
+85940.batch       batch def-wangcs   00:00:04                         00:00:00   00:00:00      0:0 
+85940.extern     extern def-wangcs   00:00:04                         00:00:00   00:00:00      0:0 
+

@@ -1,0 +1,359 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[2025-11-13 02:16:58,880] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[INFO|2025-11-13 02:17:01] llamafactory.hparams.parser:423 >> Process rank: 0, world size: 1, device: cuda:0, distributed training: False, compute dtype: torch.bfloat16
+[INFO|hub.py:421] 2025-11-13 02:17:01,766 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1949] 2025-11-13 02:17:01,783 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:01,793 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:01,793 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:01,793 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:01,793 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:01,793 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:01,793 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:01,793 >> loading file chat_template.jinja from cache at None
+[INFO|tokenization_utils_base.py:2364] 2025-11-13 02:17:02,022 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|hub.py:421] 2025-11-13 02:17:02,022 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:421] 2025-11-13 02:17:02,024 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:316] 2025-11-13 02:17:02,026 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2025-11-13 02:17:02,029 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:316] 2025-11-13 02:17:02,031 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2025-11-13 02:17:02,032 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:428] 2025-11-13 02:17:02,039 >> Image processor Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|tokenization_utils_base.py:1949] 2025-11-13 02:17:02,039 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:02,043 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:02,043 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:02,043 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:02,043 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:02,043 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:02,043 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-13 02:17:02,043 >> loading file chat_template.jinja from cache at None
+[INFO|tokenization_utils_base.py:2364] 2025-11-13 02:17:02,221 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|video_processing_utils.py:660] 2025-11-13 02:17:02,223 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:726] 2025-11-13 02:17:02,225 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:770] 2025-11-13 02:17:02,228 >> Video processor Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+[INFO|processing_utils.py:928] 2025-11-13 02:17:02,228 >> Offline mode: forcing local_files_only=True
+[INFO|processing_utils.py:1116] 2025-11-13 02:17:02,234 >> loading configuration file processor_config.json from cache at None
+[INFO|processing_utils.py:1199] 2025-11-13 02:17:02,560 >> Processor Qwen2_5_VLProcessor:
+- image_processor: Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2TokenizerFast(name_or_path='Qwen/Qwen2.5-VL-7B-Instruct', vocab_size=151643, model_max_length=131072, is_fast=True, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'additional_special_tokens': ['<|im_start|>', '<|im_end|>', '<|object_ref_start|>', '<|object_ref_end|>', '<|box_start|>', '<|box_end|>', '<|quad_start|>', '<|quad_end|>', '<|vision_start|>', '<|vision_end|>', '<|vision_pad|>', '<|image_pad|>', '<|video_pad|>']}, clean_up_tokenization_spaces=False, added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151647: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151648: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151649: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151650: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151651: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151652: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151653: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151654: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151655: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151656: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151657: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151658: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151659: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151660: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151661: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151662: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151663: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151664: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+}
+)
+- video_processor: Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+
+{
+  "processor_class": "Qwen2_5_VLProcessor"
+}
+
+[INFO|2025-11-13 02:17:02] llamafactory.data.loader:143 >> Loading dataset /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/57a4793962153e37fb77a681f2a8d0b685539997/data/...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+Converting format of dataset (num_proc=16):   0%|          | 0/1000 [00:00<?, ? examples/s]Converting format of dataset (num_proc=16):   0%|          | 1/1000 [00:00<10:26,  1.59 examples/s]Converting format of dataset (num_proc=16):   0%|          | 3/1000 [00:00<03:34,  4.65 examples/s]Converting format of dataset (num_proc=16):   1%|          | 8/1000 [00:00<01:15, 13.14 examples/s]Converting format of dataset (num_proc=16):   1%|          | 12/1000 [00:01<00:57, 17.13 examples/s]Converting format of dataset (num_proc=16):   2%|▏         | 15/1000 [00:01<00:59, 16.47 examples/s]Converting format of dataset (num_proc=16):   2%|▏         | 18/1000 [00:01<00:56, 17.52 examples/s]Converting format of dataset (num_proc=16):   2%|▏         | 22/1000 [00:01<00:52, 18.50 examples/s]Converting format of dataset (num_proc=16):   3%|▎         | 27/1000 [00:01<00:53, 18.08 examples/s]Converting format of dataset (num_proc=16):   3%|▎         | 29/1000 [00:02<00:56, 17.24 examples/s]Converting format of dataset (num_proc=16):   4%|▎         | 36/1000 [00:02<00:42, 22.89 examples/s]Converting format of dataset (num_proc=16):   4%|▍         | 39/1000 [00:02<00:53, 17.80 examples/s]Converting format of dataset (num_proc=16):   4%|▍         | 41/1000 [00:02<01:00, 15.88 examples/s]Converting format of dataset (num_proc=16):   4%|▍         | 43/1000 [00:02<00:59, 16.18 examples/s]Converting format of dataset (num_proc=16):   4%|▍         | 45/1000 [00:02<01:01, 15.55 examples/s]Converting format of dataset (num_proc=16):   5%|▍         | 47/1000 [00:03<01:15, 12.71 examples/s]Converting format of dataset (num_proc=16):   5%|▍         | 49/1000 [00:03<01:13, 13.01 examples/s]Converting format of dataset (num_proc=16):   5%|▌         | 52/1000 [00:03<01:05, 14.43 examples/s]Converting format of dataset (num_proc=16):   5%|▌         | 54/1000 [00:03<01:05, 14.41 examples/s]Converting format of dataset (num_proc=16):   6%|▌         | 59/1000 [00:03<00:46, 20.09 examples/s]Converting format of dataset (num_proc=16):   6%|▌         | 62/1000 [00:04<00:55, 17.05 examples/s]Converting format of dataset (num_proc=16):   7%|▋         | 67/1000 [00:04<00:41, 22.71 examples/s]Converting format of dataset (num_proc=16):   7%|▋         | 71/1000 [00:04<00:39, 23.70 examples/s]Converting format of dataset (num_proc=16):   7%|▋         | 74/1000 [00:04<00:39, 23.28 examples/s]Converting format of dataset (num_proc=16):   8%|▊         | 79/1000 [00:04<00:32, 28.52 examples/s]Converting format of dataset (num_proc=16):   8%|▊         | 83/1000 [00:04<00:43, 21.26 examples/s]Converting format of dataset (num_proc=16):   9%|▊         | 86/1000 [00:04<00:44, 20.44 examples/s]Converting format of dataset (num_proc=16):   9%|▉         | 89/1000 [00:05<00:41, 21.75 examples/s]Converting format of dataset (num_proc=16):   9%|▉         | 92/1000 [00:05<00:43, 20.79 examples/s]Converting format of dataset (num_proc=16):  10%|▉         | 95/1000 [00:05<00:45, 19.87 examples/s]Converting format of dataset (num_proc=16):  10%|▉         | 98/1000 [00:05<00:43, 20.77 examples/s]Converting format of dataset (num_proc=16):  10%|█         | 101/1000 [00:05<00:44, 20.20 examples/s]Converting format of dataset (num_proc=16):  10%|█         | 104/1000 [00:05<00:52, 17.16 examples/s]Converting format of dataset (num_proc=16):  11%|█         | 107/1000 [00:06<00:47, 18.95 examples/s]Converting format of dataset (num_proc=16):  11%|█         | 111/1000 [00:06<00:38, 23.21 examples/s]Converting format of dataset (num_proc=16):  11%|█▏        | 114/1000 [00:06<00:39, 22.27 examples/s]Converting format of dataset (num_proc=16):  12%|█▏        | 117/1000 [00:06<00:38, 22.81 examples/s]Converting format of dataset (num_proc=16):  12%|█▏        | 120/1000 [00:06<00:45, 19.22 examples/s]Converting format of dataset (num_proc=16):  12%|█▏        | 123/1000 [00:06<00:41, 20.90 examples/s]Converting format of dataset (num_proc=16):  13%|█▎        | 126/1000 [00:06<00:42, 20.61 examples/s]Converting format of dataset (num_proc=16):  13%|█▎        | 130/1000 [00:07<00:44, 19.49 examples/s]Converting format of dataset (num_proc=16):  13%|█▎        | 134/1000 [00:07<00:37, 23.26 examples/s]Converting format of dataset (num_proc=16):  14%|█▍        | 142/1000 [00:07<00:25, 34.17 examples/s]Converting format of dataset (num_proc=16):  15%|█▍        | 146/1000 [00:07<00:40, 21.00 examples/s]Converting format of dataset (num_proc=16):  15%|█▌        | 151/1000 [00:07<00:35, 23.76 examples/s]Converting format of dataset (num_proc=16):  16%|█▌        | 155/1000 [00:08<00:31, 26.46 examples/s]Converting format of dataset (num_proc=16):  16%|█▌        | 159/1000 [00:08<00:31, 26.79 examples/s]Converting format of dataset (num_proc=16):  16%|█▋        | 163/1000 [00:08<00:40, 20.46 examples/s]Converting format of dataset (num_proc=16):  17%|█▋        | 166/1000 [00:08<00:38, 21.50 examples/s]Converting format of dataset (num_proc=16):  17%|█▋        | 170/1000 [00:08<00:35, 23.63 examples/s]Converting format of dataset (num_proc=16):  17%|█▋        | 173/1000 [00:08<00:36, 22.74 examples/s]Converting format of dataset (num_proc=16):  18%|█▊        | 176/1000 [00:09<00:39, 21.01 examples/s]Converting format of dataset (num_proc=16):  18%|█▊        | 179/1000 [00:09<00:38, 21.06 examples/s]Converting format of dataset (num_proc=16):  18%|█▊        | 182/1000 [00:09<00:37, 21.73 examples/s]Converting format of dataset (num_proc=16):  18%|█▊        | 185/1000 [00:09<00:38, 21.27 examples/s]Converting format of dataset (num_proc=16):  19%|█▉        | 189/1000 [00:09<00:32, 25.04 examples/s]Converting format of dataset (num_proc=16):  19%|█▉        | 192/1000 [00:09<00:32, 24.95 examples/s]Converting format of dataset (num_proc=16):  20%|█▉        | 196/1000 [00:09<00:29, 27.14 examples/s]Converting format of dataset (num_proc=16):  20%|█▉        | 199/1000 [00:10<00:38, 20.90 examples/s]Converting format of dataset (num_proc=16):  20%|██        | 202/1000 [00:10<00:41, 19.18 examples/s]Converting format of dataset (num_proc=16):  21%|██        | 206/1000 [00:10<00:34, 22.84 examples/s]Converting format of dataset (num_proc=16):  21%|██        | 210/1000 [00:10<00:34, 23.05 examples/s]Converting format of dataset (num_proc=16):  21%|██▏       | 214/1000 [00:10<00:40, 19.64 examples/s]Converting format of dataset (num_proc=16):  22%|██▏       | 221/1000 [00:10<00:27, 28.55 examples/s]Converting format of dataset (num_proc=16):  22%|██▎       | 225/1000 [00:11<00:33, 22.84 examples/s]Converting format of dataset (num_proc=16):  23%|██▎       | 228/1000 [00:11<00:33, 23.01 examples/s]Converting format of dataset (num_proc=16):  24%|██▎       | 235/1000 [00:11<00:28, 26.53 examples/s]Converting format of dataset (num_proc=16):  24%|██▍       | 238/1000 [00:11<00:30, 24.61 examples/s]Converting format of dataset (num_proc=16):  24%|██▍       | 243/1000 [00:11<00:29, 25.25 examples/s]Converting format of dataset (num_proc=16):  25%|██▍       | 246/1000 [00:11<00:29, 25.14 examples/s]Converting format of dataset (num_proc=16):  25%|██▍       | 249/1000 [00:12<00:29, 25.71 examples/s]Converting format of dataset (num_proc=16):  25%|██▌       | 252/1000 [00:12<00:41, 17.94 examples/s]Converting format of dataset (num_proc=16):  26%|██▌       | 256/1000 [00:12<00:34, 21.43 examples/s]Converting format of dataset (num_proc=16):  26%|██▌       | 259/1000 [00:12<00:35, 20.79 examples/s]Converting format of dataset (num_proc=16):  26%|██▋       | 264/1000 [00:12<00:28, 25.76 examples/s]Converting format of dataset (num_proc=16):  27%|██▋       | 271/1000 [00:12<00:21, 33.64 examples/s]Converting format of dataset (num_proc=16):  28%|██▊       | 276/1000 [00:13<00:23, 30.77 examples/s]Converting format of dataset (num_proc=16):  28%|██▊       | 280/1000 [00:13<00:24, 29.33 examples/s]Converting format of dataset (num_proc=16):  28%|██▊       | 285/1000 [00:13<00:24, 29.45 examples/s]Converting format of dataset (num_proc=16):  29%|██▉       | 290/1000 [00:13<00:21, 33.58 examples/s]Converting format of dataset (num_proc=16):  29%|██▉       | 294/1000 [00:13<00:26, 26.37 examples/s]Converting format of dataset (num_proc=16):  30%|██▉       | 298/1000 [00:13<00:25, 27.70 examples/s]Converting format of dataset (num_proc=16):  30%|███       | 302/1000 [00:14<00:31, 22.38 examples/s]Converting format of dataset (num_proc=16):  30%|███       | 305/1000 [00:14<00:31, 22.01 examples/s]Converting format of dataset (num_proc=16):  31%|███       | 309/1000 [00:14<00:28, 24.61 examples/s]Converting format of dataset (num_proc=16):  31%|███▏      | 313/1000 [00:14<00:29, 23.59 examples/s]Converting format of dataset (num_proc=16):  32%|███▏      | 316/1000 [00:14<00:28, 24.11 examples/s]Converting format of dataset (num_proc=16):  32%|███▏      | 320/1000 [00:14<00:25, 27.08 examples/s]Converting format of dataset (num_proc=16):  32%|███▏      | 323/1000 [00:15<00:29, 23.15 examples/s]Converting format of dataset (num_proc=16):  33%|███▎      | 326/1000 [00:15<00:32, 21.00 examples/s]Converting format of dataset (num_proc=16):  33%|███▎      | 329/1000 [00:15<00:30, 21.65 examples/s]Converting format of dataset (num_proc=16):  33%|███▎      | 334/1000 [00:15<00:26, 25.02 examples/s]Converting format of dataset (num_proc=16):  34%|███▎      | 337/1000 [00:15<00:26, 24.93 examples/s]Converting format of dataset (num_proc=16):  34%|███▍      | 340/1000 [00:15<00:30, 21.49 examples/s]Converting format of dataset (num_proc=16):  35%|███▍      | 346/1000 [00:15<00:24, 26.77 examples/s]Converting format of dataset (num_proc=16):  35%|███▌      | 352/1000 [00:16<00:19, 32.59 examples/s]Converting format of dataset (num_proc=16):  36%|███▌      | 357/1000 [00:16<00:20, 31.32 examples/s]Converting format of dataset (num_proc=16):  36%|███▌      | 361/1000 [00:16<00:21, 29.21 examples/s]Converting format of dataset (num_proc=16):  36%|███▋      | 365/1000 [00:16<00:21, 29.99 examples/s]Converting format of dataset (num_proc=16):  37%|███▋      | 369/1000 [00:16<00:23, 27.23 examples/s]Converting format of dataset (num_proc=16):  37%|███▋      | 373/1000 [00:16<00:22, 28.43 examples/s]Converting format of dataset (num_proc=16):  38%|███▊      | 380/1000 [00:16<00:16, 37.07 examples/s]Converting format of dataset (num_proc=16):  38%|███▊      | 384/1000 [00:17<00:21, 28.38 examples/s]Converting format of dataset (num_proc=16):  39%|███▉      | 392/1000 [00:17<00:15, 38.11 examples/s]Converting format of dataset (num_proc=16):  40%|███▉      | 397/1000 [00:17<00:15, 40.08 examples/s]Converting format of dataset (num_proc=16):  40%|████      | 404/1000 [00:17<00:14, 41.55 examples/s]Converting format of dataset (num_proc=16):  41%|████      | 410/1000 [00:17<00:17, 33.70 examples/s]Converting format of dataset (num_proc=16):  41%|████▏     | 414/1000 [00:17<00:18, 31.15 examples/s]Converting format of dataset (num_proc=16):  42%|████▏     | 420/1000 [00:18<00:16, 34.76 examples/s]Converting format of dataset (num_proc=16):  42%|████▏     | 424/1000 [00:18<00:17, 33.41 examples/s]Converting format of dataset (num_proc=16):  43%|████▎     | 430/1000 [00:18<00:16, 33.63 examples/s]Converting format of dataset (num_proc=16):  43%|████▎     | 434/1000 [00:18<00:16, 34.71 examples/s]Converting format of dataset (num_proc=16):  44%|████▍     | 438/1000 [00:18<00:19, 29.43 examples/s]Converting format of dataset (num_proc=16):  44%|████▍     | 445/1000 [00:18<00:16, 34.56 examples/s]Converting format of dataset (num_proc=16):  45%|████▌     | 450/1000 [00:19<00:15, 35.87 examples/s]Converting format of dataset (num_proc=16):  45%|████▌     | 454/1000 [00:19<00:16, 32.26 examples/s]Converting format of dataset (num_proc=16):  46%|████▌     | 458/1000 [00:19<00:18, 29.06 examples/s]Converting format of dataset (num_proc=16):  46%|████▌     | 462/1000 [00:19<00:18, 29.72 examples/s]Converting format of dataset (num_proc=16):  47%|████▋     | 466/1000 [00:19<00:17, 30.29 examples/s]Converting format of dataset (num_proc=16):  47%|████▋     | 472/1000 [00:19<00:14, 36.38 examples/s]Converting format of dataset (num_proc=16):  48%|████▊     | 476/1000 [00:19<00:19, 26.47 examples/s]Converting format of dataset (num_proc=16):  49%|████▊     | 487/1000 [00:20<00:12, 42.69 examples/s]Converting format of dataset (num_proc=16):  49%|████▉     | 493/1000 [00:20<00:12, 40.87 examples/s]Converting format of dataset (num_proc=16):  50%|████▉     | 498/1000 [00:20<00:13, 36.23 examples/s]Converting format of dataset (num_proc=16):  50%|█████     | 503/1000 [00:20<00:13, 36.53 examples/s]Converting format of dataset (num_proc=16):  51%|█████     | 508/1000 [00:20<00:14, 33.24 examples/s]Converting format of dataset (num_proc=16):  51%|█████▏    | 514/1000 [00:20<00:13, 37.01 examples/s]Converting format of dataset (num_proc=16):  52%|█████▏    | 520/1000 [00:21<00:15, 31.01 examples/s]Converting format of dataset (num_proc=16):  53%|█████▎    | 529/1000 [00:21<00:11, 41.93 examples/s]Converting format of dataset (num_proc=16):  54%|█████▎    | 535/1000 [00:21<00:11, 39.65 examples/s]Converting format of dataset (num_proc=16):  54%|█████▍    | 540/1000 [00:21<00:11, 39.55 examples/s]Converting format of dataset (num_proc=16):  55%|█████▍    | 546/1000 [00:21<00:12, 36.64 examples/s]Converting format of dataset (num_proc=16):  55%|█████▌    | 552/1000 [00:21<00:12, 37.04 examples/s]Converting format of dataset (num_proc=16):  56%|█████▌    | 556/1000 [00:22<00:12, 35.92 examples/s]Converting format of dataset (num_proc=16):  56%|█████▌    | 560/1000 [00:22<00:13, 32.56 examples/s]Converting format of dataset (num_proc=16):  56%|█████▋    | 565/1000 [00:22<00:14, 29.90 examples/s]Converting format of dataset (num_proc=16):  57%|█████▋    | 569/1000 [00:22<00:15, 27.29 examples/s]Converting format of dataset (num_proc=16):  57%|█████▊    | 575/1000 [00:22<00:12, 33.07 examples/s]Converting format of dataset (num_proc=16):  58%|█████▊    | 580/1000 [00:22<00:14, 28.85 examples/s]Converting format of dataset (num_proc=16):  59%|█████▉    | 589/1000 [00:23<00:11, 35.81 examples/s]Converting format of dataset (num_proc=16):  60%|█████▉    | 598/1000 [00:23<00:11, 35.94 examples/s]Converting format of dataset (num_proc=16):  60%|██████    | 605/1000 [00:23<00:09, 41.54 examples/s]Converting format of dataset (num_proc=16):  61%|██████    | 610/1000 [00:23<00:10, 38.33 examples/s]Converting format of dataset (num_proc=16):  62%|██████▏   | 615/1000 [00:23<00:09, 38.67 examples/s]Converting format of dataset (num_proc=16):  62%|██████▏   | 621/1000 [00:23<00:09, 38.93 examples/s]Converting format of dataset (num_proc=16):  63%|██████▎   | 626/1000 [00:24<00:10, 37.38 examples/s]Converting format of dataset (num_proc=16):  63%|██████▎   | 631/1000 [00:24<00:09, 38.28 examples/s]Converting format of dataset (num_proc=16):  64%|██████▎   | 635/1000 [00:24<00:10, 36.16 examples/s]Converting format of dataset (num_proc=16):  64%|██████▍   | 639/1000 [00:24<00:15, 23.85 examples/s]Converting format of dataset (num_proc=16):  64%|██████▍   | 644/1000 [00:24<00:12, 27.80 examples/s]Converting format of dataset (num_proc=16):  65%|██████▍   | 649/1000 [00:24<00:13, 25.75 examples/s]Converting format of dataset (num_proc=16):  65%|██████▌   | 654/1000 [00:25<00:11, 30.07 examples/s]Converting format of dataset (num_proc=16):  66%|██████▌   | 658/1000 [00:25<00:14, 23.73 examples/s]Converting format of dataset (num_proc=16):  66%|██████▌   | 661/1000 [00:25<00:13, 24.71 examples/s]Converting format of dataset (num_proc=16):  67%|██████▋   | 670/1000 [00:25<00:08, 37.84 examples/s]Converting format of dataset (num_proc=16):  68%|██████▊   | 675/1000 [00:25<00:09, 35.11 examples/s]Converting format of dataset (num_proc=16):  68%|██████▊   | 680/1000 [00:25<00:09, 33.98 examples/s]Converting format of dataset (num_proc=16):  68%|██████▊   | 685/1000 [00:25<00:08, 36.69 examples/s]Converting format of dataset (num_proc=16):  69%|██████▉   | 693/1000 [00:26<00:07, 43.80 examples/s]Converting format of dataset (num_proc=16):  70%|██████▉   | 698/1000 [00:26<00:08, 35.87 examples/s]Converting format of dataset (num_proc=16):  70%|███████   | 705/1000 [00:26<00:07, 40.00 examples/s]Converting format of dataset (num_proc=16):  71%|███████   | 710/1000 [00:26<00:07, 38.24 examples/s]Converting format of dataset (num_proc=16):  72%|███████▏  | 715/1000 [00:26<00:07, 39.62 examples/s]Converting format of dataset (num_proc=16):  72%|███████▏  | 721/1000 [00:26<00:06, 40.87 examples/s]Converting format of dataset (num_proc=16):  73%|███████▎  | 726/1000 [00:26<00:06, 40.84 examples/s]Converting format of dataset (num_proc=16):  74%|███████▎  | 737/1000 [00:27<00:05, 51.17 examples/s]Converting format of dataset (num_proc=16):  74%|███████▍  | 743/1000 [00:27<00:07, 35.99 examples/s]Converting format of dataset (num_proc=16):  75%|███████▌  | 751/1000 [00:27<00:05, 43.11 examples/s]Converting format of dataset (num_proc=16):  76%|███████▌  | 758/1000 [00:27<00:05, 42.93 examples/s]Converting format of dataset (num_proc=16):  76%|███████▋  | 763/1000 [00:27<00:06, 38.52 examples/s]Converting format of dataset (num_proc=16):  77%|███████▋  | 768/1000 [00:27<00:05, 39.95 examples/s]Converting format of dataset (num_proc=16):  77%|███████▋  | 774/1000 [00:28<00:05, 38.66 examples/s]Converting format of dataset (num_proc=16):  78%|███████▊  | 779/1000 [00:28<00:05, 40.08 examples/s]Converting format of dataset (num_proc=16):  78%|███████▊  | 785/1000 [00:28<00:04, 44.31 examples/s]Converting format of dataset (num_proc=16):  79%|███████▉  | 791/1000 [00:28<00:04, 43.94 examples/s]Converting format of dataset (num_proc=16):  80%|███████▉  | 796/1000 [00:28<00:04, 45.35 examples/s]Converting format of dataset (num_proc=16):  80%|████████  | 801/1000 [00:28<00:05, 37.64 examples/s]Converting format of dataset (num_proc=16):  81%|████████  | 806/1000 [00:28<00:05, 35.98 examples/s]Converting format of dataset (num_proc=16):  81%|████████▏ | 813/1000 [00:29<00:04, 41.53 examples/s]Converting format of dataset (num_proc=16):  82%|████████▏ | 818/1000 [00:29<00:04, 41.60 examples/s]Converting format of dataset (num_proc=16):  82%|████████▏ | 823/1000 [00:29<00:04, 39.06 examples/s]Converting format of dataset (num_proc=16):  83%|████████▎ | 828/1000 [00:29<00:04, 39.43 examples/s]Converting format of dataset (num_proc=16):  83%|████████▎ | 833/1000 [00:29<00:05, 32.93 examples/s]Converting format of dataset (num_proc=16):  84%|████████▎ | 837/1000 [00:29<00:04, 32.96 examples/s]Converting format of dataset (num_proc=16):  84%|████████▍ | 845/1000 [00:29<00:03, 41.76 examples/s]Converting format of dataset (num_proc=16):  85%|████████▌ | 851/1000 [00:30<00:03, 45.63 examples/s]Converting format of dataset (num_proc=16):  86%|████████▌ | 856/1000 [00:30<00:03, 41.13 examples/s]Converting format of dataset (num_proc=16):  86%|████████▌ | 861/1000 [00:30<00:03, 42.21 examples/s]Converting format of dataset (num_proc=16):  87%|████████▋ | 866/1000 [00:30<00:03, 39.28 examples/s]Converting format of dataset (num_proc=16):  87%|████████▋ | 871/1000 [00:30<00:03, 40.87 examples/s]Converting format of dataset (num_proc=16):  88%|████████▊ | 877/1000 [00:30<00:02, 45.42 examples/s]Converting format of dataset (num_proc=16):  88%|████████▊ | 884/1000 [00:30<00:02, 50.68 examples/s]Converting format of dataset (num_proc=16):  89%|████████▉ | 890/1000 [00:30<00:02, 44.54 examples/s]Converting format of dataset (num_proc=16):  90%|████████▉ | 895/1000 [00:31<00:02, 41.16 examples/s]Converting format of dataset (num_proc=16):  90%|█████████ | 900/1000 [00:31<00:02, 42.77 examples/s]Converting format of dataset (num_proc=16):  91%|█████████ | 906/1000 [00:31<00:02, 38.30 examples/s]Converting format of dataset (num_proc=16):  91%|█████████ | 912/1000 [00:31<00:02, 33.87 examples/s]Converting format of dataset (num_proc=16):  92%|█████████▏| 917/1000 [00:31<00:02, 36.26 examples/s]Converting format of dataset (num_proc=16):  92%|█████████▏| 922/1000 [00:31<00:02, 38.65 examples/s]Converting format of dataset (num_proc=16):  93%|█████████▎| 931/1000 [00:32<00:01, 39.14 examples/s]Converting format of dataset (num_proc=16):  94%|█████████▎| 936/1000 [00:32<00:01, 33.92 examples/s]Converting format of dataset (num_proc=16):  94%|█████████▍| 942/1000 [00:32<00:01, 34.14 examples/s]Converting format of dataset (num_proc=16):  95%|█████████▍| 946/1000 [00:32<00:01, 32.44 examples/s]Converting format of dataset (num_proc=16):  95%|█████████▌| 950/1000 [00:32<00:01, 32.13 examples/s]Converting format of dataset (num_proc=16):  95%|█████████▌| 954/1000 [00:32<00:01, 27.94 examples/s]Converting format of dataset (num_proc=16):  96%|█████████▌| 957/1000 [00:33<00:01, 26.69 examples/s]Converting format of dataset (num_proc=16):  96%|█████████▌| 960/1000 [00:33<00:01, 20.04 examples/s]Converting format of dataset (num_proc=16):  96%|█████████▋| 963/1000 [00:33<00:02, 16.82 examples/s]Converting format of dataset (num_proc=16):  97%|█████████▋| 966/1000 [00:33<00:01, 18.60 examples/s]Converting format of dataset (num_proc=16):  97%|█████████▋| 970/1000 [00:33<00:01, 21.07 examples/s]Converting format of dataset (num_proc=16):  97%|█████████▋| 974/1000 [00:33<00:01, 24.70 examples/s]Converting format of dataset (num_proc=16):  98%|█████████▊| 977/1000 [00:34<00:01, 11.90 examples/s]Converting format of dataset (num_proc=16):  98%|█████████▊| 980/1000 [00:34<00:01, 12.79 examples/s]Converting format of dataset (num_proc=16):  98%|█████████▊| 982/1000 [00:34<00:01, 13.57 examples/s]Converting format of dataset (num_proc=16):  98%|█████████▊| 984/1000 [00:35<00:01,  9.37 examples/s]Converting format of dataset (num_proc=16):  99%|█████████▊| 986/1000 [00:35<00:01, 10.69 examples/s]Converting format of dataset (num_proc=16):  99%|█████████▉| 989/1000 [00:35<00:00, 11.78 examples/s]Converting format of dataset (num_proc=16):  99%|█████████▉| 992/1000 [00:36<00:00,  9.00 examples/s]Converting format of dataset (num_proc=16):  99%|█████████▉| 994/1000 [00:36<00:00,  6.88 examples/s]Converting format of dataset (num_proc=16): 100%|█████████▉| 996/1000 [00:37<00:01,  3.91 examples/s]Converting format of dataset (num_proc=16): 100%|█████████▉| 997/1000 [00:38<00:00,  3.69 examples/s]Converting format of dataset (num_proc=16): 100%|█████████▉| 998/1000 [00:38<00:00,  3.82 examples/s]Converting format of dataset (num_proc=16): 100%|█████████▉| 999/1000 [00:38<00:00,  4.12 examples/s]Converting format of dataset (num_proc=16): 100%|██████████| 1000/1000 [00:38<00:00,  4.16 examples/s]Converting format of dataset (num_proc=16): 100%|██████████| 1000/1000 [00:38<00:00, 25.68 examples/s]
+Running tokenizer on dataset (num_proc=16):   0%|          | 0/1000 [00:00<?, ? examples/s]Running tokenizer on dataset (num_proc=16):   0%|          | 0/1000 [00:00<?, ? examples/s]Running tokenizer on dataset (num_proc=16):   0%|          | 0/1000 [00:01<?, ? examples/s]Running tokenizer on dataset (num_proc=16):   0%|          | 0/1000 [00:01<?, ? examples/s]Running tokenizer on dataset (num_proc=16):   0%|          | 0/1000 [00:01<?, ? examples/s]Running tokenizer on dataset (num_proc=16):   0%|          | 0/1000 [00:01<?, ? examples/s]Running tokenizer on dataset (num_proc=16):   0%|          | 0/1000 [00:01<?, ? examples/s]Running tokenizer on dataset (num_proc=16):   0%|          | 0/1000 [00:01<?, ? examples/s]Running tokenizer on dataset (num_proc=16):   0%|          | 0/1000 [00:02<?, ? examples/s]Running tokenizer on dataset (num_proc=16):   0%|          | 0/1000 [00:02<?, ? examples/s]Running tokenizer on dataset (num_proc=16):   0%|          | 0/1000 [00:02<?, ? examples/s]Running tokenizer on dataset (num_proc=16):   0%|          | 0/1000 [00:02<?, ? examples/s]
+multiprocess.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.11/site-packages/multiprocess/pool.py", line 125, in worker
+    result = (True, func(*args, **kwds))
+                    ^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/datasets/utils/py_utils.py", line 586, in _write_generator_to_queue
+    for i, result in enumerate(func(**kwargs)):
+  File "/opt/conda/lib/python3.11/site-packages/datasets/arrow_dataset.py", line 3674, in _map_single
+    for i, batch in iter_outputs(shard_iterable):
+  File "/opt/conda/lib/python3.11/site-packages/datasets/arrow_dataset.py", line 3624, in iter_outputs
+    yield i, apply_function(example, i, offset=offset)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/datasets/arrow_dataset.py", line 3547, in apply_function
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/data/processor/supervised.py", line 99, in preprocess_dataset
+    input_ids, labels = self._encode_data_example(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/data/processor/supervised.py", line 43, in _encode_data_example
+    messages = self.template.mm_plugin.process_messages(prompt + response, images, videos, audios, self.processor)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/data/mm_plugin.py", line 1499, in process_messages
+    self._validate_messages(messages, images, videos, audios)
+  File "/app/src/llamafactory/data/mm_plugin.py", line 202, in _validate_messages
+    raise ValueError(
+ValueError: The number of images does not match the number of <image> tokens in [{'content': "What is on top of the bathroom cabinet that is on my 11 o'clock?", 'role': 'user'}, {'content': '\nGot it, let\'s try to figure out what\'s on top of the bathroom cabinet at 11 o\'clock. First, let\'s visualize the bathroom setup. The cabinet is likely a white, two-drawer unit. At 11 o\'clock (top-left area), we need to check that spot. Looking at the images, especially the one showing the cabinet area, there\'s a mirror above the sink, but wait, no—wait, the question is about the cabinet. Wait, maybe the "cabinet" here is the storage unit. Wait, no, the sink has a cabinet below? Wait, no, the main cabinet is the white drawers. Wait, in the image where the camera shows the sink and cabinet, the top of the cabinet—wait, no, maybe the mirror? Wait, no, let\'s check again. Wait, the user says "bathroom cabinet that is on my 11 o\'clock". So 11 o\'clock would be the upper left area relative to the sink. Looking at the images, there\'s a mirror mounted on the wall above the sink area. Is that part of the cabinet setup? Wait, no, maybe the cabinet is the white drawers under the sink. Wait, no, the top of that cabinet—wait, no, in some images, there\'s a mirror reflected or mounted. Wait, no, let\'s check the first few images. The shower curtain is colorful, then the sink area. Wait, the correct answer: looking at the images, the object on top of the bathroom cabinet (the white drawer unit) at 11 o\'clock is a mirror. Wait, no, wait—the mirror is on the wall above the sink. Wait, maybe I misread. Wait, no, let\'s check again. Wait, the user\'s question: "What is on top of the bathroom cabinet that is on my 11 o\'clock?" So first, identify the cabinet. The white drawer unit near 11 o\'clock (top-left). What\'s on top? Looking at the images, there\'s a mirror mounted on the wall above that area. Wait, yes! In the reflection or mounted, there\'s a mirror. So the answer is a mirror.\n\n\nTo determine what is on top of the bathroom cabinet at 11 o’clock, analyze the spatial layout and elements in the images:  \n\n1. Locate the “bathroom cabinet” in question: A white, two - drawer storage unit is visible near the top - left (11 o’clock) area relative to other fixtures like the sink and shower.  \n2. Examine objects above this cabinet: In the images, a **mirror** is mounted on the wall above this cabinet area.  \n\n\nMirror', 'role': 'assistant'}].
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 152, in launch
+    run_exp()
+  File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+    _training_function(config={"args": args, "callbacks": callbacks})
+  File "/app/src/llamafactory/train/tuner.py", line 72, in _training_function
+    run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+  File "/app/src/llamafactory/train/sft/workflow.py", line 51, in run_sft
+    dataset_module = get_dataset(template, model_args, data_args, training_args, stage="sft", **tokenizer_module)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/data/loader.py", line 315, in get_dataset
+    dataset = _get_preprocessed_dataset(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/data/loader.py", line 256, in _get_preprocessed_dataset
+    dataset = dataset.map(
+              ^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/datasets/arrow_dataset.py", line 560, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/datasets/arrow_dataset.py", line 3309, in map
+    for rank, done, content in iflatmap_unordered(
+  File "/opt/conda/lib/python3.11/site-packages/datasets/utils/py_utils.py", line 626, in iflatmap_unordered
+    [async_result.get(timeout=0.05) for async_result in async_results]
+  File "/opt/conda/lib/python3.11/site-packages/datasets/utils/py_utils.py", line 626, in <listcomp>
+    [async_result.get(timeout=0.05) for async_result in async_results]
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/multiprocess/pool.py", line 774, in get
+    raise self._value
+ValueError: The number of images does not match the number of <image> tokens in [{'content': "What is on top of the bathroom cabinet that is on my 11 o'clock?", 'role': 'user'}, {'content': '\nGot it, let\'s try to figure out what\'s on top of the bathroom cabinet at 11 o\'clock. First, let\'s visualize the bathroom setup. The cabinet is likely a white, two-drawer unit. At 11 o\'clock (top-left area), we need to check that spot. Looking at the images, especially the one showing the cabinet area, there\'s a mirror above the sink, but wait, no—wait, the question is about the cabinet. Wait, maybe the "cabinet" here is the storage unit. Wait, no, the sink has a cabinet below? Wait, no, the main cabinet is the white drawers. Wait, in the image where the camera shows the sink and cabinet, the top of the cabinet—wait, no, maybe the mirror? Wait, no, let\'s check again. Wait, the user says "bathroom cabinet that is on my 11 o\'clock". So 11 o\'clock would be the upper left area relative to the sink. Looking at the images, there\'s a mirror mounted on the wall above the sink area. Is that part of the cabinet setup? Wait, no, maybe the cabinet is the white drawers under the sink. Wait, no, the top of that cabinet—wait, no, in some images, there\'s a mirror reflected or mounted. Wait, no, let\'s check the first few images. The shower curtain is colorful, then the sink area. Wait, the correct answer: looking at the images, the object on top of the bathroom cabinet (the white drawer unit) at 11 o\'clock is a mirror. Wait, no, wait—the mirror is on the wall above the sink. Wait, maybe I misread. Wait, no, let\'s check again. Wait, the user\'s question: "What is on top of the bathroom cabinet that is on my 11 o\'clock?" So first, identify the cabinet. The white drawer unit near 11 o\'clock (top-left). What\'s on top? Looking at the images, there\'s a mirror mounted on the wall above that area. Wait, yes! In the reflection or mounted, there\'s a mirror. So the answer is a mirror.\n\n\nTo determine what is on top of the bathroom cabinet at 11 o’clock, analyze the spatial layout and elements in the images:  \n\n1. Locate the “bathroom cabinet” in question: A white, two - drawer storage unit is visible near the top - left (11 o’clock) area relative to other fixtures like the sink and shower.  \n2. Examine objects above this cabinet: In the images, a **mirror** is mounted on the wall above this cabinet area.  \n\n\nMirror', 'role': 'assistant'}].
+INFO:    Cleanup error: while stopping driver for /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/var/apptainer/mnt/session/final: fuse-overlayfs exited: fuse: reading device: Software caused connection abort
+
+scontrol show job 85877
+JobId=85877 JobName=slurm_qwen2_5vl_lora_sft_SQA3D.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=329653 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:01:08 TimeLimit=00:25:00 TimeMin=N/A
+   SubmitTime=2025-11-13T02:16:38 EligibleTime=2025-11-13T02:16:38
+   AccrueTime=2025-11-13T02:16:38
+   StartTime=2025-11-13T02:16:38 EndTime=2025-11-13T02:17:46 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-13T02:16:38 Scheduler=Main
+   Partition=compute AllocNode:Sid=trig-login01:731173
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0011
+   BatchHost=trig0011
+   NumNodes=1 NumCPUs=4 NumTasks=1 CPUs/Task=4 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=4,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=4,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=4 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=./slurm_qwen2_5vl_lora_sft_SQA3D.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L ./slurm_qwen2_5vl_lora_sft_SQA3D.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D-85877.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D-85877.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=4
+   
+
+sacct -j 85877
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+85877        slurm_qwe+ def-wangcs   00:01:08                        00:31.605  00:25.401      1:0 
+85877.batch       batch def-wangcs   00:01:08          0   5935912K  00:31.604  00:25.401      1:0 
+85877.extern     extern def-wangcs   00:01:08          0         8K  00:00.001   00:00:00      0:0 
+

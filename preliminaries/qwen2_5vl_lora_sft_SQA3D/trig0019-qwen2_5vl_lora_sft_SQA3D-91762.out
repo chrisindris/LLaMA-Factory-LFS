@@ -1,0 +1,701 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2025-11-16 03:45:23] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: 127.0.0.1:35479
+W1116 03:45:24.090000 2139371 site-packages/torch/distributed/run.py:792] 
+W1116 03:45:24.090000 2139371 site-packages/torch/distributed/run.py:792] *****************************************
+W1116 03:45:24.090000 2139371 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W1116 03:45:24.090000 2139371 site-packages/torch/distributed/run.py:792] *****************************************
+[2025-11-16 03:45:32,206] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-16 03:45:32,217] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-16 03:45:32,362] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-16 03:45:32,619] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2025-11-16 03:45:35,282] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-11-16 03:45:35,282] [INFO] [comm.py:700:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[2025-11-16 03:45:35,282] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-11-16 03:45:35,283] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-11-16 03:45:35,287] [INFO] [comm.py:669:init_distributed] cdb=None
+[INFO|2025-11-16 03:45:35] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2025-11-16 03:45:35] llamafactory.hparams.parser:423 >> Process rank: 0, world size: 4, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|hub.py:421] 2025-11-16 03:45:35,627 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1949] 2025-11-16 03:45:35,642 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,653 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,653 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,653 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,653 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,654 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,654 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,654 >> loading file chat_template.jinja from cache at None
+[INFO|tokenization_utils_base.py:2364] 2025-11-16 03:45:35,865 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|hub.py:421] 2025-11-16 03:45:35,866 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:421] 2025-11-16 03:45:35,867 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:316] 2025-11-16 03:45:35,869 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2025-11-16 03:45:35,872 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:316] 2025-11-16 03:45:35,874 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2025-11-16 03:45:35,876 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:428] 2025-11-16 03:45:35,882 >> Image processor Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|tokenization_utils_base.py:1949] 2025-11-16 03:45:35,882 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,887 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,887 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,887 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,887 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,887 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,887 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 03:45:35,887 >> loading file chat_template.jinja from cache at None
+[INFO|tokenization_utils_base.py:2364] 2025-11-16 03:45:36,049 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|video_processing_utils.py:660] 2025-11-16 03:45:36,051 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:726] 2025-11-16 03:45:36,053 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:770] 2025-11-16 03:45:36,056 >> Video processor Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+[INFO|processing_utils.py:928] 2025-11-16 03:45:36,057 >> Offline mode: forcing local_files_only=True
+[INFO|processing_utils.py:1116] 2025-11-16 03:45:36,063 >> loading configuration file processor_config.json from cache at None
+[INFO|processing_utils.py:1199] 2025-11-16 03:45:36,353 >> Processor Qwen2_5_VLProcessor:
+- image_processor: Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2TokenizerFast(name_or_path='Qwen/Qwen2.5-VL-7B-Instruct', vocab_size=151643, model_max_length=131072, is_fast=True, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'additional_special_tokens': ['<|im_start|>', '<|im_end|>', '<|object_ref_start|>', '<|object_ref_end|>', '<|box_start|>', '<|box_end|>', '<|quad_start|>', '<|quad_end|>', '<|vision_start|>', '<|vision_end|>', '<|vision_pad|>', '<|image_pad|>', '<|video_pad|>']}, clean_up_tokenization_spaces=False, added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151647: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151648: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151649: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151650: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151651: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151652: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151653: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151654: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151655: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151656: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151657: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151658: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151659: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151660: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151661: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151662: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151663: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151664: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+}
+)
+- video_processor: Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+
+{
+  "processor_class": "Qwen2_5_VLProcessor"
+}
+
+[INFO|2025-11-16 03:45:36] llamafactory.data.loader:143 >> Loading dataset /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/942a5514a2ed64b8ad7ec624ecde74f08884f1c8/data/...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+Converting format of dataset (num_proc=96): 100%|██████████| 33047/33047 [00:00<?, ? examples/s][INFO|2025-11-16 03:45:36] llamafactory.hparams.parser:423 >> Process rank: 1, world size: 4, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2025-11-16 03:45:36] llamafactory.hparams.parser:423 >> Process rank: 2, world size: 4, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2025-11-16 03:45:36] llamafactory.hparams.parser:423 >> Process rank: 3, world size: 4, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+Converting format of dataset (num_proc=96): 33048 examples [00:01,  1.35s/ examples]            [rank2]:[W1116 03:45:38.612412073 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank3]:[W1116 03:45:38.612416203 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank1]:[W1116 03:45:38.612477733 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+Converting format of dataset (num_proc=96): 33050 examples [00:01,  2.57 examples/s]Converting format of dataset (num_proc=96): 33059 examples [00:01, 12.97 examples/s]Converting format of dataset (num_proc=96): 33069 examples [00:01, 25.29 examples/s]Converting format of dataset (num_proc=96): 33080 examples [00:01, 39.59 examples/s]Converting format of dataset (num_proc=96): 33094 examples [00:01, 58.57 examples/s]Converting format of dataset (num_proc=96): 33106 examples [00:01, 69.10 examples/s]Converting format of dataset (num_proc=96): 33122 examples [00:02, 89.54 examples/s]Converting format of dataset (num_proc=96): 33134 examples [00:02, 84.54 examples/s]Converting format of dataset (num_proc=96): 33150 examples [00:02, 101.18 examples/s]Converting format of dataset (num_proc=96): 33165 examples [00:02, 110.56 examples/s]Converting format of dataset (num_proc=96): 33178 examples [00:02, 113.04 examples/s]Converting format of dataset (num_proc=96): 33191 examples [00:02, 111.20 examples/s]Converting format of dataset (num_proc=96): 33204 examples [00:02, 115.67 examples/s]Converting format of dataset (num_proc=96): 33218 examples [00:02, 121.66 examples/s]Converting format of dataset (num_proc=96): 33231 examples [00:03, 113.79 examples/s]Converting format of dataset (num_proc=96): 33245 examples [00:03, 119.57 examples/s]Converting format of dataset (num_proc=96): 33258 examples [00:03, 114.00 examples/s]Converting format of dataset (num_proc=96): 33272 examples [00:03, 118.61 examples/s]Converting format of dataset (num_proc=96): 33286 examples [00:03, 117.43 examples/s]Converting format of dataset (num_proc=96): 33309 examples [00:03, 146.95 examples/s]Converting format of dataset (num_proc=96): 33326 examples [00:03, 152.13 examples/s]Converting format of dataset (num_proc=96): 33344 examples [00:03, 145.89 examples/s]Converting format of dataset (num_proc=96): 33359 examples [00:03, 144.82 examples/s]Converting format of dataset (num_proc=96): 33378 examples [00:04, 153.52 examples/s]Converting format of dataset (num_proc=96): 33394 examples [00:04, 143.28 examples/s]Converting format of dataset (num_proc=96): 33426 examples [00:04, 188.72 examples/s]Converting format of dataset (num_proc=96): 33453 examples [00:04, 209.98 examples/s]Converting format of dataset (num_proc=96): 33478 examples [00:04, 210.35 examples/s]Converting format of dataset (num_proc=96): 33501 examples [00:04, 189.82 examples/s]Converting format of dataset (num_proc=96): 33521 examples [00:04, 180.51 examples/s]Converting format of dataset (num_proc=96): 33554 examples [00:04, 216.59 examples/s]Converting format of dataset (num_proc=96): 33578 examples [00:04, 221.31 examples/s]Converting format of dataset (num_proc=96): 33603 examples [00:05, 226.01 examples/s]Converting format of dataset (num_proc=96): 33629 examples [00:05, 234.53 examples/s]Converting format of dataset (num_proc=96): 33654 examples [00:05, 233.57 examples/s]Converting format of dataset (num_proc=96): 33684 examples [00:05, 251.79 examples/s]Converting format of dataset (num_proc=96): 33710 examples [00:05, 233.69 examples/s]Converting format of dataset (num_proc=96): 33735 examples [00:05, 236.52 examples/s]Converting format of dataset (num_proc=96): 33761 examples [00:05, 241.87 examples/s]Converting format of dataset (num_proc=96): 33786 examples [00:05, 238.08 examples/s]Converting format of dataset (num_proc=96): 33810 examples [00:05, 227.15 examples/s]Converting format of dataset (num_proc=96): 33839 examples [00:06, 242.23 examples/s]Converting format of dataset (num_proc=96): 33864 examples [00:06, 239.90 examples/s]Converting format of dataset (num_proc=96): 33892 examples [00:06, 245.21 examples/s]Converting format of dataset (num_proc=96): 33920 examples [00:06, 248.61 examples/s]Converting format of dataset (num_proc=96): 33945 examples [00:06, 208.57 examples/s]Converting format of dataset (num_proc=96): 33975 examples [00:06, 228.93 examples/s]Converting format of dataset (num_proc=96): 34001 examples [00:06, 234.60 examples/s]Converting format of dataset (num_proc=96): 34035 examples [00:06, 257.66 examples/s]Converting format of dataset (num_proc=96): 34064 examples [00:07, 234.74 examples/s]Converting format of dataset (num_proc=96): 34095 examples [00:07, 252.67 examples/s]Converting format of dataset (num_proc=96): 34131 examples [00:07, 278.00 examples/s]Converting format of dataset (num_proc=96): 34166 examples [00:07, 290.65 examples/s]Converting format of dataset (num_proc=96): 34198 examples [00:07, 265.58 examples/s]Converting format of dataset (num_proc=96): 34235 examples [00:07, 292.27 examples/s]Converting format of dataset (num_proc=96): 34266 examples [00:07, 292.61 examples/s]Converting format of dataset (num_proc=96): 34299 examples [00:07, 278.07 examples/s]Converting format of dataset (num_proc=96): 34336 examples [00:07, 301.71 examples/s]Converting format of dataset (num_proc=96): 34368 examples [00:08, 290.95 examples/s]Converting format of dataset (num_proc=96): 34414 examples [00:08, 331.40 examples/s]Converting format of dataset (num_proc=96): 34449 examples [00:08, 289.33 examples/s]Converting format of dataset (num_proc=96): 34487 examples [00:08, 310.57 examples/s]Converting format of dataset (num_proc=96): 34539 examples [00:08, 363.72 examples/s]Converting format of dataset (num_proc=96): 34579 examples [00:08, 365.58 examples/s]Converting format of dataset (num_proc=96): 34618 examples [00:08, 362.73 examples/s]Converting format of dataset (num_proc=96): 34663 examples [00:08, 380.67 examples/s]Converting format of dataset (num_proc=96): 34702 examples [00:08, 382.90 examples/s]Converting format of dataset (num_proc=96): 34745 examples [00:09, 372.55 examples/s]Converting format of dataset (num_proc=96): 34797 examples [00:09, 405.93 examples/s]Converting format of dataset (num_proc=96): 34846 examples [00:09, 428.31 examples/s]Converting format of dataset (num_proc=96): 34891 examples [00:09, 370.09 examples/s]Converting format of dataset (num_proc=96): 34931 examples [00:09, 356.47 examples/s]Converting format of dataset (num_proc=96): 34992 examples [00:09, 420.15 examples/s]Converting format of dataset (num_proc=96): 35038 examples [00:09, 408.13 examples/s]Converting format of dataset (num_proc=96): 35082 examples [00:09, 409.42 examples/s]Converting format of dataset (num_proc=96): 35125 examples [00:09, 412.23 examples/s]Converting format of dataset (num_proc=96): 35188 examples [00:10, 461.71 examples/s]Converting format of dataset (num_proc=96): 35269 examples [00:10, 558.82 examples/s]Converting format of dataset (num_proc=96): 35368 examples [00:10, 676.00 examples/s]Converting format of dataset (num_proc=96): 35437 examples [00:10, 656.41 examples/s]Converting format of dataset (num_proc=96): 35508 examples [00:10, 671.21 examples/s]Converting format of dataset (num_proc=96): 35650 examples [00:10, 879.13 examples/s]Converting format of dataset (num_proc=96): 35740 examples [00:10, 794.85 examples/s]Converting format of dataset (num_proc=96): 35850 examples [00:10, 835.58 examples/s]Converting format of dataset (num_proc=96): 35935 examples [00:10, 829.11 examples/s]Converting format of dataset (num_proc=96): 36020 examples [00:11, 659.29 examples/s]Converting format of dataset (num_proc=96): 36149 examples [00:11, 790.93 examples/s]Converting format of dataset (num_proc=96): 36270 examples [00:11, 890.77 examples/s]Converting format of dataset (num_proc=96): 36367 examples [00:11, 803.39 examples/s]Converting format of dataset (num_proc=96): 36455 examples [00:11, 810.13 examples/s]Converting format of dataset (num_proc=96): 36576 examples [00:11, 903.68 examples/s]Converting format of dataset (num_proc=96): 36671 examples [00:11, 892.61 examples/s]Converting format of dataset (num_proc=96): 36829 examples [00:11, 1050.71 examples/s]Converting format of dataset (num_proc=96): 36941 examples [00:12, 956.00 examples/s] Converting format of dataset (num_proc=96): 37054 examples [00:12, 989.50 examples/s]Converting format of dataset (num_proc=96): 37166 examples [00:12, 994.42 examples/s]Converting format of dataset (num_proc=96): 37273 examples [00:12, 997.76 examples/s]Converting format of dataset (num_proc=96): 37398 examples [00:12, 1051.21 examples/s]Converting format of dataset (num_proc=96): 37534 examples [00:12, 1136.51 examples/s]Converting format of dataset (num_proc=96): 37688 examples [00:12, 1242.04 examples/s]Converting format of dataset (num_proc=96): 37814 examples [00:12, 1173.77 examples/s]Converting format of dataset (num_proc=96): 37969 examples [00:12, 1269.91 examples/s]Converting format of dataset (num_proc=96): 38101 examples [00:13, 1256.98 examples/s]Converting format of dataset (num_proc=96): 38264 examples [00:13, 1358.87 examples/s]Converting format of dataset (num_proc=96): 38402 examples [00:13, 1315.58 examples/s]Converting format of dataset (num_proc=96): 38535 examples [00:13, 1161.54 examples/s]Converting format of dataset (num_proc=96): 38741 examples [00:13, 1389.97 examples/s]Converting format of dataset (num_proc=96): 38897 examples [00:13, 1411.21 examples/s]Converting format of dataset (num_proc=96): 39044 examples [00:13, 1405.35 examples/s]Converting format of dataset (num_proc=96): 39189 examples [00:13, 1257.02 examples/s]Converting format of dataset (num_proc=96): 39320 examples [00:13, 1258.97 examples/s]Converting format of dataset (num_proc=96): 39477 examples [00:14, 1333.28 examples/s]Converting format of dataset (num_proc=96): 39614 examples [00:14, 1298.99 examples/s]Converting format of dataset (num_proc=96): 39753 examples [00:14, 1324.12 examples/s]Converting format of dataset (num_proc=96): 39889 examples [00:14, 1258.83 examples/s]Converting format of dataset (num_proc=96): 40018 examples [00:14, 1261.59 examples/s]Converting format of dataset (num_proc=96): 40212 examples [00:14, 1451.19 examples/s]Converting format of dataset (num_proc=96): 40361 examples [00:14, 1383.75 examples/s]Converting format of dataset (num_proc=96): 40504 examples [00:14, 1382.62 examples/s]Converting format of dataset (num_proc=96): 40646 examples [00:14, 1393.10 examples/s]Converting format of dataset (num_proc=96): 40858 examples [00:15, 1592.83 examples/s]Converting format of dataset (num_proc=96): 41148 examples [00:15, 1971.89 examples/s]Converting format of dataset (num_proc=96): 41419 examples [00:15, 2174.20 examples/s]Converting format of dataset (num_proc=96): 41685 examples [00:15, 2292.35 examples/s]Converting format of dataset (num_proc=96): 41917 examples [00:15, 1859.90 examples/s]Converting format of dataset (num_proc=96): 42119 examples [00:15, 1898.83 examples/s]Converting format of dataset (num_proc=96): 42324 examples [00:15, 1823.34 examples/s]Converting format of dataset (num_proc=96): 42514 examples [00:15, 1625.10 examples/s]Converting format of dataset (num_proc=96): 42687 examples [00:16, 1481.43 examples/s]Converting format of dataset (num_proc=96): 42917 examples [00:16, 1661.64 examples/s]Converting format of dataset (num_proc=96): 43096 examples [00:16, 1681.95 examples/s]Converting format of dataset (num_proc=96): 43271 examples [00:16, 1533.44 examples/s]Converting format of dataset (num_proc=96): 43431 examples [00:16, 1418.05 examples/s]Converting format of dataset (num_proc=96): 43582 examples [00:16, 1416.89 examples/s]Converting format of dataset (num_proc=96): 43728 examples [00:16, 1408.57 examples/s]Converting format of dataset (num_proc=96): 43872 examples [00:16, 1370.36 examples/s]Converting format of dataset (num_proc=96): 44018 examples [00:16, 1379.65 examples/s]Converting format of dataset (num_proc=96): 44159 examples [00:17, 1135.28 examples/s]Converting format of dataset (num_proc=96): 44284 examples [00:17, 1036.54 examples/s]Converting format of dataset (num_proc=96): 44418 examples [00:17, 1098.33 examples/s]Converting format of dataset (num_proc=96): 44539 examples [00:17, 1093.92 examples/s]Converting format of dataset (num_proc=96): 44653 examples [00:17, 1089.86 examples/s]Converting format of dataset (num_proc=96): 44810 examples [00:17, 1205.30 examples/s]Converting format of dataset (num_proc=96): 45022 examples [00:17, 1410.34 examples/s]Converting format of dataset (num_proc=96): 45166 examples [00:17, 1299.34 examples/s]Converting format of dataset (num_proc=96): 45302 examples [00:18, 1294.35 examples/s]Converting format of dataset (num_proc=96): 45434 examples [00:18, 1294.34 examples/s]Converting format of dataset (num_proc=96): 45706 examples [00:18, 1689.92 examples/s]Converting format of dataset (num_proc=96): 45969 examples [00:18, 1956.51 examples/s]Converting format of dataset (num_proc=96): 46173 examples [00:18, 1892.54 examples/s]Converting format of dataset (num_proc=96): 46397 examples [00:18, 1987.99 examples/s]Converting format of dataset (num_proc=96): 46602 examples [00:18, 2005.04 examples/s]Converting format of dataset (num_proc=96): 46838 examples [00:18, 2105.07 examples/s]Converting format of dataset (num_proc=96): 47151 examples [00:18, 2401.45 examples/s]Converting format of dataset (num_proc=96): 47618 examples [00:19, 3069.32 examples/s]Converting format of dataset (num_proc=96): 48112 examples [00:19, 3614.34 examples/s]Converting format of dataset (num_proc=96): 48518 examples [00:19, 3738.29 examples/s]Converting format of dataset (num_proc=96): 49033 examples [00:19, 4095.77 examples/s]Converting format of dataset (num_proc=96): 49581 examples [00:19, 4494.63 examples/s]Converting format of dataset (num_proc=96): 50240 examples [00:19, 5100.73 examples/s]Converting format of dataset (num_proc=96): 50963 examples [00:19, 5731.04 examples/s]Converting format of dataset (num_proc=96): 51756 examples [00:19, 6382.64 examples/s]Converting format of dataset (num_proc=96): 52643 examples [00:19, 7095.58 examples/s]Converting format of dataset (num_proc=96): 53492 examples [00:19, 7497.14 examples/s]Converting format of dataset (num_proc=96): 54330 examples [00:20, 7753.91 examples/s]Converting format of dataset (num_proc=96): 55130 examples [00:20, 7806.26 examples/s]Converting format of dataset (num_proc=96): 55915 examples [00:20, 7763.83 examples/s]Converting format of dataset (num_proc=96): 56696 examples [00:20, 7711.00 examples/s]Converting format of dataset (num_proc=96): 57604 examples [00:20, 8072.07 examples/s]Converting format of dataset (num_proc=96): 58461 examples [00:20, 8205.24 examples/s]Converting format of dataset (num_proc=96): 59321 examples [00:20, 8286.88 examples/s]Converting format of dataset (num_proc=96): 60154 examples [00:20, 8108.80 examples/s]Converting format of dataset (num_proc=96): 60966 examples [00:20, 7738.26 examples/s]Converting format of dataset (num_proc=96): 61747 examples [00:20, 7459.68 examples/s]Converting format of dataset (num_proc=96): 62498 examples [00:21, 7205.60 examples/s]Converting format of dataset (num_proc=96): 63224 examples [00:21, 6831.73 examples/s]Converting format of dataset (num_proc=96): 63912 examples [00:21, 6078.23 examples/s]Converting format of dataset (num_proc=96): 64535 examples [00:21, 5155.43 examples/s]Converting format of dataset (num_proc=96): 65080 examples [00:21, 4296.72 examples/s]Converting format of dataset (num_proc=96): 65548 examples [00:21, 3451.46 examples/s]Converting format of dataset (num_proc=96): 65942 examples [00:22, 2402.98 examples/s]Converting format of dataset (num_proc=96): 66094 examples [00:23, 1435.52 examples/s]
+[rank0]:[W1116 03:45:59.427977437 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+Running tokenizer on dataset (num_proc=96):   0%|          | 0/33047 [00:00<?, ? examples/s][WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:46:29,115 >> Token indices sequence length is longer than the specified maximum sequence length for this model (216955 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:46:30,751 >> Token indices sequence length is longer than the specified maximum sequence length for this model (166257 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:46:33,614 >> Token indices sequence length is longer than the specified maximum sequence length for this model (219320 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:46:42,522 >> Token indices sequence length is longer than the specified maximum sequence length for this model (339573 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:46:44,515 >> Token indices sequence length is longer than the specified maximum sequence length for this model (227566 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:46:54,699 >> Token indices sequence length is longer than the specified maximum sequence length for this model (228744 > 131072). Running this sequence through the model will result in indexing errors
+slurmstepd: error: *** JOB 91762 ON trig0019 CANCELLED AT 2025-11-16T03:47:55 ***
+slurmstepd: error: Detected 1 oom_kill event in StepId=91762.batch. Some of the step tasks have been OOM Killed.
+
+scontrol show job 91762
+JobId=91762 JobName=slurm_qwen2_5vl_lora_sft_SQA3D.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=369917 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=None Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:125
+   RunTime=00:02:25 TimeLimit=00:10:00 TimeMin=N/A
+   SubmitTime=2025-11-16T03:37:26 EligibleTime=2025-11-16T03:37:26
+   AccrueTime=2025-11-16T03:37:26
+   StartTime=2025-11-16T03:45:00 EndTime=2025-11-16T03:47:25 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-16T03:45:00 Scheduler=Backfill
+   Partition=compute_full_node AllocNode:Sid=trig-login01:1127669
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0019
+   BatchHost=trig0019
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3D.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L slurm_qwen2_5vl_lora_sft_SQA3D.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D-91762.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D-91762.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+sacct -j 91762
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+91762        slurm_qwe+ def-wangcs   00:02:25                        40:45.043  45:04.099      0:0 
+91762.batch       batch def-wangcs   00:03:14          0 776805728K  40:45.041  45:04.099    0:125 
+91762.extern     extern def-wangcs   00:03:17          0        48K  00:00.001   00:00:00      0:0 
+
+
+kernel messages produced during job executions:
+[Nov16 03:45] slurmstepd invoked oom-killer: gfp_mask=0x140cca(GFP_HIGHUSER_MOVABLE|__GFP_COMP), order=0, oom_score_adj=-1000
+[  +0.000011] CPU: 8 PID: 2139127 Comm: slurmstepd Tainted: P           OE     -------  ---  5.14.0-570.25.1.el9_6.x86_64 #1
+[  +0.000004] Hardware name: Lenovo ThinkSystem SD665-N V3/SB27B41167, BIOS QGE140H-8.21 05/13/2025
+[  +0.000001] Call Trace:
+[  +0.000003]  <TASK>
+[  +0.000004]  dump_stack_lvl+0x34/0x48
+[  +0.000007]  dump_header+0x4a/0x213
+[  +0.000003]  oom_kill_process.cold+0xb/0x10
+[  +0.000002]  out_of_memory+0xef/0x2c0
+[  +0.000004]  __alloc_pages_slowpath.constprop.0+0x798/0xb20
+[  +0.000006]  __alloc_pages+0x21d/0x250
+[  +0.000004]  alloc_pages_mpol+0x93/0x1e0
+[  +0.000003]  ? filemap_get_entry+0xe3/0x140
+[  +0.000003]  folio_alloc+0x12/0x30
+[  +0.000003]  __filemap_get_folio+0x185/0x2d0
+[  +0.000002]  filemap_fault+0x4d5/0x8b0
+[  +0.000003]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  +0.000003]  ? __slab_free+0xcb/0x310
+[  +0.000005]  __do_fault+0x31/0x150
+[  +0.000003]  do_read_fault+0x11e/0x1d0
+[  +0.000003]  do_pte_missing+0x157/0x200
+[  +0.000002]  __handle_mm_fault+0x2fe/0x650
+[  +0.000005]  handle_mm_fault+0xe9/0x250
+[  +0.000003]  do_user_addr_fault+0x218/0x620
+[  +0.000004]  exc_page_fault+0x62/0x150
+[  +0.000004]  asm_exc_page_fault+0x22/0x30
+[  +0.000003] RIP: 0033:0x15310e36df02
+[  +0.000006] Code: Unable to access opcode bytes at 0x15310e36ded8.
+[  +0.000001] RSP: 002b:000015310c79dc58 EFLAGS: 00010246
+[  +0.000002] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+[  +0.000001] RDX: 0000000000000001 RSI: 0000000000000000 RDI: 0000000000000009
+[  +0.000001] RBP: 000015310c79dd40 R08: 0000000000000000 R09: 0000000000000000
+[  +0.000001] R10: 0000000000080000 R11: 0000000000000293 R12: 0000000000000009
+[  +0.000001] R13: 0000000000e68ba0 R14: 0000000000000001 R15: 0000153108000b70
+[  +0.000003]  </TASK>
+[  +0.000007] Mem-Info:
+[  +0.000008] active_anon:77817564 inactive_anon:116733872 isolated_anon:0
+               active_file:0 inactive_file:1469 isolated_file:0
+               unevictable:768 dirty:0 writeback:0
+               slab_reclaimable:166952 slab_unreclaimable:354314
+               mapped:170431 shmem:726929 pagetables:489237
+               sec_pagetables:838 bounce:0
+               kernel_misc_reclaimable:0
+               free:245858 free_pcp:248 free_cma:0
+[  +0.000004] Node 0 active_anon:159508264kB inactive_anon:35310044kB active_file:144kB inactive_file:0kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:8648kB dirty:0kB writeback:0kB shmem:66856kB shmem_thp:0kB shmem_pmdmapped:0kB anon_thp:7811072kB writeback_tmp:0kB kernel_stack:7380kB pagetables:387856kB sec_pagetables:2092kB all_unreclaimable? no
+[  +0.000004] Node 1 active_anon:6212980kB inactive_anon:189587288kB active_file:0kB inactive_file:2376kB unevictable:3072kB isolated(anon):0kB isolated(file):0kB mapped:28976kB dirty:0kB writeback:0kB shmem:132180kB shmem_thp:0kB shmem_pmdmapped:0kB anon_thp:1361920kB writeback_tmp:0kB kernel_stack:6036kB pagetables:420936kB sec_pagetables:36kB all_unreclaimable? no
+[  +0.000003] Node 2 active_anon:100425148kB inactive_anon:95443704kB active_file:0kB inactive_file:3476kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:92024kB dirty:0kB writeback:0kB shmem:998572kB shmem_thp:0kB shmem_pmdmapped:0kB anon_thp:2306048kB writeback_tmp:0kB kernel_stack:6372kB pagetables:387836kB sec_pagetables:676kB all_unreclaimable? no
+[  +0.000003] Node 3 active_anon:45123864kB inactive_anon:146594452kB active_file:224kB inactive_file:28kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:552076kB dirty:0kB writeback:0kB shmem:1710108kB shmem_thp:0kB shmem_pmdmapped:0kB anon_thp:2377728kB writeback_tmp:0kB kernel_stack:13492kB pagetables:760320kB sec_pagetables:548kB all_unreclaimable? no
+[  +0.000003] Node 0 DMA free:11264kB boost:0kB min:0kB low:12kB high:24kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:15996kB managed:15360kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[  +0.000004] lowmem_reserve[]: 0 2423 193139 193139 193139
+[  +0.000003] Node 0 DMA32 free:763096kB boost:0kB min:420kB low:2900kB high:5380kB reserved_highatomic:0KB active_anon:1756548kB inactive_anon:600kB active_file:0kB inactive_file:20kB unevictable:0kB writepending:0kB present:2602064kB managed:2531496kB mlocked:0kB bounce:0kB free_pcp:248kB local_pcp:0kB free_cma:0kB
+[  +0.000004] lowmem_reserve[]: 0 0 190715 190715 190715
+[  +0.000003] Node 0 Normal free:54520kB boost:129024kB min:162344kB low:357636kB high:552928kB reserved_highatomic:2048KB active_anon:157751716kB inactive_anon:35309444kB active_file:140kB inactive_file:0kB unevictable:0kB writepending:0kB present:198443008kB managed:195292852kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[  +0.000003] lowmem_reserve[]: 0 0 0 0 0
+[  +0.000003] Node 1 Normal free:52984kB boost:106496kB min:140308kB low:338480kB high:536652kB reserved_highatomic:0KB active_anon:6212980kB inactive_anon:189587288kB active_file:0kB inactive_file:2376kB unevictable:3072kB writepending:0kB present:201326592kB managed:198174404kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[  +0.000003] lowmem_reserve[]: 0 0 0 0 0
+[  +0.000003] Node 2 Normal free:57976kB boost:14336kB min:48148kB low:246320kB high:444492kB reserved_highatomic:6144KB active_anon:100425148kB inactive_anon:95443704kB active_file:0kB inactive_file:3476kB unevictable:0kB writepending:0kB present:201326592kB managed:198174404kB mlocked:0kB bounce:0kB free_pcp:940kB local_pcp:256kB free_cma:0kB
+[  +0.000003] lowmem_reserve[]: 0 0 0 0 0
+[  +0.000003] Node 3 Normal free:43592kB boost:129024kB min:162816kB low:360888kB high:558960kB reserved_highatomic:6144KB active_anon:45123864kB inactive_anon:146594452kB active_file:224kB inactive_file:28kB unevictable:0kB writepending:0kB present:201285376kB managed:198080780kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[  +0.000003] lowmem_reserve[]: 0 0 0 0 0
+[  +0.000002] Node 0 DMA: 0*4kB 0*8kB 0*16kB 0*32kB 0*64kB 0*128kB 0*256kB 0*512kB 1*1024kB (U) 1*2048kB (M) 2*4096kB (M) = 11264kB
+[  +0.000008] Node 0 DMA32: 294*4kB (UM) 330*8kB (UME) 187*16kB (UME) 114*32kB (UME) 288*64kB (UME) 330*128kB (UME) 45*256kB (UME) 47*512kB (UME) 215*1024kB (UME) 45*2048kB (ME) 84*4096kB (UME) = 763096kB
+[  +0.000011] Node 0 Normal: 5713*4kB (UME) 2080*8kB (UME) 515*16kB (UME) 195*32kB (UME) 3*64kB (M) 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 54164kB
+[  +0.000008] Node 1 Normal: 4066*4kB (UME) 1617*8kB (UME) 851*16kB (UME) 288*32kB (UME) 14*64kB (UM) 1*128kB (M) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 53056kB
+[  +0.000009] Node 2 Normal: 3580*4kB (UME) 2686*8kB (UME) 398*16kB (UME) 383*32kB (UME) 18*64kB (UM) 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 55584kB
+[  +0.000007] Node 3 Normal: 3839*4kB (UME) 880*8kB (UME) 415*16kB (UME) 432*32kB (UME) 7*64kB (ME) 1*128kB (M) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 43436kB
+[  +0.000009] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
+[  +0.000001] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
+[  +0.000001] Node 1 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
+[  +0.000001] Node 1 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
+[  +0.000001] Node 2 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
+[  +0.000001] Node 2 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
+[  +0.000001] Node 3 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
+[  +0.000000] Node 3 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
+[  +0.000001] 728489 total pagecache pages
+[  +0.000001] 0 pages in swap cache
+[  +0.000000] Free swap  = 0kB
+[  +0.000001] Total swap = 0kB
+[  +0.000001] 201249907 pages RAM
+[  +0.000000] 0 pages HighMem/MovableOnly
+[  +0.000001] 3182583 pages reserved
+[  +0.000000] 0 pages cma reserved
+[  +0.000001] 0 pages hwpoisoned
+[  +0.000000] Tasks state (memory values in pages):
+[  +0.000001] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes swapents oom_score_adj name
+[  +0.000018] [   1735]     0  1735    48214    29005   421888        0          -250 systemd-journal
+[  +0.000003] [   1775]    32  1775     3511      576    69632        0             0 rpcbind
+[  +0.000002] [   1797]     0  1797    12710     1728   102400        0         -1000 systemd-udevd
+[  +0.000002] [   2213]    81  2213     2666      768    61440        0          -900 dbus-broker-lau
+[  +0.000002] [   2214]    81  2214     1281      576    49152        0          -900 dbus-broker
+[  +0.000003] [   2215]     0  2215   118707     3586   143360        0             0 NetworkManager
+[  +0.000001] [   2218]     0  2218    20836     1728    61440        0             0 irqbalance
+[  +0.000002] [   2228]     0  2228     4856     1344    77824        0             0 systemd-logind
+[  +0.000002] [   2265]     0  2265   119059     4792   147456        0             0 tuned
+[  +0.000002] [   2274]     0  2274    67913      577    77824        0             0 gssproxy
+[  +0.000001] [   2297]     0  2297    55337      192    49152        0             0 agetty
+[  +0.000002] [   2298]     0  2298    55348      192    49152        0             0 agetty
+[  +0.000002] [   2526]   997  2526   729551     2214   245760        0             0 polkitd
+[  +0.000001] [   3152]    29  3152     2775      192    57344        0             0 rpc.statd
+[  +0.000002] [   3572]     0  3572     1333      192    53248        0             0 nvidia-persiste
+[  +0.000003] [   3701]     0  3701    78031      960   270336        0             0 rsyslogd
+[  +0.000001] [   3735]   995  3735    21253      576    73728        0             0 chronyd
+[  +0.000002] [   3822]     0  3822   142797      865   159744        0             0 automount
+[  +0.000002] [   4017]     0  4017     1695      192    49152        0         -1000 slurmstepd
+[  +0.000002] [   4132]     0  4132   410122   100398   978944        0             0 utilgpu
+[  +0.000001] [   4238]     0  4238   172377     4208   200704        0             0 nv-hostengine
+[  +0.000002] [   4417]     0  4417   310507     1728   126976        0             0 node_exporter
+[  +0.000002] [ 369361]     0 369361     8121     2112    81920        0         -1000 sshd
+[  +0.000002] [ 373430]   998 373430    52615      960    81920        0             0 munged
+[  +0.000002] [ 377450]     0 377450  1414955    69992  1257472        0             0 dcgm-exporter
+[  +0.000002] [ 966815]     0 966815    69326     2112   118784        0             0 sssd
+[  +0.000001] [ 966817]     0 966817    73845     3526   172032        0             0 sssd_be
+[  +0.000002] [ 966818]     0 966818    74888    13433   188416        0             0 sssd_nss
+[  +0.000002] [ 966819]     0 966819    67185     2220   131072        0             0 sssd_pam
+[  +0.000002] [2342016]     0 2342016   959580    45495   684032        0             0 cvmfs2
+[  +0.000002] [2342020]     0 2342020    12867     7410   126976        0             0 cvmfs2
+[  +0.000008] [2134052]     0 2134052   327673     4584   266240        0             0 slurmd
+[  +0.000002] [2138963]     0 2138963    92270     4566   172032        0         -1000 slurmstepd
+[  +0.000002] [2139058]     0 2139058    99922     7997   208896        0             0 cvmfs2
+[  +0.000002] [2139062]     0 2139062    12867     7477   135168        0             0 cvmfs2
+[  +0.000002] [2139124]     0 2139124   108691     3655   172032        0         -1000 slurmstepd
+[  +0.000001] [2139153] 3122343 2139153   467899     3178   221184        0             0 starter
+[  +0.000002] [2139175] 3122343 2139175  8625893   120304  3280896        0             0 llamafactory-cl
+[  +0.000002] [2139188] 3122343 2139188   172581     5296   172032        0             0 squashfuse_ll
+[  +0.000002] [2139195] 3122343 2139195     5799     5376    86016        0             0 fuse-overlayfs
+[  +0.000002] [2139371] 3122343 2139371  1410782    67427  1761280        0             0 pt_elastic
+[  +0.000002] [2139436] 3122343 2139436 33567424   314399  5021696        0             0 python3.11
+[  +0.000001] [2139437] 3122343 2139437 33673176   311415  5013504        0             0 python3.11
+[  +0.000002] [2139438] 3122343 2139438 33648086   310905  5013504        0             0 python3.11
+[  +0.000002] [2139439] 3122343 2139439 33623251   310080  5017600        0             0 python3.11
+[  +0.000002] [2139685] 3122343 2139685  7291685    87059  1921024        0             0 python3.11
+[  +0.000002] [2139687] 3122343 2139687  7291686    86824  1925120        0             0 python3.11
+[  +0.000002] [2139689] 3122343 2139689  7291684    86437  1925120        0             0 python3.11
+[  +0.000001] [2139691] 3122343 2139691  7291687    87282  1921024        0             0 python3.11
+[  +0.000002] [2140022] 3122343 2140022  7257886    79454   987136        0             0 python3.11
+[  +0.000002] [2140023] 3122343 2140023  7257889    79558   983040        0             0 python3.11
+[  +0.000002] [2140024] 3122343 2140024  7257888    79604   983040        0             0 python3.11
+[  +0.000001] [2140025] 3122343 2140025  7257887    79472   983040        0             0 python3.11
+[  +0.000002] [2140030] 3122343 2140030  7257889    79750   983040        0             0 python3.11
+[  +0.000002] [2140031] 3122343 2140031  7257886    79646   987136        0             0 python3.11
+[  +0.000001] [2140032] 3122343 2140032  7257888    79604   983040        0             0 python3.11
+[  +0.000002] [2140033] 3122343 2140033  7257887    79664   983040        0             0 python3.11
+[  +0.000001] [2140038] 3122343 2140038  7257889    79750   983040        0             0 python3.11
+[  +0.000002] [2140039] 3122343 2140039  7257888    79604   983040        0             0 python3.11
+[  +0.000001] [2140040] 3122343 2140040  7257886    79646   987136        0             0 python3.11
+[  +0.000002] [2140041] 3122343 2140041  7257887    79664   983040        0             0 python3.11
+[  +0.000002] [2140046] 3122343 2140046  7257889    79751   983040        0             0 python3.11
+[  +0.000001] [2140047] 3122343 2140047  7257888    79605   983040        0             0 python3.11
+[  +0.000002] [2140048] 3122343 2140048  7257886    79646   987136        0             0 python3.11
+[  +0.000002] [2140050] 3122343 2140050  7257887    79664   983040        0             0 python3.11
+[  +0.000001] [2140053] 3122343 2140053  7257889    79751   983040        0             0 python3.11
+[  +0.000002] [2140055] 3122343 2140055  7257888    79605   983040        0             0 python3.11
+[  +0.000001] [2140056] 3122343 2140056  7257886    79646   987136        0             0 python3.11
+[  +0.000002] [2140059] 3122343 2140059  7257887    79664   983040        0             0 python3.11
+[  +0.000001] [2140062] 3122343 2140062  7257886    79646   987136        0             0 python3.11
+[  +0.000002] [2140063] 3122343 2140063  7257889    79751   983040        0             0 python3.11
+[  +0.000002] [2140065] 3122343 2140065  7257888    79605   983040        0             0 python3.11
+[  +0.000001] [2140067] 3122343 2140067  7257886    79646   987136        0             0 python3.11
+[  +0.000002] [2140069] 3122343 2140069  7257889    79751   983040        0             0 python3.11
+[  +0.000001] [2140070] 3122343 2140070  7257887    79664   983040        0             0 python3.11
+[  +0.000002] [2140072] 3122343 2140072  7257888    79605   983040        0             0 python3.11
+[  +0.000001] [2140076] 3122343 2140076  7257886    79647   987136        0             0 python3.11
+[  +0.000002] [2140077] 3122343 2140077  7257889    79751   983040        0             0 python3.11
+[  +0.000001] [2140078] 3122343 2140078  7257887    79664   983040        0             0 python3.11
+[  +0.000002] [2140079] 3122343 2140079  7257888    79605   983040        0             0 python3.11
+[  +0.000002] [2140084] 3122343 2140084  7257889    79751   983040        0             0 python3.11
+[  +0.000001] [2140085] 3122343 2140085  7257886    79647   987136        0             0 python3.11
+[  +0.000002] [2140086] 3122343 2140086  7257887    79664   983040        0             0 python3.11
+[  +0.000001] [2140087] 3122343 2140087  7257888    79606   983040        0             0 python3.11
+[  +0.000002] [2140092] 3122343 2140092  7257889    79751   983040        0             0 python3.11
+[  +0.000001] [2140093] 3122343 2140093  7257886    79647   987136        0             0 python3.11
+[  +0.000002] [2140094] 3122343 2140094  7257887    79664   983040        0             0 python3.11
+[  +0.000001] [2140096] 3122343 2140096  7257888    79606   983040        0             0 python3.11
+[  +0.000002] [2140100] 3122343 2140100  7257889    79752   983040        0             0 python3.11
+[  +0.000002] [2140101] 3122343 2140101  7257886    79648   987136        0             0 python3.11
+[  +0.000001] [2140102] 3122343 2140102  7257887    79665   983040        0             0 python3.11
+[  +0.000002] [2140104] 3122343 2140104  7257888    79607   983040        0             0 python3.11
+[  +0.000002] [2140107] 3122343 2140107  7257889    79752   983040        0             0 python3.11
+[  +0.000001] [2140109] 3122343 2140109  7257886    79648   987136        0             0 python3.11
+[  +0.000002] [2140110] 3122343 2140110  7257887    79665   983040        0             0 python3.11
+[  +0.000001] [2140112] 3122343 2140112  7257888    79607   983040        0             0 python3.11
+[  +0.000002] [2140115] 3122343 2140115  7257889    79752   983040        0             0 python3.11
+[  +0.000001] [2140117] 3122343 2140117  7257887    79665   983040        0             0 python3.11
+[  +0.000002] [2140118] 3122343 2140118  7257886    79648   987136        0             0 python3.11
+[  +0.000002] [2140120] 3122343 2140120  7257888    79607   983040        0             0 python3.11
+[  +0.000001] [2140123] 3122343 2140123  7257889    79752   983040        0             0 python3.11
+[  +0.000002] [2140125] 3122343 2140125  7257887    79666   983040        0             0 python3.11
+[  +0.000001] [2140127] 3122343 2140127  7257886    79648   987136        0             0 python3.11
+[  +0.000002] [2140128] 3122343 2140128  7257888    79607   983040        0             0 python3.11
+[  +0.000001] [2140130] 3122343 2140130  7257889    79753   983040        0             0 python3.11
+[  +0.000002] [2140133] 3122343 2140133  7257887    79666   983040        0             0 python3.11
+[  +0.000001] [2140135] 3122343 2140135  7257886    79649   987136        0             0 python3.11
+[  +0.000002] [2140136] 3122343 2140136  7257888    79607   983040        0             0 python3.11
+[  +0.000002] [2140138] 3122343 2140138  7257889    79754   983040        0             0 python3.11
+[  +0.000001] [2140141] 3122343 2140141  7257887    79666   983040        0             0 python3.11
+[  +0.000002] [2140143] 3122343 2140143  7257886    79650   987136        0             0 python3.11
+[  +0.000001] [2140144] 3122343 2140144  7257888    79608   983040        0             0 python3.11
+[  +0.000002] [2140146] 3122343 2140146  7257889    79755   983040        0             0 python3.11
+[  +0.000001] [2140149] 3122343 2140149  7257887    79667   983040        0             0 python3.11
+[  +0.000002] [2140151] 3122343 2140151  7257886    79651   987136        0             0 python3.11
+[  +0.000002] [2140152] 3122343 2140152  7257888    79609   983040        0             0 python3.11
+[  +0.000001] [2140154] 3122343 2140154  7257889    79756   983040        0             0 python3.11
+[  +0.000002] [2140157] 3122343 2140157  7257887    79669   983040        0             0 python3.11
+[  +0.000001] [2140159] 3122343 2140159  7257886    79651   987136        0             0 python3.11
+[  +0.000002] [2140160] 3122343 2140160  7257888    79610   983040        0             0 python3.11
+[  +0.000002] [2140162] 3122343 2140162  7257889    79756   983040        0             0 python3.11
+[  +0.000001] [2140166] 3122343 2140166  7257887    79669   983040        0             0 python3.11
+[  +0.000002] [2140167] 3122343 2140167  7257886    79651   987136        0             0 python3.11
+[  +0.000001] [2140168] 3122343 2140168  7257888    79610   983040        0             0 python3.11
+[  +0.000002] [2140170] 3122343 2140170  7257889    79756   983040        0             0 python3.11
+[  +0.000001] [2140174] 3122343 2140174  7257887    79669   983040        0             0 python3.11
+[  +0.000002] [2140175] 3122343 2140175  7257889    79756   983040        0             0 python3.11
+[  +0.000001] [2140176] 3122343 2140176  7257886    79651   987136        0             0 python3.11
+[  +0.000002] [2140178] 3122343 2140178  7257888    79610   983040        0             0 python3.11
+[  +0.000002] [2140182] 3122343 2140182  7257887    79669   983040        0             0 python3.11
+[  +0.000001] [2140183] 3122343 2140183  7257889    79756   983040        0             0 python3.11
+[  +0.000002] [2140185] 3122343 2140185  7257886    79651   987136        0             0 python3.11
+[  +0.000001] [2140186] 3122343 2140186  7257888    79610   983040        0             0 python3.11
+[  +0.000002] [2140189] 3122343 2140189  7257887    79669   983040        0             0 python3.11
+[  +0.000001] [2140191] 3122343 2140191  7257889    79756   983040        0             0 python3.11
+[  +0.000002] [2140193] 3122343 2140193  7257886    79652   987136        0             0 python3.11
+[  +0.000002] [2140194] 3122343 2140194  7257888    79610   983040        0             0 python3.11
+[  +0.000001] [2140195] 3122343 2140195  7257887    79669   983040        0             0 python3.11
+[  +0.000002] [2140199] 3122343 2140199  7257889    79756   983040        0             0 python3.11
+[  +0.000001] [2140201] 3122343 2140201  7257886    79652   987136        0             0 python3.11
+[  +0.000002] [2140202] 3122343 2140202  7257888    79610   983040        0             0 python3.11
+[  +0.000001] [2140204] 3122343 2140204  7257887    79669   983040        0             0 python3.11
+[  +0.000002] [2140207] 3122343 2140207  7257889    79757   983040        0             0 python3.11
+[  +0.000001] [2140209] 3122343 2140209  7257886    79652   987136        0             0 python3.11
+[  +0.000002] [2140210] 3122343 2140210  7257888    79610   983040        0             0 python3.11
+[  +0.000002] [2140212] 3122343 2140212  7257887    79670   983040        0             0 python3.11
+[  +0.000002] [2140215] 3122343 2140215  7257889    79757   983040        0             0 python3.11
+[  +0.000001] [2140217] 3122343 2140217  7257886    79652   987136        0             0 python3.11
+[  +0.000002] [2140218] 3122343 2140218  7257888    79611   983040        0             0 python3.11
+[  +0.000002] [2140220] 3122343 2140220  7257887    79670   983040        0             0 python3.11
+[  +0.000001] [2140223] 3122343 2140223  7257889    79757   983040        0             0 python3.11
+[  +0.000001] [2140225] 3122343 2140225  7257888    79611   983040        0             0 python3.11
+[  +0.000002] [2140227] 3122343 2140227  7257886    79652   987136        0             0 python3.11
+[  +0.000002] [2140228] 3122343 2140228  7257887    79863   983040        0             0 python3.11
+[  +0.000001] [2140231] 3122343 2140231  7257889    79757   983040        0             0 python3.11
+[  +0.000002] [2140233] 3122343 2140233  7257888    79611   983040        0             0 python3.11
+[  +0.000001] [2140235] 3122343 2140235  7257886    79652   987136        0             0 python3.11
+[  +0.000002] [2140236] 3122343 2140236  7257887    79671   983040        0             0 python3.11
+[  +0.000001] [2140237] 3122343 2140237  7257889    79757   983040        0             0 python3.11
+[  +0.000002] [2140242] 3122343 2140242  7257888    79803   983040        0             0 python3.11
+[  +0.000002] [2140243] 3122343 2140243  7257886    79652   987136        0             0 python3.11
+[  +0.000001] [2140244] 3122343 2140244  7257887    79671   983040        0             0 python3.11
+[  +0.000002] [2140245] 3122343 2140245  7257889    79757   983040        0             0 python3.11
+[  +0.000001] [2140250] 3122343 2140250  7257888    79611   983040        0             0 python3.11
+[  +0.000002] [2140251] 3122343 2140251  7257887    79671   983040        0             0 python3.11
+[  +0.000002] [2140252] 3122343 2140252  7257886    79652   987136        0             0 python3.11
+[  +0.000001] [2140253] 3122343 2140253  7257889    79757   983040        0             0 python3.11
+[  +0.000002] [2140258] 3122343 2140258  7257888    79611   983040        0             0 python3.11
+[  +0.000001] [2140259] 3122343 2140259  7257887    79671   983040        0             0 python3.11
+[  +0.000002] [2140260] 3122343 2140260  7257886    79652   987136        0             0 python3.11
+[  +0.000001] [2140261] 3122343 2140261  7257889    79757   983040        0             0 python3.11
+[  +0.000002] [2140268] 3122343 2140268  7257888    79611   983040        0             0 python3.11
+[  +0.000002] [2140269] 3122343 2140269  7257887    79671   983040        0             0 python3.11
+[  +0.000001] [2140270] 3122343 2140270  7257886    79652   987136        0             0 python3.11
+[  +0.000002] [2140274] 3122343 2140274  7257888    79611   983040        0             0 python3.11
+[  +0.000001] [2140275] 3122343 2140275  7257887    79671   983040        0             0 python3.11
+[  +0.000002] [2140278] 3122343 2140278  7257886    79652   987136        0             0 python3.11
+[  +0.000002] [2140475] 3122343 2140475 40363697  5726579 47083520        0             0 python3.11
+[  +0.000002] [2140476] 3122343 2140476 37073322  2956183 24866816        0             0 python3.11
+[  +0.000002] [2140477] 3122343 2140477 35255151  1844219 15908864        0             0 python3.11
+[  +0.000001] [2140478] 3122343 2140478 38756714  5065738 41771008        0             0 python3.11
+[  +0.000002] [2140479] 3122343 2140479 34976132  1293961 11501568        0             0 python3.11
+[  +0.000001] [2140480] 3122343 2140480 37502533  3207090 26853376        0             0 python3.11
+[  +0.000002] [2140481] 3122343 2140481 34047052   757049  7237632        0             0 python3.11
+[  +0.000002] [2140482] 3122343 2140482 38833456  3677867 30683136        0             0 python3.11
+[  +0.000001] [2140483] 3122343 2140483 39801849  4611694 38129664        0             0 python3.11
+[  +0.000002] [2140484] 3122343 2140484 38651631  4699289 38813696        0             0 python3.11
+[  +0.000001] [2140485] 3122343 2140485 34191653   899444  8228864        0             0 python3.11
+[  +0.000002] [2140486] 3122343 2140486 35677825  2065046 17707008        0             0 python3.11
+[  +0.000001] [2140487] 3122343 2140487 38330135  4829250 39903232        0             0 python3.11
+[  +0.000002] [2140488] 3122343 2140488 37121086  3291677 27549696        0             0 python3.11
+[  +0.000001] [2140489] 3122343 2140489 34145118   848948  7856128        0             0 python3.11
+[  +0.000002] [2140490] 3122343 2140490 37671415  3087929 25923584        0             0 python3.11
+[  +0.000002] [2140491] 3122343 2140491 36796377  2677805 22654976        0             0 python3.11
+[  +0.000001] [2140492] 3122343 2140492 34180281   888692  8134656        0             0 python3.11
+[  +0.000002] [2140493] 3122343 2140493 35474114  2183732 18636800        0             0 python3.11
+[  +0.000001] [2140494] 3122343 2140494 37256194  3120062 26165248        0             0 python3.11
+[  +0.000002] [2140495] 3122343 2140495 35675670  2325235 19787776        0             0 python3.11
+[  +0.000002] [2140496] 3122343 2140496 34261809   969140  8785920        0             0 python3.11
+[  +0.000001] [2140497] 3122343 2140497 33884418   594482  5939200        0             0 python3.11
+[  +0.000002] [2140498] 3122343 2140498 34279581   991028  8929280        0             0 python3.11
+[  +0.000001] [2140499] 3122343 2140499 36410028  2444275 20746240        0             0 python3.11
+[  +0.000002] [2140500] 3122343 2140500 36945564  3633115 30281728        0             0 python3.11
+[  +0.000001] [2140501] 3122343 2140501 35064009  1556468 13631488        0             0 python3.11
+[  +0.000002] [2140502] 3122343 2140502 37880698  3189533 26759168        0             0 python3.11
+[  +0.000001] [2140503] 3122343 2140503 35084804  1694370 14708736        0             0 python3.11
+[  +0.000002] [2140504] 3122343 2140504 34281278   989876  8941568        0             0 python3.11
+[  +0.000002] [2140505] 3122343 2140505 34307131  1015412  9150464        0             0 python3.11
+[  +0.000001] [2140506] 3122343 2140506 34944078  1403940 12390400        0             0 python3.11
+[  +0.000002] [2140507] 3122343 2140507 37555875  4152746 34443264        0             0 python3.11
+[  +0.000002] [2140508] 3122343 2140508 34167452   873140  8036352        0             0 python3.11
+[  +0.000001] [2140509] 3122343 2140509 35617805  1967732 16912384        0             0 python3.11
+[  +0.000002] [2140510] 3122343 2140510 34063772   767732  7200768        0             0 python3.11
+[  +0.000001] [2140511] 3122343 2140511 39059020  4439843 36745216        0             0 python3.11
+[  +0.000002] [2140512] 3122343 2140512 34152527   861236  7913472        0             0 python3.11
+[  +0.000001] [2140513] 3122343 2140513 34157185   861044  7950336        0             0 python3.11
+[  +0.000002] [2140514] 3122343 2140514 38164028  3959999 32960512        0             0 python3.11
+[  +0.000001] [2140515] 3122343 2140515 36222621  1789784 15519744        0             0 python3.11
+[  +0.000002] [2140516] 3122343 2140516 33884730   595952  5943296        0             0 python3.11
+[  +0.000002] [2140517] 3122343 2140517 34095053   800564  7450624        0             0 python3.11
+[  +0.000001] [2140518] 3122343 2140518 38094762  3866687 32165888        0             0 python3.11
+[  +0.000002] [2140519] 3122343 2140519 39081153  5298894 43696128        0             0 python3.11
+[  +0.000002] [2140520] 3122343 2140520 36234833  2941223 24739840        0             0 python3.11
+[  +0.000001] [2140521] 3122343 2140521 34218569   922292  8536064        0             0 python3.11
+[  +0.000002] [2140522] 3122343 2140522 37204249  2981731 25055232        0             0 python3.11
+[  +0.000001] [2140523] 3122343 2140523 37985593  4620233 38215680        0             0 python3.11
+[  +0.000002] [2140524] 3122343 2140524 37919657  4246609 35209216        0             0 python3.11
+[  +0.000002] [2140525] 3122343 2140525 38134036  3654492 30490624        0             0 python3.11
+[  +0.000001] [2140526] 3122343 2140526 35245676  1906688 16474112        0             0 python3.11
+[  +0.000002] [2140527] 3122343 2140527 34044859   750452  7049216        0             0 python3.11
+[  +0.000001] [2140528] 3122343 2140528 36142681  2826837 23842816        0             0 python3.11
+[  +0.000002] [2140529] 3122343 2140529 33899210   604407  6057984        0             0 python3.11
+[  +0.000002] [2140530] 3122343 2140530 36955778  3449164 28815360        0             0 python3.11
+[  +0.000001] [2140531] 3122343 2140531 34267758   974708  8929280        0             0 python3.11
+[  +0.000002] [2140532] 3122343 2140532 38778297  4710166 38948864        0             0 python3.11
+[  +0.000002] [2140533] 3122343 2140533 34194971   904820  8253440        0             0 python3.11
+[  +0.000001] [2140534] 3122343 2140534 37702040  3452515 28880896        0             0 python3.11
+[  +0.000002] [2140535] 3122343 2140535 34035466   739892  6971392        0             0 python3.11
+[  +0.000001] [2140536] 3122343 2140536 33814528   522436  5373952        0             0 python3.11
+[  +0.000002] [2140537] 3122343 2140537 35190294  1899380 16367616        0             0 python3.11
+[  +0.000001] [2140538] 3122343 2140538 34037295   740359  6987776        0             0 python3.11
+[  +0.000002] [2140539] 3122343 2140539 34030609   733748  6934528        0             0 python3.11
+[  +0.000001] [2140540] 3122343 2140540 38222537  4581991 37888000        0             0 python3.11
+[  +0.000002] [2140541] 3122343 2140541 34040366   744884  7012352        0             0 python3.11
+[  +0.000001] [2140542] 3122343 2140542 36807022  3517644 29335552        0             0 python3.11
+[  +0.000002] [2140543] 3122343 2140543 36453049  3042361 25563136        0             0 python3.11
+[  +0.000002] [2140544] 3122343 2140544 34067642   772340  7229440        0             0 python3.11
+[  +0.000001] [2140545] 3122343 2140545 34100183   809204  7491584        0             0 python3.11
+[  +0.000002] [2140546] 3122343 2140546 36273358  2834212 23879680        0             0 python3.11
+[  +0.000002] [2140547] 3122343 2140547 38049411  3775344 31440896        0             0 python3.11
+[  +0.000001] [2140548] 3122343 2140548 37796407  3478680 29081600        0             0 python3.11
+[  +0.000002] [2140549] 3122343 2140549 34702344  1205376 10838016        0             0 python3.11
+[  +0.000001] [2140550] 3122343 2140550 36933375  2629113 22261760        0             0 python3.11
+[  +0.000002] [2140551] 3122343 2140551 34781175  1439732 12718080        0             0 python3.11
+[  +0.000001] [2140552] 3122343 2140552 33900167   605132  6062080        0             0 python3.11
+[  +0.000002] [2140553] 3122343 2140553 37354037  3264416 27328512        0             0 python3.11
+[  +0.000002] [2140554] 3122343 2140554 34081150   784488  7335936        0             0 python3.11
+[  +0.000001] [2140555] 3122343 2140555 34135146   839720  7868416        0             0 python3.11
+[  +0.000002] [2140556] 3122343 2140556 34019572   725544  6844416        0             0 python3.11
+[  +0.000001] [2140557] 3122343 2140557 35795825  1534266 13484032        0             0 python3.11
+[  +0.000002] [2140558] 3122343 2140558 34114725   819752  7610368        0             0 python3.11
+[  +0.000002] [2140559] 3122343 2140559 35029105  1592025 13942784        0             0 python3.11
+[  +0.000001] [2140560] 3122343 2140560 37318508  3957370 32911360        0             0 python3.11
+[  +0.000002] [2140561] 3122343 2140561 34024542   729320  6885376        0             0 python3.11
+[  +0.000002] [2140562] 3122343 2140562 38303772  3989784 33161216        0             0 python3.11
+[  +0.000001] [2140563] 3122343 2140563 35666549  2370685 20189184        0             0 python3.11
+[  +0.000002] [2140564] 3122343 2140564 37264112  3083062 25927680        0             0 python3.11
+[  +0.000001] [2140565] 3122343 2140565 37505450  3877027 32276480        0             0 python3.11
+[  +0.000002] [2140566] 3122343 2140566 36240149  2849323 24039424        0             0 python3.11
+[  +0.000001] [2140567] 3122343 2140567 33986501   689960  6578176        0             0 python3.11
+[  +0.000002] [2140568] 3122343 2140568 33987569   691112  6590464        0             0 python3.11
+[  +0.000002] [2140569] 3122343 2140569 34077108   782132  7307264        0             0 python3.11
+[  +0.000001] [2140570] 3122343 2140570 34707180  1411004 12476416        0             0 python3.11
+[  +0.000002] [2140574] 3122343 2140574 33566920   286571  3072000        0             0 python3.11
+[  +0.000002] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=slurm,mems_allowed=0-3,global_oom,task_memcg=/system.slice/slurmstepd.scope/job_91762/step_batch/user/task_0,task=python3.11,pid=2140475,uid=3122343
+[  +0.000018] Out of memory: Killed process 2140475 (python3.11) total-vm:161454788kB, anon-rss:22791124kB, file-rss:115192kB, shmem-rss:0kB, UID:3122343 pgtables:45980kB oom_score_adj:0
+[  +4.319207] oom_reaper: reaped process 2140475 (python3.11), now anon-rss:0kB, file-rss:27208kB, shmem-rss:0kB
+
