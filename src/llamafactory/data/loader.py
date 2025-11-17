@@ -57,6 +57,7 @@ def _load_single_dataset(
     r"""Load a single dataset and aligns it to the standard format."""
     logger.info_rank0(f"Loading dataset {dataset_attr}...")
     data_path, data_name, data_dir, data_files = None, None, None, None
+    
     if dataset_attr.load_from in ["hf_hub", "ms_hub", "om_hub"]:
         data_path = dataset_attr.dataset_name
         data_name = dataset_attr.subset

@@ -1,0 +1,352 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2025-11-16 02:57:55] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: 127.0.0.1:56031
+W1116 02:57:57.043000 1267360 site-packages/torch/distributed/run.py:792] 
+W1116 02:57:57.043000 1267360 site-packages/torch/distributed/run.py:792] *****************************************
+W1116 02:57:57.043000 1267360 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W1116 02:57:57.043000 1267360 site-packages/torch/distributed/run.py:792] *****************************************
+[2025-11-16 02:58:04,974] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-16 02:58:04,994] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-16 02:58:05,161] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-16 02:58:05,412] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2025-11-16 02:58:08,217] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-11-16 02:58:08,218] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-11-16 02:58:08,218] [INFO] [comm.py:700:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[2025-11-16 02:58:08,218] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-11-16 02:58:08,219] [INFO] [comm.py:669:init_distributed] cdb=None
+[INFO|2025-11-16 02:58:08] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2025-11-16 02:58:08] llamafactory.hparams.parser:423 >> Process rank: 0, world size: 4, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|hub.py:421] 2025-11-16 02:58:08,566 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1949] 2025-11-16 02:58:08,581 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,591 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,591 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,591 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,591 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,591 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,591 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,591 >> loading file chat_template.jinja from cache at None
+[INFO|tokenization_utils_base.py:2364] 2025-11-16 02:58:08,796 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|hub.py:421] 2025-11-16 02:58:08,796 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:421] 2025-11-16 02:58:08,798 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:316] 2025-11-16 02:58:08,800 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2025-11-16 02:58:08,803 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:316] 2025-11-16 02:58:08,805 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2025-11-16 02:58:08,806 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:428] 2025-11-16 02:58:08,813 >> Image processor Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|tokenization_utils_base.py:1949] 2025-11-16 02:58:08,813 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,817 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,817 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,817 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,817 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,817 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,817 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2025-11-16 02:58:08,817 >> loading file chat_template.jinja from cache at None
+[INFO|tokenization_utils_base.py:2364] 2025-11-16 02:58:08,978 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|video_processing_utils.py:660] 2025-11-16 02:58:08,979 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:726] 2025-11-16 02:58:08,982 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:770] 2025-11-16 02:58:08,985 >> Video processor Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+[INFO|processing_utils.py:928] 2025-11-16 02:58:08,985 >> Offline mode: forcing local_files_only=True
+[INFO|processing_utils.py:1116] 2025-11-16 02:58:08,991 >> loading configuration file processor_config.json from cache at None
+[INFO|processing_utils.py:1199] 2025-11-16 02:58:09,277 >> Processor Qwen2_5_VLProcessor:
+- image_processor: Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2TokenizerFast(name_or_path='Qwen/Qwen2.5-VL-7B-Instruct', vocab_size=151643, model_max_length=131072, is_fast=True, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'additional_special_tokens': ['<|im_start|>', '<|im_end|>', '<|object_ref_start|>', '<|object_ref_end|>', '<|box_start|>', '<|box_end|>', '<|quad_start|>', '<|quad_end|>', '<|vision_start|>', '<|vision_end|>', '<|vision_pad|>', '<|image_pad|>', '<|video_pad|>']}, clean_up_tokenization_spaces=False, added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151647: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151648: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151649: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151650: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151651: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151652: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151653: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151654: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151655: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151656: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151657: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151658: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151659: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151660: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151661: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151662: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151663: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151664: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+}
+)
+- video_processor: Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+
+{
+  "processor_class": "Qwen2_5_VLProcessor"
+}
+
+[INFO|2025-11-16 02:58:09] llamafactory.data.loader:143 >> Loading dataset /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/942a5514a2ed64b8ad7ec624ecde74f08884f1c8/data/...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+Converting format of dataset (num_proc=96): 100%|██████████| 33047/33047 [00:00<?, ? examples/s][INFO|2025-11-16 02:58:09] llamafactory.hparams.parser:423 >> Process rank: 3, world size: 4, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2025-11-16 02:58:09] llamafactory.hparams.parser:423 >> Process rank: 1, world size: 4, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2025-11-16 02:58:09] llamafactory.hparams.parser:423 >> Process rank: 2, world size: 4, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[rank3]:[W1116 02:58:10.136626326 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank2]:[W1116 02:58:10.142860166 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank1]:[W1116 02:58:10.698621665 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+Converting format of dataset (num_proc=96): 33048 examples [00:01,  1.47s/ examples]            Converting format of dataset (num_proc=96): 33052 examples [00:01,  4.09 examples/s]Converting format of dataset (num_proc=96): 33062 examples [00:01, 14.63 examples/s]Converting format of dataset (num_proc=96): 33072 examples [00:01, 25.59 examples/s]Converting format of dataset (num_proc=96): 33089 examples [00:01, 47.50 examples/s]Converting format of dataset (num_proc=96): 33104 examples [00:02, 64.26 examples/s]Converting format of dataset (num_proc=96): 33121 examples [00:02, 84.94 examples/s]Converting format of dataset (num_proc=96): 33137 examples [00:02, 96.71 examples/s]Converting format of dataset (num_proc=96): 33150 examples [00:02, 92.20 examples/s]Converting format of dataset (num_proc=96): 33162 examples [00:02, 95.77 examples/s]Converting format of dataset (num_proc=96): 33174 examples [00:02, 97.66 examples/s]Converting format of dataset (num_proc=96): 33189 examples [00:02, 107.44 examples/s]Converting format of dataset (num_proc=96): 33205 examples [00:02, 119.92 examples/s]Converting format of dataset (num_proc=96): 33218 examples [00:02, 116.23 examples/s]Converting format of dataset (num_proc=96): 33231 examples [00:03, 104.96 examples/s]Converting format of dataset (num_proc=96): 33243 examples [00:03, 102.08 examples/s]Converting format of dataset (num_proc=96): 33262 examples [00:03, 123.76 examples/s]Converting format of dataset (num_proc=96): 33288 examples [00:03, 152.57 examples/s]Converting format of dataset (num_proc=96): 33304 examples [00:03, 134.38 examples/s]Converting format of dataset (num_proc=96): 33322 examples [00:03, 145.12 examples/s]Converting format of dataset (num_proc=96): 33343 examples [00:03, 159.45 examples/s]Converting format of dataset (num_proc=96): 33360 examples [00:04, 141.28 examples/s]Converting format of dataset (num_proc=96): 33378 examples [00:04, 150.36 examples/s]Converting format of dataset (num_proc=96): 33396 examples [00:04, 147.80 examples/s]Converting format of dataset (num_proc=96): 33422 examples [00:04, 174.92 examples/s]Converting format of dataset (num_proc=96): 33446 examples [00:04, 192.28 examples/s]Converting format of dataset (num_proc=96): 33469 examples [00:04, 194.03 examples/s]Converting format of dataset (num_proc=96): 33491 examples [00:04, 183.01 examples/s]Converting format of dataset (num_proc=96): 33514 examples [00:04, 191.13 examples/s]Converting format of dataset (num_proc=96): 33537 examples [00:04, 192.38 examples/s]Converting format of dataset (num_proc=96): 33567 examples [00:05, 219.60 examples/s]Converting format of dataset (num_proc=96): 33591 examples [00:05, 200.28 examples/s]Converting format of dataset (num_proc=96): 33619 examples [00:05, 219.13 examples/s]Converting format of dataset (num_proc=96): 33646 examples [00:05, 232.19 examples/s]Converting format of dataset (num_proc=96): 33670 examples [00:05, 216.80 examples/s]Converting format of dataset (num_proc=96): 33693 examples [00:05, 215.27 examples/s]Converting format of dataset (num_proc=96): 33721 examples [00:05, 227.43 examples/s]Converting format of dataset (num_proc=96): 33752 examples [00:05, 245.14 examples/s]Converting format of dataset (num_proc=96): 33781 examples [00:05, 243.03 examples/s]Converting format of dataset (num_proc=96): 33811 examples [00:06, 255.00 examples/s]Converting format of dataset (num_proc=96): 33839 examples [00:06, 255.44 examples/s]Converting format of dataset (num_proc=96): 33865 examples [00:06, 242.69 examples/s]Converting format of dataset (num_proc=96): 33892 examples [00:06, 212.73 examples/s]Converting format of dataset (num_proc=96): 33919 examples [00:06, 226.11 examples/s]Converting format of dataset (num_proc=96): 33950 examples [00:06, 247.30 examples/s]Converting format of dataset (num_proc=96): 33988 examples [00:06, 277.82 examples/s]Converting format of dataset (num_proc=96): 34017 examples [00:06, 255.76 examples/s]Converting format of dataset (num_proc=96): 34044 examples [00:07, 239.85 examples/s]Converting format of dataset (num_proc=96): 34069 examples [00:07, 240.72 examples/s]Converting format of dataset (num_proc=96): 34104 examples [00:07, 266.53 examples/s]Converting format of dataset (num_proc=96): 34132 examples [00:07, 263.47 examples/s]Converting format of dataset (num_proc=96): 34161 examples [00:07, 260.86 examples/s]Converting format of dataset (num_proc=96): 34193 examples [00:07, 275.80 examples/s]Converting format of dataset (num_proc=96): 34235 examples [00:07, 306.46 examples/s]Converting format of dataset (num_proc=96): 34266 examples [00:07, 298.76 examples/s]Converting format of dataset (num_proc=96): 34296 examples [00:07, 259.19 examples/s]Converting format of dataset (num_proc=96): 34332 examples [00:08, 285.09 examples/s]Converting format of dataset (num_proc=96): 34368 examples [00:08, 304.87 examples/s]Converting format of dataset (num_proc=96): 34403 examples [00:08, 315.25 examples/s]Converting format of dataset (num_proc=96): 34437 examples [00:08, 315.80 examples/s]Converting format of dataset (num_proc=96): 34479 examples [00:08, 338.77 examples/s]Converting format of dataset (num_proc=96): 34514 examples [00:08, 323.83 examples/s]Converting format of dataset (num_proc=96): 34547 examples [00:08, 297.66 examples/s]Converting format of dataset (num_proc=96): 34591 examples [00:08, 333.33 examples/s]Converting format of dataset (num_proc=96): 34636 examples [00:08, 362.74 examples/s]Converting format of dataset (num_proc=96): 34680 examples [00:09, 383.01 examples/s]Converting format of dataset (num_proc=96): 34730 examples [00:09, 396.69 examples/s]Converting format of dataset (num_proc=96): 34773 examples [00:09, 374.48 examples/s]Converting format of dataset (num_proc=96): 34834 examples [00:09, 437.32 examples/s]Converting format of dataset (num_proc=96): 34882 examples [00:09, 417.25 examples/s]Converting format of dataset (num_proc=96): 34943 examples [00:09, 452.66 examples/s]Converting format of dataset (num_proc=96): 34991 examples [00:09, 417.69 examples/s]Converting format of dataset (num_proc=96): 35044 examples [00:09, 441.83 examples/s]Converting format of dataset (num_proc=96): 35094 examples [00:09, 448.85 examples/s]Converting format of dataset (num_proc=96): 35144 examples [00:10, 455.77 examples/s]Converting format of dataset (num_proc=96): 35191 examples [00:10, 409.79 examples/s]Converting format of dataset (num_proc=96): 35246 examples [00:10, 435.25 examples/s]Converting format of dataset (num_proc=96): 35337 examples [00:10, 555.51 examples/s]Converting format of dataset (num_proc=96): 35450 examples [00:10, 705.62 examples/s]Converting format of dataset (num_proc=96): 35524 examples [00:10, 673.59 examples/s]Converting format of dataset (num_proc=96): 35619 examples [00:10, 744.85 examples/s]Converting format of dataset (num_proc=96): 35700 examples [00:10, 751.25 examples/s]Converting format of dataset (num_proc=96): 35789 examples [00:10, 787.38 examples/s]Converting format of dataset (num_proc=96): 35871 examples [00:11, 758.78 examples/s]Converting format of dataset (num_proc=96): 35952 examples [00:11, 667.73 examples/s]Converting format of dataset (num_proc=96): 36063 examples [00:11, 773.80 examples/s]Converting format of dataset (num_proc=96): 36144 examples [00:11, 714.16 examples/s]Converting format of dataset (num_proc=96): 36220 examples [00:11, 714.30 examples/s]Converting format of dataset (num_proc=96): 36294 examples [00:11, 666.07 examples/s]Converting format of dataset (num_proc=96): 36405 examples [00:11, 757.34 examples/s]Converting format of dataset (num_proc=96): 36501 examples [00:11, 801.24 examples/s]Converting format of dataset (num_proc=96): 36585 examples [00:12, 768.64 examples/s]Converting format of dataset (num_proc=96): 36695 examples [00:12, 836.11 examples/s]Converting format of dataset (num_proc=96): 36800 examples [00:12, 883.80 examples/s]Converting format of dataset (num_proc=96): 36890 examples [00:12, 812.56 examples/s]Converting format of dataset (num_proc=96): 36975 examples [00:12, 763.15 examples/s]Converting format of dataset (num_proc=96): 37087 examples [00:12, 851.07 examples/s]Converting format of dataset (num_proc=96): 37195 examples [00:12, 902.74 examples/s]Converting format of dataset (num_proc=96): 37360 examples [00:12, 1104.44 examples/s]Converting format of dataset (num_proc=96): 37537 examples [00:12, 1259.75 examples/s]Converting format of dataset (num_proc=96): 37694 examples [00:13, 1301.97 examples/s]Converting format of dataset (num_proc=96): 37829 examples [00:13, 1252.66 examples/s]Converting format of dataset (num_proc=96): 38010 examples [00:13, 1394.89 examples/s]Converting format of dataset (num_proc=96): 38168 examples [00:13, 1412.38 examples/s]Converting format of dataset (num_proc=96): 38315 examples [00:13, 1422.27 examples/s]Converting format of dataset (num_proc=96): 38487 examples [00:13, 1503.02 examples/s]Converting format of dataset (num_proc=96): 38639 examples [00:13, 1480.21 examples/s]Converting format of dataset (num_proc=96): 38792 examples [00:13, 1475.35 examples/s]Converting format of dataset (num_proc=96): 38945 examples [00:13, 1273.33 examples/s]Converting format of dataset (num_proc=96): 39130 examples [00:14, 1423.34 examples/s]Converting format of dataset (num_proc=96): 39282 examples [00:14, 1299.90 examples/s]Converting format of dataset (num_proc=96): 39420 examples [00:14, 1185.26 examples/s]Converting format of dataset (num_proc=96): 39547 examples [00:14, 1002.58 examples/s]Converting format of dataset (num_proc=96): 39683 examples [00:14, 1072.75 examples/s]Converting format of dataset (num_proc=96): 39801 examples [00:14, 1072.49 examples/s]Converting format of dataset (num_proc=96): 39927 examples [00:14, 1103.08 examples/s]Converting format of dataset (num_proc=96): 40126 examples [00:14, 1329.90 examples/s]Converting format of dataset (num_proc=96): 40266 examples [00:15, 1260.58 examples/s]Converting format of dataset (num_proc=96): 40400 examples [00:15, 1183.13 examples/s]Converting format of dataset (num_proc=96): 40549 examples [00:15, 1258.05 examples/s]Converting format of dataset (num_proc=96): 40736 examples [00:15, 1397.03 examples/s]Converting format of dataset (num_proc=96): 40879 examples [00:15, 1149.10 examples/s]Converting format of dataset (num_proc=96): 41004 examples [00:15, 1082.17 examples/s]Converting format of dataset (num_proc=96): 41161 examples [00:15, 1199.00 examples/s]Converting format of dataset (num_proc=96): 41288 examples [00:15, 1169.12 examples/s]Converting format of dataset (num_proc=96): 41415 examples [00:16, 1053.67 examples/s]Converting format of dataset (num_proc=96): 41526 examples [00:16, 912.18 examples/s] Converting format of dataset (num_proc=96): 41667 examples [00:16, 1021.57 examples/s]Converting format of dataset (num_proc=96): 41844 examples [00:16, 1200.00 examples/s]Converting format of dataset (num_proc=96): 41973 examples [00:16, 1196.30 examples/s]Converting format of dataset (num_proc=96): 42102 examples [00:16, 1152.40 examples/s]Converting format of dataset (num_proc=96): 42238 examples [00:16, 1192.30 examples/s]Converting format of dataset (num_proc=96): 42365 examples [00:16, 1135.86 examples/s]Converting format of dataset (num_proc=96): 42485 examples [00:17, 1125.07 examples/s]Converting format of dataset (num_proc=96): 42601 examples [00:17, 990.42 examples/s] Converting format of dataset (num_proc=96): 42706 examples [00:17, 966.62 examples/s]Converting format of dataset (num_proc=96): 42856 examples [00:17, 1099.56 examples/s]Converting format of dataset (num_proc=96): 42981 examples [00:17, 1136.42 examples/s]Converting format of dataset (num_proc=96): 43099 examples [00:17, 1121.16 examples/s]Converting format of dataset (num_proc=96): 43215 examples [00:17, 832.17 examples/s] Converting format of dataset (num_proc=96): 43311 examples [00:17, 766.68 examples/s]Converting format of dataset (num_proc=96): 43399 examples [00:18, 659.08 examples/s]Converting format of dataset (num_proc=96): 43474 examples [00:18, 532.10 examples/s]Converting format of dataset (num_proc=96): 43536 examples [00:18, 524.93 examples/s]Converting format of dataset (num_proc=96): 43675 examples [00:18, 701.45 examples/s]Converting format of dataset (num_proc=96): 43769 examples [00:18, 748.49 examples/s]Converting format of dataset (num_proc=96): 43890 examples [00:18, 834.33 examples/s]Converting format of dataset (num_proc=96): 43983 examples [00:19, 733.88 examples/s]Converting format of dataset (num_proc=96): 44108 examples [00:19, 851.31 examples/s]Converting format of dataset (num_proc=96): 44269 examples [00:19, 1024.61 examples/s]Converting format of dataset (num_proc=96): 44381 examples [00:19, 709.04 examples/s] Converting format of dataset (num_proc=96): 44490 examples [00:19, 741.77 examples/s]Converting format of dataset (num_proc=96): 44743 examples [00:19, 1119.92 examples/s]Converting format of dataset (num_proc=96): 44980 examples [00:19, 1393.50 examples/s]Converting format of dataset (num_proc=96): 45146 examples [00:19, 1440.36 examples/s]Converting format of dataset (num_proc=96): 45311 examples [00:20, 1386.39 examples/s]Converting format of dataset (num_proc=96): 45467 examples [00:20, 1416.65 examples/s]Converting format of dataset (num_proc=96): 45629 examples [00:20, 1468.84 examples/s]Converting format of dataset (num_proc=96): 45941 examples [00:20, 1921.60 examples/s]Converting format of dataset (num_proc=96): 46337 examples [00:20, 2495.23 examples/s]Converting format of dataset (num_proc=96): 46714 examples [00:20, 2846.67 examples/s]Converting format of dataset (num_proc=96): 47076 examples [00:20, 3052.20 examples/s]Converting format of dataset (num_proc=96): 47482 examples [00:20, 3343.74 examples/s]Converting format of dataset (num_proc=96): 47874 examples [00:20, 3512.55 examples/s]Converting format of dataset (num_proc=96): 48388 examples [00:21, 3985.79 examples/s]Converting format of dataset (num_proc=96): 49105 examples [00:21, 4913.62 examples/s]Converting format of dataset (num_proc=96): 49827 examples [00:21, 5593.59 examples/s]Converting format of dataset (num_proc=96): 50702 examples [00:21, 6517.60 examples/s]Converting format of dataset (num_proc=96): 51561 examples [00:21, 7119.42 examples/s]Converting format of dataset (num_proc=96): 52380 examples [00:21, 7423.06 examples/s]Converting format of dataset (num_proc=96): 53317 examples [00:21, 7982.84 examples/s]Converting format of dataset (num_proc=96): 54181 examples [00:21, 8167.76 examples/s]Converting format of dataset (num_proc=96): 55028 examples [00:21, 8230.90 examples/s]Converting format of dataset (num_proc=96): 55865 examples [00:21, 8267.13 examples/s]Converting format of dataset (num_proc=96): 56733 examples [00:22, 8381.24 examples/s]Converting format of dataset (num_proc=96): 57575 examples [00:22, 8353.89 examples/s]Converting format of dataset (num_proc=96): 58480 examples [00:22, 8510.03 examples/s]Converting format of dataset (num_proc=96): 59335 examples [00:22, 8258.90 examples/s]Converting format of dataset (num_proc=96): 60166 examples [00:22, 7877.98 examples/s]Converting format of dataset (num_proc=96): 60958 examples [00:22, 7708.11 examples/s]Converting format of dataset (num_proc=96): 61733 examples [00:22, 7306.96 examples/s]Converting format of dataset (num_proc=96): 62469 examples [00:22, 7311.75 examples/s]Converting format of dataset (num_proc=96): 63205 examples [00:22, 6791.90 examples/s]Converting format of dataset (num_proc=96): 63898 examples [00:23, 6476.70 examples/s]Converting format of dataset (num_proc=96): 64554 examples [00:23, 5739.43 examples/s]Converting format of dataset (num_proc=96): 65147 examples [00:23, 4629.46 examples/s]Converting format of dataset (num_proc=96): 65652 examples [00:23, 3546.09 examples/s]Converting format of dataset (num_proc=96): 66068 examples [00:24, 1092.75 examples/s]Converting format of dataset (num_proc=96): 66094 examples [00:25, 1282.86 examples/s]
+[rank0]:[W1116 02:58:35.326993930 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+Running tokenizer on dataset (num_proc=96):   0%|          | 0/33047 [00:00<?, ? examples/s][WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:00:55,620 >> Token indices sequence length is longer than the specified maximum sequence length for this model (168171 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:01:37,009 >> Token indices sequence length is longer than the specified maximum sequence length for this model (168164 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:03:14,381 >> Token indices sequence length is longer than the specified maximum sequence length for this model (138750 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:04:29,053 >> Token indices sequence length is longer than the specified maximum sequence length for this model (138755 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:05:34,446 >> Token indices sequence length is longer than the specified maximum sequence length for this model (132041 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:06:39,019 >> Token indices sequence length is longer than the specified maximum sequence length for this model (145858 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:06:47,009 >> Token indices sequence length is longer than the specified maximum sequence length for this model (132037 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:06:53,143 >> Token indices sequence length is longer than the specified maximum sequence length for this model (132043 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:06:55,066 >> Token indices sequence length is longer than the specified maximum sequence length for this model (132044 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:10:32,761 >> Token indices sequence length is longer than the specified maximum sequence length for this model (168166 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:10:43,451 >> Token indices sequence length is longer than the specified maximum sequence length for this model (145861 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:13:42,785 >> Token indices sequence length is longer than the specified maximum sequence length for this model (132043 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:13:50,969 >> Token indices sequence length is longer than the specified maximum sequence length for this model (168165 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:14:27,720 >> Token indices sequence length is longer than the specified maximum sequence length for this model (138752 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:14:45,439 >> Token indices sequence length is longer than the specified maximum sequence length for this model (145853 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:15:17,765 >> Token indices sequence length is longer than the specified maximum sequence length for this model (145860 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:15:48,168 >> Token indices sequence length is longer than the specified maximum sequence length for this model (145861 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:16:02,934 >> Token indices sequence length is longer than the specified maximum sequence length for this model (168166 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:16:26,302 >> Token indices sequence length is longer than the specified maximum sequence length for this model (132043 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:16:34,765 >> Token indices sequence length is longer than the specified maximum sequence length for this model (138749 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:16:37,344 >> Token indices sequence length is longer than the specified maximum sequence length for this model (145858 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:16:51,518 >> Token indices sequence length is longer than the specified maximum sequence length for this model (168165 > 131072). Running this sequence through the model will result in indexing errors
+[WARNING|tokenization_utils_base.py:4009] 2025-11-16 03:17:27,095 >> Token indices sequence length is longer than the specified maximum sequence length for this model (132039 > 131072). Running this sequence through the model will result in indexing errors
+slurmstepd: error: *** JOB 91746 ON trig0029 CANCELLED AT 2025-11-16T03:17:57 DUE TO TIME LIMIT ***
+
+scontrol show job 91746
+JobId=91746 JobName=slurm_qwen2_5vl_lora_sft_SQA3D.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=371900 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=TimeLimit Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:15
+   RunTime=00:20:24 TimeLimit=00:20:00 TimeMin=N/A
+   SubmitTime=2025-11-16T02:29:58 EligibleTime=2025-11-16T02:29:58
+   AccrueTime=2025-11-16T02:29:58
+   StartTime=2025-11-16T02:57:33 EndTime=2025-11-16T03:17:57 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-16T02:57:33 Scheduler=Backfill
+   Partition=compute_full_node AllocNode:Sid=trig-login01:1127669
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0029
+   BatchHost=trig0029
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3D.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L slurm_qwen2_5vl_lora_sft_SQA3D.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D-91746.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D-91746.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+sacct -j 91746
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+91746        slurm_qwe+ def-wangcs   00:20:24                         02:19:02 1-01:57:14      0:0 
+91746.batch       batch def-wangcs   00:20:28          0 224085112K   02:19:02 1-01:57:14     0:15 
+91746.extern     extern def-wangcs   00:20:29          0        64K  00:00.001   00:00:00      0:0 
+

@@ -730,5 +730,21 @@
       "prompt": "content"
     },
     "folder": "python"
+  },
+  "SQA3D": {
+    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ab8c5bdb32fa57903341793954a35f832b75b88a/data/",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "question_with_image_tags_every_8",
+      "response": "best_trace_formatted",
+      "images": "images_every_8",
+      "system": "system_prompt"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
   }
 }
