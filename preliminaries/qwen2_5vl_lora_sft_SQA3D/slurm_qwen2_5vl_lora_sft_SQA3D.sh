@@ -6,6 +6,8 @@
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3D-%j.out
 
+# 100 examples takes 25 minutes
+
 module load apptainer
 
 TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
