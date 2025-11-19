@@ -2,11 +2,10 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1   
-#SBATCH --time=0-00:05:00
+#SBATCH --time=0-00:01:00
+#SBATCH --mem=32GB
 #SBATCH --gpus-per-node=h100:1
-#SBATCH --output=%N-helloworld-%j.out
-
-# regarding memory; trillium doesn't use a --mem option and the default of 256M on nibi is needed, so we can leave it out.
+#SBATCH --output=%N-slurm_install_components-%j.out
 
 module load apptainer
 
@@ -26,4 +25,4 @@ apptainer run --nv --writable-tmpfs \
     --env FLASHINFER_WORKSPACE_BASE="/scratch/indrisch/" \
     --pwd /scratch/indrisch/LLaMA-Factory \
     /scratch/indrisch/easyr1_verl_sif/llamafactory.sif \
-    bash /scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck/sanitycheck.sh
+    bash /scratch/indrisch/LLaMA-Factory/preliminaries/container_tools/install_components.sh
