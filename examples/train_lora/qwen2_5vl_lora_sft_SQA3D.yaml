@@ -1,6 +1,6 @@
 ### model
 model_name_or_path: Qwen/Qwen2.5-VL-7B-Instruct
-image_max_pixels: 65536 # 313632 = 648x414 image, 1/4 of the size of the default SQA3D image, exceeds token limit by factor of 3
+image_max_pixels: 65536 # 313632 = 648x414 image, 1/4 of the size of the default SQA3D image, exceeds token limit by factor of 3; the system seems to work when this value is a divisor of 313632
 video_max_pixels: 16384
 trust_remote_code: true
 
@@ -18,8 +18,9 @@ template: qwen2_vl
 cutoff_len: 131072 # max len of the model
 max_samples: 500 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
 overwrite_cache: true
-preprocessing_num_workers: 96
-dataloader_num_workers: 16
+preprocessing_num_workers: 32
+dataloader_num_workers: 4
+low_cpu_mem_usage: true
 # streaming: true # mutually exclusive with max_samples; requires max_steps. However, this seems to make it very slow.
 # max_steps: 100
 
