@@ -2,11 +2,12 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=96   
-#SBATCH --time=0-00:45:00
+#SBATCH --time=0-00:10:00
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3D-%j.out
 
-# 100 examples takes 25 minutes
+# 100 examples (per_device_train_batch_size: 2) takes 25 minutes; used 14.49% of memory (108.97 of 751.95 GB)
+# 500 examples (per_device_train_batch_size: 2) takes about 120 minutes; used 22.57% of memory (169.68 of 751.95 GB)
 
 module load apptainer
 
