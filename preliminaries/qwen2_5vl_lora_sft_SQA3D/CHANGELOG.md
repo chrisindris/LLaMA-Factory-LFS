@@ -1,6 +1,7 @@
 # to save outputs:
 find . -type f -size +50M ! -name *.dar ! -name "*pt_data_worker*" ! -wholename "*saves*" ! -name *.whl ! -name *.pack -exec sh -c "module load git-lfs/3.4.0 StdEnv/2023 && git-lfs track {} && echo {}" sh {} \;
 # then, upload saves to GCP
+rclone sync ./saves/ gcs-cvis-scene-understanding://sqa-3d/LLaMA-Factory/saves --progress --update --gcs-bucket-policy-only
 
 
 # 100 examples (per_device_train_batch_size: 2) takes 25 minutes; used 14.49% of CPU memory (108.97 of 751.95 GB), no GPU OOM errors
