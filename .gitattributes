@@ -8,3 +8,4 @@ saves/qwen2_5vl-7b/lora/sft/checkpoint-6/global_step6/bf16_zero_pp_rank_1_mp_ran
 saves/qwen2_5vl-7b/lora/sft/checkpoint-6/global_step6/bf16_zero_pp_rank_2_mp_rank_00_optim_states.pt filter=lfs diff=lfs merge=lfs -text
 saves/qwen2_5vl-7b/lora/sft/checkpoint-6/global_step6/bf16_zero_pp_rank_3_mp_rank_00_optim_states.pt filter=lfs diff=lfs merge=lfs -text
 .git/lfs/objects/06/81/068151f07c62e4c446821e2e135369ed67202f14ea39a63ebe4d220961589846 filter=lfs diff=lfs merge=lfs -text
+.git/lfs/objects/be/59/be59d3b1266339f2eb6a96d40b9cb2782fd1d9c3db5de70703f9fe4b6eb52bfb filter=lfs diff=lfs merge=lfs -text
