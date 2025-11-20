@@ -19,7 +19,7 @@ cutoff_len: 131072 # max len of the model
 max_samples: 500 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
 overwrite_cache: true
 preprocessing_num_workers: 32
-dataloader_num_workers: 4
+dataloader_num_workers: 32
 low_cpu_mem_usage: true
 # streaming: true # mutually exclusive with max_samples; requires max_steps. However, this seems to make it very slow.
 # max_steps: 100
