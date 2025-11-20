@@ -14,7 +14,7 @@ lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
 dataset: SQA3D
-media_dir: /project/aip-wangcs/indrisch/data/
+media_dir: /project/def-wangcs/indrisch/vllm/data/
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
 #max_samples: 2500 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
