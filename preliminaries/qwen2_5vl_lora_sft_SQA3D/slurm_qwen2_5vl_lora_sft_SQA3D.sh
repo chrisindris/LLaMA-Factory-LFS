@@ -1,8 +1,9 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=96   
+#SBATCH --cpus-per-task=56   
 #SBATCH --time=0-00:10:00
+#SBATCH --mem=1000G
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3D-%j.out
 
