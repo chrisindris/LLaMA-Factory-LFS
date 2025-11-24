@@ -14,7 +14,8 @@ module load apptainer
 TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
 
 # Container SIF file
-SIF_FILE="/scratch/indrisch/easyr1_spatial_understanding/easyr1_spatial_understanding.sif"
+#SIF_FILE="/scratch/indrisch/easyr1_spatial_understanding/easyr1_spatial_understanding.sif"
+SIF_FILE="/scratch/indrisch/easyr1_verl_sif/llamafactory.sif"
 
 # Bind mounts - following run_apptainer.sh pattern
 BIND_MOUNTS=(
@@ -40,6 +41,6 @@ apptainer exec --nv "${BIND_MOUNTS[@]}" \
     --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
     --env FORCE_TORCHRUN=1 \
     --pwd /scratch/indrisch/LLaMA-Factory \
-    "${SIF_FILE}" \
+    ${SIF_FILE} \
     llamafactory-cli train /scratch/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3D_unsloth.yaml
 
