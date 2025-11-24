@@ -54,10 +54,10 @@ print_param_status: true
 # acceleration
 flash_attn: fa2
 enable_liger_kernel: true
-#use_unsloth: true # mutually exclusive with DeepSpeed, which partitions in a more complex manner than unsloth.
+use_unsloth: true # mutually exclusive with DeepSpeed, which partitions in a more complex manner than unsloth.
 
 # distribution
-deepspeed: examples/deepspeed/ds_z3_offload_config.json
+#deepspeed: examples/deepspeed/ds_z3_offload_config.json
 
 ### eval
 # do_predict: true
