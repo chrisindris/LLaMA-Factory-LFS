@@ -1,0 +1,41 @@
+FATAL:   "llamafactory-cli": executable file not found in $PATH
+
+scontrol show job 96988
+JobId=96988 JobName=slurm_qwen2_5vl_lora_sft_SQA3D_unsloth.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=318473 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=255:0
+   RunTime=00:00:08 TimeLimit=00:02:00 TimeMin=N/A
+   SubmitTime=2025-11-20T20:44:22 EligibleTime=2025-11-20T20:44:22
+   AccrueTime=2025-11-20T20:44:22
+   StartTime=2025-11-20T20:49:03 EndTime=2025-11-20T20:49:11 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-20T20:49:03 Scheduler=Main
+   Partition=compute AllocNode:Sid=trig-login01:3414661
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0025
+   BatchHost=trig0025
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3D_unsloth.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L slurm_qwen2_5vl_lora_sft_SQA3D_unsloth.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D_unsloth-96988.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D_unsloth-96988.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=1
+   
+
+sacct -j 96988
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+96988        slurm_qwe+ def-wangcs   00:00:08                         00:00:00   00:00:00      0:0 
+96988.batch       batch def-wangcs   00:00:08                         00:00:00   00:00:00      0:0 
+96988.extern     extern def-wangcs   00:00:08                         00:00:00   00:00:00      0:0 
+
