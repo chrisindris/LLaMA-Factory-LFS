@@ -1,0 +1,274 @@
+[INFO|2025-11-24 05:12:04] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: 127.0.0.1:55219
+W1124 05:12:05.073000 173682 site-packages/torch/distributed/run.py:792] 
+W1124 05:12:05.073000 173682 site-packages/torch/distributed/run.py:792] *****************************************
+W1124 05:12:05.073000 173682 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W1124 05:12:05.073000 173682 site-packages/torch/distributed/run.py:792] *****************************************
+[2025-11-24 05:12:12,448] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-24 05:12:12,449] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-24 05:12:12,532] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-24 05:12:12,641] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 563, in from_name
+[rank0]:     return next(cls.discover(name=name))
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]: StopIteration
+
+[rank0]: During handling of the above exception, another exception occurred:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/versions.py", line 102, in require_version
+[rank0]:     got_ver = importlib.metadata.version(pkg)
+[rank0]:               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 1009, in version
+[rank0]:     return distribution(distribution_name).version
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 982, in distribution
+[rank0]:     return Distribution.from_name(distribution_name)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 565, in from_name
+[rank0]:     raise PackageNotFoundError(name)
+[rank0]: importlib.metadata.PackageNotFoundError: No package metadata was found for unsloth
+
+[rank0]: During handling of the above exception, another exception occurred:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/app/src/llamafactory/launcher.py", line 180, in <module>
+[rank0]:     run_exp()
+[rank0]:   File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+[rank0]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank0]:   File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+[rank0]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank0]:                                                                              ^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/app/src/llamafactory/hparams/parser.py", line 322, in get_train_args
+[rank0]:     _check_extra_dependencies(model_args, finetuning_args, training_args)
+[rank0]:   File "/app/src/llamafactory/hparams/parser.py", line 149, in _check_extra_dependencies
+[rank0]:     check_version("unsloth", mandatory=True)
+[rank0]:   File "/app/src/llamafactory/extras/misc.py", line 92, in check_version
+[rank0]:     require_version(requirement, hint)
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/versions.py", line 104, in require_version
+[rank0]:     raise importlib.metadata.PackageNotFoundError(
+[rank0]: importlib.metadata.PackageNotFoundError: No package metadata was found for The 'unsloth' distribution was not found and is required by this application. 
+[rank0]: To fix: run `pip install unsloth`.
+[rank0]:[W1124 05:12:15.922953490 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 563, in from_name
+[rank3]:     return next(cls.discover(name=name))
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]: StopIteration
+
+[rank3]: During handling of the above exception, another exception occurred:
+
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/versions.py", line 102, in require_version
+[rank3]:     got_ver = importlib.metadata.version(pkg)
+[rank3]:               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 1009, in version
+[rank3]:     return distribution(distribution_name).version
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 982, in distribution
+[rank3]:     return Distribution.from_name(distribution_name)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 565, in from_name
+[rank3]:     raise PackageNotFoundError(name)
+[rank3]: importlib.metadata.PackageNotFoundError: No package metadata was found for unsloth
+
+[rank3]: During handling of the above exception, another exception occurred:
+
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/app/src/llamafactory/launcher.py", line 180, in <module>
+[rank3]:     run_exp()
+[rank3]:   File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+[rank3]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank3]:   File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+[rank3]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank3]:                                                                              ^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/app/src/llamafactory/hparams/parser.py", line 322, in get_train_args
+[rank3]:     _check_extra_dependencies(model_args, finetuning_args, training_args)
+[rank3]:   File "/app/src/llamafactory/hparams/parser.py", line 149, in _check_extra_dependencies
+[rank3]:     check_version("unsloth", mandatory=True)
+[rank3]:   File "/app/src/llamafactory/extras/misc.py", line 92, in check_version
+[rank3]:     require_version(requirement, hint)
+[rank3]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/versions.py", line 104, in require_version
+[rank3]:     raise importlib.metadata.PackageNotFoundError(
+[rank3]: importlib.metadata.PackageNotFoundError: No package metadata was found for The 'unsloth' distribution was not found and is required by this application. 
+[rank3]: To fix: run `pip install unsloth`.
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 563, in from_name
+[rank2]:     return next(cls.discover(name=name))
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]: StopIteration
+
+[rank2]: During handling of the above exception, another exception occurred:
+
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/versions.py", line 102, in require_version
+[rank2]:     got_ver = importlib.metadata.version(pkg)
+[rank2]:               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 1009, in version
+[rank2]:     return distribution(distribution_name).version
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 982, in distribution
+[rank2]:     return Distribution.from_name(distribution_name)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 565, in from_name
+[rank2]:     raise PackageNotFoundError(name)
+[rank2]: importlib.metadata.PackageNotFoundError: No package metadata was found for unsloth
+
+[rank2]: During handling of the above exception, another exception occurred:
+
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/app/src/llamafactory/launcher.py", line 180, in <module>
+[rank2]:     run_exp()
+[rank2]:   File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+[rank2]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank2]:   File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+[rank2]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank2]:                                                                              ^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/app/src/llamafactory/hparams/parser.py", line 322, in get_train_args
+[rank2]:     _check_extra_dependencies(model_args, finetuning_args, training_args)
+[rank2]:   File "/app/src/llamafactory/hparams/parser.py", line 149, in _check_extra_dependencies
+[rank2]:     check_version("unsloth", mandatory=True)
+[rank2]:   File "/app/src/llamafactory/extras/misc.py", line 92, in check_version
+[rank2]:     require_version(requirement, hint)
+[rank2]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/versions.py", line 104, in require_version
+[rank2]:     raise importlib.metadata.PackageNotFoundError(
+[rank2]: importlib.metadata.PackageNotFoundError: No package metadata was found for The 'unsloth' distribution was not found and is required by this application. 
+[rank2]: To fix: run `pip install unsloth`.
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 563, in from_name
+[rank1]:     return next(cls.discover(name=name))
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]: StopIteration
+
+[rank1]: During handling of the above exception, another exception occurred:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/versions.py", line 102, in require_version
+[rank1]:     got_ver = importlib.metadata.version(pkg)
+[rank1]:               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 1009, in version
+[rank1]:     return distribution(distribution_name).version
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 982, in distribution
+[rank1]:     return Distribution.from_name(distribution_name)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/importlib/metadata/__init__.py", line 565, in from_name
+[rank1]:     raise PackageNotFoundError(name)
+[rank1]: importlib.metadata.PackageNotFoundError: No package metadata was found for unsloth
+
+[rank1]: During handling of the above exception, another exception occurred:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/app/src/llamafactory/launcher.py", line 180, in <module>
+[rank1]:     run_exp()
+[rank1]:   File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+[rank1]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank1]:   File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+[rank1]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank1]:                                                                              ^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/app/src/llamafactory/hparams/parser.py", line 322, in get_train_args
+[rank1]:     _check_extra_dependencies(model_args, finetuning_args, training_args)
+[rank1]:   File "/app/src/llamafactory/hparams/parser.py", line 149, in _check_extra_dependencies
+[rank1]:     check_version("unsloth", mandatory=True)
+[rank1]:   File "/app/src/llamafactory/extras/misc.py", line 92, in check_version
+[rank1]:     require_version(requirement, hint)
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/versions.py", line 104, in require_version
+[rank1]:     raise importlib.metadata.PackageNotFoundError(
+[rank1]: importlib.metadata.PackageNotFoundError: No package metadata was found for The 'unsloth' distribution was not found and is required by this application. 
+[rank1]: To fix: run `pip install unsloth`.
+W1124 05:12:17.599000 173682 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 173750 closing signal SIGTERM
+W1124 05:12:17.599000 173682 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 173751 closing signal SIGTERM
+W1124 05:12:17.600000 173682 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 173752 closing signal SIGTERM
+E1124 05:12:18.164000 173682 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 173749) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/app/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-11-24_05:12:17
+  host      : trig0060.scinet.local
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 173749)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 110, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', '127.0.0.1', '--master_port', '55219', '/app/src/llamafactory/launcher.py', '/scratch/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3D_unsloth.yaml']' returned non-zero exit status 1.
+
+scontrol show job 101634
+JobId=101634 JobName=slurm_qwen2_5vl_lora_sft_SQA3D_unsloth.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=314583 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:00:36 TimeLimit=03:00:00 TimeMin=N/A
+   SubmitTime=2025-11-24T02:55:04 EligibleTime=2025-11-24T02:55:04
+   AccrueTime=2025-11-24T02:55:04
+   StartTime=2025-11-24T05:11:44 EndTime=2025-11-24T05:12:20 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-24T05:11:44 Scheduler=Main
+   Partition=compute_full_node AllocNode:Sid=trig-login01:993958
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0060
+   BatchHost=trig0060
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3D_unsloth.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L slurm_qwen2_5vl_lora_sft_SQA3D_unsloth.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D_unsloth-101634.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D_unsloth-101634.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+sacct -j 101634
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+101634       slurm_qwe+ def-wangcs   00:00:36                         00:00:00   00:00:00      0:0 
+101634.batch      batch def-wangcs   00:00:36                         00:00:00   00:00:00      0:0 
+101634.exte+     extern def-wangcs   00:00:36                         00:00:00   00:00:00      0:0 
+
