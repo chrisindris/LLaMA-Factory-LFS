@@ -2,12 +2,13 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=96
-#SBATCH --time=0-03:00:00
+#SBATCH --time=0-10:30:00
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3D-%j.out
 
 # 100 examples (per_device_train_batch_size: 2) takes 25 minutes; used 14.49% of CPU memory (108.97 of 751.95 GB), no GPU OOM errors
 # 500 examples (per_device_train_batch_size: 2) on a full node (96 CPUs, 4 GPUs, 32 preproc workers and 32 dataloader workers) took 1.75 hours; used 30.80% of CPU memory (231.57 of 751.95 GB)
+# 2500 examples (per_device_train_batch_size: 1) on a full node (96 CPUs, 4 GPUs, 32 preproc workers and 4 dataloader workers) took 9 hours; used 14.88% of CPU memory (111.89 of 751.95 GB)
 
 module load apptainer
 
