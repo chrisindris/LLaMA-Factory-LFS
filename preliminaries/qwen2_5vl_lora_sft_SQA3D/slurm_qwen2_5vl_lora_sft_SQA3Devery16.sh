@@ -13,7 +13,7 @@ TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
 # better to have triton cache on a non-nfs file system for speed
 # if we are offline, we need to indicate this
 apptainer run --nv --writable-tmpfs \
-    -B /scratch/indrisch/LLaMA-Factory \
+    -B /project/aip-wangcs/indrisch/LLaMA-Factory \
     -B /home/indrisch \
     -B /dev/shm:/dev/shm \
     -B /etc/ssl/certs:/etc/ssl/certs:ro \
@@ -29,6 +29,6 @@ apptainer run --nv --writable-tmpfs \
     --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
     --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
     --env FORCE_TORCHRUN=1 \
-    --pwd /scratch/indrisch/LLaMA-Factory \
-    /scratch/indrisch/easyr1_verl_sif/llamafactory.sif \
-    llamafactory-cli train /scratch/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery16.yaml
+    --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
+    /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif \
+    llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery16.yaml
