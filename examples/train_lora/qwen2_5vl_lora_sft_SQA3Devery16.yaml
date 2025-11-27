@@ -26,7 +26,7 @@ low_cpu_mem_usage: true
 # max_steps: 100
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft
+output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery16
 logging_steps: 10
 save_steps: 500
 plot_loss: true
