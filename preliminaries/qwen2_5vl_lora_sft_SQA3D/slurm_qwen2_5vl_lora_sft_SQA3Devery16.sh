@@ -6,6 +6,8 @@
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery16-%j.out
 
+# 33047 examples (per_device_train_batch_size: 2) on a full node (96 CPUs, 4 GPUs, 32 preproc workers and 4 dataloader workers) took 19 hours; used 15.59% of CPU memory (117.26 of 751.95 GB)
+
 module load apptainer
 
 TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
