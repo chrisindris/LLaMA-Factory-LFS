@@ -13,7 +13,7 @@ lora_rank: 8
 lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
-dataset: SQA3D
+dataset: SQA3Devery24
 media_dir: /scratch/indrisch/vllm_experiments/data/
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
