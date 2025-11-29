@@ -1,0 +1,66 @@
+WARNING: Environment variable HF_HUB_CACHE already has value [/scratch/indrisch/huggingface/hub], will not forward new value [/project/aip-wangcs/indrisch/huggingface/hub/] from parent process environment
+WARNING: Environment variable HF_HOME already has value [/scratch/indrisch/huggingface/hub], will not forward new value [/project/aip-wangcs/indrisch/huggingface/hub/] from parent process environment
+[91mERROR  : Could not write info to setgroups: Permission denied
+[0m[91mERROR  : Error while waiting event for user namespace mappings: no event received
+[0m
+======== GPU REPORT ========
+
+==============NVSMI LOG==============
+
+Timestamp                                 : Wed Nov 26 08:44:45 2025
+Driver Version                            : 570.195.03
+CUDA Version                              : 12.8
+
+Attached GPUs                             : 4
+GPU 00000000:4E:00.0
+    Accounting Mode                       : Enabled
+    Accounting Mode Buffer Size           : 4000
+    Accounted Processes                   : None
+
+GPU 00000000:5F:00.0
+    Accounting Mode                       : Enabled
+    Accounting Mode Buffer Size           : 4000
+    Accounted Processes                   : None
+
+GPU 00000000:CB:00.0
+    Accounting Mode                       : Enabled
+    Accounting Mode Buffer Size           : 4000
+    Accounted Processes                   : None
+
+GPU 00000000:DB:00.0
+    Accounting Mode                       : Enabled
+    Accounting Mode Buffer Size           : 4000
+    Accounted Processes                   : None
+
+Wed Nov 26 08:44:45 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.195.03             Driver Version: 570.195.03     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   33C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   32C    P0             69W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   33C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   33C    P0             68W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
