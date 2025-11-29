@@ -17,7 +17,7 @@ dataset: SQA3Devery24
 media_dir: /scratch/indrisch/vllm_experiments/data/
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
-# max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
+max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
 overwrite_cache: true
 preprocessing_num_workers: 32
 dataloader_num_workers: 4
@@ -26,11 +26,11 @@ low_cpu_mem_usage: true
 # max_steps: 100
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval
+output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval_resumefromcheckpoint
 logging_steps: 10
 save_steps: 500
 plot_loss: true
-overwrite_output_dir: true
+overwrite_output_dir: false
 save_only_model: false
 report_to: none  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 
@@ -43,7 +43,7 @@ lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
 ddp_timeout: 180000000
-resume_from_checkpoint: null
+resume_from_checkpoint: /scratch/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465/
 
 # debugging level
 debug: underflow_overflow

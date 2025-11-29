@@ -2,7 +2,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=96
-#SBATCH --time=0-01:00:00
+#SBATCH --time=0-16:00:00
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval-%j.out
 
@@ -27,16 +27,20 @@
 # 2. if I set val_size = 0.1, will that set train_size = 0.9?
 # - 2.NOTE: on https://llamafactory.readthedocs.io/en/latest/getting_started/sft.html, it seems like you can do both training and evaluation in one script, but in examples/train_lora/llama3_lora_sft.yaml it is commented out.
 # - 2.NOTE: it might help if you can do train and eval in the same script as shown in https://llamafactory.readthedocs.io/en/latest/getting_started/sft.html
-# - 2.NOTE: [the code has been running for 5 minutes, so perhaps it hasn't errored yet? we will see]
+# - 2.ANSWER: yes (see files named *SQA3Devery24_traineval*)
 # 3. should the training ground truth be the traces or the ground truth answers?
 # - 3.ANSWER: for NLG it seems like the same full answer used for training is used here for evaluation (see examples/extras/nlg_eval/llama3_lora_predict.yaml)
 # - 3.ANSWER: [answer in general terms, such as for general competency]
+
+
+# 500 examples took about 5 minutes
+# 1 epoch for 33047 examples (train and test 90-10 split) took under 13 hours
 
 module load apptainer
 
 TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
 
-# STEP 1: RUN THE TRAINING
+# STEP 1: RUN THE TRAINING AND EVALUATION
 
 # better to have triton cache on a non-nfs file system for speed
 # if we are offline, we need to indicate this
@@ -60,6 +64,3 @@ apptainer run --nv --writable-tmpfs \
     --pwd /scratch/indrisch/LLaMA-Factory \
     /scratch/indrisch/easyr1_verl_sif/llamafactory.sif \
     llamafactory-cli train /scratch/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery24_traineval.yaml
-
-
-# STEP 2: RUN THE EVALUATION
