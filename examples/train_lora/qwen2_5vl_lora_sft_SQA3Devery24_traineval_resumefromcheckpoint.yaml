@@ -26,11 +26,11 @@ low_cpu_mem_usage: true
 # max_steps: 100
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval_resumefromcheckpoint
+output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval
 logging_steps: 10
 save_steps: 500
 plot_loss: true
-overwrite_output_dir: false
+overwrite_output_dir: true
 save_only_model: false
 report_to: none  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 
@@ -38,7 +38,7 @@ report_to: none  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 8
 learning_rate: 1.0e-4
-num_train_epochs: 1.0
+num_train_epochs: 1.0 # note that this is cumulative; hence, if the model has had X epochs already and you want it to train for Y more epochs, you need to set num_train_epochs to X + Y. You can set this to increments of 500 and then if there is a difference after, it gets overwritten on the next run.
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
