@@ -1,0 +1,3 @@
+[91mERROR  : Could not write info to setgroups: Permission denied
+[0m[91mERROR  : Error while waiting event for user namespace mappings: no event received
+[0m
