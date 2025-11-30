@@ -8,4 +8,7 @@
 #SBATCH --array=1-5
 #SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_array-%j.out
 
-./multi_runner.sh $SLURM_ARRAY_TASK_ID
+# run as sbatch array_job.sh <cluster_name>
+
+CLUSTER_NAME=$1
+./multi_runner.sh $SLURM_ARRAY_TASK_ID $CLUSTER_NAME

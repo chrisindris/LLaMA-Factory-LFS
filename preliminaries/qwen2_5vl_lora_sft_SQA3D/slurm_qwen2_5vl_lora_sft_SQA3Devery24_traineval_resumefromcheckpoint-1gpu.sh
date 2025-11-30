@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=24
-#SBATCH --time=0-00:05:00
-#SBATCH --mem=1024GB
-#SBATCH --gpus-per-node=h100:4
+#SBATCH --cpus-per-task=6
+#SBATCH --time=0-00:10:00
+#SBATCH --mem=256GB
+#SBATCH --gpus-per-node=h100:1
 #SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint-1gpu-%j.out
 
 module load apptainer
