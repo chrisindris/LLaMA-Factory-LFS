@@ -1,0 +1,13 @@
+Task number: 2
+ls: cannot access '/project/aip-wangcs/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/': No such file or directory
+Most Recent Save: 
+New Epoch: 238
+New YAML: /project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora//qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_2.yaml
+python: can't open file '/project/6110552/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/modify_yaml.py': [Errno 2] No such file or directory
+./multi_runner.sh: num_train_epochs: command not found
+WARNING: Environment variable TORCH_EXTENSIONS_DIR already has value [/tmp/.cache/torch_extensions], will not forward new value [None] from parent process environment
+WARNING: Environment variable PYTORCH_KERNEL_CACHE_PATH already has value [/tmp/.cache/torch/kernels], will not forward new value [None] from parent process environment
+WARNING: Environment variable FORCE_TORCHRUN already has value [1], will not forward new value [None] from parent process environment
+[91mERROR  : Could not write info to setgroups: Permission denied
+[0m[91mERROR  : Error while waiting event for user namespace mappings: no event received
+[0m

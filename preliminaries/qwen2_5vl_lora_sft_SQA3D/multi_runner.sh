@@ -1,4 +1,11 @@
 #!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=48
+#SBATCH --time=0-00:15:00
+#SBATCH --mem=256GB
+#SBATCH --gpus-per-node=h100:4
+#SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_multirunner_%j.out
 
 TASK_NUMBER=$1
 CLUSTER_NAME=$2
