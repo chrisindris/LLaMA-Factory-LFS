@@ -1,0 +1,20 @@
+Task number: 1
+Most Recent Epoch: 465
+New Epoch: 1
+New YAML: /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora//qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_1.yaml
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+slurmstepd: error: *** JOB 1527984 ON kn174 CANCELLED AT 2025-11-29T08:16:02 ***
