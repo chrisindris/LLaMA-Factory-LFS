@@ -4,9 +4,9 @@ TASK_NUMBER=$1
 
 echo "Task number: $TASK_NUMBER"
 
-YAML_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/"
+YAML_DIR="/scratch/indrisch/LLaMA-Factory/examples/train_lora/"
 BASE_YAML="qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint"
-SAVE_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/"
+SAVE_DIR="/scratch/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/"
 
 # ----- EDIT THE YAML -----
 
@@ -29,7 +29,7 @@ rm ${TMP_YAML}
 module load apptainer
 TORCH_CUDA_ARCH_LIST="9.0"
 apptainer run --nv --writable-tmpfs \
-    -B /project/aip-wangcs/indrisch/LLaMA-Factory \
+    -B /scratch/indrisch/LLaMA-Factory \
     -B /home/indrisch \
     -B /dev/shm:/dev/shm \
     -B /etc/ssl/certs:/etc/ssl/certs:ro \
@@ -45,6 +45,6 @@ apptainer run --nv --writable-tmpfs \
     --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
     --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
     --env FORCE_TORCHRUN=1 \
-    --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
-    /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif \
+    --pwd /scratch/indrisch/LLaMA-Factory \
+    /scratch/indrisch/easyr1_verl_sif/llamafactory.sif \
     llamafactory-cli train ${NEW_YAML}
