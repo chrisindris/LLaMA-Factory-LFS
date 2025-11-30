@@ -2,10 +2,10 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=24
-#SBATCH --time=0-16:00:00
+#SBATCH --time=0-00:05:00
 #SBATCH --mem=1024GB
 #SBATCH --gpus-per-node=h100:4
-#SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint-%j.out
+#SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint-1gpu-%j.out
 
 module load apptainer
 
@@ -34,7 +34,7 @@ apptainer run --nv --writable-tmpfs \
     --env FORCE_TORCHRUN=1 \
     --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
     /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif \
-    llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint.yaml
+    llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint-1gpu.yaml
 
 
 # STEP 2: RUN THE EVALUATION

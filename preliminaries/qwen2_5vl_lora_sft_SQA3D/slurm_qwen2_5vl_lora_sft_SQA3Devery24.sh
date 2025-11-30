@@ -2,7 +2,8 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=96
-#SBATCH --time=0-23:59:59
+#SBATCH --time=1-00:00:00
+#SBATCH --mem=512GB
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24-%j.out
 
@@ -33,5 +34,5 @@ apptainer run --nv --writable-tmpfs \
     --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
     --env FORCE_TORCHRUN=1 \
     --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
-    /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif \
+    /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif \
     llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery24.yaml
