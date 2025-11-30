@@ -1,0 +1,144 @@
+
+============================================================
+Converting checkpoint from 4 GPUs to 1 GPUs
+Source: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465
+Target: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465_converted/world_size_1
+============================================================
+
+Step 1: Loading optimizer states...
+Loading optimizer states from /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465/global_step465
+  Loading optimizer states from rank 0...
+    Debug: Type of rank_optim_states_raw: <class 'dict'>
+    Debug: Number of keys: 3
+    Debug: Top-level keys: ['optimizer_state_dict', 'ds_config', 'ds_version']
+    Found wrapped checkpoint, unwrapping optimizer_state_dict
+    Skipping non-optimizer-state entry: zero_stage (type: <enum 'ZeroStageEnum'>)
+    Skipping non-optimizer-state entry: loss_scaler (type: <class 'deepspeed.runtime.fp16.loss_scaler.LossScaler'>)
+    Skipping non-optimizer-state entry: dynamic_loss_scale (type: <class 'bool'>)
+    Skipping non-optimizer-state entry: overflow (type: <class 'bool'>)
+    Skipping non-optimizer-state entry: partition_count (type: <class 'int'>)
+    Skipping non-optimizer-state entry: fp32_flat_groups (type: <class 'list'>)
+  Loading optimizer states from rank 1...
+    Found wrapped checkpoint, unwrapping optimizer_state_dict
+  Loading optimizer states from rank 2...
+    Found wrapped checkpoint, unwrapping optimizer_state_dict
+  Loading optimizer states from rank 3...
+    Found wrapped checkpoint, unwrapping optimizer_state_dict
+  Gathered optimizer states for 0 parameters
+Step 2: Repartitioning optimizer states for 1 GPUs...
+Step 3: Saving repartitioned optimizer states...
+  Saved optimizer states for rank 0
+
+Step 4: Loading model states...
+  Loading model states from rank 0...
+  Loading model states from rank 1...
+  Loading model states from rank 2...
+  Loading model states from rank 3...
+Step 5: Repartitioning model states for 1 GPUs...
+Step 6: Saving repartitioned model states...
+  Saved model states for rank 0
+
+Step 7: Copying metadata files...
+  Copied trainer_state.json
+  Copied scheduler.pt
+  Copied training_args.bin
+  Copied adapter_config.json
+  Copied adapter_model.safetensors
+  Copied tokenizer_config.json
+  Copied tokenizer.json
+  Copied special_tokens_map.json
+  Copied vocab.json
+  Copied added_tokens.json
+  Copied merges.txt
+  Copied preprocessor_config.json
+  Copied video_preprocessor_config.json
+  Copied chat_template.jinja
+  Copied README.md
+
+Step 8: Creating 'latest' file...
+  Created 'latest' file pointing to global_step465
+
+============================================================
+✓ Successfully converted checkpoint to 1 GPUs
+Output directory: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465_converted/world_size_1
+============================================================
+
+
+============================================================
+Converting checkpoint from 4 GPUs to 8 GPUs
+Source: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465
+Target: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465_converted/world_size_8
+============================================================
+
+Step 1: Loading optimizer states...
+Loading optimizer states from /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465/global_step465
+  Loading optimizer states from rank 0...
+    Debug: Type of rank_optim_states_raw: <class 'dict'>
+    Debug: Number of keys: 3
+    Debug: Top-level keys: ['optimizer_state_dict', 'ds_config', 'ds_version']
+    Found wrapped checkpoint, unwrapping optimizer_state_dict
+    Skipping non-optimizer-state entry: zero_stage (type: <enum 'ZeroStageEnum'>)
+    Skipping non-optimizer-state entry: loss_scaler (type: <class 'deepspeed.runtime.fp16.loss_scaler.LossScaler'>)
+    Skipping non-optimizer-state entry: dynamic_loss_scale (type: <class 'bool'>)
+    Skipping non-optimizer-state entry: overflow (type: <class 'bool'>)
+    Skipping non-optimizer-state entry: partition_count (type: <class 'int'>)
+    Skipping non-optimizer-state entry: fp32_flat_groups (type: <class 'list'>)
+  Loading optimizer states from rank 1...
+    Found wrapped checkpoint, unwrapping optimizer_state_dict
+  Loading optimizer states from rank 2...
+    Found wrapped checkpoint, unwrapping optimizer_state_dict
+  Loading optimizer states from rank 3...
+    Found wrapped checkpoint, unwrapping optimizer_state_dict
+  Gathered optimizer states for 0 parameters
+Step 2: Repartitioning optimizer states for 8 GPUs...
+Step 3: Saving repartitioned optimizer states...
+  Saved optimizer states for rank 0
+  Saved optimizer states for rank 1
+  Saved optimizer states for rank 2
+  Saved optimizer states for rank 3
+  Saved optimizer states for rank 4
+  Saved optimizer states for rank 5
+  Saved optimizer states for rank 6
+  Saved optimizer states for rank 7
+
+Step 4: Loading model states...
+  Loading model states from rank 0...
+  Loading model states from rank 1...
+  Loading model states from rank 2...
+  Loading model states from rank 3...
+Step 5: Repartitioning model states for 8 GPUs...
+Step 6: Saving repartitioned model states...
+  Saved model states for rank 0
+  Saved model states for rank 1
+  Saved model states for rank 2
+  Saved model states for rank 3
+  Saved model states for rank 4
+  Saved model states for rank 5
+  Saved model states for rank 6
+  Saved model states for rank 7
+
+Step 7: Copying metadata files...
+  Copied trainer_state.json
+  Copied scheduler.pt
+  Copied training_args.bin
+  Copied adapter_config.json
+  Copied adapter_model.safetensors
+  Copied tokenizer_config.json
+  Copied tokenizer.json
+  Copied special_tokens_map.json
+  Copied vocab.json
+  Copied added_tokens.json
+  Copied merges.txt
+  Copied preprocessor_config.json
+  Copied video_preprocessor_config.json
+  Copied chat_template.jinja
+  Copied README.md
+
+Step 8: Creating 'latest' file...
+  Created 'latest' file pointing to global_step465
+
+============================================================
+✓ Successfully converted checkpoint to 8 GPUs
+Output directory: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465_converted/world_size_8
+============================================================
+

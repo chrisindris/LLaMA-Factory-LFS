@@ -18,12 +18,12 @@ import json
 import os
 import shutil
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 import torch
 
 
-def load_optimizer_states(checkpoint_dir: Path, original_world_size: int) -> Dict:
+def load_optimizer_states(checkpoint_dir: Path, original_world_size: int) -> Tuple[Dict, Dict]:
     """
     Load and gather optimizer states from all partitions.
     
@@ -35,7 +35,8 @@ def load_optimizer_states(checkpoint_dir: Path, original_world_size: int) -> Dic
         original_world_size: Original number of GPUs used for training
         
     Returns:
-        Dictionary mapping parameter IDs to their complete optimizer states
+        Tuple of (gathered_optim_states, metadata_dict) where metadata_dict contains
+        top-level metadata from the optimizer state files (like dp_world_size)
     """
     # Find the global_step directory
     global_step_dirs = [d for d in checkpoint_dir.iterdir() if d.is_dir() and d.name.startswith("global_step")]
@@ -49,6 +50,7 @@ def load_optimizer_states(checkpoint_dir: Path, original_world_size: int) -> Dic
     # In ZeRO Stage 3, each rank has optimizer states for different parameters
     # We need to merge them all
     gathered_optim_states = {}
+    metadata = {}
     
     for rank in range(original_world_size):
         optim_file = global_step_dir / f"bf16_zero_pp_rank_{rank}_mp_rank_00_optim_states.pt"
@@ -60,38 +62,50 @@ def load_optimizer_states(checkpoint_dir: Path, original_world_size: int) -> Dic
             raise FileNotFoundError(f"Optimizer state file not found for rank {rank}: {optim_file}")
         
         print(f"  Loading optimizer states from rank {rank}...")
-        rank_optim_states = torch.load(optim_file, map_location="cpu", weights_only=False)
+        rank_optim_states_raw = torch.load(optim_file, map_location="cpu", weights_only=False)
+        
+        # Extract metadata from the first rank BEFORE unwrapping (all ranks should have the same metadata)
+        if rank == 0 and isinstance(rank_optim_states_raw, dict):
+            # Common metadata keys that DeepSpeed stores
+            metadata_keys = ['dp_world_size', 'world_size', 'data_parallel_size', 
+                           'mp_world_size', 'pp_world_size', 'param_groups',
+                           'base_optimizer_state']
+            for key in metadata_keys:
+                if key in rank_optim_states_raw:
+                    metadata[key] = rank_optim_states_raw[key]
+                    print(f"    Found metadata key: {key} = {metadata[key]}")
         
         # Debug: inspect the structure
         if rank == 0:
-            print(f"    Debug: Type of rank_optim_states: {type(rank_optim_states)}")
-            if isinstance(rank_optim_states, dict):
-                print(f"    Debug: Number of keys: {len(rank_optim_states)}")
-                if len(rank_optim_states) > 0:
-                    first_key = next(iter(rank_optim_states.keys()))
-                    first_value = rank_optim_states[first_key]
-                    print(f"    Debug: First key: {first_key} (type: {type(first_key)})")
-                    print(f"    Debug: First value type: {type(first_value)}")
-                    if isinstance(first_value, dict):
-                        print(f"    Debug: First value keys: {list(first_value.keys())[:5]}")
-                    elif isinstance(first_value, str):
-                        print(f"    Debug: First value (string): {first_value[:100] if len(first_value) > 100 else first_value}")
-                    elif isinstance(first_value, torch.Tensor):
-                        print(f"    Debug: First value (tensor) shape: {first_value.shape}")
+            print(f"    Debug: Type of rank_optim_states_raw: {type(rank_optim_states_raw)}")
+            if isinstance(rank_optim_states_raw, dict):
+                print(f"    Debug: Number of keys: {len(rank_optim_states_raw)}")
+                print(f"    Debug: Top-level keys: {list(rank_optim_states_raw.keys())[:10]}")
         
         # DeepSpeed optimizer states structure can vary:
         # Option 1: {param_id: {optimizer_key: tensor, ...}, ...}
         # Option 2: {param_id: tensor, ...}  (simpler structure)
         # Option 3: Nested structure with different organization
         # Option 4: Top-level metadata keys like 'optimizer_state_dict', 'param_groups', etc.
+        rank_optim_states = rank_optim_states_raw
         if isinstance(rank_optim_states, dict):
+            # Extract the actual optimizer state dict (skip metadata keys)
             # Check if this is a wrapped checkpoint with metadata
             if 'optimizer_state_dict' in rank_optim_states:
                 # Unwrap the optimizer state dict
                 rank_optim_states = rank_optim_states['optimizer_state_dict']
                 print(f"    Found wrapped checkpoint, unwrapping optimizer_state_dict")
             
+            # Skip metadata keys when processing parameter states
+            metadata_keys_to_skip = {'dp_world_size', 'world_size', 'data_parallel_size',
+                                   'mp_world_size', 'pp_world_size', 'param_groups',
+                                   'base_optimizer_state', 'optimizer_state_dict'}
+            
             for param_id, optim_state in rank_optim_states.items():
+                # Skip metadata keys
+                if param_id in metadata_keys_to_skip:
+                    continue
+                
                 # Skip non-dict, non-tensor values (metadata, strings, etc.)
                 if not isinstance(optim_state, (dict, torch.Tensor)):
                     if rank == 0:  # Only print for first rank to avoid spam
@@ -148,11 +162,12 @@ def load_optimizer_states(checkpoint_dir: Path, original_world_size: int) -> Dic
             raise ValueError(f"Unexpected optimizer state structure: {type(rank_optim_states)}")
     
     print(f"  Gathered optimizer states for {len(gathered_optim_states)} parameters")
-    return gathered_optim_states
+    return gathered_optim_states, metadata
 
 
 def repartition_optimizer_states(
     gathered_optim_states: Dict,
+    metadata: Dict,
     target_world_size: int
 ) -> List[Dict]:
     """
@@ -164,12 +179,22 @@ def repartition_optimizer_states(
     
     Args:
         gathered_optim_states: Gathered optimizer states from all original ranks
+        metadata: Metadata dictionary from original checkpoint
         target_world_size: Target number of GPUs
         
     Returns:
-        List of optimizer state dictionaries, one per target rank
+        List of optimizer state dictionaries, one per target rank, each including updated metadata
     """
     repartitioned = [{} for _ in range(target_world_size)]
+    
+    # Update metadata with new world size
+    updated_metadata = metadata.copy()
+    if 'dp_world_size' in updated_metadata:
+        updated_metadata['dp_world_size'] = target_world_size
+    if 'world_size' in updated_metadata:
+        updated_metadata['world_size'] = target_world_size
+    if 'data_parallel_size' in updated_metadata:
+        updated_metadata['data_parallel_size'] = target_world_size
     
     # Sort parameter IDs for consistent distribution
     param_ids = sorted(gathered_optim_states.keys())
@@ -185,6 +210,12 @@ def repartition_optimizer_states(
                 repartitioned[target_rank][param_id][key] = value.clone()
             else:
                 repartitioned[target_rank][param_id][key] = value
+    
+    # Add updated metadata to each rank's optimizer state
+    for rank in range(target_world_size):
+        # Merge metadata into each rank's state dict
+        for key, value in updated_metadata.items():
+            repartitioned[rank][key] = value
     
     return repartitioned
 
@@ -321,6 +352,23 @@ def copy_metadata_files(source_dir: Path, target_dir: Path):
             print(f"  Copied {filename}")
 
 
+def create_latest_file(checkpoint_dir: Path, global_step_name: str):
+    """
+    Create or update the 'latest' file that DeepSpeed uses to track the latest checkpoint.
+    
+    The 'latest' file is a simple text file containing the name of the latest
+    checkpoint directory (e.g., 'global_step465').
+    
+    Args:
+        checkpoint_dir: Path to the checkpoint directory
+        global_step_name: Name of the global_step directory (e.g., 'global_step465')
+    """
+    latest_file = checkpoint_dir / "latest"
+    with open(latest_file, "w") as f:
+        f.write(global_step_name)
+    print(f"  Created 'latest' file pointing to {global_step_name}")
+
+
 def convert_checkpoint(
     checkpoint_path: str,
     original_world_size: int,
@@ -360,10 +408,10 @@ def convert_checkpoint(
     
     # Load and repartition optimizer states
     print("Step 1: Loading optimizer states...")
-    gathered_optim_states = load_optimizer_states(checkpoint_dir, original_world_size)
+    gathered_optim_states, metadata = load_optimizer_states(checkpoint_dir, original_world_size)
     
     print(f"Step 2: Repartitioning optimizer states for {target_world_size} GPUs...")
-    repartitioned_optim_states = repartition_optimizer_states(gathered_optim_states, target_world_size)
+    repartitioned_optim_states = repartition_optimizer_states(gathered_optim_states, metadata, target_world_size)
     
     # Determine optimizer state file prefix (bf16 or fp16)
     optim_prefix = "bf16"
@@ -395,6 +443,10 @@ def convert_checkpoint(
     # Copy metadata files
     print(f"\nStep 7: Copying metadata files...")
     copy_metadata_files(checkpoint_dir, output_path)
+    
+    # Create the 'latest' file that DeepSpeed expects
+    print(f"\nStep 8: Creating 'latest' file...")
+    create_latest_file(output_path, global_step_name)
     
     print(f"\n{'='*60}")
     print(f"✓ Successfully converted checkpoint to {target_world_size} GPUs")

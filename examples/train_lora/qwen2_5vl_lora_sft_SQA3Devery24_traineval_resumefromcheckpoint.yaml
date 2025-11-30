@@ -17,7 +17,7 @@ dataset: SQA3Devery24
 media_dir: /project/aip-wangcs/indrisch/data/
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
-#max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
+max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
 overwrite_cache: true
 preprocessing_num_workers: 32
 dataloader_num_workers: 4
