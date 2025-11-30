@@ -1,0 +1,236 @@
+Task number: 2
+Most Recent Save: 465
+New Epoch: 3
+New YAML: /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora//qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_2.yaml
+sed: -e expression #1, char 58: unknown option to `s'
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2025-11-29 08:25:44] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: 127.0.0.1:53771
+W1129 08:25:45.554000 235756 site-packages/torch/distributed/run.py:792] 
+W1129 08:25:45.554000 235756 site-packages/torch/distributed/run.py:792] *****************************************
+W1129 08:25:45.554000 235756 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W1129 08:25:45.554000 235756 site-packages/torch/distributed/run.py:792] *****************************************
+[2025-11-29 08:25:53,838] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-29 08:25:53,838] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-29 08:25:53,841] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-29 08:25:53,841] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Traceback (most recent call last):
+  File "/app/src/llamafactory/launcher.py", line 180, in <module>
+    run_exp()
+  File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+    _training_function(config={"args": args, "callbacks": callbacks})
+  File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+Traceback (most recent call last):
+  File "/app/src/llamafactory/launcher.py", line 180, in <module>
+    model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+          run_exp() 
+            File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+                                                            ^^^^^^^^^^^^^^    ^_training_function(config={"args": args, "callbacks": callbacks})^
+^^^^
+  File "/app/src/llamafactory/hparams/parser.py", line 219, in get_train_args
+  File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+    model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+                                                                       model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)  
+        ^^^^^^^^^^^^ ^ ^ ^ ^ ^ ^ ^ ^ 
+    File "/app/src/llamafactory/hparams/parser.py", line 219, in get_train_args
+                                                                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/hparams/parser.py", line 197, in _parse_train_args
+    model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+                                                         return _parse_args(parser, args, allow_extra_keys=allow_extra_keys) 
+                                ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^  File "/app/src/llamafactory/hparams/parser.py", line 197, in _parse_train_args
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/hparams/parser.py", line 79, in _parse_args
+    return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+    return _parse_args(parser, args, allow_extra_keys=allow_extra_keys) 
+          ^^^^^^^^^^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^  File "/opt/conda/lib/python3.11/site-packages/transformers/hf_argparser.py", line 380, in parse_dict
+^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/hparams/parser.py", line 79, in _parse_args
+    return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+           ^^^^^^    ^obj = dtype(**inputs)^
+^^^^^^^^^^^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^  File "<string>", line 73, in __init__
+^^  File "/app/src/llamafactory/hparams/model_args.py", line 427, in __post_init__
+^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/transformers/hf_argparser.py", line 380, in parse_dict
+    BaseModelArguments.__post_init__(self)
+  File "/app/src/llamafactory/hparams/model_args.py", line 177, in __post_init__
+    obj = dtype(**inputs)
+          ^^^^^^^^^^^^^^^
+  File "<string>", line 73, in __init__
+  File "/app/src/llamafactory/hparams/model_args.py", line 427, in __post_init__
+    raise ValueError("Please provide `model_name_or_path`.")
+ValueError: Please provide `model_name_or_path`.
+    BaseModelArguments.__post_init__(self)
+  File "/app/src/llamafactory/hparams/model_args.py", line 177, in __post_init__
+    raise ValueError("Please provide `model_name_or_path`.")
+ValueError: Please provide `model_name_or_path`.
+Traceback (most recent call last):
+  File "/app/src/llamafactory/launcher.py", line 180, in <module>
+Traceback (most recent call last):
+  File "/app/src/llamafactory/launcher.py", line 180, in <module>
+    run_exp()
+    run_exp()
+  File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+  File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+    _training_function(config={"args": args, "callbacks": callbacks})
+  File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+    _training_function(config={"args": args, "callbacks": callbacks})
+  File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+    model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+                                                                             ^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/hparams/parser.py", line 219, in get_train_args
+    model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+                                                                             ^^^^^^^^^^^^^^^^^^^^    
+model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+  File "/app/src/llamafactory/hparams/parser.py", line 219, in get_train_args
+                                                                             ^^^^    ^model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)^
+^^^^^^^^^^ ^ ^ ^ ^ ^ ^ ^ 
+      File "/app/src/llamafactory/hparams/parser.py", line 197, in _parse_train_args
+                                                                 ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/hparams/parser.py", line 197, in _parse_train_args
+    return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+           ^^^^^^^^^^^^^^    ^return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)^
+^^^^^^^^^^^^^^^^^^^^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^  File "/app/src/llamafactory/hparams/parser.py", line 79, in _parse_args
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/hparams/parser.py", line 79, in _parse_args
+    return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+    return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+                   ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^  File "/opt/conda/lib/python3.11/site-packages/transformers/hf_argparser.py", line 380, in parse_dict
+
+  File "/opt/conda/lib/python3.11/site-packages/transformers/hf_argparser.py", line 380, in parse_dict
+    obj = dtype(**inputs)
+          ^^^^^^^^^^^^^^^
+  File "<string>", line 73, in __init__
+  File "/app/src/llamafactory/hparams/model_args.py", line 427, in __post_init__
+    obj = dtype(**inputs)
+          ^^^^^^^^^^^^^^^
+  File "<string>", line 73, in __init__
+  File "/app/src/llamafactory/hparams/model_args.py", line 427, in __post_init__
+    BaseModelArguments.__post_init__(self)
+    BaseModelArguments.__post_init__(self)
+  File "/app/src/llamafactory/hparams/model_args.py", line 177, in __post_init__
+  File "/app/src/llamafactory/hparams/model_args.py", line 177, in __post_init__
+    raise ValueError("Please provide `model_name_or_path`.")
+    raise ValueError("Please provide `model_name_or_path`.")
+ValueError: ValueErrorPlease provide `model_name_or_path`.: 
+Please provide `model_name_or_path`.
+E1129 08:26:02.109000 235756 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 235782) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/app/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+[1]:
+  time      : 2025-11-29_08:26:02
+  host      : kn174.paice.vectorinstitute.ai
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 235783)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+[2]:
+  time      : 2025-11-29_08:26:02
+  host      : kn174.paice.vectorinstitute.ai
+  rank      : 2 (local_rank: 2)
+  exitcode  : 1 (pid: 235784)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+[3]:
+  time      : 2025-11-29_08:26:02
+  host      : kn174.paice.vectorinstitute.ai
+  rank      : 3 (local_rank: 3)
+  exitcode  : 1 (pid: 235785)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-11-29_08:26:02
+  host      : kn174.paice.vectorinstitute.ai
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 235782)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 110, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', '127.0.0.1', '--master_port', '53771', '/app/src/llamafactory/launcher.py', '/project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora//qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_2.yaml']' returned non-zero exit status 1.
+INFO:    Terminating fuse-overlayfs after timeout
+INFO:    Timeouts can be caused by a running background process
+Uncaught exception in compile_worker subprocess
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.11/site-packages/torch/_inductor/compile_worker/__main__.py", line 38, in main
+    pre_fork_setup()
+  File "/opt/conda/lib/python3.11/site-packages/torch/_inductor/async_compile.py", line 62, in pre_fork_setup
+  File "/opt/conda/lib/python3.11/site-packages/triton/compiler/compiler.py", line 156, in triton_key
+OSError: [Errno 107] Transport endpoint is not connected
+Uncaught exception in compile_worker subprocess
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.11/site-packages/torch/_inductor/compile_worker/__main__.py", line 38, in main
+    pre_fork_setup()
+  File "/opt/conda/lib/python3.11/site-packages/torch/_inductor/async_compile.py", line 62, in pre_fork_setup
+  File "/opt/conda/lib/python3.11/site-packages/triton/compiler/compiler.py", line 156, in triton_key
+OSError: [Errno 107] Transport endpoint is not connected
+Uncaught exception in compile_worker subprocess
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.11/site-packages/torch/_inductor/compile_worker/__main__.py", line 38, in main
+    pre_fork_setup()
+  File "/opt/conda/lib/python3.11/site-packages/torch/_inductor/async_compile.py", line 62, in pre_fork_setup
+  File "/opt/conda/lib/python3.11/site-packages/triton/compiler/compiler.py", line 156, in triton_key
+OSError: [Errno 107] Transport endpoint is not connected
+Uncaught exception in compile_worker subprocess
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.11/site-packages/torch/_inductor/compile_worker/__main__.py", line 38, in main
+    pre_fork_setup()
+  File "/opt/conda/lib/python3.11/site-packages/torch/_inductor/async_compile.py", line 62, in pre_fork_setup
+  File "/opt/conda/lib/python3.11/site-packages/triton/compiler/compiler.py", line 156, in triton_key
+OSError: [Errno 107] Transport endpoint is not connected
