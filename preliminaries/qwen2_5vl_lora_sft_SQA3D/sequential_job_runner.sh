@@ -44,7 +44,7 @@ while [[ (${#JOBS_WHICH_HAVE_STARTED_RUNNING[@]} -ne 5) || ($(currently_running_
     fi
   done
 
-  sleep 10 # Optional: pause for 1 second
+  sleep 2m # pause for 2 minutes
 done
 
 #sbatch sequential_job.sh 1 KILLARNEY

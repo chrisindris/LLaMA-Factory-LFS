@@ -2,7 +2,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=24
-#SBATCH --time=0-00:00:15
+#SBATCH --time=0-00:16:00
 #SBATCH --mem=1024GB
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --output=%N-sequential_job-%j.out
@@ -95,7 +95,7 @@ SAVE_DIR="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/"
 # get the number (epoch) of the most recent saved checkpoint.
 MOST_RECENT_SAVE=$(ls -larth ${SAVE_DIR} | grep checkpoint | grep -v converted | tail -n 1 | grep -Eo '[0-9]+$')
 echo "Most Recent Save: ${MOST_RECENT_SAVE}"
-NEW_EPOCH=$(expr 234 + ${TASK_NUMBER} \* 2) # This will be $(expr ${MOST_RECENT_SAVE} + 1) when we run it for real
+NEW_EPOCH=$(expr 246 + ${TASK_NUMBER} \* 2) # This will be $(expr ${MOST_RECENT_SAVE} + 1) when we run it for real
 echo "New Epoch: ${NEW_EPOCH}"
 
 # starting from the base yaml, generate the yaml for this run.
