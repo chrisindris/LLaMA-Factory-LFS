@@ -20,3 +20,10 @@ rclone sync ./saves/ gcs-cvis-scene-understanding://sqa-3d/LLaMA-Factory/saves -
 254:          96618        indrisch     def-wangcs slurm_qwen2_5v  PD    3:00:00           compute     1 gres/gpu:h100:1  (Priority)
 255:          96616        indrisch     def-wangcs slurm_qwen2_5v  PD      15:00 compute_full_node     1 gres/gpu:h100:4  (Priority)
 258:          96615        indrisch     def-wangcs slurm_qwen2_5v  PD    3:00:00 compute_full_node     1 gres/gpu:h100:4  (Priority)
+
+
+
+
+--------
+/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_epoch2.sh
+- If we want to run one epoch at a time, it takes about 15 minutes to do the precursor work before it starts up.

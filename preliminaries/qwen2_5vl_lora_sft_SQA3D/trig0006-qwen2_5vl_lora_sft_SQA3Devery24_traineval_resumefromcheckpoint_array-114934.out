@@ -1,0 +1,183 @@
+Task number: 5
+Most Recent Save: 465
+New Epoch: 244
+New YAML: /scratch/indrisch//LLaMA-Factory/examples/train_lora//qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_5.yaml
+python: can't open file '/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/modify_yaml.py': [Errno 2] No such file or directory
+./multi_runner.sh: line 63: num_train_epochs: command not found
+FATAL:   While checking container encryption: could not open image /scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/None: failed to retrieve path for /scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/None: lstat /scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/None: no such file or directory
+
+scontrol show job 114934
+JobId=114934 ArrayJobId=114934 ArrayTaskId=5 JobName=array_job.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=153421 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=255:0
+   RunTime=00:00:06 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2025-11-30T05:02:51 EligibleTime=2025-11-30T05:02:51
+   AccrueTime=2025-11-30T05:02:51
+   StartTime=2025-11-30T05:13:02 EndTime=2025-11-30T05:13:08 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-30T05:13:02 Scheduler=Main
+   Partition=compute_full_node AllocNode:Sid=trig-login01:3018829
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0006
+   BatchHost=trig0006
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/array_job.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L array_job.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_array-114934.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_array-114934.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+JobId=114972 ArrayJobId=114934 ArrayTaskId=4 JobName=array_job.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=153421 Nice=0 Account=def-wangcs QOS=normal
+   JobState=FAILED Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=255:0
+   RunTime=00:00:05 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2025-11-30T05:02:51 EligibleTime=2025-11-30T05:02:51
+   AccrueTime=2025-11-30T05:02:51
+   StartTime=2025-11-30T05:12:55 EndTime=2025-11-30T05:13:00 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-30T05:12:55 Scheduler=Main
+   Partition=compute_full_node AllocNode:Sid=trig-login01:3018829
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0059
+   BatchHost=trig0059
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/array_job.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L array_job.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_array-114972.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_array-114972.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+JobId=114971 ArrayJobId=114934 ArrayTaskId=3 JobName=array_job.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=153421 Nice=0 Account=def-wangcs QOS=normal
+   JobState=FAILED Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=255:0
+   RunTime=00:00:06 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2025-11-30T05:02:51 EligibleTime=2025-11-30T05:02:51
+   AccrueTime=2025-11-30T05:02:51
+   StartTime=2025-11-30T05:12:48 EndTime=2025-11-30T05:12:54 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-30T05:12:48 Scheduler=Main
+   Partition=compute_full_node AllocNode:Sid=trig-login01:3018829
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0059
+   BatchHost=trig0059
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/array_job.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L array_job.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_array-114971.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_array-114971.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+JobId=114970 ArrayJobId=114934 ArrayTaskId=2 JobName=array_job.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=153421 Nice=0 Account=def-wangcs QOS=normal
+   JobState=FAILED Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=255:0
+   RunTime=00:00:06 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2025-11-30T05:02:51 EligibleTime=2025-11-30T05:02:51
+   AccrueTime=2025-11-30T05:02:51
+   StartTime=2025-11-30T05:12:41 EndTime=2025-11-30T05:12:47 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-30T05:12:41 Scheduler=Main
+   Partition=compute_full_node AllocNode:Sid=trig-login01:3018829
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0059
+   BatchHost=trig0059
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/array_job.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L array_job.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_array-114970.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_array-114970.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+JobId=114967 ArrayJobId=114934 ArrayTaskId=1 JobName=array_job.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=153421 Nice=0 Account=def-wangcs QOS=normal
+   JobState=FAILED Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=255:0
+   RunTime=00:00:07 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2025-11-30T05:02:51 EligibleTime=2025-11-30T05:02:51
+   AccrueTime=2025-11-30T05:02:51
+   StartTime=2025-11-30T05:12:33 EndTime=2025-11-30T05:12:40 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-30T05:12:33 Scheduler=Main
+   Partition=compute_full_node AllocNode:Sid=trig-login01:3018829
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0059
+   BatchHost=trig0059
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/array_job.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L array_job.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_array-114967.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_array-114967.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+sacct -j 114934
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+114934_1     array_job+ def-wangcs   00:00:07                        00:00.426  00:01.049    127:0 
+114934_1.ba+      batch def-wangcs   00:00:07          0     41532K  00:00.424  00:01.049    127:0 
+114934_1.ex+     extern def-wangcs   00:00:07          0        20K  00:00.001   00:00:00      0:0 
+114934_2     array_job+ def-wangcs   00:00:06                        00:00.411  00:01.046    127:0 
+114934_2.ba+      batch def-wangcs   00:00:06          0      6168K  00:00.409  00:01.046    127:0 
+114934_2.ex+     extern def-wangcs   00:00:06          0        44K  00:00.001   00:00:00      0:0 
+114934_3     array_job+ def-wangcs   00:00:06                        00:00.379  00:01.077    127:0 
+114934_3.ba+      batch def-wangcs   00:00:06          0      8224K  00:00.378  00:01.077    127:0 
+114934_3.ex+     extern def-wangcs   00:00:06          0        40K  00:00.001   00:00:00      0:0 
+114934_4     array_job+ def-wangcs   00:00:05                        00:00.385  00:01.085    127:0 
+114934_4.ba+      batch def-wangcs   00:00:05          0      7532K  00:00.385  00:01.083    127:0 
+114934_4.ex+     extern def-wangcs   00:00:05          0        44K   00:00:00  00:00.001      0:0 
+114934_5     array_job+ def-wangcs   00:00:06                        00:00.404  00:01.072    127:0 
+114934_5.ba+      batch def-wangcs   00:00:06          0      7916K  00:00.404  00:01.072    127:0 
+114934_5.ex+     extern def-wangcs   00:00:06                         00:00:00   00:00:00      0:0 
+
