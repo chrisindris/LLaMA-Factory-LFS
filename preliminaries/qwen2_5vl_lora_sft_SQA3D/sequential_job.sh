@@ -2,14 +2,13 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=24
-#SBATCH --time=0-00:15:00
+#SBATCH --time=0-00:00:15
 #SBATCH --mem=1024GB
 #SBATCH --gpus-per-node=h100:4
-#SBATCH --array=1-5
-#SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_array-%j.out
+#SBATCH --output=%N-sequential_job-%j.out
 
-TASK_NUMBER=${SLURM_ARRAY_TASK_ID}
-CLUSTER_NAME=$1
+TASK_NUMBER=$1
+CLUSTER_NAME=$2
 
 # Auto-detect cluster name from hostname if not provided
 if [[ -z "$CLUSTER_NAME" ]]; then

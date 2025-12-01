@@ -1,0 +1,370 @@
+Task number: 4
+Most Recent Save: 465
+New Epoch: 242
+New YAML: /project/6110552/indrisch//LLaMA-Factory/examples/train_lora//qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_4.yaml
+python: can't open file '/project/6110552/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/modify_yaml.py': [Errno 2] No such file or directory
+/cm/local/apps/slurm/var/spool/job1530194/slurm_script: num_train_epochs: command not found
+WARNING: Environment variable TORCH_EXTENSIONS_DIR already has value [/tmp/.cache/torch_extensions], will not forward new value [None] from parent process environment
+WARNING: Environment variable PYTORCH_KERNEL_CACHE_PATH already has value [/tmp/.cache/torch/kernels], will not forward new value [None] from parent process environment
+WARNING: Environment variable FORCE_TORCHRUN already has value [1], will not forward new value [None] from parent process environment
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2025-11-30 10:51:23] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: 127.0.0.1:51803
+W1130 10:51:24.974000 1554570 site-packages/torch/distributed/run.py:792] 
+W1130 10:51:24.974000 1554570 site-packages/torch/distributed/run.py:792] *****************************************
+W1130 10:51:24.974000 1554570 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W1130 10:51:24.974000 1554570 site-packages/torch/distributed/run.py:792] *****************************************
+[2025-11-30 10:51:33,349] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-30 10:51:33,349] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-30 10:51:33,349] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-30 10:51:33,374] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Warning: The cache directory for DeepSpeed Triton autotune, /scratch/indrisch/.triton_cache, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+Warning: The cache directory for DeepSpeed Triton autotune, /scratch/indrisch/.triton_cache, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+Warning: The cache directory for DeepSpeed Triton autotune, /scratch/indrisch/.triton_cache, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+Warning: The cache directory for DeepSpeed Triton autotune, /scratch/indrisch/.triton_cache, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 180, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/dpo_trainer.py", line 47, in <module>
+    from .utils import (
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/utils.py", line 51, in <module>
+    import deepspeed
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/__init__.py", line 25, in <module>
+    from . import ops
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/__init__.py", line 15, in <module>
+    from ..git_version_info import compatible_ops as __compatible_ops__
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/git_version_info.py", line 29, in <module>
+    op_compatible = builder.is_compatible()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/op_builder/fp_quantizer.py", line 35, in is_compatible
+    sys_cuda_major, _ = installed_cuda_version()
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/op_builder/builder.py", line 53, in installed_cuda_version
+    output = subprocess.check_output([cuda_home + "/bin/nvcc", "-V"], universal_newlines=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/opt/conda/lib/python3.11/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2/bin/nvcc'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/src/llamafactory/launcher.py", line 178, in <module>
+    from llamafactory.train.tuner import run_exp  # use absolute import
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/train/tuner.py", line 31, in <module>
+    from .dpo import run_dpo
+  File "/app/src/llamafactory/train/dpo/__init__.py", line 15, in <module>
+    from .workflow import run_dpo
+  File "/app/src/llamafactory/train/dpo/workflow.py", line 27, in <module>
+    from .trainer import CustomDPOTrainer
+  File "/app/src/llamafactory/train/dpo/trainer.py", line 27, in <module>
+    from trl import DPOTrainer
+  File "<frozen importlib._bootstrap>", line 1229, in _handle_fromlist
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 171, in __getattr__
+    value = getattr(module, name)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 170, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 182, in _get_module
+    raise RuntimeError(
+RuntimeError: Failed to import trl.trainer.dpo_trainer because of the following error (look up to see its traceback):
+[Errno 2] No such file or directory: '/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2/bin/nvcc'
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 180, in _get_module
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 180, in _get_module
+        return importlib.import_module("." + module_name, self.__name__)return importlib.import_module("." + module_name, self.__name__)
+
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  File "/opt/conda/lib/python3.11/importlib/__init__.py", line 126, in import_module
+  File "/opt/conda/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+    return _bootstrap._gcd_import(name[level:], package, level)
+                 ^ ^ ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+^^
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/dpo_trainer.py", line 47, in <module>
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/dpo_trainer.py", line 47, in <module>
+    from .utils import (
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/utils.py", line 51, in <module>
+    from .utils import (
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/utils.py", line 51, in <module>
+    import deepspeed
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/__init__.py", line 25, in <module>
+    import deepspeed
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/__init__.py", line 25, in <module>
+    from . import ops
+    from . import ops
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/__init__.py", line 15, in <module>
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/__init__.py", line 15, in <module>
+    from ..git_version_info import compatible_ops as __compatible_ops__
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/git_version_info.py", line 29, in <module>
+    from ..git_version_info import compatible_ops as __compatible_ops__
+    op_compatible = builder.is_compatible()
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/git_version_info.py", line 29, in <module>
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/op_builder/fp_quantizer.py", line 35, in is_compatible
+    op_compatible = builder.is_compatible()
+         sys_cuda_major, _ = installed_cuda_version() 
+                   ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^^^^^^^^
+^Traceback (most recent call last):
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/op_builder/fp_quantizer.py", line 35, in is_compatible
+^^^^^  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 180, in _get_module
+^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/op_builder/builder.py", line 53, in installed_cuda_version
+    sys_cuda_major, _ = installed_cuda_version()
+    output = subprocess.check_output([cuda_home + "/bin/nvcc", "-V"], universal_newlines=True)
+     return importlib.import_module("." + module_name, self.__name__) 
+                           ^ ^ ^  ^  ^  ^  ^  ^ ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/op_builder/builder.py", line 53, in installed_cuda_version
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^  File "/opt/conda/lib/python3.11/importlib/__init__.py", line 126, in import_module
+^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 466, in check_output
+    output = subprocess.check_output([cuda_home + "/bin/nvcc", "-V"], universal_newlines=True)
+      return _bootstrap._gcd_import(name[level:], package, level) 
+          ^^^^^^^^^^^ ^ ^ ^ ^ ^ ^ ^ ^ ^     ^ return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,^^
+^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/opt/conda/lib/python3.11/subprocess.py", line 1955, in _execute_child
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 548, in run
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+      File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+with Popen(*popenargs, **kwargs) as process:
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/dpo_trainer.py", line 47, in <module>
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 1026, in __init__
+    from .utils import (
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/utils.py", line 51, in <module>
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/opt/conda/lib/python3.11/subprocess.py", line 1955, in _execute_child
+    import deepspeed
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/__init__.py", line 25, in <module>
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2/bin/nvcc'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/src/llamafactory/launcher.py", line 178, in <module>
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2/bin/nvcc'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/src/llamafactory/launcher.py", line 178, in <module>
+    from . import ops
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/__init__.py", line 15, in <module>
+    from llamafactory.train.tuner import run_exp  # use absolute import
+    from llamafactory.train.tuner import run_exp  # use absolute import
+     ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^from ..git_version_info import compatible_ops as __compatible_ops__^^
+^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/git_version_info.py", line 29, in <module>
+^^  File "/app/src/llamafactory/train/tuner.py", line 31, in <module>
+^
+  File "/app/src/llamafactory/train/tuner.py", line 31, in <module>
+    op_compatible = builder.is_compatible()
+    from .dpo import run_dpo
+         File "/app/src/llamafactory/train/dpo/__init__.py", line 15, in <module>
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/op_builder/fp_quantizer.py", line 35, in is_compatible
+    from .dpo import run_dpo
+  File "/app/src/llamafactory/train/dpo/__init__.py", line 15, in <module>
+    from .workflow import run_dpo
+    sys_cuda_major, _ = installed_cuda_version()
+  File "/app/src/llamafactory/train/dpo/workflow.py", line 27, in <module>
+                        ^^^^^^^^^^^^^^^^^^^^^^^    ^from .workflow import run_dpo
+
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/op_builder/builder.py", line 53, in installed_cuda_version
+  File "/app/src/llamafactory/train/dpo/workflow.py", line 27, in <module>
+    from .trainer import CustomDPOTrainer
+    output = subprocess.check_output([cuda_home + "/bin/nvcc", "-V"], universal_newlines=True)
+  File "/app/src/llamafactory/train/dpo/trainer.py", line 27, in <module>
+             ^^^^^^    ^from .trainer import CustomDPOTrainer^
+^^^^^^^^^^^  File "/app/src/llamafactory/train/dpo/trainer.py", line 27, in <module>
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 466, in check_output
+    from trl import DPOTrainer
+  File "<frozen importlib._bootstrap>", line 1229, in _handle_fromlist
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 171, in __getattr__
+    from trl import DPOTrainer
+  File "<frozen importlib._bootstrap>", line 1229, in _handle_fromlist
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 171, in __getattr__
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 548, in run
+    value = getattr(module, name)
+            ^^^^^^^^^^    ^value = getattr(module, name)^
+^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 170, in __getattr__
+            ^^^^^^^^^^^^^^^^^^^^^    
+with Popen(*popenargs, **kwargs) as process:
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 170, in __getattr__
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 1026, in __init__
+    module = self._get_module(self._class_to_module[name])
+             ^^^^^^^^^^^^^^^^^^^^^    ^module = self._get_module(self._class_to_module[name])^
+^^^^^^^^^^^^^^^^ ^ ^ ^ ^ ^ ^ 
+    File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 182, in _get_module
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^self._execute_child(args, executable, preexec_fn, close_fds,^
+^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 182, in _get_module
+  File "/opt/conda/lib/python3.11/subprocess.py", line 1955, in _execute_child
+    raise RuntimeError(
+RuntimeError: Failed to import trl.trainer.dpo_trainer because of the following error (look up to see its traceback):
+[Errno 2] No such file or directory: '/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2/bin/nvcc'
+    raise RuntimeError(
+RuntimeError: Failed to import trl.trainer.dpo_trainer because of the following error (look up to see its traceback):
+[Errno 2] No such file or directory: '/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2/bin/nvcc'
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2/bin/nvcc'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/src/llamafactory/launcher.py", line 178, in <module>
+    from llamafactory.train.tuner import run_exp  # use absolute import
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/train/tuner.py", line 31, in <module>
+    from .dpo import run_dpo
+  File "/app/src/llamafactory/train/dpo/__init__.py", line 15, in <module>
+    from .workflow import run_dpo
+  File "/app/src/llamafactory/train/dpo/workflow.py", line 27, in <module>
+    from .trainer import CustomDPOTrainer
+  File "/app/src/llamafactory/train/dpo/trainer.py", line 27, in <module>
+    from trl import DPOTrainer
+  File "<frozen importlib._bootstrap>", line 1229, in _handle_fromlist
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 171, in __getattr__
+    value = getattr(module, name)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 170, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 182, in _get_module
+    raise RuntimeError(
+RuntimeError: Failed to import trl.trainer.dpo_trainer because of the following error (look up to see its traceback):
+[Errno 2] No such file or directory: '/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2/bin/nvcc'
+E1130 10:51:37.222000 1554570 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 1554597) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/app/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+[1]:
+  time      : 2025-11-30_10:51:37
+  host      : kn170.paice.vectorinstitute.ai
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 1554598)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+[2]:
+  time      : 2025-11-30_10:51:37
+  host      : kn170.paice.vectorinstitute.ai
+  rank      : 2 (local_rank: 2)
+  exitcode  : 1 (pid: 1554599)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+[3]:
+  time      : 2025-11-30_10:51:37
+  host      : kn170.paice.vectorinstitute.ai
+  rank      : 3 (local_rank: 3)
+  exitcode  : 1 (pid: 1554600)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-11-30_10:51:37
+  host      : kn170.paice.vectorinstitute.ai
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 1554597)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 110, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', '127.0.0.1', '--master_port', '51803', '/app/src/llamafactory/launcher.py', '/project/6110552/indrisch//LLaMA-Factory/examples/train_lora//qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_4.yaml']' returned non-zero exit status 1.
