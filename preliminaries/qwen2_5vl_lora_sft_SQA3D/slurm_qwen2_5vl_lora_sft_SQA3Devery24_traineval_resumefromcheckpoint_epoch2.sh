@@ -2,8 +2,8 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=24
-#SBATCH --time=0-16:00:00
-#SBATCH --mem=1024GB
+#SBATCH --time=1-00:00:00
+#SBATCH --mem=1536GB
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_epoch2-%j.out
 

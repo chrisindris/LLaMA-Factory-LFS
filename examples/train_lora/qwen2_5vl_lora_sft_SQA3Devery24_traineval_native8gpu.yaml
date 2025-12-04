@@ -17,11 +17,10 @@ dataset: SQA3Devery24
 media_dir: /project/aip-wangcs/shared/data/
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
-#max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
-overwrite_cache: false
+# max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
+overwrite_cache: true
 preprocessing_num_workers: 32
-dataloader_num_workers: 0
-dataloader_pin_memory: false
+dataloader_num_workers: 4
 low_cpu_mem_usage: true
 # streaming: true # mutually exclusive with max_samples; requires max_steps. However, this seems to make it very slow.
 # max_steps: 100
@@ -39,13 +38,12 @@ report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 8
 learning_rate: 1.0e-4
-num_train_epochs: 1.0 # note that this is cumulative; hence, if the model has had X epochs already and you want it to train for Y more epochs, you need to set num_train_epochs to X + Y. You can set this to increments of 500 and then if there is a difference after, it gets overwritten on the next run.
+num_train_epochs: 1.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
 ddp_timeout: 180000000
-#resume_from_checkpoint: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465_converted/world_size_1/ #
-adapter_name_or_path: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465_converted/world_size_1/ #
+resume_from_checkpoint: null
 
 # debugging level
 debug: underflow_overflow

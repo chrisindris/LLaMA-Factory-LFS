@@ -27,12 +27,12 @@ report_to: none
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 8
 learning_rate: 0.0001
-num_train_epochs: 238
+num_train_epochs: 250
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
 ddp_timeout: 180000000
-resume_from_checkpoint: /project/aip-wangcs/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-488/
+resume_from_checkpoint: /project/aip-wangcs/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-496/
 debug: underflow_overflow
 log_level: debug
 log_level_replica: debug
