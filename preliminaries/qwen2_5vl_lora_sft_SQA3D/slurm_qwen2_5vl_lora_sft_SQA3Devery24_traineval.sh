@@ -62,6 +62,8 @@ apptainer run --nv --writable-tmpfs \
     --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
     --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
     --env FORCE_TORCHRUN=1 \
+    --env WANDB_MODE=offline \
+    --env WANDB_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/wandb/" \
     --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
     /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif \
     llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery24_traineval.yaml
