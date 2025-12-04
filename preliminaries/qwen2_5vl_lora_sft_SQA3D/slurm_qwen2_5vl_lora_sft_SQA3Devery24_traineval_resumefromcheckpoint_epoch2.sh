@@ -2,9 +2,9 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=96
-#SBATCH --time=0-16:10:00
+#SBATCH --time=0-14:00:00
 #SBATCH --gpus-per-node=h100:4
-#SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval-%j.out
+#SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_epoch2-%j.out
 
 # Note, for prediction:
 # --- to do inference (NOT an evaluation of the model after training): examples/inference/llama3_lora_sft.yaml
@@ -47,9 +47,11 @@ TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
 apptainer run --nv --writable-tmpfs \
     -B /scratch/indrisch/LLaMA-Factory \
     -B /home/indrisch \
+    -B /scratch/indrisch/ \
     -B /dev/shm:/dev/shm \
     -B /etc/ssl/certs:/etc/ssl/certs:ro \
     -B /etc/pki:/etc/pki:ro \
+    -B /etc/pki/tls/certs/ca-bundle.crt \
     -W ${SLURM_TMPDIR} \
     --env HF_HUB_OFFLINE=1 \
     --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
