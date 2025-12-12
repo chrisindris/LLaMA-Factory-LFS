@@ -27,9 +27,9 @@ low_cpu_mem_usage: true
 # max_steps: 100
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval
+output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval_resumefromcheckpoint_8gpu
 logging_steps: 10
-save_steps: 500
+save_steps: 200
 plot_loss: true
 overwrite_output_dir: true
 save_only_model: false
@@ -45,7 +45,7 @@ warmup_ratio: 0.1
 bf16: true
 ddp_timeout: 180000000
 #resume_from_checkpoint: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465_converted/world_size_8/ #
-adapter_name_or_path: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465_converted/world_size_8/ #
+adapter_name_or_path: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-466/ #
 
 # debugging level
 debug: underflow_overflow
@@ -65,4 +65,4 @@ deepspeed: examples/deepspeed/ds_z2_offload_config.json
 val_size: 0.1
 per_device_eval_batch_size: 1
 eval_strategy: steps
-eval_steps: 500
+eval_steps: 200
