@@ -1,0 +1,163 @@
+created virtual environment CPython3.11.5.final.0-64 in 257ms
+  creator CPython3Posix(dest=/tmp/ENV, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/home/indrisch/.local/share/virtualenv)
+    added seed packages: pip==25.3, setuptools==80.7.1, wheel==0.45.1+computecanada
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+created virtual environment CPython3.11.5.final.0-64 in 262ms
+  creator CPython3Posix(dest=/tmp/ENV, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/home/indrisch/.local/share/virtualenv)
+    added seed packages: pip==25.3, setuptools==80.7.1, wheel==0.45.1+computecanada
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /tmp/ENV/lib/python3.11/site-packages (25.3)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /tmp/ENV/lib/python3.11/site-packages (25.3)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/ray-2.49.1+computecanada-cp311-cp311-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/click-8.3.1+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/filelock-3.20.0+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jsonschema-4.25.1+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/ray-2.49.1+computecanada-cp311-cp311-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/msgpack-1.1.2+computecanada-cp311-cp311-linux_x86_64.whl (from ray)
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a/lib/python3.11/site-packages (from ray) (24.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/protobuf-6.33.0+computecanada-cp311-cp311-linux_x86_64.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/PyYAML-6.0.2+computecanada-cp311-cp311-linux_x86_64.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/requests-2.32.5+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/attrs-25.4.0+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jsonschema_specifications-2025.9.1+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/referencing-0.37.0+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/rpds_py-0.27.0+computecanada-cp311-cp311-linux_x86_64.whl (from jsonschema->ray)
+Requirement already satisfied: typing-extensions>=4.4.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2025a/lib/python3.11/site-packages (from referencing>=0.28.4->jsonschema->ray) (4.12.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/charset_normalizer-3.4.4+computecanada-py3-none-any.whl (from requests->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/idna-3.11+computecanada-py3-none-any.whl (from requests->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/urllib3-2.5.0+computecanada-py3-none-any.whl (from requests->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/certifi-2025.10.5+computecanada-py3-none-any.whl (from requests->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/click-8.3.1+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/filelock-3.20.0+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jsonschema-4.25.1+computecanada-py3-none-any.whl (from ray)
+Installing collected packages: urllib3, rpds-py, pyyaml, protobuf, msgpack, idna, filelock, click, charset-normalizer, certifi, attrs, requests, referencing, jsonschema-specifications, jsonschema, ray
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/msgpack-1.1.2+computecanada-cp311-cp311-linux_x86_64.whl (from ray)
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a/lib/python3.11/site-packages (from ray) (24.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/protobuf-6.33.0+computecanada-cp311-cp311-linux_x86_64.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/PyYAML-6.0.2+computecanada-cp311-cp311-linux_x86_64.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/requests-2.32.5+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/attrs-25.4.0+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jsonschema_specifications-2025.9.1+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/referencing-0.37.0+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/rpds_py-0.27.0+computecanada-cp311-cp311-linux_x86_64.whl (from jsonschema->ray)
+Requirement already satisfied: typing-extensions>=4.4.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2025a/lib/python3.11/site-packages (from referencing>=0.28.4->jsonschema->ray) (4.12.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/charset_normalizer-3.4.4+computecanada-py3-none-any.whl (from requests->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/idna-3.11+computecanada-py3-none-any.whl (from requests->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/urllib3-2.5.0+computecanada-py3-none-any.whl (from requests->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/certifi-2025.10.5+computecanada-py3-none-any.whl (from requests->ray)
+Installing collected packages: urllib3, rpds-py, pyyaml, protobuf, msgpack, idna, filelock, click, charset-normalizer, certifi, attrs, requests, referencing, jsonschema-specifications, jsonschema, ray
+
+Successfully installed attrs-25.4.0+computecanada certifi-2025.10.5+computecanada charset-normalizer-3.4.4+computecanada click-8.3.1+computecanada filelock-3.20.0+computecanada idna-3.11+computecanada jsonschema-4.25.1+computecanada jsonschema-specifications-2025.9.1+computecanada msgpack-1.1.2+computecanada protobuf-6.33.0+computecanada pyyaml-6.0.2+computecanada ray-2.49.1+computecanada referencing-0.37.0+computecanada requests-2.32.5+computecanada rpds-py-0.27.0+computecanada urllib3-2.5.0+computecanada
+
+Successfully installed attrs-25.4.0+computecanada certifi-2025.10.5+computecanada charset-normalizer-3.4.4+computecanada click-8.3.1+computecanada filelock-3.20.0+computecanada idna-3.11+computecanada jsonschema-4.25.1+computecanada jsonschema-specifications-2025.9.1+computecanada msgpack-1.1.2+computecanada protobuf-6.33.0+computecanada pyyaml-6.0.2+computecanada ray-2.49.1+computecanada referencing-0.37.0+computecanada requests-2.32.5+computecanada rpds-py-0.27.0+computecanada urllib3-2.5.0+computecanada
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node_ray.py", line 1, in <module>
+    import ray
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/__init__.py", line 114, in <module>
+    from ray._private.worker import (  # noqa: E402,F401
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/_private/worker.py", line 57, in <module>
+    import ray.actor
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/actor.py", line 59, in <module>
+    from ray.util.tracing.tracing_helper import (
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/util/tracing/tracing_helper.py", line 29, in <module>
+    from ray.runtime_context import get_runtime_context
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/runtime_context.py", line 9, in <module>
+    from ray.runtime_env import RuntimeEnv
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/runtime_env/__init__.py", line 2, in <module>
+    from ray.runtime_env.runtime_env import RuntimeEnv, RuntimeEnvConfig  # noqa: E402,F401
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/runtime_env/runtime_env.py", line 13, in <module>
+    from ray._private.runtime_env.plugin_schema_manager import RuntimeEnvPluginSchemaManager
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/_private/runtime_env/plugin_schema_manager.py", line 6, in <module>
+    import jsonschema
+  File "/tmp/ENV/lib/python3.11/site-packages/jsonschema/__init__.py", line 13, in <module>
+    from jsonschema._format import FormatChecker
+  File "/tmp/ENV/lib/python3.11/site-packages/jsonschema/_format.py", line 11, in <module>
+    from jsonschema.exceptions import FormatError
+  File "/tmp/ENV/lib/python3.11/site-packages/jsonschema/exceptions.py", line 15, in <module>
+    from referencing.exceptions import Unresolvable as _Unresolvable
+  File "/tmp/ENV/lib/python3.11/site-packages/referencing/__init__.py", line 5, in <module>
+    from referencing._core import Anchor, Registry, Resource, Specification
+  File "/tmp/ENV/lib/python3.11/site-packages/referencing/_core.py", line 18, in <module>
+    from referencing.typing import URI, Anchor as AnchorType, D, Mapping, Retrieve
+  File "/tmp/ENV/lib/python3.11/site-packages/referencing/typing.py", line 22, in <module>
+    D = TypeVar("D", default=Any)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: TypeVar.__init__() got an unexpected keyword argument 'default'
+Traceback (most recent call last):
+  File "/tmp/ENV/bin/ray", line 3, in <module>
+    from ray.scripts.scripts import main
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/__init__.py", line 114, in <module>
+    from ray._private.worker import (  # noqa: E402,F401
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/_private/worker.py", line 57, in <module>
+    import ray.actor
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/actor.py", line 59, in <module>
+    from ray.util.tracing.tracing_helper import (
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/util/tracing/tracing_helper.py", line 29, in <module>
+    from ray.runtime_context import get_runtime_context
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/runtime_context.py", line 9, in <module>
+    from ray.runtime_env import RuntimeEnv
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/runtime_env/__init__.py", line 2, in <module>
+    from ray.runtime_env.runtime_env import RuntimeEnv, RuntimeEnvConfig  # noqa: E402,F401
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/runtime_env/runtime_env.py", line 13, in <module>
+    from ray._private.runtime_env.plugin_schema_manager import RuntimeEnvPluginSchemaManager
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/_private/runtime_env/plugin_schema_manager.py", line 6, in <module>
+    import jsonschema
+  File "/tmp/ENV/lib/python3.11/site-packages/jsonschema/__init__.py", line 13, in <module>
+    from jsonschema._format import FormatChecker
+  File "/tmp/ENV/lib/python3.11/site-packages/jsonschema/_format.py", line 11, in <module>
+    from jsonschema.exceptions import FormatError
+  File "/tmp/ENV/lib/python3.11/site-packages/jsonschema/exceptions.py", line 15, in <module>
+    from referencing.exceptions import Unresolvable as _Unresolvable
+  File "/tmp/ENV/lib/python3.11/site-packages/referencing/__init__.py", line 5, in <module>
+    from referencing._core import Anchor, Registry, Resource, Specification
+  File "/tmp/ENV/lib/python3.11/site-packages/referencing/_core.py", line 18, in <module>
+    from referencing.typing import URI, Anchor as AnchorType, D, Mapping, Retrieve
+  File "/tmp/ENV/lib/python3.11/site-packages/referencing/typing.py", line 22, in <module>
+    D = TypeVar("D", default=Any)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: TypeVar.__init__() got an unexpected keyword argument 'default'
+srun: error: kn079: task 1: Exited with exit code 1
+Traceback (most recent call last):
+  File "/tmp/ENV/bin/ray", line 3, in <module>
+    from ray.scripts.scripts import main
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/__init__.py", line 114, in <module>
+    from ray._private.worker import (  # noqa: E402,F401
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/_private/worker.py", line 57, in <module>
+    import ray.actor
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/actor.py", line 59, in <module>
+    from ray.util.tracing.tracing_helper import (
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/util/tracing/tracing_helper.py", line 29, in <module>
+    from ray.runtime_context import get_runtime_context
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/runtime_context.py", line 9, in <module>
+    from ray.runtime_env import RuntimeEnv
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/runtime_env/__init__.py", line 2, in <module>
+    from ray.runtime_env.runtime_env import RuntimeEnv, RuntimeEnvConfig  # noqa: E402,F401
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/runtime_env/runtime_env.py", line 13, in <module>
+    from ray._private.runtime_env.plugin_schema_manager import RuntimeEnvPluginSchemaManager
+  File "/tmp/ENV/lib/python3.11/site-packages/ray/_private/runtime_env/plugin_schema_manager.py", line 6, in <module>
+    import jsonschema
+  File "/tmp/ENV/lib/python3.11/site-packages/jsonschema/__init__.py", line 13, in <module>
+    from jsonschema._format import FormatChecker
+  File "/tmp/ENV/lib/python3.11/site-packages/jsonschema/_format.py", line 11, in <module>
+    from jsonschema.exceptions import FormatError
+  File "/tmp/ENV/lib/python3.11/site-packages/jsonschema/exceptions.py", line 15, in <module>
+    from referencing.exceptions import Unresolvable as _Unresolvable
+  File "/tmp/ENV/lib/python3.11/site-packages/referencing/__init__.py", line 5, in <module>
+    from referencing._core import Anchor, Registry, Resource, Specification
+  File "/tmp/ENV/lib/python3.11/site-packages/referencing/_core.py", line 18, in <module>
+    from referencing.typing import URI, Anchor as AnchorType, D, Mapping, Retrieve
+  File "/tmp/ENV/lib/python3.11/site-packages/referencing/typing.py", line 22, in <module>
+    D = TypeVar("D", default=Any)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: TypeVar.__init__() got an unexpected keyword argument 'default'
+srun: error: kn053: task 0: Exited with exit code 1
+/cm/local/apps/slurm/var/spool/job1545679/slurm_script: line 65: kill: (846073) - No such process

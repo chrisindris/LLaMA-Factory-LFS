@@ -5,7 +5,7 @@
 #SBATCH --time=0-08:00:00
 #SBATCH --mem=2000GB
 #SBATCH --gpus-per-node=h100:8
-#SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_native8gpu_evalsteps10-%j.out
+#SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_native8gpu_evalsteps200-%j.out
 
 # Note, for prediction:
 # --- to do inference (NOT an evaluation of the model after training): examples/inference/llama3_lora_sft.yaml
@@ -66,4 +66,4 @@ apptainer run --nv --writable-tmpfs \
     --env WANDB_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/wandb/" \
     --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
     /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif \
-    llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery24_traineval_native8gpu_evalsteps10.yaml
+    llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery24_traineval_native8gpu_evalsteps200.yaml

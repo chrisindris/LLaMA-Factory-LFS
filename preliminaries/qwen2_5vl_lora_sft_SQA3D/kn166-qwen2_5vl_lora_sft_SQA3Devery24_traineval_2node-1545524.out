@@ -1,0 +1,107 @@
+created virtual environment CPython3.11.5.final.0-64 in 904ms
+  creator CPython3Posix(dest=/tmp/ENV, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/home/indrisch/.local/share/virtualenv)
+    added seed packages: pip==25.3, setuptools==80.7.1, wheel==0.45.1+computecanada
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+created virtual environment CPython3.11.5.final.0-64 in 734ms
+  creator CPython3Posix(dest=/tmp/ENV, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/home/indrisch/.local/share/virtualenv)
+    added seed packages: pip==25.3, setuptools==80.7.1, wheel==0.45.1+computecanada
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /tmp/ENV/lib/python3.11/site-packages (25.3)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /tmp/ENV/lib/python3.11/site-packages (25.3)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/ray-2.49.1+computecanada-cp311-cp311-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/ray-2.49.1+computecanada-cp311-cp311-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/click-8.3.1+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/filelock-3.20.0+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jsonschema-4.25.1+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/msgpack-1.1.2+computecanada-cp311-cp311-linux_x86_64.whl (from ray)
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a/lib/python3.11/site-packages (from ray) (24.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/protobuf-6.33.0+computecanada-cp311-cp311-linux_x86_64.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/PyYAML-6.0.2+computecanada-cp311-cp311-linux_x86_64.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/requests-2.32.5+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/attrs-25.4.0+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jsonschema_specifications-2025.9.1+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/referencing-0.37.0+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/rpds_py-0.27.0+computecanada-cp311-cp311-linux_x86_64.whl (from jsonschema->ray)
+Requirement already satisfied: typing-extensions>=4.4.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2025a/lib/python3.11/site-packages (from referencing>=0.28.4->jsonschema->ray) (4.12.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/charset_normalizer-3.4.4+computecanada-py3-none-any.whl (from requests->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/idna-3.11+computecanada-py3-none-any.whl (from requests->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/urllib3-2.5.0+computecanada-py3-none-any.whl (from requests->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/certifi-2025.10.5+computecanada-py3-none-any.whl (from requests->ray)
+Installing collected packages: urllib3, rpds-py, pyyaml, protobuf, msgpack, idna, filelock, click, charset-normalizer, certifi, attrs, requests, referencing, jsonschema-specifications, jsonschema, ray
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/click-8.3.1+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/filelock-3.20.0+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jsonschema-4.25.1+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/msgpack-1.1.2+computecanada-cp311-cp311-linux_x86_64.whl (from ray)
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a/lib/python3.11/site-packages (from ray) (24.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/protobuf-6.33.0+computecanada-cp311-cp311-linux_x86_64.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/PyYAML-6.0.2+computecanada-cp311-cp311-linux_x86_64.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/requests-2.32.5+computecanada-py3-none-any.whl (from ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/attrs-25.4.0+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jsonschema_specifications-2025.9.1+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/referencing-0.37.0+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/rpds_py-0.27.0+computecanada-cp311-cp311-linux_x86_64.whl (from jsonschema->ray)
+Requirement already satisfied: typing-extensions>=4.4.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2025a/lib/python3.11/site-packages (from referencing>=0.28.4->jsonschema->ray) (4.12.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/charset_normalizer-3.4.4+computecanada-py3-none-any.whl (from requests->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/idna-3.11+computecanada-py3-none-any.whl (from requests->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/urllib3-2.5.0+computecanada-py3-none-any.whl (from requests->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/certifi-2025.10.5+computecanada-py3-none-any.whl (from requests->ray)
+Installing collected packages: urllib3, rpds-py, pyyaml, protobuf, msgpack, idna, filelock, click, charset-normalizer, certifi, attrs, requests, referencing, jsonschema-specifications, jsonschema, ray
+
+Successfully installed attrs-25.4.0+computecanada certifi-2025.10.5+computecanada charset-normalizer-3.4.4+computecanada click-8.3.1+computecanada filelock-3.20.0+computecanada idna-3.11+computecanada jsonschema-4.25.1+computecanada jsonschema-specifications-2025.9.1+computecanada msgpack-1.1.2+computecanada protobuf-6.33.0+computecanada pyyaml-6.0.2+computecanada ray-2.49.1+computecanada referencing-0.37.0+computecanada requests-2.32.5+computecanada rpds-py-0.27.0+computecanada urllib3-2.5.0+computecanada
+
+Successfully installed attrs-25.4.0+computecanada certifi-2025.10.5+computecanada charset-normalizer-3.4.4+computecanada click-8.3.1+computecanada filelock-3.20.0+computecanada idna-3.11+computecanada jsonschema-4.25.1+computecanada jsonschema-specifications-2025.9.1+computecanada msgpack-1.1.2+computecanada protobuf-6.33.0+computecanada pyyaml-6.0.2+computecanada ray-2.49.1+computecanada referencing-0.37.0+computecanada requests-2.32.5+computecanada rpds-py-0.27.0+computecanada urllib3-2.5.0+computecanada
+Waiting for Ray cluster to initialize...
+2025-12-04 17:32:46,553	INFO usage_lib.py:473 -- Usage stats collection is enabled by default without user confirmation because this terminal is detected to be non-interactive. To disable this, add `--disable-usage-stats` to the command that starts the cluster, or run the following command: `ray disable-usage-stats` before starting the cluster. See https://docs.ray.io/en/master/cluster/usage-stats.html for more details.
+2025-12-04 17:32:46,553	INFO scripts.py:913 -- Local node IP: kn166
+2025-12-04 17:32:47,803	SUCC scripts.py:949 -- --------------------
+2025-12-04 17:32:47,803	SUCC scripts.py:950 -- Ray runtime started.
+2025-12-04 17:32:47,803	SUCC scripts.py:951 -- --------------------
+2025-12-04 17:32:47,804	INFO scripts.py:953 -- Next steps
+2025-12-04 17:32:47,804	INFO scripts.py:956 -- To add another node to this Ray cluster, run
+2025-12-04 17:32:47,804	INFO scripts.py:959 --   ray start --address='kn166:39235'
+2025-12-04 17:32:47,805	INFO scripts.py:968 -- To connect to this Ray cluster:
+2025-12-04 17:32:47,805	INFO scripts.py:970 -- import ray
+2025-12-04 17:32:47,805	INFO scripts.py:971 -- ray.init(_node_ip_address='kn166')
+2025-12-04 17:32:47,805	INFO scripts.py:1002 -- To terminate the Ray runtime, run
+2025-12-04 17:32:47,805	INFO scripts.py:1003 --   ray stop
+2025-12-04 17:32:47,805	INFO scripts.py:1006 -- To view the status of the cluster, use
+2025-12-04 17:32:47,805	INFO scripts.py:1007 --   ray status
+2025-12-04 17:32:47,805	INFO scripts.py:1123 -- --block
+2025-12-04 17:32:47,805	INFO scripts.py:1124 -- This command will now block forever until terminated by a signal.
+2025-12-04 17:32:47,805	INFO scripts.py:1127 -- Running subprocesses are monitored and a message will be printed if any of them terminate unexpectedly. Subprocesses exit with SIGTERM will be treated as graceful, thus NOT reported.
+2025-12-04 17:32:46,562	INFO scripts.py:1094 -- Local node IP: 10.1.1.167
+2025-12-04 17:32:48,974	SUCC scripts.py:1110 -- --------------------
+2025-12-04 17:32:48,974	SUCC scripts.py:1111 -- Ray runtime started.
+2025-12-04 17:32:48,974	SUCC scripts.py:1112 -- --------------------
+2025-12-04 17:32:48,974	INFO scripts.py:1114 -- To terminate the Ray runtime, run
+2025-12-04 17:32:48,974	INFO scripts.py:1115 --   ray stop
+2025-12-04 17:32:48,976	INFO scripts.py:1123 -- --block
+2025-12-04 17:32:48,976	INFO scripts.py:1124 -- This command will now block forever until terminated by a signal.
+2025-12-04 17:32:48,976	INFO scripts.py:1127 -- Running subprocesses are monitored and a message will be printed if any of them terminate unexpectedly. Subprocesses exit with SIGTERM will be treated as graceful, thus NOT reported.
+2025-12-04 17:32:51,239	INFO worker.py:1771 -- Connecting to existing Ray cluster at address: kn166:39235...
+2025-12-04 17:32:51,253	INFO worker.py:1951 -- Connected to Ray cluster.
+Ray cluster connected successfully
+Available resources: {'object_store_memory': 315613299916.0, 'memory': 736431033140.0, 'CPU': 2.0, 'node:10.1.1.167': 1.0, 'GPU': 2.0, 'accelerator_type:L40S': 2.0, 'node:__internal_head__': 1.0, 'node:kn166': 1.0}
+WARNING: skipping mount of /etc/pki/tls/certs/ca-bundle.crt: stat /etc/pki/tls/certs/ca-bundle.crt: no such file or directory
+WARNING: skipping mount of /project/aip-wangcs/indrisch/apptainer-home: stat /project/aip-wangcs/indrisch/apptainer-home: no such file or directory
+WARNING: skipping mount of /project/aip-wangcs/indrisch/apptainer-tmp: stat /project/aip-wangcs/indrisch/apptainer-tmp: no such file or directory
+INFO:    Terminating fuse-overlayfs after timeout
+INFO:    Timeouts can be caused by a running background process
+FATAL:   container creation failed: mount hook function failure: mount /project/aip-wangcs/indrisch/apptainer-tmp->/project/aip-wangcs/indrisch/apptainer-tmp/ error: while mounting /project/aip-wangcs/indrisch/apptainer-tmp: mount source /project/aip-wangcs/indrisch/apptainer-tmp doesn't exist
+WARNING: skipping mount of /etc/pki/tls/certs/ca-bundle.crt: stat /etc/pki/tls/certs/ca-bundle.crt: no such file or directory
+WARNING: skipping mount of /project/aip-wangcs/indrisch/apptainer-home: stat /project/aip-wangcs/indrisch/apptainer-home: no such file or directory
+WARNING: skipping mount of /project/aip-wangcs/indrisch/apptainer-tmp: stat /project/aip-wangcs/indrisch/apptainer-tmp: no such file or directory
+INFO:    Terminating fuse-overlayfs after timeout
+INFO:    Timeouts can be caused by a running background process
+FATAL:   container creation failed: mount hook function failure: mount /project/aip-wangcs/indrisch/apptainer-tmp->/project/aip-wangcs/indrisch/apptainer-tmp/ error: while mounting /project/aip-wangcs/indrisch/apptainer-tmp: mount source /project/aip-wangcs/indrisch/apptainer-tmp doesn't exist
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 62 seconds for job step to finish.
+slurmstepd: error: *** STEP 1545524.1 ON kn166 CANCELLED AT 2025-12-04T17:33:05 ***
+srun: error: kn167: task 1: Killed
+srun: error: kn166: task 0: Killed
