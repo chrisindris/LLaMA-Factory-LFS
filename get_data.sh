@@ -48,7 +48,7 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 FacebookAI/roberta-large-mnli # for MNLI, deterimining the X portion of the reranker.
 # hf download --max-workers=4 MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli # for MNLI, deterimining the X portion of the reranker.
 
-#hf download --max-workers=4 Video-R1/Video-R1-7B # Video-R1 is Qwen2.5VL-7B that was used by Video-R1.
+hf download --max-workers=4 Video-R1/Video-R1-7B # Video-R1 is Qwen2.5VL-7B that was used by Video-R1.
 #hf download --max-workers=4 Video-R1/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
 #hf download --max-workers=4 Qwen/Qwen3-VL-8B-Instruct # The Qwen3 counterpart to Qwen2.5VL-7B, which is what we have been using.
 #hf download --max-workers=4 Qwen/Qwen3-VL-8B-Thinking # Same as above but with extra thinking capabilities.
