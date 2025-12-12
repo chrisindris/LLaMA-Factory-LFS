@@ -1,43 +1,13 @@
 #!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=24
+#SBATCH --time=0-08:00:00
+#SBATCH --gpus-per-node=h100:4
+#SBATCH --output=vgllm_3d_8b_lora_sft_SQA3Devery24_traineval_single-%j.out
 
-TASK_NUMBER=$1
-
-echo "Task number: $TASK_NUMBER"
-
-YAML_DIR="examples/train_lora/"
-BASE_YAML="vgllm_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint"
-SAVE_DIR="saves/vgllm-3d-8b/lora/sft/SQA3Devery24_traineval/"
-
-# ----- EDIT THE YAML -----
-
-# Get the number (epoch) of the most recent saved checkpoint.
-if [ -d "${SAVE_DIR}" ]; then
-    MOST_RECENT_SAVE=$(ls -larth ${SAVE_DIR} | grep checkpoint | grep -v converted | tail -n 1 | grep -Eo '[0-9]+$')
-else
-    MOST_RECENT_SAVE=""
-fi
-echo "Most Recent Save: ${MOST_RECENT_SAVE}"
-# NEW_EPOCH=$(expr 234 + ${TASK_NUMBER} \* 2) # This will be $(expr ${MOST_RECENT_SAVE} + 1) when we run it for real
-if [ -z "$MOST_RECENT_SAVE" ]; then
-    NEW_EPOCH=1
-else
-    NEW_EPOCH=$(expr ${MOST_RECENT_SAVE} + 1)
-fi
-echo "New Epoch: ${NEW_EPOCH}"
-
-# Starting from the base yaml, generate the yaml for this run.
-NEW_YAML=${YAML_DIR}/${BASE_YAML}_${TASK_NUMBER}.yaml
-TMP_YAML=${YAML_DIR}/${BASE_YAML}_${TASK_NUMBER}.tmp.yaml
-
-echo "New YAML: ${NEW_YAML}"
-sed "s/num_train_epochs[^#]*#/num_train_epochs: ${NEW_EPOCH} #/g" ${YAML_DIR}/${BASE_YAML}.yaml > ${TMP_YAML}
-
-if [ -z "$MOST_RECENT_SAVE" ]; then
-    sed "s|resume_from_checkpoint[^#]*#|resume_from_checkpoint: null #|g" ${TMP_YAML} > ${NEW_YAML}
-else
-    sed "s|resume_from_checkpoint[^#]*#|resume_from_checkpoint: ${SAVE_DIR}checkpoint-${MOST_RECENT_SAVE}/ #|g" ${TMP_YAML} > ${NEW_YAML}
-fi
-rm ${TMP_YAML}
+# Define the YAML file
+YAML_FILE="examples/train_lora/vgllm_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint.yaml"
 
 # Some environmental variables for Apptainer
 HF_HOME="/scratch/leihan/huggingface/hub"
@@ -62,6 +32,7 @@ apptainer run --nv --writable-tmpfs \
     -W ${SLURM_TMPDIR} \
     --env HF_HUB_OFFLINE=1 \
     --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
+    --env HOME="${SLURM_TMPDIR}" \
     --env HF_HOME="${HF_HOME}" \
     --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
     --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
@@ -77,4 +48,4 @@ apptainer run --nv --writable-tmpfs \
     --env WANDB_NAME="${WANDB_NAME}" \
     --env WANDB_ENTITY="${WANDB_ENTITY}" \
     --pwd /scratch/leihan/LLaMA-Factory-LFS \
-    llama_factory.sif bash -c "llamafactory-cli train ${NEW_YAML}"
+    llama_factory.sif bash -c "llamafactory-cli train ${YAML_FILE}"

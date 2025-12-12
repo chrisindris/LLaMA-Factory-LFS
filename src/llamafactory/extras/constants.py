@@ -3748,3 +3748,23 @@ register_model_group(
     },
     template="zephyr",
 )
+
+# Register vgllm public model
+register_model_group(
+    models={
+        "VGLLM-QA-VGGT-8B": {
+            DownloadSource.DEFAULT: "zd11024/vgllm-qa-vggt-8b",
+        },
+        "VGLLM-3D-VGGT-8B": {
+            DownloadSource.DEFAULT: "zd11024/vgllm-3d-vggt-8b",
+        },
+        "VGLLM-3D-VGGT-4B": {
+            DownloadSource.DEFAULT: "zd11024/vgllm-3d-vggt-4b",
+        },
+        "VGLLM-QA-VGGT-4B": {
+            DownloadSource.DEFAULT: "zd11024/vgllm-qa-vggt-4b",
+        },
+    },
+    template="qwen2_vl",
+    multimodal=True,
+)

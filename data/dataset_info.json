@@ -764,7 +764,7 @@
     }
   },
   "SQA3Devery24": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/",
+    "file_name": "llamafactory-sqa3d-traces-multiimage-vqa/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_24",
