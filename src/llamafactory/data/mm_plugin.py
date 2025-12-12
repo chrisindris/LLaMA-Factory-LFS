@@ -1553,6 +1553,12 @@ class Qwen2VLPlugin(BasePlugin):
             message["content"] = content
 
         return messages
+    
+    
+# Videor1SFTPlugin is going to be exactly the same as Qwen2VLPlugin, different only by its name.
+@dataclass
+class Videor1SFTPlugin(Qwen2VLPlugin):
+    pass
 
 
 @dataclass
@@ -2047,6 +2053,7 @@ PLUGINS = {
     "qwen2_omni": Qwen2OmniPlugin,
     "qwen2_vl": Qwen2VLPlugin,
     "qwen3_vl": Qwen3VLPlugin,
+    "videor1sft": Videor1SFTPlugin,
     "video_llava": VideoLlavaPlugin,
 }
 

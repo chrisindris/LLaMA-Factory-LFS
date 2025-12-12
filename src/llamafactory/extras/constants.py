@@ -3477,6 +3477,20 @@ register_model_group(
 
 register_model_group(
     models={
+        "Video-R1-Qwen2.5-VL-7B-COT-SFT": {
+            DownloadSource.DEFAULT: "Video-R1/Qwen2.5-VL-7B-COT-SFT",
+        },
+        "Video-R1-Qwen2.5-VL-7B-Instruct": {
+            DownloadSource.DEFAULT: "Video-R1/Qwen2.5-VL-7B-Instruct",
+        },
+    },
+    template="videor1sft",
+    multimodal=True,
+)
+
+
+register_model_group(
+    models={
         "Video-LLaVA-7B-Chat": {
             DownloadSource.DEFAULT: "LanguageBind/Video-LLaVA-7B-hf",
         },
