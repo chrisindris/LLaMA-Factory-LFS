@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=24
-#SBATCH --time=1-00:00:00
-#SBATCH --mem=1024GB
-#SBATCH --gpus-per-node=h100:4
+#SBATCH --cpus-per-task=1
+#SBATCH --time=0-00:03:00
+#SBATCH --mem=256GB
+#SBATCH --gpus-per-node=h100:1
 #SBATCH --output=out/%N-qwen3vl_lora_sft_SQA3Devery24_traineval-%j.out
 
 
@@ -37,5 +37,5 @@ apptainer run --nv --writable-tmpfs \
     --env WANDB_MODE=offline \
     --env WANDB_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/wandb/" \
     --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
-    /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif \
-    llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/qwen3vl_lora_sft_SQA3Devery24_traineval.yaml
+    /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory_wandb.sif \
+    pip freeze && llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/qwen3vl_lora_sft_SQA3Devery24_traineval.yaml
