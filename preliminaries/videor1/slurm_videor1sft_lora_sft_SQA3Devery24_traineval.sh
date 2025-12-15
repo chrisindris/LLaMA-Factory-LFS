@@ -26,6 +26,7 @@ TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
 # if we are offline, we need to indicate this
 apptainer run --nv --writable-tmpfs \
     -B /project/aip-wangcs/indrisch/LLaMA-Factory \
+    -B /home/indrisch \
     -B /dev/shm:/dev/shm \
     -B /etc/ssl/certs:/etc/ssl/certs:ro \
     -B /etc/pki:/etc/pki:ro \
