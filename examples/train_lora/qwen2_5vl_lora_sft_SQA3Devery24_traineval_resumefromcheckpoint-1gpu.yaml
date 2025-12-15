@@ -14,36 +14,38 @@ lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
 dataset: SQA3Devery24
-media_dir: /project/aip-wangcs/indrisch/data/
+media_dir: /project/aip-wangcs/shared/data/
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
-max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
-overwrite_cache: true
+#max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
+overwrite_cache: false
 preprocessing_num_workers: 32
-dataloader_num_workers: 4
+dataloader_num_workers: 0
+dataloader_pin_memory: false
 low_cpu_mem_usage: true
 # streaming: true # mutually exclusive with max_samples; requires max_steps. However, this seems to make it very slow.
 # max_steps: 100
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval
-logging_steps: 1
-save_steps: 1
+output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval_resumefromcheckpoint_1gpu
+logging_steps: 10
+save_steps: 200
 plot_loss: true
 overwrite_output_dir: true
 save_only_model: false
-report_to: none  # choices: [none, wandb, tensorboard, swanlab, mlflow]
+report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 
 ### train
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 8
 learning_rate: 1.0e-4
-num_train_epochs: 234 # note that this is cumulative; hence, if the model has had X epochs already and you want it to train for Y more epochs, you need to set num_train_epochs to X + Y. You can set this to increments of 500 and then if there is a difference after, it gets overwritten on the next run.
+num_train_epochs: 1.0 # note that this is cumulative; hence, if the model has had X epochs already and you want it to train for Y more epochs, you need to set num_train_epochs to X + Y. You can set this to increments of 500 and then if there is a difference after, it gets overwritten on the next run.
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
 ddp_timeout: 180000000
-resume_from_checkpoint: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465_converted/world_size_1/ #
+#resume_from_checkpoint: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465_converted/world_size_1/ #
+adapter_name_or_path: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-500/ #
 
 # debugging level
 debug: underflow_overflow
@@ -57,10 +59,10 @@ enable_liger_kernel: true
 #use_unsloth: true # mutually exclusive with DeepSpeed, which partitions in a more complex manner than unsloth.
 
 # distribution
-deepspeed: examples/deepspeed/ds_z3_offload_config.json
+deepspeed: examples/deepspeed/ds_z2_offload_config.json
 
 ## eval
 val_size: 0.1
 per_device_eval_batch_size: 1
 eval_strategy: steps
-eval_steps: 500
+eval_steps: 200

@@ -1,0 +1,53 @@
+
+Currently Loaded Modules:
+  1) CCconfig                         9) ucx/1.14.1
+  2) gentoo/2023             (S)     10) libfabric/1.18.0
+  3) gcccore/.12.3           (H)     11) pmix/4.2.4
+  4) gcc/12.3                (t)     12) ucc/1.2.0
+  5) flexiblas/3.3.1                 13) openmpi/4.1.5    (m)
+  6) imkl/2023.2.0           (math)  14) hwloc/2.9.1
+  7) StdEnv/2023             (S)     15) apptainer/1.3.5
+  8) slurm/killarney/24.05.7
+
+  Where:
+   H:     Hidden Module
+   S:     Module is Sticky, requires --force to unload or purge
+   m:     MPI implementations / Implémentations MPI
+   math:  Mathematical libraries / Bibliothèques mathématiques
+   t:     Tools for development / Outils de développement
+
+ 
+
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 17, in main
+    from .extras.misc import is_env_enabled
+  File "/app/src/llamafactory/extras/misc.py", line 23, in <module>
+    import torch
+  File "/home/indrisch/.local/lib/python3.11/site-packages/torch/__init__.py", line 426, in <module>
+    _load_global_deps()
+  File "/home/indrisch/.local/lib/python3.11/site-packages/torch/__init__.py", line 379, in _load_global_deps
+    raise err
+  File "/home/indrisch/.local/lib/python3.11/site-packages/torch/__init__.py", line 334, in _load_global_deps
+    ctypes.CDLL(global_deps_lib_path, mode=ctypes.RTLD_GLOBAL)
+  File "/opt/conda/lib/python3.11/ctypes/__init__.py", line 376, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: libmpi.so.40: cannot open shared object file: No such file or directory

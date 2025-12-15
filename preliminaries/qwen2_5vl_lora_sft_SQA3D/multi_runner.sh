@@ -10,6 +10,30 @@
 TASK_NUMBER=${SLURM_ARRAY_TASK_ID}
 CLUSTER_NAME=$1
 
+# Auto-detect cluster name from hostname if not provided
+if [[ -z "$CLUSTER_NAME" ]]; then
+    HOSTNAME=$(hostname)
+    if [[ "$HOSTNAME" == kn* ]]; then
+        CLUSTER_NAME="KILLARNEY"
+    elif [[ "$HOSTNAME" == *rorqual* ]] || [[ "$HOSTNAME" == rorqual* ]]; then
+        CLUSTER_NAME="RORQUAL"
+    elif [[ "$HOSTNAME" == *fir* ]] || [[ "$HOSTNAME" == fir* ]]; then
+        CLUSTER_NAME="FIR"
+    elif [[ "$HOSTNAME" == *nibi* ]] || [[ "$HOSTNAME" == nibi* ]]; then
+        CLUSTER_NAME="NIBI"
+    elif [[ "$HOSTNAME" == *narval* ]] || [[ "$HOSTNAME" == narval* ]]; then
+        CLUSTER_NAME="NARVAL"
+    elif [[ "$HOSTNAME" == *trillium* ]] || [[ "$HOSTNAME" == trillium* ]]; then
+        CLUSTER_NAME="TRILLIUM"
+    elif [[ "$HOSTNAME" == *tamia* ]] || [[ "$HOSTNAME" == tamia* ]]; then
+        CLUSTER_NAME="TAMIA"
+    else
+        echo "Error: Could not auto-detect cluster name from hostname '$HOSTNAME'. Please provide CLUSTER_NAME as first argument or set it as environment variable."
+        exit 1
+    fi
+    echo "Auto-detected cluster name: $CLUSTER_NAME (from hostname: $HOSTNAME)"
+fi
+
 echo "Task number: $TASK_NUMBER"
 
 # ----- GET VALUES FOR THIS CLUSTER -----
@@ -28,17 +52,33 @@ else
 fi
 
 export PYTHONPATH="$PYTHONPATH:${PROJECT_DIR}/scripts"
-export MEDIA_DIR="$(python -c "import sysconfigtool; print(sysconfigtool.read('$CLUSTER_NAME', 'media_dir'))")"
-export HF_HOME="$(python -c "import sysconfigtool; print(sysconfigtool.read('$CLUSTER_NAME', 'HF_HOME'))")"
-export HF_HUB_CACHE="$(python -c "import sysconfigtool; print(sysconfigtool.read('$CLUSTER_NAME', 'HF_HUB_CACHE'))")"
-export TRITON_CACHE_DIR="$(python -c "import sysconfigtool; print(sysconfigtool.read('$CLUSTER_NAME', 'TRITON_CACHE_DIR'))")"
-export FLASHINFER_WORKSPACE_BASE="$(python -c "import sysconfigtool; print(sysconfigtool.read('$CLUSTER_NAME', 'FLASHINFER_WORKSPACE_BASE'))")"
-export TORCH_CUDA_ARCH_LIST="$(python -c "import sysconfigtool; print(sysconfigtool.read('$CLUSTER_NAME', 'TORCH_CUDA_ARCH_LIST'))")"
-export TORCH_EXTENSIONS_DIR="$(python -c "import sysconfigtool; print(sysconfigtool.read('$CLUSTER_NAME', 'TORCH_EXTENSIONS_DIR'))")"
-export PYTORCH_KERNEL_CACHE_PATH="$(python -c "import sysconfigtool; print(sysconfigtool.read('$CLUSTER_NAME', 'PYTORCH_KERNEL_CACHE_PATH'))")"
-export FORCE_TORCHRUN="$(python -c "import sysconfigtool; print(sysconfigtool.read('$CLUSTER_NAME', 'FORCE_TORCHRUN'))")"
-export BEST_GPU="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$CLUSTER_NAME', 'BEST_GPU'))")"
-export SIF_FILE="$(python -c "import sysconfigtool; print(sysconfigtool.read('$CLUSTER_NAME', 'SIF_FILE'))")"
+
+# Helper function to read config and handle None values (both Python None and string "None")
+read_config() {
+    local key=$1
+    local value=$(python -c "import sysconfigtool; result = sysconfigtool.read('$CLUSTER_NAME', '$key'); print(result if result is not None and str(result) != 'None' else '')")
+    # Filter out literal "None" string
+    [[ "$value" == "None" ]] && value=""
+    echo "$value"
+}
+
+export MEDIA_DIR="$(read_config 'media_dir')"
+export HF_HOME="$(read_config 'HF_HOME')"
+export HF_HUB_CACHE="$(read_config 'HF_HUB_CACHE')"
+export TRITON_CACHE_DIR="$(read_config 'TRITON_CACHE_DIR')"
+export FLASHINFER_WORKSPACE_BASE="$(read_config 'FLASHINFER_WORKSPACE_BASE')"
+export TORCH_CUDA_ARCH_LIST="$(read_config 'TORCH_CUDA_ARCH_LIST')"
+# export TORCH_EXTENSIONS_DIR="$(read_config 'TORCH_EXTENSIONS_DIR')"
+# export PYTORCH_KERNEL_CACHE_PATH="$(read_config 'PYTORCH_KERNEL_CACHE_PATH')"
+# export FORCE_TORCHRUN="$(read_config 'FORCE_TORCHRUN')"
+export BEST_GPU="$(read_config 'BEST_GPU')"
+export SIF_FILE="$(read_config 'SIF_FILE')"
+
+# Validate critical variables
+if [[ -z "$SIF_FILE" ]] || [[ "$SIF_FILE" == "None" ]]; then
+    echo "Error: SIF_FILE is not set or is None for cluster '$CLUSTER_NAME'. Please check sysconfig.json."
+    exit 1
+fi
 
 if [[ "$BEST_GPU" == "h100" ]]; then
     export TORCH_CUDA_ARCH_LIST="9.0"
@@ -62,22 +102,51 @@ echo "New Epoch: ${NEW_EPOCH}"
 NEW_YAML=${YAML_DIR}/${BASE_YAML}_${TASK_NUMBER}.yaml
 echo "New YAML: ${NEW_YAML}"
 
-python modify_yaml.py \
-    --input_path ${YAML_DIR}/${BASE_YAML}.yaml \
-    --output_path ${NEW_YAML} \
-    --keys \ 
+source /scratch/indrisch/venv_llamafactory/bin/activate && python ${PROJECT_DIR}/scripts/modify_yaml.py \
+    --input_yaml ${YAML_DIR}/${BASE_YAML}.yaml \
+    --output_yaml ${NEW_YAML} \
+    --keys \
     "num_train_epochs" \
     "resume_from_checkpoint" \
     "media_dir" \
     --values \
     "${NEW_EPOCH}" \
     "${SAVE_DIR}checkpoint-${MOST_RECENT_SAVE}/" \
-    "${MEDIA_DIR}" \
+    "${MEDIA_DIR}" && deactivate
 
 
 # ----- RUN THE COMMAND -----
 
+# echo all variables currently set:
+echo "HF_HOME: ${HF_HOME}"
+echo "HF_HUB_CACHE: ${HF_HUB_CACHE}"
+echo "TRITON_CACHE_DIR: ${TRITON_CACHE_DIR}"
+echo "FLASHINFER_WORKSPACE_BASE: ${FLASHINFER_WORKSPACE_BASE}"
+echo "TORCH_CUDA_ARCH_LIST: ${TORCH_CUDA_ARCH_LIST}"
+# echo "TORCH_EXTENSIONS_DIR: ${TORCH_EXTENSIONS_DIR}"
+# echo "PYTORCH_KERNEL_CACHE_PATH: ${PYTORCH_KERNEL_CACHE_PATH}"
+# echo "FORCE_TORCHRUN: ${FORCE_TORCHRUN}"
+echo "BEST_GPU: ${BEST_GPU}"
+echo "SIF_FILE: ${SIF_FILE}"
+echo "MEDIA_DIR: ${MEDIA_DIR}"
+echo "PROJECT_DIR: ${PROJECT_DIR}"
+echo "SLURM_TMPDIR: ${SLURM_TMPDIR}"
+echo "NEW_YAML: ${NEW_YAML}"
+echo "MOST_RECENT_SAVE: ${MOST_RECENT_SAVE}"
+echo "NEW_EPOCH: ${NEW_EPOCH}"
+echo "TASK_NUMBER: ${TASK_NUMBER}"
+echo "CLUSTER_NAME: ${CLUSTER_NAME}"
+
+
 module load apptainer
+
+# Unset CUDA-related environment variables from host modules to prevent conflicts
+# The container has its own CUDA installation, and host CUDA paths can cause DeepSpeed
+# to look for nvcc at incorrect locations (e.g., /cvmfs/... paths that don't exist in container)
+unset CUDA_HOME CUDA_PATH CUDA_ROOT CUDA_BIN_PATH CUDA_LIB_PATH
+unset CUDA_INC_PATH CUDA_LD_LIBRARY_PATH
+unset EBROOTCUDA EBVERSIONCUDA EBDEVELCUDA
+
 apptainer run --nv --writable-tmpfs \
     -B ${PROJECT_DIR} \
     -B /home/indrisch \
