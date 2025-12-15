@@ -14,10 +14,10 @@ lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
 dataset: SQA3Devery24
-media_dir: /project/aip-wangcs/indrisch/data/
+media_dir: /project/aip-wangcs/shared/data/
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
-max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
+#max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
 overwrite_cache: true
 preprocessing_num_workers: 32
 dataloader_num_workers: 4
@@ -43,7 +43,8 @@ lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
 ddp_timeout: 180000000
-resume_from_checkpoint: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465/ #
+#resume_from_checkpoint: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465/ #
+adapter_name_or_path: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-465/ #
 
 # debugging level
 debug: underflow_overflow

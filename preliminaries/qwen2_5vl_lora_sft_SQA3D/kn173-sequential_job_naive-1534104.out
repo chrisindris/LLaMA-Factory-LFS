@@ -1,0 +1,36 @@
+Task number: 1
+Most Recent Save: 488
+New Epoch: 236
+New YAML: /project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora//qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_1.yaml
+Successfully modified YAML file: /project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora//qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_1.yaml
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+TORCH_CUDA_ARCH_LIST: 9.0
+BEST_GPU: h100
+SIF_FILE: /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory
+SLURM_TMPDIR: /tmp
+NEW_YAML: /project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora//qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_1.yaml
+MOST_RECENT_SAVE: 488
+NEW_EPOCH: 236
+TASK_NUMBER: 1
+CLUSTER_NAME: KILLARNEY
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+slurmstepd: error: *** JOB 1534104 ON kn173 CANCELLED AT 2025-12-01T07:10:16 ***

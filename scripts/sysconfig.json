@@ -75,7 +75,7 @@
         "FLASHINFER_WORKSPACE_BASE": "/scratch/indrisch/",
         "LLAMAFACTORY_HOME": "/project/aip-wangcs/indrisch/LLaMA-Factory",
         "SIF_FILE": "/project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif",
-        "media_dir": "/project/aip-wangcs/indrisch/data/"
+        "media_dir": "/project/aip-wangcs/shared/data/"
     },
     "TAMIA": {
         "HF_HOME": "/project/aip-wangcs/indrisch/huggingface/hub",
