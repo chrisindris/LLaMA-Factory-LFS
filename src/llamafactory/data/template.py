@@ -2103,6 +2103,10 @@ register_template(
     replace_jinja_template=True,
 )
 
+try:
+    mm_plugin_instance = get_mm_plugin(name="videor1sft", image_token="<|image_pad|>", video_token="<|video_pad|>")
+except Exception as e:
+    raise
 register_template(
     name="videor1sft",
     format_user=StringFormatter(slots=["<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n"]),
@@ -2116,7 +2120,7 @@ register_template(
     default_system="You are a helpful assistant.",
     stop_words=["<|im_end|>"],
     replace_eos=True,
-    mm_plugin=get_mm_plugin(name="videor1sft", image_token="<|image_pad|>", video_token="<|video_pad|>"),
+    mm_plugin=mm_plugin_instance,
 )
 
 register_template(
