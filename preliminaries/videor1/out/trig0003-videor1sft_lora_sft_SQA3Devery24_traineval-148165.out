@@ -1,0 +1,186 @@
+
+Currently Loaded Modules:
+  1) CCconfig   2) gentoo/2023 (S)   3) apptainer/1.3.5
+
+  Where:
+   S:  Module is Sticky, requires --force to unload or purge
+
+ 
+
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2025-12-15 19:09:48] llamafactory.launcher:143 >> Initializing 1 distributed tasks at: 127.0.0.1:35371
+⚙️  Running in WANDB offline mode
+[2025-12-15 19:09:54,444] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2025-12-15 19:09:58,915] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-12-15 19:09:58,916] [INFO] [comm.py:700:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[INFO|2025-12-15 19:09:58] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2025-12-15 19:09:58] llamafactory.hparams.parser:423 >> Process rank: 0, world size: 1, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|hub.py:421] 2025-12-15 19:09:58,967 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1949] 2025-12-15 19:09:58,980 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2025-12-15 19:09:58,990 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2025-12-15 19:09:58,990 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2025-12-15 19:09:58,990 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2025-12-15 19:09:58,990 >> loading file added_tokens.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/added_tokens.json
+[INFO|tokenization_utils_base.py:2095] 2025-12-15 19:09:58,990 >> loading file special_tokens_map.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/special_tokens_map.json
+[INFO|tokenization_utils_base.py:2095] 2025-12-15 19:09:58,990 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2025-12-15 19:09:58,990 >> loading file chat_template.jinja from cache at None
+[INFO|tokenization_utils_base.py:2364] 2025-12-15 19:09:59,288 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|hub.py:421] 2025-12-15 19:09:59,288 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:421] 2025-12-15 19:09:59,289 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:316] 2025-12-15 19:09:59,291 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2025-12-15 19:09:59,295 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/preprocessor_config.json
+[INFO|image_processing_base.py:316] 2025-12-15 19:09:59,297 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2025-12-15 19:09:59,299 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/preprocessor_config.json
+[WARNING|logging.py:328] 2025-12-15 19:09:59,299 >> `use_fast` is set to `True` but the image processor class does not have a fast version.  Falling back to the slow version.
+[INFO|hub.py:421] 2025-12-15 19:09:59,299 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:421] 2025-12-15 19:09:59,300 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:316] 2025-12-15 19:09:59,300 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2025-12-15 19:09:59,302 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/preprocessor_config.json
+[INFO|image_processing_base.py:316] 2025-12-15 19:09:59,302 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2025-12-15 19:09:59,303 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/preprocessor_config.json
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/app/src/llamafactory/model/loader.py", line 98, in load_tokenizer
+[rank0]:     processor = AutoProcessor.from_pretrained(
+[rank0]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/processing_auto.py", line 396, in from_pretrained
+[rank0]:     return processor_class.from_pretrained(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/processing_utils.py", line 1394, in from_pretrained
+[rank0]:     args = cls._get_arguments_from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/processing_utils.py", line 1453, in _get_arguments_from_pretrained
+[rank0]:     args.append(attribute_class.from_pretrained(pretrained_model_name_or_path, **kwargs))
+[rank0]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/image_processing_auto.py", line 622, in from_pretrained
+[rank0]:     raise ValueError(
+[rank0]: ValueError: Unrecognized image processor in Video-R1/Qwen2.5-VL-7B-COT-SFT. Should have a `image_processor_type` key in its preprocessor_config.json of config.json, or one of the following `model_type` keys in its config.json: aimv2, aimv2_vision_model, align, aria, beit, bit, blip, blip-2, bridgetower, chameleon, chinese_clip, clip, clipseg, cohere2_vision, conditional_detr, convnext, convnextv2, cvt, data2vec-vision, deepseek_vl, deepseek_vl_hybrid, deformable_detr, deit, depth_anything, depth_pro, deta, detr, dinat, dinov2, dinov3_vit, donut-swin, dpt, edgetam, efficientformer, efficientloftr, efficientnet, eomt, flava, focalnet, fuyu, gemma3, gemma3n, git, glm4v, glpn, got_ocr2, grounding-dino, groupvit, hiera, idefics, idefics2, idefics3, ijepa, imagegpt, instructblip, instructblipvideo, janus, kosmos-2, kosmos-2.5, layoutlmv2, layoutlmv3, levit, lfm2_vl, lightglue, llama4, llava, llava_next, llava_next_video, llava_onevision, mask2former, maskformer, metaclip_2, mgp-str, mistral3, mlcd, mllama, mm-grounding-dino, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, nat, nougat, oneformer, ovis2, owlv2, owlvit, paligemma, perceiver, perception_lm, phi4_multimodal, pix2struct, pixtral, poolformer, prompt_depth_anything, pvt, pvt_v2, qwen2_5_vl, qwen2_vl, qwen3_vl, regnet, resnet, rt_detr, sam, sam2, sam_hq, segformer, seggpt, shieldgemma2, siglip, siglip2, smolvlm, superglue, superpoint, swiftformer, swin, swin2sr, swinv2, table-transformer, textnet, timesformer, timm_wrapper, tvlt, tvp, udop, upernet, van, videomae, vilt, vipllava, vit, vit_hybrid, vit_mae, vit_msn, vitmatte, xclip, yolos, zoedepth
+
+[rank0]: During handling of the above exception, another exception occurred:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/app/src/llamafactory/launcher.py", line 180, in <module>
+[rank0]:     run_exp()
+[rank0]:   File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+[rank0]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank0]:   File "/app/src/llamafactory/train/tuner.py", line 72, in _training_function
+[rank0]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank0]:   File "/app/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank0]:     tokenizer_module = load_tokenizer(model_args)
+[rank0]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/app/src/llamafactory/model/loader.py", line 104, in load_tokenizer
+[rank0]:     processor = AutoProcessor.from_pretrained(
+[rank0]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/processing_auto.py", line 396, in from_pretrained
+[rank0]:     return processor_class.from_pretrained(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/processing_utils.py", line 1394, in from_pretrained
+[rank0]:     args = cls._get_arguments_from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/processing_utils.py", line 1453, in _get_arguments_from_pretrained
+[rank0]:     args.append(attribute_class.from_pretrained(pretrained_model_name_or_path, **kwargs))
+[rank0]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/image_processing_auto.py", line 622, in from_pretrained
+[rank0]:     raise ValueError(
+[rank0]: ValueError: Unrecognized image processor in Video-R1/Qwen2.5-VL-7B-COT-SFT. Should have a `image_processor_type` key in its preprocessor_config.json of config.json, or one of the following `model_type` keys in its config.json: aimv2, aimv2_vision_model, align, aria, beit, bit, blip, blip-2, bridgetower, chameleon, chinese_clip, clip, clipseg, cohere2_vision, conditional_detr, convnext, convnextv2, cvt, data2vec-vision, deepseek_vl, deepseek_vl_hybrid, deformable_detr, deit, depth_anything, depth_pro, deta, detr, dinat, dinov2, dinov3_vit, donut-swin, dpt, edgetam, efficientformer, efficientloftr, efficientnet, eomt, flava, focalnet, fuyu, gemma3, gemma3n, git, glm4v, glpn, got_ocr2, grounding-dino, groupvit, hiera, idefics, idefics2, idefics3, ijepa, imagegpt, instructblip, instructblipvideo, janus, kosmos-2, kosmos-2.5, layoutlmv2, layoutlmv3, levit, lfm2_vl, lightglue, llama4, llava, llava_next, llava_next_video, llava_onevision, mask2former, maskformer, metaclip_2, mgp-str, mistral3, mlcd, mllama, mm-grounding-dino, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, nat, nougat, oneformer, ovis2, owlv2, owlvit, paligemma, perceiver, perception_lm, phi4_multimodal, pix2struct, pixtral, poolformer, prompt_depth_anything, pvt, pvt_v2, qwen2_5_vl, qwen2_vl, qwen3_vl, regnet, resnet, rt_detr, sam, sam2, sam_hq, segformer, seggpt, shieldgemma2, siglip, siglip2, smolvlm, superglue, superpoint, swiftformer, swin, swin2sr, swinv2, table-transformer, textnet, timesformer, timm_wrapper, tvlt, tvp, udop, upernet, van, videomae, vilt, vipllava, vit, vit_hybrid, vit_mae, vit_msn, vitmatte, xclip, yolos, zoedepth
+[rank0]:[W1215 19:09:59.954901075 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+E1215 19:10:01.234000 1476791 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 1476794) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/app/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-12-15_19:10:01
+  host      : trig0003.scinet.local
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 1476794)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 110, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '1', '--master_addr', '127.0.0.1', '--master_port', '35371', '/app/src/llamafactory/launcher.py', '/scratch/indrisch/LLaMA-Factory/examples/train_lora/videor1sft_lora_sft_SQA3Devery24_traineval.yaml']' returned non-zero exit status 1.
+
+scontrol show job 148165
+JobId=148165 JobName=slurm_videor1sft_lora_sft_SQA3Devery24_traineval.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=252800 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:00:34 TimeLimit=00:10:00 TimeMin=N/A
+   SubmitTime=2025-12-15T19:09:28 EligibleTime=2025-12-15T19:09:28
+   AccrueTime=2025-12-15T19:09:28
+   StartTime=2025-12-15T19:09:28 EndTime=2025-12-15T19:10:02 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-12-15T19:09:28 Scheduler=Main
+   Partition=compute AllocNode:Sid=trig-login01:3729329
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0003
+   BatchHost=trig0003
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/videor1/slurm_videor1sft_lora_sft_SQA3Devery24_traineval.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/videor1
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L slurm_videor1sft_lora_sft_SQA3Devery24_traineval.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/videor1/out/%N-videor1sft_lora_sft_SQA3Devery24_traineval-148165.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/videor1/out/%N-videor1sft_lora_sft_SQA3Devery24_traineval-148165.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=1
+   
+
+sacct -j 148165
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+148165       slurm_vid+ def-wangcs   00:00:34                         00:00:00   00:00:00      0:0 
+148165.batch      batch def-wangcs   00:00:34                         00:00:00   00:00:00      0:0 
+148165.exte+     extern def-wangcs   00:00:34                         00:00:00   00:00:00      0:0 
+

@@ -14,8 +14,8 @@ lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
 dataset: SQA3Devery24
-media_dir: /project/aip-wangcs/shared/data/
-template: qwen2_5_vl
+media_dir: /scratch/indrisch/vllm_experiments/data/
+template: videor1sft
 cutoff_len: 131072 # max len of the model
 # max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
 overwrite_cache: false
@@ -39,7 +39,7 @@ report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 8
 learning_rate: 1.0e-4
-num_train_epochs: 2.0
+num_train_epochs: 1.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
