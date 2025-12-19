@@ -7,8 +7,10 @@
 #SBATCH --gpus-per-node=h100:2
 #SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3D-%j.out
 
-# 100 examples (per_device_train_batch_size: 2) takes 25 minutes; used 14.49% of memory (108.97 of 751.95 GB)
-# 500 examples (per_device_train_batch_size: 2) takes about 120 minutes; used 22.57% of memory (169.68 of 751.95 GB)
+# 100 examples (per_device_train_batch_size: 2) takes 25 minutes; used 14.49% of CPU memory (108.97 of 751.95 GB), no GPU OOM errors
+# 500 examples (per_device_train_batch_size: 2) on a full node (96 CPUs, 4 GPUs, 32 preproc workers and 32 dataloader workers) took 1.75 hours; used 30.80% of CPU memory (231.57 of 751.95 GB)
+# 2500 examples (per_device_train_batch_size: 1) on a full node (96 CPUs, 4 GPUs, 32 preproc workers and 4 dataloader workers) took 9 hours; used 14.88% of CPU memory (111.89 of 751.95 GB)
+# 33047 examples (per_device_train_batch_size: 1) on a full node (96 CPUs, 4 GPUs, 32 preproc workers and 4 dataloader workers); in 24 hours,
 
 module load apptainer
 
@@ -17,7 +19,7 @@ TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
 # better to have triton cache on a non-nfs file system for speed
 # if we are offline, we need to indicate this
 apptainer run --nv --writable-tmpfs \
-    -B /scratch/indrisch/LLaMA-Factory \
+    -B /project/aip-wangcs/indrisch/LLaMA-Factory \
     -B /home/indrisch \
     -B /dev/shm:/dev/shm \
     -B /etc/ssl/certs:/etc/ssl/certs:ro \
@@ -33,6 +35,6 @@ apptainer run --nv --writable-tmpfs \
     --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
     --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
     --env FORCE_TORCHRUN=1 \
-    --pwd /scratch/indrisch/LLaMA-Factory \
-    /scratch/indrisch/easyr1_verl_sif/llamafactory.sif \
-    llamafactory-cli train /scratch/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3D.yaml
+    --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
+    /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif \ \
+    llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3D.yaml

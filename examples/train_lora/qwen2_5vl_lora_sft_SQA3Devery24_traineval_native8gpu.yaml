@@ -1,0 +1,66 @@
+### model
+model_name_or_path: Qwen/Qwen2.5-VL-7B-Instruct
+cache_dir: /scratch/indrisch/huggingface/hub
+image_max_pixels: 65536 # 313632 = 648x414 image, 1/4 of the size of the default SQA3D image, exceeds token limit by factor of 3; the system seems to work when this value is a divisor of 313632
+video_max_pixels: 16384
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_rank: 8
+lora_target: all
+
+### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
+dataset: SQA3Devery24
+media_dir: /project/aip-wangcs/shared/data/
+template: qwen2_vl
+cutoff_len: 131072 # max len of the model
+# max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
+overwrite_cache: true
+preprocessing_num_workers: 32
+dataloader_num_workers: 4
+low_cpu_mem_usage: true
+# streaming: true # mutually exclusive with max_samples; requires max_steps. However, this seems to make it very slow.
+# max_steps: 100
+
+### output
+output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval
+logging_steps: 10
+save_steps: 500
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
+
+### train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 1.0e-4
+num_train_epochs: 1.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+resume_from_checkpoint: null
+
+# debugging level
+debug: underflow_overflow
+log_level: debug
+log_level_replica: debug
+print_param_status: true
+
+# acceleration
+flash_attn: fa2
+enable_liger_kernel: true
+#use_unsloth: true # mutually exclusive with DeepSpeed, which partitions in a more complex manner than unsloth.
+
+# distribution
+deepspeed: examples/deepspeed/ds_z2_offload_config.json
+
+## eval
+val_size: 0.1
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 500

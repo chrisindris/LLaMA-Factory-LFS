@@ -1,0 +1,8 @@
+usage: ds_to_universal.py [-h] --input_folder INPUT_FOLDER --output_folder
+                          OUTPUT_FOLDER
+                          [--num_extract_workers NUM_EXTRACT_WORKERS]
+                          [--num_merge_workers NUM_MERGE_WORKERS]
+                          [--keep_temp_folder] [--no_strict]
+                          [--inject_missing_state]
+ds_to_universal.py: error: the following arguments are required: --input_folder, --output_folder
+/cm/local/apps/slurm/var/spool/job1528972/slurm_script: --input_folder: command not found
