@@ -10,4 +10,4 @@ virtualenv --no-download venv_llamafactory_cu126
 source venv_llamafactory_cu126/bin/activate
 popd
 pip install --upgrade pip setuptools wheel
-pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy -e ".[torch,metrics,deepspeed,liger-kernel]" --no-build-isolation
+pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray -e ".[torch,metrics,deepspeed,liger-kernel]" --no-build-isolation

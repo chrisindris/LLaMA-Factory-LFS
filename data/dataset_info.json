@@ -778,5 +778,21 @@
       "user_tag": "user",
       "assistant_tag": "assistant"
     }
+  },
+  "SQA3Devery24_R12C12F12X62": {
+    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62/snapshots/7df1906772c39a22c69a2aad435670fc2c38fea7/data/",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "question_with_image_tags_every_24",
+      "response": "best_trace_formatted",
+      "images": "images_every_24",
+      "system": "system_prompt"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
   }
 }
