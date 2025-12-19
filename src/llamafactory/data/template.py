@@ -2104,11 +2104,11 @@ register_template(
 )
 
 try:
-    mm_plugin_instance = get_mm_plugin(name="videor1sft", image_token="<|image_pad|>", video_token="<|video_pad|>")
+    mm_plugin_instance = get_mm_plugin(name="videor1", image_token="<|image_pad|>", video_token="<|video_pad|>")
 except Exception as e:
     raise
 register_template(
-    name="videor1sft",
+    name="videor1",
     format_user=StringFormatter(slots=["<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n"]),
     format_assistant=StringFormatter(slots=["{{content}}<|im_end|>\n"]),
     format_system=StringFormatter(slots=["<|im_start|>system\n{{content}}<|im_end|>\n"]),
