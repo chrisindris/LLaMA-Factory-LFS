@@ -1,5 +1,5 @@
 ### model
-model_name_or_path: Video-R1/Qwen2.5-VL-7B-COT-SFT
+model_name_or_path: Video-R1/Video-R1-7B
 cache_dir: /scratch/indrisch/huggingface/hub
 image_max_pixels: 65536 # 313632 = 648x414 image, 1/4 of the size of the default SQA3D image, exceeds token limit by factor of 3; the system seems to work when this value is a divisor of 313632
 video_max_pixels: 16384
@@ -27,7 +27,7 @@ low_cpu_mem_usage: true
 # max_steps: 100
 
 ### output
-output_dir: saves/videor1sft/lora/sft/SQA3Devery24_traineval
+output_dir: saves/videor1/lora/sft/SQA3Devery24_traineval
 logging_steps: 10
 save_steps: 200
 plot_loss: true
