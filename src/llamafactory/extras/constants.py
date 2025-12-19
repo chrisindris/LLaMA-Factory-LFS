@@ -3484,7 +3484,7 @@ register_model_group(
             DownloadSource.DEFAULT: "Video-R1/Qwen2.5-VL-7B-Instruct",
         },
     },
-    template="videor1sft",
+    template="videor1",
     multimodal=True,
 )
 

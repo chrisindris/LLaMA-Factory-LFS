@@ -1,11 +1,22 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=48
-#SBATCH --time=0-18:00:00
-#SBATCH --mem=1900G
-#SBATCH --gpus-per-node=h100:8
-#SBATCH --output=out/%N-qwen3vl_lora_sft_SQA3Devery24_traineval-%j.out
+#SBATCH --cpus-per-task=12
+#SBATCH --time=1-00:00:00
+#SBATCH --mem=450GB
+#SBATCH --gpus-per-node=h100:2
+#SBATCH --output=out/%N-videor1_lora_sft_SQA3Devery24_traineval-%j.out
+
+# Get MPI library paths for bind mounting
+# MPI_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcc12/openmpi/4.1.5/lib"
+# HWLOC_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/hwloc/2.9.1/lib"
+# # Gentoo system libraries (contains libpciaccess and other system deps)
+# GENTOO_LIB64_PATH="/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib64"
+
+# STEP 1: RUN THE TRAINING AND EVALUATION
+
+# better to have triton cache on a non-nfs file system for speed
+# if we are offline, we need to indicate this
 
 RUNNING_MODE=$1 # this is optional; generally, we wouldn't use this
 
@@ -28,7 +39,6 @@ if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
         -B /etc/ssl/certs:/etc/ssl/certs:ro \
         -B /etc/pki:/etc/pki:ro \
         -W ${SLURM_TMPDIR} \
-        --env LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" \
         --env HF_HUB_OFFLINE=1 \
         --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
         --env HF_HOME="/scratch/indrisch/huggingface/hub" \
@@ -42,8 +52,8 @@ if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
         --env WANDB_MODE=offline \
         --env WANDB_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/wandb/" \
         --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
-        /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory_wandb.sif \
-        pip freeze && llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/qwen3vl_lora_sft_SQA3Devery24_traineval.yaml
+        /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif \
+        llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/videor1_lora_sft_SQA3Devery24_traineval.yaml
 
 elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
@@ -52,18 +62,45 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
     module load arrow
 
     source /project/aip-wangcs/indrisch/venv_llamafactory_cu126/bin/activate
-    export TORCH_CUDA_ARCH_LIST="9.0" # for clusters with a100 GPUs
-    export CUDA_VISIBLE_DEVICES=0,1,2,3
-    export FORCE_TORCHRUN=1 
+
+    pushd /project/aip-wangcs/indrisch/
+    module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+    module load python/3.12 cuda/12.6 opencv/4.12.0
+    module load arrow
+    virtualenv --no-download venv_llamafactory_cu126
+    source venv_llamafactory_cu126/bin/activate
+    popd
+    
+    # Set environment variables AFTER venv activation to ensure they persist
+    # Create cache directories before they're needed
+    mkdir -p "${SLURM_TMPDIR}/.cache/torch_extensions"
+    mkdir -p "${SLURM_TMPDIR}/.cache/torch/kernels"
+    mkdir -p "${SLURM_TMPDIR}/.config/matplotlib"
+    mkdir -p "${SLURM_TMPDIR}/.triton_cache"
+    
     export HF_HUB_OFFLINE=1 
+    export MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib"
+    export HF_HOME="/scratch/indrisch/huggingface/hub"
+    export HF_HUB_CACHE="/scratch/indrisch/huggingface/hub"
+    export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
+    export FLASHINFER_WORKSPACE_BASE="/scratch/indrisch/"
+    export TORCH_CUDA_ARCH_LIST="9.0" # for clusters with a100 GPUs
+    export TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" # needed for cpu_adam
+    export PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels"
+    export FORCE_TORCHRUN=1 
     export WANDB_MODE=offline 
     export WANDB_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/wandb/" 
-    export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
     export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
     # giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
+
     pushd /project/aip-wangcs/indrisch/LLaMA-Factory
+    pip install --upgrade pip setuptools wheel
+    pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray -e ".[torch,metrics,deepspeed,liger-kernel]"
+
+
+    #pushd /project/aip-wangcs/indrisch/LLaMA-Factory
     llamafactory-cli train \
-        --model_name_or_path Qwen/Qwen3-VL-8B-Instruct \
+        --model_name_or_path Video-R1/Video-R1-7B \
         --no_use_fast_tokenizer \
         --cache_dir /scratch/indrisch/huggingface/hub \
         --image_max_pixels 65536 \
@@ -76,13 +113,13 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
         --lora_target all \
         --dataset SQA3Devery24 \
         --media_dir /project/aip-wangcs/shared/data/ \
-        --template qwen3_vl \
+        --template videor1 \
         --cutoff_len 131072 \
         --preprocessing_num_workers 32 \
         --dataloader_num_workers 0 \
         --dataloader_pin_memory false \
         --low_cpu_mem_usage \
-        --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3vl-8b/lora/sft/SQA3Devery24_traineval \
+        --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1/lora/sft/SQA3Devery24_traineval \
         --logging_steps 10 \
         --save_steps 200 \
         --plot_loss \
@@ -104,7 +141,7 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
         --flash_attn fa2 \
         --enable_liger_kernel \
         --gradient_checkpointing \
-        --deepspeed /project/aip-wangcs/indrisch/LLaMA-Factory/examples/deepspeed/ds_z3_offload_config.json \
+        --deepspeed /project/aip-wangcs/indrisch/LLaMA-Factory/examples/deepspeed/ds_z2_offload_config.json \
         --val_size 0.1 \
         --per_device_eval_batch_size 1 \
         --eval_strategy steps \
