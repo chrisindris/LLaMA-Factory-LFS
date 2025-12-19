@@ -1,0 +1,195 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2025-11-24 14:31:46] llamafactory.launcher:143 >> Initializing 2 distributed tasks at: 127.0.0.1:56313
+W1124 14:31:47.725000 2624424 site-packages/torch/distributed/run.py:792] 
+W1124 14:31:47.725000 2624424 site-packages/torch/distributed/run.py:792] *****************************************
+W1124 14:31:47.725000 2624424 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W1124 14:31:47.725000 2624424 site-packages/torch/distributed/run.py:792] *****************************************
+[2025-11-24 14:31:55,324] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-24 14:31:55,324] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2025-11-24 14:32:02,859] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-11-24 14:32:02,860] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-11-24 14:32:02,860] [INFO] [comm.py:700:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[INFO|2025-11-24 14:32:02] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2025-11-24 14:32:02] llamafactory.hparams.parser:423 >> Process rank: 0, world size: 2, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|hub.py:421] 2025-11-24 14:32:02,964 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_auto.py:922] 2025-11-24 14:32:02,965 >> Could not locate the tokenizer configuration file, will try to use the model config instead.
+[INFO|hub.py:421] 2025-11-24 14:32:02,965 >> Offline mode: forcing local_files_only=True
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 479, in cached_files
+[rank0]:     hf_hub_download(
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[rank0]:     return fn(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1010, in hf_hub_download
+[rank0]:     return _hf_hub_download_to_cache_dir(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1117, in _hf_hub_download_to_cache_dir
+[rank0]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1649, in _raise_on_head_call_error
+[rank0]:     raise LocalEntryNotFoundError(
+[rank0]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank0]: The above exception was the direct cause of the following exception:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/app/src/llamafactory/model/loader.py", line 78, in load_tokenizer
+[rank0]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank0]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 1093, in from_pretrained
+[rank0]:     config = AutoConfig.from_pretrained(
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1333, in from_pretrained
+[rank0]:     config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank0]:                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 662, in get_config_dict
+[rank0]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank0]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 721, in _get_config_dict
+[rank0]:     resolved_config_file = cached_file(
+[rank0]:                            ^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 322, in cached_file
+[rank0]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 553, in cached_files
+[rank0]:     raise OSError(
+[rank0]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank0]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank0]: The above exception was the direct cause of the following exception:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/app/src/llamafactory/launcher.py", line 180, in <module>
+[rank0]:     run_exp()
+[rank0]:   File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+[rank0]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank0]:   File "/app/src/llamafactory/train/tuner.py", line 72, in _training_function
+[rank0]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank0]:   File "/app/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank0]:     tokenizer_module = load_tokenizer(model_args)
+[rank0]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/app/src/llamafactory/model/loader.py", line 93, in load_tokenizer
+[rank0]:     raise OSError("Failed to load tokenizer.") from e
+[rank0]: OSError: Failed to load tokenizer.
+[INFO|2025-11-24 14:32:03] llamafactory.hparams.parser:423 >> Process rank: 1, world size: 2, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 479, in cached_files
+[rank1]:     hf_hub_download(
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[rank1]:     return fn(*args, **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1010, in hf_hub_download
+[rank1]:     return _hf_hub_download_to_cache_dir(
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1117, in _hf_hub_download_to_cache_dir
+[rank1]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1649, in _raise_on_head_call_error
+[rank1]:     raise LocalEntryNotFoundError(
+[rank1]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank1]: The above exception was the direct cause of the following exception:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/app/src/llamafactory/model/loader.py", line 78, in load_tokenizer
+[rank1]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank1]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 1093, in from_pretrained
+[rank1]:     config = AutoConfig.from_pretrained(
+[rank1]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1333, in from_pretrained
+[rank1]:     config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank1]:                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 662, in get_config_dict
+[rank1]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank1]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 721, in _get_config_dict
+[rank1]:     resolved_config_file = cached_file(
+[rank1]:                            ^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 322, in cached_file
+[rank1]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 553, in cached_files
+[rank1]:     raise OSError(
+[rank1]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank1]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank1]: The above exception was the direct cause of the following exception:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/app/src/llamafactory/launcher.py", line 180, in <module>
+[rank1]:     run_exp()
+[rank1]:   File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+[rank1]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank1]:   File "/app/src/llamafactory/train/tuner.py", line 72, in _training_function
+[rank1]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank1]:   File "/app/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank1]:     tokenizer_module = load_tokenizer(model_args)
+[rank1]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/app/src/llamafactory/model/loader.py", line 93, in load_tokenizer
+[rank1]:     raise OSError("Failed to load tokenizer.") from e
+[rank1]: OSError: Failed to load tokenizer.
+[rank0]:[W1124 14:32:03.433507267 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+W1124 14:32:08.469000 2624424 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 2624458 closing signal SIGTERM
+E1124 14:32:08.533000 2624424 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 2624457) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/app/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-11-24_14:32:08
+  host      : rg31803.rorqual.calcul.quebec
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 2624457)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 110, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '2', '--master_addr', '127.0.0.1', '--master_port', '56313', '/app/src/llamafactory/launcher.py', '/scratch/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3D.yaml']' returned non-zero exit status 1.
+INFO:    Cleanup error: while stopping driver for /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/var/apptainer/mnt/session/final: fuse-overlayfs exited: fuse: reading device: Software caused connection abort
