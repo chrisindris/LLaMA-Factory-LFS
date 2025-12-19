@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=12
-#SBATCH --time=1-00:00:00
-#SBATCH --mem=450GB
-#SBATCH --gpus-per-node=h100:2
+#SBATCH --cpus-per-task=1   
+#SBATCH --time=0-00:10:00
+#SBATCH --mem=99GB
+#SBATCH --gpus-per-node=h100:1
 #SBATCH --output=out/%N-videor1_lora_sft_SQA3Devery24_traineval-%j.out
 
 # Get MPI library paths for bind mounting
@@ -33,7 +33,7 @@ if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
 
     apptainer run --nv --writable-tmpfs \
         -C \
-        -B /project/aip-wangcs/indrisch/LLaMA-Factory \
+        -B /scratch/indrisch/LLaMA-Factory \
         -B /home/indrisch \
         -B /dev/shm:/dev/shm \
         -B /etc/ssl/certs:/etc/ssl/certs:ro \
@@ -50,10 +50,10 @@ if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
         --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
         --env FORCE_TORCHRUN=1 \
         --env WANDB_MODE=offline \
-        --env WANDB_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/wandb/" \
-        --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
-        /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif \
-        llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/videor1_lora_sft_SQA3Devery24_traineval.yaml
+        --env WANDB_DIR="/scratch/indrisch/LLaMA-Factory/wandb/" \
+        --pwd /scratch/indrisch/LLaMA-Factory \
+        /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif \
+        llamafactory-cli train /scratch/indrisch/LLaMA-Factory/examples/train_lora/videor1_lora_sft_SQA3Devery24_traineval.yaml
 
 elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
@@ -89,16 +89,16 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
     export PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels"
     export FORCE_TORCHRUN=1 
     export WANDB_MODE=offline 
-    export WANDB_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/wandb/" 
+    export WANDB_DIR="/scratch/indrisch/LLaMA-Factory/wandb/" 
     export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
     # giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
 
-    pushd /project/aip-wangcs/indrisch/LLaMA-Factory
+    pushd /scratch/indrisch/LLaMA-Factory
     pip install --upgrade pip setuptools wheel
     pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray -e ".[torch,metrics,deepspeed,liger-kernel]"
 
 
-    #pushd /project/aip-wangcs/indrisch/LLaMA-Factory
+    #pushd /scratch/indrisch/LLaMA-Factory
     llamafactory-cli train \
         --model_name_or_path Video-R1/Video-R1-7B \
         --no_use_fast_tokenizer \
@@ -119,7 +119,7 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
         --dataloader_num_workers 0 \
         --dataloader_pin_memory false \
         --low_cpu_mem_usage \
-        --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1/lora/sft/SQA3Devery24_traineval \
+        --output_dir /scratch/indrisch/LLaMA-Factory/saves/videor1/lora/sft/SQA3Devery24_traineval \
         --logging_steps 10 \
         --save_steps 200 \
         --plot_loss \
@@ -141,7 +141,7 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
         --flash_attn fa2 \
         --enable_liger_kernel \
         --gradient_checkpointing \
-        --deepspeed /project/aip-wangcs/indrisch/LLaMA-Factory/examples/deepspeed/ds_z2_offload_config.json \
+        --deepspeed /scratch/indrisch/LLaMA-Factory/examples/deepspeed/ds_z2_offload_config.json \
         --val_size 0.1 \
         --per_device_eval_batch_size 1 \
         --eval_strategy steps \

@@ -1,7 +1,7 @@
 {
     "RORQUAL": {
-        "HF_HOME": "/project/def-wangcs/indrisch/.cache/huggingface/hub",
-        "HF_HUB_CACHE": "/project/def-wangcs/indrisch/.cache/huggingface/hub",
+        "HF_HOME": "/scratch/indrisch/huggingface/hub",
+        "HF_HUB_CACHE": "/scratch/indrisch/huggingface/hub",
         "HF_HUB_DISABLE_XET": "1",
         "TRITON_CACHE_DIR": "/project/def-wangcs/indrisch/.triton_cache",
         "VLLM_HOME": "/project/def-wangcs/indrisch/vllm/",
@@ -9,7 +9,10 @@
         "VLLM_CONFIG_ROOT": "/project/def-wangcs/indrisch/.config/vllm",
         "VLLM_CACHE_ROOT": "/project/def-wangcs/indrisch/.cache/vllm",
         "BEST_GPU": "h100",
-        "FLASHINFER_WORKSPACE_BASE": "/project/def-wangcs/indrisch/"
+        "FLASHINFER_WORKSPACE_BASE": "/project/def-wangcs/indrisch/",
+        "LLAMAFACTORY_HOME": "/scratch/indrisch/LLaMA-Factory/",
+        "SIF_FILE": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif",
+        "media_dir": "/scratch/indrisch/data/"
     },
     "FIR": {
         "HF_HOME": "/scratch/indrisch/huggingface/hub",

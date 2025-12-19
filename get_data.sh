@@ -3,6 +3,8 @@
 # RUN ON: Login Node
 # RUN AS: ./load_model.sh <cluster_name>
 
+export HF_TOKEN=$(cat /home/indrisch/TOKENS/cvis-tmu-organization-token.txt)
+
 # vLLM models typically come from the huggingface hub. 
 module load python/3.12 git-lfs/3.4.0 && git-lfs install
 virtualenv --no-download temp_env && source temp_env/bin/activate
@@ -56,6 +58,10 @@ hf download --max-workers=4 Video-R1/Video-R1-7B # Video-R1 is Qwen2.5VL-7B that
 
 # SPECIAL NOTE: there is currently no Qwen3-VL that is less than 235B, which is way too big for our purposes (training it); even the smallest Qwen3-Omni (also vision-language) is 30GB. Hence, we will still try to enhance Qwen2.5 VL.
 # we should try VL and non-VL versions of Qwen3 to assess traces.
+
+hf download --max-workers=12 cvis-tmu/easyr1_verl_sif --repo-type=dataset
+hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62 --repo-type=dataset
+hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa --repo-type=dataset
 
 deactivate
 rm -r temp_env
