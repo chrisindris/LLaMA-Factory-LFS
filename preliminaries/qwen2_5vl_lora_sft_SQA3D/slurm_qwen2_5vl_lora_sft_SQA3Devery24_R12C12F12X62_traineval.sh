@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=96
-#SBATCH --time=0-21:00:00
-#SBATCH --gpus-per-node=h100:4
+#SBATCH --cpus-per-task=24
+#SBATCH --time=1-00:00:00
+#SBATCH --gpus-per-node=h100:1
 #SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_R12C12F12X62_traineval-%j.out
 
 module load apptainer
