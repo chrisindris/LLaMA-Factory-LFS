@@ -1,0 +1,40 @@
+
+scontrol show job 103989
+JobId=103989 JobName=slurm_qwen2_5vl_lora_sft_SQA3Devery24.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=194493 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=None Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:54
+   RunTime=00:00:06 TimeLimit=1-00:00:00 TimeMin=N/A
+   SubmitTime=2025-11-26T05:58:34 EligibleTime=2025-11-26T05:58:34
+   AccrueTime=2025-11-26T05:58:34
+   StartTime=2025-11-26T06:32:02 EndTime=2025-11-26T06:32:08 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-26T06:32:02 Scheduler=Main
+   Partition=compute_full_node AllocNode:Sid=trig-login01:4116686
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0058
+   BatchHost=trig0058
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3Devery24.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L slurm_qwen2_5vl_lora_sft_SQA3Devery24.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24-103989.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24-103989.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+sacct -j 103989
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+103989       slurm_qwe+ def-wangcs   00:00:06                         00:00:00   00:00:00      0:0 
+103989.batch      batch def-wangcs   00:00:06                         00:00:00   00:00:00      0:0 
+103989.exte+     extern def-wangcs   00:00:06                         00:00:00   00:00:00      0:0 
+

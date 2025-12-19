@@ -1,0 +1,9 @@
+Task number: 2
+Most Recent Save: 465
+New Epoch: 238
+New YAML: /project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora//qwen2_5vl_lora_sft_SQA3Devery24_traineval_resumefromcheckpoint_2.yaml
+Traceback (most recent call last):
+  File "/project/aip-wangcs/indrisch//LLaMA-Factory/scripts/modify_yaml.py", line 8, in <module>
+    import yaml
+ModuleNotFoundError: No module named 'yaml'
+FATAL:   While checking container encryption: could not open image /project/aip-wangcs/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/None: failed to retrieve path for /project/aip-wangcs/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/None: lstat /project/6110552/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/None: no such file or directory
