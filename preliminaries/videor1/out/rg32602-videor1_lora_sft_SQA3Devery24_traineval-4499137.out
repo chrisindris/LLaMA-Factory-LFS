@@ -1,0 +1,4 @@
+/scratch/indrisch/LLaMA-Factory /scratch/indrisch/LLaMA-Factory/preliminaries/videor1
+slurmstepd: error: *** JOB 4499137 ON rg32602 CANCELLED AT 2025-12-21T04:29:07 ***
+slurmstepd: error: *** JOB 4499137 STEPD TERMINATED ON rg32602 AT 2025-12-21T04:39:07 DUE TO JOB NOT ENDING WITH SIGNALS ***
+slurmstepd: error: Container 1984991 in cgroup plugin has 2 processes, giving up after 607 sec

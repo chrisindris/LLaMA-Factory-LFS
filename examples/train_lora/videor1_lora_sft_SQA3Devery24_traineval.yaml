@@ -19,7 +19,7 @@ template: videor1
 cutoff_len: 131072 # max len of the model
 # max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
 overwrite_cache: false
-preprocessing_num_workers: 32
+preprocessing_num_workers: 16  # Reduced from 32 to avoid deadlock with multimodal data
 dataloader_num_workers: 0
 dataloader_pin_memory: false
 low_cpu_mem_usage: true
@@ -39,7 +39,7 @@ report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 8
 learning_rate: 1.0e-4
-num_train_epochs: 2.0
+num_train_epochs: 1.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
@@ -58,7 +58,7 @@ enable_liger_kernel: true
 #use_unsloth: true # mutually exclusive with DeepSpeed, which partitions in a more complex manner than unsloth.
 
 # distribution
-deepspeed: examples/deepspeed/ds_z2_offload_config.json
+deepspeed: examples/deepspeed/ds_z2_config.json
 
 ## eval
 val_size: 0.1

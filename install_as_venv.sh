@@ -13,10 +13,10 @@ export TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" # needed f
 export PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels"
 export FORCE_TORCHRUN=1 
 export WANDB_MODE=offline 
-export WANDB_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/wandb/" 
+export WANDB_DIR="/scratch/indrisch/LLaMA-Factory/wandb/" 
 export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
 
-pushd /project/aip-wangcs/indrisch/
+pushd /scratch/indrisch/
 module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
 module load python/3.12 cuda/12.6 opencv/4.12.0
 module load arrow
