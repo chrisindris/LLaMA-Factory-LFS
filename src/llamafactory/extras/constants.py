@@ -56,7 +56,7 @@ LAYERNORM_NAMES = {"norm", "ln"}
 
 LLAMABOARD_CONFIG = "llamaboard_config.yaml"
 
-MCA_SUPPORTED_MODELS = {"deepseek_v3", "llama", "mistral", "mixtral", "qwen2", "qwen2_vl", "qwen2_5_vl", "qwen3", "qwen3_moe", "qwen3_next"}
+MCA_SUPPORTED_MODELS = {"deepseek_v3", "llama", "mistral", "mixtral", "qwen2", "qwen2_vl", "qwen2_5_vl", "qwen3", "qwen3_moe", "qwen3_next", "videor1"}
 
 METHODS = ["full", "freeze", "lora", "oft"]
 
@@ -3480,8 +3480,8 @@ register_model_group(
         "Video-R1-Qwen2.5-VL-7B-COT-SFT": {
             DownloadSource.DEFAULT: "Video-R1/Qwen2.5-VL-7B-COT-SFT",
         },
-        "Video-R1-Qwen2.5-VL-7B-Instruct": {
-            DownloadSource.DEFAULT: "Video-R1/Qwen2.5-VL-7B-Instruct",
+        "Video-R1-7B": {
+            DownloadSource.DEFAULT: "Video-R1/Video-R1-7B",
         },
     },
     template="videor1",

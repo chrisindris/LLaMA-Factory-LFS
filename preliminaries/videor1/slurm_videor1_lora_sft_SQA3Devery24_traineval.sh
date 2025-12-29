@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=1   
-#SBATCH --time=0-00:10:00
-#SBATCH --mem=99GB
-#SBATCH --gpus-per-node=h100:1
+#SBATCH --cpus-per-task=64  
+#SBATCH --time=0-01:00:00
+#SBATCH --mem=485GB
+#SBATCH --gpus-per-node=h100:4
 #SBATCH --output=out/%N-videor1_lora_sft_SQA3Devery24_traineval-%j.out
 
 # Get MPI library paths for bind mounting
@@ -30,6 +30,9 @@ if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
     module load apptainer
 
     TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
+    
+    # Set CUDA_VISIBLE_DEVICES: use SLURM's value if set, otherwise default to 0,1,2,3
+    CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0,1,2,3}"
 
     apptainer run --nv --writable-tmpfs \
         -C \
@@ -39,6 +42,7 @@ if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
         -B /etc/ssl/certs:/etc/ssl/certs:ro \
         -B /etc/pki:/etc/pki:ro \
         -W ${SLURM_TMPDIR} \
+        --env CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES}" \
         --env HF_HUB_OFFLINE=1 \
         --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
         --env HF_HOME="/scratch/indrisch/huggingface/hub" \
@@ -51,9 +55,57 @@ if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
         --env FORCE_TORCHRUN=1 \
         --env WANDB_MODE=offline \
         --env WANDB_DIR="/scratch/indrisch/LLaMA-Factory/wandb/" \
+        --env PYTHONPATH="/scratch/indrisch/LLaMA-Factory/src:${PYTHONPATH:-}" \
+        --env NCCL_IB_DISABLE=0 \
+        --env NCCL_P2P_DISABLE=0 \
+        --env NCCL_DEBUG=INFO \
+        --env NCCL_SOCKET_IFNAME=^docker0,lo \
         --pwd /scratch/indrisch/LLaMA-Factory \
         /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif \
         llamafactory-cli train /scratch/indrisch/LLaMA-Factory/examples/train_lora/videor1_lora_sft_SQA3Devery24_traineval.yaml
+
+elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
+
+    module load apptainer
+
+    TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
+
+    SLURM_TMPDIR="/scratch/indrisch/tmp"
+    
+    # Create directories for pip cache and temporary files on scratch
+    mkdir -p /scratch/indrisch/tmp
+    mkdir -p /scratch/indrisch/.cache/pip
+    mkdir -p /scratch/indrisch/.cache/torch_extensions
+    mkdir -p /scratch/indrisch/.cache/torch/kernels
+    mkdir -p /scratch/indrisch/.config/matplotlib
+    mkdir -p /scratch/indrisch/.triton_cache
+
+    apptainer shell --nv --writable \
+        -B /scratch/indrisch \
+        -B /home/indrisch \
+        -B /dev/shm:/dev/shm \
+        -B /etc/ssl/certs:/etc/ssl/certs:ro \
+        -B /etc/pki:/etc/pki:ro \
+        -W ${SLURM_TMPDIR} \
+        --env CUDA_VISIBLE_DEVICES=0,1,2,3 \
+        --env HF_HUB_OFFLINE=1 \
+        --env TMPDIR="/scratch/indrisch/tmp" \
+        --env PIP_CACHE_DIR="/scratch/indrisch/.cache/pip" \
+        --env MPLCONFIGDIR="/scratch/indrisch/.config/matplotlib" \
+        --env HF_HOME="/scratch/indrisch/huggingface/hub" \
+        --env HF_HUB_CACHE="/scratch/indrisch/huggingface/hub" \
+        --env TRITON_CACHE_DIR="/scratch/indrisch/.triton_cache" \
+        --env FLASHINFER_WORKSPACE_BASE="/scratch/indrisch/" \
+        --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
+        --env TORCH_EXTENSIONS_DIR="/scratch/indrisch/.cache/torch_extensions" \
+        --env PYTORCH_KERNEL_CACHE_PATH="/scratch/indrisch/.cache/torch/kernels" \
+        --env FORCE_TORCHRUN=1 \
+        --env WANDB_MODE=offline \
+        --env WANDB_DIR="/scratch/indrisch/LLaMA-Factory/wandb/" \
+        --env PYTHONPATH="/scratch/indrisch/LLaMA-Factory/src:${PYTHONPATH:-}" \
+        --pwd /scratch/indrisch/LLaMA-Factory \
+        /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+
 
 elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
@@ -61,15 +113,15 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
     module load python/3.12 cuda/12.6 opencv/4.12.0
     module load arrow
 
-    source /project/aip-wangcs/indrisch/venv_llamafactory_cu126/bin/activate
+    source /scratch/indrisch/venv_llamafactory_cu126/bin/activate
 
-    pushd /project/aip-wangcs/indrisch/
-    module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
-    module load python/3.12 cuda/12.6 opencv/4.12.0
-    module load arrow
-    virtualenv --no-download venv_llamafactory_cu126
-    source venv_llamafactory_cu126/bin/activate
-    popd
+    # pushd /scratch/indrisch/
+    # module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+    # module load python/3.12 cuda/12.6 opencv/4.12.0
+    # module load arrow
+    # virtualenv --no-download venv_llamafactory_cu126
+    # source venv_llamafactory_cu126/bin/activate
+    # popd
     
     # Set environment variables AFTER venv activation to ensure they persist
     # Create cache directories before they're needed
@@ -78,6 +130,7 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
     mkdir -p "${SLURM_TMPDIR}/.config/matplotlib"
     mkdir -p "${SLURM_TMPDIR}/.triton_cache"
     
+    export CUDA_VISIBLE_DEVICES=0,1,2,3
     export HF_HUB_OFFLINE=1 
     export MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib"
     export HF_HOME="/scratch/indrisch/huggingface/hub"
@@ -93,12 +146,12 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
     export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
     # giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
 
+    # pushd /scratch/indrisch/LLaMA-Factory
+    # pip install --upgrade pip setuptools wheel
+    # pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray -e ".[torch,metrics,deepspeed,liger-kernel]"
+
+
     pushd /scratch/indrisch/LLaMA-Factory
-    pip install --upgrade pip setuptools wheel
-    pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray -e ".[torch,metrics,deepspeed,liger-kernel]"
-
-
-    #pushd /scratch/indrisch/LLaMA-Factory
     llamafactory-cli train \
         --model_name_or_path Video-R1/Video-R1-7B \
         --no_use_fast_tokenizer \
@@ -112,7 +165,7 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
         --lora_rank 8 \
         --lora_target all \
         --dataset SQA3Devery24 \
-        --media_dir /project/aip-wangcs/shared/data/ \
+        --media_dir /scratch/indrisch/data/ \
         --template videor1 \
         --cutoff_len 131072 \
         --preprocessing_num_workers 32 \
@@ -129,7 +182,7 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
         --per_device_train_batch_size 2 \
         --gradient_accumulation_steps 8 \
         --learning_rate 1.0e-4 \
-        --num_train_epochs 2.0 \
+        --num_train_epochs 1.0 \
         --lr_scheduler_type cosine \
         --warmup_ratio 0.1 \
         --bf16 \
@@ -141,7 +194,7 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
         --flash_attn fa2 \
         --enable_liger_kernel \
         --gradient_checkpointing \
-        --deepspeed /scratch/indrisch/LLaMA-Factory/examples/deepspeed/ds_z2_offload_config.json \
+        --deepspeed /scratch/indrisch/LLaMA-Factory/examples/deepspeed/ds_z2_config.json \
         --val_size 0.1 \
         --per_device_eval_batch_size 1 \
         --eval_strategy steps \
