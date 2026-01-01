@@ -3199,6 +3199,20 @@ register_model_group(
 
 register_model_group(
     models={
+        "qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1": {
+            DownloadSource.DEFAULT: "cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1",
+        },
+        "qwen2_5vl-7b-lora-sft-SQA3Devery24_R12C12F12X62_400steps": {
+            DownloadSource.DEFAULT: "cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_R12C12F12X62_400steps",
+        },
+    },
+    template="qwen2_vl",
+    multimodal=True,
+)
+
+
+register_model_group(
+    models={
         "Qwen3-VL-2B-Instruct": {
             DownloadSource.DEFAULT: "Qwen/Qwen3-VL-2B-Instruct",
             DownloadSource.MODELSCOPE: "Qwen/Qwen3-VL-2B-Instruct",

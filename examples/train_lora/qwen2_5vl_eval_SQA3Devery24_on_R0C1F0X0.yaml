@@ -1,0 +1,70 @@
+### model
+model_name_or_path: Qwen/Qwen2.5-VL-7B-Instruct
+cache_dir: /scratch/indrisch/huggingface/hub
+image_max_pixels: 65536 # 313632 = 648x414 image, 1/4 of the size of the default SQA3D image, exceeds token limit by factor of 3; the system seems to work when this value is a divisor of 313632
+video_max_pixels: 16384
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: false
+do_eval: true
+finetuning_type: lora
+lora_rank: 8
+lora_target: all
+
+### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
+dataset: SQA3Devery24_R0C1F0X0
+media_dir: /scratch/indrisch/data/
+template: qwen2_vl
+cutoff_len: 131072 # max len of the model
+# max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
+overwrite_cache: false
+preprocessing_num_workers: 16 # Reduced from 32 to avoid deadlock with multimodal data (Rorqual)
+dataloader_num_workers: 0
+dataloader_pin_memory: false
+low_cpu_mem_usage: true
+# streaming: true # mutually exclusive with max_samples; requires max_steps. However, this seems to make it very slow.
+# max_steps: 100
+
+### output
+output_dir: saves/qwen2_5vl-7b/lora/eval/SQA3Devery24_on_R0C1F0X0
+logging_steps: 1
+save_steps: 1
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
+
+### train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 0.0
+num_train_epochs: 0.0 
+lr_scheduler_type: cosine
+warmup_ratio: 0.0
+bf16: true
+ddp_timeout: 180000000
+# resume_from_checkpoint: null
+adapter_name_or_path: /scratch/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1/snapshots/0bdc7d9fb51e700a889b40dbabf01c929e31d43c/checkpoint-465/
+
+# debugging level
+debug: underflow_overflow
+log_level: debug
+log_level_replica: debug
+print_param_status: true
+
+# acceleration
+flash_attn: fa2
+enable_liger_kernel: true
+#use_unsloth: true # mutually exclusive with DeepSpeed, which partitions in a more complex manner than unsloth.
+
+# distribution
+# For inference, we need ZeRO-3. No need for cpu offload.
+deepspeed: examples/deepspeed/ds_z3_config.json
+
+## eval
+val_size: 0.1
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 1
