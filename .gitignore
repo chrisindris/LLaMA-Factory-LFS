@@ -1,4 +1,4 @@
-# Misc large fodlers
+# Misc large folders
 None/
 
 # Byte-compiled / optimized / DLL files
@@ -8,6 +8,7 @@ __pycache__/
 
 # Large data worker outputs
 *pt_data_worker*
+core*python3.11*
 
 # C extensions
 *.so

@@ -27,8 +27,8 @@ low_cpu_mem_usage: true
 # max_steps: 100
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_R12C12F12X62_traineval_eval200_corrected
-logging_steps: 1
+output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_R12C12F12X62_traineval
+logging_steps: 10
 save_steps: 200
 plot_loss: true
 overwrite_output_dir: true
@@ -39,13 +39,13 @@ report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 8
 learning_rate: 1.0e-4
-num_train_epochs: 1.0 
+num_train_epochs: 1 
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
 ddp_timeout: 180000000
-resume_from_checkpoint: null
-#adapter_name_or_path: /scratch/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_R12C12F12X62_traineval/checkpoint-500/
+# resume_from_checkpoint: null
+adapter_name_or_path: /scratch/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_R12C12F12X62_traineval/checkpoint-400/
 
 # debugging level
 debug: underflow_overflow
