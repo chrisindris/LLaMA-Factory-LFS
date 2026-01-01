@@ -7,19 +7,20 @@ trust_remote_code: true
 
 ### method
 stage: sft
-do_train: true
+do_train: false
+do_eval: true
 finetuning_type: lora
 lora_rank: 8
 lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
-dataset: SQA3Devery24_R12C12F12X62
+dataset: SQA3Devery24_R1C0F0X0
 media_dir: /scratch/indrisch/vllm_experiments/data/
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
 # max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
 overwrite_cache: false
-preprocessing_num_workers: 32
+preprocessing_num_workers: 32 # use 32 on 4 GPUs and with the full dataset
 dataloader_num_workers: 0
 dataloader_pin_memory: false
 low_cpu_mem_usage: true
@@ -27,9 +28,9 @@ low_cpu_mem_usage: true
 # max_steps: 100
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_R12C12F12X62_traineval_eval200_corrected
+output_dir: saves/qwen2_5vl-7b/lora/eval/X62_on_R1C0F0X0
 logging_steps: 1
-save_steps: 200
+save_steps: 1
 plot_loss: true
 overwrite_output_dir: true
 save_only_model: false
@@ -38,14 +39,14 @@ report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 ### train
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 8
-learning_rate: 1.0e-4
-num_train_epochs: 1.0 
+learning_rate: 0.0
+num_train_epochs: 0.0 
 lr_scheduler_type: cosine
-warmup_ratio: 0.1
+warmup_ratio: 0.0
 bf16: true
 ddp_timeout: 180000000
-resume_from_checkpoint: null
-#adapter_name_or_path: /scratch/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_R12C12F12X62_traineval/checkpoint-500/
+# resume_from_checkpoint: null
+adapter_name_or_path: /scratch/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_R12C12F12X62_traineval/checkpoint-465/
 
 # debugging level
 debug: underflow_overflow
@@ -59,11 +60,11 @@ enable_liger_kernel: true
 #use_unsloth: true # mutually exclusive with DeepSpeed, which partitions in a more complex manner than unsloth.
 
 # distribution
-# Switched to ZeRO-2 to avoid ZeRO-3 LoRA checkpoint resumption bug (tracing error)
-deepspeed: examples/deepspeed/ds_z2_offload_config.json
+# For inference, we need ZeRO-3.
+deepspeed: examples/deepspeed/ds_z3_offload_config.json
 
 ## eval
 val_size: 0.1
 per_device_eval_batch_size: 1
 eval_strategy: steps
-eval_steps: 200
+eval_steps: 1
