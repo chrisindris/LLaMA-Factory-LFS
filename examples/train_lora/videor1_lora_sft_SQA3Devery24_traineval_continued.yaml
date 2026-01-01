@@ -14,7 +14,7 @@ lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
 dataset: SQA3Devery24
-media_dir: /scratch/indrisch/vllm_experiments/data/
+media_dir: /project/aip-wangcs/shared/data/
 template: videor1
 cutoff_len: 131072 # max len of the model
 # max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
@@ -27,7 +27,7 @@ low_cpu_mem_usage: true
 # max_steps: 100
 
 ### output
-output_dir: saves/videor1/lora/sft/SQA3Devery24_traineval
+output_dir: saves/videor1/lora/sft/SQA3Devery24_traineval_continued
 logging_steps: 10
 save_steps: 200
 plot_loss: true
@@ -39,12 +39,13 @@ report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 8
 learning_rate: 1.0e-4
-num_train_epochs: 1.0
+num_train_epochs: 2.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
 ddp_timeout: 180000000
-resume_from_checkpoint: null
+# resume_from_checkpoint: null
+adapter_name_or_path: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1/lora/sft/SQA3Devery24_traineval_continued/checkpoint-400/
 
 # debugging level
 debug: underflow_overflow
