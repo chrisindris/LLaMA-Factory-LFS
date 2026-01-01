@@ -48,7 +48,7 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 FacebookAI/roberta-large-mnli # for MNLI, deterimining the X portion of the reranker.
 # hf download --max-workers=4 MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli # for MNLI, deterimining the X portion of the reranker.
 
-hf download --max-workers=4 Video-R1/Video-R1-7B # Video-R1 is Qwen2.5VL-7B that was used by Video-R1.
+# hf download --max-workers=4 Video-R1/Video-R1-7B # Video-R1 is Qwen2.5VL-7B that was used by Video-R1.
 #hf download --max-workers=4 Video-R1/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
 #hf download --max-workers=4 Qwen/Qwen3-VL-8B-Instruct # The Qwen3 counterpart to Qwen2.5VL-7B, which is what we have been using.
 #hf download --max-workers=4 Qwen/Qwen3-VL-8B-Thinking # Same as above but with extra thinking capabilities.
@@ -56,6 +56,12 @@ hf download --max-workers=4 Video-R1/Video-R1-7B # Video-R1 is Qwen2.5VL-7B that
 
 # SPECIAL NOTE: there is currently no Qwen3-VL that is less than 235B, which is way too big for our purposes (training it); even the smallest Qwen3-Omni (also vision-language) is 30GB. Hence, we will still try to enhance Qwen2.5 VL.
 # we should try VL and non-VL versions of Qwen3 to assess traces.
+
+hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa --repo-type=dataset
+hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62 --repo-type=dataset
+hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C0.0_F0.0_X1.0 --repo-type=dataset
+hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R1.0_C0.0_F0.0_X0.0 --repo-type=dataset
+hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C1.0_F0.0_X0.0 --repo-type=dataset
 
 deactivate
 rm -r temp_env

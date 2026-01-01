@@ -3480,8 +3480,8 @@ register_model_group(
         "Video-R1-Qwen2.5-VL-7B-COT-SFT": {
             DownloadSource.DEFAULT: "Video-R1/Qwen2.5-VL-7B-COT-SFT",
         },
-        "Video-R1-Qwen2.5-VL-7B-Instruct": {
-            DownloadSource.DEFAULT: "Video-R1/Qwen2.5-VL-7B-Instruct",
+        "Video-R1-7B": {
+            DownloadSource.DEFAULT: "Video-R1/Video-R1-7B",
         },
     },
     template="videor1",

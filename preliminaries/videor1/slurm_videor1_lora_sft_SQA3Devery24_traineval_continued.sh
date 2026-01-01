@@ -2,10 +2,10 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=24
-#SBATCH --time=0-18:00:00
+#SBATCH --time=1-00:00:00
 #SBATCH --mem=950GB
 #SBATCH --gpus-per-node=h100:4
-#SBATCH --output=out/%N-videor1_lora_sft_SQA3Devery24_traineval-%j.out
+#SBATCH --output=out/%N-videor1_lora_sft_SQA3Devery24_traineval_continued-%j.out
 
 # Get MPI library paths for bind mounting
 # MPI_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcc12/openmpi/4.1.5/lib"
@@ -52,7 +52,7 @@ if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
         --env WANDB_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/wandb/" \
         --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
         /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif \
-        llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/videor1_lora_sft_SQA3Devery24_traineval.yaml
+        llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/videor1_lora_sft_SQA3Devery24_traineval_continued.yaml
 
 elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
@@ -110,53 +110,55 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
 
     pushd /project/aip-wangcs/indrisch/LLaMA-Factory
-    llamafactory-cli train \
-        --model_name_or_path Video-R1/Video-R1-7B \
-        --no_use_fast_tokenizer \
-        --cache_dir /scratch/indrisch/huggingface/hub \
-        --image_max_pixels 65536 \
-        --video_max_pixels 16384 \
-        --trust_remote_code \
-        --stage sft \
-        --do_train \
-        --finetuning_type lora \
-        --lora_rank 8 \
-        --lora_target all \
-        --dataset SQA3Devery24 \
-        --media_dir /project/aip-wangcs/shared/data/ \
-        --template videor1 \
-        --cutoff_len 131072 \
-        --preprocessing_num_workers 32 \
-        --dataloader_num_workers 0 \
-        --dataloader_pin_memory false \
-        --low_cpu_mem_usage \
-        --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1/lora/sft/SQA3Devery24_traineval \
-        --logging_steps 10 \
-        --save_steps 200 \
-        --plot_loss \
-        --overwrite_output_dir \
-        --save_only_model false \
-        --report_to wandb \
-        --per_device_train_batch_size 2 \
-        --gradient_accumulation_steps 8 \
-        --learning_rate 1.0e-4 \
-        --num_train_epochs 2.0 \
-        --lr_scheduler_type cosine \
-        --warmup_ratio 0.1 \
-        --bf16 \
-        --ddp_timeout 180000000 \
-        --debug underflow_overflow \
-        --log_level debug \
-        --log_level_replica debug \
-        --print_param_status \
-        --flash_attn fa2 \
-        --enable_liger_kernel \
-        --gradient_checkpointing \
-        --deepspeed /project/aip-wangcs/indrisch/LLaMA-Factory/examples/deepspeed/ds_z2_config.json \
-        --val_size 0.1 \
-        --per_device_eval_batch_size 1 \
-        --eval_strategy steps \
-        --eval_steps 200
+    llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/videor1_lora_sft_SQA3Devery24_traineval_continued.yaml
+    # llamafactory-cli train \
+    #     --model_name_or_path Video-R1/Video-R1-7B \
+    #     --no_use_fast_tokenizer \
+    #     --cache_dir /scratch/indrisch/huggingface/hub \
+    #     --image_max_pixels 65536 \
+    #     --video_max_pixels 16384 \
+    #     --trust_remote_code \
+    #     --stage sft \
+    #     --do_train \
+    #     --finetuning_type lora \
+    #     --lora_rank 8 \
+    #     --lora_target all \
+    #     --dataset SQA3Devery24 \
+    #     --media_dir /project/aip-wangcs/shared/data/ \
+    #     --template videor1 \
+    #     --cutoff_len 131072 \
+    #     --preprocessing_num_workers 32 \
+    #     --dataloader_num_workers 0 \
+    #     --dataloader_pin_memory false \
+    #     --low_cpu_mem_usage \
+    #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1/lora/sft/SQA3Devery24_traineval_continued \
+    #     --logging_steps 10 \
+    #     --save_steps 200 \
+    #     --plot_loss \
+    #     --overwrite_output_dir \
+    #     --save_only_model false \
+    #     --report_to wandb \
+    #     --per_device_train_batch_size 2 \
+    #     --gradient_accumulation_steps 8 \
+    #     --learning_rate 1.0e-4 \
+    #     --num_train_epochs 2.0 \
+    #     --lr_scheduler_type cosine \
+    #     --warmup_ratio 0.1 \
+    #     --bf16 \
+    #     --ddp_timeout 180000000 \
+    #     --debug underflow_overflow \
+    #     --log_level debug \
+    #     --log_level_replica debug \
+    #     --print_param_status \
+    #     --flash_attn fa2 \
+    #     --enable_liger_kernel \
+    #     --gradient_checkpointing \
+    #     --deepspeed /project/aip-wangcs/indrisch/LLaMA-Factory/examples/deepspeed/ds_z2_config.json \
+    #     --val_size 0.1 \
+    #     --per_device_eval_batch_size 1 \
+    #     --eval_strategy steps \
+    #     --eval_steps 200 \
+    #     --adapter_name_or_path /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1/lora/sft/SQA3Devery24_traineval_continued/checkpoint-400/
 
 else
     echo "Invalid running mode: $RUNNING_MODE"

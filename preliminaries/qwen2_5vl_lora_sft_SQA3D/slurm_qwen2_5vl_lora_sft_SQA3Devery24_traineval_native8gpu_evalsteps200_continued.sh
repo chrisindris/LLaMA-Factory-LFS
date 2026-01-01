@@ -1,29 +1,44 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=24
-#SBATCH --time=0-18:00:00
-#SBATCH --mem=950GB
-#SBATCH --gpus-per-node=h100:4
-#SBATCH --output=out/%N-videor1_lora_sft_SQA3Devery24_traineval-%j.out
+#SBATCH --cpus-per-task=48
+#SBATCH --time=1-00:00:00
+#SBATCH --mem=2000GB
+#SBATCH --gpus-per-node=h100:8
+#SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_native8gpu_evalsteps200_continued-%j.out
 
-# Get MPI library paths for bind mounting
-# MPI_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcc12/openmpi/4.1.5/lib"
-# HWLOC_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/hwloc/2.9.1/lib"
-# # Gentoo system libraries (contains libpciaccess and other system deps)
-# GENTOO_LIB64_PATH="/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib64"
+# Note, for prediction:
+# --- to do inference (NOT an evaluation of the model after training): examples/inference/llama3_lora_sft.yaml
+# - predict_with_generate: true # this is required
+# - predict_with_generate: true is incompatible with DeepSpeed ZeRO-3; hence, we need a separate script and separate run for evaluation (when we would use a separate dataset for eval; see adgen_train in dataset_info.json and on huggingface)
 
-# STEP 1: RUN THE TRAINING AND EVALUATION
+#Note, for evaluation:
+# --- to evaluate the model after training (general competency) [https://llamafactory.readthedocs.io/en/latest/getting_started/eval.html]: see examples/train_lora/llama3_lora_eval.yaml
+# ----> Question1a: Why does this not refer to a dataset?
+# ----> Question1b: What are [mmlu_test, ceval_validation, cmmlu_test]?
+# --- to evaluate the model after training (NLG assessment; BLEU and ROUGE scores for quality of generation) [https://llamafactory.readthedocs.io/en/latest/getting_started/eval.html]: see examples/extras/nlg_eval/llama3_lora_predict.yaml
+# ----> Question2a: What is NLG, BLEU, ROUGE? (note that this uses alpaca and identity datasets, for which the answer is a full sentence not just a final answer)
 
-# better to have triton cache on a non-nfs file system for speed
-# if we are offline, we need to indicate this
+# questions regarding evaluation:
+# 1. do I need to specify train vs. eval examples in the dataset?
+# - 1.ANSWER: see adgen_train/adgen_eval (in dataset_info.json) and on huggingface; the idea is to have a separate train and eval set.
+# 1a. how do I use "subset" to split the dataset into train and eval?
+# - 1a.ANSWER: see adgen_train/adgen_eval (in dataset_info.json); there is an adgen_train and a separate adgen_eval dataset, where the split indicates the split shown on huggingface.
+# - 1a.NOTE: to have it set up like that on huggingface with separate train and eval sets [in my dataset creation script, ask Cursor]
+# 2. if I set val_size = 0.1, will that set train_size = 0.9?
+# - 2.NOTE: on https://llamafactory.readthedocs.io/en/latest/getting_started/sft.html, it seems like you can do both training and evaluation in one script, but in examples/train_lora/llama3_lora_sft.yaml it is commented out.
+# - 2.NOTE: it might help if you can do train and eval in the same script as shown in https://llamafactory.readthedocs.io/en/latest/getting_started/sft.html
+# - 2.ANSWER: yes (see files named *SQA3Devery24_traineval*)
+# 3. should the training ground truth be the traces or the ground truth answers?
+# - 3.ANSWER: for NLG it seems like the same full answer used for training is used here for evaluation (see examples/extras/nlg_eval/llama3_lora_predict.yaml)
+# - 3.ANSWER: [answer in general terms, such as for general competency]
+
+
+# 500 examples took about 5 minutes
+# 1 epoch for 33047 examples (train and test 90-10 split) took under 13 hours
+
 
 RUNNING_MODE=$1 # this is optional; generally, we wouldn't use this
-
-# STEP 1: RUN THE TRAINING AND EVALUATION
-
-# better to have triton cache on a non-nfs file system for speed
-# if we are offline, we need to indicate this
 
 if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
 
@@ -31,6 +46,10 @@ if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
 
     TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
 
+    # STEP 1: RUN THE TRAINING AND EVALUATION
+
+    # better to have triton cache on a non-nfs file system for speed
+    # if we are offline, we need to indicate this
     apptainer run --nv --writable-tmpfs \
         -B /project/aip-wangcs/indrisch/LLaMA-Factory \
         -B /home/indrisch \
@@ -52,7 +71,7 @@ if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
         --env WANDB_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/wandb/" \
         --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
         /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif \
-        llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/videor1_lora_sft_SQA3Devery24_traineval.yaml
+        llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery24_traineval_native8gpu_evalsteps200_continued.yaml
 
 elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
@@ -110,53 +129,7 @@ elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
 
     pushd /project/aip-wangcs/indrisch/LLaMA-Factory
-    llamafactory-cli train \
-        --model_name_or_path Video-R1/Video-R1-7B \
-        --no_use_fast_tokenizer \
-        --cache_dir /scratch/indrisch/huggingface/hub \
-        --image_max_pixels 65536 \
-        --video_max_pixels 16384 \
-        --trust_remote_code \
-        --stage sft \
-        --do_train \
-        --finetuning_type lora \
-        --lora_rank 8 \
-        --lora_target all \
-        --dataset SQA3Devery24 \
-        --media_dir /project/aip-wangcs/shared/data/ \
-        --template videor1 \
-        --cutoff_len 131072 \
-        --preprocessing_num_workers 32 \
-        --dataloader_num_workers 0 \
-        --dataloader_pin_memory false \
-        --low_cpu_mem_usage \
-        --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1/lora/sft/SQA3Devery24_traineval \
-        --logging_steps 10 \
-        --save_steps 200 \
-        --plot_loss \
-        --overwrite_output_dir \
-        --save_only_model false \
-        --report_to wandb \
-        --per_device_train_batch_size 2 \
-        --gradient_accumulation_steps 8 \
-        --learning_rate 1.0e-4 \
-        --num_train_epochs 2.0 \
-        --lr_scheduler_type cosine \
-        --warmup_ratio 0.1 \
-        --bf16 \
-        --ddp_timeout 180000000 \
-        --debug underflow_overflow \
-        --log_level debug \
-        --log_level_replica debug \
-        --print_param_status \
-        --flash_attn fa2 \
-        --enable_liger_kernel \
-        --gradient_checkpointing \
-        --deepspeed /project/aip-wangcs/indrisch/LLaMA-Factory/examples/deepspeed/ds_z2_config.json \
-        --val_size 0.1 \
-        --per_device_eval_batch_size 1 \
-        --eval_strategy steps \
-        --eval_steps 200
+    llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery24_traineval_native8gpu_evalsteps200_continued.yaml
 
 else
     echo "Invalid running mode: $RUNNING_MODE"

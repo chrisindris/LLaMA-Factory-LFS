@@ -1,5 +1,5 @@
 ### model
-model_name_or_path: Video-R1/Video-R1-7B
+model_name_or_path: Qwen/Qwen2.5-VL-7B-Instruct
 cache_dir: /scratch/indrisch/huggingface/hub
 image_max_pixels: 65536 # 313632 = 648x414 image, 1/4 of the size of the default SQA3D image, exceeds token limit by factor of 3; the system seems to work when this value is a divisor of 313632
 video_max_pixels: 16384
@@ -15,7 +15,7 @@ lora_target: all
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
 dataset: SQA3Devery24
 media_dir: /project/aip-wangcs/shared/data/
-template: videor1
+template: qwen2_vl
 cutoff_len: 131072 # max len of the model
 # max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
 overwrite_cache: false
@@ -27,7 +27,7 @@ low_cpu_mem_usage: true
 # max_steps: 100
 
 ### output
-output_dir: saves/videor1/lora/sft/SQA3Devery24_traineval
+output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval_native8gpu_evalsteps200_continued/
 logging_steps: 10
 save_steps: 200
 plot_loss: true
@@ -39,12 +39,13 @@ report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 8
 learning_rate: 1.0e-4
-num_train_epochs: 2.0
+num_train_epochs: 3.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
 ddp_timeout: 180000000
-resume_from_checkpoint: null
+#resume_from_checkpoint: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval_native8gpu/checkpoint-200/ #
+adapter_name_or_path: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval_native8gpu/checkpoint-200/ #
 
 # debugging level
 debug: underflow_overflow
@@ -57,7 +58,7 @@ flash_attn: fa2
 enable_liger_kernel: true
 #use_unsloth: true # mutually exclusive with DeepSpeed, which partitions in a more complex manner than unsloth.
 
-# distribution
+# distribution; no offload on Killarney due to CPU ADAM issues.
 deepspeed: examples/deepspeed/ds_z2_config.json
 
 ## eval
