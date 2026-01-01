@@ -27,7 +27,7 @@ low_cpu_mem_usage: true
 # max_steps: 100
 
 ### output
-output_dir: saves/videor1/lora/sft/SQA3Devery24_traineval
+output_dir: saves/videor1/lora/sft/SQA3Devery24_traineval_continued
 logging_steps: 10
 save_steps: 200
 plot_loss: true
@@ -44,7 +44,8 @@ lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
 ddp_timeout: 180000000
-resume_from_checkpoint: null
+# resume_from_checkpoint: null
+adapter_name_or_path: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1/lora/sft/SQA3Devery24_traineval_continued/checkpoint-400/
 
 # debugging level
 debug: underflow_overflow
