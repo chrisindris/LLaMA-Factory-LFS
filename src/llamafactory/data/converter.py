@@ -19,7 +19,7 @@ from typing import TYPE_CHECKING, Any, Optional, Union
 
 from ..extras import logging
 from .data_utils import Role
-
+from .data_packing.h5py_data import retrieve_image
 
 if TYPE_CHECKING:
     from datasets import Dataset, IterableDataset
@@ -55,12 +55,17 @@ class DatasetConverter:
             if isinstance(medias[0], str):
                 for i in range(len(medias)):
                     media_path = os.path.join(self.data_args.media_dir, medias[i])
-                    if os.path.isfile(media_path):
+                    if os.path.isfile(media_path): # if the path given points to an image on the system
                         medias[i] = media_path
                     else:
-                        logger.warning_rank0_once(
-                            f"Media {medias[i]} does not exist in `media_dir`. Use original path."
-                        )
+                        try: # if we get a result from the h5py file, we can still put the media path in the dataset.
+                            image = retrieve_image(image_path=media_path)
+                            medias[i] = media_path
+                        except Exception as e:
+                            logger.warning_rank0_once(
+                                f"Media {media_path} does not exist in `media_dir`. Use original path."
+                            )
+                            raise ValueError(f"Failed to retrieve image from {media_path}: {e}")
             elif isinstance(medias[0], list):  # for processed video frames
                 # medias is a list of lists, e.g., [[frame1.jpg, frame2.jpg], [frame3.jpg, frame4.jpg]]
                 for i in range(len(medias)):
@@ -69,9 +74,13 @@ class DatasetConverter:
                         if os.path.isfile(media_path):
                             medias[i][j] = media_path
                         else:
-                            logger.warning_rank0_once(
-                                f"Media {medias[i][j]} does not exist in `media_dir`. Use original path."
-                            )
+                            try: # if we get a result from the h5py file, we can still put the media path in the dataset.
+                                image = retrieve_image(image_path=media_path)
+                                medias[i][j] = image
+                            except Exception as e:
+                                logger.warning_rank0_once(
+                                    f"Media {medias[i][j]} does not exist in `media_dir`. Use original path."
+                                )
 
         return medias
 
@@ -423,3 +432,4 @@ def align_dataset(
         remove_columns=column_names,
         **kwargs,
     )
+
