@@ -1,0 +1,13 @@
+Packing mode:
+  Input directory: /scratch/indrisch/data/ScanNet/scans
+  Output directory: /scratch/indrisch/data_h5py/ScanNet/scans
+  Scene pattern: scene*_*
+  Color folder: color
+  Image extension: .jpg
+  H5py filename: images.hdf5
+  JSON filename: image_mapping.json
+  Number of workers: 32
+Found 650 scene folders total
+Processing 650 scenes
+Using 32 worker processes for parallel processing
+slurmstepd: error: *** JOB 4865225 ON rc31718 CANCELLED AT 2026-01-08T08:11:32 DUE TO TIME LIMIT ***
