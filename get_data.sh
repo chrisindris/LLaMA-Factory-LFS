@@ -64,10 +64,11 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C1.0_F0.0_X0.0 --repo-type=dataset
 
 # to fix the readmes (go from VideoR1-COT-SFT to VideoR1)
-hf download --max-workers=4 cvis-tmu/videor1-lora-sft-SQA3Devery24_800steps_merged
-hf download --max-workers=4 cvis-tmu/videor1-lora-sft-SQA3Devery24_1200steps
-hf download --max-workers=4 cvis-tmu/videor1-lora-sft-SQA3Devery24_800steps
-hf download --max-workers=4 cvis-tmu/videor1-lora-sft-SQA3Devery24_400steps
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-SQA3Devery24_800steps_merged
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-SQA3Devery24_1200steps
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-SQA3Devery24_800steps
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-SQA3Devery24_400steps
+hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 deactivate
 rm -r temp_env
