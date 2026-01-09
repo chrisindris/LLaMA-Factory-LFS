@@ -1,0 +1,7 @@
+/localscratch/spool/slurmd/job4856283/slurm_script: line 12: /project/aip-wangcs/indrisch/venv_llamafactory_cu126/bin/activate: No such file or directory
+mkdir: cannot create directory ‘/project/aip-wangcs’: Permission denied
+chmod: cannot access '/project/aip-wangcs/shared/data_pt/ScanNet/scans/': No such file or directory
+Traceback (most recent call last):
+  File "/scratch/indrisch/LLaMA-Factory/scripts/data_packing/h5py_data.py", line 18, in <module>
+    import h5py
+ModuleNotFoundError: No module named 'h5py'

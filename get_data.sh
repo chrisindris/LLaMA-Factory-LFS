@@ -64,12 +64,18 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # hf download --max-workers=12 cvis-tmu/easyr1_verl_sif --repo-type=dataset
-hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62 --repo-type=dataset
-hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa --repo-type=dataset
+# hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62 --repo-type=dataset
+# hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa --repo-type=dataset
 
-hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R1.0_C0.0_F0.0_X0.0 --repo-type=dataset
-hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C1.0_F0.0_X0.0 --repo-type=dataset
-hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C0.0_F0.0_X1.0 --repo-type=dataset
+# hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R1.0_C0.0_F0.0_X0.0 --repo-type=dataset
+# hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C1.0_F0.0_X0.0 --repo-type=dataset
+# hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C0.0_F0.0_X1.0 --repo-type=dataset
+
+# get the 1 epoch models 
+hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_R12C12F12X62_465steps
+hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_R1_465steps
+hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_C1_465steps
+hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_X1_465steps
 
 deactivate
 rm -r temp_env

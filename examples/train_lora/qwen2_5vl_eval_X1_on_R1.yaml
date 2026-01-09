@@ -14,7 +14,7 @@ lora_rank: 8
 lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
-dataset: SQA3Devery24_R12C12F12X62
+dataset: SQA3Devery24_R1C0F0X0
 media_dir: /scratch/indrisch/data/
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
@@ -28,7 +28,7 @@ low_cpu_mem_usage: true
 # max_steps: 100
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/eval/X62_on_X62
+output_dir: saves/qwen2_5vl-7b/lora/eval/X1_on_R1
 logging_steps: 1
 save_steps: 1
 plot_loss: true
@@ -46,7 +46,7 @@ warmup_ratio: 0.0
 bf16: true
 ddp_timeout: 180000000
 # resume_from_checkpoint: null
-adapter_name_or_path: /scratch/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-SQA3Devery24_R12C12F12X62_465steps/snapshots/d9721b66286ae0d8e0e3b213fb5950cbfec94678/
+adapter_name_or_path: /scratch/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-SQA3Devery24_X1_465steps/snapshots/b5d0cb4f4bdaa2d0dc7639e1da80927467404bf6/
 
 # debugging level
 debug: underflow_overflow

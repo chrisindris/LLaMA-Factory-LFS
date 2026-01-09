@@ -14,7 +14,7 @@ lora_rank: 8
 lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
-dataset: SQA3Devery24_R12C12F12X62
+dataset: SQA3Devery24_R0C1F0X0
 media_dir: /scratch/indrisch/data/
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
@@ -28,7 +28,7 @@ low_cpu_mem_usage: true
 # max_steps: 100
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/eval/X62_on_X62
+output_dir: saves/qwen2_5vl-7b/lora/eval/X62_on_C1
 logging_steps: 1
 save_steps: 1
 plot_loss: true
