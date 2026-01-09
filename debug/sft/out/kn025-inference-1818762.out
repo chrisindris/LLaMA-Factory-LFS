@@ -1,0 +1,97 @@
+/project/aip-wangcs/indrisch/LLaMA-Factory/scripts /project/aip-wangcs/indrisch/LLaMA-Factory/debug/sft
+[WARNING|2026-01-09 02:43:43] llamafactory.extras.misc:154 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO|training_args.py:2222] 2026-01-09 02:43:56,462 >> PyTorch: setting up devices
+[INFO|training_args.py:1881] 2026-01-09 02:43:56,684 >> The default value for the training argument `--report_to` will change in v5 (from all installed integrations to none). In v5, you will need to use `--report_to all` to get the same behavior as now. You should start updating your code and make this info disappear :-).
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+[INFO|hub.py:421] 2026-01-09 02:44:00,596 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:421] 2026-01-09 02:44:00,597 >> Offline mode: forcing local_files_only=True
+⚙️  Running in WANDB offline mode
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/hub.py", line 479, in cached_files
+    hf_hub_download(
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 106, in _inner_fn
+    validate_repo_id(arg_value)
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 160, in validate_repo_id
+    raise HFValidationError(
+huggingface_hub.errors.HFValidationError: Repo id must use alphanumeric chars, '-', '_' or '.'. The name cannot start or end with '-' or '.' and the maximum length is 96: ' '.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 78, in load_tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py", line 1073, in from_pretrained
+    tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py", line 905, in get_tokenizer_config
+    resolved_config_file = cached_file(
+                           ^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/hub.py", line 322, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/hub.py", line 532, in cached_files
+    _get_cache_file_to_return(path_or_repo_id, filename, cache_dir, revision, repo_type)
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/hub.py", line 143, in _get_cache_file_to_return
+    resolved_file = try_to_load_from_cache(
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 106, in _inner_fn
+    validate_repo_id(arg_value)
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 160, in validate_repo_id
+    raise HFValidationError(
+huggingface_hub.errors.HFValidationError: Repo id must use alphanumeric chars, '-', '_' or '.'. The name cannot start or end with '-' or '.' and the maximum length is 96: ' '.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/hub.py", line 479, in cached_files
+    hf_hub_download(
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 106, in _inner_fn
+    validate_repo_id(arg_value)
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 160, in validate_repo_id
+    raise HFValidationError(
+huggingface_hub.errors.HFValidationError: Repo id must use alphanumeric chars, '-', '_' or '.'. The name cannot start or end with '-' or '.' and the maximum length is 96: ' '.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/LLaMA-Factory/scripts/vllm_infer.py", line 240, in <module>
+    fire.Fire(vllm_infer)
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/fire/core.py", line 135, in Fire
+    component_trace = _Fire(component, args, parsed_flag_args, context, name)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/fire/core.py", line 468, in _Fire
+    component, remaining_args = _CallAndUpdateTrace(
+                                ^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/fire/core.py", line 684, in _CallAndUpdateTrace
+    component = fn(*varargs, **kwargs)
+                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/LLaMA-Factory/scripts/vllm_infer.py", line 107, in vllm_infer
+    tokenizer_module = load_tokenizer(model_args)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 86, in load_tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py", line 1073, in from_pretrained
+    tokenizer_config = get_tokenizer_config(pretrained_model_name_or_path, **kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py", line 905, in get_tokenizer_config
+    resolved_config_file = cached_file(
+                           ^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/hub.py", line 322, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/hub.py", line 532, in cached_files
+    _get_cache_file_to_return(path_or_repo_id, filename, cache_dir, revision, repo_type)
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/hub.py", line 143, in _get_cache_file_to_return
+    resolved_file = try_to_load_from_cache(
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 106, in _inner_fn
+    validate_repo_id(arg_value)
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 160, in validate_repo_id
+    raise HFValidationError(
+huggingface_hub.errors.HFValidationError: Repo id must use alphanumeric chars, '-', '_' or '.'. The name cannot start or end with '-' or '.' and the maximum length is 96: ' '.
+/cm/local/apps/slurm/var/spool/job1818762/slurm_script: --model_name_or_path: command not found
