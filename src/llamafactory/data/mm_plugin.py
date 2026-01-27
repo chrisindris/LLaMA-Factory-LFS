@@ -40,6 +40,7 @@ from ..extras.packages import (
     is_pyav_available,
     is_transformers_version_greater_than,
 )
+from .data_packing.h5py_data import retrieve_image
 
 
 if is_librosa_available():
@@ -261,7 +262,14 @@ class MMPluginMixin:
         results = []
         for image in images:
             if isinstance(image, (str, BinaryIO)):
-                image = Image.open(image)
+                try: # if the path given points to an image on the system, or BinaryIO
+                    image = Image.open(image)
+                except FileNotFoundError:
+                    try: # check to see if we can get it from an h5py file
+                        image = retrieve_image(image_path=image)
+                        image = Image.open(BytesIO(image))
+                    except Exception as e:
+                        raise ValueError(f"Failed to retrieve image from {image}: {e}")
             elif isinstance(image, bytes):
                 image = Image.open(BytesIO(image))
             elif isinstance(image, dict):
