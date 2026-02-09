@@ -12,3 +12,5 @@ saves/qwen2_5vl-7b/lora/sft/checkpoint-6/global_step6/bf16_zero_pp_rank_3_mp_ran
 saves/qwen2_5vl-7b/lora/sft/SQA3D/checkpoint-120/global_step120/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt filter=lfs diff=lfs merge=lfs -text
 saves/qwen2_5vl-7b/lora/sft/SQA3D/checkpoint-120/global_step120/bf16_zero_pp_rank_1_mp_rank_00_optim_states.pt filter=lfs diff=lfs merge=lfs -text
 saves/qwen2_5vl-7b/lora/sft/SQA3D/checkpoint-120/global_step120/bf16_zero_pp_rank_2_mp_rank_00_optim_states.pt filter=lfs diff=lfs merge=lfs -text
+preliminaries/qwen2_5vl_lora_sft_SQA3D/kn176-qwen2_5vl_lora_sft_SQA3Devery24_traineval-1534331.out filter=lfs diff=lfs merge=lfs -text
+models/qwen2_5vl_lora_sft_SQA3D/out/kn176-qwen2_5vl_lora_sft_SQA3Devery24_traineval-1534331.out filter=lfs diff=lfs merge=lfs -text

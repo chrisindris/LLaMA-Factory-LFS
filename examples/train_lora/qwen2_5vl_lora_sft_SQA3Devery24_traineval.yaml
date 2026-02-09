@@ -57,7 +57,7 @@ enable_liger_kernel: true
 #use_unsloth: true # mutually exclusive with DeepSpeed, which partitions in a more complex manner than unsloth.
 
 # distribution
-deepspeed: examples/deepspeed/ds_z3_offload_config.json
+deepspeed: examples/deepspeed/ds_z2_offload_config.json
 
 ## eval
 val_size: 0.1
