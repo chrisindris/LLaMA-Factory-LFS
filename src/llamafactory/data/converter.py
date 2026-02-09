@@ -42,6 +42,9 @@ class DatasetConverter:
 
     def _find_medias(self, medias: Union["MediaType", list["MediaType"], None]) -> Optional[list["MediaType"]]:
         r"""Optionally concatenate media path to media dir when loading from local disk."""
+        
+        logger.info_rank0(f"DEBUG _find_medias: load_from={self.dataset_attr.load_from}, media_dir={self.data_args.media_dir}")
+        
         if medias is None:
             return None
         elif not isinstance(medias, list):

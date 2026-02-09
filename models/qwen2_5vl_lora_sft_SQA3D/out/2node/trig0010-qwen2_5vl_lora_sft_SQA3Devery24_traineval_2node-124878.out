@@ -1,0 +1,76 @@
+slurmstepd: error: execve(): config_env.sh: Permission denied
+srun: error: trig0011: task 1: Exited with exit code 13
+srun: Terminating StepId=124878.0
+slurmstepd: error: execve(): config_env.sh: Permission denied
+slurmstepd: error: *** STEP 124878.0 ON trig0010 CANCELLED AT 2025-12-04T11:11:24 ***
+srun: error: trig0010: task 0: Exited with exit code 13
+/var/spool/slurm/slurmd/job124878/slurm_script: line 22: /dev/shm/slurm.indrisch.124878/ENV/bin/activate: No such file or directory
+import: unable to open X server `' @ error/import.c/ImportImageCommand/348.
+import: unable to open X server `' @ error/import.c/ImportImageCommand/348.
+NODE_RANK: 0
+HEAD_NODE: trig0010
+RAY_PORT: 43405
+slurmstepd: error: execve(): ray: No such file or directory
+slurmstepd: error: execve(): ray: No such file or directory
+srun: error: trig0011: task 1: Exited with exit code 2
+srun: Terminating StepId=124878.1
+slurmstepd: error: *** STEP 124878.1 ON trig0010 CANCELLED AT 2025-12-04T11:11:25 ***
+srun: error: trig0010: task 0: Exited with exit code 2
+WARNING: skipping mount of /scratch/apptainer-home: stat /scratch/apptainer-home: no such file or directory
+WARNING: skipping mount of /scratch/apptainer-tmp: stat /scratch/apptainer-tmp: no such file or directory
+INFO:    Terminating fuse-overlayfs after timeout
+INFO:    Timeouts can be caused by a running background process
+FATAL:   container creation failed: mount hook function failure: mount /scratch/apptainer-tmp->/scratch/apptainer-tmp/ error: while mounting /scratch/apptainer-tmp: mount source /scratch/apptainer-tmp doesn't exist
+import: unable to open X server `' @ error/import.c/ImportImageCommand/348.
+import: unable to open X server `' @ error/import.c/ImportImageCommand/348.
+NODE_RANK: 1
+HEAD_NODE: trig0010
+RAY_PORT: 43405
+WARNING: skipping mount of /scratch/apptainer-home: stat /scratch/apptainer-home: no such file or directory
+WARNING: skipping mount of /scratch/apptainer-tmp: stat /scratch/apptainer-tmp: no such file or directory
+INFO:    Terminating fuse-overlayfs after timeout
+INFO:    Timeouts can be caused by a running background process
+FATAL:   container creation failed: mount hook function failure: mount /scratch/apptainer-tmp->/scratch/apptainer-tmp/ error: while mounting /scratch/apptainer-tmp: mount source /scratch/apptainer-tmp doesn't exist
+/var/spool/slurm/slurmd/job124878/slurm_script: line 75: kill: (1958647) - No such process
+
+scontrol show job 124878
+JobId=124878 JobName=slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=232614 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=None Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:20 TimeLimit=00:02:00 TimeMin=N/A
+   SubmitTime=2025-12-04T09:54:39 EligibleTime=2025-12-04T09:54:39
+   AccrueTime=2025-12-04T09:54:39
+   StartTime=2025-12-04T11:11:18 EndTime=2025-12-04T11:11:38 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-12-04T11:11:18 Scheduler=Main
+   Partition=compute_full_node AllocNode:Sid=trig-login01:3495626
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig[0010-0011]
+   BatchHost=trig0010
+   NumNodes=2 NumCPUs=192 NumTasks=2 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=192,mem=1540000M,node=2,billing=8,gres/gpu=8
+   AllocTRES=cpu=192,mem=1540000M,node=2,billing=8,gres/gpu=8
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L /scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node-124878.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node-124878.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+sacct -j 124878
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+124878       slurm_qwe+ def-wangcs   00:00:20                        00:00.658  00:01.103      0:0 
+124878.batch      batch def-wangcs   00:00:20          0     74664K  00:00.570  00:01.068      0:0 
+124878.exte+     extern def-wangcs   00:00:20          0       104K  00:00.002   00:00:00      0:0 
+124878.0     config_en+ def-wangcs   00:00:01          0      2060K  00:00.047  00:00.014     13:0 
+124878.1     ray-multi+ def-wangcs   00:00:00          0      2256K  00:00.037  00:00.021      2:0 
+

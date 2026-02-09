@@ -2111,50 +2111,68 @@ register_template(
     replace_jinja_template=True,
 )
 
-# DEBUG: Starting videor1 template registration
-# DEBUG: Starting videor1 template registration
-import sys
-print(f"[DEBUG template.py] Starting videor1 template registration at line {sys._getframe().f_lineno}", file=sys.stderr, flush=True)
-print(f"[DEBUG template.py] Current templates before videor1 registration: {list(TEMPLATES.keys())[:10]}...", file=sys.stderr, flush=True)
+# DEBUG: Starting videor1 template registration (RORQUAL)
+# import sys
+# print(f"[DEBUG template.py] Starting videor1 template registration at line {sys._getframe().f_lineno}", file=sys.stderr, flush=True)
+# print(f"[DEBUG template.py] Current templates before videor1 registration: {list(TEMPLATES.keys())[:10]}...", file=sys.stderr, flush=True)
 
+# try:
+#     print(f"[DEBUG template.py] Attempting to get videor1 plugin...", file=sys.stderr, flush=True)
+#     mm_plugin_instance = get_mm_plugin(name="videor1", image_token="<|image_pad|>", video_token="<|video_pad|>")
+#     print(f"[DEBUG template.py] Successfully got videor1 plugin: {type(mm_plugin_instance)}", file=sys.stderr, flush=True)
+# except Exception as e:
+#     print(f"[DEBUG template.py] Exception getting videor1 plugin: {type(e).__name__}: {e}", file=sys.stderr, flush=True)
+#     import traceback
+#     traceback.print_exc(file=sys.stderr)
+#     # Fallback to base plugin if videor1 plugin fails to load
+#     print(f"[DEBUG template.py] Falling back to base plugin...", file=sys.stderr, flush=True)
+#     mm_plugin_instance = get_mm_plugin(name="base")
+#     print(f"[DEBUG template.py] Got base plugin: {type(mm_plugin_instance)}", file=sys.stderr, flush=True)
+
+# print(f"[DEBUG template.py] About to call register_template for videor1...", file=sys.stderr, flush=True)
+# try:
+#     register_template(
+#         name="videor1",
+#         format_user=StringFormatter(slots=["<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n"]),
+#         format_assistant=StringFormatter(slots=["{{content}}<|im_end|>\n"]),
+#         format_system=StringFormatter(slots=["<|im_start|>system\n{{content}}<|im_end|>\n"]),
+#         format_function=FunctionFormatter(slots=["{{content}}<|im_end|>\n"], tool_format="qwen"),
+#         format_observation=StringFormatter(
+#             slots=["<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n"]
+#         ),
+#         format_tools=ToolFormatter(tool_format="qwen"),
+#         default_system="You are a helpful assistant.",
+#         stop_words=["<|im_end|>"],
+#         replace_eos=True,
+#         mm_plugin=mm_plugin_instance,
+#     )
+#     print(f"[DEBUG template.py] Successfully registered videor1 template", file=sys.stderr, flush=True)
+#     print(f"[DEBUG template.py] Templates after videor1 registration: {list(TEMPLATES.keys())[:15]}...", file=sys.stderr, flush=True)
+#     print(f"[DEBUG template.py] videor1 in TEMPLATES: {'videor1' in TEMPLATES}", file=sys.stderr, flush=True)
+# except Exception as e:
+#     print(f"[DEBUG template.py] Exception registering videor1 template: {type(e).__name__}: {e}", file=sys.stderr, flush=True)
+#     import traceback
+#     traceback.print_exc(file=sys.stderr)
+#     raise
 try:
-    print(f"[DEBUG template.py] Attempting to get videor1 plugin...", file=sys.stderr, flush=True)
     mm_plugin_instance = get_mm_plugin(name="videor1", image_token="<|image_pad|>", video_token="<|video_pad|>")
-    print(f"[DEBUG template.py] Successfully got videor1 plugin: {type(mm_plugin_instance)}", file=sys.stderr, flush=True)
 except Exception as e:
-    print(f"[DEBUG template.py] Exception getting videor1 plugin: {type(e).__name__}: {e}", file=sys.stderr, flush=True)
-    import traceback
-    traceback.print_exc(file=sys.stderr)
-    # Fallback to base plugin if videor1 plugin fails to load
-    print(f"[DEBUG template.py] Falling back to base plugin...", file=sys.stderr, flush=True)
-    mm_plugin_instance = get_mm_plugin(name="base")
-    print(f"[DEBUG template.py] Got base plugin: {type(mm_plugin_instance)}", file=sys.stderr, flush=True)
-
-print(f"[DEBUG template.py] About to call register_template for videor1...", file=sys.stderr, flush=True)
-try:
-    register_template(
-        name="videor1",
-        format_user=StringFormatter(slots=["<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n"]),
-        format_assistant=StringFormatter(slots=["{{content}}<|im_end|>\n"]),
-        format_system=StringFormatter(slots=["<|im_start|>system\n{{content}}<|im_end|>\n"]),
-        format_function=FunctionFormatter(slots=["{{content}}<|im_end|>\n"], tool_format="qwen"),
-        format_observation=StringFormatter(
-            slots=["<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n"]
-        ),
-        format_tools=ToolFormatter(tool_format="qwen"),
-        default_system="You are a helpful assistant.",
-        stop_words=["<|im_end|>"],
-        replace_eos=True,
-        mm_plugin=mm_plugin_instance,
-    )
-    print(f"[DEBUG template.py] Successfully registered videor1 template", file=sys.stderr, flush=True)
-    print(f"[DEBUG template.py] Templates after videor1 registration: {list(TEMPLATES.keys())[:15]}...", file=sys.stderr, flush=True)
-    print(f"[DEBUG template.py] videor1 in TEMPLATES: {'videor1' in TEMPLATES}", file=sys.stderr, flush=True)
-except Exception as e:
-    print(f"[DEBUG template.py] Exception registering videor1 template: {type(e).__name__}: {e}", file=sys.stderr, flush=True)
-    import traceback
-    traceback.print_exc(file=sys.stderr)
     raise
+register_template(
+    name="videor1",
+    format_user=StringFormatter(slots=["<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n"]),
+    format_assistant=StringFormatter(slots=["{{content}}<|im_end|>\n"]),
+    format_system=StringFormatter(slots=["<|im_start|>system\n{{content}}<|im_end|>\n"]),
+    format_function=FunctionFormatter(slots=["{{content}}<|im_end|>\n"], tool_format="qwen"),
+    format_observation=StringFormatter(
+        slots=["<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n"]
+    ),
+    format_tools=ToolFormatter(tool_format="qwen"),
+    default_system="You are a helpful assistant.",
+    stop_words=["<|im_end|>"],
+    replace_eos=True,
+    mm_plugin=mm_plugin_instance,
+)
 
 register_template(
     name="video_llava",

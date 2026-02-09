@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# SBATCH directives - Default to RORQUAL settings
+# For TRILLIUM: Uncomment the TRILLIUM section below and comment out conflicting RORQUAL directives,
+# or override via sbatch command line arguments
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=16  
@@ -7,7 +11,42 @@
 #SBATCH --gpus-per-node=h100:1
 #SBATCH --output=out/SQA3D_h5py/%N-qwen2_5vl_lora_sft_SQA3Devery24_h5py-%j.out
 
-# Get MPI library paths for bind mounting
+# For TRILLIUM (uncomment these and comment out the conflicting RORQUAL directives above):
+# #SBATCH --cpus-per-task=24
+# #SBATCH --time=0-00:15:00
+# #SBATCH --output=out/SQA3Devery24_h5py/%N-qwen2_5vl_lora_sft_SQA3Devery24_h5py-%j.out
+
+# Detect cluster based on terminal prompt or hostname
+if [[ "$PS1" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "$PS1" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]]; then
+    CLUSTER="RORQUAL"
+elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
+    CLUSTER="TRILLIUM"
+elif [[ "$PS1" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "$PS1" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
+    CLUSTER="KILLARNEY"
+else
+    echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to RORQUAL."
+    CLUSTER="RORQUAL"
+fi
+
+# Set cluster-specific variables
+echo "Detected cluster: $CLUSTER"
+if [[ "$CLUSTER" == "RORQUAL" ]]; then
+    # RORQUAL-specific paths and settings
+    SIF_PATH="/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif"
+    YAML_FILE="/scratch/indrisch/LLaMA-Factory/examples/train_lora/videor1_lora_sft_SQA3Devery24_h5py.yaml"
+    APPTAINER_EXTRA_FLAGS="-C"
+    APPTAINER_NCCL_ENV="--env NCCL_IB_DISABLE=0 --env NCCL_P2P_DISABLE=0 --env NCCL_DEBUG=INFO --env NCCL_SOCKET_IFNAME=^docker0,lo"
+    USE_CUDA_VISIBLE_DEVICES=1
+elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
+    # TRILLIUM-specific paths and settings
+    SIF_PATH="/scratch/indrisch/easyr1_verl_sif/llamafactory.sif"
+    YAML_FILE="/scratch/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery24_h5py.yaml"
+    APPTAINER_EXTRA_FLAGS=""
+    APPTAINER_NCCL_ENV=""
+    USE_CUDA_VISIBLE_DEVICES=0
+fi
+
+# Get MPI library paths for bind mounting (RORQUAL-specific, commented out)
 # MPI_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcc12/openmpi/4.1.5/lib"
 # HWLOC_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/hwloc/2.9.1/lib"
 # # Gentoo system libraries (contains libpciaccess and other system deps)
@@ -19,12 +58,6 @@
 # if we are offline, we need to indicate this
 
 RUNNING_MODE=$1 # this is optional; generally, we wouldn't use this
-YAML_FILE="/scratch/indrisch/LLaMA-Factory/examples/train_lora/videor1_lora_sft_SQA3Devery24_h5py.yaml"
-
-# STEP 1: RUN THE TRAINING AND EVALUATION
-
-# better to have triton cache on a non-nfs file system for speed
-# if we are offline, we need to indicate this
 
 if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
 
@@ -32,38 +65,39 @@ if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
 
     TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
     
-    # Set CUDA_VISIBLE_DEVICES: use SLURM's value if set, otherwise default to 0,1,2,3
-    CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0,1,2,3}"
-
-    apptainer run --nv --writable-tmpfs \
-        -C \
-        -B /scratch/indrisch/LLaMA-Factory \
-        -B /home/indrisch \
-        -B /dev/shm:/dev/shm \
-        -B /etc/ssl/certs:/etc/ssl/certs:ro \
-        -B /etc/pki:/etc/pki:ro \
-        -W ${SLURM_TMPDIR} \
-        --env CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES}" \
-        --env HF_HUB_OFFLINE=1 \
-        --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
-        --env HF_HOME="/scratch/indrisch/huggingface/hub" \
-        --env HF_HUB_CACHE="/scratch/indrisch/huggingface/hub" \
-        --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
-        --env FLASHINFER_WORKSPACE_BASE="/scratch/indrisch/" \
-        --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
-        --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
-        --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
-        --env FORCE_TORCHRUN=1 \
-        --env WANDB_MODE=offline \
-        --env WANDB_DIR="/scratch/indrisch/LLaMA-Factory/wandb/" \
-        --env PYTHONPATH="/scratch/indrisch/LLaMA-Factory/src:${PYTHONPATH:-}" \
-        --env NCCL_IB_DISABLE=0 \
-        --env NCCL_P2P_DISABLE=0 \
-        --env NCCL_DEBUG=INFO \
-        --env NCCL_SOCKET_IFNAME=^docker0,lo \
-        --pwd /scratch/indrisch/LLaMA-Factory \
-        /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif \
-        llamafactory-cli train $YAML_FILE
+    # Build apptainer command with cluster-specific settings
+    APPTAINER_CMD="apptainer run --nv --writable-tmpfs"
+    
+    # Add cluster-specific flags
+    if [[ -n "$APPTAINER_EXTRA_FLAGS" ]]; then
+        APPTAINER_CMD="$APPTAINER_CMD $APPTAINER_EXTRA_FLAGS"
+    fi
+    
+    # Common bind mounts
+    APPTAINER_CMD="$APPTAINER_CMD -B /scratch/indrisch/LLaMA-Factory -B /home/indrisch -B /dev/shm:/dev/shm -B /etc/ssl/certs:/etc/ssl/certs:ro -B /etc/pki:/etc/pki:ro"
+    
+    # Working directory
+    APPTAINER_CMD="$APPTAINER_CMD -W ${SLURM_TMPDIR} --pwd /scratch/indrisch/LLaMA-Factory"
+    
+    # Set CUDA_VISIBLE_DEVICES if needed (RORQUAL only)
+    if [[ "$USE_CUDA_VISIBLE_DEVICES" == "1" ]]; then
+        CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0,1,2,3}"
+        APPTAINER_CMD="$APPTAINER_CMD --env CUDA_VISIBLE_DEVICES=\"${CUDA_VISIBLE_DEVICES}\""
+    fi
+    
+    # Common environment variables
+    APPTAINER_CMD="$APPTAINER_CMD --env HF_HUB_OFFLINE=1 --env MPLCONFIGDIR=\"${SLURM_TMPDIR}/.config/matplotlib\" --env HF_HOME=\"/scratch/indrisch/huggingface/hub\" --env HF_HUB_CACHE=\"/scratch/indrisch/huggingface/hub\" --env TRITON_CACHE_DIR=\"${SLURM_TMPDIR}/.triton_cache\" --env FLASHINFER_WORKSPACE_BASE=\"/scratch/indrisch/\" --env TORCH_CUDA_ARCH_LIST=\"${TORCH_CUDA_ARCH_LIST}\" --env TORCH_EXTENSIONS_DIR=\"${SLURM_TMPDIR}/.cache/torch_extensions\" --env PYTORCH_KERNEL_CACHE_PATH=\"${SLURM_TMPDIR}/.cache/torch/kernels\" --env FORCE_TORCHRUN=1 --env WANDB_MODE=offline --env WANDB_DIR=\"/scratch/indrisch/LLaMA-Factory/wandb/\" --env PYTHONPATH=\"/scratch/indrisch/LLaMA-Factory/src:\${PYTHONPATH:-}\""
+    
+    # Add NCCL environment variables if needed (RORQUAL only)
+    if [[ -n "$APPTAINER_NCCL_ENV" ]]; then
+        APPTAINER_CMD="$APPTAINER_CMD $APPTAINER_NCCL_ENV"
+    fi
+    
+    # SIF path and command
+    APPTAINER_CMD="$APPTAINER_CMD $SIF_PATH llamafactory-cli train $YAML_FILE"
+    
+    # Execute the command
+    eval $APPTAINER_CMD
 
 elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
 
@@ -71,7 +105,7 @@ elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
 
     TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
 
-    SLURM_TMPDIR="/scratch/indrisch/tmp"
+    SLURM_TMPDIR="${SLURM_TMPDIR:-/scratch/indrisch/tmp}"
     
     # Create directories for pip cache and temporary files on scratch
     mkdir -p /scratch/indrisch/tmp
@@ -81,35 +115,39 @@ elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
     mkdir -p /scratch/indrisch/.config/matplotlib
     mkdir -p /scratch/indrisch/.triton_cache
 
-    apptainer run --nv --writable-tmpfs \
-        -C \
-        -B /scratch/indrisch/LLaMA-Factory \
-        -B /home/indrisch \
-        -B /dev/shm:/dev/shm \
-        -B /etc/ssl/certs:/etc/ssl/certs:ro \
-        -B /etc/pki:/etc/pki:ro \
-        -W ${SLURM_TMPDIR} \
-        --env CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES}" \
-        --env HF_HUB_OFFLINE=1 \
-        --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
-        --env HF_HOME="/scratch/indrisch/huggingface/hub" \
-        --env HF_HUB_CACHE="/scratch/indrisch/huggingface/hub" \
-        --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
-        --env FLASHINFER_WORKSPACE_BASE="/scratch/indrisch/" \
-        --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
-        --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
-        --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
-        --env FORCE_TORCHRUN=1 \
-        --env WANDB_MODE=offline \
-        --env WANDB_DIR="/scratch/indrisch/LLaMA-Factory/wandb/" \
-        --env PYTHONPATH="/scratch/indrisch/LLaMA-Factory/src:${PYTHONPATH:-}" \
-        --env NCCL_IB_DISABLE=0 \
-        --env NCCL_P2P_DISABLE=0 \
-        --env NCCL_DEBUG=INFO \
-        --env NCCL_SOCKET_IFNAME=^docker0,lo \
-        --pwd /scratch/indrisch/LLaMA-Factory \
-        /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif \
-        bash
+    # Build apptainer command with cluster-specific settings
+    APPTAINER_CMD="apptainer run --nv --writable-tmpfs"
+    
+    # Add cluster-specific flags
+    if [[ -n "$APPTAINER_EXTRA_FLAGS" ]]; then
+        APPTAINER_CMD="$APPTAINER_CMD $APPTAINER_EXTRA_FLAGS"
+    fi
+    
+    # Common bind mounts
+    APPTAINER_CMD="$APPTAINER_CMD -B /scratch/indrisch/LLaMA-Factory -B /home/indrisch -B /dev/shm:/dev/shm -B /etc/ssl/certs:/etc/ssl/certs:ro -B /etc/pki:/etc/pki:ro"
+    
+    # Working directory
+    APPTAINER_CMD="$APPTAINER_CMD -W ${SLURM_TMPDIR} --pwd /scratch/indrisch/LLaMA-Factory"
+    
+    # Set CUDA_VISIBLE_DEVICES if needed (RORQUAL only)
+    if [[ "$USE_CUDA_VISIBLE_DEVICES" == "1" ]]; then
+        CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0,1,2,3}"
+        APPTAINER_CMD="$APPTAINER_CMD --env CUDA_VISIBLE_DEVICES=\"${CUDA_VISIBLE_DEVICES}\""
+    fi
+    
+    # Common environment variables
+    APPTAINER_CMD="$APPTAINER_CMD --env HF_HUB_OFFLINE=1 --env MPLCONFIGDIR=\"${SLURM_TMPDIR}/.config/matplotlib\" --env HF_HOME=\"/scratch/indrisch/huggingface/hub\" --env HF_HUB_CACHE=\"/scratch/indrisch/huggingface/hub\" --env TRITON_CACHE_DIR=\"${SLURM_TMPDIR}/.triton_cache\" --env FLASHINFER_WORKSPACE_BASE=\"/scratch/indrisch/\" --env TORCH_CUDA_ARCH_LIST=\"${TORCH_CUDA_ARCH_LIST}\" --env TORCH_EXTENSIONS_DIR=\"${SLURM_TMPDIR}/.cache/torch_extensions\" --env PYTORCH_KERNEL_CACHE_PATH=\"${SLURM_TMPDIR}/.cache/torch/kernels\" --env FORCE_TORCHRUN=1 --env WANDB_MODE=offline --env WANDB_DIR=\"/scratch/indrisch/LLaMA-Factory/wandb/\" --env PYTHONPATH=\"/scratch/indrisch/LLaMA-Factory/src:\${PYTHONPATH:-}\""
+    
+    # Add NCCL environment variables if needed (RORQUAL only)
+    if [[ -n "$APPTAINER_NCCL_ENV" ]]; then
+        APPTAINER_CMD="$APPTAINER_CMD $APPTAINER_NCCL_ENV"
+    fi
+    
+    # SIF path and command
+    APPTAINER_CMD="$APPTAINER_CMD $SIF_PATH bash"
+    
+    # Execute the command
+    eval $APPTAINER_CMD
 
     # apptainer run --nv --writable-tmpfs \
     #     -C \

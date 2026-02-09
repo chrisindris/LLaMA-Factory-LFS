@@ -1,0 +1,770 @@
+Input directory: /scratch/indrisch/vllm_experiments/data/ScanNet/scans
+Output directory: /scratch/indrisch/vllm_experiments/data_pt/ScanNet/scans
+Scene pattern: scene*_*
+Color folder: color
+Image extension: .jpg
+Tensor filename: images.pt
+Number of workers: 64
+Found 650 scene folders total
+Processing 650 scenes
+Using 64 worker processes for parallel processing
+Error processing scene0000_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0002_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0012_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0050_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0054_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0128_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0129_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0137_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0138_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0140_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0142_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0147_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0151_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0152_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0155_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0158_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0163_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0164_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0166_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0167_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0169_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0172_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0173_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0174_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0177_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0178_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0179_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0181_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0184_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0185_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0186_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0187_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0188_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0189_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0194_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0195_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0196_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0197_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0198_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0199_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0200_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0201_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0203_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0204_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0206_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0207_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0208_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0209_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0210_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0211_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0212_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0213_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0214_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0215_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0217_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0218_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0220_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0221_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0222_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0223_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0224_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0225_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0226_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0227_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0229_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0230_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0231_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0232_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0233_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0234_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0235_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0236_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0237_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0238_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0239_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0240_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0241_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0242_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0243_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0244_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0245_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0246_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0247_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0248_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0249_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0250_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0251_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0252_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0253_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0254_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0255_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0256_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0257_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0258_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0259_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0260_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0261_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0262_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0263_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0264_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0265_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0266_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0267_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0268_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0270_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0271_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0272_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0273_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0274_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0275_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0276_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0277_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0278_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0279_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0280_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0281_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0282_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0283_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0284_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0285_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0286_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0287_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0288_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0289_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0291_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0292_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0294_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0295_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0296_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0297_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0298_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0299_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0300_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0301_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0302_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0303_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0305_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0306_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0307_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0308_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0309_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0310_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0311_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0312_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0313_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0314_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0315_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0316_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0317_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0319_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0320_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0321_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0322_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0323_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0324_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0325_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0326_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0327_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0328_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0329_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0330_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0331_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0332_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0333_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0335_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0336_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0338_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0339_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0340_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0341_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0342_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0343_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0344_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0345_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0346_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0347_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0348_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0350_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0351_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0352_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0353_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0354_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0355_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0356_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0357_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0358_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0359_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0361_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0362_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0363_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0364_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0365_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0366_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0367_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0368_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0369_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0370_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0371_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0372_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0373_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0374_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0375_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0376_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0377_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0378_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0379_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0380_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0382_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0383_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0384_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0385_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0386_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0387_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0388_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0389_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0390_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0391_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0392_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0393_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0394_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0395_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0396_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0397_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0398_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0399_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0400_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0401_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0402_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0403_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0404_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0406_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0407_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0409_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0410_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0411_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0412_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0413_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0414_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0415_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0416_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0417_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0418_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0419_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0420_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0422_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0424_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0425_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0426_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0427_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0428_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0429_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0430_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0431_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0433_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0434_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0435_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0436_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0437_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0438_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0439_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0440_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0441_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0442_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0443_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0445_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0446_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0447_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0448_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0449_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0450_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0451_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0452_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0453_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0455_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0456_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0457_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0458_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0459_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0460_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0462_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0463_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0464_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0465_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0466_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0467_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0468_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0469_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0470_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0472_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0473_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0474_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0475_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0476_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0477_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0478_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0479_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0480_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0481_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0482_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0483_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0485_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0486_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0487_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0488_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0489_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0490_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0492_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0493_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0494_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0495_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0496_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0497_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0498_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0499_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0500_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0501_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0502_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0503_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0504_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0505_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0506_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0507_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0508_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0509_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0510_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0511_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0512_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0513_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0514_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0515_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0516_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0517_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0518_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0519_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0520_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0521_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0522_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0523_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0524_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0525_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0527_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0528_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0529_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0530_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0532_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0533_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0534_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0535_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0536_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0537_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0538_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0539_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0540_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0541_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0542_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0544_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0545_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0546_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0547_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0548_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0549_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0550_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0551_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0552_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0553_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0554_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0555_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0556_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0557_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0558_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0559_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0560_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0562_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0563_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0564_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0565_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0566_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0567_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0568_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0569_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0570_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0571_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0572_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0573_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0574_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0575_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0576_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0577_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0578_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0579_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0580_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0581_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0582_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0583_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0584_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0585_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0586_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0588_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0589_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0590_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0591_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0592_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0593_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0594_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0595_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0596_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0597_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0598_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0599_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0600_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0601_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0602_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0603_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0604_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0605_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0606_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0607_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0608_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0609_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0610_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0611_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0612_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0613_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0614_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0615_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0616_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0617_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0618_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0619_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0620_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0621_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0622_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0623_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0624_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0625_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0626_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0627_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0628_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0629_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0630_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0631_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0633_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0634_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0635_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0637_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0639_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0640_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0641_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0642_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0643_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0644_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0645_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0646_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0648_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0649_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0650_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0651_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0652_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0653_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0654_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0655_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0656_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0657_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0658_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0661_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0662_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0663_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0664_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0665_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0666_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0667_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0668_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0670_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0671_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0672_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0673_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0674_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0675_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0676_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0677_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0678_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0679_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0680_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0681_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0682_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0683_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0685_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0686_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0687_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0688_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0689_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0690_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0691_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0692_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0693_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0694_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0695_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0696_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0697_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0698_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0699_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0700_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0702_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0703_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0704_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0705_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Error processing scene0706_00: A process in the process pool was terminated abruptly while the future was running or pending.
+Successfully processed 143/650 scenes
+Processing complete. Successfully processed 143 scenes.
+slurmstepd: error: Detected 1 oom_kill event in StepId=792564.batch. Some of the step tasks have been OOM Killed.
+
+scontrol show job 792564
+JobId=792564 JobName=tensor_data.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=1732469 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=OutOfMemory Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:125
+   RunTime=00:02:47 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2026-01-07T16:51:33 EligibleTime=2026-01-07T16:51:33
+   AccrueTime=2026-01-07T16:51:33
+   StartTime=2026-01-07T16:51:43 EndTime=2026-01-07T16:54:30 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-01-07T16:51:43 Scheduler=Main
+   Partition=compute AllocNode:Sid=tri-login02:864474
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=tri0432
+   BatchHost=tri0432
+   NumNodes=1 NumCPUs=192 NumTasks=1 CPUs/Task=192 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=192,mem=767000M,node=1,billing=192
+   AllocTRES=cpu=192,mem=767000M,node=1,billing=192
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=192 MinMemoryNode=767000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/scripts/data_packing/tensor_data.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/scripts/data_packing
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L tensor_data.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/scripts/data_packing/%N-tensor_data-792564.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/scripts/data_packing/%N-tensor_data-792564.out
+   TresPerTask=cpu=192
+   
+
+sacct -j 792564
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+792564       tensor_da+ def-wangcs   00:02:47                         00:00:00   00:00:00      0:0 
+792564.batch      batch def-wangcs   00:02:47                         00:00:00   00:00:00      0:0 
+792564.exte+     extern def-wangcs   00:02:47                         00:00:00   00:00:00      0:0 
+
+
+kernel messages produced during job executions:
+[Jan 7 16:52] python invoked oom-killer: gfp_mask=0x140dca(GFP_HIGHUSER_MOVABLE|__GFP_COMP|__GFP_ZERO), order=0, oom_score_adj=0
+[  +0.000012] CPU: 88 PID: 969599 Comm: python Tainted: G S         OE     -------  ---  5.14.0-570.52.1.el9_6.x86_64 #1
+[  +0.000003] Hardware name: Lenovo ThinkSystem SD665 V3/SB27B96517, BIOS QGE140H-8.21 05/14/2025
+[  +0.000001] Call Trace:
+[  +0.000003]  <TASK>
+[  +0.000003]  dump_stack_lvl+0x34/0x48
+[  +0.000005]  dump_header+0x4a/0x213
+[  +0.000003]  oom_kill_process.cold+0xb/0x10
+[  +0.000001]  out_of_memory+0xef/0x2c0
+[  +0.000003]  __alloc_pages_slowpath.constprop.0+0x798/0xb20
+[  +0.000004]  __alloc_pages+0x21d/0x250
+[  +0.000001]  alloc_pages_mpol+0x93/0x1e0
+[  +0.000003]  vma_alloc_folio+0x55/0xb0
+[  +0.000001]  do_anonymous_page+0x5e/0x3e0
+[  +0.000002]  __handle_mm_fault+0x2fe/0x650
+[  +0.000002]  ? nohz_balancer_kick+0x31/0x240
+[  +0.000003]  handle_mm_fault+0xe9/0x250
+[  +0.000001]  do_user_addr_fault+0x154/0x620
+[  +0.000004]  exc_page_fault+0x62/0x150
+[  +0.000003]  asm_exc_page_fault+0x22/0x30
+[  +0.000003] RIP: 0033:0x145976bade7c
+[  +0.000002] Code: e9 31 fc ff ff 66 0f 1f 84 00 00 00 00 00 49 89 d4 49 89 c2 45 31 c9 0f 1f 80 00 00 00 00 45 0f b6 34 24 49 83 c1 01 49 01 f4 <45> 88 32 4d 01 ea 4c 39 c9 75 e9 e9 0e fc ff ff 4d 8d 65 ff 49 83
+[  +0.000002] RSP: 002b:00007fff8c0992c0 EFLAGS: 00010206
+[  +0.000001] RAX: 00001456e5884340 RBX: 000000000013247f RCX: 0000000000132480
+[  +0.000001] RDX: 00000000751bdba1 RSI: 0000000000000003 RDI: 00007fff8c0993a0
+[  +0.000000] RBP: 00007fff8c099300 R08: 0000000000000003 R09: 0000000000021cc1
+[  +0.000001] R10: 00001456e58a6000 R11: 0000000000000001 R12: 00000000752231e4
+[  +0.000000] R13: 0000000000000001 R14: 000000000000006f R15: 0000145976bad9f0
+[  +0.000002]  </TASK>
+[  +0.000004] Mem-Info:
+[  +0.000025] active_anon:88106488 inactive_anon:106984347 isolated_anon:0
+               active_file:0 inactive_file:11023 isolated_file:0
+               unevictable:768 dirty:0 writeback:18191
+               slab_reclaimable:676720 slab_unreclaimable:319894
+               mapped:8031 shmem:433216 pagetables:397674
+               sec_pagetables:874 bounce:0
+               kernel_misc_reclaimable:0
+               free:243947 free_pcp:1145 free_cma:0
+[  +0.000003] Node 0 active_anon:50386736kB inactive_anon:43201880kB active_file:0kB inactive_file:5852kB unevictable:3072kB isolated(anon):0kB isolated(file):0kB mapped:13368kB dirty:0kB writeback:9396kB shmem:1607872kB shmem_thp:0kB shmem_pmdmapped:0kB anon_thp:15396864kB writeback_tmp:0kB kernel_stack:5912kB pagetables:180364kB sec_pagetables:2092kB all_unreclaimable? no
+[  +0.000008] Node 1 active_anon:9971800kB inactive_anon:88289840kB active_file:0kB inactive_file:6072kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:220kB dirty:0kB writeback:9860kB shmem:112kB shmem_thp:0kB shmem_pmdmapped:0kB anon_thp:12324864kB writeback_tmp:0kB kernel_stack:5520kB pagetables:193704kB sec_pagetables:52kB all_unreclaimable? no
+[  +0.000002] Node 2 active_anon:79289880kB inactive_anon:19056908kB active_file:0kB inactive_file:1744kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:0kB dirty:0kB writeback:8044kB shmem:140kB shmem_thp:0kB shmem_pmdmapped:0kB anon_thp:13535232kB writeback_tmp:0kB kernel_stack:4848kB pagetables:196932kB sec_pagetables:156kB all_unreclaimable? no
+[  +0.000001] Node 3 active_anon:29904916kB inactive_anon:67852900kB active_file:380kB inactive_file:20404kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:4276kB dirty:0kB writeback:27196kB shmem:244kB shmem_thp:0kB shmem_pmdmapped:0kB anon_thp:7925760kB writeback_tmp:0kB kernel_stack:4552kB pagetables:189324kB sec_pagetables:540kB all_unreclaimable? no
+[  +0.000002] Node 4 active_anon:30200244kB inactive_anon:67719812kB active_file:0kB inactive_file:0kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:44kB dirty:0kB writeback:3688kB shmem:172kB shmem_thp:0kB shmem_pmdmapped:0kB anon_thp:16656384kB writeback_tmp:0kB kernel_stack:6804kB pagetables:247516kB sec_pagetables:548kB all_unreclaimable? no
+[  +0.000001] Node 5 active_anon:54280052kB inactive_anon:43998368kB active_file:0kB inactive_file:1124kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:20kB dirty:0kB writeback:2316kB shmem:106708kB shmem_thp:0kB shmem_pmdmapped:0kB anon_thp:26273792kB writeback_tmp:0kB kernel_stack:4584kB pagetables:182016kB sec_pagetables:28kB all_unreclaimable? no
+[  +0.000001] Node 6 active_anon:53118396kB inactive_anon:44998660kB active_file:0kB inactive_file:3780kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:14864kB dirty:0kB writeback:6468kB shmem:17452kB shmem_thp:0kB shmem_pmdmapped:0kB anon_thp:14233600kB writeback_tmp:0kB kernel_stack:6980kB pagetables:203744kB sec_pagetables:44kB all_unreclaimable? no
+[  +0.000002] Node 7 active_anon:45273928kB inactive_anon:52819020kB active_file:0kB inactive_file:4784kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:52kB dirty:0kB writeback:5796kB shmem:164kB shmem_thp:0kB shmem_pmdmapped:0kB anon_thp:11991040kB writeback_tmp:0kB kernel_stack:5664kB pagetables:197096kB sec_pagetables:36kB all_unreclaimable? no
+[  +0.000003] Node 0 DMA free:11264kB boost:0kB min:4kB low:16kB high:28kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:15996kB managed:15360kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[  +0.000002] lowmem_reserve[]: 0 2324 96273 96273 96273
+[  +0.000003] Node 0 DMA32 free:376280kB boost:0kB min:676kB low:3056kB high:5436kB reserved_highatomic:0KB active_anon:1253180kB inactive_anon:780796kB active_file:0kB inactive_file:32kB unevictable:0kB writepending:52kB present:2498396kB managed:2430204kB mlocked:0kB bounce:0kB free_pcp:248kB local_pcp:0kB free_cma:0kB
+[  +0.000002] lowmem_reserve[]: 0 0 93949 93949 93949
+[  +0.000003] Node 0 Normal free:90560kB boost:317440kB min:344800kB low:441004kB high:537208kB reserved_highatomic:14336KB active_anon:49133228kB inactive_anon:42421084kB active_file:0kB inactive_file:6632kB unevictable:3072kB writepending:4776kB present:97779648kB managed:96204476kB mlocked:0kB bounce:0kB free_pcp:2564kB local_pcp:0kB free_cma:0kB
+[  +0.000002] lowmem_reserve[]: 0 0 0 0 0
+[  +0.000004] Node 1 Normal free:68220kB boost:299008kB min:327188kB low:426272kB high:525356kB reserved_highatomic:22528KB active_anon:9971800kB inactive_anon:88289840kB active_file:0kB inactive_file:5568kB unevictable:0kB writepending:3444kB present:100663296kB managed:99084040kB mlocked:0kB bounce:0kB free_pcp:768kB local_pcp:0kB free_cma:0kB
+[  +0.000001] lowmem_reserve[]: 0 0 0 0 0
+[  +0.000003] Node 2 Normal free:39620kB boost:0kB min:28180kB low:127264kB high:226348kB reserved_highatomic:12288KB active_anon:79289880kB inactive_anon:19056908kB active_file:0kB inactive_file:1744kB unevictable:0kB writepending:3776kB present:100663296kB managed:99084044kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[  +0.000002] lowmem_reserve[]: 0 0 0 0 0
+[  +0.000002] Node 3 Normal free:76008kB boost:30720kB min:58884kB low:157912kB high:256940kB reserved_highatomic:20480KB active_anon:29904916kB inactive_anon:67852900kB active_file:880kB inactive_file:19904kB unevictable:0kB writepending:25900kB present:100663296kB managed:99037540kB mlocked:0kB bounce:0kB free_pcp:244kB local_pcp:0kB free_cma:0kB
+[  +0.000002] lowmem_reserve[]: 0 0 0 0 0
+[  +0.000002] Node 4 Normal free:141692kB boost:0kB min:28180kB low:127264kB high:226348kB reserved_highatomic:118784KB active_anon:30200244kB inactive_anon:67719812kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:2064kB present:100663296kB managed:99084044kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[  +0.000002] lowmem_reserve[]: 0 0 0 0 0
+[  +0.000002] Node 5 Normal free:74712kB boost:0kB min:28180kB low:127264kB high:226348kB reserved_highatomic:49152KB active_anon:54280052kB inactive_anon:43998368kB active_file:0kB inactive_file:1124kB unevictable:0kB writepending:2176kB present:100663296kB managed:99084040kB mlocked:0kB bounce:0kB free_pcp:212kB local_pcp:0kB free_cma:0kB
+[  +0.000001] lowmem_reserve[]: 0 0 0 0 0
+[  +0.000002] Node 6 Normal free:63196kB boost:0kB min:28180kB low:127264kB high:226348kB reserved_highatomic:36864KB active_anon:53118396kB inactive_anon:44998660kB active_file:0kB inactive_file:3780kB unevictable:0kB writepending:4440kB present:100663296kB managed:99084044kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[  +0.000001] lowmem_reserve[]: 0 0 0 0 0
+[  +0.000002] Node 7 Normal free:33480kB boost:0kB min:28156kB low:127152kB high:226148kB reserved_highatomic:4096KB active_anon:45273928kB inactive_anon:52819020kB active_file:0kB inactive_file:4784kB unevictable:0kB writepending:0kB present:100594432kB managed:98999340kB mlocked:0kB bounce:0kB free_pcp:780kB local_pcp:0kB free_cma:0kB
+[  +0.000002] lowmem_reserve[]: 0 0 0 0 0
+[  +0.000001] Node 0 DMA: 0*4kB 0*8kB 0*16kB 0*32kB 0*64kB 0*128kB 0*256kB 0*512kB 1*1024kB (U) 1*2048kB (M) 2*4096kB (M) = 11264kB
+[  +0.000003] Node 0 DMA32: 259*4kB (UME) 340*8kB (UM) 292*16kB (UM) 219*32kB (UME) 100*64kB (UME) 30*128kB (UME) 12*256kB (UME) 27*512kB (U) 14*1024kB (UE) 18*2048kB (ME) 69*4096kB (M) = 376396kB
+[  +0.000004] Node 0 Normal: 37*4kB (UM) 2272*8kB (UM) 2490*16kB (UE) 687*32kB (UE) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 80148kB
+[  +0.000002] Node 1 Normal: 123*4kB (UM) 349*8kB (UM) 1977*16kB (UM) 848*32kB (UE) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 62052kB
+[  +0.000003] Node 2 Normal: 56*4kB (UM) 830*8kB (UME) 606*16kB (UME) 255*32kB (UME) 173*64kB (UME) 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 35792kB
+[  +0.000003] Node 3 Normal: 748*4kB (UM) 3090*8kB (UME) 1289*16kB (UME) 455*32kB (UM) 3*64kB (M) 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 63088kB
+[  +0.000002] Node 4 Normal: 962*4kB (UME) 2602*8kB (UME) 3824*16kB (UME) 1531*32kB (UME) 149*64kB (ME) 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 144376kB
+[  +0.000003] Node 5 Normal: 791*4kB (UM) 2988*8kB (UME) 1442*16kB (UME) 779*32kB (UME) 10*64kB (ME) 1*128kB (E) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 75836kB
+[  +0.000003] Node 6 Normal: 41*4kB (ME) 2226*8kB (UME) 1463*16kB (UME) 507*32kB (UM) 36*64kB (UME) 6*128kB (ME) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 60676kB
+[  +0.000003] Node 7 Normal: 127*4kB (UM) 86*8kB (UM) 650*16kB (UM) 639*32kB (UME) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 32044kB
+[  +0.000003] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
+[  +0.000000] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
+[  +0.000001] Node 1 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
+[  +0.000000] Node 1 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
+[  +0.000001] Node 2 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
+[  +0.000000] Node 2 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
+[  +0.000000] Node 3 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
+[  +0.000000] Node 3 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
+[  +0.000001] Node 4 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
+[  +0.000000] Node 4 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
+[  +0.000000] Node 5 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
+[  +0.000001] Node 5 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
+[  +0.000000] Node 6 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
+[  +0.000000] Node 6 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
+[  +0.000000] Node 7 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
+[  +0.000001] Node 7 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
+[  +0.000000] 448342 total pagecache pages
+[  +0.000000] 0 pages in swap cache
+[  +0.000001] Free swap  = 0kB
+[  +0.000000] Total swap = 0kB
+[  +0.000000] 201217062 pages RAM
+[  +0.000001] 0 pages HighMem/MovableOnly
+[  +0.000000] 3190279 pages reserved
+[  +0.000000] 0 pages cma reserved
+[  +0.000000] 0 pages hwpoisoned
+[  +0.000001] Tasks state (memory values in pages):
+[  +0.000000] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes swapents oom_score_adj name
+[  +0.000124] [   2650]     0  2650    19292     6912   192512        0          -250 systemd-journal
+[  +0.000002] [   2704]    32  2704     3511     1152    61440        0             0 rpcbind
+[  +0.000002] [   2729]     0  2729    12873     1920    94208        0         -1000 systemd-udevd
+[  +0.000003] [   3245]    81  3245     2668      768    57344        0          -900 dbus-broker-lau
+[  +0.000001] [   3246]    81  3246     1281      384    53248        0          -900 dbus-broker
+[  +0.000001] [   3247]     0  3247   118658     3200   135168        0             0 NetworkManager
+[  +0.000002] [   3250]     0  3250    20829     1152    61440        0             0 irqbalance
+[  +0.000001] [   3261]     0  3261     4856     1536    73728        0             0 systemd-logind
+[  +0.000001] [   3315]     0  3315   119060     5126   139264        0             0 tuned
+[  +0.000001] [   3320]     0  3320    67913      384    73728        0             0 gssproxy
+[  +0.000001] [   3329]     0  3329    55337      384    45056        0             0 agetty
+[  +0.000002] [   3331]     0  3331    55348      384    53248        0             0 agetty
+[  +0.000001] [   3559]   997  3559   713167     2688   245760        0             0 polkitd
+[  +0.000001] [   4168]    29  4168     2775        0    53248        0             0 rpc.statd
+[  +0.000001] [   4248]     0  4248    53492     1536   172032        0             0 rsyslogd
+[  +0.000001] [   4266]   996  4266    21160      384    61440        0             0 chronyd
+[  +0.000002] [   4358]     0  4358   124155     1234   151552        0             0 automount
+[  +0.000001] [   4480]   998  4480    52615      768    77824        0             0 munged
+[  +0.000001] [   4544]     0  4544   307663        0   139264        0             0 utilcpu
+[  +0.000001] [   4577]     0  4577     8089     1152    81920        0         -1000 sshd
+[  +0.000001] [   4601]     0  4601    55877      384    61440        0             0 likwid-collecto
+[  +0.000001] [   4669]     0  4669   310507     2053   135168        0             0 node_exporter
+[  +0.000001] [   6693]     0  6693     1695      384    49152        0         -1000 slurmstepd
+[  +0.000006] [2674485]     0 2674485    68889     2304   131072        0             0 sssd
+[  +0.000001] [2674486]     0 2674486    74576     4441   167936        0             0 sssd_be
+[  +0.000001] [2674487]     0 2674487    74601        0   176128        0             0 sssd_nss
+[  +0.000001] [2674488]     0 2674488    65902     1536   110592        0             0 sssd_pam
+[  +0.000019] [ 761962]     0 761962     4417        0    65536        0             0 cvmfs2
+[  +0.000001] [ 761965]     0 761965  1729275    16344   733184        0             0 cvmfs2
+[  +0.000001] [ 765375]     0 765375   289076     1536   184320        0             0 slurmd
+[  +0.000001] [ 947822]     0 947822     4417        0    65536        0             0 cvmfs2
+[  +0.000001] [ 947824]     0 947824   115963     8408   188416        0             0 cvmfs2
+[  +0.000007] [ 969366]     0 969366    36521     1536    73728        0         -1000 slurmstepd
+[  +0.000001] [ 969370]     0 969370    55341      384    49152        0             0 sleep
+[  +0.000001] [ 969472]     0 969472    36685     1152    77824        0         -1000 slurmstepd
+[  +0.000001] [ 969476] 3122343 969476    55736      768    65536        0             0 slurm_script
+[  +0.000001] [ 969562] 3122343 969562   879002    66916  1581056        0             0 python
+[  +0.000002] [ 969565] 3122343 969565 11105634 10306377 83292160        0             0 python
+[  +0.000001] [ 969566] 3122343 969566  5318755  3930294 32169984        0             0 python
+[  +0.000001] [ 969567] 3122343 969567 10397888  9599894 77627392        0             0 python
+[  +0.000001] [ 969568] 3122343 969568  5327025  4530973 36970496        0             0 python
+[  +0.000001] [ 969569] 3122343 969569  4178428  2157513 17956864        0             0 python
+[  +0.000001] [ 969570] 3122343 969570  3519258  2730636 22487040        0             0 python
+[  +0.000000] [ 969571] 3122343 969571  2972598  2190117 18104320        0             0 python
+[  +0.000001] [ 969572] 3122343 969572  2614757  1822384 15233024        0             0 python
+[  +0.000001] [ 969573] 3122343 969573  4195363  1960648 16326656        0             0 python
+[  +0.000001] [ 969574] 3122343 969574  7043029  3485781 28540928        0             0 python
+[  +0.000001] [ 969575] 3122343 969575  3717046  2935998 24068096        0             0 python
+[  +0.000000] [ 969576] 3122343 969576 10680821  9886719 79888384        0             0 python
+[  +0.000001] [ 969577] 3122343 969577  4851022  2475842 20377600        0             0 python
+[  +0.000001] [ 969578] 3122343 969578  4745141  3948287 32313344        0             0 python
+[  +0.000002] [ 969579] 3122343 969579  1416515   632121  5632000        0             0 python
+[  +0.000001] [ 969580] 3122343 969580  2112906  1313573 11210752        0             0 python
+[  +0.000001] [ 969581] 3122343 969581  1703852   910002  7933952        0             0 python
+[  +0.000000] [ 969582] 3122343 969582  1823131  1029045  8888320        0             0 python
+[  +0.000001] [ 969583] 3122343 969583  5019779  2679233 22196224        0             0 python
+[  +0.000001] [ 969584] 3122343 969584  4286811  3478902 28635136        0             0 python
+[  +0.000001] [ 969585] 3122343 969585  2193766  1408107 11862016        0             0 python
+[  +0.000001] [ 969586] 3122343 969586  1413401   621960  5603328        0             0 python
+[  +0.000001] [ 969587] 3122343 969587  2966580  2179405 18059264        0             0 python
+[  +0.000000] [ 969588] 3122343 969588  4456875  3657661 30003200        0             0 python
+[  +0.000001] [ 969589] 3122343 969589  5806886  4567803 37281792        0             0 python
+[  +0.000001] [ 969590] 3122343 969590  5243718  3165209 26009600        0             0 python
+[  +0.000000] [ 969591] 3122343 969591  3323999  2522156 20914176        0             0 python
+[  +0.000001] [ 969592] 3122343 969592  4233324  3438889 28209152        0             0 python
+[  +0.000001] [ 969593] 3122343 969593  1863464  1072802  9211904        0             0 python
+[  +0.000001] [ 969594] 3122343 969594  2283152  1498924 12574720        0             0 python
+[  +0.000000] [ 969595] 3122343 969595   987588   186923  2191360        0             0 python
+[  +0.000001] [ 969596] 3122343 969596  3439323  2646711 21843968        0             0 python
+[  +0.000001] [ 969597] 3122343 969597  2855279  2053050 17158144        0             0 python
+[  +0.000001] [ 969598] 3122343 969598  1166926   373331  3637248        0             0 python
+[  +0.000000] [ 969599] 3122343 969599  5599693  2878826 23736320        0             0 python
+[  +0.000001] [ 969600] 3122343 969600  8745644  4812472 39186432        0             0 python
+[  +0.000001] [ 969601] 3122343 969601  4721292  3928211 32120832        0             0 python
+[  +0.000000] [ 969602] 3122343 969602  3103614  2310293 19152896        0             0 python
+[  +0.000001] [ 969603] 3122343 969603  4908905  4120486 33619968        0             0 python
+[  +0.000001] [ 969604] 3122343 969604  4637924  3852972 31453184        0             0 python
+[  +0.000001] [ 969605] 3122343 969605  5172046  2855984 23502848        0             0 python
+[  +0.000001] [ 969606] 3122343 969606  3537727  1938195 16175104        0             0 python
+[  +0.000000] [ 969607] 3122343 969607  4286378  3485150 28631040        0             0 python
+[  +0.000001] [ 969608] 3122343 969608  4313406  3527450 28848128        0             0 python
+[  +0.000001] [ 969609] 3122343 969609  5493370  2898660 23871488        0             0 python
+[  +0.000000] [ 969610] 3122343 969610  2251038  1469880 12320768        0             0 python
+[  +0.000001] [ 969611] 3122343 969611  1715079   919921  8024064        0             0 python
+[  +0.000001] [ 969612] 3122343 969612  9402848  8611454 69648384        0             0 python
+[  +0.000001] [ 969613] 3122343 969613  1574450   787375  6897664        0             0 python
+[  +0.000001] [ 969614] 3122343 969614  3281321  2489738 20578304        0             0 python
+[  +0.000000] [ 969615] 3122343 969615  3981786  3185705 26193920        0             0 python
+[  +0.000001] [ 969616] 3122343 969616 13037876 12036962 97165312        0             0 python
+[  +0.000001] [ 969617] 3122343 969617  4717041  2056735 17195008        0             0 python
+[  +0.000001] [ 969618] 3122343 969618  4382508  3533811 28897280        0             0 python
+[  +0.000001] [ 969619] 3122343 969619  1804106  1017007  8736768        0             0 python
+[  +0.000001] [ 969620] 3122343 969620  2892389  2098796 17457152        0             0 python
+[  +0.000001] [ 969621] 3122343 969621  3801700  2193200 18194432        0             0 python
+[  +0.000001] [ 969622] 3122343 969622  3394844  2596583 21483520        0             0 python
+[  +0.000001] [ 969623] 3122343 969623  4385808  3583594 29429760        0             0 python
+[  +0.000000] [ 969624] 3122343 969624  2663043  1863704 15622144        0             0 python
+[  +0.000001] [ 969625] 3122343 969625  2930696  1277967 10907648        0             0 python
+[  +0.000001] [ 969626] 3122343 969626  4628734  3840791 31375360        0             0 python
+[  +0.000001] [ 969627] 3122343 969627  4556372  3755130 30797824        0             0 python
+[  +0.000001] [ 969628] 3122343 969628  3194188  2399142 19877888        0             0 python
+[  +0.000025] [ 970152]     0 970152    55341      384    49152        0             0 sleep
+[  +0.000006] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=task_0,mems_allowed=0-7,global_oom,task_memcg=/system.slice/slurmstepd.scope/job_792564/step_batch/user/task_0,task=python,pid=969616,uid=3122343
+[  +0.000014] Out of memory: Killed process 969616 (python) total-vm:52151504kB, anon-rss:48139652kB, file-rss:8196kB, shmem-rss:0kB, UID:3122343 pgtables:94888kB oom_score_adj:0
+[  +5.957003] oom_reaper: reaped process 969616 (python), now anon-rss:0kB, file-rss:8196kB, shmem-rss:0kB
+
