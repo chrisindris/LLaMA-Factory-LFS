@@ -228,8 +228,12 @@ def vllm_infer(
 
     # Write all results at once outside the loop
     with open(save_name, "w", encoding="utf-8") as f:
-        for text, pred, label in zip(all_prompts, all_preds, all_labels):
-            f.write(json.dumps({"prompt": text, "predict": pred, "label": label}, ensure_ascii=False) + "\n")
+        with open(save_name[:-6] + "_formatted.jsonl", "w", encoding="utf-8") as f_formatted:
+            d = []
+            for index, (text, pred, label) in enumerate(zip(all_prompts, all_preds, all_labels)):
+                f.write(json.dumps({"prompt": text, "predict": pred, "label": label}, ensure_ascii=False) + "\n")
+                d.append({"prompt": text, "predict": pred, "label": label})
+            f_formatted.write(json.dumps(d, ensure_ascii=False, indent=4) + "\n")
 
     print("*" * 70)
     print(f"{len(all_prompts)} total generated results have been saved at {save_name}.")
