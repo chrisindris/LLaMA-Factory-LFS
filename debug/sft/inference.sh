@@ -2,7 +2,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=64
-#SBATCH --time=0-00:10:00
+#SBATCH --time=0-00:20:00
 #SBATCH --mem=400GB
 #SBATCH --gpus-per-node=l40s:4
 #SBATCH --output=out/%N-inference-%j.out
@@ -92,6 +92,25 @@ if [[ "$RUNNING_MODE" == "VENV" ]]; then
         --temperature 0.95 \
         --top_p 0.7 \
         --vllm_config "{\"limit_mm_per_prompt\": {\"image\": 320}}" \
+        --save_name /project/aip-wangcs/indrisch/LLaMA-Factory/debug/sft/out/generated_predictions_Qwen25VL7BInstruct_SQA3Dep1.jsonl \
+        # --pipeline_parallel_size -1 # if we want to debug on 0 GPUs, this gets a little bit into the code.
+
+    python vllm_infer.py \
+        --model_name_or_path Qwen/Qwen2.5-VL-7B-Instruct \
+        --media_dir /project/aip-wangcs/shared/data/ \
+        --image_max_pixels 65536 \
+        --dataset SQA3Devery24 \
+        --template qwen2_vl \
+        --cutoff_len 126076 \
+        --max_samples 100 \
+        --overwrite_cache true \
+        --preprocessing_num_workers 32 \
+        --low_cpu_mem_usage true \
+        --enable_thinking \
+        --temperature 0.95 \
+        --top_p 0.7 \
+        --vllm_config "{\"limit_mm_per_prompt\": {\"image\": 320}}" \
+        --save_name /project/aip-wangcs/indrisch/LLaMA-Factory/debug/sft/out/generated_predictions_Qwen25VL7BInstruct.jsonl \
         # --pipeline_parallel_size -1 # if we want to debug on 0 GPUs, this gets a little bit into the code.
 
 else
