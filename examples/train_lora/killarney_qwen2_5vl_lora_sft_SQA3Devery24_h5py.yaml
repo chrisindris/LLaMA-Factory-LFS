@@ -14,7 +14,7 @@ lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
 dataset: SQA3Devery24
-media_dir: /scratch/indrisch/vllm_experiments/data_h5py/
+media_dir: /project/aip-wangcs/shared/data/ # /project/aip-wangcs/shared/data_h5py/ for packed into h5py format; /project/aip-wangcs/shared/data/ for normal
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
 max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
@@ -27,8 +27,8 @@ low_cpu_mem_usage: true
 # max_steps: 100
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_R0C0F0X1_traineval_eval200_corrected
-logging_steps: 1
+output_dir: saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval_native8gpu_epoch3plus
+logging_steps: 10
 save_steps: 200
 plot_loss: true
 overwrite_output_dir: true
@@ -39,13 +39,13 @@ report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 8
 learning_rate: 1.0e-4
-num_train_epochs: 1.0 
+num_train_epochs: 3.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
 ddp_timeout: 180000000
 resume_from_checkpoint: null
-#adapter_name_or_path: /scratch/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_R0C0F0X1_traineval/checkpoint-500/
+# adapter_name_or_path: /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval_native8gpu/checkpoint-233/ #
 
 # debugging level
 debug: underflow_overflow
@@ -58,9 +58,8 @@ flash_attn: fa2
 enable_liger_kernel: true
 #use_unsloth: true # mutually exclusive with DeepSpeed, which partitions in a more complex manner than unsloth.
 
-# distribution
-# Switched to ZeRO-2 to avoid ZeRO-3 LoRA checkpoint resumption bug (tracing error)
-deepspeed: examples/deepspeed/ds_z2_offload_config.json
+# distribution; no offload on Killarney due to CPU ADAM issues.
+deepspeed: examples/deepspeed/ds_z3_config.json
 
 ## eval
 val_size: 0.1
