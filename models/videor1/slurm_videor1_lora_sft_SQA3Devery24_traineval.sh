@@ -1,37 +1,39 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
+#SBATCH --output=out/%N-videor1_lora_sft_SQA3Devery24_traineval-%j.out
 
 # RORQUAL:
 #SBATCH --cpus-per-task=64  
 #SBATCH --time=0-01:00:00
 #SBATCH --mem=485GB
 #SBATCH --gpus-per-node=h100:4
-#SBATCH --output=out/%N-videor1_lora_sft_SQA3Devery24_traineval-%j.out
 
 # TRILLIUM:
 #SBATCH --cpus-per-task=96
 #SBATCH --time=0-17:00:00
 #SBATCH --gpus-per-node=h100:4
-#SBATCH --output=out/r1/%N-videor1_lora_sft_SQA3Devery24_traineval-%j.out
 
 # Detect cluster based on terminal prompt or hostname
 if [[ "$PS1" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "$PS1" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]]; then
     CLUSTER="RORQUAL"
+    RUNNING_MODE="APPTAINER" # running mode for RORQUAL
+    YAML_FILE="/scratch/indrisch/LLaMA-Factory/examples/train_lora/${CLUSTER,,}_videor1_lora_sft_SQA3Devery24_traineval.yaml"
 elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
     CLUSTER="TRILLIUM"
+    RUNNING_MODE="APPTAINER" # running mode for TRILLIUM
+    YAML_FILE="/scratch/indrisch/LLaMA-Factory/examples/train_lora/${CLUSTER,,}_videor1_lora_sft_SQA3Devery24_traineval.yaml"
 elif [[ "$PS1" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "$PS1" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
     CLUSTER="KILLARNEY"
+    RUNNING_MODE="VENV" # running mode for KILLARNEY
+    YAML_FILE="/project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/${CLUSTER,,}_videor1_lora_sft_SQA3Devery24_traineval.yaml"
 else
     echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to RORQUAL."
     CLUSTER="RORQUAL"
 fi
 
-# if CLUSTER is RORQUAL and $1 is not provided/set, set RUNNING_MODE to APPTAINER
-if [[ "$CLUSTER" == "RORQUAL" ]] && [[ -z "$RUNNING_MODE" ]]; then
-    RUNNING_MODE="APPTAINER"
-else
-    RUNNING_MODE=$1 # this is optional; generally, we wouldn't use this
+if [[ -z "$RUNNING_MODE" ]]; then
+    RUNNING_MODE=$1
 fi
 
 if [[ "$CLUSTER" == "RORQUAL" ]]; then
@@ -88,7 +90,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
                         --env NCCL_SOCKET_IFNAME=^docker0,lo \
                         --pwd /scratch/indrisch/LLaMA-Factory \
                         /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif \
-                        llamafactory-cli train /scratch/indrisch/LLaMA-Factory/examples/train_lora/${CLUSTER,,}_videor1_lora_sft_SQA3Devery24_traineval.yaml
+                        llamafactory-cli train ${YAML_FILE}
 
         elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
 
@@ -178,53 +180,54 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
 
 
                 pushd /scratch/indrisch/LLaMA-Factory
-                llamafactory-cli train \
-                        --model_name_or_path Video-R1/Video-R1-7B \
-                        --no_use_fast_tokenizer \
-                        --cache_dir /scratch/indrisch/huggingface/hub \
-                        --image_max_pixels 65536 \
-                        --video_max_pixels 16384 \
-                        --trust_remote_code \
-                        --stage sft \
-                        --do_train \
-                        --finetuning_type lora \
-                        --lora_rank 8 \
-                        --lora_target all \
-                        --dataset SQA3Devery24 \
-                        --media_dir /scratch/indrisch/data/ \
-                        --template videor1 \
-                        --cutoff_len 131072 \
-                        --preprocessing_num_workers 32 \
-                        --dataloader_num_workers 0 \
-                        --dataloader_pin_memory false \
-                        --low_cpu_mem_usage \
-                        --output_dir /scratch/indrisch/LLaMA-Factory/saves/videor1/lora/sft/SQA3Devery24_traineval \
-                        --logging_steps 10 \
-                        --save_steps 200 \
-                        --plot_loss \
-                        --overwrite_output_dir \
-                        --save_only_model false \
-                        --report_to wandb \
-                        --per_device_train_batch_size 2 \
-                        --gradient_accumulation_steps 8 \
-                        --learning_rate 1.0e-4 \
-                        --num_train_epochs 1.0 \
-                        --lr_scheduler_type cosine \
-                        --warmup_ratio 0.1 \
-                        --bf16 \
-                        --ddp_timeout 180000000 \
-                        --debug underflow_overflow \
-                        --log_level debug \
-                        --log_level_replica debug \
-                        --print_param_status \
-                        --flash_attn fa2 \
-                        --enable_liger_kernel \
-                        --gradient_checkpointing \
-                        --deepspeed /scratch/indrisch/LLaMA-Factory/examples/deepspeed/ds_z2_config.json \
-                        --val_size 0.1 \
-                        --per_device_eval_batch_size 1 \
-                        --eval_strategy steps \
-                        --eval_steps 200
+                llamafactory-cli train ${YAML_FILE}
+                # llamafactory-cli train \
+                        # --model_name_or_path Video-R1/Video-R1-7B \
+                        # --no_use_fast_tokenizer \
+                        # --cache_dir /scratch/indrisch/huggingface/hub \
+                        # --image_max_pixels 65536 \
+                        # --video_max_pixels 16384 \
+                        # --trust_remote_code \
+                        # --stage sft \
+                        # --do_train \
+                        # --finetuning_type lora \
+                        # --lora_rank 8 \
+                        # --lora_target all \
+                        # --dataset SQA3Devery24 \
+                        # --media_dir /scratch/indrisch/data/ \
+                        # --template videor1 \
+                        # --cutoff_len 131072 \
+                        # --preprocessing_num_workers 16 \
+                        # --dataloader_num_workers 0 \
+                        # --dataloader_pin_memory false \
+                        # --low_cpu_mem_usage \
+                        # --output_dir /scratch/indrisch/LLaMA-Factory/saves/videor1/lora/sft/SQA3Devery24_traineval \
+                        # --logging_steps 10 \
+                        # --save_steps 200 \
+                        # --plot_loss \
+                        # --overwrite_output_dir \
+                        # --save_only_model false \
+                        # --report_to wandb \
+                        # --per_device_train_batch_size 2 \
+                        # --gradient_accumulation_steps 8 \
+                        # --learning_rate 1.0e-4 \
+                        # --num_train_epochs 1.0 \
+                        # --lr_scheduler_type cosine \
+                        # --warmup_ratio 0.1 \
+                        # --bf16 \
+                        # --ddp_timeout 180000000 \
+                        # --debug underflow_overflow \
+                        # --log_level debug \
+                        # --log_level_replica debug \
+                        # --print_param_status \
+                        # --flash_attn fa2 \
+                        # --enable_liger_kernel \
+                        # --gradient_checkpointing \
+                        # --deepspeed /scratch/indrisch/LLaMA-Factory/examples/deepspeed/ds_z2_config.json \
+                        # --val_size 0.1 \
+                        # --per_device_eval_batch_size 1 \
+                        # --eval_strategy steps \
+                        # --eval_steps 200
 
         else
                 echo "Invalid running mode: $RUNNING_MODE"
@@ -276,7 +279,7 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
                         --env WANDB_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/wandb/" \
                         --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
                         /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif \
-                        llamafactory-cli train /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/${CLUSTER,,}_videor1_lora_sft_SQA3Devery24_traineval.yaml
+                        llamafactory-cli train ${YAML_FILE}
 
         elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
@@ -295,53 +298,54 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
                 export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
                 # giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
                 pushd /project/aip-wangcs/indrisch/LLaMA-Factory
-                llamafactory-cli train \
-                        --model_name_or_path Video-R1/Qwen2.5-VL-7B-COT-SFT \
-                        --no_use_fast_tokenizer \
-                        --cache_dir /scratch/indrisch/huggingface/hub \
-                        --image_max_pixels 65536 \
-                        --video_max_pixels 16384 \
-                        --trust_remote_code \
-                        --stage sft \
-                        --do_train \
-                        --finetuning_type lora \
-                        --lora_rank 8 \
-                        --lora_target all \
-                        --dataset SQA3Devery24 \
-                        --media_dir /project/aip-wangcs/shared/data/ \
-                        --template videor1 \
-                        --cutoff_len 131072 \
-                        --preprocessing_num_workers 32 \
-                        --dataloader_num_workers 0 \
-                        --dataloader_pin_memory false \
-                        --low_cpu_mem_usage \
-                        --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1sft/lora/sft/SQA3Devery24_traineval \
-                        --logging_steps 10 \
-                        --save_steps 200 \
-                        --plot_loss \
-                        --overwrite_output_dir \
-                        --save_only_model false \
-                        --report_to wandb \
-                        --per_device_train_batch_size 2 \
-                        --gradient_accumulation_steps 8 \
-                        --learning_rate 1.0e-4 \
-                        --num_train_epochs 2.0 \
-                        --lr_scheduler_type cosine \
-                        --warmup_ratio 0.1 \
-                        --bf16 \
-                        --ddp_timeout 180000000 \
-                        --debug underflow_overflow \
-                        --log_level debug \
-                        --log_level_replica debug \
-                        --print_param_status \
-                        --flash_attn fa2 \
-                        --enable_liger_kernel \
-                        --gradient_checkpointing \
-                        --deepspeed /project/aip-wangcs/indrisch/LLaMA-Factory/examples/deepspeed/ds_z2_offload_config.json \
-                        --val_size 0.1 \
-                        --per_device_eval_batch_size 1 \
-                        --eval_strategy steps \
-                        --eval_steps 200
+                llamafactory-cli train ${YAML_FILE}
+                # llamafactory-cli train \
+                #         --model_name_or_path Video-R1/Video-R1-7B \
+                #         --no_use_fast_tokenizer \
+                #         --cache_dir /scratch/indrisch/huggingface/hub \
+                #         --image_max_pixels 65536 \
+                #         --video_max_pixels 16384 \
+                #         --trust_remote_code \
+                #         --stage sft \
+                #         --do_train \
+                #         --finetuning_type lora \
+                #         --lora_rank 8 \
+                #         --lora_target all \
+                #         --dataset SQA3Devery24 \
+                #         --media_dir /project/aip-wangcs/shared/data/ \
+                #         --template videor1 \
+                #         --cutoff_len 131072 \
+                #         --preprocessing_num_workers 16 \
+                #         --dataloader_num_workers 0 \
+                #         --dataloader_pin_memory false \
+                #         --low_cpu_mem_usage \
+                #         --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1sft/lora/sft/SQA3Devery24_traineval \
+                #         --logging_steps 10 \
+                #         --save_steps 200 \
+                #         --plot_loss \
+                #         --overwrite_output_dir \
+                #         --save_only_model false \
+                #         --report_to wandb \
+                #         --per_device_train_batch_size 2 \
+                #         --gradient_accumulation_steps 8 \
+                #         --learning_rate 1.0e-4 \
+                #         --num_train_epochs 2.0 \
+                #         --lr_scheduler_type cosine \
+                #         --warmup_ratio 0.1 \
+                #         --bf16 \
+                #         --ddp_timeout 180000000 \
+                #         --debug underflow_overflow \
+                #         --log_level debug \
+                #         --log_level_replica debug \
+                #         --print_param_status \
+                #         --flash_attn fa2 \
+                #         --enable_liger_kernel \
+                #         --gradient_checkpointing \
+                #         --deepspeed /project/aip-wangcs/indrisch/LLaMA-Factory/examples/deepspeed/ds_z2_offload_config.json \
+                #         --val_size 0.1 \
+                #         --per_device_eval_batch_size 1 \
+                #         --eval_strategy steps \
+                #         --eval_steps 200
 
         else
                 echo "Invalid running mode: $RUNNING_MODE"
@@ -372,7 +376,7 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
                 --env PYTHONPATH="/scratch/indrisch/LLaMA-Factory/src:${PYTHONPATH:-}" \
                 --pwd /scratch/indrisch/LLaMA-Factory \
                 /scratch/indrisch/easyr1_verl_sif/llamafactory.sif \
-                llamafactory-cli train /scratch/indrisch/LLaMA-Factory/examples/train_lora/${CLUSTER,,}_videor1_lora_sft_SQA3Devery24_traineval.yaml
+                llamafactory-cli train ${YAML_FILE}
 
 else
         echo "Invalid cluster: $CLUSTER"

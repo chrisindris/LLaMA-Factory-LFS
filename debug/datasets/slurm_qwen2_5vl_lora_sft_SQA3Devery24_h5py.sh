@@ -1,4 +1,7 @@
 #!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --output=out/SQA3D_h5py/%N-qwen2_5vl_lora_sft_SQA3Devery24_h5py-%j.out
 
 # SBATCH directives - Default to RORQUAL settings
 # For TRILLIUM: Uncomment the TRILLIUM section below and comment out conflicting RORQUAL directives,
@@ -9,12 +12,10 @@
 #SBATCH --time=0-00:10:00
 #SBATCH --mem=120GB
 #SBATCH --gpus-per-node=h100:1
-#SBATCH --output=out/SQA3D_h5py/%N-qwen2_5vl_lora_sft_SQA3Devery24_h5py-%j.out
 
 # For TRILLIUM (uncomment these and comment out the conflicting RORQUAL directives above):
 # #SBATCH --cpus-per-task=24
 # #SBATCH --time=0-00:15:00
-# #SBATCH --output=out/SQA3Devery24_h5py/%N-qwen2_5vl_lora_sft_SQA3Devery24_h5py-%j.out
 
 # For KILLARNEY (uncomment these and comment out the conflicting RORQUAL directives above):
 #SBATCH --nodes=1
@@ -23,7 +24,6 @@
 #SBATCH --time=0-00:10:00
 #SBATCH --mem=495GB
 #SBATCH --gpus-per-node=l40s:4
-#SBATCH --output=out/SQA3D_h5py/%N-qwen2_5vl_lora_sft_SQA3Devery24_h5py-%j.out
 
 # Detect cluster based on terminal prompt or hostname
 if [[ "$PS1" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "$PS1" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]]; then
@@ -42,10 +42,11 @@ echo "Detected cluster: $CLUSTER"
 if [[ "$CLUSTER" == "RORQUAL" ]]; then
     # RORQUAL-specific paths and settings
     SIF_PATH="/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif"
-    YAML_FILE="/scratch/indrisch/LLaMA-Factory/examples/train_lora/videor1_lora_sft_SQA3Devery24_h5py.yaml"
+    YAML_FILE="/scratch/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery24_h5py.yaml"
     APPTAINER_EXTRA_FLAGS="-C"
     APPTAINER_NCCL_ENV="--env NCCL_IB_DISABLE=0 --env NCCL_P2P_DISABLE=0 --env NCCL_DEBUG=INFO --env NCCL_SOCKET_IFNAME=^docker0,lo"
     USE_CUDA_VISIBLE_DEVICES=1
+    RUNNING_MODE="APPTAINER"
 elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
     # TRILLIUM-specific paths and settings
     SIF_PATH="/scratch/indrisch/easyr1_verl_sif/llamafactory.sif"
@@ -53,10 +54,11 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
     APPTAINER_EXTRA_FLAGS=""
     APPTAINER_NCCL_ENV=""
     USE_CUDA_VISIBLE_DEVICES=0
+    RUNNING_MODE="APPTAINER"
 elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
     # KILLARNEY-specific paths and settings
     SIF_PATH="/project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif"
-    YAML_FILE="/project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/killarney_qwen2_5vl_lora_sft_SQA3Devery24_h5py.yaml"
+    YAML_FILE="/project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/${CLUSTER,,}_qwen2_5vl_lora_sft_SQA3Devery24_h5py.yaml"
     APPTAINER_EXTRA_FLAGS=""
     APPTAINER_NCCL_ENV=""
     USE_CUDA_VISIBLE_DEVICES=0
@@ -118,7 +120,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
             --env NCCL_SOCKET_IFNAME=^docker0,lo \
             --pwd /scratch/indrisch/LLaMA-Factory \
             /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif \
-            llamafactory-cli train $YAML_FILE
+            llamafactory-cli train ${YAML_FILE}
 
     elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
 
@@ -325,7 +327,7 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
         --env PYTHONPATH="/scratch/indrisch/LLaMA-Factory/src:${PYTHONPATH:-}" \
         --pwd /scratch/indrisch/LLaMA-Factory \
         /scratch/indrisch/easyr1_verl_sif/llamafactory.sif \
-        llamafactory-cli train $YAML_FILE
+        llamafactory-cli train ${YAML_FILE}
 
 elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
 
