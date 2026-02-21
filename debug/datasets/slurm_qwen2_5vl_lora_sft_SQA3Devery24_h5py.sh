@@ -25,6 +25,25 @@
 #SBATCH --mem=495GB
 #SBATCH --gpus-per-node=l40s:4
 
+# ----- HEADER: ENV VARIABLES -----
+
+EXPERIMENT_NAME="qwen2_5vl_lora_sft_SQA3Devery24_h5py"
+
+# --- for reading cluster-specific settings ---
+
+if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then
+    PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
+elif [[ "$PWD" == *LLaMA-Factory* ]]; then
+    PROJECT_DIR="${PWD%%LLaMA-Factory*}/LLaMA-Factory"
+else
+    echo "Error: Could not find 'LLaMA-Factory' or 'LLaMA-Factory-LFS' in the current path."
+    exit 1
+fi
+SYSCONFIG_DIR_PATH="$PROJECT_DIR/scripts"
+export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
+
+# --- setting environment ---
+
 # Detect cluster based on terminal prompt or hostname
 if [[ "$PS1" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "$PS1" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]]; then
     CLUSTER="RORQUAL"
@@ -71,15 +90,29 @@ fi
 # # Gentoo system libraries (contains libpciaccess and other system deps)
 # GENTOO_LIB64_PATH="/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib64"
 
-# STEP 1: RUN THE TRAINING AND EVALUATION
+export HF_HOME="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'HF_HOME'))")" && echo "HF_HOME: $HF_HOME"
+export HF_HUB_CACHE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'HF_HUB_CACHE'))")" && echo "HF_HUB_CACHE: $HF_HUB_CACHE"
+export TRITON_CACHE_DIR="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'TRITON_CACHE_DIR'))")" && echo "TRITON_CACHE_DIR: $TRITON_CACHE_DIR"
+export FLASHINFER_WORKSPACE_BASE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'FLASHINFER_WORKSPACE_BASE'))")" && echo "FLASHINFER_WORKSPACE_BASE: $FLASHINFER_WORKSPACE_BASE"
+export BEST_GPU="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'BEST_GPU'))")" && echo "BEST_GPU: $BEST_GPU"
+export TORCH_EXTENSIONS_DIR="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'TORCH_EXTENSIONS_DIR'))")" && echo "TORCH_EXTENSIONS_DIR: $TORCH_EXTENSIONS_DIR"
+export SIF_FILE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'SIF_FILE'))")" && echo "SIF_FILE: $SIF_FILE"
 
-# better to have triton cache on a non-nfs file system for speed
-# if we are offline, we need to indicate this
+export WANDB_DIR="${PROJECT_DIR}/wandb/"
+if [[ "$BEST_GPU" == "h100" ]]; then
+    export TORCH_CUDA_ARCH_LIST="9.0"
+else
+    export TORCH_CUDA_ARCH_LIST="8.0"
+fi
 
-# set running mode to $1 if $RUNNING_MODE is not set
+YAML_FILE="${PROJECT_DIR}/examples/train_lora/${CLUSTER,,}_${EXPERIMENT_NAME}.yaml"
+OUTPUT_DIR="${PROJECT_DIR}/saves/videor1/lora/sft/SQA3Devery24_traineval"
+
 if [[ -z "$RUNNING_MODE" ]]; then
     RUNNING_MODE=$1
 fi
+
+# ----- EXPERIMENT -----
 
 if [[ "$CLUSTER" == "RORQUAL" ]]; then
 
@@ -94,7 +127,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
 
         apptainer run --nv --writable-tmpfs \
             -C \
-            -B /scratch/indrisch/LLaMA-Factory \
+            -B ${PROJECT_DIR} \
             -B /home/indrisch \
             -B /dev/shm:/dev/shm \
             -B /etc/ssl/certs:/etc/ssl/certs:ro \
@@ -103,23 +136,23 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
             --env CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES}" \
             --env HF_HUB_OFFLINE=1 \
             --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
-            --env HF_HOME="/scratch/indrisch/huggingface/hub" \
-            --env HF_HUB_CACHE="/scratch/indrisch/huggingface/hub" \
+            --env HF_HOME="${HF_HOME}" \
+            --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
             --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
-            --env FLASHINFER_WORKSPACE_BASE="/scratch/indrisch/" \
+            --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
             --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
             --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
             --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
             --env FORCE_TORCHRUN=1 \
             --env WANDB_MODE=offline \
-            --env WANDB_DIR="/scratch/indrisch/LLaMA-Factory/wandb/" \
-            --env PYTHONPATH="/scratch/indrisch/LLaMA-Factory/src:${PYTHONPATH:-}" \
+            --env WANDB_DIR="${WANDB_DIR}" \
+            --env PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}" \
             --env NCCL_IB_DISABLE=0 \
             --env NCCL_P2P_DISABLE=0 \
             --env NCCL_DEBUG=INFO \
             --env NCCL_SOCKET_IFNAME=^docker0,lo \
-            --pwd /scratch/indrisch/LLaMA-Factory \
-            /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif \
+            --pwd ${PROJECT_DIR} \
+            ${SIF_FILE} \
             llamafactory-cli train ${YAML_FILE}
 
     elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
@@ -128,19 +161,19 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
 
         TORCH_CUDA_ARCH_LIST="9.0" # for clusters with h100 GPUs
 
-        SLURM_TMPDIR="/scratch/indrisch/tmp"
+        SLURM_TMPDIR="${SLURM_TMPDIR}/tmp"
         
         # Create directories for pip cache and temporary files on scratch
-        mkdir -p /scratch/indrisch/tmp
-        mkdir -p /scratch/indrisch/.cache/pip
-        mkdir -p /scratch/indrisch/.cache/torch_extensions
-        mkdir -p /scratch/indrisch/.cache/torch/kernels
-        mkdir -p /scratch/indrisch/.config/matplotlib
-        mkdir -p /scratch/indrisch/.triton_cache
+        mkdir -p ${SLURM_TMPDIR}/tmp
+        mkdir -p ${SLURM_TMPDIR}/.cache/pip
+        mkdir -p ${SLURM_TMPDIR}/.cache/torch_extensions
+        mkdir -p ${SLURM_TMPDIR}/.cache/torch/kernels
+        mkdir -p ${SLURM_TMPDIR}/.config/matplotlib
+        mkdir -p ${SLURM_TMPDIR}/.triton_cache
 
         apptainer run --nv --writable-tmpfs \
             -C \
-            -B /scratch/indrisch/LLaMA-Factory \
+            -B ${PROJECT_DIR} \
             -B /home/indrisch \
             -B /dev/shm:/dev/shm \
             -B /etc/ssl/certs:/etc/ssl/certs:ro \
@@ -149,23 +182,23 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
             --env CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES}" \
             --env HF_HUB_OFFLINE=1 \
             --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
-            --env HF_HOME="/scratch/indrisch/huggingface/hub" \
-            --env HF_HUB_CACHE="/scratch/indrisch/huggingface/hub" \
+            --env HF_HOME="${HF_HOME}" \
+            --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
             --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
-            --env FLASHINFER_WORKSPACE_BASE="/scratch/indrisch/" \
+            --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
             --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
             --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
             --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
             --env FORCE_TORCHRUN=1 \
             --env WANDB_MODE=offline \
-            --env WANDB_DIR="/scratch/indrisch/LLaMA-Factory/wandb/" \
-            --env PYTHONPATH="/scratch/indrisch/LLaMA-Factory/src:${PYTHONPATH:-}" \
+            --env WANDB_DIR="${WANDB_DIR}" \
+            --env PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}" \
             --env NCCL_IB_DISABLE=0 \
             --env NCCL_P2P_DISABLE=0 \
             --env NCCL_DEBUG=INFO \
             --env NCCL_SOCKET_IFNAME=^docker0,lo \
-            --pwd /scratch/indrisch/LLaMA-Factory \
-            /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif \
+            --pwd ${PROJECT_DIR} \
+            ${SIF_FILE} \
             bash
 
         # apptainer run --nv --writable-tmpfs \
@@ -223,16 +256,16 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         export CUDA_VISIBLE_DEVICES=0,1,2,3
         export HF_HUB_OFFLINE=1 
         export MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib"
-        export HF_HOME="/scratch/indrisch/huggingface/hub"
-        export HF_HUB_CACHE="/scratch/indrisch/huggingface/hub"
+        export HF_HOME="${HF_HOME}"
+        export HF_HUB_CACHE="${HF_HUB_CACHE}"
         export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
-        export FLASHINFER_WORKSPACE_BASE="/scratch/indrisch/"
+        export FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}"
         export TORCH_CUDA_ARCH_LIST="9.0" # for clusters with a100 GPUs
         export TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" # needed for cpu_adam
         export PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels"
         export FORCE_TORCHRUN=1 
         export WANDB_MODE=offline 
-        export WANDB_DIR="/scratch/indrisch/LLaMA-Factory/wandb/" 
+        export WANDB_DIR="${WANDB_DIR}" 
         export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
         # giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
 
@@ -241,7 +274,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         # pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray -e ".[torch,metrics,deepspeed,liger-kernel]"
 
 
-        pushd /scratch/indrisch/LLaMA-Factory
+        pushd ${PROJECT_DIR}
         llamafactory-cli train $YAML_FILE
         # llamafactory-cli train \
         #     --model_name_or_path Video-R1/Video-R1-7B \
@@ -306,7 +339,7 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
 
     # Note: we need to set the PYTHONPATH so that llama-factory will use the latest code in the src directory
     apptainer run --nv --writable-tmpfs \
-        -B /scratch/indrisch/LLaMA-Factory \
+        -B ${PROJECT_DIR} \
         -B /home/indrisch \
         -B /dev/shm:/dev/shm \
         -B /etc/ssl/certs:/etc/ssl/certs:ro \
@@ -314,19 +347,19 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
         -W ${SLURM_TMPDIR} \
         --env HF_HUB_OFFLINE=1 \
         --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
-        --env HF_HOME="/scratch/indrisch/huggingface/hub" \
-        --env HF_HUB_CACHE="/scratch/indrisch/huggingface/hub" \
+        --env HF_HOME="${HF_HOME}" \
+        --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
         --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
-        --env FLASHINFER_WORKSPACE_BASE="/scratch/indrisch/" \
+        --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
         --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
         --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
         --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
         --env FORCE_TORCHRUN=1 \
         --env WANDB_MODE=offline \
-        --env WANDB_DIR="/scratch/indrisch/LLaMA-Factory/wandb/" \
-        --env PYTHONPATH="/scratch/indrisch/LLaMA-Factory/src:${PYTHONPATH:-}" \
-        --pwd /scratch/indrisch/LLaMA-Factory \
-        /scratch/indrisch/easyr1_verl_sif/llamafactory.sif \
+        --env WANDB_DIR="${WANDB_DIR}" \
+        --env PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}" \
+        --pwd ${PROJECT_DIR} \
+        ${SIF_FILE} \
         llamafactory-cli train ${YAML_FILE}
 
 elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
@@ -342,7 +375,7 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         # better to have triton cache on a non-nfs file system for speed
         # if we are offline, we need to indicate this
         apptainer run --nv --writable-tmpfs \
-            -B /project/aip-wangcs/indrisch/LLaMA-Factory \
+            -B ${PROJECT_DIR} \
             -B /home/indrisch \
             -B /dev/shm:/dev/shm \
             -B /etc/ssl/certs:/etc/ssl/certs:ro \
@@ -350,18 +383,19 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
             -W ${SLURM_TMPDIR} \
             --env HF_HUB_OFFLINE=1 \
             --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
-            --env HF_HOME="/scratch/indrisch/huggingface/hub" \
-            --env HF_HUB_CACHE="/scratch/indrisch/huggingface/hub" \
+            --env HF_HOME="${HF_HOME}" \
+            --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
             --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
-            --env FLASHINFER_WORKSPACE_BASE="/scratch/indrisch/" \
+            --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
             --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
             --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
             --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
             --env FORCE_TORCHRUN=1 \
             --env WANDB_MODE=offline \
-            --env WANDB_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/wandb/" \
-            --pwd /project/aip-wangcs/indrisch/LLaMA-Factory \
-            /project/aip-wangcs/indrisch/easyr1_verl_sif/llamafactory.sif \
+            --env WANDB_DIR="${WANDB_DIR}" \
+            --env PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}" \
+            --pwd ${PROJECT_DIR} \
+            ${SIF_FILE} \
             llamafactory-cli train ${YAML_FILE}
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
@@ -384,10 +418,10 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         if [ -f /project/aip-wangcs/indrisch/venv_llamafactory_cu126/bin/activate ]; then
             source /project/aip-wangcs/indrisch/venv_llamafactory_cu126/bin/activate
         else
-            pushd /project/aip-wangcs/indrisch/
+            pushd ${PROJECT_DIR}
             virtualenv --no-download venv_llamafactory_cu126
             source venv_llamafactory_cu126/bin/activate
-            pushd /project/aip-wangcs/indrisch/LLaMA-Factory
+            pushd ${PROJECT_DIR}
             pip install --upgrade pip setuptools wheel
             # Note that using CPU ADAM doesn't seem to work on Killarney; hence, avoid using deepspeed versions which use offload.
             # DS_BUILD_CPU_ADAM=1 DS_BUILD_AIO=1 DS_BUILD_UTILS=1 pip install -e ".[torch,metrics,deepspeed,liger-kernel]"
@@ -405,21 +439,21 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         
         export HF_HUB_OFFLINE=1 
         export MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib"
-        export HF_HOME="/scratch/indrisch/huggingface/hub"
-        export HF_HUB_CACHE="/scratch/indrisch/huggingface/hub"
+        export HF_HOME="${HF_HOME}"
+        export HF_HUB_CACHE="${HF_HUB_CACHE}"
         export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
-        export FLASHINFER_WORKSPACE_BASE="/scratch/indrisch/"
+        export FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}"
         export TORCH_CUDA_ARCH_LIST="9.0" # for clusters with a100 GPUs
         export TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" # needed for cpu_adam
         export PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels"
         export FORCE_TORCHRUN=1 
         export WANDB_MODE=offline 
-        export WANDB_DIR="/project/aip-wangcs/indrisch/LLaMA-Factory/wandb/" 
+        export WANDB_DIR="${WANDB_DIR}" 
         export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
         # giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
 
 
-        pushd /project/aip-wangcs/indrisch/LLaMA-Factory
+        pushd ${PROJECT_DIR}
         llamafactory-cli train ${YAML_FILE}
 
     else
