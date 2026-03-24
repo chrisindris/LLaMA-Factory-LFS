@@ -1,0 +1,13 @@
+Reading 2 parquet file(s) from /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data
+Lookup built: 645 unique video entries
+Reading /scratch/indrisch/huggingface/hub/datasets--AIGeeksGroup--Scene-30K/snapshots/4dec3fdb6ff83357fbf6d93ec6fe0392df6a7152/Scene-30K.jsonl
+Parsing 30238 lines with 64 workers
+Writing 54 missing scene_id(s) to /scratch/indrisch/LLaMA-Factory/data/Scene30k/missing_scene_ids.txt
+Verifying 54 missing scene(s) against /scratch/indrisch/data/ScanNet/scans
+ERROR: Some missing scenes are not available in ScanNet:
+  scene0190_00: directory not found (/scratch/indrisch/data/ScanNet/scans/scene0190_00/color)
+  scene0216_00: directory not found (/scratch/indrisch/data/ScanNet/scans/scene0216_00/color)
+  scene0219_00: directory not found (/scratch/indrisch/data/ScanNet/scans/scene0219_00/color)
+  scene0228_00: directory not found (/scratch/indrisch/data/ScanNet/scans/scene0228_00/color)
+  scene0269_00: directory not found (/scratch/indrisch/data/ScanNet/scans/scene0269_00/color)
+  scene0290_00: directory not found (/scratch/indrisch/data/ScanNet/scans/scene0290_00/color)

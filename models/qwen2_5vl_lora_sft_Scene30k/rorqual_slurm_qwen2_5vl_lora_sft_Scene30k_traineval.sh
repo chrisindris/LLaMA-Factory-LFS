@@ -6,6 +6,10 @@
 #SBATCH --time=0-18:00:00
 #SBATCH --mem=485G
 #SBATCH --gpus-per-node=h100:4
+# #SBATCH --cpus-per-task=16
+# #SBATCH --time=0-00:15:00
+# #SBATCH --mem=100G
+# #SBATCH --gpus=h100:1
 
 if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then
     PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
@@ -17,5 +21,6 @@ else
 fi
 SYSCONFIG_DIR_PATH="$PROJECT_DIR/scripts"
 export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
+export PYTHONUNBUFFERED=1
 
-${PROJECT_DIR}/models/qwen2_5vl_lora_sft_Scene30k/slurm_qwen2_5vl_lora_sft_Scene30k_traineval.sh
+${PROJECT_DIR}/models/qwen2_5vl_lora_sft_Scene30k/slurm_qwen2_5vl_lora_sft_Scene30k_traineval.sh "$@"
