@@ -52,7 +52,7 @@ flash_attn: fa2
 enable_liger_kernel: true
 
 # distribution
-deepspeed: examples/deepspeed/ds_z2_offload_config.json
+deepspeed: examples/deepspeed/ds_z2_config.json
 
 ## eval
 val_size: 0.1

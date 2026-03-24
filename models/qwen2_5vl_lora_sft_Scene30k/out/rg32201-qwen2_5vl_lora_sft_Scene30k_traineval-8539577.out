@@ -1,0 +1,9 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /project/def-wangcs/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /project/def-wangcs/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: None
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+/scratch/indrisch/LLaMA-Factory /scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k
+slurmstepd: error: *** JOB 8539577 ON rg32201 CANCELLED AT 2026-03-18T13:53:24 DUE TO TIME LIMIT ***

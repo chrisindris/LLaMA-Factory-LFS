@@ -113,7 +113,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
             --env WANDB_DIR="${WANDB_DIR}" \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
-            pip freeze && llamafactory-cli train ${YAML_FILE}
+            pip freeze && llamafactory-cli train ${YAML_FILE} # Advice from Leihan: either I can use VENV mode (and adjust for rorqual) or copy the SIF_FILE into the root of LLaMA-Factory and use APPTAINER mode
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
