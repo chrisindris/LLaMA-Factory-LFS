@@ -3,6 +3,7 @@
 # RUN ON: Login Node
 # RUN AS: ./get_data.sh <cluster_name>
 
+export HF_DEBUG=1
 export HF_TOKEN=$(cat /home/indrisch/TOKENS/cvis-tmu-organization-token.txt)
 
 # vLLM models typically come from the huggingface hub. 
@@ -99,7 +100,7 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # scene30k
-hf download --max-workers=4 AIGeeksGroup/Scene-30K --repo-type=dataset
+hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
 
 deactivate
 rm -r temp_env
