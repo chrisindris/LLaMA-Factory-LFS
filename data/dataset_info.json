@@ -844,11 +844,18 @@
     }
   },
   "Scene30k": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--AIGeeksGroup--Scene-30K/snapshots/4dec3fdb6ff83357fbf6d93ec6fe0392df6a7152/Scene-30K.jsonl",
+    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/",
     "formatting": "alpaca",
     "columns": {
-      "prompt": "question",
-      "response": "cot"
+      "prompt": "question_with_image_tags",
+      "response": "cot",
+      "images": "images_every_24"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
     }
   }
 }
