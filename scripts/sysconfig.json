@@ -63,7 +63,7 @@
         "FLASHINFER_WORKSPACE_BASE": "/scratch/indrisch/",
         "LLAMAFACTORY_HOME": "/scratch/indrisch/LLaMA-Factory/",
         "SIF_FILE": "/scratch/indrisch/easyr1_verl_sif/llamafactory.sif",
-        "media_dir": "/scratch/indrisch/vllm_experiments/data/"
+        "media_dir": "/project/def-wangcs/shared/data/"
     },
     "KILLARNEY": {
         "HF_HOME": "/scratch/indrisch/huggingface/hub",

@@ -41,7 +41,7 @@ echo "HF_HUB_CACHE: $HF_HUB_CACHE"
 echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 
 # hf download --max-workers=7 moonshotai/Kimi-VL-A3B-Thinking-2506 # model for generating traces (the "teacher")
-# hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a student (in addition to LLaVa-3D)
+hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a student (in addition to LLaVa-3D)
 # hf download --max-workers=4 Qwen/Qwen2.5-7B-Instruct-1M # text-only long-context model used to assess the traces
 #hf download --max-workers=4 Qwen/Qwen2.5-7B-Instruct # text-only model used to assess the traces; the 1M version doesn't seem to load
 #hf download --max-workers=4 Qwen/Qwen2.5-0.5B-Instruct # text-only model used to assess the traces; the 1M version doesn't seem to load
@@ -100,7 +100,7 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # scene30k
-hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
+# hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
 
 deactivate
 rm -r temp_env

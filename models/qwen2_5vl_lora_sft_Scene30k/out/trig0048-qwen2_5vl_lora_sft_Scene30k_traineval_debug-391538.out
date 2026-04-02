@@ -1,0 +1,177 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: None
+SIF_FILE: /scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+RUNNING_MODE: VENV
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2026-03-30 15:58:45] llamafactory.launcher:143 >> Initializing 1 distributed tasks at: 127.0.0.1:34785
+⚙️  Running in WANDB offline mode
+[2026-03-30 15:58:51,867] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2026-03-30 15:58:56,959] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-03-30 15:58:56,959] [INFO] [comm.py:700:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[INFO|2026-03-30 15:58:56] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2026-03-30 15:58:56] llamafactory.hparams.parser:423 >> Process rank: 0, world size: 1, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|hub.py:421] 2026-03-30 15:58:56,997 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_auto.py:922] 2026-03-30 15:58:56,997 >> Could not locate the tokenizer configuration file, will try to use the model config instead.
+[INFO|hub.py:421] 2026-03-30 15:58:56,997 >> Offline mode: forcing local_files_only=True
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 479, in cached_files
+[rank0]:     hf_hub_download(
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[rank0]:     return fn(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1010, in hf_hub_download
+[rank0]:     return _hf_hub_download_to_cache_dir(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1117, in _hf_hub_download_to_cache_dir
+[rank0]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1649, in _raise_on_head_call_error
+[rank0]:     raise LocalEntryNotFoundError(
+[rank0]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank0]: The above exception was the direct cause of the following exception:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/app/src/llamafactory/model/loader.py", line 78, in load_tokenizer
+[rank0]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank0]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 1093, in from_pretrained
+[rank0]:     config = AutoConfig.from_pretrained(
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1333, in from_pretrained
+[rank0]:     config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank0]:                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 662, in get_config_dict
+[rank0]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank0]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 721, in _get_config_dict
+[rank0]:     resolved_config_file = cached_file(
+[rank0]:                            ^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 322, in cached_file
+[rank0]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 553, in cached_files
+[rank0]:     raise OSError(
+[rank0]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank0]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank0]: The above exception was the direct cause of the following exception:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/app/src/llamafactory/launcher.py", line 180, in <module>
+[rank0]:     run_exp()
+[rank0]:   File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+[rank0]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank0]:   File "/app/src/llamafactory/train/tuner.py", line 72, in _training_function
+[rank0]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank0]:   File "/app/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank0]:     tokenizer_module = load_tokenizer(model_args)
+[rank0]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/app/src/llamafactory/model/loader.py", line 93, in load_tokenizer
+[rank0]:     raise OSError("Failed to load tokenizer.") from e
+[rank0]: OSError: Failed to load tokenizer.
+[rank0]:[W330 15:58:57.445406743 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+E0330 15:58:58.923000 3998303 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 3998646) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/app/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-03-30_15:58:58
+  host      : trig0048.scinet.local
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 3998646)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 110, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '1', '--master_addr', '127.0.0.1', '--master_port', '34785', '/app/src/llamafactory/launcher.py', '/scratch/indrisch//LLaMA-Factory/examples/train_lora/trillium_qwen2_5vl_lora_sft_Scene30k_traineval_debug.yaml']' returned non-zero exit status 1.
+
+scontrol show job 391538
+JobId=391538 JobName=trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=1114848 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:00:35 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2026-03-30T15:56:42 EligibleTime=2026-03-30T15:56:43
+   AccrueTime=2026-03-30T15:56:43
+   StartTime=2026-03-30T15:58:25 EndTime=2026-03-30T15:59:00 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-03-30T15:58:25 Scheduler=Main
+   Partition=compute AllocNode:Sid=trig-login01:237613
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0048
+   BatchHost=trig0048
+   NumNodes=1 NumCPUs=24 NumTasks=1 CPUs/Task=24 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=24 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k/trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   SubmitLine=SBATCH --comment /opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh VENV --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh VENV
+   WorkDir=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh VENV
+   StdErr=
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k/out/trig0048-qwen2_5vl_lora_sft_Scene30k_traineval_debug-391538.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=24
+
+sacct -j 391538
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+391538       trillium_+ def-wangcs   00:00:35                         00:00:00   00:00:00      0:0 
+391538.batch      batch def-wangcs   00:00:35                         00:00:00   00:00:00      0:0 
+391538.exte+     extern def-wangcs   00:00:35                         00:00:00   00:00:00      0:0 
+

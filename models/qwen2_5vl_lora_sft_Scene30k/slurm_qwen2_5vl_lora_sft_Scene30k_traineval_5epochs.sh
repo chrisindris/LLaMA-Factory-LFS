@@ -20,6 +20,14 @@
 #SBATCH --mem=1900G
 #SBATCH --gpus-per-node=h100:8
 
+# ---------------------------------------------------------------------
+# ------------ qwen2_5vl_lora_sft_Scene30k_traineval_5epochs ----------
+# ---------------------------------------------------------------------
+#
+# This script will train (SFT, LoRA) a Qwen2.5VL model on the Scene30k dataset for 5 epochs.
+#
+#
+
 # ----- HEADER: ENV VARIABLES -----
 
 EXPERIMENT_NAME="qwen2_5vl_lora_sft_Scene30k_traineval_5epochs"
@@ -61,8 +69,8 @@ export TRITON_CACHE_DIR="$(python3 -c "import sysconfigtool; print(sysconfigtool
 export FLASHINFER_WORKSPACE_BASE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'FLASHINFER_WORKSPACE_BASE'))")" && echo "FLASHINFER_WORKSPACE_BASE: $FLASHINFER_WORKSPACE_BASE"
 export BEST_GPU="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'BEST_GPU'))")" && echo "BEST_GPU: $BEST_GPU"
 export TORCH_EXTENSIONS_DIR="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'TORCH_EXTENSIONS_DIR'))")" && echo "TORCH_EXTENSIONS_DIR: $TORCH_EXTENSIONS_DIR"
-#export SIF_FILE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'SIF_FILE'))")" && echo "SIF_FILE: $SIF_FILE"
-export SIF_FILE="${PROJECT_DIR}/llamafactory.sif"
+export SIF_FILE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'SIF_FILE'))")" && echo "SIF_FILE: $SIF_FILE"
+export MEDIA_DIR="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'media_dir'))")" && echo "MEDIA_DIR: $MEDIA_DIR"
 
 export WANDB_DIR="${PROJECT_DIR}/wandb/"
 if [[ "$BEST_GPU" == "h100" ]]; then
@@ -124,6 +132,8 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         apptainer run --nv --writable-tmpfs \
             ${NVIDIA_BIND_ARGS} \
             -B ${PROJECT_DIR} \
+            -B ${HF_HOME} \
+            -B ${MEDIA_DIR} \
             -B /home/indrisch \
             -B /dev/shm:/dev/shm \
             -B /etc/ssl/certs:/etc/ssl/certs:ro \
@@ -235,7 +245,9 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
 elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
 
     apptainer run --nv --writable-tmpfs \
-        -B /scratch/indrisch/LLaMA-Factory \
+        -B ${PROJECT_DIR} \
+        -B ${HF_HOME} \
+        -B ${MEDIA_DIR} \
         -B /home/indrisch \
         -B /dev/shm:/dev/shm \
         -B /etc/ssl/certs:/etc/ssl/certs:ro \
@@ -266,6 +278,8 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         apptainer run --nv --writable-tmpfs \
             -C \
             -B ${PROJECT_DIR} \
+            -B ${HF_HOME} \
+            -B ${MEDIA_DIR} \
             -B /home/indrisch \
             -B /dev/shm:/dev/shm \
             -B /etc/ssl/certs:/etc/ssl/certs:ro \
