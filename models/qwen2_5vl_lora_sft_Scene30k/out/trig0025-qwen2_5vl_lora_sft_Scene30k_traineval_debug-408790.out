@@ -265,3 +265,42 @@ Please check that the Hugging Face dataset 'parquet' isn't based on a loading sc
 If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
 Converting format of dataset (num_proc=16):   0%|          | 0/30238 [00:00<?, ? examples/s]Converting format of dataset (num_proc=16):   0%|          | 39/30238 [00:00<03:37, 138.63 examples/s]Converting format of dataset (num_proc=16):   2%|▏         | 559/30238 [00:00<00:16, 1821.40 examples/s]Converting format of dataset (num_proc=16):   6%|▌         | 1686/30238 [00:00<00:06, 4711.34 examples/s]Converting format of dataset (num_proc=16):  10%|▉         | 2902/30238 [00:00<00:04, 6806.03 examples/s]Converting format of dataset (num_proc=16):  14%|█▍        | 4171/30238 [00:00<00:03, 8473.02 examples/s]Converting format of dataset (num_proc=16):  18%|█▊        | 5531/30238 [00:00<00:02, 9847.97 examples/s]Converting format of dataset (num_proc=16):  23%|██▎       | 6902/30238 [00:00<00:02, 10902.89 examples/s]Converting format of dataset (num_proc=16):  27%|██▋       | 8123/30238 [00:01<00:02, 10948.53 examples/s]Converting format of dataset (num_proc=16):  32%|███▏      | 9633/30238 [00:01<00:01, 12072.18 examples/s]Converting format of dataset (num_proc=16):  37%|███▋      | 11057/30238 [00:01<00:01, 12225.43 examples/s]Converting format of dataset (num_proc=16):  41%|████      | 12332/30238 [00:01<00:01, 11867.94 examples/s]Converting format of dataset (num_proc=16):  45%|████▌     | 13699/30238 [00:01<00:01, 11615.15 examples/s]Converting format of dataset (num_proc=16):  50%|████▉     | 14976/30238 [00:01<00:01, 11863.42 examples/s]Converting format of dataset (num_proc=16):  54%|█████▎    | 16199/30238 [00:01<00:01, 11740.92 examples/s]Converting format of dataset (num_proc=16):  58%|█████▊    | 17503/30238 [00:01<00:01, 12008.48 examples/s]Converting format of dataset (num_proc=16):  62%|██████▏   | 18713/30238 [00:01<00:00, 11575.85 examples/s]Converting format of dataset (num_proc=16):  66%|██████▌   | 19933/30238 [00:02<00:00, 11095.57 examples/s]Converting format of dataset (num_proc=16):  70%|██████▉   | 21085/30238 [00:02<00:00, 10861.45 examples/s]Converting format of dataset (num_proc=16):  73%|███████▎  | 22181/30238 [00:02<00:00, 10684.24 examples/s]Converting format of dataset (num_proc=16):  78%|███████▊  | 23488/30238 [00:02<00:00, 11330.24 examples/s]Converting format of dataset (num_proc=16):  82%|████████▏ | 24647/30238 [00:02<00:00, 10661.36 examples/s]Converting format of dataset (num_proc=16):  86%|████████▌ | 26016/30238 [00:02<00:00, 11410.88 examples/s]Converting format of dataset (num_proc=16):  90%|████████▉ | 27184/30238 [00:02<00:00, 11156.03 examples/s]Converting format of dataset (num_proc=16):  94%|█████████▎| 28328/30238 [00:02<00:00, 8093.32 examples/s] Converting format of dataset (num_proc=16):  97%|█████████▋| 29262/30238 [00:03<00:00, 2939.41 examples/s]Converting format of dataset (num_proc=16):  99%|█████████▉| 29951/30238 [00:04<00:00, 1990.24 examples/s]Converting format of dataset (num_proc=16): 100%|██████████| 30238/30238 [00:04<00:00, 6080.90 examples/s]
 Running tokenizer on dataset (num_proc=16):   0%|          | 0/30238 [00:00<?, ? examples/s]
+scontrol show job 408790
+JobId=408790 JobName=trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=486822 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=TimeLimit Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:15
+   RunTime=01:15:04 TimeLimit=01:15:00 TimeMin=N/A
+   SubmitTime=2026-04-04T23:34:59 EligibleTime=2026-04-04T23:34:59
+   AccrueTime=2026-04-04T23:34:59
+   StartTime=2026-04-04T23:35:25 EndTime=2026-04-05T00:50:29 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-04-04T23:35:25 Scheduler=Backfill
+   Partition=compute AllocNode:Sid=trig-login01:4009378
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0025
+   BatchHost=trig0025
+   NumNodes=1 NumCPUs=24 NumTasks=1 CPUs/Task=24 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=24 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k/trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   SubmitLine=SBATCH --comment /opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   StdErr=
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k/out/trig0025-qwen2_5vl_lora_sft_Scene30k_traineval_debug-408790.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=24
+
+sacct -j 408790
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+408790       trillium_+ def-wangcs   01:15:04                        04:07.019   22:34:34      0:0 
+408790.batch      batch def-wangcs   01:15:05          0  15317712K  04:07.019   22:34:34     0:15 
+408790.exte+     extern def-wangcs   01:15:05                         00:00:00   00:00:00      0:0 
+

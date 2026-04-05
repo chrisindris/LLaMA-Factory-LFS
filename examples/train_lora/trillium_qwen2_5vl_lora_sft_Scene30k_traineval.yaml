@@ -45,7 +45,7 @@ ddp_timeout: 180000000
 resume_from_checkpoint: null
 
 # debugging level
-debug: none
+# debug: none # to turn off debugging, we must simply comment out this line.
 log_level: passive
 log_level_replica: passive
 print_param_status: false
