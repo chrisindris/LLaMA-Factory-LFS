@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_Scene30k_traineval_debug-%j.out
 #SBATCH --cpus-per-task=24
-#SBATCH --time=0-00:15:00
+#SBATCH --time=0-01:15:00
 #SBATCH --gpus-per-node=h100:1
 
 if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then

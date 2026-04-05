@@ -17,23 +17,25 @@ dataset: Scene30k
 media_dir: /project/def-wangcs/shared/data/
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
-overwrite_cache: true
-preprocessing_num_workers: 32
+overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
+preprocessing_num_workers: 16 # reduced from 32 to 16 to avoid memory issues with large multimodal data; adjust based on your system's capabilities
 dataloader_num_workers: 4
+dataloader_prefetch_factor: 1 # when dataloader_num_workers > 0, this argument specifies the number of batches loaded in advance by each worker. Setting it to 1 can help reduce memory usage when working with large multimodal data.
+dataloader_pin_memory: false
 low_cpu_mem_usage: true
 
 ### output
 output_dir: saves/qwen2_5vl-7b/lora/sft/Scene30k_traineval
 logging_steps: 10
-save_steps: 500
+save_steps: 426 # save after every 1.00 Scene30k epochs
 plot_loss: true
 overwrite_output_dir: true
 save_only_model: false
 report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 
 ### train
-per_device_train_batch_size: 2
-gradient_accumulation_steps: 8
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 4
 learning_rate: 1.0e-4
 num_train_epochs: 1.0
 lr_scheduler_type: cosine
@@ -53,10 +55,10 @@ flash_attn: fa2
 enable_liger_kernel: true
 
 # distribution
-deepspeed: examples/deepspeed/ds_z2_config.json
+deepspeed: examples/deepspeed/ds_z2_config.json # as long as we aren't on Killarney, we can use offload.
 
 ## eval
 val_size: 0.1
 per_device_eval_batch_size: 1
 eval_strategy: steps
-eval_steps: 500
+eval_steps: 426 # evaluate after every 1.00 Scene30k epochs

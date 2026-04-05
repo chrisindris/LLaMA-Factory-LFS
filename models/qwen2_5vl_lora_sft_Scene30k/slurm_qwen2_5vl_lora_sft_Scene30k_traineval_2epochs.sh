@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --output=out/%N-qwen2_5vl_lora_sft_Scene30k_traineval_5epochs-%j.out
+#SBATCH --output=out/%N-qwen2_5vl_lora_sft_Scene30k_traineval_2epochs-%j.out
 
 # RORQUAL:
 #SBATCH --cpus-per-task=64
@@ -21,16 +21,16 @@
 #SBATCH --gpus-per-node=h100:8
 
 # ---------------------------------------------------------------------
-# ------------ qwen2_5vl_lora_sft_Scene30k_traineval_5epochs ----------
+# ------------ qwen2_5vl_lora_sft_Scene30k_traineval_2epochs ----------
 # ---------------------------------------------------------------------
 #
-# This script will train (SFT, LoRA) a Qwen2.5VL model on the Scene30k dataset for 5 epochs.
+# This script will train (SFT, LoRA) a Qwen2.5VL model on the Scene30k dataset for 2 epochs.
 #
 #
 
 # ----- HEADER: ENV VARIABLES -----
 
-EXPERIMENT_NAME="qwen2_5vl_lora_sft_Scene30k_traineval_5epochs"
+EXPERIMENT_NAME="qwen2_5vl_lora_sft_Scene30k_traineval_2epochs"
 
 # --- for reading cluster-specific settings ---
 
