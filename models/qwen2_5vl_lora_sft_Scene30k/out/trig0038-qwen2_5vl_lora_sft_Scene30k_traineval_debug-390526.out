@@ -1,0 +1,126 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: None
+SIF_FILE: /scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+RUNNING_MODE: APPTAINER
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2026-03-30 15:01:23] llamafactory.launcher:143 >> Initializing 1 distributed tasks at: 127.0.0.1:40219
+⚙️  Running in WANDB offline mode
+[2026-03-30 15:01:29,661] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Traceback (most recent call last):
+  File "/app/src/llamafactory/launcher.py", line 180, in <module>
+    run_exp()
+  File "/app/src/llamafactory/train/tuner.py", line 95, in run_exp
+    args = read_args(args)
+           ^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/hparams/parser.py", line 64, in read_args
+    dict_config = OmegaConf.load(Path(sys.argv[1]).absolute())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/omegaconf/omegaconf.py", line 189, in load
+    with io.open(os.path.abspath(file_), "r", encoding="utf-8") as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/scratch/indrisch/LLaMA-Factory/examples/train_lora/trillium_qwen2_5vl_lora_sft_Scene30k_traineval_debug.yaml'
+E0330 15:01:36.641000 1386031 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 1386056) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/app/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-03-30_15:01:36
+  host      : trig0038.scinet.local
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 1386056)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 110, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '1', '--master_addr', '127.0.0.1', '--master_port', '40219', '/app/src/llamafactory/launcher.py', '/scratch/indrisch//LLaMA-Factory/examples/train_lora/trillium_qwen2_5vl_lora_sft_Scene30k_traineval_debug.yaml']' returned non-zero exit status 1.
+
+scontrol show job 390526
+JobId=390526 JobName=trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=1115745 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:00:55 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2026-03-30T15:00:41 EligibleTime=2026-03-30T15:00:41
+   AccrueTime=2026-03-30T15:00:41
+   StartTime=2026-03-30T15:00:42 EndTime=2026-03-30T15:01:37 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-03-30T15:00:42 Scheduler=Main
+   Partition=compute AllocNode:Sid=trig-login01:237613
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0038
+   BatchHost=trig0038
+   NumNodes=1 NumCPUs=24 NumTasks=1 CPUs/Task=24 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=24 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k/trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   SubmitLine=SBATCH --comment /opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   StdErr=
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k/out/trig0038-qwen2_5vl_lora_sft_Scene30k_traineval_debug-390526.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=24
+
+sacct -j 390526
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+390526       trillium_+ def-wangcs   00:00:55                         00:00:00   00:00:00      0:0 
+390526.batch      batch def-wangcs   00:00:55                         00:00:00   00:00:00      0:0 
+390526.exte+     extern def-wangcs   00:00:55                         00:00:00   00:00:00      0:0 
+

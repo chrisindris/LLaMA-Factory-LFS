@@ -14,17 +14,20 @@ lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
 dataset: Scene30k
+media_dir: /scratch/indrisch/data/
 template: videor1
 cutoff_len: 131072 # max len of the model
-overwrite_cache: true
+overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
 preprocessing_num_workers: 32
 dataloader_num_workers: 4
+dataloader_prefetch_factor: 1 # when dataloader_num_workers > 0, this argument specifies the number of batches loaded in advance by each worker. Setting it to 1 can help reduce memory usage when working with large multimodal data.
+dataloader_pin_memory: false
 low_cpu_mem_usage: true
 
 ### output
 output_dir: saves/videor1/lora/sft/Scene30k_traineval
 logging_steps: 10
-save_steps: 500
+save_steps: 426 # save after every 1.00 Scene30k epochs
 plot_loss: true
 overwrite_output_dir: true
 save_only_model: false
@@ -58,4 +61,4 @@ deepspeed: examples/deepspeed/ds_z2_offload_config.json
 val_size: 0.1
 per_device_eval_batch_size: 1
 eval_strategy: steps
-eval_steps: 500
+eval_steps: 426 # evaluate after every 1.00 Scene30k epochs

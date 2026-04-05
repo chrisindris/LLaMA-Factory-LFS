@@ -19,7 +19,7 @@ media_dir: /scratch/indrisch/vllm_experiments/data/
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
 # max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
-overwrite_cache: false
+overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
 preprocessing_num_workers: 32 # use 32 on 4 GPUs and with the full dataset
 dataloader_num_workers: 0
 dataloader_pin_memory: false
