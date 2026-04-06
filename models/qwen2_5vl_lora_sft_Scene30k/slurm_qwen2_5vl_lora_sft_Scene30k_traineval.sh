@@ -277,9 +277,19 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
 
     if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
 
+        module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+        module load python/3.12 cuda/12.6 opencv/4.12.0
+        module load arrow
+        
         module load apptainer
 
-        apptainer run --nv --writable-tmpfs \
+        MPI_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcc12/openmpi/4.1.5/lib"
+        HWLOC_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/hwloc/2.9.1/lib"
+
+        # on the login node, run "apptainer overlay create --size 20000 /project/aip-wangcs/indrisch/LLaMA-Factory/apptainer/overlay.img"
+        # then run apptainer run --nv --overlay ../../apptainer/overlay.img -C -B /scratch/indrisch/ /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+        # then within it, conda install h5py -y
+        apptainer run --nv --overlay ${PROJECT_DIR}/apptainer/overlay.img \
             -C \
             -B ${PROJECT_DIR} \
             -B ${HF_HOME} \
@@ -288,8 +298,10 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
             -B /dev/shm:/dev/shm \
             -B /etc/ssl/certs:/etc/ssl/certs:ro \
             -B /etc/pki:/etc/pki:ro \
+            -B "${MPI_LIB_PATH}:${MPI_LIB_PATH}:ro" \
+            -B "${HWLOC_LIB_PATH}:${HWLOC_LIB_PATH}:ro" \
             -W ${SLURM_TMPDIR} \
-            --env LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" \
+            --env LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:/usr/lib64:/lib/x86_64-linux-gnu:/lib64:${MPI_LIB_PATH}:${HWLOC_LIB_PATH}:${LD_LIBRARY_PATH}" \
             --env HF_HUB_OFFLINE=1 \
             --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
             --env HF_HOME="${HF_HOME}" \
@@ -303,9 +315,55 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
             --env WANDB_MODE=offline \
             --env WANDB_DIR="${WANDB_DIR}" \
             --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
+            --env PYTHONNOUSERSITE=1 \
+            --env HOME="${SLURM_TMPDIR}" \
+            --env PYTHONPATH="${PROJECT_DIR}/src" \
+            --env NCCL_IB_DISABLE=0 \
+            --env NCCL_P2P_DISABLE=0 \
+            --env NCCL_DEBUG=INFO \
+            --env NCCL_SOCKET_IFNAME=^docker0,lo \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
-            pip freeze && llamafactory-cli train ${YAML_FILE}
+            llamafactory-cli train ${YAML_FILE}
+
+        # apptainer run --nv --writable-tmpfs \
+        #     -C \
+        #     -B ${PROJECT_DIR} \
+        #     -B ${HF_HOME} \
+        #     -B ${MEDIA_DIR} \
+        #     -B /home/indrisch \
+        #     -B /dev/shm:/dev/shm \
+        #     -B /etc/ssl/certs:/etc/ssl/certs:ro \
+        #     -B /etc/pki:/etc/pki:ro \
+        #     -B "${MPI_LIB_PATH}:${MPI_LIB_PATH}:ro" \
+        #     -B "${HWLOC_LIB_PATH}:${HWLOC_LIB_PATH}:ro" \
+        #     -W ${SLURM_TMPDIR} \
+        #     --env LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:/usr/lib64:/lib/x86_64-linux-gnu:/lib64:${MPI_LIB_PATH}:${HWLOC_LIB_PATH}:${LD_LIBRARY_PATH}" \
+        #     --env HF_HUB_OFFLINE=1 \
+        #     --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
+        #     --env HF_HOME="${HF_HOME}" \
+        #     --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
+        #     --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
+        #     --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
+        #     --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
+        #     --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
+        #     --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
+        #     --env FORCE_TORCHRUN=1 \
+        #     --env WANDB_MODE=offline \
+        #     --env WANDB_DIR="${WANDB_DIR}" \
+        #     --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
+        #     --env PYTHONNOUSERSITE=1 \
+        #     --env HOME="${SLURM_TMPDIR}" \
+        #     --env PYTHONPATH="${PROJECT_DIR}/src" \
+        #     --env NCCL_IB_DISABLE=0 \
+        #     --env NCCL_P2P_DISABLE=0 \
+        #     --env NCCL_DEBUG=INFO \
+        #     --env NCCL_SOCKET_IFNAME=^docker0,lo \
+        #     --pwd ${PROJECT_DIR} \
+        #     ${SIF_FILE} \
+            # llamafactory-cli train ${YAML_FILE}
+            #bash -lc "which python && which pip && pip freeze && cd '${PROJECT_DIR}' && llamafactory-cli train '${YAML_FILE}'"
+            #bash -lc "set -euo pipefail && mkdir -p /tmp/pydeps && export PYTHONPATH=/tmp/pydeps:${PROJECT_DIR}/src && ( python -c 'import h5py' >/dev/null 2>&1 || python -m pip install --no-index --find-links /scratch/indrisch/wheels/llamafactory_py311 --no-deps --target /tmp/pydeps h5py ) && python -c 'import h5py, sys; print(\"h5py\", h5py.__version__); print(sys.executable)' && cd '${PROJECT_DIR}' && llamafactory-cli train '${YAML_FILE}'"
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
