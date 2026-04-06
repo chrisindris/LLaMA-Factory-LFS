@@ -264,3 +264,42 @@ A copy of this license is made available in this container at /NGC-DL-CONTAINER-
 Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
 If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
 Running tokenizer on dataset (num_proc=16):   0%|          | 0/30238 [00:00<?, ? examples/s]
+scontrol show job 409984
+JobId=409984 JobName=trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=497484 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=TimeLimit Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:15
+   RunTime=03:00:15 TimeLimit=03:00:00 TimeMin=N/A
+   SubmitTime=2026-04-05T18:01:29 EligibleTime=2026-04-05T18:01:29
+   AccrueTime=2026-04-05T18:01:29
+   StartTime=2026-04-05T18:02:06 EndTime=2026-04-05T21:02:21 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-04-05T18:02:06 Scheduler=Backfill
+   Partition=compute AllocNode:Sid=trig-login01:3130422
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0025
+   BatchHost=trig0025
+   NumNodes=1 NumCPUs=24 NumTasks=1 CPUs/Task=24 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=24 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k/trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   SubmitLine=SBATCH --comment /opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   StdErr=
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k/out/trig0025-qwen2_5vl_lora_sft_Scene30k_traineval_debug-409984.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=24
+
+sacct -j 409984
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+409984       trillium_+ def-wangcs   03:00:15                        14:34.018 2-22:58:43      0:0 
+409984.batch      batch def-wangcs   03:00:16          0  17505844K  14:34.018 2-22:58:43     0:15 
+409984.exte+     extern def-wangcs   03:00:16                         00:00:00   00:00:00      0:0 
+

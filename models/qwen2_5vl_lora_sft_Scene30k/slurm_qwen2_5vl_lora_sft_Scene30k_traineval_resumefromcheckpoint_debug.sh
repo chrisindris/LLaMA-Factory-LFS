@@ -21,16 +21,15 @@
 #SBATCH --gpus-per-node=h100:8
 
 # ---------------------------------------------------------------------
-# ------------ qwen2_5vl_lora_sft_Scene30k_traineval_debug ------------
+# ------------ qwen2_5vl_lora_sft_Scene30k_traineval_resumefromcheckpoint_debug ------------
 # ---------------------------------------------------------------------
 #
-# This script is nearly identical to the normal qwen2_5vl_lora_sft_Scene30k_traineval.sh script, but with much leaner requests for GPUs and time.
-# We want to see if it will run at all.
+# This script is nearly identical to the normal qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh script, but here we will be using a YAML where we start from a given checkpoint.
 #
 
 # ----- HEADER: ENV VARIABLES -----
 
-EXPERIMENT_NAME="qwen2_5vl_lora_sft_Scene30k_traineval_debug"
+EXPERIMENT_NAME="qwen2_5vl_lora_sft_Scene30k_traineval_resumefromcheckpoint_debug"
 
 # --- for reading cluster-specific settings ---
 
@@ -80,7 +79,7 @@ else
 fi
 
 YAML_FILE="${PROJECT_DIR}/examples/train_lora/${CLUSTER,,}_${EXPERIMENT_NAME}.yaml"
-OUTPUT_DIR="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/Scene30k_traineval_debug"
+OUTPUT_DIR="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/Scene30k_traineval_resumefromcheckpoint_debug"
 
 if [[ -n "$1" ]]; then
     RUNNING_MODE="$1"
