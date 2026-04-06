@@ -154,6 +154,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
             --env FORCE_TORCHRUN=1 \
             --env WANDB_MODE=offline \
             --env WANDB_DIR="${WANDB_DIR}" \
+            --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
             llamafactory-cli train ${YAML_FILE}
@@ -176,6 +177,8 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         export FORCE_TORCHRUN=1
         export HF_HUB_OFFLINE=1
         export WANDB_MODE=offline
+        export WANDB_DIR="${WANDB_DIR}"
+        export WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb"
         export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
         export DISABLE_VERSION_CHECK=1
 
@@ -265,6 +268,7 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
         --env FORCE_TORCHRUN=1 \
         --env WANDB_MODE=offline \
         --env WANDB_DIR="${WANDB_DIR}" \
+        --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
         --pwd ${PROJECT_DIR} \
         ${SIF_FILE} \
         llamafactory-cli train ${YAML_FILE}
@@ -298,6 +302,7 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
             --env FORCE_TORCHRUN=1 \
             --env WANDB_MODE=offline \
             --env WANDB_DIR="${WANDB_DIR}" \
+            --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
             pip freeze && llamafactory-cli train ${YAML_FILE}
@@ -313,6 +318,8 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         export FORCE_TORCHRUN=1 
         export HF_HUB_OFFLINE=1 
         export WANDB_MODE=offline 
+        export WANDB_DIR="${WANDB_DIR}"
+        export WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb"
         export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
         export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
         # giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
