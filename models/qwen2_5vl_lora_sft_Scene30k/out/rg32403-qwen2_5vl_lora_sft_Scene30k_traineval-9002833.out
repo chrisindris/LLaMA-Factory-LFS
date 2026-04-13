@@ -1,0 +1,301 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /project/def-wangcs/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /project/def-wangcs/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: None
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /scratch/indrisch/data/
+RUNNING_MODE: VENV
+Copying venv to local storage...
+=== VENV DIAGNOSTICS ===
+HOSTNAME: rg32403
+CUDA_VISIBLE_DEVICES: 0,1,2,3
+SLURM_GPUS: 
+SLURM_JOB_GPUS: 0,1,2,3
+Mon Apr  6 11:21:50 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.211.01             Driver Version: 570.211.01     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          Off |   00000000:4E:00.0 Off |                    0 |
+| N/A   33C    P0             72W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          Off |   00000000:5F:00.0 Off |                    0 |
+| N/A   32C    P0             69W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          Off |   00000000:CB:00.0 Off |                    0 |
+| N/A   32C    P0             69W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          Off |   00000000:DB:00.0 Off |                    0 |
+| N/A   33C    P0             68W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+CUDA available: True
+Device count: 4
+=== END VENV DIAGNOSTICS ===
+/scratch/indrisch/LLaMA-Factory /scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k
+[INFO|2026-04-06 11:22:10] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: 127.0.0.1:37471
+W0406 11:22:11.915000 163756 torch/distributed/run.py:803] 
+W0406 11:22:11.915000 163756 torch/distributed/run.py:803] *****************************************
+W0406 11:22:11.915000 163756 torch/distributed/run.py:803] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0406 11:22:11.915000 163756 torch/distributed/run.py:803] *****************************************
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[WARNING|2026-04-06 11:22:21] llamafactory.extras.misc:154 >> Version checking has been disabled, may lead to unexpected behaviors.
+⚙️  Running in WANDB offline mode⚙️  Running in WANDB offline mode
+⚙️  Running in WANDB offline mode
+
+⚙️  Running in WANDB offline mode
+[2026-04-06 11:22:23,069] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-04-06 11:22:23,069] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-04-06 11:22:23,069] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-04-06 11:22:23,069] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+df: df: df: df: /localscratch/indrisch.9002833.0/.triton_cache/localscratch/indrisch.9002833.0/.triton_cache/localscratch/indrisch.9002833.0/.triton_cache/localscratch/indrisch.9002833.0/.triton_cache: No such file or directory: No such file or directory: No such file or directory
+: No such file or directory
+
+
+/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2026-04-06 11:22:26,553] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-04-06 11:22:26,553] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-04-06 11:22:26,554] [INFO] [comm.py:689:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[2026-04-06 11:22:26,554] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-04-06 11:22:26,554] [INFO] [comm.py:658:init_distributed] cdb=None
+[W406 11:22:26.080287150 ProcessGroupNCCL.cpp:924] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[W406 11:22:26.080342680 ProcessGroupNCCL.cpp:924] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[W406 11:22:26.080502290 ProcessGroupNCCL.cpp:924] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[W406 11:22:26.080519570 ProcessGroupNCCL.cpp:924] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank1]:     run_exp()
+[rank1]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank1]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank1]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 55, in _training_function
+[rank1]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank1]:                                                                              ^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/parser.py", line 250, in get_train_args
+[rank1]:     model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+[rank1]:                                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/parser.py", line 204, in _parse_train_args
+[rank1]:     return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/parser.py", line 86, in _parse_args
+[rank1]:     return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/hf_argparser.py", line 380, in parse_dict
+[rank1]:     obj = dtype(**inputs)
+[rank1]:           ^^^^^^^^^^^^^^^
+[rank1]:   File "<string>", line 147, in __init__
+[rank1]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/training_args.py", line 104, in __post_init__
+[rank1]:     BaseTrainingArguments.__post_init__(self)
+[rank1]:   File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/training_args.py", line 2058, in __post_init__
+[rank1]:     self.debug = [DebugOption(s) for s in self.debug.split()]
+[rank1]:                   ^^^^^^^^^^^^^^
+[rank1]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/enum.py", line 757, in __call__
+[rank1]:     return cls.__new__(cls, value)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/enum.py", line 1179, in __new__
+[rank1]:     raise exc
+[rank1]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/enum.py", line 1156, in __new__
+[rank1]:     result = cls._missing_(value)
+[rank1]:              ^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/generic.py", line 480, in _missing_
+[rank1]:     raise ValueError(
+[rank1]: ValueError: none is not a valid DebugOption, please select one of ['underflow_overflow', 'tpu_metrics_debug']
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank0]:     run_exp()
+[rank0]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank0]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank0]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 55, in _training_function
+[rank0]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank0]:                                                                              ^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/parser.py", line 250, in get_train_args
+[rank0]:     model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+[rank0]:                                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/parser.py", line 204, in _parse_train_args
+[rank0]:     return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/parser.py", line 86, in _parse_args
+[rank0]:     return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/hf_argparser.py", line 380, in parse_dict
+[rank0]:     obj = dtype(**inputs)
+[rank0]:           ^^^^^^^^^^^^^^^
+[rank0]:   File "<string>", line 147, in __init__
+[rank0]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/training_args.py", line 104, in __post_init__
+[rank0]:     BaseTrainingArguments.__post_init__(self)
+[rank0]:   File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/training_args.py", line 2058, in __post_init__
+[rank0]:     self.debug = [DebugOption(s) for s in self.debug.split()]
+[rank0]:                   ^^^^^^^^^^^^^^
+[rank0]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/enum.py", line 757, in __call__
+[rank0]:     return cls.__new__(cls, value)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/enum.py", line 1179, in __new__
+[rank0]:     raise exc
+[rank0]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/enum.py", line 1156, in __new__
+[rank0]:     result = cls._missing_(value)
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/generic.py", line 480, in _missing_
+[rank0]:     raise ValueError(
+[rank0]: ValueError: none is not a valid DebugOption, please select one of ['underflow_overflow', 'tpu_metrics_debug']
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank2]:     run_exp()
+[rank2]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank2]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank2]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 55, in _training_function
+[rank2]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank2]:                                                                              ^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/parser.py", line 250, in get_train_args
+[rank2]:     model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+[rank2]:                                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/parser.py", line 204, in _parse_train_args
+[rank2]:     return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/parser.py", line 86, in _parse_args
+[rank2]:     return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/hf_argparser.py", line 380, in parse_dict
+[rank2]:     obj = dtype(**inputs)
+[rank2]:           ^^^^^^^^^^^^^^^
+[rank2]:   File "<string>", line 147, in __init__
+[rank2]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/training_args.py", line 104, in __post_init__
+[rank2]:     BaseTrainingArguments.__post_init__(self)
+[rank2]:   File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/training_args.py", line 2058, in __post_init__
+[rank2]:     self.debug = [DebugOption(s) for s in self.debug.split()]
+[rank2]:                   ^^^^^^^^^^^^^^
+[rank2]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/enum.py", line 757, in __call__
+[rank2]:     return cls.__new__(cls, value)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/enum.py", line 1179, in __new__
+[rank2]:     raise exc
+[rank2]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/enum.py", line 1156, in __new__
+[rank2]:     result = cls._missing_(value)
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/generic.py", line 480, in _missing_
+[rank2]:     raise ValueError(
+[rank2]: ValueError: none is not a valid DebugOption, please select one of ['underflow_overflow', 'tpu_metrics_debug']
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank3]:     run_exp()
+[rank3]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank3]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank3]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 55, in _training_function
+[rank3]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank3]:                                                                              ^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/parser.py", line 250, in get_train_args
+[rank3]:     model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+[rank3]:                                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/parser.py", line 204, in _parse_train_args
+[rank3]:     return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/parser.py", line 86, in _parse_args
+[rank3]:     return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/hf_argparser.py", line 380, in parse_dict
+[rank3]:     obj = dtype(**inputs)
+[rank3]:           ^^^^^^^^^^^^^^^
+[rank3]:   File "<string>", line 147, in __init__
+[rank3]:   File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/hparams/training_args.py", line 104, in __post_init__
+[rank3]:     BaseTrainingArguments.__post_init__(self)
+[rank3]:   File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/training_args.py", line 2058, in __post_init__
+[rank3]:     self.debug = [DebugOption(s) for s in self.debug.split()]
+[rank3]:                   ^^^^^^^^^^^^^^
+[rank3]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/enum.py", line 757, in __call__
+[rank3]:     return cls.__new__(cls, value)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/enum.py", line 1179, in __new__
+[rank3]:     raise exc
+[rank3]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/enum.py", line 1156, in __new__
+[rank3]:     result = cls._missing_(value)
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/generic.py", line 480, in _missing_
+[rank3]:     raise ValueError(
+[rank3]: ValueError: none is not a valid DebugOption, please select one of ['underflow_overflow', 'tpu_metrics_debug']
+[rank0]:[W406 11:22:28.645634227 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank0]:[W406 11:22:28.204015933 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+[rank1]:[W406 11:22:28.213485911 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+[rank2]:[W406 11:22:28.216399778 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+[rank3]:[W406 11:22:28.250166920 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+W0406 11:22:28.962000 163756 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 163760 closing signal SIGTERM
+W0406 11:22:28.963000 163756 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 163761 closing signal SIGTERM
+W0406 11:22:28.964000 163756 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 163762 closing signal SIGTERM
+E0406 11:22:29.159000 163756 torch/distributed/elastic/multiprocessing/api.py:882] failed (exitcode: 1) local_rank: 0 (pid: 163759) of binary: /scratch/indrisch/venv_llamafactory_cu126/bin/python
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu126/bin/torchrun", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 357, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 936, in main
+    run(args)
+  File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 927, in run
+    elastic_launch(
+  File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 156, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 293, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-04-06_11:22:28
+  host      : rg32403.rorqual.calcul.quebec
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 163759)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+[W406 11:22:29.823998696 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu126/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', '127.0.0.1', '--master_port', '37471', '/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/scratch/indrisch//LLaMA-Factory/examples/train_lora/rorqual_qwen2_5vl_lora_sft_Scene30k_traineval.yaml']' returned non-zero exit status 1.
+[W406 11:22:29.429633958 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
