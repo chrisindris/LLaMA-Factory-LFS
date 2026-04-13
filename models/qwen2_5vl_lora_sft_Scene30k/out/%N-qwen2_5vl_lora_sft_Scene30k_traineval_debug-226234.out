@@ -1,0 +1,86 @@
+
+======== GPU REPORT ========
+
+==============NVSMI LOG==============
+
+Timestamp                                 : Mon Apr 13 13:05:49 2026
+Driver Version                            : 570.211.01
+CUDA Version                              : 12.8
+
+Attached GPUs                             : 4
+GPU 00000000:4E:00.0
+    Accounting Mode                       : Enabled
+    Accounting Mode Buffer Size           : 4000
+    Accounted Processes
+        Process ID                        : 4110089
+            GPU Utilization               : 0 %
+            Memory Utilization            : 0 %
+            Max memory usage              : 1820 MiB
+            Time                          : 29489 ms
+            Is Running                    : 0
+
+GPU 00000000:5F:00.0
+    Accounting Mode                       : Enabled
+    Accounting Mode Buffer Size           : 4000
+    Accounted Processes
+        Process ID                        : 4110090
+            GPU Utilization               : 0 %
+            Memory Utilization            : 0 %
+            Max memory usage              : 1924 MiB
+            Time                          : 29545 ms
+            Is Running                    : 0
+
+GPU 00000000:CB:00.0
+    Accounting Mode                       : Enabled
+    Accounting Mode Buffer Size           : 4000
+    Accounted Processes
+        Process ID                        : 4110091
+            GPU Utilization               : 0 %
+            Memory Utilization            : 0 %
+            Max memory usage              : 1924 MiB
+            Time                          : 28961 ms
+            Is Running                    : 0
+
+GPU 00000000:DB:00.0
+    Accounting Mode                       : Enabled
+    Accounting Mode Buffer Size           : 4000
+    Accounted Processes
+        Process ID                        : 4110092
+            GPU Utilization               : 0 %
+            Memory Utilization            : 0 %
+            Max memory usage              : 1820 MiB
+            Time                          : 29569 ms
+            Is Running                    : 0
+
+Mon Apr 13 13:05:50 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.211.01             Driver Version: 570.211.01     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   41C    P0            104W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   40C    P0             95W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   42C    P0            126W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   41C    P0            103W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+

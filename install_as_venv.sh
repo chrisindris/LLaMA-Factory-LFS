@@ -3,7 +3,7 @@
 # ensure that cuda 12.8 is being used; ln -sfn /usr/local/cuda-12.8 /etc/alternatives/cuda
 
 usage() {
-    echo "Usage: $0 (RORQUAL|FIR|NIBI|NARVAL|TRILLIUM)"
+    echo "Usage: $0 (RORQUAL|FIR|NIBI|NARVAL|TRILLIUM|TAMIA)"
     exit 1
 }
 
@@ -11,7 +11,7 @@ if [ $# -ne 1 ]; then
     usage
 fi
 
-if [ $1 != "RORQUAL" ] && [ $1 != "FIR" ] && [ $1 != "NIBI" ] && [ $1 != "NARVAL" ] && [ $1 != "TRILLIUM" ]; then
+if [ $1 != "RORQUAL" ] && [ $1 != "FIR" ] && [ $1 != "NIBI" ] && [ $1 != "NARVAL" ] && [ $1 != "TRILLIUM" ] && [ $1 != "TAMIA" ]; then
     usage
 fi
 
@@ -50,7 +50,14 @@ export WANDB_MODE=offline
 export WANDB_DIR="${PROJECT_DIR}/wandb/" 
 export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
 
-pushd /scratch/indrisch/
+
+if [ $1 == "TAMIA" ]; then
+    pushd /scratch/i/indrisch/
+else 
+    pushd /scratch/indrisch/
+fi
+
+
 module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
 module load python/3.12 cuda/12.6 opencv/4.12.0
 module load arrow

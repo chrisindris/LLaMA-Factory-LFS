@@ -4,7 +4,7 @@
 # RUN AS: ./get_data.sh <cluster_name>
 
 export HF_DEBUG=1
-export HF_TOKEN=$(cat /home/indrisch/TOKENS/cvis-tmu-organization-token.txt)
+export HF_TOKEN=$(cat /home/i/indrisch/TOKENS/cvis-tmu-organization-token.txt)
 
 # vLLM models typically come from the huggingface hub. 
 module load python/3.12 git-lfs/3.4.0 && git-lfs install
@@ -51,9 +51,9 @@ hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a
 # hf download --max-workers=4 FacebookAI/roberta-large-mnli # for MNLI, deterimining the X portion of the reranker.
 # hf download --max-workers=4 MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli # for MNLI, deterimining the X portion of the reranker.
 
-# hf download --max-workers=4 Video-R1/Video-R1-7B # Video-R1 is Qwen2.5VL-7B that was used by Video-R1.
-#hf download --max-workers=4 Video-R1/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
-#hf download --max-workers=4 Qwen/Qwen3-VL-8B-Instruct # The Qwen3 counterpart to Qwen2.5VL-7B, which is what we have been using.
+hf download --max-workers=4 Video-R1/Video-R1-7B # Video-R1 is Qwen2.5VL-7B that was used by Video-R1.
+hf download --max-workers=4 Video-R1/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
+hf download --max-workers=4 Qwen/Qwen3-VL-8B-Instruct # The Qwen3 counterpart to Qwen2.5VL-7B, which is what we have been using.
 #hf download --max-workers=4 Qwen/Qwen3-VL-8B-Thinking # Same as above but with extra thinking capabilities.
 #hf download --max-workers=8 zd11024/Video3D-LLM-LLaVA-Qwen-Uniform-32 # Resulting model of Video3D-LLM
 # hf download --max-workers=4 Video-R1/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
@@ -68,7 +68,7 @@ hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_R12C12F12X62_400steps
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
-# hf download --max-workers=12 cvis-tmu/easyr1_verl_sif --repo-type=dataset
+hf download --max-workers=12 cvis-tmu/easyr1_verl_sif --repo-type=dataset
 hf download --max-workers=12 cvis-tmu/compute_canada_sif_files llamafactory.sif --repo-type=dataset --revision 382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62 --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa --repo-type=dataset
@@ -101,7 +101,7 @@ hf download --max-workers=12 cvis-tmu/compute_canada_sif_files llamafactory.sif 
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # scene30k
-# hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
+hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
 
 deactivate
 rm -r temp_env

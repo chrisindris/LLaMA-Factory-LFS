@@ -57,6 +57,9 @@ elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
 elif [[ "$PS1" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "$PS1" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
     CLUSTER="KILLARNEY"
     RUNNING_MODE="VENV" # running mode for KILLARNEY
+elif [[ "$PS1" == *"tamia"* ]] || [[ "$HOSTNAME" == *"tamia"* ]] || [[ "$PS1" == *"tg"* ]] || [[ "$HOSTNAME" == *"tg"* ]]; then
+    CLUSTER="TAMIA"
+    RUNNING_MODE="APPTAINER"
 else
     echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to RORQUAL."
     CLUSTER="RORQUAL"

@@ -1,0 +1,183 @@
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: None
+SIF_FILE: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /scratch/i/indrisch/data/
+RUNNING_MODE: VENV
+Copying venv to local storage...
+=== VENV DIAGNOSTICS ===
+HOSTNAME: tg11306.tamia.ecpia.ca
+CUDA_VISIBLE_DEVICES: 0,1,2,3
+SLURM_GPUS: 
+SLURM_JOB_GPUS: 0,1,2,3
+Mon Apr 13 12:48:45 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.211.01             Driver Version: 570.211.01     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   47C    P0             75W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   46C    P0             73W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   46C    P0             73W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   46C    P0             71W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+CUDA available: True
+Device count: 4
+=== END VENV DIAGNOSTICS ===
+/scratch/i/indrisch//LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_Scene30k/slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh: line 503: pushd: /scratch/i/indrisch/LLaMA-Factory: No such file or directory
+[INFO|2026-04-13 12:48:59] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: 127.0.0.1:36389
+W0413 12:49:00.524000 1670397 torch/distributed/run.py:851] 
+W0413 12:49:00.524000 1670397 torch/distributed/run.py:851] *****************************************
+W0413 12:49:00.524000 1670397 torch/distributed/run.py:851] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0413 12:49:00.524000 1670397 torch/distributed/run.py:851] *****************************************
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 182, in <module>
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 182, in <module>
+    from llamafactory.train.tuner import run_exp  # use absolute import
+    ^^^^^^^    ^from llamafactory.train.tuner import run_exp  # use absolute import^
+^^^^ ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 23, in <module>
+^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 23, in <module>
+    from ..data import get_template_and_fix_tokenizer
+    from ..data import get_template_and_fix_tokenizer
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/__init__.py", line 22, in <module>
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/__init__.py", line 22, in <module>
+    from .loader import get_dataset
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/loader.py", line 24, in <module>
+    from .loader import get_dataset
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/loader.py", line 24, in <module>
+    from .converter import align_dataset
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/converter.py", line 22, in <module>
+    from .converter import align_dataset
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/converter.py", line 22, in <module>
+    from .data_packing.h5py_data import retrieve_image
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/data_packing/h5py_data.py", line 19, in <module>
+    from .data_packing.h5py_data import retrieve_image
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/data_packing/h5py_data.py", line 19, in <module>
+    import h5py
+ModuleNotFoundError:     No module named 'h5py'import h5py
+
+ModuleNotFoundError: No module named 'h5py'
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 182, in <module>
+    from llamafactory.train.tuner import run_exp  # use absolute import
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 23, in <module>
+    from ..data import get_template_and_fix_tokenizer
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/__init__.py", line 22, in <module>
+    from .loader import get_dataset
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/loader.py", line 24, in <module>
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 182, in <module>
+    from .converter import align_dataset
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/converter.py", line 22, in <module>
+    from llamafactory.train.tuner import run_exp  # use absolute import
+    from .data_packing.h5py_data import retrieve_image
+     File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/data_packing/h5py_data.py", line 19, in <module>
+ ^^^^^^^    ^import h5py^
+^^^ModuleNotFoundError^: ^No module named 'h5py'^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 23, in <module>
+    from ..data import get_template_and_fix_tokenizer
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/__init__.py", line 22, in <module>
+    from .loader import get_dataset
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/loader.py", line 24, in <module>
+    from .converter import align_dataset
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/converter.py", line 22, in <module>
+    from .data_packing.h5py_data import retrieve_image
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/data/data_packing/h5py_data.py", line 19, in <module>
+    import h5py
+ModuleNotFoundError: No module named 'h5py'
+W0413 12:49:10.569000 1670397 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 1670400 closing signal SIGTERM
+W0413 12:49:10.572000 1670397 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 1670402 closing signal SIGTERM
+E0413 12:49:10.651000 1670397 torch/distributed/elastic/multiprocessing/api.py:986] failed (exitcode: 1) local_rank: 1 (pid: 1670401) of binary: /scratch/i/indrisch/venv_llamafactory_cu126/bin/python
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/venv_llamafactory_cu126/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 362, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 990, in main
+    run(args)
+  File "/scratch/i/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 981, in run
+    elastic_launch(
+  File "/scratch/i/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 170, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 317, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+[1]:
+  time      : 2026-04-13_12:49:10
+  host      : tg11306.tamia.ecpia.ca
+  rank      : 3 (local_rank: 3)
+  exitcode  : 1 (pid: 1670403)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+[2]:
+  time      : 2026-04-13_12:49:10
+  host      : tg11306.tamia.ecpia.ca
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 1670400)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+[3]:
+  time      : 2026-04-13_12:49:10
+  host      : tg11306.tamia.ecpia.ca
+  rank      : 2 (local_rank: 2)
+  exitcode  : -15 (pid: 1670402)
+  error_file: <N/A>
+  traceback : Signal 15 (SIGTERM) received by PID 1670402
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-04-13_12:49:10
+  host      : tg11306.tamia.ecpia.ca
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 1670401)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/venv_llamafactory_cu126/bin/llamafactory-cli", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', '127.0.0.1', '--master_port', '36389', '/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py', '/scratch/i/indrisch//LLaMA-Factory-LFS/examples/train_lora/tamia_qwen2_5vl_lora_sft_Scene30k_traineval_debug.yaml']' returned non-zero exit status 1.
