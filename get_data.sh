@@ -69,6 +69,7 @@ hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # hf download --max-workers=12 cvis-tmu/easyr1_verl_sif --repo-type=dataset
+hf download --max-workers=12 cvis-tmu/compute_canada_sif_files llamafactory.sif --repo-type=dataset --revision 382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62 --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa --repo-type=dataset
 

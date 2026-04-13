@@ -5,6 +5,7 @@
 
 # Misc large folders
 None/
+apptainer/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

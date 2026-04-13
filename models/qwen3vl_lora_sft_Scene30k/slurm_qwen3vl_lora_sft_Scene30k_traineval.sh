@@ -186,28 +186,66 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
     fi
 elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
 
-    apptainer run --nv --writable-tmpfs \
-        -B /scratch/indrisch/LLaMA-Factory \
-        -B /home/indrisch \
-        -B /dev/shm:/dev/shm \
-        -B /etc/ssl/certs:/etc/ssl/certs:ro \
-        -B /etc/pki:/etc/pki:ro \
-        -W ${SLURM_TMPDIR} \
-        --env HF_HUB_OFFLINE=1 \
-        --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
-        --env HF_HOME="${HF_HOME}" \
-        --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
-        --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
-        --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
-        --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
-        --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
-        --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
-        --env FORCE_TORCHRUN=1 \
-        --env WANDB_MODE=offline \
-        --env WANDB_DIR="${WANDB_DIR}" \
-        --pwd ${PROJECT_DIR} \
-        ${SIF_FILE} \
+    if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
+
+        apptainer run --nv --overlay /scratch/indrisch/apptainer-overlay.img \
+            -B /scratch/indrisch/LLaMA-Factory \
+            -B /home/indrisch \
+            -B /dev/shm:/dev/shm \
+            -B /etc/ssl/certs:/etc/ssl/certs:ro \
+            -B /etc/pki:/etc/pki:ro \
+            -W ${SLURM_TMPDIR} \
+            --env HF_HUB_OFFLINE=1 \
+            --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
+            --env HF_HOME="${HF_HOME}" \
+            --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
+            --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
+            --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
+            --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
+            --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
+            --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
+            --env FORCE_TORCHRUN=1 \
+            --env WANDB_MODE=offline \
+            --env WANDB_DIR="${WANDB_DIR}" \
+            --pwd ${PROJECT_DIR} \
+            ${SIF_FILE} \
+            llamafactory-cli train ${YAML_FILE}
+
+    elif [[ "$RUNNING_MODE" == "VENV" ]]; then
+
+        module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+        module load python/3.12 cuda/12.6 opencv/4.12.0
+        module load arrow
+
+        echo "Copying venv to local storage..."
+        cp -a /scratch/indrisch/venv_llamafactory_cu126 ${SLURM_TMPDIR}/venv_llamafactory_cu126
+        source ${SLURM_TMPDIR}/venv_llamafactory_cu126/bin/activate
+
+        export PYTHONUNBUFFERED=1
+        export NCCL_DEBUG=INFO
+        export TORCH_CUDA_ARCH_LIST="9.0"
+        export FORCE_TORCHRUN=1
+        export HF_HUB_OFFLINE=1
+        export WANDB_MODE=offline
+        export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
+        export DISABLE_VERSION_CHECK=1
+
+        echo "=== VENV DIAGNOSTICS ==="
+        echo "HOSTNAME: $(hostname)"
+        echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
+        echo "SLURM_GPUS: $SLURM_GPUS"
+        echo "SLURM_JOB_GPUS: $SLURM_JOB_GPUS"
+        nvidia-smi
+        python3 -c "import torch; print('CUDA available:', torch.cuda.is_available()); print('Device count:', torch.cuda.device_count())"
+        echo "=== END VENV DIAGNOSTICS ==="
+
+        pushd /scratch/indrisch/LLaMA-Factory
         llamafactory-cli train ${YAML_FILE}
+
+    else
+        echo "Invalid running mode: $RUNNING_MODE"
+        exit 1
+    fi
 
 elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
 

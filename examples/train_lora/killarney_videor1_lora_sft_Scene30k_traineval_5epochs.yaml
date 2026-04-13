@@ -1,5 +1,5 @@
 ### model
-model_name_or_path: Qwen/Qwen2.5-VL-7B-Instruct
+model_name_or_path: Video-R1/Video-R1-7B
 cache_dir: /scratch/indrisch/huggingface/hub
 image_max_pixels: 65536
 video_max_pixels: 16384
@@ -14,18 +14,18 @@ lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
 dataset: Scene30k
-media_dir: /project/def-wangcs/shared/data/
-template: qwen2_vl
+media_dir: /project/aip-wangcs/shared/data/
+template: videor1
 cutoff_len: 131072 # max len of the model
 overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
-preprocessing_num_workers: 32
+preprocessing_num_workers: 16 # reduced from 32 to 16 to avoid memory issues with large multimodal data; adjust based on your system's capabilities
 dataloader_num_workers: 4
 dataloader_prefetch_factor: 1 # when dataloader_num_workers > 0, this argument specifies the number of batches loaded in advance by each worker. Setting it to 1 can help reduce memory usage when working with large multimodal data.
 dataloader_pin_memory: false
 low_cpu_mem_usage: true
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft/Scene30k_traineval_debug
+output_dir: saves/videor1/lora/sft/Scene30k_traineval_5epochs
 logging_steps: 10
 save_steps: 426 # save after every 1.00 Scene30k epochs
 plot_loss: true
@@ -37,7 +37,7 @@ report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 per_device_train_batch_size: 4
 gradient_accumulation_steps: 4
 learning_rate: 1.0e-4
-num_train_epochs: 1.0
+num_train_epochs: 5.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
@@ -45,10 +45,10 @@ ddp_timeout: 180000000
 resume_from_checkpoint: null
 
 # debugging level
-debug: underflow_overflow
-log_level: debug
-log_level_replica: debug
-print_param_status: true
+# debug: none # to turn off debugging, we must simply comment out this line.
+log_level: passive
+log_level_replica: passive
+print_param_status: false
 
 # acceleration
 flash_attn: fa2

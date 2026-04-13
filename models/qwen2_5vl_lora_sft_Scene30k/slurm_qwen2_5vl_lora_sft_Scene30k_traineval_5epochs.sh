@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --output=out/%N-qwen2_5vl_lora_sft_Scene30k_traineval-%j.out
+#SBATCH --output=out/%N-qwen2_5vl_lora_sft_Scene30k_traineval_5epochs-%j.out
 
 # RORQUAL:
 #SBATCH --cpus-per-task=64
-#SBATCH --time=0-18:00:00
+#SBATCH --time=2-00:00:00
 #SBATCH --mem=485G
 #SBATCH --gpus-per-node=h100:4
 
@@ -21,16 +21,16 @@
 #SBATCH --gpus-per-node=h100:8
 
 # ---------------------------------------------------------------------
-# ------------ qwen2_5vl_lora_sft_Scene30k_traineval ------------------
+# ------------ qwen2_5vl_lora_sft_Scene30k_traineval_5epochs ----------
 # ---------------------------------------------------------------------
 #
-# This script will train (SFT, LoRA) a Qwen2.5VL model on the Scene30k dataset.
+# This script will train (SFT, LoRA) a Qwen2.5VL model on the Scene30k dataset for 5 epochs.
 #
 #
 
 # ----- HEADER: ENV VARIABLES -----
 
-EXPERIMENT_NAME="qwen2_5vl_lora_sft_Scene30k_traineval"
+EXPERIMENT_NAME="qwen2_5vl_lora_sft_Scene30k_traineval_5epochs"
 
 # --- for reading cluster-specific settings ---
 
@@ -80,7 +80,7 @@ else
 fi
 
 YAML_FILE="${PROJECT_DIR}/examples/train_lora/${CLUSTER,,}_${EXPERIMENT_NAME}.yaml"
-OUTPUT_DIR="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/Scene30k_traineval"
+OUTPUT_DIR="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/Scene30k_traineval_5epochs"
 
 if [[ -n "$1" ]]; then
     RUNNING_MODE="$1"
@@ -130,6 +130,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         echo "=== END APPTAINER GPU SANITY TEST (exit code: $?) ==="
 
         apptainer run --nv --writable-tmpfs \
+            -C \
             ${NVIDIA_BIND_ARGS} \
             -B ${PROJECT_DIR} \
             -B ${HF_HOME} \
@@ -154,7 +155,6 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
             --env FORCE_TORCHRUN=1 \
             --env WANDB_MODE=offline \
             --env WANDB_DIR="${WANDB_DIR}" \
-            --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
             llamafactory-cli train ${YAML_FILE}
@@ -177,8 +177,6 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         export FORCE_TORCHRUN=1
         export HF_HUB_OFFLINE=1
         export WANDB_MODE=offline
-        export WANDB_DIR="${WANDB_DIR}"
-        export WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb"
         export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
         export DISABLE_VERSION_CHECK=1
 
@@ -245,33 +243,74 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         echo "Invalid running mode: $RUNNING_MODE"
         exit 1
     fi
+
 elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
 
-    apptainer run --nv --writable-tmpfs \
-        -B ${PROJECT_DIR} \
-        -B ${HF_HOME} \
-        -B ${MEDIA_DIR} \
-        -B /home/indrisch \
-        -B /dev/shm:/dev/shm \
-        -B /etc/ssl/certs:/etc/ssl/certs:ro \
-        -B /etc/pki:/etc/pki:ro \
-        -W ${SLURM_TMPDIR} \
-        --env HF_HUB_OFFLINE=1 \
-        --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
-        --env HF_HOME="${HF_HOME}" \
-        --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
-        --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
-        --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
-        --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
-        --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
-        --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
-        --env FORCE_TORCHRUN=1 \
-        --env WANDB_MODE=offline \
-        --env WANDB_DIR="${WANDB_DIR}" \
-        --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
-        --pwd ${PROJECT_DIR} \
-        ${SIF_FILE} \
+    if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
+
+        module load apptainer
+
+        apptainer run --nv --overlay /scratch/indrisch/apptainer-overlay.img \
+            -B ${PROJECT_DIR} \
+            -B ${HF_HOME} \
+            -B ${MEDIA_DIR} \
+            -B /home/indrisch \
+            -B /dev/shm:/dev/shm \
+            -B /etc/ssl/certs:/etc/ssl/certs:ro \
+            -B /etc/pki:/etc/pki:ro \
+            -W ${SLURM_TMPDIR} \
+            --env PYTHONNOUSERSITE=1 \
+            --env HF_HUB_OFFLINE=1 \
+            --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
+            --env HF_HOME="${HF_HOME}" \
+            --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
+            --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
+            --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
+            --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
+            --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
+            --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
+            --env FORCE_TORCHRUN=1 \
+            --env WANDB_MODE=offline \
+            --env WANDB_DIR="${WANDB_DIR}" \
+            --pwd ${PROJECT_DIR} \
+            ${SIF_FILE} \
+            llamafactory-cli train ${YAML_FILE}
+
+    elif [[ "$RUNNING_MODE" == "VENV" ]]; then
+
+        module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+        module load python/3.12 cuda/12.6 opencv/4.12.0
+        module load arrow
+
+        echo "Copying venv to local storage..."
+        cp -a /scratch/indrisch/venv_llamafactory_cu126 ${SLURM_TMPDIR}/venv_llamafactory_cu126
+        source ${SLURM_TMPDIR}/venv_llamafactory_cu126/bin/activate
+
+        export PYTHONUNBUFFERED=1
+        export NCCL_DEBUG=INFO
+        export TORCH_CUDA_ARCH_LIST="9.0"
+        export FORCE_TORCHRUN=1
+        export HF_HUB_OFFLINE=1
+        export WANDB_MODE=offline
+        export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
+        export DISABLE_VERSION_CHECK=1
+
+        echo "=== VENV DIAGNOSTICS ==="
+        echo "HOSTNAME: $(hostname)"
+        echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
+        echo "SLURM_GPUS: $SLURM_GPUS"
+        echo "SLURM_JOB_GPUS: $SLURM_JOB_GPUS"
+        nvidia-smi
+        python3 -c "import torch; print('CUDA available:', torch.cuda.is_available()); print('Device count:', torch.cuda.device_count())"
+        echo "=== END VENV DIAGNOSTICS ==="
+
+        pushd /scratch/indrisch/LLaMA-Factory
         llamafactory-cli train ${YAML_FILE}
+
+    else
+        echo "Invalid running mode: $RUNNING_MODE"
+        exit 1
+    fi
 
 elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
 
