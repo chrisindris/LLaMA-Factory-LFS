@@ -3,6 +3,8 @@ model_name_or_path: Qwen/Qwen3-VL-8B-Instruct
 cache_dir: /scratch/indrisch/huggingface/hub
 image_max_pixels: 65536
 video_max_pixels: 16384
+use_fast_tokenizer: false
+# giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
 trust_remote_code: true
 
 ### method
