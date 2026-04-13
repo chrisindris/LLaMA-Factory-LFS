@@ -16,3 +16,10 @@ On Killarney, you can load the same modules and then source
 `/project/aip-wangcs/indrisch/venv_llamafactory_cu126/bin/activate`
 
 If you want to pip install for a venv, on the login node it is preferred to use ComputeCanada's existing wheels, which you can search using the "avail_wheels" command, or simply by passing the "--no-index" flag to pip install. However, note that this is not required; on the login nodes, which have internet access, you can pip install as normal.
+# the llamafactory-cli options
+
+Whether we use an APPTAINER container or a python venv VENV, we will use the same llamafactory-cli command. 
+
+To find information about this command, you can run `llamafactory-cli --help` or `llamafactory-cli <subcommand> --help` for more specific information about a subcommand as long as your venv is activated, or you can simply consult the following file:
+
+/scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck/trig0003-helloworld-69038.out
