@@ -44,6 +44,7 @@ warmup_ratio: 0.1
 bf16: true
 ddp_timeout: 180000000
 # resume_from_checkpoint: /scratch/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-500
+# When this points to a local checkpoint folder with trainer_state.json, parser can auto-enable full resume.
 adapter_name_or_path: /scratch/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_traineval/checkpoint-500/
 
 # debugging level
