@@ -166,6 +166,6 @@ python upload_model_checkpoint.py \
   --repo-id "cvis-tmu/$ID" \
   --commit-message "$COMMIT_MESSAGE"
 
-wandb sync "$WANDB_LOG" --id "$ID"
+# wandb sync "$WANDB_LOG" --id "$ID"
 
 deactivate
