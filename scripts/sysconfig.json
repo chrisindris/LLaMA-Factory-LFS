@@ -84,7 +84,7 @@
         "LLAMAFACTORY_HOME": "/project/aip-wangcs/indrisch/LLaMA-Factory",
         "SIF_FILE": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif",
         "media_dir": "/project/aip-wangcs/shared/data/",
-        "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/"
+        "VENV_DATASET_UPLOAD": "/project/aip-wangcs/indrisch/venv_llamafactory_cu126/"
     },
     "TAMIA": {
         "HF_HOME": "/project/aip-wangcs/indrisch/huggingface/hub",

@@ -2060,6 +2060,7 @@ PLUGINS = {
     "qwen2_audio": Qwen2AudioPlugin,
     "qwen2_omni": Qwen2OmniPlugin,
     "qwen2_vl": Qwen2VLPlugin,
+    "qwen3_5": Qwen3VLPlugin,
     "qwen3_vl": Qwen3VLPlugin,
     "videor1": Videor1Plugin,
     "video_llava": VideoLlavaPlugin,

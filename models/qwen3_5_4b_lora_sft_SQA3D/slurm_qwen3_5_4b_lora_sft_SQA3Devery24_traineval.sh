@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --output=out/%N-qwen3vl_lora_sft_SQA3Devery24_traineval-%j.out
+#SBATCH --output=out/%N-qwen3_5_4b_lora_sft_SQA3Devery24_traineval-%j.out
 
 # RORQUAL:
 #SBATCH --cpus-per-task=64
@@ -22,7 +22,7 @@
 
 # ----- HEADER: ENV VARIABLES -----
 
-EXPERIMENT_NAME="qwen3vl_lora_sft_SQA3Devery24_traineval"
+EXPERIMENT_NAME="qwen3_5_4b_lora_sft_SQA3Devery24_traineval"
 
 # --- for reading cluster-specific settings ---
 
@@ -71,7 +71,7 @@ else
 fi
 
 YAML_FILE="${PROJECT_DIR}/examples/train_lora/${CLUSTER,,}_${EXPERIMENT_NAME}.yaml"
-OUTPUT_DIR="${PROJECT_DIR}/saves/qwen3vl-8b/lora/sft/SQA3Devery24_traineval"
+OUTPUT_DIR="${PROJECT_DIR}/saves/qwen3_5-4b/lora/sft/SQA3Devery24_traineval"
 
 if [[ -z "$RUNNING_MODE" ]]; then
     RUNNING_MODE=$1
@@ -133,7 +133,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         pushd /project/aip-wangcs/indrisch/LLaMA-Factory
         llamafactory-cli train ${YAML_FILE}
         # llamafactory-cli train \
-        #     --model_name_or_path Qwen/Qwen3-VL-8B-Instruct \
+        #     --model_name_or_path Qwen/Qwen3.5-4B \
         #     --no_use_fast_tokenizer \
         #     --cache_dir /scratch/indrisch/huggingface/hub \
         #     --image_max_pixels 65536 \
@@ -146,13 +146,13 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         #     --lora_target all \
         #     --dataset SQA3Devery24 \
         #     --media_dir /project/aip-wangcs/shared/data/ \
-        #     --template qwen3_vl \
+        #     --template qwen3_5 \
         #     --cutoff_len 131072 \
         #     --preprocessing_num_workers 32 \
         #     --dataloader_num_workers 0 \
         #     --dataloader_pin_memory false \
         #     --low_cpu_mem_usage \
-        #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3vl-8b/lora/sft/SQA3Devery24_traineval \
+        #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-4b/lora/sft/SQA3Devery24_traineval \
         #     --logging_steps 10 \
         #     --save_steps 200 \
         #     --plot_loss \
@@ -213,17 +213,31 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
 
     if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
 
+        module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+        module load python/3.12 cuda/12.6 opencv/4.12.0
+        module load arrow
+        
         module load apptainer
 
-        apptainer run --nv --writable-tmpfs \
+        MPI_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcc12/openmpi/4.1.5/lib"
+        HWLOC_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/hwloc/2.9.1/lib"
+
+        # on the login node, run "apptainer overlay create --size 20000 /project/aip-wangcs/indrisch/LLaMA-Factory/apptainer/overlay.img"
+        # then run apptainer run --nv --overlay ../../apptainer/overlay.img -C -B /scratch/indrisch/ /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+        # then within it, conda install h5py -y
+        apptainer run --nv --overlay ${PROJECT_DIR}/apptainer/overlay.img \
             -C \
             -B ${PROJECT_DIR} \
+            -B ${HF_HOME} \
+            -B ${MEDIA_DIR} \
             -B /home/indrisch \
             -B /dev/shm:/dev/shm \
             -B /etc/ssl/certs:/etc/ssl/certs:ro \
             -B /etc/pki:/etc/pki:ro \
+            -B "${MPI_LIB_PATH}:${MPI_LIB_PATH}:ro" \
+            -B "${HWLOC_LIB_PATH}:${HWLOC_LIB_PATH}:ro" \
             -W ${SLURM_TMPDIR} \
-            --env LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" \
+            --env LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:/usr/lib64:/lib/x86_64-linux-gnu:/lib64:${MPI_LIB_PATH}:${HWLOC_LIB_PATH}:${LD_LIBRARY_PATH}" \
             --env HF_HUB_OFFLINE=1 \
             --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
             --env HF_HOME="${HF_HOME}" \
@@ -236,10 +250,18 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
             --env FORCE_TORCHRUN=1 \
             --env WANDB_MODE=offline \
             --env WANDB_DIR="${WANDB_DIR}" \
+            --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
+            --env PYTHONNOUSERSITE=1 \
+            --env HOME="${SLURM_TMPDIR}" \
+            --env PYTHONPATH="${PROJECT_DIR}/src" \
+            --env NCCL_IB_DISABLE=0 \
+            --env NCCL_P2P_DISABLE=0 \
+            --env NCCL_DEBUG=INFO \
+            --env NCCL_SOCKET_IFNAME=^docker0,lo \
             --env DISABLE_VERSION_CHECK=1 \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
-            pip freeze && llamafactory-cli train ${YAML_FILE}
+            llamafactory-cli train ${YAML_FILE}
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
@@ -258,7 +280,7 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         pushd /project/aip-wangcs/indrisch/LLaMA-Factory
         llamafactory-cli train ${YAML_FILE}
         # llamafactory-cli train \
-        #     --model_name_or_path Qwen/Qwen3-VL-8B-Instruct \
+        #     --model_name_or_path Qwen/Qwen3.5-4B \
         #     --no_use_fast_tokenizer \
         #     --cache_dir /scratch/indrisch/huggingface/hub \
         #     --image_max_pixels 65536 \
@@ -271,13 +293,13 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         #     --lora_target all \
         #     --dataset SQA3Devery24 \
         #     --media_dir /project/aip-wangcs/shared/data/ \
-        #     --template qwen3_vl \
+        #     --template qwen3_5 \
         #     --cutoff_len 131072 \
         #     --preprocessing_num_workers 32 \
         #     --dataloader_num_workers 0 \
         #     --dataloader_pin_memory false \
         #     --low_cpu_mem_usage \
-        #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3vl-8b/lora/sft/SQA3Devery24_traineval \
+        #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-4b/lora/sft/SQA3Devery24_traineval \
         #     --logging_steps 10 \
         #     --save_steps 200 \
         #     --plot_loss \

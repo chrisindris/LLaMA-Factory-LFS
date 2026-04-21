@@ -15,7 +15,7 @@ lora_target: all
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
 dataset: Scene30k
 media_dir: /project/def-wangcs/shared/data/
-template: videor1sft
+template: videor1
 cutoff_len: 131072 # max len of the model
 overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
 preprocessing_num_workers: 32
