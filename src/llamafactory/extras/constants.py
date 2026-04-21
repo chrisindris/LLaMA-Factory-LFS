@@ -3277,6 +3277,22 @@ register_model_group(
 
 register_model_group(
     models={
+        "Qwen3.5-4B": {
+            DownloadSource.DEFAULT: "Qwen/Qwen3.5-4B",
+            DownloadSource.MODELSCOPE: "Qwen/Qwen3.5-4B",
+        },
+        "Qwen3.5-9B": {
+            DownloadSource.DEFAULT: "Qwen/Qwen3.5-9B",
+            DownloadSource.MODELSCOPE: "Qwen/Qwen3.5-9B",
+        },
+    },
+    template="qwen3_5",
+    multimodal=True,
+)
+
+
+register_model_group(
+    models={
         "Seed-Coder-8B-Base": {
             DownloadSource.DEFAULT: "ByteDance-Seed/Seed-Coder-8B-Base",
             DownloadSource.MODELSCOPE: "ByteDance-Seed/Seed-Coder-8B-Base",

@@ -13,7 +13,8 @@
         "LLAMAFACTORY_HOME": "/scratch/indrisch/LLaMA-Factory/",
         "SIF_FILE": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif",
         "media_dir": "/scratch/indrisch/data/",
-        "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/"
+        "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/",
+        "VENV_LLAMAFACTORY": "/scratch/indrisch/venv_llamafactory_cu126/"
     },
     "FIR": {
         "HF_HOME": "/scratch/indrisch/huggingface/hub",
@@ -26,7 +27,8 @@
         "VLLM_CACHE_ROOT": "/scratch/indrisch/.cache/vllm",
         "BEST_GPU": "h100",
         "FLASHINFER_WORKSPACE_BASE": "/scratch/indrisch/",
-        "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/"
+        "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/",
+        "VENV_LLAMAFACTORY": "/scratch/indrisch/venv_llamafactory_cu126/"
     },
     "NIBI": {
         "HF_HOME": "/scratch/indrisch/huggingface/hub",
@@ -39,7 +41,8 @@
         "VLLM_CACHE_ROOT": "/scratch/indrisch/.cache/vllm",
         "BEST_GPU": "h100",
         "FLASHINFER_WORKSPACE_BASE": "/scratch/indrisch/",
-        "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/"
+        "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/",
+        "VENV_LLAMAFACTORY": "/scratch/indrisch/venv_llamafactory_cu126/"
     },
     "NARVAL": {
         "HF_HOME": "/project/def-wangcs/indrisch/huggingface/hub",
@@ -52,7 +55,8 @@
         "VLLM_CACHE_ROOT": "/project/def-wangcs/indrisch/.cache/vllm",
         "BEST_GPU": "a100",
         "FLASHINFER_WORKSPACE_BASE": "/project/def-wangcs/indrisch/",
-        "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/"
+        "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/",
+        "VENV_LLAMAFACTORY": "/scratch/indrisch/venv_llamafactory_cu126/"
     },
     "TRILLIUM": {
         "HF_HOME": "/scratch/indrisch/huggingface/hub",
@@ -68,7 +72,8 @@
         "LLAMAFACTORY_HOME": "/scratch/indrisch/LLaMA-Factory/",
         "SIF_FILE": "/scratch/indrisch/easyr1_verl_sif/llamafactory.sif",
         "media_dir": "/project/def-wangcs/shared/data/",
-        "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/"
+        "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/",
+        "VENV_LLAMAFACTORY": "/scratch/indrisch/venv_llamafactory_cu126/"
     },
     "KILLARNEY": {
         "HF_HOME": "/scratch/indrisch/huggingface/hub",
@@ -84,7 +89,8 @@
         "LLAMAFACTORY_HOME": "/project/aip-wangcs/indrisch/LLaMA-Factory",
         "SIF_FILE": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif",
         "media_dir": "/project/aip-wangcs/shared/data/",
-        "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/"
+        "VENV_DATASET_UPLOAD": "/project/aip-wangcs/indrisch/venv_llamafactory_cu126/",
+        "VENV_LLAMAFACTORY": "/project/aip-wangcs/indrisch/venv_llamafactory_cu126/"
     },
     "TAMIA": {
         "HF_HOME": "/project/aip-wangcs/indrisch/huggingface/hub",
@@ -100,6 +106,7 @@
         "LLAMAFACTORY_HOME": "None",
         "SIF_FILE": "None",
         "media_dir": "None",
-        "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/"
+        "VENV_DATASET_UPLOAD": "/project/aip-wangcs/indrisch/venv_llamafactory_cu126/",
+        "VENV_LLAMAFACTORY": "/project/aip-wangcs/indrisch/venv_llamafactory_cu126/"
     }
 }

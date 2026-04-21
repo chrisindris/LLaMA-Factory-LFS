@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --output=out/%N-qwen2_5vl_lora_sft_Scene30k_traineval_5epochs-%j.out
+#SBATCH --output=out/%N-qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs-%j.out
 
 # RORQUAL:
 #SBATCH --cpus-per-task=64
@@ -21,16 +21,16 @@
 #SBATCH --gpus-per-node=h100:8
 
 # ---------------------------------------------------------------------
-# ------------ qwen2_5vl_lora_sft_Scene30k_traineval_5epochs ----------
+# ------------ qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs ----------
 # ---------------------------------------------------------------------
 #
-# This script will train (SFT, LoRA) a Qwen2.5VL model on the Scene30k dataset for 5 epochs.
+# This script will train (SFT, LoRA) a Qwen3.5 model on the Scene30k dataset for 5 epochs.
 #
 #
 
 # ----- HEADER: ENV VARIABLES -----
 
-EXPERIMENT_NAME="qwen2_5vl_lora_sft_Scene30k_traineval_5epochs"
+EXPERIMENT_NAME="qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs"
 
 # --- for reading cluster-specific settings ---
 
@@ -80,7 +80,7 @@ else
 fi
 
 YAML_FILE="${PROJECT_DIR}/examples/train_lora/${CLUSTER,,}_${EXPERIMENT_NAME}.yaml"
-OUTPUT_DIR="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/Scene30k_traineval_5epochs"
+OUTPUT_DIR="${PROJECT_DIR}/saves/qwen3_5-4b/lora/sft/Scene30k_traineval_5epochs"
 
 if [[ -n "$1" ]]; then
     RUNNING_MODE="$1"
@@ -192,7 +192,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         pushd /scratch/indrisch/LLaMA-Factory
         llamafactory-cli train ${YAML_FILE}
         # llamafactory-cli train \
-        #     --model_name_or_path Qwen/Qwen3-VL-8B-Instruct \
+        #     --model_name_or_path Qwen/Qwen3.5-4B \
         #     --no_use_fast_tokenizer \
         #     --cache_dir /scratch/indrisch/huggingface/hub \
         #     --image_max_pixels 65536 \
@@ -205,13 +205,13 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         #     --lora_target all \
         #     --dataset Scene30k \
         #     --media_dir /project/aip-wangcs/shared/data/ \
-        #     --template qwen3_vl \
+        #     --template qwen3_5 \
         #     --cutoff_len 131072 \
         #     --preprocessing_num_workers 32 \
         #     --dataloader_num_workers 0 \
         #     --dataloader_pin_memory false \
         #     --low_cpu_mem_usage \
-        #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3vl-8b/lora/sft/Scene30k_traineval \
+        #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-4b/lora/sft/Scene30k_traineval \
         #     --logging_steps 10 \
         #     --save_steps 200 \
         #     --plot_loss \
@@ -277,7 +277,7 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
             llamafactory-cli train ${YAML_FILE}
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
-
+    
         module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
         module load python/3.12 cuda/12.6 opencv/4.12.0
         module load arrow
@@ -361,48 +361,10 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
             --env NCCL_P2P_DISABLE=0 \
             --env NCCL_DEBUG=INFO \
             --env NCCL_SOCKET_IFNAME=^docker0,lo \
+            --env DISABLE_VERSION_CHECK=1 \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
             llamafactory-cli train ${YAML_FILE}
-
-        # apptainer run --nv --writable-tmpfs \
-        #     -C \
-        #     -B ${PROJECT_DIR} \
-        #     -B ${HF_HOME} \
-        #     -B ${MEDIA_DIR} \
-        #     -B /home/indrisch \
-        #     -B /dev/shm:/dev/shm \
-        #     -B /etc/ssl/certs:/etc/ssl/certs:ro \
-        #     -B /etc/pki:/etc/pki:ro \
-        #     -B "${MPI_LIB_PATH}:${MPI_LIB_PATH}:ro" \
-        #     -B "${HWLOC_LIB_PATH}:${HWLOC_LIB_PATH}:ro" \
-        #     -W ${SLURM_TMPDIR} \
-        #     --env LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:/usr/lib64:/lib/x86_64-linux-gnu:/lib64:${MPI_LIB_PATH}:${HWLOC_LIB_PATH}:${LD_LIBRARY_PATH}" \
-        #     --env HF_HUB_OFFLINE=1 \
-        #     --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
-        #     --env HF_HOME="${HF_HOME}" \
-        #     --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
-        #     --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
-        #     --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
-        #     --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
-        #     --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
-        #     --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
-        #     --env FORCE_TORCHRUN=1 \
-        #     --env WANDB_MODE=offline \
-        #     --env WANDB_DIR="${WANDB_DIR}" \
-        #     --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
-        #     --env PYTHONNOUSERSITE=1 \
-        #     --env HOME="${SLURM_TMPDIR}" \
-        #     --env PYTHONPATH="${PROJECT_DIR}/src" \
-        #     --env NCCL_IB_DISABLE=0 \
-        #     --env NCCL_P2P_DISABLE=0 \
-        #     --env NCCL_DEBUG=INFO \
-        #     --env NCCL_SOCKET_IFNAME=^docker0,lo \
-        #     --pwd ${PROJECT_DIR} \
-        #     ${SIF_FILE} \
-            # llamafactory-cli train ${YAML_FILE}
-            #bash -lc "which python && which pip && pip freeze && cd '${PROJECT_DIR}' && llamafactory-cli train '${YAML_FILE}'"
-            #bash -lc "set -euo pipefail && mkdir -p /tmp/pydeps && export PYTHONPATH=/tmp/pydeps:${PROJECT_DIR}/src && ( python -c 'import h5py' >/dev/null 2>&1 || python -m pip install --no-index --find-links /scratch/indrisch/wheels/llamafactory_py311 --no-deps --target /tmp/pydeps h5py ) && python -c 'import h5py, sys; print(\"h5py\", h5py.__version__); print(sys.executable)' && cd '${PROJECT_DIR}' && llamafactory-cli train '${YAML_FILE}'"
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
@@ -415,15 +377,13 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         export FORCE_TORCHRUN=1 
         export HF_HUB_OFFLINE=1 
         export WANDB_MODE=offline 
-        export WANDB_DIR="${WANDB_DIR}"
-        export WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb"
         export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
         export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
         # giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
         pushd /project/aip-wangcs/indrisch/LLaMA-Factory
         llamafactory-cli train ${YAML_FILE}
         # llamafactory-cli train \
-        #     --model_name_or_path Qwen/Qwen3-VL-8B-Instruct \
+        #     --model_name_or_path Qwen/Qwen3.5-4B \
         #     --no_use_fast_tokenizer \
         #     --cache_dir /scratch/indrisch/huggingface/hub \
         #     --image_max_pixels 65536 \
@@ -436,13 +396,13 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         #     --lora_target all \
         #     --dataset Scene30k \
         #     --media_dir /project/aip-wangcs/shared/data/ \
-        #     --template qwen3_vl \
+        #     --template qwen3_5 \
         #     --cutoff_len 131072 \
         #     --preprocessing_num_workers 32 \
         #     --dataloader_num_workers 0 \
         #     --dataloader_pin_memory false \
         #     --low_cpu_mem_usage \
-        #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3vl-8b/lora/sft/Scene30k_traineval \
+        #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-4b/lora/sft/Scene30k_traineval \
         #     --logging_steps 10 \
         #     --save_steps 200 \
         #     --plot_loss \

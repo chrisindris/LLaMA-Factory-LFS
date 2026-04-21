@@ -236,6 +236,7 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
             --env FORCE_TORCHRUN=1 \
             --env WANDB_MODE=offline \
             --env WANDB_DIR="${WANDB_DIR}" \
+            --env DISABLE_VERSION_CHECK=1 \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
             pip freeze && llamafactory-cli train ${YAML_FILE}

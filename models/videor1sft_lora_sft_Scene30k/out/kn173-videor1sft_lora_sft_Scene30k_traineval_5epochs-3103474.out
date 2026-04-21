@@ -1,0 +1,331 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: None
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+RUNNING_MODE: VENV
+/project/aip-wangcs/indrisch/LLaMA-Factory /project/aip-wangcs/indrisch/LLaMA-Factory/models/videor1sft_lora_sft_Scene30k
+[INFO|2026-04-18 15:18:10] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: 127.0.0.1:55003
+W0418 15:18:12.392000 1583241 torch/distributed/run.py:803] 
+W0418 15:18:12.392000 1583241 torch/distributed/run.py:803] *****************************************
+W0418 15:18:12.392000 1583241 torch/distributed/run.py:803] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0418 15:18:12.392000 1583241 torch/distributed/run.py:803] *****************************************
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+⚙️  Running in WANDB offline mode
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[WARNING|2026-04-18 15:18:19] llamafactory.extras.misc:154 >> Version checking has been disabled, may lead to unexpected behaviors.
+⚙️  Running in WANDB offline mode
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+⚙️  Running in WANDB offline mode
+⚙️  Running in WANDB offline mode
+[2026-04-18 15:18:20,353] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+df: /tmp/.triton_cache: No such file or directory
+[2026-04-18 15:18:20,566] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-04-18 15:18:20,920] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-04-18 15:18:20,920] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2026-04-18 15:18:23,016] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-04-18 15:18:23,016] [INFO] [comm.py:689:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[2026-04-18 15:18:23,017] [INFO] [comm.py:658:init_distributed] cdb=None
+[W418 15:18:23.414582222 ProcessGroupNCCL.cpp:924] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[W418 15:18:23.414749994 ProcessGroupNCCL.cpp:924] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[2026-04-18 15:18:23,294] [INFO] [comm.py:658:init_distributed] cdb=None
+[W418 15:18:23.691738681 ProcessGroupNCCL.cpp:924] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[2026-04-18 15:18:23,351] [INFO] [comm.py:658:init_distributed] cdb=None
+[W418 15:18:23.748998486 ProcessGroupNCCL.cpp:924] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[INFO|2026-04-18 15:18:23] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2026-04-18 15:18:23] llamafactory.hparams.parser:529 >> Process rank: 0, world size: 4, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|hub.py:421] 2026-04-18 15:18:23,666 >> Offline mode: forcing local_files_only=True
+[INFO|2026-04-18 15:18:23] llamafactory.hparams.parser:529 >> Process rank: 3, world size: 4, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+[INFO|tokenization_utils_base.py:1949] 2026-04-18 15:18:23,683 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2026-04-18 15:18:23,694 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2026-04-18 15:18:23,694 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2026-04-18 15:18:23,694 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2026-04-18 15:18:23,694 >> loading file added_tokens.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/added_tokens.json
+[INFO|tokenization_utils_base.py:2095] 2026-04-18 15:18:23,694 >> loading file special_tokens_map.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/special_tokens_map.json
+[INFO|tokenization_utils_base.py:2095] 2026-04-18 15:18:23,694 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2026-04-18 15:18:23,694 >> loading file chat_template.jinja from cache at None
+[INFO|2026-04-18 15:18:23] llamafactory.hparams.parser:529 >> Process rank: 1, world size: 4, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-04-18 15:18:23] llamafactory.hparams.parser:529 >> Process rank: 2, world size: 4, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[INFO|tokenization_utils_base.py:2364] 2026-04-18 15:18:24,030 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|hub.py:421] 2026-04-18 15:18:24,030 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:421] 2026-04-18 15:18:24,032 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:316] 2026-04-18 15:18:24,035 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2026-04-18 15:18:24,039 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/preprocessor_config.json
+[INFO|image_processing_base.py:316] 2026-04-18 15:18:24,043 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2026-04-18 15:18:24,045 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/preprocessor_config.json
+[WARNING|logging.py:328] 2026-04-18 15:18:24,046 >> `use_fast` is set to `True` but the image processor class does not have a fast version.  Falling back to the slow version.
+[INFO|hub.py:421] 2026-04-18 15:18:24,046 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:421] 2026-04-18 15:18:24,047 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:316] 2026-04-18 15:18:24,048 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2026-04-18 15:18:24,051 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/preprocessor_config.json
+[INFO|image_processing_base.py:316] 2026-04-18 15:18:24,051 >> Offline mode: forcing local_files_only=True
+`use_fast` is set to `True` but the image processor class does not have a fast version.  Falling back to the slow version.
+[INFO|image_processing_base.py:383] 2026-04-18 15:18:24,054 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Video-R1--Qwen2.5-VL-7B-COT-SFT/snapshots/f71f0f1e22c015007fccd080eef87824fe292a10/preprocessor_config.json
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 98, in load_tokenizer
+[rank0]:     processor = AutoProcessor.from_pretrained(
+[rank0]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/processing_auto.py", line 396, in from_pretrained
+[rank0]:     return processor_class.from_pretrained(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1394, in from_pretrained
+[rank0]:     args = cls._get_arguments_from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1453, in _get_arguments_from_pretrained
+[rank0]:     args.append(attribute_class.from_pretrained(pretrained_model_name_or_path, **kwargs))
+[rank0]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/image_processing_auto.py", line 622, in from_pretrained
+[rank0]:     raise ValueError(
+[rank0]: ValueError: Unrecognized image processor in Video-R1/Qwen2.5-VL-7B-COT-SFT. Should have a `image_processor_type` key in its preprocessor_config.json of config.json, or one of the following `model_type` keys in its config.json: aimv2, aimv2_vision_model, align, aria, beit, bit, blip, blip-2, bridgetower, chameleon, chinese_clip, clip, clipseg, cohere2_vision, conditional_detr, convnext, convnextv2, cvt, data2vec-vision, deepseek_vl, deepseek_vl_hybrid, deformable_detr, deit, depth_anything, depth_pro, deta, detr, dinat, dinov2, dinov3_vit, donut-swin, dpt, edgetam, efficientformer, efficientloftr, efficientnet, eomt, flava, focalnet, fuyu, gemma3, gemma3n, git, glm4v, glpn, got_ocr2, grounding-dino, groupvit, hiera, idefics, idefics2, idefics3, ijepa, imagegpt, instructblip, instructblipvideo, janus, kosmos-2, kosmos-2.5, layoutlmv2, layoutlmv3, levit, lfm2_vl, lightglue, llama4, llava, llava_next, llava_next_video, llava_onevision, mask2former, maskformer, metaclip_2, mgp-str, mistral3, mlcd, mllama, mm-grounding-dino, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, nat, nougat, oneformer, ovis2, owlv2, owlvit, paligemma, perceiver, perception_lm, phi4_multimodal, pix2struct, pixtral, poolformer, prompt_depth_anything, pvt, pvt_v2, qwen2_5_vl, qwen2_vl, qwen3_vl, regnet, resnet, rt_detr, sam, sam2, sam_hq, segformer, seggpt, shieldgemma2, siglip, siglip2, smolvlm, superglue, superpoint, swiftformer, swin, swin2sr, swinv2, table-transformer, textnet, timesformer, timm_wrapper, tvlt, tvp, udop, upernet, van, videomae, vilt, vipllava, vit, vit_hybrid, vit_mae, vit_msn, vitmatte, xclip, yolos, zoedepth
+
+[rank0]: During handling of the above exception, another exception occurred:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank0]:     run_exp()
+[rank0]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank0]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank0]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank0]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank0]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank0]:     tokenizer_module = load_tokenizer(model_args)
+[rank0]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 104, in load_tokenizer
+[rank0]:     processor = AutoProcessor.from_pretrained(
+[rank0]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/processing_auto.py", line 396, in from_pretrained
+[rank0]:     return processor_class.from_pretrained(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1394, in from_pretrained
+[rank0]:     args = cls._get_arguments_from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1453, in _get_arguments_from_pretrained
+[rank0]:     args.append(attribute_class.from_pretrained(pretrained_model_name_or_path, **kwargs))
+[rank0]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/image_processing_auto.py", line 622, in from_pretrained
+[rank0]:     raise ValueError(
+[rank0]: ValueError: Unrecognized image processor in Video-R1/Qwen2.5-VL-7B-COT-SFT. Should have a `image_processor_type` key in its preprocessor_config.json of config.json, or one of the following `model_type` keys in its config.json: aimv2, aimv2_vision_model, align, aria, beit, bit, blip, blip-2, bridgetower, chameleon, chinese_clip, clip, clipseg, cohere2_vision, conditional_detr, convnext, convnextv2, cvt, data2vec-vision, deepseek_vl, deepseek_vl_hybrid, deformable_detr, deit, depth_anything, depth_pro, deta, detr, dinat, dinov2, dinov3_vit, donut-swin, dpt, edgetam, efficientformer, efficientloftr, efficientnet, eomt, flava, focalnet, fuyu, gemma3, gemma3n, git, glm4v, glpn, got_ocr2, grounding-dino, groupvit, hiera, idefics, idefics2, idefics3, ijepa, imagegpt, instructblip, instructblipvideo, janus, kosmos-2, kosmos-2.5, layoutlmv2, layoutlmv3, levit, lfm2_vl, lightglue, llama4, llava, llava_next, llava_next_video, llava_onevision, mask2former, maskformer, metaclip_2, mgp-str, mistral3, mlcd, mllama, mm-grounding-dino, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, nat, nougat, oneformer, ovis2, owlv2, owlvit, paligemma, perceiver, perception_lm, phi4_multimodal, pix2struct, pixtral, poolformer, prompt_depth_anything, pvt, pvt_v2, qwen2_5_vl, qwen2_vl, qwen3_vl, regnet, resnet, rt_detr, sam, sam2, sam_hq, segformer, seggpt, shieldgemma2, siglip, siglip2, smolvlm, superglue, superpoint, swiftformer, swin, swin2sr, swinv2, table-transformer, textnet, timesformer, timm_wrapper, tvlt, tvp, udop, upernet, van, videomae, vilt, vipllava, vit, vit_hybrid, vit_mae, vit_msn, vitmatte, xclip, yolos, zoedepth
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 98, in load_tokenizer
+[rank3]:     processor = AutoProcessor.from_pretrained(
+[rank3]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/processing_auto.py", line 396, in from_pretrained
+[rank3]:     return processor_class.from_pretrained(
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1394, in from_pretrained
+[rank3]:     args = cls._get_arguments_from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1453, in _get_arguments_from_pretrained
+[rank3]:     args.append(attribute_class.from_pretrained(pretrained_model_name_or_path, **kwargs))
+[rank3]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/image_processing_auto.py", line 622, in from_pretrained
+[rank3]:     raise ValueError(
+[rank3]: ValueError: Unrecognized image processor in Video-R1/Qwen2.5-VL-7B-COT-SFT. Should have a `image_processor_type` key in its preprocessor_config.json of config.json, or one of the following `model_type` keys in its config.json: aimv2, aimv2_vision_model, align, aria, beit, bit, blip, blip-2, bridgetower, chameleon, chinese_clip, clip, clipseg, cohere2_vision, conditional_detr, convnext, convnextv2, cvt, data2vec-vision, deepseek_vl, deepseek_vl_hybrid, deformable_detr, deit, depth_anything, depth_pro, deta, detr, dinat, dinov2, dinov3_vit, donut-swin, dpt, edgetam, efficientformer, efficientloftr, efficientnet, eomt, flava, focalnet, fuyu, gemma3, gemma3n, git, glm4v, glpn, got_ocr2, grounding-dino, groupvit, hiera, idefics, idefics2, idefics3, ijepa, imagegpt, instructblip, instructblipvideo, janus, kosmos-2, kosmos-2.5, layoutlmv2, layoutlmv3, levit, lfm2_vl, lightglue, llama4, llava, llava_next, llava_next_video, llava_onevision, mask2former, maskformer, metaclip_2, mgp-str, mistral3, mlcd, mllama, mm-grounding-dino, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, nat, nougat, oneformer, ovis2, owlv2, owlvit, paligemma, perceiver, perception_lm, phi4_multimodal, pix2struct, pixtral, poolformer, prompt_depth_anything, pvt, pvt_v2, qwen2_5_vl, qwen2_vl, qwen3_vl, regnet, resnet, rt_detr, sam, sam2, sam_hq, segformer, seggpt, shieldgemma2, siglip, siglip2, smolvlm, superglue, superpoint, swiftformer, swin, swin2sr, swinv2, table-transformer, textnet, timesformer, timm_wrapper, tvlt, tvp, udop, upernet, van, videomae, vilt, vipllava, vit, vit_hybrid, vit_mae, vit_msn, vitmatte, xclip, yolos, zoedepth
+
+[rank3]: During handling of the above exception, another exception occurred:
+
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank3]:     run_exp()
+[rank3]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank3]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank3]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank3]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank3]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank3]:     tokenizer_module = load_tokenizer(model_args)
+[rank3]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 104, in load_tokenizer
+[rank3]:     processor = AutoProcessor.from_pretrained(
+[rank3]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/processing_auto.py", line 396, in from_pretrained
+[rank3]:     return processor_class.from_pretrained(
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1394, in from_pretrained
+[rank3]:     args = cls._get_arguments_from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1453, in _get_arguments_from_pretrained
+[rank3]:     args.append(attribute_class.from_pretrained(pretrained_model_name_or_path, **kwargs))
+[rank3]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/image_processing_auto.py", line 622, in from_pretrained
+[rank3]:     raise ValueError(
+[rank3]: ValueError: Unrecognized image processor in Video-R1/Qwen2.5-VL-7B-COT-SFT. Should have a `image_processor_type` key in its preprocessor_config.json of config.json, or one of the following `model_type` keys in its config.json: aimv2, aimv2_vision_model, align, aria, beit, bit, blip, blip-2, bridgetower, chameleon, chinese_clip, clip, clipseg, cohere2_vision, conditional_detr, convnext, convnextv2, cvt, data2vec-vision, deepseek_vl, deepseek_vl_hybrid, deformable_detr, deit, depth_anything, depth_pro, deta, detr, dinat, dinov2, dinov3_vit, donut-swin, dpt, edgetam, efficientformer, efficientloftr, efficientnet, eomt, flava, focalnet, fuyu, gemma3, gemma3n, git, glm4v, glpn, got_ocr2, grounding-dino, groupvit, hiera, idefics, idefics2, idefics3, ijepa, imagegpt, instructblip, instructblipvideo, janus, kosmos-2, kosmos-2.5, layoutlmv2, layoutlmv3, levit, lfm2_vl, lightglue, llama4, llava, llava_next, llava_next_video, llava_onevision, mask2former, maskformer, metaclip_2, mgp-str, mistral3, mlcd, mllama, mm-grounding-dino, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, nat, nougat, oneformer, ovis2, owlv2, owlvit, paligemma, perceiver, perception_lm, phi4_multimodal, pix2struct, pixtral, poolformer, prompt_depth_anything, pvt, pvt_v2, qwen2_5_vl, qwen2_vl, qwen3_vl, regnet, resnet, rt_detr, sam, sam2, sam_hq, segformer, seggpt, shieldgemma2, siglip, siglip2, smolvlm, superglue, superpoint, swiftformer, swin, swin2sr, swinv2, table-transformer, textnet, timesformer, timm_wrapper, tvlt, tvp, udop, upernet, van, videomae, vilt, vipllava, vit, vit_hybrid, vit_mae, vit_msn, vitmatte, xclip, yolos, zoedepth
+`use_fast` is set to `True` but the image processor class does not have a fast version.  Falling back to the slow version.
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 98, in load_tokenizer
+[rank1]:     processor = AutoProcessor.from_pretrained(
+[rank1]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/processing_auto.py", line 396, in from_pretrained
+[rank1]:     return processor_class.from_pretrained(
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1394, in from_pretrained
+[rank1]:     args = cls._get_arguments_from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1453, in _get_arguments_from_pretrained
+[rank1]:     args.append(attribute_class.from_pretrained(pretrained_model_name_or_path, **kwargs))
+[rank1]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/image_processing_auto.py", line 622, in from_pretrained
+[rank1]:     raise ValueError(
+[rank1]: ValueError: Unrecognized image processor in Video-R1/Qwen2.5-VL-7B-COT-SFT. Should have a `image_processor_type` key in its preprocessor_config.json of config.json, or one of the following `model_type` keys in its config.json: aimv2, aimv2_vision_model, align, aria, beit, bit, blip, blip-2, bridgetower, chameleon, chinese_clip, clip, clipseg, cohere2_vision, conditional_detr, convnext, convnextv2, cvt, data2vec-vision, deepseek_vl, deepseek_vl_hybrid, deformable_detr, deit, depth_anything, depth_pro, deta, detr, dinat, dinov2, dinov3_vit, donut-swin, dpt, edgetam, efficientformer, efficientloftr, efficientnet, eomt, flava, focalnet, fuyu, gemma3, gemma3n, git, glm4v, glpn, got_ocr2, grounding-dino, groupvit, hiera, idefics, idefics2, idefics3, ijepa, imagegpt, instructblip, instructblipvideo, janus, kosmos-2, kosmos-2.5, layoutlmv2, layoutlmv3, levit, lfm2_vl, lightglue, llama4, llava, llava_next, llava_next_video, llava_onevision, mask2former, maskformer, metaclip_2, mgp-str, mistral3, mlcd, mllama, mm-grounding-dino, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, nat, nougat, oneformer, ovis2, owlv2, owlvit, paligemma, perceiver, perception_lm, phi4_multimodal, pix2struct, pixtral, poolformer, prompt_depth_anything, pvt, pvt_v2, qwen2_5_vl, qwen2_vl, qwen3_vl, regnet, resnet, rt_detr, sam, sam2, sam_hq, segformer, seggpt, shieldgemma2, siglip, siglip2, smolvlm, superglue, superpoint, swiftformer, swin, swin2sr, swinv2, table-transformer, textnet, timesformer, timm_wrapper, tvlt, tvp, udop, upernet, van, videomae, vilt, vipllava, vit, vit_hybrid, vit_mae, vit_msn, vitmatte, xclip, yolos, zoedepth
+
+[rank1]: During handling of the above exception, another exception occurred:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank1]:     run_exp()
+[rank1]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank1]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank1]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank1]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank1]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank1]:     tokenizer_module = load_tokenizer(model_args)
+[rank1]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 104, in load_tokenizer
+[rank1]:     processor = AutoProcessor.from_pretrained(
+[rank1]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/processing_auto.py", line 396, in from_pretrained
+[rank1]:     return processor_class.from_pretrained(
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1394, in from_pretrained
+[rank1]:     args = cls._get_arguments_from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1453, in _get_arguments_from_pretrained
+[rank1]:     args.append(attribute_class.from_pretrained(pretrained_model_name_or_path, **kwargs))
+[rank1]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/image_processing_auto.py", line 622, in from_pretrained
+[rank1]:     raise ValueError(
+[rank1]: ValueError: Unrecognized image processor in Video-R1/Qwen2.5-VL-7B-COT-SFT. Should have a `image_processor_type` key in its preprocessor_config.json of config.json, or one of the following `model_type` keys in its config.json: aimv2, aimv2_vision_model, align, aria, beit, bit, blip, blip-2, bridgetower, chameleon, chinese_clip, clip, clipseg, cohere2_vision, conditional_detr, convnext, convnextv2, cvt, data2vec-vision, deepseek_vl, deepseek_vl_hybrid, deformable_detr, deit, depth_anything, depth_pro, deta, detr, dinat, dinov2, dinov3_vit, donut-swin, dpt, edgetam, efficientformer, efficientloftr, efficientnet, eomt, flava, focalnet, fuyu, gemma3, gemma3n, git, glm4v, glpn, got_ocr2, grounding-dino, groupvit, hiera, idefics, idefics2, idefics3, ijepa, imagegpt, instructblip, instructblipvideo, janus, kosmos-2, kosmos-2.5, layoutlmv2, layoutlmv3, levit, lfm2_vl, lightglue, llama4, llava, llava_next, llava_next_video, llava_onevision, mask2former, maskformer, metaclip_2, mgp-str, mistral3, mlcd, mllama, mm-grounding-dino, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, nat, nougat, oneformer, ovis2, owlv2, owlvit, paligemma, perceiver, perception_lm, phi4_multimodal, pix2struct, pixtral, poolformer, prompt_depth_anything, pvt, pvt_v2, qwen2_5_vl, qwen2_vl, qwen3_vl, regnet, resnet, rt_detr, sam, sam2, sam_hq, segformer, seggpt, shieldgemma2, siglip, siglip2, smolvlm, superglue, superpoint, swiftformer, swin, swin2sr, swinv2, table-transformer, textnet, timesformer, timm_wrapper, tvlt, tvp, udop, upernet, van, videomae, vilt, vipllava, vit, vit_hybrid, vit_mae, vit_msn, vitmatte, xclip, yolos, zoedepth
+`use_fast` is set to `True` but the image processor class does not have a fast version.  Falling back to the slow version.
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 98, in load_tokenizer
+[rank2]:     processor = AutoProcessor.from_pretrained(
+[rank2]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/processing_auto.py", line 396, in from_pretrained
+[rank2]:     return processor_class.from_pretrained(
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1394, in from_pretrained
+[rank2]:     args = cls._get_arguments_from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1453, in _get_arguments_from_pretrained
+[rank2]:     args.append(attribute_class.from_pretrained(pretrained_model_name_or_path, **kwargs))
+[rank2]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/image_processing_auto.py", line 622, in from_pretrained
+[rank2]:     raise ValueError(
+[rank2]: ValueError: Unrecognized image processor in Video-R1/Qwen2.5-VL-7B-COT-SFT. Should have a `image_processor_type` key in its preprocessor_config.json of config.json, or one of the following `model_type` keys in its config.json: aimv2, aimv2_vision_model, align, aria, beit, bit, blip, blip-2, bridgetower, chameleon, chinese_clip, clip, clipseg, cohere2_vision, conditional_detr, convnext, convnextv2, cvt, data2vec-vision, deepseek_vl, deepseek_vl_hybrid, deformable_detr, deit, depth_anything, depth_pro, deta, detr, dinat, dinov2, dinov3_vit, donut-swin, dpt, edgetam, efficientformer, efficientloftr, efficientnet, eomt, flava, focalnet, fuyu, gemma3, gemma3n, git, glm4v, glpn, got_ocr2, grounding-dino, groupvit, hiera, idefics, idefics2, idefics3, ijepa, imagegpt, instructblip, instructblipvideo, janus, kosmos-2, kosmos-2.5, layoutlmv2, layoutlmv3, levit, lfm2_vl, lightglue, llama4, llava, llava_next, llava_next_video, llava_onevision, mask2former, maskformer, metaclip_2, mgp-str, mistral3, mlcd, mllama, mm-grounding-dino, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, nat, nougat, oneformer, ovis2, owlv2, owlvit, paligemma, perceiver, perception_lm, phi4_multimodal, pix2struct, pixtral, poolformer, prompt_depth_anything, pvt, pvt_v2, qwen2_5_vl, qwen2_vl, qwen3_vl, regnet, resnet, rt_detr, sam, sam2, sam_hq, segformer, seggpt, shieldgemma2, siglip, siglip2, smolvlm, superglue, superpoint, swiftformer, swin, swin2sr, swinv2, table-transformer, textnet, timesformer, timm_wrapper, tvlt, tvp, udop, upernet, van, videomae, vilt, vipllava, vit, vit_hybrid, vit_mae, vit_msn, vitmatte, xclip, yolos, zoedepth
+
+[rank2]: During handling of the above exception, another exception occurred:
+
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank2]:     run_exp()
+[rank2]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank2]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank2]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank2]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank2]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank2]:     tokenizer_module = load_tokenizer(model_args)
+[rank2]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 104, in load_tokenizer
+[rank2]:     processor = AutoProcessor.from_pretrained(
+[rank2]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/processing_auto.py", line 396, in from_pretrained
+[rank2]:     return processor_class.from_pretrained(
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1394, in from_pretrained
+[rank2]:     args = cls._get_arguments_from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/processing_utils.py", line 1453, in _get_arguments_from_pretrained
+[rank2]:     args.append(attribute_class.from_pretrained(pretrained_model_name_or_path, **kwargs))
+[rank2]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/auto/image_processing_auto.py", line 622, in from_pretrained
+[rank2]:     raise ValueError(
+[rank2]: ValueError: Unrecognized image processor in Video-R1/Qwen2.5-VL-7B-COT-SFT. Should have a `image_processor_type` key in its preprocessor_config.json of config.json, or one of the following `model_type` keys in its config.json: aimv2, aimv2_vision_model, align, aria, beit, bit, blip, blip-2, bridgetower, chameleon, chinese_clip, clip, clipseg, cohere2_vision, conditional_detr, convnext, convnextv2, cvt, data2vec-vision, deepseek_vl, deepseek_vl_hybrid, deformable_detr, deit, depth_anything, depth_pro, deta, detr, dinat, dinov2, dinov3_vit, donut-swin, dpt, edgetam, efficientformer, efficientloftr, efficientnet, eomt, flava, focalnet, fuyu, gemma3, gemma3n, git, glm4v, glpn, got_ocr2, grounding-dino, groupvit, hiera, idefics, idefics2, idefics3, ijepa, imagegpt, instructblip, instructblipvideo, janus, kosmos-2, kosmos-2.5, layoutlmv2, layoutlmv3, levit, lfm2_vl, lightglue, llama4, llava, llava_next, llava_next_video, llava_onevision, mask2former, maskformer, metaclip_2, mgp-str, mistral3, mlcd, mllama, mm-grounding-dino, mobilenet_v1, mobilenet_v2, mobilevit, mobilevitv2, nat, nougat, oneformer, ovis2, owlv2, owlvit, paligemma, perceiver, perception_lm, phi4_multimodal, pix2struct, pixtral, poolformer, prompt_depth_anything, pvt, pvt_v2, qwen2_5_vl, qwen2_vl, qwen3_vl, regnet, resnet, rt_detr, sam, sam2, sam_hq, segformer, seggpt, shieldgemma2, siglip, siglip2, smolvlm, superglue, superpoint, swiftformer, swin, swin2sr, swinv2, table-transformer, textnet, timesformer, timm_wrapper, tvlt, tvp, udop, upernet, van, videomae, vilt, vipllava, vit, vit_hybrid, vit_mae, vit_msn, vitmatte, xclip, yolos, zoedepth
+[rank0]:[W418 15:18:24.080522628 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank0]:[W418 15:18:25.578627073 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+[rank3]:[W418 15:18:25.643559772 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+[rank2]:[W418 15:18:25.819897181 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+W0418 15:18:25.498000 1583241 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 1583250 closing signal SIGTERM
+W0418 15:18:25.501000 1583241 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 1583251 closing signal SIGTERM
+W0418 15:18:25.504000 1583241 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 1583252 closing signal SIGTERM
+E0418 15:18:25.771000 1583241 torch/distributed/elastic/multiprocessing/api.py:882] failed (exitcode: 1) local_rank: 0 (pid: 1583249) of binary: /project/6110552/indrisch/venv_llamafactory_cu126/bin/python
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/bin/torchrun", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 357, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 936, in main
+    run(args)
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 927, in run
+    elastic_launch(
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 156, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 293, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-04-18_15:18:25
+  host      : kn173.paice.vectorinstitute.ai
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 1583249)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+[W418 15:18:25.368879638 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/python/3.12.4/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', '127.0.0.1', '--master_port', '55003', '/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_videor1sft_lora_sft_Scene30k_traineval_5epochs.yaml']' returned non-zero exit status 1.
+[W418 15:18:26.957820468 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
