@@ -51,7 +51,7 @@ echo "HF_HUB_CACHE: $HF_HUB_CACHE"
 echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 
 # hf download --max-workers=7 moonshotai/Kimi-VL-A3B-Thinking-2506 # model for generating traces (the "teacher")
-hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a student (in addition to LLaVa-3D)
+# hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a student (in addition to LLaVa-3D)
 # hf download --max-workers=4 Qwen/Qwen2.5-7B-Instruct-1M # text-only long-context model used to assess the traces
 #hf download --max-workers=4 Qwen/Qwen2.5-7B-Instruct # text-only model used to assess the traces; the 1M version doesn't seem to load
 #hf download --max-workers=4 Qwen/Qwen2.5-0.5B-Instruct # text-only model used to assess the traces; the 1M version doesn't seem to load
@@ -61,9 +61,11 @@ hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a
 # hf download --max-workers=4 FacebookAI/roberta-large-mnli # for MNLI, deterimining the X portion of the reranker.
 # hf download --max-workers=4 MoritzLaurer/DeBERTa-v3-large-mnli-fever-anli-ling-wanli # for MNLI, deterimining the X portion of the reranker.
 
-hf download --max-workers=4 Video-R1/Video-R1-7B # Video-R1 is Qwen2.5VL-7B that was used by Video-R1.
-hf download --max-workers=4 Video-R1/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
-hf download --max-workers=4 Qwen/Qwen3-VL-8B-Instruct # The Qwen3 counterpart to Qwen2.5VL-7B, which is what we have been using.
+# hf download --max-workers=4 Video-R1/Video-R1-7B # Video-R1 is Qwen2.5VL-7B that was used by Video-R1.
+# hf download --max-workers=4 Video-R1/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
+# hf download --max-workers=4 Qwen/Qwen3-VL-8B-Instruct # The Qwen3 counterpart to Qwen2.5VL-7B, which is what we have been using.
+hf download --max-workers=4 Qwen/Qwen3.5-4B # Qwen3.5 multimodal base model used for mirrored SFT runs.
+hf download --max-workers=4 Qwen/Qwen3.5-9B # Qwen3.5 multimodal base model used for mirrored SFT runs.
 #hf download --max-workers=4 Qwen/Qwen3-VL-8B-Thinking # Same as above but with extra thinking capabilities.
 #hf download --max-workers=8 zd11024/Video3D-LLM-LLaVA-Qwen-Uniform-32 # Resulting model of Video3D-LLM
 # hf download --max-workers=4 Video-R1/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
@@ -111,7 +113,7 @@ hf download --max-workers=4 Qwen/Qwen3-VL-8B-Instruct # The Qwen3 counterpart to
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # scene30k
-hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
+# hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
 
 deactivate
 # rm -r temp_env

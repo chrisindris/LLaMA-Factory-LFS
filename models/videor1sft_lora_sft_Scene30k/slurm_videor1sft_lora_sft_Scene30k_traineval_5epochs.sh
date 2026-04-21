@@ -361,6 +361,7 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
             --env NCCL_P2P_DISABLE=0 \
             --env NCCL_DEBUG=INFO \
             --env NCCL_SOCKET_IFNAME=^docker0,lo \
+            --env DISABLE_VERSION_CHECK=1 \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
             llamafactory-cli train ${YAML_FILE}
