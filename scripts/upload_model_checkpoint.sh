@@ -30,10 +30,14 @@ while [[ $# -gt 0 ]]; do
       WANDB_LOG="$2"
       shift 2
       ;;
+    --no-wandb-upload)
+      NO_WANDB_UPLOAD=true
+      shift 1
+      ;;
     -h|--help)
       echo "Usage:"
-      echo "  $0 --id <ID> --checkpoint <CHECKPOINT_DIR> --wandb-log <WANDB_LOG> [--commit-message <MESSAGE>]"
-      echo "  $0 --out <OUT_FILE_OR_DIR> [--commit-message <MESSAGE>]"
+      echo "  $0 --id <ID> --checkpoint <CHECKPOINT_DIR> --wandb-log <WANDB_LOG> [--commit-message <MESSAGE>] [--no-wandb-upload]"
+      echo "  $0 --out <OUT_FILE_OR_DIR> [--commit-message <MESSAGE>] [--no-wandb-upload]"
       exit 0
       ;;
     *)
@@ -166,6 +170,8 @@ python upload_model_checkpoint.py \
   --repo-id "cvis-tmu/$ID" \
   --commit-message "$COMMIT_MESSAGE"
 
-wandb sync "$WANDB_LOG" --id "$ID"
+if [[ -z "$NO_WANDB_UPLOAD" ]]; then
+  wandb sync "$WANDB_LOG" --id "$ID"
+fi
 
 deactivate
