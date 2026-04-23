@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=48   
-#SBATCH --time=0-00:10:00
-#SBATCH --mem=1125G 
-#SBATCH --gpus-per-node=h100:4
+#SBATCH --cpus-per-task=24   
+#SBATCH --time=0-03:00:00
+#SBATCH --mem=562G 
+#SBATCH --gpus-per-node=h100:2
 #SBATCH --output=%N-qwen2_5vl_lora_sft_SQA3D-%j.out
 
 # 100 examples (per_device_train_batch_size: 2) takes 25 minutes; used 14.49% of memory (108.97 of 751.95 GB)
