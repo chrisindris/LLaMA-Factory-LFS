@@ -18,7 +18,7 @@ git-lfs install
 # pip install --upgrade pip setuptools wheel
 # pip install packaging
 # pip install --no-index huggingface_hub
-source /project/aip-wangcs/indrisch/venv_llamafactory_cu126/bin/activate
+#source /project/aip-wangcs/indrisch/venv_llamafactory_cu126/bin/activate
 
 # --- default location: $HOME/.cache/huggingface/hub; modify with HF_HOME and HFHUB_CACHE. ---
 #huggingface-cli download moonshotai/Kimi-VL-A3B-Thinking-2506 # default location: $HOME/.cache/huggingface/hub
@@ -43,7 +43,10 @@ echo "PYTHONPATH: $PYTHONPATH"
 export HF_HOME="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HOME'))")" 
 export HF_HUB_CACHE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HUB_CACHE'))")" 
 export HF_HUB_DISABLE_XET="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HUB_DISABLE_XET'))")" 
+export VENV_LLAMAFACTORY="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'VENV_LLAMAFACTORY'))")"
 unset PYTHONPATH
+
+source $VENV_LLAMAFACTORY/bin/activate
 
 echo "Cluster name: $1"
 echo "HF_HOME: $HF_HOME"
