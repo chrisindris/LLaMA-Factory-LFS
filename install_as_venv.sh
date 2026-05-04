@@ -3,7 +3,7 @@
 # ensure that cuda 12.8 is being used; ln -sfn /usr/local/cuda-12.8 /etc/alternatives/cuda
 
 usage() {
-    echo "Usage: $0 (RORQUAL|FIR|NIBI|NARVAL|TRILLIUM)"
+    echo "Usage: $0 (RORQUAL|FIR|NIBI|NARVAL|TRILLIUM|KILLARNEY)"
     exit 1
 }
 
@@ -11,7 +11,7 @@ if [ $# -ne 1 ]; then
     usage
 fi
 
-if [ $1 != "RORQUAL" ] && [ $1 != "FIR" ] && [ $1 != "NIBI" ] && [ $1 != "NARVAL" ] && [ $1 != "TRILLIUM" ]; then
+if [ $1 != "RORQUAL" ] && [ $1 != "FIR" ] && [ $1 != "NIBI" ] && [ $1 != "NARVAL" ] && [ $1 != "TRILLIUM" ] && [ $1 != "KILLARNEY" ]; then
     usage
 fi
 
@@ -54,8 +54,8 @@ pushd /scratch/indrisch/
 module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
 module load python/3.12 cuda/12.6 opencv/4.12.0
 module load arrow
-virtualenv --no-download venv_llamafactory_cu126
-source venv_llamafactory_cu126/bin/activate
+virtualenv --no-download venv_llamafactory_cu126_qwen35
+source venv_llamafactory_cu126_qwen35/bin/activate
 popd
 pip install --upgrade pip setuptools wheel
-pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray -e ".[torch,metrics,deepspeed,liger-kernel]"
+pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers>=5.2.0" -e ".[torch,metrics,deepspeed,liger-kernel]"

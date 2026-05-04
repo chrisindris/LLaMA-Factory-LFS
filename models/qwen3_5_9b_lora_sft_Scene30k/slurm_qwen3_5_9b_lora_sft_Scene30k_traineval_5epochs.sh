@@ -71,6 +71,7 @@ export BEST_GPU="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$
 export TORCH_EXTENSIONS_DIR="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'TORCH_EXTENSIONS_DIR'))")" && echo "TORCH_EXTENSIONS_DIR: $TORCH_EXTENSIONS_DIR"
 export SIF_FILE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'SIF_FILE'))")" && echo "SIF_FILE: $SIF_FILE"
 export MEDIA_DIR="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'media_dir'))")" && echo "MEDIA_DIR: $MEDIA_DIR"
+export VENV_LLAMAFACTORY="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'VENV_LLAMAFACTORY'))")" && echo "VENV_LLAMAFACTORY: $VENV_LLAMAFACTORY"
 
 export WANDB_DIR="${PROJECT_DIR}/wandb/"
 if [[ "$BEST_GPU" == "h100" ]]; then
@@ -372,7 +373,7 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         module load python/3.12 cuda/12.6 opencv/4.12.0
         module load arrow
 
-        source /project/aip-wangcs/indrisch/venv_llamafactory_cu126/bin/activate
+        source ${VENV_LLAMAFACTORY}/bin/activate
         export CUDA_VISIBLE_DEVICES=0,1,2,3
         export FORCE_TORCHRUN=1 
         export HF_HUB_OFFLINE=1 
