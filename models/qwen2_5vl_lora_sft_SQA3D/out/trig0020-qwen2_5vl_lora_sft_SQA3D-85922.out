@@ -1,0 +1,75 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[2025-11-13 04:22:45,264] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 152, in launch
+    run_exp()
+  File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+    _training_function(config={"args": args, "callbacks": callbacks})
+  File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+    model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+                                                                             ^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/hparams/parser.py", line 262, in get_train_args
+    raise ValueError("Please specify `max_steps` in streaming mode.")
+ValueError: Please specify `max_steps` in streaming mode.
+INFO:    Cleanup error: while stopping driver for /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/var/apptainer/mnt/session/final: fuse-overlayfs exited: fuse: reading device: Software caused connection abort
+
+scontrol show job 85922
+JobId=85922 JobName=slurm_qwen2_5vl_lora_sft_SQA3D.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=329757 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:00:24 TimeLimit=00:25:00 TimeMin=N/A
+   SubmitTime=2025-11-13T04:22:27 EligibleTime=2025-11-13T04:22:27
+   AccrueTime=2025-11-13T04:22:27
+   StartTime=2025-11-13T04:22:27 EndTime=2025-11-13T04:22:51 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-13T04:22:27 Scheduler=Main
+   Partition=compute AllocNode:Sid=trig-login01:731173
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0020
+   BatchHost=trig0020
+   NumNodes=1 NumCPUs=24 NumTasks=1 CPUs/Task=24 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=24 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=./slurm_qwen2_5vl_lora_sft_SQA3D.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L ./slurm_qwen2_5vl_lora_sft_SQA3D.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D-85922.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D-85922.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=24
+   
+
+sacct -j 85922
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+85922        slurm_qwe+ def-wangcs   00:00:24                         00:00:00   00:00:00      0:0 
+85922.batch       batch def-wangcs   00:00:24                         00:00:00   00:00:00      0:0 
+85922.extern     extern def-wangcs   00:00:24                         00:00:00   00:00:00      0:0 
+

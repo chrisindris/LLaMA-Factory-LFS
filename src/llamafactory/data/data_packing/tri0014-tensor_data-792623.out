@@ -1,0 +1,50 @@
+Input directory: /scratch/indrisch/vllm_experiments/data/ScanNet/scans
+Output directory: /scratch/indrisch/vllm_experiments/data_pt/ScanNet/scans
+Scene pattern: scene*_*
+Color folder: color
+Image extension: .jpg
+Tensor filename: images.pt
+Number of workers: 32
+Found 650 scene folders total
+Processing 650 scenes
+Using 32 worker processes for parallel processing
+slurmstepd: error: *** JOB 792623 ON tri0014 CANCELLED AT 2026-01-07T17:04:16 ***
+
+scontrol show job 792623
+JobId=792623 JobName=tensor_data.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=1721738 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=None Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:15
+   RunTime=00:07:10 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2026-01-07T16:56:56 EligibleTime=2026-01-07T16:56:56
+   AccrueTime=2026-01-07T16:56:56
+   StartTime=2026-01-07T16:57:06 EndTime=2026-01-07T17:04:16 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-01-07T16:57:06 Scheduler=Main
+   Partition=compute AllocNode:Sid=tri-login02:864474
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=tri0014
+   BatchHost=tri0014
+   NumNodes=1 NumCPUs=192 NumTasks=1 CPUs/Task=192 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=192,mem=767000M,node=1,billing=192
+   AllocTRES=cpu=192,mem=767000M,node=1,billing=192
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=192 MinMemoryNode=767000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/scripts/data_packing/tensor_data.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/scripts/data_packing
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L tensor_data.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/scripts/data_packing/%N-tensor_data-792623.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/scripts/data_packing/%N-tensor_data-792623.out
+   TresPerTask=cpu=192
+   
+
+sacct -j 792623
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+792623       tensor_da+ def-wangcs   00:07:10                         01:45:16   01:16:03      0:0 
+792623.batch      batch def-wangcs   00:07:17          0 769233764K   01:45:16   01:16:03     0:15 
+792623.exte+     extern def-wangcs   00:07:18          0          0   00:00:00   00:00:00      0:0 
+

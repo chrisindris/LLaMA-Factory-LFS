@@ -1,0 +1,6 @@
+/cm/local/apps/slurm/var/spool/job1715750/slurm_script: /cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/init/bash: Too many levels of symbolic links
+environment: line 17: /cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/libexec/lmod: Too many levels of symbolic links
+environment: line 17: /cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/libexec/lmod: Too many levels of symbolic links
+environment: line 17: /cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/libexec/lmod: Too many levels of symbolic links
+/project/aip-wangcs/indrisch/LLaMA-Factory /project/aip-wangcs/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+/cm/local/apps/slurm/var/spool/job1715750/slurm_script: /project/6110552/indrisch/venv_llamafactory_cu126/bin/llamafactory-cli: /project/6110552/indrisch/venv_llamafactory_cu126/bin/python: bad interpreter: Too many levels of symbolic links

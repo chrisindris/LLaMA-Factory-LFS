@@ -14,6 +14,7 @@
 
 import os
 from dataclasses import dataclass, field
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -22,6 +23,7 @@ from transformers import DataCollatorWithPadding
 from llamafactory.data import get_dataset, get_template_and_fix_tokenizer
 from llamafactory.hparams import get_train_args
 from llamafactory.model import load_model, load_tokenizer
+from llamafactory.train.sft import workflow as sft_workflow
 from llamafactory.train.sft.trainer import CustomSeq2SeqTrainer
 
 
@@ -87,3 +89,75 @@ def test_shuffle(disable_shuffling: bool):
         assert data_collator.verbose_list[0]["input_ids"] == dataset_module["train_dataset"][0]["input_ids"]
     else:
         assert data_collator.verbose_list[0]["input_ids"] != dataset_module["train_dataset"][0]["input_ids"]
+
+
+def test_resume_from_checkpoint_passthrough(monkeypatch, tmp_path):
+    class DummyTokenizer:
+        eos_token_id = 1
+        additional_special_tokens_ids = []
+        pad_token_id = 0
+        padding_side = "right"
+
+    class DummyGeneratingArgs:
+        def to_dict(self, obey_generation_config: bool = True) -> dict[str, Any]:
+            return {}
+
+    class DummyTrainer:
+        latest_resume_checkpoint = None
+
+        def __init__(self, **kwargs):
+            pass
+
+        def train(self, resume_from_checkpoint=None):
+            DummyTrainer.latest_resume_checkpoint = resume_from_checkpoint
+            return SimpleNamespace(metrics={})
+
+        def save_model(self):
+            pass
+
+        def log_metrics(self, *args, **kwargs):
+            pass
+
+        def save_metrics(self, *args, **kwargs):
+            pass
+
+        def save_state(self):
+            pass
+
+        def is_world_process_zero(self):
+            return False
+
+    monkeypatch.setattr(sft_workflow, "load_tokenizer", lambda _: {"tokenizer": DummyTokenizer()})
+    monkeypatch.setattr(sft_workflow, "get_template_and_fix_tokenizer", lambda tokenizer, data_args: "template")
+    monkeypatch.setattr(
+        sft_workflow,
+        "get_dataset",
+        lambda *args, **kwargs: {"train_dataset": [], "eval_dataset": []},
+    )
+    monkeypatch.setattr(sft_workflow, "load_model", lambda *args, **kwargs: SimpleNamespace(config=SimpleNamespace()))
+    monkeypatch.setattr(sft_workflow, "SFTDataCollatorWith4DAttentionMask", lambda **kwargs: object())
+    monkeypatch.setattr(sft_workflow, "CustomSeq2SeqTrainer", DummyTrainer)
+    monkeypatch.setattr(sft_workflow, "create_modelcard_and_push", lambda *args, **kwargs: None)
+
+    model_args = SimpleNamespace(block_diag_attn=False, compute_dtype=None)
+    data_args = SimpleNamespace(ignore_pad_token_for_loss=True)
+    training_args = SimpleNamespace(
+        do_train=True,
+        predict_with_generate=False,
+        do_eval=False,
+        do_predict=False,
+        resume_from_checkpoint="adapter-checkpoint-200",
+        output_dir=str(tmp_path),
+    )
+    finetuning_args = SimpleNamespace(compute_accuracy=False, include_effective_tokens_per_second=False, plot_loss=False)
+
+    sft_workflow.run_sft(
+        model_args=model_args,
+        data_args=data_args,
+        training_args=training_args,
+        finetuning_args=finetuning_args,
+        generating_args=DummyGeneratingArgs(),
+        callbacks=None,
+    )
+
+    assert DummyTrainer.latest_resume_checkpoint == "adapter-checkpoint-200"

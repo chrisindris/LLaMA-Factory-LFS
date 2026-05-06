@@ -1,0 +1,15 @@
+Reading 2 parquet file(s) from /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data
+Lookup built: 645 unique video entries
+Reading /scratch/indrisch/huggingface/hub/datasets--AIGeeksGroup--Scene-30K/snapshots/4dec3fdb6ff83357fbf6d93ec6fe0392df6a7152/Scene-30K.jsonl
+Parsing 30238 lines with 64 workers
+Rows with images: 29119, rows without: 1119
+Writing 54 missing scene_id(s) to /scratch/indrisch/LLaMA-Factory/data/Scene30k/missing_scene_ids.txt
+Creating Dataset from 30238 rows
+Dataset({
+    features: ['scene_id', 'question', 'cot', 'images_every_24'],
+    num_rows: 30238
+})
+Saving dataset locally to /scratch/indrisch/LLaMA-Factory/data/Scene30k/Scene30k_with_images
+Saving the dataset (0/1 shards):   0%|          | 0/30238 [00:00<?, ? examples/s]Saving the dataset (0/1 shards):  63%|██████▎   | 19000/30238 [00:00<00:00, 180710.25 examples/s]Saving the dataset (1/1 shards): 100%|██████████| 30238/30238 [00:00<00:00, 180710.25 examples/s]Saving the dataset (1/1 shards): 100%|██████████| 30238/30238 [00:00<00:00, 185501.21 examples/s]
+Local save complete: /scratch/indrisch/LLaMA-Factory/data/Scene30k/Scene30k_with_images
+ONLINE=false, skipping HuggingFace upload

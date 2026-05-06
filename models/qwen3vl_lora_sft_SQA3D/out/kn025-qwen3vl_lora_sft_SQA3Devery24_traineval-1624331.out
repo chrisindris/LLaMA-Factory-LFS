@@ -1,0 +1,73 @@
+
+The following have been reloaded with a version change:
+  1) python/3.11.5 => python/3.12.4
+
+[INFO|2025-12-15 03:22:10] llamafactory.launcher:143 >> Initializing 1 distributed tasks at: 127.0.0.1:34431
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 182, in <module>
+    from llamafactory.train.tuner import run_exp  # use absolute import
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 28, in <module>
+    from ..hparams import get_infer_args, get_ray_args, get_train_args, read_args
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/hparams/__init__.py", line 20, in <module>
+    from .parser import get_eval_args, get_infer_args, get_ray_args, get_train_args, read_args
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/hparams/parser.py", line 46, in <module>
+    check_dependencies()
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/extras/misc.py", line 97, in check_dependencies
+    check_version("transformers>=4.49.0,<=4.57.1")
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/extras/misc.py", line 92, in check_version
+    require_version(requirement, hint)
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/versions.py", line 111, in require_version
+    _compare_versions(op, got_ver, want_ver, requirement, pkg, hint)
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/versions.py", line 44, in _compare_versions
+    raise ImportError(
+ImportError: transformers>=4.49.0,<=4.57.1 is required for a normal functioning of this module, but found transformers==4.57.1+computecanada.
+To fix: run `pip install transformers>=4.49.0,<=4.57.1` or set `DISABLE_VERSION_CHECK=1` to skip this check.
+[W1215 03:22:27.237333798 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+E1215 03:22:28.127000 435849 torch/distributed/elastic/multiprocessing/api.py:882] failed (exitcode: 1) local_rank: 0 (pid: 435852) of binary: /project/6110552/indrisch/venv_llamafactory_cu126/bin/python
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/bin/torchrun", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 357, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 936, in main
+    run(args)
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 927, in run
+    elastic_launch(
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 156, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 293, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-12-15_03:22:28
+  host      : kn025.paice.vectorinstitute.ai
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 435852)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+[W1215 03:22:28.931922707 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/python/3.12.4/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '1', '--master_addr', '127.0.0.1', '--master_port', '34431', '/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '--model_name_or_path', 'Qwen/Qwen3-VL-8B-Instruct', '--no_use_fast_tokenizer', '--cache_dir', '/scratch/indrisch/huggingface/hub', '--image_max_pixels', '65536', '--video_max_pixels', '16384', '--trust_remote_code', '--stage', 'sft', '--do_train', '--finetuning_type', 'lora', '--lora_rank', '8', '--lora_target', 'all', '--dataset', 'SQA3Devery24', '--media_dir', '/project/aip-wangcs/shared/data/', '--template', 'qwen3_vl', '--cutoff_len', '131072', '--preprocessing_num_workers', '32', '--dataloader_num_workers', '0', '--dataloader_pin_memory', 'false', '--low_cpu_mem_usage', '--output_dir', '/project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3vl-8b/lora/sft/SQA3Devery24_traineval', '--logging_steps', '10', '--save_steps', '200', '--plot_loss', '--overwrite_output_dir', '--save_only_model', 'false', '--report_to', 'wandb', '--per_device_train_batch_size', '2', '--gradient_accumulation_steps', '8', '--learning_rate', '1.0e-4', '--num_train_epochs', '2.0', '--lr_scheduler_type', 'cosine', '--warmup_ratio', '0.1', '--bf16', '--ddp_timeout', '180000000', '--debug', 'underflow_overflow', '--log_level', 'debug', '--log_level_replica', 'debug', '--print_param_status', '--flash_attn', 'fa2', '--enable_liger_kernel', '--gradient_checkpointing', '--deepspeed', '/project/aip-wangcs/indrisch/LLaMA-Factory/examples/deepspeed/ds_z3_offload_config.json', '--val_size', '0.1', '--per_device_eval_batch_size', '1', '--eval_strategy', 'steps', '--eval_steps', '200']' returned non-zero exit status 1.
+[W1215 03:22:29.606157083 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())

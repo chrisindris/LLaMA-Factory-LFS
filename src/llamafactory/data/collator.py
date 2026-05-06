@@ -217,6 +217,7 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
                 "qwen2_vl",
                 "qwen2_5_vl",
                 "qwen2_5_omni_thinker",
+                "qwen3_5",
                 "qwen3_omni_moe_thinker",
                 "qwen3_vl",
                 "qwen3_vl_moe",

@@ -1,0 +1,609 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: None
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+RUNNING_MODE: APPTAINER
+WARNING: Overriding HOME environment variable with APPTAINERENV_HOME is not permitted
+WARNING: Skipping /dev/shm bind mount: already mounted
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2026-04-13 08:54:02] llamafactory.launcher:143 >> Initializing 8 distributed tasks at: 127.0.0.1:55169
+W0413 08:54:03.855000 145 site-packages/torch/distributed/run.py:792] 
+W0413 08:54:03.855000 145 site-packages/torch/distributed/run.py:792] *****************************************
+W0413 08:54:03.855000 145 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0413 08:54:03.855000 145 site-packages/torch/distributed/run.py:792] *****************************************
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 120
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+⚙️  Running in WANDB offline mode
+⚙️  Running in WANDB offline mode
+⚙️  Running in WANDB offline mode
+⚙️  Running in WANDB offline mode⚙️  Running in WANDB offline mode
+
+⚙️  Running in WANDB offline mode
+⚙️  Running in WANDB offline mode
+⚙️  Running in WANDB offline mode
+[2026-04-13 08:54:16,419] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-04-13 08:54:16,419] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-04-13 08:54:16,419] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-04-13 08:54:16,419] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-04-13 08:54:16,419] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-04-13 08:54:16,419] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-04-13 08:54:16,608] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-04-13 08:54:17,146] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2026-04-13 08:54:22,470] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-04-13 08:54:22,470] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-04-13 08:54:22,478] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-04-13 08:54:22,497] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-04-13 08:54:22,497] [INFO] [comm.py:700:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[2026-04-13 08:54:22,509] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-04-13 08:54:22,511] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-04-13 08:54:22,511] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-04-13 08:54:22,513] [INFO] [comm.py:669:init_distributed] cdb=None
+[INFO|2026-04-13 08:54:23] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2026-04-13 08:54:23] llamafactory.hparams.parser:529 >> Process rank: 0, world size: 8, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|hub.py:421] 2026-04-13 08:54:23,706 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_auto.py:922] 2026-04-13 08:54:23,711 >> Could not locate the tokenizer configuration file, will try to use the model config instead.
+[INFO|hub.py:421] 2026-04-13 08:54:23,711 >> Offline mode: forcing local_files_only=True
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 479, in cached_files
+[rank0]:     hf_hub_download(
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[rank0]:     return fn(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1010, in hf_hub_download
+[rank0]:     return _hf_hub_download_to_cache_dir(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1117, in _hf_hub_download_to_cache_dir
+[rank0]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1649, in _raise_on_head_call_error
+[rank0]:     raise LocalEntryNotFoundError(
+[rank0]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank0]: The above exception was the direct cause of the following exception:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 78, in load_tokenizer
+[rank0]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank0]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 1093, in from_pretrained
+[rank0]:     config = AutoConfig.from_pretrained(
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1333, in from_pretrained
+[rank0]:     config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank0]:                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 662, in get_config_dict
+[rank0]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank0]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 721, in _get_config_dict
+[rank0]:     resolved_config_file = cached_file(
+[rank0]:                            ^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 322, in cached_file
+[rank0]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 553, in cached_files
+[rank0]:     raise OSError(
+[rank0]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank0]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank0]: The above exception was the direct cause of the following exception:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank0]:     run_exp()
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank0]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank0]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank0]:     tokenizer_module = load_tokenizer(model_args)
+[rank0]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 93, in load_tokenizer
+[rank0]:     raise OSError("Failed to load tokenizer.") from e
+[rank0]: OSError: Failed to load tokenizer.
+[INFO|2026-04-13 08:54:24] llamafactory.hparams.parser:529 >> Process rank: 1, world size: 8, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 479, in cached_files
+[rank1]:     hf_hub_download(
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[rank1]:     return fn(*args, **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1010, in hf_hub_download
+[rank1]:     return _hf_hub_download_to_cache_dir(
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1117, in _hf_hub_download_to_cache_dir
+[rank1]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1649, in _raise_on_head_call_error
+[rank1]:     raise LocalEntryNotFoundError(
+[rank1]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank1]: The above exception was the direct cause of the following exception:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 78, in load_tokenizer
+[rank1]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank1]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 1093, in from_pretrained
+[rank1]:     config = AutoConfig.from_pretrained(
+[rank1]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1333, in from_pretrained
+[rank1]:     config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank1]:                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 662, in get_config_dict
+[rank1]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank1]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 721, in _get_config_dict
+[rank1]:     resolved_config_file = cached_file(
+[rank1]:                            ^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 322, in cached_file
+[rank1]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 553, in cached_files
+[rank1]:     raise OSError(
+[rank1]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank1]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank1]: The above exception was the direct cause of the following exception:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank1]:     run_exp()
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank1]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank1]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank1]:     tokenizer_module = load_tokenizer(model_args)
+[rank1]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 93, in load_tokenizer
+[rank1]:     raise OSError("Failed to load tokenizer.") from e
+[rank1]: OSError: Failed to load tokenizer.
+[rank0]:[W413 08:54:24.726654051 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[INFO|2026-04-13 08:54:24] llamafactory.hparams.parser:529 >> Process rank: 3, world size: 8, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 479, in cached_files
+[rank3]:     hf_hub_download(
+[rank3]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[rank3]:     return fn(*args, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1010, in hf_hub_download
+[rank3]:     return _hf_hub_download_to_cache_dir(
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1117, in _hf_hub_download_to_cache_dir
+[rank3]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank3]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1649, in _raise_on_head_call_error
+[rank3]:     raise LocalEntryNotFoundError(
+[rank3]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank3]: The above exception was the direct cause of the following exception:
+
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 78, in load_tokenizer
+[rank3]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank3]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 1093, in from_pretrained
+[rank3]:     config = AutoConfig.from_pretrained(
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1333, in from_pretrained
+[rank3]:     config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank3]:                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 662, in get_config_dict
+[rank3]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank3]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 721, in _get_config_dict
+[rank3]:     resolved_config_file = cached_file(
+[rank3]:                            ^^^^^^^^^^^^
+[rank3]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 322, in cached_file
+[rank3]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 553, in cached_files
+[rank3]:     raise OSError(
+[rank3]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank3]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank3]: The above exception was the direct cause of the following exception:
+
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank3]:     run_exp()
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank3]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank3]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank3]:     tokenizer_module = load_tokenizer(model_args)
+[rank3]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 93, in load_tokenizer
+[rank3]:     raise OSError("Failed to load tokenizer.") from e
+[rank3]: OSError: Failed to load tokenizer.
+[INFO|2026-04-13 08:54:24] llamafactory.hparams.parser:529 >> Process rank: 4, world size: 8, device: cuda:4, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-04-13 08:54:24] llamafactory.hparams.parser:529 >> Process rank: 5, world size: 8, device: cuda:5, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-04-13 08:54:24] llamafactory.hparams.parser:529 >> Process rank: 2, world size: 8, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[rank4]: Traceback (most recent call last):
+[rank4]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 479, in cached_files
+[rank4]:     hf_hub_download(
+[rank4]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[rank4]:     return fn(*args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1010, in hf_hub_download
+[rank4]:     return _hf_hub_download_to_cache_dir(
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1117, in _hf_hub_download_to_cache_dir
+[rank4]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank4]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1649, in _raise_on_head_call_error
+[rank4]:     raise LocalEntryNotFoundError(
+[rank4]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank4]: The above exception was the direct cause of the following exception:
+
+[rank4]: Traceback (most recent call last):
+[rank4]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 78, in load_tokenizer
+[rank4]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank4]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 1093, in from_pretrained
+[rank4]:     config = AutoConfig.from_pretrained(
+[rank4]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1333, in from_pretrained
+[rank4]:     config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank4]:                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 662, in get_config_dict
+[rank4]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank4]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 721, in _get_config_dict
+[rank4]:     resolved_config_file = cached_file(
+[rank4]:                            ^^^^^^^^^^^^
+[rank4]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 322, in cached_file
+[rank4]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 553, in cached_files
+[rank4]:     raise OSError(
+[rank4]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank4]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank4]: The above exception was the direct cause of the following exception:
+
+[rank4]: Traceback (most recent call last):
+[rank4]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank4]:     run_exp()
+[rank4]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank4]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank4]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank4]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank4]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank4]:     tokenizer_module = load_tokenizer(model_args)
+[rank4]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 93, in load_tokenizer
+[rank4]:     raise OSError("Failed to load tokenizer.") from e
+[rank4]: OSError: Failed to load tokenizer.
+[INFO|2026-04-13 08:54:24] llamafactory.hparams.parser:529 >> Process rank: 6, world size: 8, device: cuda:6, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-04-13 08:54:24] llamafactory.hparams.parser:529 >> Process rank: 7, world size: 8, device: cuda:7, distributed training: True, compute dtype: torch.bfloat16
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 479, in cached_files
+[rank2]:     hf_hub_download(
+[rank2]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[rank2]:     return fn(*args, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1010, in hf_hub_download
+[rank2]:     return _hf_hub_download_to_cache_dir(
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1117, in _hf_hub_download_to_cache_dir
+[rank2]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank2]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1649, in _raise_on_head_call_error
+[rank2]:     raise LocalEntryNotFoundError(
+[rank2]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank2]: The above exception was the direct cause of the following exception:
+
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 78, in load_tokenizer
+[rank2]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank2]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 1093, in from_pretrained
+[rank2]:     config = AutoConfig.from_pretrained(
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1333, in from_pretrained
+[rank2]:     config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank2]:                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 662, in get_config_dict
+[rank2]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank2]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 721, in _get_config_dict
+[rank2]:     resolved_config_file = cached_file(
+[rank2]:                            ^^^^^^^^^^^^
+[rank2]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 322, in cached_file
+[rank2]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 553, in cached_files
+[rank2]:     raise OSError(
+[rank2]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank2]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank2]: The above exception was the direct cause of the following exception:
+
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank2]:     run_exp()
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank2]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank2]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank2]:     tokenizer_module = load_tokenizer(model_args)
+[rank2]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 93, in load_tokenizer
+[rank2]:     raise OSError("Failed to load tokenizer.") from e
+[rank2]: OSError: Failed to load tokenizer.
+[rank5]: Traceback (most recent call last):
+[rank5]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 479, in cached_files
+[rank5]:     hf_hub_download(
+[rank5]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[rank5]:     return fn(*args, **kwargs)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1010, in hf_hub_download
+[rank5]:     return _hf_hub_download_to_cache_dir(
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1117, in _hf_hub_download_to_cache_dir
+[rank5]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank5]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1649, in _raise_on_head_call_error
+[rank5]:     raise LocalEntryNotFoundError(
+[rank5]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank5]: The above exception was the direct cause of the following exception:
+
+[rank5]: Traceback (most recent call last):
+[rank5]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 78, in load_tokenizer
+[rank5]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank5]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 1093, in from_pretrained
+[rank5]:     config = AutoConfig.from_pretrained(
+[rank5]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1333, in from_pretrained
+[rank5]:     config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank5]:                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 662, in get_config_dict
+[rank5]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank5]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 721, in _get_config_dict
+[rank5]:     resolved_config_file = cached_file(
+[rank5]:                            ^^^^^^^^^^^^
+[rank5]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 322, in cached_file
+[rank5]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 553, in cached_files
+[rank5]:     raise OSError(
+[rank5]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank5]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank5]: The above exception was the direct cause of the following exception:
+
+[rank5]: Traceback (most recent call last):
+[rank5]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank5]:     run_exp()
+[rank5]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank5]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank5]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank5]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank5]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank5]:     tokenizer_module = load_tokenizer(model_args)
+[rank5]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 93, in load_tokenizer
+[rank5]:     raise OSError("Failed to load tokenizer.") from e
+[rank5]: OSError: Failed to load tokenizer.
+[rank7]: Traceback (most recent call last):
+[rank7]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 479, in cached_files
+[rank7]:     hf_hub_download(
+[rank7]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[rank7]:     return fn(*args, **kwargs)
+[rank7]:            ^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1010, in hf_hub_download
+[rank7]:     return _hf_hub_download_to_cache_dir(
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1117, in _hf_hub_download_to_cache_dir
+[rank7]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank7]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1649, in _raise_on_head_call_error
+[rank7]:     raise LocalEntryNotFoundError(
+[rank7]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank7]: The above exception was the direct cause of the following exception:
+
+[rank7]: Traceback (most recent call last):
+[rank7]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 78, in load_tokenizer
+[rank7]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank7]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 1093, in from_pretrained
+[rank7]:     config = AutoConfig.from_pretrained(
+[rank7]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1333, in from_pretrained
+[rank7]:     config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank7]:                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 662, in get_config_dict
+[rank7]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank7]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 721, in _get_config_dict
+[rank7]:     resolved_config_file = cached_file(
+[rank7]:                            ^^^^^^^^^^^^
+[rank7]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 322, in cached_file
+[rank7]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 553, in cached_files
+[rank7]:     raise OSError(
+[rank7]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank7]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank7]: The above exception was the direct cause of the following exception:
+
+[rank7]: Traceback (most recent call last):
+[rank7]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank7]:     run_exp()
+[rank7]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank7]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank7]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank7]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank7]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank7]:     tokenizer_module = load_tokenizer(model_args)
+[rank7]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 93, in load_tokenizer
+[rank7]:     raise OSError("Failed to load tokenizer.") from e
+[rank7]: OSError: Failed to load tokenizer.
+[rank6]: Traceback (most recent call last):
+[rank6]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 479, in cached_files
+[rank6]:     hf_hub_download(
+[rank6]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[rank6]:     return fn(*args, **kwargs)
+[rank6]:            ^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1010, in hf_hub_download
+[rank6]:     return _hf_hub_download_to_cache_dir(
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1117, in _hf_hub_download_to_cache_dir
+[rank6]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank6]:   File "/opt/conda/lib/python3.11/site-packages/huggingface_hub/file_download.py", line 1649, in _raise_on_head_call_error
+[rank6]:     raise LocalEntryNotFoundError(
+[rank6]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank6]: The above exception was the direct cause of the following exception:
+
+[rank6]: Traceback (most recent call last):
+[rank6]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 78, in load_tokenizer
+[rank6]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank6]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 1093, in from_pretrained
+[rank6]:     config = AutoConfig.from_pretrained(
+[rank6]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/opt/conda/lib/python3.11/site-packages/transformers/models/auto/configuration_auto.py", line 1333, in from_pretrained
+[rank6]:     config_dict, unused_kwargs = PretrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank6]:                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 662, in get_config_dict
+[rank6]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank6]:                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/opt/conda/lib/python3.11/site-packages/transformers/configuration_utils.py", line 721, in _get_config_dict
+[rank6]:     resolved_config_file = cached_file(
+[rank6]:                            ^^^^^^^^^^^^
+[rank6]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 322, in cached_file
+[rank6]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/opt/conda/lib/python3.11/site-packages/transformers/utils/hub.py", line 553, in cached_files
+[rank6]:     raise OSError(
+[rank6]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank6]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank6]: The above exception was the direct cause of the following exception:
+
+[rank6]: Traceback (most recent call last):
+[rank6]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank6]:     run_exp()
+[rank6]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank6]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank6]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank6]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank6]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 48, in run_sft
+[rank6]:     tokenizer_module = load_tokenizer(model_args)
+[rank6]:                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/model/loader.py", line 93, in load_tokenizer
+[rank6]:     raise OSError("Failed to load tokenizer.") from e
+[rank6]: OSError: Failed to load tokenizer.
+W0413 08:54:26.513000 145 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 195 closing signal SIGTERM
+W0413 08:54:26.514000 145 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 196 closing signal SIGTERM
+W0413 08:54:26.514000 145 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 197 closing signal SIGTERM
+W0413 08:54:26.515000 145 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 198 closing signal SIGTERM
+W0413 08:54:26.515000 145 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 199 closing signal SIGTERM
+W0413 08:54:26.515000 145 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 200 closing signal SIGTERM
+W0413 08:54:26.516000 145 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 201 closing signal SIGTERM
+E0413 08:54:27.276000 145 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 194) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-04-13_08:54:26
+  host      : kn176.paice.vectorinstitute.ai
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 194)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '8', '--master_addr', '127.0.0.1', '--master_port', '55169', '/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_videor1sft_lora_sft_Scene30k_traineval_5epochs.yaml']' returned non-zero exit status 1.

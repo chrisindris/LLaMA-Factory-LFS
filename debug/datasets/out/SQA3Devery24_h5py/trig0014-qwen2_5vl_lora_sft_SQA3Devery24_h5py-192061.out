@@ -1,0 +1,117 @@
+WARNING: Environment variable PYTHONPATH already has value [/scratch/indrisch/LLaMA-Factory/src:/cvmfs/soft.computecanada.ca/custom/python/site-packages], will not forward new value [/cvmfs/soft.computecanada.ca/custom/python/site-packages] from parent process environment
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2026-01-09 00:15:21] llamafactory.launcher:143 >> Initializing 1 distributed tasks at: 127.0.0.1:47953
+Traceback (most recent call last):
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 182, in <module>
+    from llamafactory.train.tuner import run_exp  # use absolute import
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 23, in <module>
+    from ..data import get_template_and_fix_tokenizer
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/data/__init__.py", line 22, in <module>
+    from .loader import get_dataset
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/data/loader.py", line 24, in <module>
+    from .converter import align_dataset
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/data/converter.py", line 22, in <module>
+    from .data_packing.h5py_data import retrieve_image
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/data/data_packing/h5py_data.py", line 19, in <module>
+    import h5py
+ModuleNotFoundError: No module named 'h5py'
+E0109 00:15:28.757000 3012655 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 3012680) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-01-09_00:15:28
+  host      : trig0014.scinet.local
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 3012680)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '1', '--master_addr', '127.0.0.1', '--master_port', '47953', '/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/scratch/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery24_h5py.yaml']' returned non-zero exit status 1.
+
+scontrol show job 192061
+JobId=192061 JobName=slurm_qwen2_5vl_lora_sft_SQA3Devery24_h5py.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=115755 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:00:26 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2026-01-09T00:07:21 EligibleTime=2026-01-09T00:07:21
+   AccrueTime=2026-01-09T00:07:21
+   StartTime=2026-01-09T00:15:03 EndTime=2026-01-09T00:15:29 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-01-09T00:15:03 Scheduler=Backfill
+   Partition=compute AllocNode:Sid=trig-login01:237667
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0014
+   BatchHost=trig0014
+   NumNodes=1 NumCPUs=24 NumTasks=1 CPUs/Task=24 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=24 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/debug/datasets/slurm_qwen2_5vl_lora_sft_SQA3Devery24_h5py.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/debug/datasets
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L slurm_qwen2_5vl_lora_sft_SQA3Devery24_h5py.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/debug/datasets/out/SQA3Devery24_h5py/%N-qwen2_5vl_lora_sft_SQA3Devery24_h5py-192061.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/debug/datasets/out/SQA3Devery24_h5py/%N-qwen2_5vl_lora_sft_SQA3Devery24_h5py-192061.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=24
+   
+
+sacct -j 192061
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+192061       slurm_qwe+ def-wangcs   00:00:26                         00:00:00   00:00:00      0:0 
+192061.batch      batch def-wangcs   00:00:26                         00:00:00   00:00:00      0:0 
+192061.exte+     extern def-wangcs   00:00:26                         00:00:00   00:00:00      0:0 
+
