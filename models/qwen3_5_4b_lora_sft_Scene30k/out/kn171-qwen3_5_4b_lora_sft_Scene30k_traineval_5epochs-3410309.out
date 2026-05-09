@@ -1,0 +1,104 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: None
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126_qwen35/
+RUNNING_MODE: VENV
+/project/aip-wangcs/indrisch/LLaMA-Factory /project/aip-wangcs/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+[INFO|2026-05-03 21:27:42] llamafactory.launcher:143 >> Initializing 1 distributed tasks at: 127.0.0.1:47229
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[WARNING|2026-05-03 21:27:56] llamafactory.extras.misc:154 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO] Running in WANDB offline mode
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/trl/import_utils.py", line 180, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/python/3.12.4/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/trl/trainer/dpo_trainer.py", line 40, in <module>
+    from transformers.models.auto.modeling_auto import MODEL_FOR_VISION_2_SEQ_MAPPING_NAMES
+ImportError: cannot import name 'MODEL_FOR_VISION_2_SEQ_MAPPING_NAMES' from 'transformers.models.auto.modeling_auto' (/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/transformers/models/auto/modeling_auto.py). Did you mean: 'MODEL_FOR_BACKBONE_MAPPING_NAMES'?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 182, in <module>
+    from llamafactory.train.tuner import run_exp  # use absolute import
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 31, in <module>
+    from .dpo import run_dpo
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/dpo/__init__.py", line 15, in <module>
+    from .workflow import run_dpo
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/dpo/workflow.py", line 27, in <module>
+    from .trainer import CustomDPOTrainer
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/dpo/trainer.py", line 27, in <module>
+    from trl import DPOTrainer
+  File "<frozen importlib._bootstrap>", line 1412, in _handle_fromlist
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/trl/import_utils.py", line 171, in __getattr__
+    value = getattr(module, name)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/trl/import_utils.py", line 170, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/trl/import_utils.py", line 182, in _get_module
+    raise RuntimeError(
+RuntimeError: Failed to import trl.trainer.dpo_trainer because of the following error (look up to see its traceback):
+cannot import name 'MODEL_FOR_VISION_2_SEQ_MAPPING_NAMES' from 'transformers.models.auto.modeling_auto' (/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/transformers/models/auto/modeling_auto.py)
+E0503 21:28:00.020000 2345987 torch/distributed/elastic/multiprocessing/api.py:986] failed (exitcode: 1) local_rank: 0 (pid: 2346005) of binary: /scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/python
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 362, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/run.py", line 990, in main
+    run(args)
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/run.py", line 981, in run
+    elastic_launch(
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 170, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 317, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-05-03_21:28:00
+  host      : kn171.paice.vectorinstitute.ai
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 2346005)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/llamafactory-cli", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/python/3.12.4/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '1', '--master_addr', '127.0.0.1', '--master_port', '47229', '/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.yaml']' returned non-zero exit status 1.

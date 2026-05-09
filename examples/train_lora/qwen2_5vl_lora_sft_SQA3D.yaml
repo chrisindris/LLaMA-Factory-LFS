@@ -1,9 +1,6 @@
 ### model
 model_name_or_path: Qwen/Qwen2.5-VL-7B-Instruct
-<<<<<<< HEAD
-=======
 cache_dir: /scratch/indrisch/huggingface/hub
->>>>>>> main
 image_max_pixels: 65536 # 313632 = 648x414 image, 1/4 of the size of the default SQA3D image, exceeds token limit by factor of 3; the system seems to work when this value is a divisor of 313632
 video_max_pixels: 16384
 trust_remote_code: true
