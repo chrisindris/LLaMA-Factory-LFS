@@ -9,19 +9,29 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=16G
 #SBATCH --time=00:15:00
-#SBATCH --array=0-3
+#SBATCH --array=3-3
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 
+# to run: sbatch export_merge_adapter_job.sh [cluster]
+
 set -euo pipefail
 
-module load gcc apptainer
+module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+module load python/3.12 cuda/12.6 opencv/4.12.0
+module load arrow
+module load apptainer
 
 # User inputs (override with environment variables or edit below)
 # Define arrays for array job
 BASE_MODEL_PATHS=(
     "Video-R1/Video-R1-7B"
     "Qwen/Qwen2.5-VL-7B-Instruct"
+)
+
+BASE_MODEL_PATH_TEMPLATES=(
+    "videor1"
+    "qwen2_vl"
 )
 
 ADAPTER_PATHS=(
@@ -45,8 +55,10 @@ ADAPTER_NAME=$(basename "$ADAPTER_PATH")
 # if ADAPTER_NAME contains 'videor1', use BASE_MODEL_PATHS[0], else use BASE_MODEL_PATHS[1]
 if [[ "$ADAPTER_NAME" == *"videor1"* ]]; then
     BASE_MODEL_PATH=${BASE_MODEL_PATHS[0]}
+    TEMPLATE=${BASE_MODEL_PATH_TEMPLATES[0]}
 else
     BASE_MODEL_PATH=${BASE_MODEL_PATHS[1]}
+    TEMPLATE=${BASE_MODEL_PATH_TEMPLATES[1]}
 fi
 USER_ACCOUNT=$(whoami)
 
@@ -65,27 +77,30 @@ export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
 
 # --- setting environment ---
 
-# Detect cluster based on terminal prompt or hostname
-if [[ "$PS1" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "$PS1" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]]; then
-    CLUSTER="RORQUAL"
-    RUNNING_MODE="APPTAINER" # running mode for RORQUAL
-    OFFLINE=1
-elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
-    CLUSTER="TRILLIUM"
-    RUNNING_MODE="APPTAINER" # running mode for TRILLIUM
-    OFFLINE=1
-elif [[ "$PS1" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "$PS1" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
-    CLUSTER="KILLARNEY"
-    RUNNING_MODE="VENV" # running mode for KILLARNEY
-    OFFLINE=1
-elif [[ "$PS1" == *"nibi"* ]] || [[ "$HOSTNAME" == *"nibi"* ]] || [[ "$PS1" == *"g"* ]] || [[ "$HOSTNAME" == *"g"* ]]; then
-    CLUSTER="NIBI"
-    RUNNING_MODE="APPTAINER" # running mode for NIBI
-else
-    echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to RORQUAL."
-    CLUSTER="RORQUAL"
-    RUNNING_MODE="APPTAINER" # running mode for unknown cluster
-    OFFLINE=1
+CLUSTER=${1}
+if [[ -z "${CLUSTER:-}" ]]; then
+    # Detect cluster based on terminal prompt or hostname
+    if [[ "$PS1" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "$PS1" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]]; then
+        CLUSTER="RORQUAL"
+        RUNNING_MODE="APPTAINER" # running mode for RORQUAL
+        OFFLINE=1
+    elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
+        CLUSTER="TRILLIUM"
+        RUNNING_MODE="APPTAINER" # running mode for TRILLIUM
+        OFFLINE=1
+    elif [[ "$PS1" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "$PS1" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
+        CLUSTER="KILLARNEY"
+        RUNNING_MODE="VENV" # running mode for KILLARNEY
+        OFFLINE=1
+    elif [[ "$PS1" == *"nibi"* ]] || [[ "$HOSTNAME" == *"nibi"* ]] || [[ "$PS1" == *"g"* ]] || [[ "$HOSTNAME" == *"g"* ]]; then
+        CLUSTER="NIBI"
+        RUNNING_MODE="APPTAINER" # running mode for NIBI
+    else
+        echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to RORQUAL."
+        CLUSTER="RORQUAL"
+        RUNNING_MODE="APPTAINER" # running mode for unknown cluster
+        OFFLINE=1
+    fi
 fi
 
 OFFLINE=${OFFLINE:-0} # by default, run in online mode
@@ -122,39 +137,82 @@ HF_HOME=${HF_HOME:-$HF_HOME}
 
 # ========= run the export and merge process inside the container =========
 
+# apptainer run --nv --writable-tmpfs \
+#   -B ${WORKDIR} \
+#   -B /dev/shm:/dev/shm \
+#   -B /etc/ssl/certs:/etc/ssl/certs:ro \
+#   -B /etc/pki:/etc/pki:ro \
+#   -W "${SLURM_TMPDIR:-/tmp}" \
+#   --env HUGGINGFACE_HUB_TOKEN="${HF_TOKEN}" \
+#   --env HF_HOME="${HF_HOME}" \
+#   --env HF_TOKEN="${HF_TOKEN}" \
+#   --env TRANSFORMERS_CACHE="${HF_HOME}" \
+#   --env TRANSFORMERS_OFFLINE=${TRANSFORMERS_OFFLINE} \
+#   --env HUGGINGFACE_HUB_OFFLINE=${HUGGINGFACE_HUB_OFFLINE} \
+#   --env CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-}" \
+#   --env DISABLE_VERSION_CHECK="${DISABLE_VERSION_CHECK}" \
+#   --pwd "${WORKDIR}" \
+#   "${CONTAINER}" bash -lc "set -euo pipefail; \
+#     llamafactory-cli export \
+#       --model_name_or_path \"${BASE_MODEL_PATH}\" \
+#       --adapter_name_or_path \"${ADAPTER_PATH}\" \
+#       --export_dir \"${EXPORT_DIR}\" \
+#       --template \"${TEMPLATE}\" \
+#       --finetuning_type lora \
+#       --export_size ${EXPORT_SIZE} \
+#       --export_device ${EXPORT_DEVICE} \
+#       --infer_dtype ${INFER_DTYPE} \
+#       --export_legacy_format false"
+
+
+# on the login node, run "apptainer overlay create --fakeroot --size 20000 ./apptainer/overlay.img"
+# apptainer run --nv --fakeroot --overlay /scratch/indrisch/LLaMA-Factory/apptainer/overlay.img \
+
+# apptainer run --nv --fakeroot --overlay /scratch/indrisch/LLaMA-Factory/apptainer/overlay.img \
+#     -C \
+#     -B /scratch/indrisch/ \
+#     -B /dev/shm:/dev/shm \
+#     -B /etc/ssl/certs:/etc/ssl/certs:ro \
+#     -B /etc/pki:/etc/pki:ro \
+#     /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif \
+#     bash
+
 apptainer run --nv --writable-tmpfs \
-  -B ${WORKDIR} \
-  -B /dev/shm:/dev/shm \
-  -B /etc/ssl/certs:/etc/ssl/certs:ro \
-  -B /etc/pki:/etc/pki:ro \
-  -W "${SLURM_TMPDIR:-/tmp}" \
-  --env HUGGINGFACE_HUB_TOKEN="${HF_TOKEN}" \
-  --env HF_HOME="${HF_HOME}" \
-  --env HF_TOKEN="${HF_TOKEN}" \
-  --env TRANSFORMERS_CACHE="${HF_HOME}" \
-  --env TRANSFORMERS_OFFLINE=${TRANSFORMERS_OFFLINE} \
-  --env HUGGINGFACE_HUB_OFFLINE=${HUGGINGFACE_HUB_OFFLINE} \
-  --env CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-}" \
-  --env DISABLE_VERSION_CHECK="${DISABLE_VERSION_CHECK}" \
-  --pwd "${WORKDIR}" \
-  "${CONTAINER}" bash -lc "set -euo pipefail; \
-    llamafactory-cli export \
-      --model_name_or_path \"${BASE_MODEL_PATH}\" \
-      --adapter_name_or_path \"${ADAPTER_PATH}\" \
-      --export_dir \"${EXPORT_DIR}\" \
-      --template \"${TEMPLATE}\" \
-      --finetuning_type lora \
-      --export_size ${EXPORT_SIZE} \
-      --export_device ${EXPORT_DEVICE} \
-      --infer_dtype ${INFER_DTYPE} \
-      --export_legacy_format false"
+    -C \
+    -B /scratch/indrisch/ \
+    -B ${WORKDIR} \
+    -B /dev/shm:/dev/shm \
+    -B /etc/ssl/certs:/etc/ssl/certs:ro \
+    -B /etc/pki:/etc/pki:ro \
+    -W "${SLURM_TMPDIR:-/tmp}" \
+    --env HUGGINGFACE_HUB_TOKEN="${HF_TOKEN}" \
+    --env HF_HOME="${HF_HOME}" \
+    --env HF_TOKEN="${HF_TOKEN}" \
+    --env TRANSFORMERS_CACHE="${HF_HOME}" \
+    --env TRANSFORMERS_OFFLINE=${TRANSFORMERS_OFFLINE} \
+    --env HUGGINGFACE_HUB_OFFLINE=${HUGGINGFACE_HUB_OFFLINE} \
+    --env CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-}" \
+    --env DISABLE_VERSION_CHECK="${DISABLE_VERSION_CHECK}" \
+    --env PYTHONPATH="${PROJECT_DIR}/src" \
+    --pwd "${WORKDIR}" \
+    "${CONTAINER}" bash -lc "set -euo pipefail; \
+        llamafactory-cli export \
+        --model_name_or_path \"${BASE_MODEL_PATH}\" \
+        --adapter_name_or_path \"${ADAPTER_PATH}\" \
+        --export_dir \"${EXPORT_DIR}\" \
+        --template \"${TEMPLATE}\" \
+        --finetuning_type lora \
+        --export_size ${EXPORT_SIZE} \
+        --export_device ${EXPORT_DEVICE} \
+        --infer_dtype ${INFER_DTYPE} \
+        --export_legacy_format false"
 
 echo "Model exported successfully to ${EXPORT_DIR}"
 
 # Export the output merged model to HF Hub (optional)
 # Uncomment and set the following variables if you want to push to HF Hub
-module load python/3.12.4
-module load arrow/21.0.0
+# module load python/3.12.4
+# module load arrow/21.0.0
 
 python -m pip install --upgrade huggingface_hub
 

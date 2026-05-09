@@ -54,8 +54,8 @@ pushd /scratch/indrisch/
 module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
 module load python/3.12 cuda/12.6 opencv/4.12.0
 module load arrow
-virtualenv --no-download venv_llamafactory_cu126_qwen35
-source venv_llamafactory_cu126_qwen35/bin/activate
+virtualenv --no-download venv_llamafactory_cu126
+source venv_llamafactory_cu126/bin/activate
 popd
 pip install --upgrade pip setuptools wheel
-pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers>=5.2.0" -e ".[torch,metrics,deepspeed,liger-kernel]"
+pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers==4.57.1+computecanada" -e ".[torch,metrics,deepspeed,liger-kernel]"

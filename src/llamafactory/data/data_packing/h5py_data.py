@@ -16,7 +16,10 @@ from pathlib import Path
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import warnings
 
-import h5py
+try:
+    import h5py
+except ModuleNotFoundError:
+    print("note: h5py is not installed, therefore running programs with h5py data will fail.")
 import numpy as np
 
 

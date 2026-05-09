@@ -1,3 +1,4 @@
+#!/bin/bash
 # regarding memory; trillium doesn't use a --mem option and the default of 256M on nibi is needed, so we can leave it out.
 
 module load apptainer
