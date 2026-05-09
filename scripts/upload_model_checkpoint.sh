@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # --- variables for the run commands ---
-# run this script as "./upload_model_checkpoint.sh [flag argumens]", where the following possibilities are valid:
+# run this script as "./upload_model_checkpoint.sh [flag arguments]", where the following possibilities are valid:
 # --id <ID> --checkpoint <CHECKPOINT> --wandb-log <WANDB_LOG> --commit-message <COMMIT MESSAGE>
 # --out <OUT_FILE> --commit-message <COMMIT MESSAGE>
 # note that if <COMMIT MESSAGE> is not provided, set it equal either to "<ID> CHECKPOINT> <WANDB_LOG" or "<OUT_FILE>", depending on which flags are provided.

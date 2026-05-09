@@ -84,16 +84,16 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # hf download --max-workers=12 cvis-tmu/easyr1_verl_sif --repo-type=dataset
-# hf download --max-workers=12 cvis-tmu/compute_canada_sif_files llamafactory.sif --repo-type=dataset --revision 382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a
+hf download --max-workers=12 cvis-tmu/compute_canada_sif_files llamafactory.sif --repo-type=dataset --revision 382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a
 # hf download --max-workers=12 cvis-tmu/compute_canada_sif_files vsibench_eval.sif --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62 --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa --repo-type=dataset
-hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_426steps
-hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_852steps
-hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_5epochs
-hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_426steps
-hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_852steps
-hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_5epochs
+# hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_426steps
+# hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_852steps
+# hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_5epochs
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_426steps
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_852steps
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_5epochs
 
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R1.0_C0.0_F0.0_X0.0 --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C1.0_F0.0_X0.0 --repo-type=dataset
