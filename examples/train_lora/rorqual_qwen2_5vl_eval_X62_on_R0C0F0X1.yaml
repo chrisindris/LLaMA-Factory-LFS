@@ -15,20 +15,12 @@ lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
 dataset: SQA3Devery24_R0C0F0X1
-<<<<<<< HEAD
-media_dir: /scratch/indrisch/data/
-=======
 media_dir: /scratch/indrisch/vllm_experiments/data/
->>>>>>> trillium-SFT-SQA3D
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
 # max_samples: 100 # this governs how many examples of the dataset get used; if not set, all 33047 examples are used
 overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
-<<<<<<< HEAD
-preprocessing_num_workers: 16 # Reduced from 32 to avoid deadlock with multimodal data (Rorqual)
-=======
 preprocessing_num_workers: 32 # use 32 on 4 GPUs and with the full dataset
->>>>>>> trillium-SFT-SQA3D
 dataloader_num_workers: 0
 dataloader_pin_memory: false
 low_cpu_mem_usage: true
@@ -54,11 +46,7 @@ warmup_ratio: 0.0
 bf16: true
 ddp_timeout: 180000000
 # resume_from_checkpoint: null
-<<<<<<< HEAD
-adapter_name_or_path: /scratch/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-SQA3Devery24_R12C12F12X62_400steps/snapshots/7f88c14066a90136b49c7c0a7c0b4e4c99953e53/
-=======
 adapter_name_or_path: /scratch/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/SQA3Devery24_R12C12F12X62_traineval/checkpoint-465/
->>>>>>> trillium-SFT-SQA3D
 
 # debugging level
 debug: underflow_overflow
@@ -72,13 +60,8 @@ enable_liger_kernel: true
 #use_unsloth: true # mutually exclusive with DeepSpeed, which partitions in a more complex manner than unsloth.
 
 # distribution
-<<<<<<< HEAD
-# For inference, we need ZeRO-3. No need for cpu offload.
-deepspeed: examples/deepspeed/ds_z3_config.json
-=======
 # For inference, we need ZeRO-3.
 deepspeed: examples/deepspeed/ds_z3_offload_config.json
->>>>>>> trillium-SFT-SQA3D
 
 ## eval
 val_size: 0.1

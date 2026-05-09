@@ -1,16 +1,15 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=1   
-#SBATCH --time=0-00:05:00
+#SBATCH --cpus-per-task=80   
+#SBATCH --time=0-00:25:00
 #SBATCH --gpus-per-node=h100:1
-#SBATCH --output=%N-helloworld-%j.out
-
-# regarding memory; trillium doesn't use a --mem option and the default of 256M on nibi is needed, so we can leave it out.
+#SBATCH --output=%N-qwen2_5vl_lora_sft-%j.out
 
 module load apptainer
 
 # better to have triton cache on a non-nfs file system for speed
+# if we are offline, we need to indicate this
 apptainer run --nv --writable-tmpfs \
     -B /scratch/indrisch/LLaMA-Factory \
     -B /home/indrisch \
@@ -26,4 +25,4 @@ apptainer run --nv --writable-tmpfs \
     --env FLASHINFER_WORKSPACE_BASE="/scratch/indrisch/" \
     --pwd /scratch/indrisch/LLaMA-Factory \
     /scratch/indrisch/easyr1_verl_sif/llamafactory.sif \
-    bash /scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck/sanitycheck.sh
+    llamafactory-cli train /scratch/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft.yaml

@@ -41,6 +41,7 @@
         "VLLM_CACHE_ROOT": "/scratch/indrisch/.cache/vllm",
         "BEST_GPU": "h100",
         "FLASHINFER_WORKSPACE_BASE": "/scratch/indrisch/",
+        "SIF_FILE": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--easyr1_verl_sif/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif",
         "VENV_DATASET_UPLOAD": "/scratch/indrisch/venv_dataset_upload/",
         "VENV_LLAMAFACTORY": "/scratch/indrisch/venv_llamafactory_cu126/"
     },
