@@ -1,0 +1,43 @@
+/cm/local/apps/slurm/var/spool/job3693735/slurm_script: /cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/init/bash: Too many levels of symbolic links
+SLURM_JOB_NODELIST: kn117
+HEAD_NODE: kn117
+MASTER_ADDR: kn117
+MASTER_PORT: 29500
+/project/aip-wangcs/indrisch//LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/slurm_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh: /cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/init/bash: Too many levels of symbolic links
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126_qwen35/
+RUNNING_MODE: VENV
+environment: line 17: /cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/libexec/lmod: Too many levels of symbolic links
+/project/aip-wangcs/indrisch/LLaMA-Factory/install_as_venv.sh: /cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/init/bash: Too many levels of symbolic links
+VENV_LLAMAFACTORY: /tmp/venv_llamafactory_cu132_qwen35
+AVX-512 support detected — enabling AVX-512 compile flags for native extensions
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+g++ (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Setting up environment for CUDA 13.x
+environment: line 17: /cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/libexec/lmod: Too many levels of symbolic links
+/project/aip-wangcs/indrisch/LLaMA-Factory/install_as_venv.sh: line 108: virtualenv: command not found
+/project/aip-wangcs/indrisch/LLaMA-Factory/install_as_venv.sh: line 109: /tmp/venv_llamafactory_cu132_qwen35/bin/activate: No such file or directory
+/project/aip-wangcs/indrisch/LLaMA-Factory/install_as_venv.sh: line 110: /home/indrisch/.local/bin/pip: cannot execute: required file not found
+Installing transformers>=5.2.0 for Qwen3.5 compatibility
+/project/aip-wangcs/indrisch/LLaMA-Factory/install_as_venv.sh: line 116: /home/indrisch/.local/bin/pip: cannot execute: required file not found
+/project/aip-wangcs/indrisch//LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/slurm_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh: line 452: /tmp/venv_llamafactory_cu132_qwen35/bin/activate: No such file or directory
+/project/aip-wangcs/indrisch/LLaMA-Factory /project/aip-wangcs/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+SLURM_NNODES: 1
+/project/aip-wangcs/indrisch//LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/slurm_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh: line 514: llamafactory-cli: command not found
+srun: error: kn117: task 0: Exited with exit code 127
+srun: Terminating StepId=3693735.0
