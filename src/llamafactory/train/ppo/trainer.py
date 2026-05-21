@@ -143,9 +143,25 @@ class CustomPPOTrainer(PPOTrainer, Trainer):
         self.reward_model = reward_model
         self.current_device = get_current_device()  # patch for deepspeed training
 
+        additional_special_tokens_ids = getattr(self.tokenizer, "additional_special_tokens_ids", None)
+        if additional_special_tokens_ids is None:
+            additional_special_tokens = getattr(self.tokenizer, "additional_special_tokens", None) or []
+            if additional_special_tokens:
+                additional_special_tokens_ids = self.tokenizer.convert_tokens_to_ids(additional_special_tokens)
+                if isinstance(additional_special_tokens_ids, int):
+                    additional_special_tokens_ids = [additional_special_tokens_ids]
+            else:
+                additional_special_tokens_ids = []
+
+        if isinstance(additional_special_tokens_ids, int):
+            additional_special_tokens_ids = [additional_special_tokens_ids]
+
+        additional_special_tokens_ids = [
+            token_id for token_id in list(additional_special_tokens_ids) if token_id is not None
+        ]
         self.generation_config = GenerationConfig(
             pad_token_id=self.tokenizer.pad_token_id,
-            eos_token_id=[self.tokenizer.eos_token_id] + self.tokenizer.additional_special_tokens_ids,
+            eos_token_id=[self.tokenizer.eos_token_id] + additional_special_tokens_ids,
             **generating_args.to_dict(),
         )
 

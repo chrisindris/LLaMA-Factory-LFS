@@ -80,6 +80,7 @@
         "HF_HUB_CACHE": "/scratch/indrisch/huggingface/hub",
         "HF_HUB_DISABLE_XET": "1",
         "TRITON_CACHE_DIR": "/scratch/indrisch/.triton_cache",
+        "TORCH_EXTENSIONS_DIR": "/scratch/indrisch/.cache/torch_extensions",
         "VLLM_HOME": "/scratch/indrisch/vllm_experiments/",
         "VLLM_CONFIG_DIR": "/scratch/indrisch/.config/vllm",
         "VLLM_CONFIG_ROOT": "/scratch/indrisch/.config/vllm",

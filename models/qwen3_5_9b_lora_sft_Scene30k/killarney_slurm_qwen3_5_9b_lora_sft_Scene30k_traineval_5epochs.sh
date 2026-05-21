@@ -4,8 +4,10 @@
 #SBATCH --output=out/%N-qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs-%j.out
 #SBATCH --cpus-per-task=48
 #SBATCH --time=1-00:00:00
-#SBATCH --mem=1900G
+#SBATCH --mem=1950G
 #SBATCH --gpus-per-node=h100:8
+#SBATCH --mail-user=christopher.indris@torontomu.ca
+#SBATCH --mail-type=ALL
 
 if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then
     PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"

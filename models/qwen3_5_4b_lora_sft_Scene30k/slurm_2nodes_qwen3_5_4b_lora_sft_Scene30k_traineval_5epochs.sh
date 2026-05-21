@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --nodes=1
+#SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
-#SBATCH --output=out/%N-qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs-%j.out
+#SBATCH --output=out/%N-2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs-%j.out
 
 # RORQUAL:
 #SBATCH --cpus-per-task=64
@@ -21,7 +21,7 @@
 #SBATCH --gpus-per-node=h100:8
 
 # ---------------------------------------------------------------------
-# ------------ qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs ----------
+# ------------ 2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs ----------
 # ---------------------------------------------------------------------
 #
 # This script will train (SFT, LoRA) a Qwen3.5 model on the Scene30k dataset for 5 epochs.
@@ -30,7 +30,7 @@
 
 # ----- HEADER: ENV VARIABLES -----
 
-EXPERIMENT_NAME="qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs"
+EXPERIMENT_NAME="2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs"
 
 # --- for reading cluster-specific settings ---
 
@@ -435,18 +435,32 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         # module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
         # module load python/3.12 cuda/12.6 opencv/4.12.0
         # module load arrow
-        module load StdEnv gcc openmpi python/3.12 cuda/12.9 opencv arrow
+        module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow
 
         # copying the venv to local storage is necessary on Killarney because the shared filesystems have very slow metadata performance, which makes using a venv directly on the shared filesystem extremely slow due to all the stat calls that pip packages require. Copying the venv to local storage and running from there avoids this issue.
-        echo "Copying venv ${VENV_LLAMAFACTORY} to local storage ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})..."
-        cp -a ${VENV_LLAMAFACTORY} ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
-        source ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})/bin/activate
+        # echo "Copying venv ${VENV_LLAMAFACTORY} to local storage ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})..."
+        # cp -a ${VENV_LLAMAFACTORY} ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
+        # source ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})/bin/activate
+
+        # we can generate the venv on the local storage.
+        export DS_BUILD_CPU_ADAM=1
+        export BUILD_UTILS=1
+        export DS_BUILD_OPS=1
+        VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu132_qwen35/" # it's best to use a cuda 13.2 for this.
+        VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
+        /project/aip-wangcs/indrisch/LLaMA-Factory/install_as_venv.sh KILLARNEY
+        source ${VENV_LLAMAFACTORY}/bin/activate
+
 
         export CUDA_VISIBLE_DEVICES=0,1,2,3
         export FORCE_TORCHRUN=1 
         export HF_HUB_OFFLINE=1 
         export WANDB_MODE=offline 
         export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
+        export TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions"
+        mkdir -p "${TORCH_EXTENSIONS_DIR}"
+        export CFLAGS="-O3 -march=native -mavx512f -mavx512dq -mavx512bw"
+        export CXXFLAGS="-O3 -std=c++17 -march=native -mavx512f -mavx512dq -mavx512bw"
         export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
         # Use node-local cache to avoid NFS contention for datasets; this replaces the cache_dir from the yaml. 
         export HF_DATASETS_CACHE="${SLURM_TMPDIR}/hf_datasets"
