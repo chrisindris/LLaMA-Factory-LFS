@@ -1,0 +1,2172 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+Hello, world!
+================================================
+The current directory is /scratch/indrisch/LLaMA-Factory
+================================================
+The environment variables are: SHELL=/bin/bash
+EBROOTIMKL=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0
+SLURM_GPUS_PER_NODE=h100:1
+NV_LIBCUBLAS_VERSION=12.4.5.8-1
+NVIDIA_VISIBLE_DEVICES=all
+COLORTERM=truecolor
+NV_NVML_DEV_VERSION=12.4.127-1
+SLURM_JOB_USER=indrisch
+CLU=nib
+SLURM_TASKS_PER_NODE=1
+XDG_CONFIG_DIRS=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/etc/xdg:/etc/xdg
+API_PORT=8000
+SLURM_JOB_UID=3122343
+EBVERSIONOPENMPI=4.1.5
+HISTCONTROL=ignoredups
+TERM_PROGRAM_VERSION=2.0.43
+LMOD_FAMILY_APPTAINER=apptainer
+EBROOTPMIX=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4
+NV_LIBNCCL_DEV_PACKAGE=libnccl-dev=2.21.5-1+cuda12.4
+SLURM_HOME=/opt/software/slurm/24.11.6
+SLURM_TASK_PID=224232
+NV_LIBNCCL_DEV_PACKAGE_VERSION=2.21.5-1
+PKG_CONFIG_PATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/mkl/2023.2.0/lib/pkgconfig:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/lib/pkgconfig:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5/lib/pkgconfig:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4/lib/pkgconfig:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0/lib/pkgconfig:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1/lib/pkgconfig:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/lib/pkgconfig
+SLURM_JOB_GPUS=4
+SLURM_LOCALID=0
+SLURM_SUBMIT_DIR=/scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck
+HISTSIZE=1000
+HOSTNAME=g20
+SINGULARITY_NAME=llamafactory.sif
+EBDEVELLIBFABRIC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0/easybuild/x86-64-v4-Compiler-gcccore-libfabric-1.18.0-easybuild-devel
+EBVERSIONAPPTAINER=1.3.5
+SLURMD_NODENAME=g20
+FPATH=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/local/share/zsh/site-functions:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/site-functions:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Calendar:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Chpwd:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/AIX:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/BSD:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Base:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Cygwin:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Darwin:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Debian:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Linux:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Mandriva:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Redhat:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Solaris:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Unix:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/X:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Zsh:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/openSUSE:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Exceptions:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/MIME:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Math:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Misc:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Newuser:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Prompts:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/TCP:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/VCS_Info:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/VCS_Info/Backends:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Zftp:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Zle:/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/init/ksh_funcs
+NODE_OPTIONS=
+LMOD_FAMILY_BASE_OS=gentoo
+SLURM_JOB_START_TIME=1762194857
+_ModuleTable011_=c29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L0NvbXBpbGVyL2djYzEyL29wZW5tcGkvNC4xLjUubHVhIiwKZnVsbE5hbWUgPSAib3Blbm1waS80LjEuNSIsCmxvYWRPcmRlciA9IDEwLApwcm9wVCA9IHsKdHlwZV8gPSB7Cm1waSA9IDEsCn0sCn0sCnN0YWNrRGVwdGggPSAxLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAib3Blbm1waSIsCndWID0gIjAwMDAwMDAwNC4wMDAwMDAwMDEuMDAwMDAwMDA1Lip6ZmluYWwiLAp9LApwbWl4ID0gewpmbiA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L0NvbXBpbGVyL2djY2NvcmUvcG1peC80LjIuNC5sdWEi
+HYDRA_LAUNCHER_EXTRA_ARGS=--external-launcher
+NVIDIA_REQUIRE_CUDA=cuda>=12.4 brand=tesla,driver>=470,driver<471 brand=unknown,driver>=470,driver<471 brand=nvidia,driver>=470,driver<471 brand=nvidiartx,driver>=470,driver<471 brand=geforce,driver>=470,driver<471 brand=geforcertx,driver>=470,driver<471 brand=quadro,driver>=470,driver<471 brand=quadrortx,driver>=470,driver<471 brand=titan,driver>=470,driver<471 brand=titanrtx,driver>=470,driver<471 brand=tesla,driver>=525,driver<526 brand=unknown,driver>=525,driver<526 brand=nvidia,driver>=525,driver<526 brand=nvidiartx,driver>=525,driver<526 brand=geforce,driver>=525,driver<526 brand=geforcertx,driver>=525,driver<526 brand=quadro,driver>=525,driver<526 brand=quadrortx,driver>=525,driver<526 brand=titan,driver>=525,driver<526 brand=titanrtx,driver>=525,driver<526 brand=tesla,driver>=535,driver<536 brand=unknown,driver>=535,driver<536 brand=nvidia,driver>=535,driver<536 brand=nvidiartx,driver>=535,driver<536 brand=geforce,driver>=535,driver<536 brand=geforcertx,driver>=535,driver<536 brand=quadro,driver>=535,driver<536 brand=quadrortx,driver>=535,driver<536 brand=titan,driver>=535,driver<536 brand=titanrtx,driver>=535,driver<536
+_ModuleTable007_=L0NvbXBpbGVyL2djY2NvcmVcIikiLAp9LApmbiA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2N1c3RvbS9tb2R1bGVzL2dlbnRvby8yMDIzLmx1YSIsCmZ1bGxOYW1lID0gImdlbnRvby8yMDIzIiwKbG9hZE9yZGVyID0gMiwKcHJvcFQgPSB7Cmxtb2QgPSB7CnN0aWNreSA9IDEsCn0sCn0sCnN0YWNrRGVwdGggPSAxLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiZ2VudG9vLzIwMjMiLAp3ViA9ICIwMDAwMDIwMjMuKnpmaW5hbCIsCn0sCmh3bG9jID0gewpmbiA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L0NvbXBpbGVyL2djY2NvcmUvaHdsb2MvMi45LjEubHVhIiwKZnVsbE5hbWUg
+HF_HUB_CACHE=/scratch/indrisch/huggingface/hub
+_ModuleTable002_=Lip6ZmluYWwiLAp9LApTdGRFbnYgPSB7CmZuID0gIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvY3VzdG9tL21vZHVsZXMvU3RkRW52LzIwMjMubHVhIiwKZnVsbE5hbWUgPSAiU3RkRW52LzIwMjMiLApsb2FkT3JkZXIgPSAxMywKcHJvcFQgPSB7Cmxtb2QgPSB7CnN0aWNreSA9IDEsCn0sCn0sCnN0YWNrRGVwdGggPSAwLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiU3RkRW52IiwKd1YgPSAiczAwMDAyMDIzLip6ZmluYWwiLAp9LAphcHB0YWluZXIgPSB7CmZuID0gIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvZWFzeWJ1aWxkL21vZHVsZXMvMjAyMy94ODYtNjQtdjMvQ29yZS9hcHB0YWluZXIvMS4zLjUubHVhIiwKZnVsbE5hbWUgPSAiYXBwdGFp
+NV_LIBCUBLAS_DEV_PACKAGE=libcublas-dev-12-4=12.4.5.8-1
+NV_NVTX_VERSION=12.4.127-1
+__LMOD_REF_COUNT_MODULEPATH=/opt/software/modulefiles:2;/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/MPI/gcc12/openmpi4:1;/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcc12:1;/home/indrisch/.local/easybuild/modules/2023/x86-64-v4/Compiler/gcccore:1;/home/indrisch/.local/easybuild/modules/2023/x86-64-v3/Core:1;/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore:1;/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core:1;/cvmfs/soft.computecanada.ca/custom/modules:1
+EPREFIX=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3
+LMOD_AVAIL_EXTENSIONS=no
+OMPI_MCA_btl=^openib,ofi
+_ModuleTable005_=c2VyTmFtZSA9ICJnY2MiLAp3ViA9ICJeMDAwMDAwMTIuMDAwMDAwMDAzLip6ZmluYWwiLAp9LApnY2Njb3JlID0gewpmbiA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmUvZ2NjY29yZS8uMTIuMy5sdWEiLApmdWxsTmFtZSA9ICJnY2Njb3JlLy4xMi4zIiwKbG9hZE9yZGVyID0gMywKcHJvcFQgPSB7fSwKcmVmX2NvdW50ID0gMiwKc3RhY2tEZXB0aCA9IDIsCnN0YXR1cyA9ICJhY3RpdmUiLAp1c2VyTmFtZSA9ICJnY2Njb3JlLy4xMi4zIiwKd1YgPSAiMDAwMDAwMDAwLjAwMDAwMDAxMi4wMDAwMDAwMDMuKnpmaW5hbCIsCn0sCmdlbnRvbyA9IHsKYWN0aW9uQSA9IHsKCiJwcmVwZW5kX3BhdGgoXCJN
+NV_CUDA_CUDART_DEV_VERSION=12.4.127-1
+NV_LIBCUSPARSE_VERSION=12.3.1.170-1
+SLURM_CLUSTER_NAME=nibi
+EBROOTOPENMPI=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5
+EBVERSIONGENTOO=2023
+SLURM_JOB_END_TIME=1762194977
+EBVERSIONMII=1.1.2
+NV_LIBNPP_VERSION=12.2.5.30-1
+LMOD_ADMIN_FILE=/cvmfs/soft.computecanada.ca/config/lmod/admin.list
+SLURM_CPUS_ON_NODE=1
+EBVERSIONUCX=1.14.1
+EBROOTGENTOO=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr
+LMOD_RC=/cvmfs/soft.computecanada.ca/config/lmod/lmodrc.lua:/cvmfs/soft.computecanada.ca/config/lmod/lmodrc/cache_avx512_2025.lua
+SINGULARITY_ENVIRONMENT=/.singularity.d/env/91-environment.sh
+NCCL_VERSION=2.21.5-1
+SLURM_JOB_CPUS_PER_NODE=1
+EBROOTMII=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/mii/1.1.2
+EBVERSIONUCC=1.2.0
+EBROOTHWLOC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1
+LMOD_DIR=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/libexec
+RSNT_ARCH=avx512
+SACCT_FORMAT=Account,User,JobID,Start,End,AllocCPUS,Elapsed,AllocTRES%30,CPUTime,AveRSS,MaxRSS,MaxRSSTask,MaxRSSNode,NodeList,ExitCode,State%20
+SLURM_GPUS_ON_NODE=1
+PRTE_MCA_plm_slurm_args=--external-launcher
+PWD=/scratch/indrisch/LLaMA-Factory
+SLURM_GTIDS=0
+LOGNAME=indrisch
+MODULERCFILE=:/cvmfs/soft.computecanada.ca/config/lmod//modulerc_nibi:/cvmfs/soft.computecanada.ca/config/lmod//modulerc
+XDG_SESSION_TYPE=tty
+SLURM_JOB_PARTITION=gpubase_bygpu_b1
+MODULESHOME=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod
+NVIDIA_DRIVER_CAPABILITIES=compute,utility
+RSNT_INTERCONNECT=infiniband
+MANPATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/share/man:/opt/software/slurm/24.11.6/share/man:/opt/software/slurm/24.11.6/share/man:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/share/man:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5/share/man:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4/share/man:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0/share/man:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/share/man:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/gcc-data/x86_64-pc-linux-gnu/12/man:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/binutils-data/x86_64-pc-linux-gnu/2.40/man:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/man:/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/share/man::
+NV_NVPROF_DEV_PACKAGE=cuda-nvprof-12-4=12.4.127-1
+SLURM_TRES_PER_TASK=cpu=1
+NV_LIBNPP_PACKAGE=libnpp-12-4=12.2.5.30-1
+ROCR_VISIBLE_DEVICES=0
+SLURM_OOM_KILL_STEP=0
+EBDEVELIMKL=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/easybuild/x86-64-v3-Core-imkl-2023.2.0-easybuild-devel
+NV_LIBNCCL_DEV_PACKAGE_NAME=libnccl-dev
+SLURM_JOB_NUM_NODES=1
+OMPI_MCA_pml=^yalla
+FLEXIBLAS_LIBRARY_PATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/mkl/2023.2.0/lib/intel64/flexiblas
+VLLM_WORKER_MULTIPROC_METHOD=spawn
+_ModuleTable008_=PSAiaHdsb2MvMi45LjEiLApsb2FkT3JkZXIgPSA1LApwcm9wVCA9IHt9LApyZWZfY291bnQgPSAyLApzdGFja0RlcHRoID0gMiwKc3RhdHVzID0gImFjdGl2ZSIsCnVzZXJOYW1lID0gImh3bG9jLzIuOS4xIiwKd1YgPSAiMDAwMDAwMDAyLjAwMDAwMDAwOS4wMDAwMDAwMDEuKnpmaW5hbCIsCn0sCmlta2wgPSB7CmZuID0gIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvZWFzeWJ1aWxkL21vZHVsZXMvMjAyMy94ODYtNjQtdjMvQ29yZS9pbWtsLzIwMjMuMi4wLmx1YSIsCmZ1bGxOYW1lID0gImlta2wvMjAyMy4yLjAiLApsb2FkT3JkZXIgPSAxMiwKcHJvcFQgPSB7CnR5cGVfID0gewptYXRoID0gMSwKfSwKfSwKc3RhY2tEZXB0aCA9IDEsCnN0YXR1cyA9ICJhY3RpdmUi
+VSCODE_GIT_ASKPASS_NODE=/home/indrisch/.cursor-server/cli/servers/Stable-8e4da76ad196925accaa169efcae28c45454cce0/server/node
+EBVERSIONHWLOC=2.9.1
+SLURM_JOBID=3840042
+NV_LIBCUBLAS_DEV_VERSION=12.4.5.8-1
+PIP_CONFIG_FILE=/cvmfs/soft.computecanada.ca/config/python/pip-x86-64-v4-gentoo2023.conf
+_ModuleTable013_=ZSIsCnVzZXJOYW1lID0gInVjYy8xLjIuMCIsCndWID0gIjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpmaW5hbCIsCn0sCnVjeCA9IHsKZm4gPSAiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5jYS9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12NC9Db21waWxlci9nY2Njb3JlL3VjeC8xLjE0LjEubHVhIiwKZnVsbE5hbWUgPSAidWN4LzEuMTQuMSIsCmxvYWRPcmRlciA9IDYsCnByb3BUID0ge30sCnJlZl9jb3VudCA9IDIsCnN0YWNrRGVwdGggPSAyLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAidWN4LzEuMTQuMSIsCndWID0gIjAwMDAwMDAwMS4wMDAwMDAwMTQuMDAwMDAwMDAxLip6ZmluYWwiLAp9LAp9LAptcGF0aEEgPSB7CiIvb3B0L3NvZnR3YXJlL21v
+NVIDIA_PRODUCT_NAME=CUDA
+EBROOTFLEXIBLAS=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1
+I_MPI_HYDRA_BOOTSTRAP_EXEC_EXTRA_ARGS=--external-launcher
+SLURM_JOB_QOS=normal
+USER_PATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/bin:/opt/software/slurm/24.11.6/bin:/opt/software/slurm/bin:/home/indrisch/.cursor-server/cli/servers/Stable-8e4da76ad196925accaa169efcae28c45454cce0/server/bin/remote-cli:/home/indrisch/google-cloud-sdk/bin:/opt/software/slurm/24.11.6/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/mii/1.1.2/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucc/1.2.0/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/sbin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/bin:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/x86_64-pc-linux-gnu/gcc-bin/12:/cvmfs/soft.computecanada.ca/easybuild/bin:/cvmfs/soft.computecanada.ca/custom/bin:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin:/cvmfs/soft.computecanada.ca/custom/bin/computecanada:/opt/software/slurm/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/indrisch/.local/bin:/home/indrisch/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+NV_LIBCUBLAS_DEV_PACKAGE_NAME=libcublas-dev-12-4
+APPTAINER_ENVIRONMENT=/.singularity.d/env/91-environment.sh
+EBDEVELGCCCORE=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/x86_64-pc-linux-gnu/gcc-bin/easybuild/x86-64-v3-Core-gcccore-.12.3.1-easybuild-devel
+LMOD_SHORT_TIME=3600
+APPTAINER_APPNAME=
+NV_CUDA_CUDART_VERSION=12.4.127-1
+EBDEVELOPENMPI=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5/easybuild/x86-64-v4-Compiler-gcc12-openmpi-4.1.5-easybuild-devel
+HOME=/home/indrisch
+_ModuleTable015_=bXBpbGVyL2djY2NvcmUiCiwgIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvZWFzeWJ1aWxkL21vZHVsZXMvMjAyMy94ODYtNjQtdjMvQ29yZSIsICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2N1c3RvbS9tb2R1bGVzIiwKfSwKc3lzdGVtQmFzZU1QQVRIID0gIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvY3VzdG9tL21vZHVsZXMiLAp9Cg==
+_ModuleTable_Sz_=15
+LANG=C.UTF-8
+__LMOD_SET_KSH_FPATH=1
+LMOD_FAMILY_BASE_OS_VERSION=2023
+LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=01;36:*.au=01;36:*.flac=01;36:*.m4a=01;36:*.mid=01;36:*.midi=01;36:*.mka=01;36:*.mp3=01;36:*.mpc=01;36:*.ogg=01;36:*.ra=01;36:*.wav=01;36:*.oga=01;36:*.opus=01;36:*.spx=01;36:*.xspf=01;36:
+APPTAINER_COMMAND=run
+SLURM_PROCID=0
+EBROOTGCC=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/x86_64-pc-linux-gnu/gcc-bin
+SCRATCH=/scratch/indrisch
+CUDA_VERSION=12.4.1
+SINGULARITY_CONTAINER=/scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+SSL_CERT_DIR=/etc/pki/tls/certs
+NV_LIBCUBLAS_PACKAGE=libcublas-12-4=12.4.5.8-1
+LMOD_SETTARG_FULL_SUPPORT=no
+PYTORCH_VERSION=2.6.0
+MII=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/mii/1.1.2/bin/mii
+EBROOTLIBFABRIC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0
+NV_CUDA_NSIGHT_COMPUTE_DEV_PACKAGE=cuda-nsight-compute-12-4=12.4.1-1
+TMPDIR=/tmp
+GIT_ASKPASS=/home/indrisch/.cursor-server/cli/servers/Stable-8e4da76ad196925accaa169efcae28c45454cce0/server/extensions/git/dist/askpass.sh
+OMPI_MCA_mtl=^ofi
+CMAKE_PREFIX_PATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/mii/1.1.2:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucc/1.2.0:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1
+PROMPT_COMMAND=PS1="Apptainer> "; unset PROMPT_COMMAND
+RSNT_CPU_VENDOR_ID=intel
+https_proxy=
+EBVERSIONIMKL=2023.2.0
+_ModuleTable010_=dC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmUvbWlpLzEuMS4yLmx1YSIsCmZ1bGxOYW1lID0gIm1paS8xLjEuMiIsCmxvYWRPcmRlciA9IDE0LApwcm9wVCA9IHt9LApzdGFja0RlcHRoID0gMCwKc3RhdHVzID0gImFjdGl2ZSIsCnVzZXJOYW1lID0gIm1paSIsCndWID0gIjAwMDAwMDAwMS4wMDAwMDAwMDEuMDAwMDAwMDAyLip6ZmluYWwiLAp9LApvcGVubXBpID0gewphY3Rpb25BID0gewoicHJlcGVuZF9wYXRoKFwiTU9EVUxFUEFUSFwiLFwiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5jYS9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12NC9NUEkvZ2NjMTIvb3Blbm1waTRcIikiLAp9LApmbiA9ICIvY3ZtZnMv
+SLURM_CPUS_PER_TASK=1
+SLURM_NTASKS=1
+SSH_USER_AUTH=/tmp/sshauth.XXXXXXXXX9uN86l
+EBDEVELAPPTAINER=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/easybuild/x86-64-v3-Core-apptainer-1.3.5-easybuild-devel
+SLURM_TOPOLOGY_ADDR=top.gswitch.g20
+LMOD_VERSION=8.7.47
+SSH_CONNECTION=10.37.127.254 41224 10.37.36.13 22
+EBDEVELFLEXIBLAS=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/easybuild/x86-64-v4-Compiler-gcc12-flexiblas-3.3.1-easybuild-devel
+NV_LIBNPP_DEV_PACKAGE=libnpp-dev-12-4=12.2.5.30-1
+RSNT_ENABLE_LMOD_CACHE=yes
+CC_CLUSTER=nibi
+__LMOD_Priority_MODULEPATH=/opt/software/modulefiles:-10
+EBVERSIONGCC=12.3.1
+SLURM_RESTART_COUNT=0
+LMOD_PACKAGE_PATH=/cvmfs/soft.computecanada.ca/config/lmod/
+LMOD_FAMILY_APPTAINER_VERSION=1.3.5
+NV_LIBCUBLAS_PACKAGE_NAME=libcublas-12-4
+TRITON_CACHE_DIR=/local/scratch/indrisch.3840042.0/.triton_cache
+ZE_AFFINITY_MASK=0
+EBDEVELGCC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/gcc/12.3/easybuild/x86-64-v3-Core-gcc-12.3-easybuild-devel
+_ModuleTable003_=bmVyLzEuMy41IiwKbG9hZE9yZGVyID0gMTUsCnByb3BUID0ge30sCnN0YWNrRGVwdGggPSAwLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiYXBwdGFpbmVyIiwKd1YgPSAiXjAwMDAwMDAxLjAwMDAwMDAwMy4wMDAwMDAwMDUuKnpmaW5hbCIsCn0sCmZsZXhpYmxhcyA9IHsKZm4gPSAiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5jYS9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12NC9Db21waWxlci9nY2MxMi9mbGV4aWJsYXMvMy4zLjEubHVhIiwKZnVsbE5hbWUgPSAiZmxleGlibGFzLzMuMy4xIiwKbG9hZE9yZGVyID0gMTEsCnByb3BUID0ge30sCnN0YWNrRGVwdGggPSAxLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiZmxleGlibGFzIiwK
+HYDRA_BOOTSTRAP=slurm
+INFOPATH=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/binutils-data/x86_64-pc-linux-gnu/2.40/info::
+NV_LIBNPP_DEV_VERSION=12.2.5.30-1
+MODULEPATH_ROOT=/cvmfs/soft.computecanada.ca/easybuild/modules
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+CUDA_VISIBLE_DEVICES=0
+SLURM_TOPOLOGY_ADDR_PATTERN=switch.switch.node
+HF_HOME=/scratch/indrisch/huggingface/hub
+EBROOTGCCCORE=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/x86_64-pc-linux-gnu/gcc-bin
+XDG_SESSION_CLASS=user
+LMOD_PKG=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod
+APPTAINER_CONTAINER=/scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+SLURM_SCRIPT_CONTEXT=prolog_task
+SLURM_MEM_PER_NODE=262144
+EBROOTAPPTAINER=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5
+PYTHONPATH=/cvmfs/soft.computecanada.ca/custom/python/site-packages
+TERM=xterm-256color
+NV_LIBCUSPARSE_DEV_VERSION=12.3.1.170-1
+MII_INDEX_FILE=/cvmfs/soft.computecanada.ca/custom/mii/data/avx512_intel
+MKL_EXAMPLES=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/mkl/2023.2.0/examples
+LESSOPEN=|lesspipe %s
+USER=indrisch
+CURL_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt
+LIBRARY_PATH=/usr/local/cuda/lib64/stubs
+SLURM_NODELIST=g20
+VSCODE_GIT_IPC_HANDLE=/run/user/3122343/vscode-git-1df9c521a3.sock
+ENVIRONMENT=BATCH
+GPU_DEVICE_ORDINAL=0
+RSNT_SLURM_MPI_TYPE=pmix
+ARCH=x86_64
+EBDEVELUCX=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1/easybuild/x86-64-v4-Compiler-gcccore-ucx-1.14.1-easybuild-devel
+EBDEVELUCC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucc/1.2.0/easybuild/x86-64-v4-Compiler-gcccore-ucc-1.2.0-easybuild-devel
+LOADEDMODULES=CCconfig:gentoo/2023:gcccore/.12.3:gcc/12.3:hwloc/2.9.1:ucx/1.14.1:libfabric/1.18.0:pmix/4.2.4:ucc/1.2.0:openmpi/4.1.5:flexiblas/3.3.1:imkl/2023.2.0:StdEnv/2023:mii/1.1.2:apptainer/1.3.5
+EBVERSIONFLEXIBLAS=3.3.1
+SLURM_JOB_ACCOUNT=def-wangcs_gpu
+SLURM_PRIO_PROCESS=0
+SLURM_NPROCS=1
+SLURM_TMPDIR=/local/scratch/indrisch.3840042.0
+LMOD_ROOT=/cvmfs/soft.computecanada.ca/custom/software/lmod
+EBDEVELMII=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/mii/1.1.2/easybuild/x86-64-v3-Core-mii-1.1.2-easybuild-devel
+SHLVL=4
+MAX_JOBS=16
+_ModuleTable012_=LApmdWxsTmFtZSA9ICJwbWl4LzQuMi40IiwKbG9hZE9yZGVyID0gOCwKcHJvcFQgPSB7fSwKcmVmX2NvdW50ID0gMSwKc3RhY2tEZXB0aCA9IDIsCnN0YXR1cyA9ICJhY3RpdmUiLAp1c2VyTmFtZSA9ICJwbWl4LzQuMi40IiwKd1YgPSAiMDAwMDAwMDA0LjAwMDAwMDAwMi4wMDAwMDAwMDQuKnpmaW5hbCIsCn0sCnVjYyA9IHsKZm4gPSAiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5jYS9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12NC9Db21waWxlci9nY2Njb3JlL3VjYy8xLjIuMC5sdWEiLApmdWxsTmFtZSA9ICJ1Y2MvMS4yLjAiLApsb2FkT3JkZXIgPSA5LApwcm9wVCA9IHt9LApyZWZfY291bnQgPSAxLApzdGFja0RlcHRoID0gMiwKc3RhdHVzID0gImFjdGl2
+SLURM_NNODES=1
+BASH_ENV=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/init/bash
+_ModuleTable006_=T0RVTEVQQVRIXCIsXCIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmVcIikiCiwgInByZXBlbmRfcGF0aChcIk1PRFVMRVBBVEhcIixcIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvZWFzeWJ1aWxkL21vZHVsZXMvMjAyMy94ODYtNjQtdjQvQ29tcGlsZXIvZ2NjY29yZVwiKSIKLCAicHJlcGVuZF9wYXRoKFwiTU9EVUxFUEFUSFwiLFwiL2hvbWUvaW5kcmlzY2gvLmxvY2FsL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmVcIikiLCAicHJlcGVuZF9wYXRoKFwiTU9EVUxFUEFUSFwiLFwiL2hvbWUvaW5kcmlzY2gvLmxvY2FsL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0
+NV_CUDA_LIB_VERSION=12.4.1-1
+NVARCH=x86_64
+LMOD_sys=Linux
+__LMOD_STACK_LESSOPEN=fGxlc3NwaXBlICVz:fHwvdXNyL2Jpbi9sZXNzcGlwZS5zaCAlcw==
+OMPI_MCA_coll=^hcoll
+EBROOTUCX=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1
+MPLCONFIGDIR=/local/scratch/indrisch.3840042.0/.config/matplotlib
+EBDEVELHWLOC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/easybuild/x86-64-v4-Compiler-gcccore-hwloc-2.9.1-easybuild-devel
+APPTAINER_NAME=llamafactory.sif
+SINGULARITY_BIND=/scratch/indrisch/LLaMA-Factory,/home/indrisch,/dev/shm,/etc/ssl/certs,/etc/pki,/project,/scratch
+_ModuleTable009_=LAp1c2VyTmFtZSA9ICJpbWtsIiwKd1YgPSAiXjAwMDAyMDIzLjAwMDAwMDAwMi4qemZpbmFsIiwKfSwKbGliZmFicmljID0gewpmbiA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L0NvbXBpbGVyL2djY2NvcmUvbGliZmFicmljLzEuMTguMC5sdWEiLApmdWxsTmFtZSA9ICJsaWJmYWJyaWMvMS4xOC4wIiwKbG9hZE9yZGVyID0gNywKcHJvcFQgPSB7fSwKcmVmX2NvdW50ID0gMSwKc3RhY2tEZXB0aCA9IDIsCnN0YXR1cyA9ICJhY3RpdmUiLAp1c2VyTmFtZSA9ICJsaWJmYWJyaWMvMS4xOC4wIiwKd1YgPSAiMDAwMDAwMDAxLjAwMDAwMDAxOC4qemZpbmFsIiwKfSwKbWlpID0gewpmbiA9ICIvY3ZtZnMvc29m
+EBROOTUCC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucc/1.2.0
+CC_RESTRICTED=true
+XDG_SESSION_ID=107433
+http_proxy=
+RSNT_CUDA_DRIVER_VERSION=580.82.07
+SLURM_SUBMIT_HOST=l3.nibi.sharcnet
+NV_CUDA_COMPAT_PACKAGE=cuda-compat-12-4
+PIP_ROOT_USER_ACTION=ignore
+APPTAINER_BIND=/scratch/indrisch/LLaMA-Factory,/home/indrisch,/dev/shm,/etc/ssl/certs,/etc/pki,/project,/scratch
+_ModuleTable001_=X01vZHVsZVRhYmxlXyA9IHsKTVR2ZXJzaW9uID0gMywKY19yZWJ1aWxkVGltZSA9IGZhbHNlLApjX3Nob3J0VGltZSA9IGZhbHNlLApkZXB0aFQgPSB7fSwKZmFtaWx5ID0gewphcHB0YWluZXIgPSAiYXBwdGFpbmVyIiwKYmFzZV9vcyA9ICJnZW50b28iLApjb21waWxlciA9ICJnY2MiLAptcGkgPSAib3Blbm1waSIsCn0sCm1UID0gewpDQ2NvbmZpZyA9IHsKZm4gPSAiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5jYS9jdXN0b20vbW9kdWxlcy9DQ2NvbmZpZy5sdWEiLApmdWxsTmFtZSA9ICJDQ2NvbmZpZyIsCmxvYWRPcmRlciA9IDEsCnByb3BUID0ge30sCnN0YWNrRGVwdGggPSAxLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiQ0Njb25maWciLAp3ViA9ICJN
+NV_LIBNCCL_PACKAGE=libnccl2=2.21.5-1+cuda12.4
+LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/.singularity.d/libs
+EASYBUILD_CONFIGFILES=/cvmfs/soft.computecanada.ca/easybuild/config.cfg
+EASYBUILD_BUILDPATH=/tmp/indrisch
+LMOD_FAMILY_COMPILER=gcc
+XDG_RUNTIME_DIR=/local/scratch/indrisch.3840042.0
+SLURM_JOB_ID=3840042
+_ModuleTable014_=ZHVsZWZpbGVzIgosICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L01QSS9nY2MxMi9vcGVubXBpNCIKLCAiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5jYS9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12NC9Db21waWxlci9nY2MxMiIKLCAiL2hvbWUvaW5kcmlzY2gvLmxvY2FsL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L0NvbXBpbGVyL2djY2NvcmUiCiwgIi9ob21lL2luZHJpc2NoLy5sb2NhbC9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12My9Db3JlIgosICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L0Nv
+SSL_CERT_FILE=/etc/pki/tls/certs/ca-bundle.crt
+SLURM_NODEID=0
+FLASHINFER_WORKSPACE_BASE=/scratch/indrisch/
+_ModuleTable004_=d1YgPSAiMDAwMDAwMDAzLjAwMDAwMDAwMy4wMDAwMDAwMDEuKnpmaW5hbCIsCn0sCmdjYyA9IHsKYWN0aW9uQSA9IHsKInByZXBlbmRfcGF0aChcIk1PRFVMRVBBVEhcIixcIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvZWFzeWJ1aWxkL21vZHVsZXMvMjAyMy94ODYtNjQtdjQvQ29tcGlsZXIvZ2NjMTJcIikiLAp9LApmbiA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmUvZ2NjLzEyLjMubHVhIiwKZnVsbE5hbWUgPSAiZ2NjLzEyLjMiLApsb2FkT3JkZXIgPSA0LApwcm9wVCA9IHsKdHlwZV8gPSB7CnRvb2xzID0gMSwKfSwKfSwKc3RhY2tEZXB0aCA9IDEsCnN0YXR1cyA9ICJhY3RpdmUiLAp1
+LMOD_FAMILY_MPI_VERSION=4.1.5
+SSH_CLIENT=10.37.127.254 41224 22
+MKLROOT=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/mkl/2023.2.0
+NV_CUDA_NSIGHT_COMPUTE_VERSION=12.4.1-1
+RSNT_GPU_TYPES=H100
+HF_HUB_OFFLINE=1
+DEBUGINFOD_IMA_CERT_PATH=/etc/keys/ima:
+LMOD_FAMILY_MPI=openmpi
+SQUEUE_SORT=-t,e,S
+FLASH_ATTENTION_FORCE_BUILD=TRUE
+which_declare=declare -f
+NV_NVPROF_VERSION=12.4.127-1
+TMOUT=172800
+LMOD_FAMILY_COMPILER_VERSION=12.3
+EBVERSIONPMIX=4.2.4
+VSCODE_GIT_ASKPASS_MAIN=/home/indrisch/.cursor-server/cli/servers/Stable-8e4da76ad196925accaa169efcae28c45454cce0/server/extensions/git/dist/askpass-main.js
+SLURM_MPI_TYPE=pmix
+XDG_DATA_DIRS=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/mii/1.1.2/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/share:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share:/home/indrisch/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share
+__Init_Default_Modules=1
+BROWSER=/home/indrisch/.cursor-server/cli/servers/Stable-8e4da76ad196925accaa169efcae28c45454cce0/server/bin/helpers/browser.sh
+SLURM_CONF=/opt/software/slurm/24.11.6/etc/slurm.conf
+PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/opt/conda/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+SLURM_JOB_NAME=helloworld.sh
+MODULEPATH=/opt/software/modulefiles:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/MPI/gcc12/openmpi4:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcc12:/home/indrisch/.local/easybuild/modules/2023/x86-64-v4/Compiler/gcccore:/home/indrisch/.local/easybuild/modules/2023/x86-64-v3/Core:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core:/cvmfs/soft.computecanada.ca/custom/modules
+SQUEUE_FORMAT=%.17i %.8u %.20a %.14j %.3t %.10L %.5D %.4C %.10b %.7m %N (%r) 
+NV_LIBNCCL_PACKAGE_NAME=libnccl2
+SLURM_NTASKS_PER_NODE=1
+_LMFILES_=/cvmfs/soft.computecanada.ca/custom/modules/CCconfig.lua:/cvmfs/soft.computecanada.ca/custom/modules/gentoo/2023.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core/gcccore/.12.3.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core/gcc/12.3.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore/ucc/1.2.0.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcc12/flexiblas/3.3.1.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core/imkl/2023.2.0.lua:/cvmfs/soft.computecanada.ca/custom/modules/StdEnv/2023.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core/mii/1.1.2.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core/apptainer/1.3.5.lua
+NV_LIBNCCL_PACKAGE_VERSION=2.21.5-1
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/3122343/bus
+EBVERSIONLIBFABRIC=1.18.0
+EBDEVELPMIX=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4/easybuild/x86-64-v4-Compiler-gcccore-pmix-4.2.4-easybuild-devel
+LMOD_CMD=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/libexec/lmod
+MAIL=/var/spool/mail/indrisch
+EBVERSIONGCCCORE=12.3.1
+GRADIO_SERVER_PORT=7860
+LMOD_SYSTEM_DEFAULT_MODULES=StdEnv mii
+OMPI_MCA_plm_slurm_args=--external-launcher
+SLURM_JOB_GID=3122343
+CPATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/mkl/2023.2.0/include/fftw:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/mkl/2023.2.0/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/include/flexiblas:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucc/1.2.0/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/include
+DEBIAN_FRONTEND=noninteractive
+OLDPWD=/scratch/indrisch/LLaMA-Factory
+CLUSTER=nibi
+SLURM_JOB_NODELIST=g20
+TERM_PROGRAM=vscode
+I_MPI_HYDRA_BOOTSTRAP=slurm
+VSCODE_IPC_HOOK_CLI=/run/user/3122343/vscode-ipc-8ef198c0-3e8d-48b1-97be-766f0f70ab5c.sock
+LMOD_AVAIL_STYLE=grouped:system
+BASH_FUNC_ml%%=() {  eval "$($LMOD_DIR/ml_cmd "$@")"
+}
+BASH_FUNC_which%%=() {  ( alias;
+ eval ${which_declare} ) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot $@
+}
+BASH_FUNC_module%%=() {  if [ -z "${LMOD_SH_DBG_ON+x}" ]; then
+ case "$-" in 
+ *v*x*)
+ __lmod_sh_dbg='vx'
+ ;;
+ *v*)
+ __lmod_sh_dbg='v'
+ ;;
+ *x*)
+ __lmod_sh_dbg='x'
+ ;;
+ esac;
+ fi;
+ if [ -n "${__lmod_sh_dbg:-}" ]; then
+ set +$__lmod_sh_dbg;
+ echo "Shell debugging temporarily silenced: export LMOD_SH_DBG_ON=1 for Lmod's output" 1>&2;
+ fi;
+ eval "$($LMOD_CMD shell "$@")" && eval "$(${LMOD_SETTARG_CMD:-:} -s sh)";
+ __lmod_my_status=$?;
+ if [ -n "${__lmod_sh_dbg:-}" ]; then
+ echo "Shell debugging restarted" 1>&2;
+ set -$__lmod_sh_dbg;
+ fi;
+ unset __lmod_sh_dbg;
+ return $__lmod_my_status
+}
+_=/usr/bin/env
+================================================
+The available GPUs are: Mon Nov  3 13:34:19 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:9B:00.0 Off |                    0 |
+| N/A   29C    P0             69W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+================================================
+The available CPUs are: 1
+================================================
+The available memory is:                total        used        free      shared  buff/cache   available
+Mem:           2.0Ti        18Gi       1.9Ti       274Mi       4.0Gi       1.9Ti
+Swap:           31Gi          0B        31Gi
+================================================
+The available disk space is: Filesystem                                                                       Size  Used Avail Use% Mounted on
+fuse-overlayfs                                                                    64M   16K   64M   1% /
+tmpfs                                                                            733G   21M  733G   1% /dev/shm
+10.39.2.4:/export/images/alma9b/usr/share/zoneinfo/Canada/Eastern                180G  101G   80G  56% /etc/localtime
+10.39.2.4:/export/images/alma9b/etc/hosts                                        180G  101G   80G  56% /etc/hosts
+efivarfs                                                                         512K  207K  301K  41% /sys/firmware/efi/efivars
+10.36.8.1:/home/indrisch                                                         200T  123T   78T  62% /home/indrisch
+tmpfs                                                                           1008G   92K 1008G   1% /tmp
+/dev/md127                                                                        12T  986G   11T   9% /var/tmp
+tmpfs                                                                             64M   16K   64M   1% /.singularity.d/libs
+10.39.2.4:/export/images/alma9b/usr/lib64/libnvidia-opticalflow.so.580.82.07     180G  101G   80G  56% /.singularity.d/libs/libnvidia-opticalflow.so.1
+10.39.2.4:/export/images/alma9b/usr/lib64/libnvcuvid.so.580.82.07                180G  101G   80G  56% /.singularity.d/libs/libnvcuvid.so.1
+10.39.2.4:/export/images/alma9b/usr/lib64/libnvidia-ml.so.580.82.07              180G  101G   80G  56% /.singularity.d/libs/libnvidia-ml.so.1
+cvmfs2                                                                            49G   35G   15G  70% /.singularity.d/libs/libGL.so
+10.39.2.4:/export/images/alma9b/usr/lib64/libnvidia-cfg.so.580.82.07             180G  101G   80G  56% /.singularity.d/libs/libnvidia-cfg.so.1
+10.39.2.4:/export/images/alma9b/usr/lib64/libEGL_nvidia.so.580.82.07             180G  101G   80G  56% /.singularity.d/libs/libEGL_nvidia.so.0
+10.39.2.4:/export/images/alma9b/usr/lib64/libcuda.so.580.82.07                   180G  101G   80G  56% /.singularity.d/libs/libcuda.so.1
+10.39.2.4:/export/images/alma9b/usr/lib64/libGLESv2_nvidia.so.580.82.07          180G  101G   80G  56% /.singularity.d/libs/libGLESv2_nvidia.so.2
+10.39.2.4:/export/images/alma9b/usr/lib64/libnvidia-opencl.so.580.82.07          180G  101G   80G  56% /.singularity.d/libs/libnvidia-opencl.so.1
+10.39.2.4:/export/images/alma9b/usr/lib64/libnvidia-nvvm.so.580.82.07            180G  101G   80G  56% /.singularity.d/libs/libnvidia-nvvm.so.4
+10.39.2.4:/export/images/alma9b/usr/lib64/libnvidia-ptxjitcompiler.so.580.82.07  180G  101G   80G  56% /.singularity.d/libs/libnvidia-ptxjitcompiler.so.1
+10.39.2.4:/export/images/alma9b/usr/lib64/libnvoptix.so.580.82.07                180G  101G   80G  56% /.singularity.d/libs/libnvoptix.so.1
+10.39.2.4:/export/images/alma9b/usr/lib64/libGLX_nvidia.so.580.82.07             180G  101G   80G  56% /.singularity.d/libs/libGLX_nvidia.so.0
+10.39.2.4:/export/images/alma9b/usr/lib64/libGLESv1_CM_nvidia.so.580.82.07       180G  101G   80G  56% /.singularity.d/libs/libGLESv1_CM_nvidia.so.1
+10.39.2.4:/export/images/alma9b/usr/lib64/libnvidia-encode.so.580.82.07          180G  101G   80G  56% /.singularity.d/libs/libnvidia-encode.so.1
+10.39.2.4:/export/images/alma9b/usr/lib64/libnvidia-fbc.so.580.82.07             180G  101G   80G  56% /.singularity.d/libs/libnvidia-fbc.so.1
+10.39.2.4:/export/images/alma9b/usr/lib64/libnvidia-egl-wayland.so.1.1.20        180G  101G   80G  56% /.singularity.d/libs/libnvidia-egl-wayland.so.1
+10.39.2.4:/export/images/alma9b/usr/lib64/libcuda.so.580.82.07                   180G  101G   80G  56% /.singularity.d/libs/libcuda.so
+10.39.2.4:/export/images/alma9b/usr/lib64/libcudadebugger.so.580.82.07           180G  101G   80G  56% /.singularity.d/libs/libcudadebugger.so.1
+10.39.2.4:/export/images/alma9b/usr/bin/nvidia-cuda-mps-server                   180G  101G   80G  56% /usr/bin/nvidia-cuda-mps-server
+tmpfs                                                                            404G  209M  403G   1% /run/nvidia-persistenced/socket
+10.39.2.4:/export/images/alma9b/usr/bin/nvidia-smi                               180G  101G   80G  56% /usr/bin/nvidia-smi
+10.39.2.4:/export/images/alma9b/usr/bin/nvidia-debugdump                         180G  101G   80G  56% /usr/bin/nvidia-debugdump
+10.39.2.4:/export/images/alma9b/usr/bin/nvidia-persistenced                      180G  101G   80G  56% /usr/bin/nvidia-persistenced
+10.39.2.4:/export/images/alma9b/usr/bin/nvidia-cuda-mps-control                  180G  101G   80G  56% /usr/bin/nvidia-cuda-mps-control
+10.36.8.1:/project                                                                18P   17P  1.5P  92% /project
+10.36.8.1:/scratch                                                               4.5P  3.0P  1.5P  68% /scratch
+10.39.2.4:/export/images/alma9b/etc/pki                                          180G  101G   80G  56% /etc/pki
+10.39.2.4:/export/images/alma9b/etc/pki/tls/certs                                180G  101G   80G  56% /etc/ssl/certs
+10.36.8.1:/scratch/indrisch/LLaMA-Factory                                        4.5P  3.0P  1.5P  68% /scratch/indrisch/LLaMA-Factory
+================================================
+/scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck/sanitycheck.sh: line 19: ip: command not found
+The available network interfaces are: 
+================================================
+/scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck/sanitycheck.sh: line 21: ip: command not found
+The available network routes are: 
+================================================
+----------------------------------------------------------------------
+| Usage:                                                             |
+|   llamafactory-cli api -h: launch an OpenAI-style API server       |
+|   llamafactory-cli chat -h: launch a chat interface in CLI         |
+|   llamafactory-cli export -h: merge LoRA adapters and export model |
+|   llamafactory-cli train -h: train models                          |
+|   llamafactory-cli webchat -h: launch a chat interface in Web UI   |
+|   llamafactory-cli webui: launch LlamaBoard                        |
+|   llamafactory-cli env: show environment info                      |
+|   llamafactory-cli version: show version info                      |
+| Hint: You can use `lmf` as a shortcut for `llamafactory-cli`.      |
+----------------------------------------------------------------------
+================================================
+[2025-11-03 13:34:38,857] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+usage: llamafactory-cli [-h] [--model_name_or_path MODEL_NAME_OR_PATH]
+                        [--adapter_name_or_path ADAPTER_NAME_OR_PATH]
+                        [--adapter_folder ADAPTER_FOLDER]
+                        [--cache_dir CACHE_DIR]
+                        [--use_fast_tokenizer [USE_FAST_TOKENIZER]]
+                        [--no_use_fast_tokenizer]
+                        [--resize_vocab [RESIZE_VOCAB]]
+                        [--split_special_tokens [SPLIT_SPECIAL_TOKENS]]
+                        [--add_tokens ADD_TOKENS]
+                        [--add_special_tokens ADD_SPECIAL_TOKENS]
+                        [--model_revision MODEL_REVISION]
+                        [--low_cpu_mem_usage [LOW_CPU_MEM_USAGE]]
+                        [--no_low_cpu_mem_usage]
+                        [--rope_scaling {linear,dynamic,yarn,llama3}]
+                        [--flash_attn {auto,disabled,sdpa,fa2}]
+                        [--shift_attn [SHIFT_ATTN]]
+                        [--mixture_of_depths {convert,load}]
+                        [--use_unsloth [USE_UNSLOTH]]
+                        [--use_unsloth_gc [USE_UNSLOTH_GC]]
+                        [--enable_liger_kernel [ENABLE_LIGER_KERNEL]]
+                        [--moe_aux_loss_coef MOE_AUX_LOSS_COEF]
+                        [--disable_gradient_checkpointing [DISABLE_GRADIENT_CHECKPOINTING]]
+                        [--use_reentrant_gc [USE_REENTRANT_GC]]
+                        [--no_use_reentrant_gc]
+                        [--upcast_layernorm [UPCAST_LAYERNORM]]
+                        [--upcast_lmhead_output [UPCAST_LMHEAD_OUTPUT]]
+                        [--train_from_scratch [TRAIN_FROM_SCRATCH]]
+                        [--infer_backend {huggingface,vllm,sglang}]
+                        [--offload_folder OFFLOAD_FOLDER]
+                        [--use_cache [USE_CACHE]] [--no_use_cache]
+                        [--infer_dtype {auto,float16,bfloat16,float32}]
+                        [--hf_hub_token HF_HUB_TOKEN]
+                        [--ms_hub_token MS_HUB_TOKEN]
+                        [--om_hub_token OM_HUB_TOKEN]
+                        [--print_param_status [PRINT_PARAM_STATUS]]
+                        [--trust_remote_code [TRUST_REMOTE_CODE]]
+                        [--quantization_method {bnb,gptq,awq,aqlm,quanto,eetq,hqq,mxfp4}]
+                        [--quantization_bit QUANTIZATION_BIT]
+                        [--quantization_type {fp4,nf4}]
+                        [--double_quantization [DOUBLE_QUANTIZATION]]
+                        [--no_double_quantization]
+                        [--quantization_device_map {auto}] [--fp8 [FP8]]
+                        [--fp8_backend FP8_BACKEND]
+                        [--fp8_enable_fsdp_float8_all_gather [FP8_ENABLE_FSDP_FLOAT8_ALL_GATHER]]
+                        [--image_max_pixels IMAGE_MAX_PIXELS]
+                        [--image_min_pixels IMAGE_MIN_PIXELS]
+                        [--image_do_pan_and_scan [IMAGE_DO_PAN_AND_SCAN]]
+                        [--crop_to_patches [CROP_TO_PATCHES]]
+                        [--video_max_pixels VIDEO_MAX_PIXELS]
+                        [--video_min_pixels VIDEO_MIN_PIXELS]
+                        [--video_fps VIDEO_FPS] [--video_maxlen VIDEO_MAXLEN]
+                        [--use_audio_in_video [USE_AUDIO_IN_VIDEO]]
+                        [--audio_sampling_rate AUDIO_SAMPLING_RATE]
+                        [--export_dir EXPORT_DIR] [--export_size EXPORT_SIZE]
+                        [--export_device {cpu,auto}]
+                        [--export_quantization_bit EXPORT_QUANTIZATION_BIT]
+                        [--export_quantization_dataset EXPORT_QUANTIZATION_DATASET]
+                        [--export_quantization_nsamples EXPORT_QUANTIZATION_NSAMPLES]
+                        [--export_quantization_maxlen EXPORT_QUANTIZATION_MAXLEN]
+                        [--export_legacy_format [EXPORT_LEGACY_FORMAT]]
+                        [--export_hub_model_id EXPORT_HUB_MODEL_ID]
+                        [--vllm_maxlen VLLM_MAXLEN]
+                        [--vllm_gpu_util VLLM_GPU_UTIL]
+                        [--vllm_enforce_eager [VLLM_ENFORCE_EAGER]]
+                        [--vllm_max_lora_rank VLLM_MAX_LORA_RANK]
+                        [--vllm_config VLLM_CONFIG]
+                        [--sglang_maxlen SGLANG_MAXLEN]
+                        [--sglang_mem_fraction SGLANG_MEM_FRACTION]
+                        [--sglang_tp_size SGLANG_TP_SIZE]
+                        [--sglang_config SGLANG_CONFIG]
+                        [--sglang_lora_backend {triton,flashinfer}]
+                        [--template TEMPLATE] [--dataset DATASET]
+                        [--eval_dataset EVAL_DATASET]
+                        [--dataset_dir DATASET_DIR] [--media_dir MEDIA_DIR]
+                        [--cutoff_len CUTOFF_LEN]
+                        [--train_on_prompt [TRAIN_ON_PROMPT]]
+                        [--mask_history [MASK_HISTORY]]
+                        [--streaming [STREAMING]] [--buffer_size BUFFER_SIZE]
+                        [--mix_strategy {concat,interleave_under,interleave_over}]
+                        [--interleave_probs INTERLEAVE_PROBS]
+                        [--overwrite_cache [OVERWRITE_CACHE]]
+                        [--preprocessing_batch_size PREPROCESSING_BATCH_SIZE]
+                        [--preprocessing_num_workers PREPROCESSING_NUM_WORKERS]
+                        [--max_samples MAX_SAMPLES]
+                        [--eval_num_beams EVAL_NUM_BEAMS]
+                        [--ignore_pad_token_for_loss [IGNORE_PAD_TOKEN_FOR_LOSS]]
+                        [--no_ignore_pad_token_for_loss] [--val_size VAL_SIZE]
+                        [--eval_on_each_dataset [EVAL_ON_EACH_DATASET]]
+                        [--packing PACKING] [--neat_packing [NEAT_PACKING]]
+                        [--tool_format TOOL_FORMAT]
+                        [--default_system DEFAULT_SYSTEM]
+                        [--enable_thinking [ENABLE_THINKING]]
+                        [--no_enable_thinking]
+                        [--tokenized_path TOKENIZED_PATH]
+                        [--data_shared_file_system [DATA_SHARED_FILE_SYSTEM]]
+                        [--output_dir OUTPUT_DIR]
+                        [--overwrite_output_dir [OVERWRITE_OUTPUT_DIR]]
+                        [--do_train [DO_TRAIN]] [--do_eval [DO_EVAL]]
+                        [--do_predict [DO_PREDICT]]
+                        [--eval_strategy {no,steps,epoch}]
+                        [--prediction_loss_only [PREDICTION_LOSS_ONLY]]
+                        [--per_device_train_batch_size PER_DEVICE_TRAIN_BATCH_SIZE]
+                        [--per_device_eval_batch_size PER_DEVICE_EVAL_BATCH_SIZE]
+                        [--per_gpu_train_batch_size PER_GPU_TRAIN_BATCH_SIZE]
+                        [--per_gpu_eval_batch_size PER_GPU_EVAL_BATCH_SIZE]
+                        [--gradient_accumulation_steps GRADIENT_ACCUMULATION_STEPS]
+                        [--eval_accumulation_steps EVAL_ACCUMULATION_STEPS]
+                        [--eval_delay EVAL_DELAY]
+                        [--torch_empty_cache_steps TORCH_EMPTY_CACHE_STEPS]
+                        [--learning_rate LEARNING_RATE]
+                        [--weight_decay WEIGHT_DECAY]
+                        [--adam_beta1 ADAM_BETA1] [--adam_beta2 ADAM_BETA2]
+                        [--adam_epsilon ADAM_EPSILON]
+                        [--max_grad_norm MAX_GRAD_NORM]
+                        [--num_train_epochs NUM_TRAIN_EPOCHS]
+                        [--max_steps MAX_STEPS]
+                        [--lr_scheduler_type {linear,cosine,cosine_with_restarts,polynomial,constant,constant_with_warmup,inverse_sqrt,reduce_lr_on_plateau,cosine_with_min_lr,cosine_warmup_with_min_lr,warmup_stable_decay}]
+                        [--lr_scheduler_kwargs LR_SCHEDULER_KWARGS]
+                        [--warmup_ratio WARMUP_RATIO]
+                        [--warmup_steps WARMUP_STEPS]
+                        [--log_level {detail,debug,info,warning,error,critical,passive}]
+                        [--log_level_replica {detail,debug,info,warning,error,critical,passive}]
+                        [--log_on_each_node [LOG_ON_EACH_NODE]]
+                        [--no_log_on_each_node] [--logging_dir LOGGING_DIR]
+                        [--logging_strategy {no,steps,epoch}]
+                        [--logging_first_step [LOGGING_FIRST_STEP]]
+                        [--logging_steps LOGGING_STEPS]
+                        [--logging_nan_inf_filter [LOGGING_NAN_INF_FILTER]]
+                        [--no_logging_nan_inf_filter]
+                        [--save_strategy {no,steps,epoch,best}]
+                        [--save_steps SAVE_STEPS]
+                        [--save_total_limit SAVE_TOTAL_LIMIT]
+                        [--save_safetensors [SAVE_SAFETENSORS]]
+                        [--no_save_safetensors]
+                        [--save_on_each_node [SAVE_ON_EACH_NODE]]
+                        [--save_only_model [SAVE_ONLY_MODEL]]
+                        [--restore_callback_states_from_checkpoint [RESTORE_CALLBACK_STATES_FROM_CHECKPOINT]]
+                        [--no_cuda [NO_CUDA]] [--use_cpu [USE_CPU]]
+                        [--use_mps_device [USE_MPS_DEVICE]] [--seed SEED]
+                        [--data_seed DATA_SEED]
+                        [--jit_mode_eval [JIT_MODE_EVAL]] [--bf16 [BF16]]
+                        [--fp16 [FP16]] [--fp16_opt_level FP16_OPT_LEVEL]
+                        [--half_precision_backend {auto,apex,cpu_amp}]
+                        [--bf16_full_eval [BF16_FULL_EVAL]]
+                        [--fp16_full_eval [FP16_FULL_EVAL]] [--tf32 TF32]
+                        [--local_rank LOCAL_RANK]
+                        [--ddp_backend {nccl,gloo,mpi,ccl,hccl,cncl,mccl}]
+                        [--tpu_num_cores TPU_NUM_CORES]
+                        [--tpu_metrics_debug [TPU_METRICS_DEBUG]]
+                        [--debug DEBUG [DEBUG ...]]
+                        [--dataloader_drop_last [DATALOADER_DROP_LAST]]
+                        [--eval_steps EVAL_STEPS]
+                        [--dataloader_num_workers DATALOADER_NUM_WORKERS]
+                        [--dataloader_prefetch_factor DATALOADER_PREFETCH_FACTOR]
+                        [--past_index PAST_INDEX] [--run_name RUN_NAME]
+                        [--disable_tqdm DISABLE_TQDM]
+                        [--remove_unused_columns [REMOVE_UNUSED_COLUMNS]]
+                        [--no_remove_unused_columns]
+                        [--label_names LABEL_NAMES [LABEL_NAMES ...]]
+                        [--load_best_model_at_end [LOAD_BEST_MODEL_AT_END]]
+                        [--metric_for_best_model METRIC_FOR_BEST_MODEL]
+                        [--greater_is_better GREATER_IS_BETTER]
+                        [--ignore_data_skip [IGNORE_DATA_SKIP]]
+                        [--fsdp FSDP [FSDP ...]]
+                        [--fsdp_min_num_params FSDP_MIN_NUM_PARAMS]
+                        [--fsdp_config FSDP_CONFIG]
+                        [--fsdp_transformer_layer_cls_to_wrap FSDP_TRANSFORMER_LAYER_CLS_TO_WRAP]
+                        [--accelerator_config ACCELERATOR_CONFIG]
+                        [--parallelism_config PARALLELISM_CONFIG]
+                        [--deepspeed DEEPSPEED]
+                        [--label_smoothing_factor LABEL_SMOOTHING_FACTOR]
+                        [--optim {adamw_torch,adamw_torch_fused,adamw_torch_xla,adamw_torch_npu_fused,adamw_apex_fused,adafactor,adamw_anyprecision,adamw_torch_4bit,adamw_torch_8bit,ademamix,sgd,adagrad,adamw_bnb_8bit,adamw_8bit,ademamix_8bit,lion_8bit,lion_32bit,paged_adamw_32bit,paged_adamw_8bit,paged_ademamix_32bit,paged_ademamix_8bit,paged_lion_32bit,paged_lion_8bit,rmsprop,rmsprop_bnb,rmsprop_bnb_8bit,rmsprop_bnb_32bit,galore_adamw,galore_adamw_8bit,galore_adafactor,galore_adamw_layerwise,galore_adamw_8bit_layerwise,galore_adafactor_layerwise,lomo,adalomo,grokadamw,schedule_free_radam,schedule_free_adamw,schedule_free_sgd,apollo_adamw,apollo_adamw_layerwise,stable_adamw}]
+                        [--optim_args OPTIM_ARGS] [--adafactor [ADAFACTOR]]
+                        [--group_by_length [GROUP_BY_LENGTH]]
+                        [--length_column_name LENGTH_COLUMN_NAME]
+                        [--report_to REPORT_TO] [--project PROJECT]
+                        [--trackio_space_id TRACKIO_SPACE_ID]
+                        [--ddp_find_unused_parameters DDP_FIND_UNUSED_PARAMETERS]
+                        [--ddp_bucket_cap_mb DDP_BUCKET_CAP_MB]
+                        [--ddp_broadcast_buffers DDP_BROADCAST_BUFFERS]
+                        [--dataloader_pin_memory [DATALOADER_PIN_MEMORY]]
+                        [--no_dataloader_pin_memory]
+                        [--dataloader_persistent_workers [DATALOADER_PERSISTENT_WORKERS]]
+                        [--skip_memory_metrics [SKIP_MEMORY_METRICS]]
+                        [--no_skip_memory_metrics]
+                        [--use_legacy_prediction_loop [USE_LEGACY_PREDICTION_LOOP]]
+                        [--push_to_hub [PUSH_TO_HUB]]
+                        [--resume_from_checkpoint RESUME_FROM_CHECKPOINT]
+                        [--hub_model_id HUB_MODEL_ID]
+                        [--hub_strategy {end,every_save,checkpoint,all_checkpoints}]
+                        [--hub_token HUB_TOKEN]
+                        [--hub_private_repo HUB_PRIVATE_REPO]
+                        [--hub_always_push [HUB_ALWAYS_PUSH]]
+                        [--hub_revision HUB_REVISION]
+                        [--gradient_checkpointing [GRADIENT_CHECKPOINTING]]
+                        [--gradient_checkpointing_kwargs GRADIENT_CHECKPOINTING_KWARGS]
+                        [--include_inputs_for_metrics [INCLUDE_INPUTS_FOR_METRICS]]
+                        [--include_for_metrics INCLUDE_FOR_METRICS [INCLUDE_FOR_METRICS ...]]
+                        [--eval_do_concat_batches [EVAL_DO_CONCAT_BATCHES]]
+                        [--no_eval_do_concat_batches]
+                        [--fp16_backend {auto,apex,cpu_amp}]
+                        [--push_to_hub_model_id PUSH_TO_HUB_MODEL_ID]
+                        [--push_to_hub_organization PUSH_TO_HUB_ORGANIZATION]
+                        [--push_to_hub_token PUSH_TO_HUB_TOKEN]
+                        [--mp_parameters MP_PARAMETERS]
+                        [--auto_find_batch_size [AUTO_FIND_BATCH_SIZE]]
+                        [--full_determinism [FULL_DETERMINISM]]
+                        [--torchdynamo TORCHDYNAMO] [--ray_scope RAY_SCOPE]
+                        [--ddp_timeout DDP_TIMEOUT]
+                        [--torch_compile [TORCH_COMPILE]]
+                        [--torch_compile_backend TORCH_COMPILE_BACKEND]
+                        [--torch_compile_mode TORCH_COMPILE_MODE]
+                        [--include_tokens_per_second [INCLUDE_TOKENS_PER_SECOND]]
+                        [--include_num_input_tokens_seen [INCLUDE_NUM_INPUT_TOKENS_SEEN]]
+                        [--neftune_noise_alpha NEFTUNE_NOISE_ALPHA]
+                        [--optim_target_modules OPTIM_TARGET_MODULES]
+                        [--batch_eval_metrics [BATCH_EVAL_METRICS]]
+                        [--eval_on_start [EVAL_ON_START]]
+                        [--use_liger_kernel [USE_LIGER_KERNEL]]
+                        [--liger_kernel_config LIGER_KERNEL_CONFIG]
+                        [--eval_use_gather_object [EVAL_USE_GATHER_OBJECT]]
+                        [--average_tokens_across_devices [AVERAGE_TOKENS_ACROSS_DEVICES]]
+                        [--no_average_tokens_across_devices]
+                        [--sortish_sampler [SORTISH_SAMPLER]]
+                        [--predict_with_generate [PREDICT_WITH_GENERATE]]
+                        [--generation_max_length GENERATION_MAX_LENGTH]
+                        [--generation_num_beams GENERATION_NUM_BEAMS]
+                        [--generation_config GENERATION_CONFIG]
+                        [--ray_run_name RAY_RUN_NAME]
+                        [--ray_storage_path RAY_STORAGE_PATH]
+                        [--ray_storage_filesystem {s3,gs,gcs}]
+                        [--ray_num_workers RAY_NUM_WORKERS]
+                        [--resources_per_worker RESOURCES_PER_WORKER]
+                        [--placement_strategy {SPREAD,PACK,STRICT_SPREAD,STRICT_PACK}]
+                        [--ray_init_kwargs RAY_INIT_KWARGS]
+                        [--freeze_trainable_layers FREEZE_TRAINABLE_LAYERS]
+                        [--freeze_trainable_modules FREEZE_TRAINABLE_MODULES]
+                        [--freeze_extra_modules FREEZE_EXTRA_MODULES]
+                        [--additional_target ADDITIONAL_TARGET]
+                        [--module_dropout MODULE_DROPOUT]
+                        [--oft_rank OFT_RANK]
+                        [--oft_block_size OFT_BLOCK_SIZE]
+                        [--oft_target OFT_TARGET]
+                        [--create_new_adapter [CREATE_NEW_ADAPTER]]
+                        [--lora_alpha LORA_ALPHA]
+                        [--lora_dropout LORA_DROPOUT] [--lora_rank LORA_RANK]
+                        [--lora_target LORA_TARGET]
+                        [--loraplus_lr_ratio LORAPLUS_LR_RATIO]
+                        [--loraplus_lr_embedding LORAPLUS_LR_EMBEDDING]
+                        [--use_rslora [USE_RSLORA]] [--use_dora [USE_DORA]]
+                        [--pissa_init [PISSA_INIT]] [--pissa_iter PISSA_ITER]
+                        [--pissa_convert [PISSA_CONVERT]]
+                        [--pref_beta PREF_BETA] [--pref_ftx PREF_FTX]
+                        [--pref_bco_weight PREF_BCO_WEIGHT]
+                        [--pref_loss {sigmoid,hinge,ipo,kto_pair,orpo,simpo}]
+                        [--dpo_label_smoothing DPO_LABEL_SMOOTHING]
+                        [--kto_chosen_weight KTO_CHOSEN_WEIGHT]
+                        [--kto_rejected_weight KTO_REJECTED_WEIGHT]
+                        [--simpo_gamma SIMPO_GAMMA]
+                        [--ppo_buffer_size PPO_BUFFER_SIZE]
+                        [--ppo_epochs PPO_EPOCHS]
+                        [--ppo_score_norm [PPO_SCORE_NORM]]
+                        [--ppo_target PPO_TARGET]
+                        [--ppo_whiten_rewards [PPO_WHITEN_REWARDS]]
+                        [--ref_model REF_MODEL]
+                        [--ref_model_adapters REF_MODEL_ADAPTERS]
+                        [--ref_model_quantization_bit REF_MODEL_QUANTIZATION_BIT]
+                        [--reward_model REWARD_MODEL]
+                        [--reward_model_adapters REWARD_MODEL_ADAPTERS]
+                        [--reward_model_quantization_bit REWARD_MODEL_QUANTIZATION_BIT]
+                        [--reward_model_type {lora,full,api}]
+                        [--ld_alpha LD_ALPHA] [--use_galore [USE_GALORE]]
+                        [--galore_target GALORE_TARGET]
+                        [--galore_rank GALORE_RANK]
+                        [--galore_update_interval GALORE_UPDATE_INTERVAL]
+                        [--galore_scale GALORE_SCALE]
+                        [--galore_proj_type {std,reverse_std,right,left,full}]
+                        [--galore_layerwise [GALORE_LAYERWISE]]
+                        [--use_apollo [USE_APOLLO]]
+                        [--apollo_target APOLLO_TARGET]
+                        [--apollo_rank APOLLO_RANK]
+                        [--apollo_update_interval APOLLO_UPDATE_INTERVAL]
+                        [--apollo_scale APOLLO_SCALE]
+                        [--apollo_proj {svd,random}]
+                        [--apollo_proj_type {std,right,left}]
+                        [--apollo_scale_type {channel,tensor}]
+                        [--apollo_layerwise [APOLLO_LAYERWISE]]
+                        [--apollo_scale_front [APOLLO_SCALE_FRONT]]
+                        [--use_badam [USE_BADAM]] [--badam_mode {layer,ratio}]
+                        [--badam_start_block BADAM_START_BLOCK]
+                        [--badam_switch_mode {ascending,descending,random,fixed}]
+                        [--badam_switch_interval BADAM_SWITCH_INTERVAL]
+                        [--badam_update_ratio BADAM_UPDATE_RATIO]
+                        [--badam_mask_mode {adjacent,scatter}]
+                        [--badam_verbose BADAM_VERBOSE]
+                        [--use_swanlab [USE_SWANLAB]]
+                        [--swanlab_project SWANLAB_PROJECT]
+                        [--swanlab_workspace SWANLAB_WORKSPACE]
+                        [--swanlab_run_name SWANLAB_RUN_NAME]
+                        [--swanlab_mode {cloud,local}]
+                        [--swanlab_api_key SWANLAB_API_KEY]
+                        [--swanlab_logdir SWANLAB_LOGDIR]
+                        [--swanlab_lark_webhook_url SWANLAB_LARK_WEBHOOK_URL]
+                        [--swanlab_lark_secret SWANLAB_LARK_SECRET]
+                        [--pure_bf16 [PURE_BF16]]
+                        [--stage {pt,sft,rm,ppo,dpo,kto}]
+                        [--finetuning_type {lora,freeze,full}]
+                        [--use_llama_pro [USE_LLAMA_PRO]]
+                        [--use_adam_mini [USE_ADAM_MINI]]
+                        [--use_muon [USE_MUON]]
+                        [--use_dft_loss [USE_DFT_LOSS]]
+                        [--freeze_vision_tower [FREEZE_VISION_TOWER]]
+                        [--no_freeze_vision_tower]
+                        [--freeze_multi_modal_projector [FREEZE_MULTI_MODAL_PROJECTOR]]
+                        [--no_freeze_multi_modal_projector]
+                        [--freeze_language_model [FREEZE_LANGUAGE_MODEL]]
+                        [--compute_accuracy [COMPUTE_ACCURACY]]
+                        [--disable_shuffling [DISABLE_SHUFFLING]]
+                        [--early_stopping_steps EARLY_STOPPING_STEPS]
+                        [--plot_loss [PLOT_LOSS]]
+                        [--include_effective_tokens_per_second [INCLUDE_EFFECTIVE_TOKENS_PER_SECOND]]
+                        [--do_sample [DO_SAMPLE]] [--no_do_sample]
+                        [--temperature TEMPERATURE] [--top_p TOP_P]
+                        [--top_k TOP_K] [--num_beams NUM_BEAMS]
+                        [--max_length MAX_LENGTH]
+                        [--max_new_tokens MAX_NEW_TOKENS]
+                        [--repetition_penalty REPETITION_PENALTY]
+                        [--length_penalty LENGTH_PENALTY]
+                        [--skip_special_tokens [SKIP_SPECIAL_TOKENS]]
+                        [--no_skip_special_tokens]
+
+options:
+  -h, --help            show this help message and exit
+  --model_name_or_path MODEL_NAME_OR_PATH, --model-name-or-path MODEL_NAME_OR_PATH
+                        Path to the model weight or identifier from
+                        huggingface.co/models or modelscope.cn/models.
+                        (default: None)
+  --adapter_name_or_path ADAPTER_NAME_OR_PATH, --adapter-name-or-path ADAPTER_NAME_OR_PATH
+                        Path to the adapter weight or identifier from
+                        huggingface.co/models. Use commas to separate multiple
+                        adapters. (default: None)
+  --adapter_folder ADAPTER_FOLDER, --adapter-folder ADAPTER_FOLDER
+                        The folder containing the adapter weights to load.
+                        (default: None)
+  --cache_dir CACHE_DIR, --cache-dir CACHE_DIR
+                        Where to store the pre-trained models downloaded from
+                        huggingface.co or modelscope.cn. (default: None)
+  --use_fast_tokenizer [USE_FAST_TOKENIZER], --use-fast-tokenizer [USE_FAST_TOKENIZER]
+                        Whether or not to use one of the fast tokenizer
+                        (backed by the tokenizers library). (default: True)
+  --no_use_fast_tokenizer, --no-use-fast-tokenizer
+                        Whether or not to use one of the fast tokenizer
+                        (backed by the tokenizers library). (default: False)
+  --resize_vocab [RESIZE_VOCAB], --resize-vocab [RESIZE_VOCAB]
+                        Whether or not to resize the tokenizer vocab and the
+                        embedding layers. (default: False)
+  --split_special_tokens [SPLIT_SPECIAL_TOKENS], --split-special-tokens [SPLIT_SPECIAL_TOKENS]
+                        Whether or not the special tokens should be split
+                        during the tokenization process. (default: False)
+  --add_tokens ADD_TOKENS, --add-tokens ADD_TOKENS
+                        Non-special tokens to be added into the tokenizer. Use
+                        commas to separate multiple tokens. (default: None)
+  --add_special_tokens ADD_SPECIAL_TOKENS, --add-special-tokens ADD_SPECIAL_TOKENS
+                        Special tokens to be added into the tokenizer. Use
+                        commas to separate multiple tokens. (default: None)
+  --model_revision MODEL_REVISION, --model-revision MODEL_REVISION
+                        The specific model version to use (can be a branch
+                        name, tag name or commit id). (default: main)
+  --low_cpu_mem_usage [LOW_CPU_MEM_USAGE], --low-cpu-mem-usage [LOW_CPU_MEM_USAGE]
+                        Whether or not to use memory-efficient model loading.
+                        (default: True)
+  --no_low_cpu_mem_usage, --no-low-cpu-mem-usage
+                        Whether or not to use memory-efficient model loading.
+                        (default: False)
+  --rope_scaling {linear,dynamic,yarn,llama3}, --rope-scaling {linear,dynamic,yarn,llama3}
+                        Which scaling strategy should be adopted for the RoPE
+                        embeddings. (default: None)
+  --flash_attn {auto,disabled,sdpa,fa2}, --flash-attn {auto,disabled,sdpa,fa2}
+                        Enable FlashAttention for faster training and
+                        inference. (default: AttentionFunction.AUTO)
+  --shift_attn [SHIFT_ATTN], --shift-attn [SHIFT_ATTN]
+                        Enable shift short attention (S^2-Attn) proposed by
+                        LongLoRA. (default: False)
+  --mixture_of_depths {convert,load}, --mixture-of-depths {convert,load}
+                        Convert the model to mixture-of-depths (MoD) or load
+                        the MoD model. (default: None)
+  --use_unsloth [USE_UNSLOTH], --use-unsloth [USE_UNSLOTH]
+                        Whether or not to use unsloth's optimization for the
+                        LoRA training. (default: False)
+  --use_unsloth_gc [USE_UNSLOTH_GC], --use-unsloth-gc [USE_UNSLOTH_GC]
+                        Whether or not to use unsloth's gradient checkpointing
+                        (no need to install unsloth). (default: False)
+  --enable_liger_kernel [ENABLE_LIGER_KERNEL], --enable-liger-kernel [ENABLE_LIGER_KERNEL]
+                        Whether or not to enable liger kernel for faster
+                        training. (default: False)
+  --moe_aux_loss_coef MOE_AUX_LOSS_COEF, --moe-aux-loss-coef MOE_AUX_LOSS_COEF
+                        Coefficient of the auxiliary router loss in mixture-
+                        of-experts model. (default: None)
+  --disable_gradient_checkpointing [DISABLE_GRADIENT_CHECKPOINTING], --disable-gradient-checkpointing [DISABLE_GRADIENT_CHECKPOINTING]
+                        Whether or not to disable gradient checkpointing.
+                        (default: False)
+  --use_reentrant_gc [USE_REENTRANT_GC], --use-reentrant-gc [USE_REENTRANT_GC]
+                        Whether or not to use reentrant gradient
+                        checkpointing. (default: True)
+  --no_use_reentrant_gc, --no-use-reentrant-gc
+                        Whether or not to use reentrant gradient
+                        checkpointing. (default: False)
+  --upcast_layernorm [UPCAST_LAYERNORM], --upcast-layernorm [UPCAST_LAYERNORM]
+                        Whether or not to upcast the layernorm weights in
+                        fp32. (default: False)
+  --upcast_lmhead_output [UPCAST_LMHEAD_OUTPUT], --upcast-lmhead-output [UPCAST_LMHEAD_OUTPUT]
+                        Whether or not to upcast the output of lm_head in
+                        fp32. (default: False)
+  --train_from_scratch [TRAIN_FROM_SCRATCH], --train-from-scratch [TRAIN_FROM_SCRATCH]
+                        Whether or not to randomly initialize the model
+                        weights. (default: False)
+  --infer_backend {huggingface,vllm,sglang}, --infer-backend {huggingface,vllm,sglang}
+                        Backend engine used at inference. (default:
+                        EngineName.HF)
+  --offload_folder OFFLOAD_FOLDER, --offload-folder OFFLOAD_FOLDER
+                        Path to offload model weights. (default: offload)
+  --use_cache [USE_CACHE], --use-cache [USE_CACHE]
+                        Whether or not to use KV cache in generation.
+                        (default: True)
+  --no_use_cache, --no-use-cache
+                        Whether or not to use KV cache in generation.
+                        (default: False)
+  --infer_dtype {auto,float16,bfloat16,float32}, --infer-dtype {auto,float16,bfloat16,float32}
+                        Data type for model weights and activations at
+                        inference. (default: auto)
+  --hf_hub_token HF_HUB_TOKEN, --hf-hub-token HF_HUB_TOKEN
+                        Auth token to log in with Hugging Face Hub. (default:
+                        None)
+  --ms_hub_token MS_HUB_TOKEN, --ms-hub-token MS_HUB_TOKEN
+                        Auth token to log in with ModelScope Hub. (default:
+                        None)
+  --om_hub_token OM_HUB_TOKEN, --om-hub-token OM_HUB_TOKEN
+                        Auth token to log in with Modelers Hub. (default:
+                        None)
+  --print_param_status [PRINT_PARAM_STATUS], --print-param-status [PRINT_PARAM_STATUS]
+                        For debugging purposes, print the status of the
+                        parameters in the model. (default: False)
+  --trust_remote_code [TRUST_REMOTE_CODE], --trust-remote-code [TRUST_REMOTE_CODE]
+                        Whether to trust the execution of code from
+                        datasets/models defined on the Hub or not. (default:
+                        False)
+  --quantization_method {bnb,gptq,awq,aqlm,quanto,eetq,hqq,mxfp4}, --quantization-method {bnb,gptq,awq,aqlm,quanto,eetq,hqq,mxfp4}
+                        Quantization method to use for on-the-fly
+                        quantization. (default: QuantizationMethod.BNB)
+  --quantization_bit QUANTIZATION_BIT, --quantization-bit QUANTIZATION_BIT
+                        The number of bits to quantize the model using on-the-
+                        fly quantization. (default: None)
+  --quantization_type {fp4,nf4}, --quantization-type {fp4,nf4}
+                        Quantization data type to use in bitsandbytes int4
+                        training. (default: nf4)
+  --double_quantization [DOUBLE_QUANTIZATION], --double-quantization [DOUBLE_QUANTIZATION]
+                        Whether or not to use double quantization in
+                        bitsandbytes int4 training. (default: True)
+  --no_double_quantization, --no-double-quantization
+                        Whether or not to use double quantization in
+                        bitsandbytes int4 training. (default: False)
+  --quantization_device_map {auto}, --quantization-device-map {auto}
+                        Device map used to infer the 4-bit quantized model,
+                        needs bitsandbytes>=0.43.0. (default: None)
+  --fp8 [FP8]           Enable FP8 mixed precision training via HuggingFace
+                        Accelerate. Requires PyTorch 2.7+ and Hopper
+                        architecture GPUs. (default: False)
+  --fp8_backend FP8_BACKEND, --fp8-backend FP8_BACKEND
+                        FP8 backend to use ('auto', 'torchao', 'te', 'msamp').
+                        'auto' selects best available backend. (default: auto)
+  --fp8_enable_fsdp_float8_all_gather [FP8_ENABLE_FSDP_FLOAT8_ALL_GATHER], --fp8-enable-fsdp-float8-all-gather [FP8_ENABLE_FSDP_FLOAT8_ALL_GATHER]
+                        Enable FP8 optimizations for FSDP2 all-gather
+                        operations. (default: False)
+  --image_max_pixels IMAGE_MAX_PIXELS, --image-max-pixels IMAGE_MAX_PIXELS
+                        The maximum number of pixels of image inputs.
+                        (default: 589824)
+  --image_min_pixels IMAGE_MIN_PIXELS, --image-min-pixels IMAGE_MIN_PIXELS
+                        The minimum number of pixels of image inputs.
+                        (default: 1024)
+  --image_do_pan_and_scan [IMAGE_DO_PAN_AND_SCAN], --image-do-pan-and-scan [IMAGE_DO_PAN_AND_SCAN]
+                        Use pan and scan to process image for gemma3.
+                        (default: False)
+  --crop_to_patches [CROP_TO_PATCHES], --crop-to-patches [CROP_TO_PATCHES]
+                        Whether to crop the image to patches for internvl.
+                        (default: False)
+  --video_max_pixels VIDEO_MAX_PIXELS, --video-max-pixels VIDEO_MAX_PIXELS
+                        The maximum number of pixels of video inputs.
+                        (default: 65536)
+  --video_min_pixels VIDEO_MIN_PIXELS, --video-min-pixels VIDEO_MIN_PIXELS
+                        The minimum number of pixels of video inputs.
+                        (default: 256)
+  --video_fps VIDEO_FPS, --video-fps VIDEO_FPS
+                        The frames to sample per second for video inputs.
+                        (default: 2.0)
+  --video_maxlen VIDEO_MAXLEN, --video-maxlen VIDEO_MAXLEN
+                        The maximum number of sampled frames for video inputs.
+                        (default: 128)
+  --use_audio_in_video [USE_AUDIO_IN_VIDEO], --use-audio-in-video [USE_AUDIO_IN_VIDEO]
+                        Whether or not to use audio in video inputs. (default:
+                        False)
+  --audio_sampling_rate AUDIO_SAMPLING_RATE, --audio-sampling-rate AUDIO_SAMPLING_RATE
+                        The sampling rate of audio inputs. (default: 16000)
+  --export_dir EXPORT_DIR, --export-dir EXPORT_DIR
+                        Path to the directory to save the exported model.
+                        (default: None)
+  --export_size EXPORT_SIZE, --export-size EXPORT_SIZE
+                        The file shard size (in GB) of the exported model.
+                        (default: 5)
+  --export_device {cpu,auto}, --export-device {cpu,auto}
+                        The device used in model export, use `auto` to
+                        accelerate exporting. (default: cpu)
+  --export_quantization_bit EXPORT_QUANTIZATION_BIT, --export-quantization-bit EXPORT_QUANTIZATION_BIT
+                        The number of bits to quantize the exported model.
+                        (default: None)
+  --export_quantization_dataset EXPORT_QUANTIZATION_DATASET, --export-quantization-dataset EXPORT_QUANTIZATION_DATASET
+                        Path to the dataset or dataset name to use in
+                        quantizing the exported model. (default: None)
+  --export_quantization_nsamples EXPORT_QUANTIZATION_NSAMPLES, --export-quantization-nsamples EXPORT_QUANTIZATION_NSAMPLES
+                        The number of samples used for quantization. (default:
+                        128)
+  --export_quantization_maxlen EXPORT_QUANTIZATION_MAXLEN, --export-quantization-maxlen EXPORT_QUANTIZATION_MAXLEN
+                        The maximum length of the model inputs used for
+                        quantization. (default: 1024)
+  --export_legacy_format [EXPORT_LEGACY_FORMAT], --export-legacy-format [EXPORT_LEGACY_FORMAT]
+                        Whether or not to save the `.bin` files instead of
+                        `.safetensors`. (default: False)
+  --export_hub_model_id EXPORT_HUB_MODEL_ID, --export-hub-model-id EXPORT_HUB_MODEL_ID
+                        The name of the repository if push the model to the
+                        Hugging Face hub. (default: None)
+  --vllm_maxlen VLLM_MAXLEN, --vllm-maxlen VLLM_MAXLEN
+                        Maximum sequence (prompt + response) length of the
+                        vLLM engine. (default: 4096)
+  --vllm_gpu_util VLLM_GPU_UTIL, --vllm-gpu-util VLLM_GPU_UTIL
+                        The fraction of GPU memory in (0,1) to be used for the
+                        vLLM engine. (default: 0.7)
+  --vllm_enforce_eager [VLLM_ENFORCE_EAGER], --vllm-enforce-eager [VLLM_ENFORCE_EAGER]
+                        Whether or not to disable CUDA graph in the vLLM
+                        engine. (default: False)
+  --vllm_max_lora_rank VLLM_MAX_LORA_RANK, --vllm-max-lora-rank VLLM_MAX_LORA_RANK
+                        Maximum rank of all LoRAs in the vLLM engine.
+                        (default: 32)
+  --vllm_config VLLM_CONFIG, --vllm-config VLLM_CONFIG
+                        Config to initialize the vllm engine. Please use JSON
+                        strings. (default: None)
+  --sglang_maxlen SGLANG_MAXLEN, --sglang-maxlen SGLANG_MAXLEN
+                        Maximum sequence (prompt + response) length of the
+                        SGLang engine. (default: 4096)
+  --sglang_mem_fraction SGLANG_MEM_FRACTION, --sglang-mem-fraction SGLANG_MEM_FRACTION
+                        The memory fraction (0-1) to be used for the SGLang
+                        engine. (default: 0.7)
+  --sglang_tp_size SGLANG_TP_SIZE, --sglang-tp-size SGLANG_TP_SIZE
+                        Tensor parallel size for the SGLang engine. (default:
+                        -1)
+  --sglang_config SGLANG_CONFIG, --sglang-config SGLANG_CONFIG
+                        Config to initialize the SGLang engine. Please use
+                        JSON strings. (default: None)
+  --sglang_lora_backend {triton,flashinfer}, --sglang-lora-backend {triton,flashinfer}
+                        The backend of running GEMM kernels for Lora modules.
+                        Recommend using the Triton LoRA backend for better
+                        performance and stability. (default: triton)
+  --template TEMPLATE   Which template to use for constructing prompts in
+                        training and inference. (default: None)
+  --dataset DATASET     The name of dataset(s) to use for training. Use commas
+                        to separate multiple datasets. (default: None)
+  --eval_dataset EVAL_DATASET, --eval-dataset EVAL_DATASET
+                        The name of dataset(s) to use for evaluation. Use
+                        commas to separate multiple datasets. (default: None)
+  --dataset_dir DATASET_DIR, --dataset-dir DATASET_DIR
+                        Path to the folder containing the datasets. (default:
+                        data)
+  --media_dir MEDIA_DIR, --media-dir MEDIA_DIR
+                        Path to the folder containing the images, videos or
+                        audios. Defaults to `dataset_dir`. (default: None)
+  --cutoff_len CUTOFF_LEN, --cutoff-len CUTOFF_LEN
+                        The cutoff length of the tokenized inputs in the
+                        dataset. (default: 2048)
+  --train_on_prompt [TRAIN_ON_PROMPT], --train-on-prompt [TRAIN_ON_PROMPT]
+                        Whether or not to disable the mask on the prompt.
+                        (default: False)
+  --mask_history [MASK_HISTORY], --mask-history [MASK_HISTORY]
+                        Whether or not to mask the history and train on the
+                        last turn only. (default: False)
+  --streaming [STREAMING]
+                        Enable dataset streaming. (default: False)
+  --buffer_size BUFFER_SIZE, --buffer-size BUFFER_SIZE
+                        Size of the buffer to randomly sample examples from in
+                        dataset streaming. (default: 16384)
+  --mix_strategy {concat,interleave_under,interleave_over}, --mix-strategy {concat,interleave_under,interleave_over}
+                        Strategy to use in dataset mixing (concat/interleave)
+                        (undersampling/oversampling). (default: concat)
+  --interleave_probs INTERLEAVE_PROBS, --interleave-probs INTERLEAVE_PROBS
+                        Probabilities to sample data from datasets. Use commas
+                        to separate multiple datasets. (default: None)
+  --overwrite_cache [OVERWRITE_CACHE], --overwrite-cache [OVERWRITE_CACHE]
+                        Overwrite the cached training and evaluation sets.
+                        (default: False)
+  --preprocessing_batch_size PREPROCESSING_BATCH_SIZE, --preprocessing-batch-size PREPROCESSING_BATCH_SIZE
+                        The number of examples in one group in pre-processing.
+                        (default: 1000)
+  --preprocessing_num_workers PREPROCESSING_NUM_WORKERS, --preprocessing-num-workers PREPROCESSING_NUM_WORKERS
+                        The number of processes to use for the pre-processing.
+                        (default: None)
+  --max_samples MAX_SAMPLES, --max-samples MAX_SAMPLES
+                        For debugging purposes, truncate the number of
+                        examples for each dataset. (default: None)
+  --eval_num_beams EVAL_NUM_BEAMS, --eval-num-beams EVAL_NUM_BEAMS
+                        Number of beams to use for evaluation. This argument
+                        will be passed to `model.generate` (default: None)
+  --ignore_pad_token_for_loss [IGNORE_PAD_TOKEN_FOR_LOSS], --ignore-pad-token-for-loss [IGNORE_PAD_TOKEN_FOR_LOSS]
+                        Whether or not to ignore the tokens corresponding to
+                        the pad label in loss computation. (default: True)
+  --no_ignore_pad_token_for_loss, --no-ignore-pad-token-for-loss
+                        Whether or not to ignore the tokens corresponding to
+                        the pad label in loss computation. (default: False)
+  --val_size VAL_SIZE, --val-size VAL_SIZE
+                        Size of the validation set, should be an integer or a
+                        float in range `[0,1)`. (default: 0.0)
+  --eval_on_each_dataset [EVAL_ON_EACH_DATASET], --eval-on-each-dataset [EVAL_ON_EACH_DATASET]
+                        Whether or not to evaluate on each dataset separately.
+                        (default: False)
+  --packing PACKING     Enable sequences packing in training. Will
+                        automatically enable in pre-training. (default: None)
+  --neat_packing [NEAT_PACKING], --neat-packing [NEAT_PACKING]
+                        Enable sequence packing without cross-attention.
+                        (default: False)
+  --tool_format TOOL_FORMAT, --tool-format TOOL_FORMAT
+                        Tool format to use for constructing function calling
+                        examples. (default: None)
+  --default_system DEFAULT_SYSTEM, --default-system DEFAULT_SYSTEM
+                        Override the default system message in the template.
+                        (default: None)
+  --enable_thinking [ENABLE_THINKING], --enable-thinking [ENABLE_THINKING]
+                        Whether or not to enable thinking mode for reasoning
+                        models. (default: True)
+  --no_enable_thinking, --no-enable-thinking
+                        Whether or not to enable thinking mode for reasoning
+                        models. (default: False)
+  --tokenized_path TOKENIZED_PATH, --tokenized-path TOKENIZED_PATH
+                        Path to save or load the tokenized datasets. If
+                        tokenized_path not exists, it will save the tokenized
+                        datasets. If tokenized_path exists, it will load the
+                        tokenized datasets. (default: None)
+  --data_shared_file_system [DATA_SHARED_FILE_SYSTEM], --data-shared-file-system [DATA_SHARED_FILE_SYSTEM]
+                        Whether or not to use a shared file system for the
+                        datasets. (default: False)
+  --output_dir OUTPUT_DIR, --output-dir OUTPUT_DIR
+                        The output directory where the model predictions and
+                        checkpoints will be written. Defaults to
+                        'trainer_output' if not provided. (default: None)
+  --overwrite_output_dir [OVERWRITE_OUTPUT_DIR], --overwrite-output-dir [OVERWRITE_OUTPUT_DIR]
+                        Overwrite the content of the output directory. Use
+                        this to continue training if output_dir points to a
+                        checkpoint directory. (default: False)
+  --do_train [DO_TRAIN], --do-train [DO_TRAIN]
+                        Whether to run training. (default: False)
+  --do_eval [DO_EVAL], --do-eval [DO_EVAL]
+                        Whether to run eval on the dev set. (default: False)
+  --do_predict [DO_PREDICT], --do-predict [DO_PREDICT]
+                        Whether to run predictions on the test set. (default:
+                        False)
+  --eval_strategy {no,steps,epoch}, --eval-strategy {no,steps,epoch}
+                        The evaluation strategy to use. (default: no)
+  --prediction_loss_only [PREDICTION_LOSS_ONLY], --prediction-loss-only [PREDICTION_LOSS_ONLY]
+                        When performing evaluation and predictions, only
+                        returns the loss. (default: False)
+  --per_device_train_batch_size PER_DEVICE_TRAIN_BATCH_SIZE, --per-device-train-batch-size PER_DEVICE_TRAIN_BATCH_SIZE
+                        Batch size per device accelerator core/CPU for
+                        training. (default: 8)
+  --per_device_eval_batch_size PER_DEVICE_EVAL_BATCH_SIZE, --per-device-eval-batch-size PER_DEVICE_EVAL_BATCH_SIZE
+                        Batch size per device accelerator core/CPU for
+                        evaluation. (default: 8)
+  --per_gpu_train_batch_size PER_GPU_TRAIN_BATCH_SIZE, --per-gpu-train-batch-size PER_GPU_TRAIN_BATCH_SIZE
+                        Deprecated, the use of `--per_device_train_batch_size`
+                        is preferred. Batch size per GPU/TPU core/CPU for
+                        training. (default: None)
+  --per_gpu_eval_batch_size PER_GPU_EVAL_BATCH_SIZE, --per-gpu-eval-batch-size PER_GPU_EVAL_BATCH_SIZE
+                        Deprecated, the use of `--per_device_eval_batch_size`
+                        is preferred. Batch size per GPU/TPU core/CPU for
+                        evaluation. (default: None)
+  --gradient_accumulation_steps GRADIENT_ACCUMULATION_STEPS, --gradient-accumulation-steps GRADIENT_ACCUMULATION_STEPS
+                        Number of updates steps to accumulate before
+                        performing a backward/update pass. (default: 1)
+  --eval_accumulation_steps EVAL_ACCUMULATION_STEPS, --eval-accumulation-steps EVAL_ACCUMULATION_STEPS
+                        Number of predictions steps to accumulate before
+                        moving the tensors to the CPU. (default: None)
+  --eval_delay EVAL_DELAY, --eval-delay EVAL_DELAY
+                        Number of epochs or steps to wait for before the first
+                        evaluation can be performed, depending on the
+                        eval_strategy. (default: 0)
+  --torch_empty_cache_steps TORCH_EMPTY_CACHE_STEPS, --torch-empty-cache-steps TORCH_EMPTY_CACHE_STEPS
+                        Number of steps to wait before calling
+                        `torch.<device>.empty_cache()`.This can help avoid
+                        CUDA out-of-memory errors by lowering peak VRAM usage
+                        at a cost of about [10{'option_strings': ['--
+                        torch_empty_cache_steps', '--torch-empty-cache-
+                        steps'], 'dest': 'torch_empty_cache_steps', 'nargs':
+                        None, 'const': None, 'default': None, 'type': 'int',
+                        'choices': None, 'required': False, 'help': 'Number of
+                        steps to wait before calling
+                        `torch.<device>.empty_cache()`.This can help avoid
+                        CUDA out-of-memory errors by lowering peak VRAM usage
+                        at a cost of about [10% slower performance](https://gi
+                        thub.com/huggingface/transformers/issues/31372).If
+                        left unset or set to None, cache will not be
+                        emptied.', 'metavar': None, 'container':
+                        <argparse._ArgumentGroup object at 0x147d47b0a850>,
+                        'prog': 'llamafactory-cli'}lower performance](https://
+                        github.com/huggingface/transformers/issues/31372).If
+                        left unset or set to None, cache will not be emptied.
+                        (default: None)
+  --learning_rate LEARNING_RATE, --learning-rate LEARNING_RATE
+                        The initial learning rate for AdamW. (default: 5e-05)
+  --weight_decay WEIGHT_DECAY, --weight-decay WEIGHT_DECAY
+                        Weight decay for AdamW if we apply some. (default:
+                        0.0)
+  --adam_beta1 ADAM_BETA1, --adam-beta1 ADAM_BETA1
+                        Beta1 for AdamW optimizer (default: 0.9)
+  --adam_beta2 ADAM_BETA2, --adam-beta2 ADAM_BETA2
+                        Beta2 for AdamW optimizer (default: 0.999)
+  --adam_epsilon ADAM_EPSILON, --adam-epsilon ADAM_EPSILON
+                        Epsilon for AdamW optimizer. (default: 1e-08)
+  --max_grad_norm MAX_GRAD_NORM, --max-grad-norm MAX_GRAD_NORM
+                        Max gradient norm. (default: 1.0)
+  --num_train_epochs NUM_TRAIN_EPOCHS, --num-train-epochs NUM_TRAIN_EPOCHS
+                        Total number of training epochs to perform. (default:
+                        3.0)
+  --max_steps MAX_STEPS, --max-steps MAX_STEPS
+                        If > 0: set total number of training steps to perform.
+                        Override num_train_epochs. (default: -1)
+  --lr_scheduler_type {linear,cosine,cosine_with_restarts,polynomial,constant,constant_with_warmup,inverse_sqrt,reduce_lr_on_plateau,cosine_with_min_lr,cosine_warmup_with_min_lr,warmup_stable_decay}, --lr-scheduler-type {linear,cosine,cosine_with_restarts,polynomial,constant,constant_with_warmup,inverse_sqrt,reduce_lr_on_plateau,cosine_with_min_lr,cosine_warmup_with_min_lr,warmup_stable_decay}
+                        The scheduler type to use. (default: linear)
+  --lr_scheduler_kwargs LR_SCHEDULER_KWARGS, --lr-scheduler-kwargs LR_SCHEDULER_KWARGS
+                        Extra parameters for the lr_scheduler such as
+                        {'num_cycles': 1} for the cosine with hard restarts.
+                        (default: {})
+  --warmup_ratio WARMUP_RATIO, --warmup-ratio WARMUP_RATIO
+                        Linear warmup over warmup_ratio fraction of total
+                        steps. (default: 0.0)
+  --warmup_steps WARMUP_STEPS, --warmup-steps WARMUP_STEPS
+                        Linear warmup over warmup_steps. (default: 0)
+  --log_level {detail,debug,info,warning,error,critical,passive}, --log-level {detail,debug,info,warning,error,critical,passive}
+                        Logger log level to use on the main node. Possible
+                        choices are the log levels as strings: 'debug',
+                        'info', 'warning', 'error' and 'critical', plus a
+                        'passive' level which doesn't set anything and lets
+                        the application set the level. Defaults to 'passive'.
+                        (default: passive)
+  --log_level_replica {detail,debug,info,warning,error,critical,passive}, --log-level-replica {detail,debug,info,warning,error,critical,passive}
+                        Logger log level to use on replica nodes. Same choices
+                        and defaults as ``log_level`` (default: warning)
+  --log_on_each_node [LOG_ON_EACH_NODE], --log-on-each-node [LOG_ON_EACH_NODE]
+                        When doing a multinode distributed training, whether
+                        to log once per node or just once on the main node.
+                        (default: True)
+  --no_log_on_each_node, --no-log-on-each-node
+                        When doing a multinode distributed training, whether
+                        to log once per node or just once on the main node.
+                        (default: False)
+  --logging_dir LOGGING_DIR, --logging-dir LOGGING_DIR
+                        Tensorboard log dir. (default: None)
+  --logging_strategy {no,steps,epoch}, --logging-strategy {no,steps,epoch}
+                        The logging strategy to use. (default: steps)
+  --logging_first_step [LOGGING_FIRST_STEP], --logging-first-step [LOGGING_FIRST_STEP]
+                        Log the first global_step (default: False)
+  --logging_steps LOGGING_STEPS, --logging-steps LOGGING_STEPS
+                        Log every X updates steps. Should be an integer or a
+                        float in range `[0,1)`. If smaller than 1, will be
+                        interpreted as ratio of total training steps.
+                        (default: 500)
+  --logging_nan_inf_filter [LOGGING_NAN_INF_FILTER], --logging-nan-inf-filter [LOGGING_NAN_INF_FILTER]
+                        Filter nan and inf losses for logging. (default: True)
+  --no_logging_nan_inf_filter, --no-logging-nan-inf-filter
+                        Filter nan and inf losses for logging. (default:
+                        False)
+  --save_strategy {no,steps,epoch,best}, --save-strategy {no,steps,epoch,best}
+                        The checkpoint save strategy to use. (default: steps)
+  --save_steps SAVE_STEPS, --save-steps SAVE_STEPS
+                        Save checkpoint every X updates steps. Should be an
+                        integer or a float in range `[0,1)`. If smaller than
+                        1, will be interpreted as ratio of total training
+                        steps. (default: 500)
+  --save_total_limit SAVE_TOTAL_LIMIT, --save-total-limit SAVE_TOTAL_LIMIT
+                        If a value is passed, will limit the total amount of
+                        checkpoints. Deletes the older checkpoints in
+                        `output_dir`. When `load_best_model_at_end` is
+                        enabled, the 'best' checkpoint according to
+                        `metric_for_best_model` will always be retained in
+                        addition to the most recent ones. For example, for
+                        `save_total_limit=5` and
+                        `load_best_model_at_end=True`, the four last
+                        checkpoints will always be retained alongside the best
+                        model. When `save_total_limit=1` and
+                        `load_best_model_at_end=True`, it is possible that two
+                        checkpoints are saved: the last one and the best one
+                        (if they are different). Default is unlimited
+                        checkpoints (default: None)
+  --save_safetensors [SAVE_SAFETENSORS], --save-safetensors [SAVE_SAFETENSORS]
+                        Use safetensors saving and loading for state dicts
+                        instead of default torch.load and torch.save.
+                        (default: True)
+  --no_save_safetensors, --no-save-safetensors
+                        Use safetensors saving and loading for state dicts
+                        instead of default torch.load and torch.save.
+                        (default: False)
+  --save_on_each_node [SAVE_ON_EACH_NODE], --save-on-each-node [SAVE_ON_EACH_NODE]
+                        When doing multi-node distributed training, whether to
+                        save models and checkpoints on each node, or only on
+                        the main one (default: False)
+  --save_only_model [SAVE_ONLY_MODEL], --save-only-model [SAVE_ONLY_MODEL]
+                        When checkpointing, whether to only save the model, or
+                        also the optimizer, scheduler & rng state.Note that
+                        when this is true, you won't be able to resume
+                        training from checkpoint.This enables you to save
+                        storage by not storing the optimizer, scheduler & rng
+                        state.You can only load the model using
+                        from_pretrained with this option set to True.
+                        (default: False)
+  --restore_callback_states_from_checkpoint [RESTORE_CALLBACK_STATES_FROM_CHECKPOINT], --restore-callback-states-from-checkpoint [RESTORE_CALLBACK_STATES_FROM_CHECKPOINT]
+                        Whether to restore the callback states from the
+                        checkpoint. If `True`, will override callbacks passed
+                        to the `Trainer` if they exist in the checkpoint.
+                        (default: False)
+  --no_cuda [NO_CUDA], --no-cuda [NO_CUDA]
+                        This argument is deprecated. It will be removed in
+                        version 5.0 of 🤗 Transformers. (default: False)
+  --use_cpu [USE_CPU], --use-cpu [USE_CPU]
+                        Whether or not to use cpu. If left to False, we will
+                        use the available torch device/backend
+                        (cuda/mps/xpu/hpu etc.) (default: False)
+  --use_mps_device [USE_MPS_DEVICE], --use-mps-device [USE_MPS_DEVICE]
+                        This argument is deprecated. `mps` device will be used
+                        if available similar to `cuda` device. It will be
+                        removed in version 5.0 of 🤗 Transformers (default:
+                        False)
+  --seed SEED           Random seed that will be set at the beginning of
+                        training. (default: 42)
+  --data_seed DATA_SEED, --data-seed DATA_SEED
+                        Random seed to be used with data samplers. (default:
+                        None)
+  --jit_mode_eval [JIT_MODE_EVAL], --jit-mode-eval [JIT_MODE_EVAL]
+                        Whether or not to use PyTorch jit trace for inference
+                        (default: False)
+  --bf16 [BF16]         Whether to use bf16 (mixed) precision instead of
+                        32-bit. Requires Ampere or higher NVIDIA architecture
+                        or using CPU (use_cpu) or Ascend NPU. This is an
+                        experimental API and it may change. (default: False)
+  --fp16 [FP16]         Whether to use fp16 (mixed) precision instead of
+                        32-bit (default: False)
+  --fp16_opt_level FP16_OPT_LEVEL, --fp16-opt-level FP16_OPT_LEVEL
+                        For fp16: Apex AMP optimization level selected in
+                        ['O0', 'O1', 'O2', and 'O3']. See details at
+                        https://nvidia.github.io/apex/amp.html (default: O1)
+  --half_precision_backend {auto,apex,cpu_amp}, --half-precision-backend {auto,apex,cpu_amp}
+                        The backend to be used for half precision. (default:
+                        auto)
+  --bf16_full_eval [BF16_FULL_EVAL], --bf16-full-eval [BF16_FULL_EVAL]
+                        Whether to use full bfloat16 evaluation instead of
+                        32-bit. This is an experimental API and it may change.
+                        (default: False)
+  --fp16_full_eval [FP16_FULL_EVAL], --fp16-full-eval [FP16_FULL_EVAL]
+                        Whether to use full float16 evaluation instead of
+                        32-bit (default: False)
+  --tf32 TF32           Whether to enable tf32 mode, available in Ampere and
+                        newer GPU architectures. This is an experimental API
+                        and it may change. (default: None)
+  --local_rank LOCAL_RANK, --local-rank LOCAL_RANK
+                        For distributed training: local_rank (default: -1)
+  --ddp_backend {nccl,gloo,mpi,ccl,hccl,cncl,mccl}, --ddp-backend {nccl,gloo,mpi,ccl,hccl,cncl,mccl}
+                        The backend to be used for distributed training
+                        (default: None)
+  --tpu_num_cores TPU_NUM_CORES, --tpu-num-cores TPU_NUM_CORES
+                        TPU: Number of TPU cores (automatically passed by
+                        launcher script) (default: None)
+  --tpu_metrics_debug [TPU_METRICS_DEBUG], --tpu-metrics-debug [TPU_METRICS_DEBUG]
+                        Deprecated, the use of `--debug tpu_metrics_debug` is
+                        preferred. TPU: Whether to print debug metrics
+                        (default: False)
+  --debug DEBUG [DEBUG ...]
+                        Whether or not to enable debug mode. Current options:
+                        `underflow_overflow` (Detect underflow and overflow in
+                        activations and weights), `tpu_metrics_debug` (print
+                        debug metrics on TPU). (default: None)
+  --dataloader_drop_last [DATALOADER_DROP_LAST], --dataloader-drop-last [DATALOADER_DROP_LAST]
+                        Drop the last incomplete batch if it is not divisible
+                        by the batch size. (default: False)
+  --eval_steps EVAL_STEPS, --eval-steps EVAL_STEPS
+                        Run an evaluation every X steps. Should be an integer
+                        or a float in range `[0,1)`. If smaller than 1, will
+                        be interpreted as ratio of total training steps.
+                        (default: None)
+  --dataloader_num_workers DATALOADER_NUM_WORKERS, --dataloader-num-workers DATALOADER_NUM_WORKERS
+                        Number of subprocesses to use for data loading
+                        (PyTorch only). 0 means that the data will be loaded
+                        in the main process. (default: 0)
+  --dataloader_prefetch_factor DATALOADER_PREFETCH_FACTOR, --dataloader-prefetch-factor DATALOADER_PREFETCH_FACTOR
+                        Number of batches loaded in advance by each worker. 2
+                        means there will be a total of 2 * num_workers batches
+                        prefetched across all workers. (default: None)
+  --past_index PAST_INDEX, --past-index PAST_INDEX
+                        If >=0, uses the corresponding part of the output as
+                        the past state for next step. (default: -1)
+  --run_name RUN_NAME, --run-name RUN_NAME
+                        An optional descriptor for the run. Notably used for
+                        trackio, wandb, mlflow comet and swanlab logging.
+                        (default: None)
+  --disable_tqdm DISABLE_TQDM, --disable-tqdm DISABLE_TQDM
+                        Whether or not to disable the tqdm progress bars.
+                        (default: None)
+  --remove_unused_columns [REMOVE_UNUSED_COLUMNS], --remove-unused-columns [REMOVE_UNUSED_COLUMNS]
+                        Remove columns not required by the model when using an
+                        nlp.Dataset. (default: True)
+  --no_remove_unused_columns, --no-remove-unused-columns
+                        Remove columns not required by the model when using an
+                        nlp.Dataset. (default: False)
+  --label_names LABEL_NAMES [LABEL_NAMES ...], --label-names LABEL_NAMES [LABEL_NAMES ...]
+                        The list of keys in your dictionary of inputs that
+                        correspond to the labels. (default: None)
+  --load_best_model_at_end [LOAD_BEST_MODEL_AT_END], --load-best-model-at-end [LOAD_BEST_MODEL_AT_END]
+                        Whether or not to load the best model found during
+                        training at the end of training. When this option is
+                        enabled, the best checkpoint will always be saved. See
+                        `save_total_limit` for more. (default: False)
+  --metric_for_best_model METRIC_FOR_BEST_MODEL, --metric-for-best-model METRIC_FOR_BEST_MODEL
+                        The metric to use to compare two different models.
+                        (default: None)
+  --greater_is_better GREATER_IS_BETTER, --greater-is-better GREATER_IS_BETTER
+                        Whether the `metric_for_best_model` should be
+                        maximized or not. (default: None)
+  --ignore_data_skip [IGNORE_DATA_SKIP], --ignore-data-skip [IGNORE_DATA_SKIP]
+                        When resuming training, whether or not to skip the
+                        first epochs and batches to get to the same training
+                        data. (default: False)
+  --fsdp FSDP [FSDP ...]
+                        Whether or not to use PyTorch Fully Sharded Data
+                        Parallel (FSDP) training (in distributed training
+                        only). The base option should be `full_shard`,
+                        `shard_grad_op` or `no_shard` and you can add CPU-
+                        offload to `full_shard` or `shard_grad_op` like this:
+                        full_shard offload` or `shard_grad_op offload`. You
+                        can add auto-wrap to `full_shard` or `shard_grad_op`
+                        with the same syntax: full_shard auto_wrap` or
+                        `shard_grad_op auto_wrap`. (default: [])
+  --fsdp_min_num_params FSDP_MIN_NUM_PARAMS, --fsdp-min-num-params FSDP_MIN_NUM_PARAMS
+                        This parameter is deprecated. FSDP's minimum number of
+                        parameters for Default Auto Wrapping. (useful only
+                        when `fsdp` field is passed). (default: 0)
+  --fsdp_config FSDP_CONFIG, --fsdp-config FSDP_CONFIG
+                        Config to be used with FSDP (Pytorch Fully Sharded
+                        Data Parallel). The value is either a fsdp json config
+                        file (e.g., `fsdp_config.json`) or an already loaded
+                        json file as `dict`. (default: None)
+  --fsdp_transformer_layer_cls_to_wrap FSDP_TRANSFORMER_LAYER_CLS_TO_WRAP, --fsdp-transformer-layer-cls-to-wrap FSDP_TRANSFORMER_LAYER_CLS_TO_WRAP
+                        This parameter is deprecated. Transformer layer class
+                        name (case-sensitive) to wrap, e.g, `BertLayer`,
+                        `GPTJBlock`, `T5Block` .... (useful only when `fsdp`
+                        flag is passed). (default: None)
+  --accelerator_config ACCELERATOR_CONFIG, --accelerator-config ACCELERATOR_CONFIG
+                        Config to be used with the internal Accelerator object
+                        initialization. The value is either a accelerator json
+                        config file (e.g., `accelerator_config.json`) or an
+                        already loaded json file as `dict`. (default: None)
+  --parallelism_config PARALLELISM_CONFIG, --parallelism-config PARALLELISM_CONFIG
+                        Parallelism configuration for the training run.
+                        Requires Accelerate `1.10.1` (default: None)
+  --deepspeed DEEPSPEED
+                        Enable deepspeed and pass the path to deepspeed json
+                        config file (e.g. `ds_config.json`) or an already
+                        loaded json file as a dict (default: None)
+  --label_smoothing_factor LABEL_SMOOTHING_FACTOR, --label-smoothing-factor LABEL_SMOOTHING_FACTOR
+                        The label smoothing epsilon to apply (zero means no
+                        label smoothing). (default: 0.0)
+  --optim {adamw_torch,adamw_torch_fused,adamw_torch_xla,adamw_torch_npu_fused,adamw_apex_fused,adafactor,adamw_anyprecision,adamw_torch_4bit,adamw_torch_8bit,ademamix,sgd,adagrad,adamw_bnb_8bit,adamw_8bit,ademamix_8bit,lion_8bit,lion_32bit,paged_adamw_32bit,paged_adamw_8bit,paged_ademamix_32bit,paged_ademamix_8bit,paged_lion_32bit,paged_lion_8bit,rmsprop,rmsprop_bnb,rmsprop_bnb_8bit,rmsprop_bnb_32bit,galore_adamw,galore_adamw_8bit,galore_adafactor,galore_adamw_layerwise,galore_adamw_8bit_layerwise,galore_adafactor_layerwise,lomo,adalomo,grokadamw,schedule_free_radam,schedule_free_adamw,schedule_free_sgd,apollo_adamw,apollo_adamw_layerwise,stable_adamw}
+                        The optimizer to use. (default: adamw_torch)
+  --optim_args OPTIM_ARGS, --optim-args OPTIM_ARGS
+                        Optional arguments to supply to optimizer. (default:
+                        None)
+  --adafactor [ADAFACTOR]
+                        Whether or not to replace AdamW by Adafactor.
+                        (default: False)
+  --group_by_length [GROUP_BY_LENGTH], --group-by-length [GROUP_BY_LENGTH]
+                        Whether or not to group samples of roughly the same
+                        length together when batching. (default: False)
+  --length_column_name LENGTH_COLUMN_NAME, --length-column-name LENGTH_COLUMN_NAME
+                        Column name with precomputed lengths to use when
+                        grouping by length. (default: length)
+  --report_to REPORT_TO, --report-to REPORT_TO
+                        The list of integrations to report the results and
+                        logs to. (default: None)
+  --project PROJECT     The name of the project to use for logging. Currenly,
+                        only used by Trackio. (default: huggingface)
+  --trackio_space_id TRACKIO_SPACE_ID, --trackio-space-id TRACKIO_SPACE_ID
+                        The Hugging Face Space ID to deploy to when using
+                        Trackio. Should be a complete Space name like
+                        'username/reponame' or 'orgname/reponame', or just
+                        'reponame' in which case the Space will be created in
+                        the currently-logged-in Hugging Face user's namespace.
+                        If `None`, will log to a local directory. Note that
+                        this Space will be public unless you set
+                        `hub_private_repo=True` or your organization's default
+                        is to create private Spaces. (default: trackio)
+  --ddp_find_unused_parameters DDP_FIND_UNUSED_PARAMETERS, --ddp-find-unused-parameters DDP_FIND_UNUSED_PARAMETERS
+                        When using distributed training, the value of the flag
+                        `find_unused_parameters` passed to
+                        `DistributedDataParallel`. (default: None)
+  --ddp_bucket_cap_mb DDP_BUCKET_CAP_MB, --ddp-bucket-cap-mb DDP_BUCKET_CAP_MB
+                        When using distributed training, the value of the flag
+                        `bucket_cap_mb` passed to `DistributedDataParallel`.
+                        (default: None)
+  --ddp_broadcast_buffers DDP_BROADCAST_BUFFERS, --ddp-broadcast-buffers DDP_BROADCAST_BUFFERS
+                        When using distributed training, the value of the flag
+                        `broadcast_buffers` passed to
+                        `DistributedDataParallel`. (default: None)
+  --dataloader_pin_memory [DATALOADER_PIN_MEMORY], --dataloader-pin-memory [DATALOADER_PIN_MEMORY]
+                        Whether or not to pin memory for DataLoader. (default:
+                        True)
+  --no_dataloader_pin_memory, --no-dataloader-pin-memory
+                        Whether or not to pin memory for DataLoader. (default:
+                        False)
+  --dataloader_persistent_workers [DATALOADER_PERSISTENT_WORKERS], --dataloader-persistent-workers [DATALOADER_PERSISTENT_WORKERS]
+                        If True, the data loader will not shut down the worker
+                        processes after a dataset has been consumed once. This
+                        allows to maintain the workers Dataset instances
+                        alive. Can potentially speed up training, but will
+                        increase RAM usage. (default: False)
+  --skip_memory_metrics [SKIP_MEMORY_METRICS], --skip-memory-metrics [SKIP_MEMORY_METRICS]
+                        Whether or not to skip adding of memory profiler
+                        reports to metrics. (default: True)
+  --no_skip_memory_metrics, --no-skip-memory-metrics
+                        Whether or not to skip adding of memory profiler
+                        reports to metrics. (default: False)
+  --use_legacy_prediction_loop [USE_LEGACY_PREDICTION_LOOP], --use-legacy-prediction-loop [USE_LEGACY_PREDICTION_LOOP]
+                        Whether or not to use the legacy prediction_loop in
+                        the Trainer. (default: False)
+  --push_to_hub [PUSH_TO_HUB], --push-to-hub [PUSH_TO_HUB]
+                        Whether or not to upload the trained model to the
+                        model hub after training. (default: False)
+  --resume_from_checkpoint RESUME_FROM_CHECKPOINT, --resume-from-checkpoint RESUME_FROM_CHECKPOINT
+                        The path to a folder with a valid checkpoint for your
+                        model. (default: None)
+  --hub_model_id HUB_MODEL_ID, --hub-model-id HUB_MODEL_ID
+                        The name of the repository to keep in sync with the
+                        local `output_dir`. (default: None)
+  --hub_strategy {end,every_save,checkpoint,all_checkpoints}, --hub-strategy {end,every_save,checkpoint,all_checkpoints}
+                        The hub strategy to use when `--push_to_hub` is
+                        activated. (default: every_save)
+  --hub_token HUB_TOKEN, --hub-token HUB_TOKEN
+                        The token to use to push to the Model Hub. (default:
+                        None)
+  --hub_private_repo HUB_PRIVATE_REPO, --hub-private-repo HUB_PRIVATE_REPO
+                        Whether to make the repo private. If `None` (default),
+                        the repo will be public unless the organization's
+                        default is private. This value is ignored if the repo
+                        already exists. If reporting to Trackio with
+                        deployment to Hugging Face Spaces enabled, the same
+                        logic determines whether the Space is private.
+                        (default: None)
+  --hub_always_push [HUB_ALWAYS_PUSH], --hub-always-push [HUB_ALWAYS_PUSH]
+                        Unless `True`, the Trainer will skip pushes if the
+                        previous one wasn't finished yet. (default: False)
+  --hub_revision HUB_REVISION, --hub-revision HUB_REVISION
+                        The revision to use when pushing to the Hub. Can be a
+                        branch name, a tag, or a commit hash. (default: None)
+  --gradient_checkpointing [GRADIENT_CHECKPOINTING], --gradient-checkpointing [GRADIENT_CHECKPOINTING]
+                        If True, use gradient checkpointing to save memory at
+                        the expense of slower backward pass. (default: False)
+  --gradient_checkpointing_kwargs GRADIENT_CHECKPOINTING_KWARGS, --gradient-checkpointing-kwargs GRADIENT_CHECKPOINTING_KWARGS
+                        Gradient checkpointing key word arguments such as
+                        `use_reentrant`. Will be passed to
+                        `torch.utils.checkpoint.checkpoint` through
+                        `model.gradient_checkpointing_enable`. (default: None)
+  --include_inputs_for_metrics [INCLUDE_INPUTS_FOR_METRICS], --include-inputs-for-metrics [INCLUDE_INPUTS_FOR_METRICS]
+                        This argument is deprecated and will be removed in
+                        version 5 of 🤗 Transformers. Use `include_for_metrics`
+                        instead. (default: False)
+  --include_for_metrics INCLUDE_FOR_METRICS [INCLUDE_FOR_METRICS ...], --include-for-metrics INCLUDE_FOR_METRICS [INCLUDE_FOR_METRICS ...]
+                        List of strings to specify additional data to include
+                        in the `compute_metrics` function.Options: 'inputs',
+                        'loss'. (default: [])
+  --eval_do_concat_batches [EVAL_DO_CONCAT_BATCHES], --eval-do-concat-batches [EVAL_DO_CONCAT_BATCHES]
+                        Whether to recursively concat
+                        inputs/losses/labels/predictions across batches. If
+                        `False`, will instead store them as lists, with each
+                        batch kept separate. (default: True)
+  --no_eval_do_concat_batches, --no-eval-do-concat-batches
+                        Whether to recursively concat
+                        inputs/losses/labels/predictions across batches. If
+                        `False`, will instead store them as lists, with each
+                        batch kept separate. (default: False)
+  --fp16_backend {auto,apex,cpu_amp}, --fp16-backend {auto,apex,cpu_amp}
+                        Deprecated. Use half_precision_backend instead
+                        (default: auto)
+  --push_to_hub_model_id PUSH_TO_HUB_MODEL_ID, --push-to-hub-model-id PUSH_TO_HUB_MODEL_ID
+                        The name of the repository to which push the
+                        `Trainer`. (default: None)
+  --push_to_hub_organization PUSH_TO_HUB_ORGANIZATION, --push-to-hub-organization PUSH_TO_HUB_ORGANIZATION
+                        The name of the organization in with to which push the
+                        `Trainer`. (default: None)
+  --push_to_hub_token PUSH_TO_HUB_TOKEN, --push-to-hub-token PUSH_TO_HUB_TOKEN
+                        The token to use to push to the Model Hub. (default:
+                        None)
+  --mp_parameters MP_PARAMETERS, --mp-parameters MP_PARAMETERS
+                        Used by the SageMaker launcher to send mp-specific
+                        args. Ignored in Trainer (default: )
+  --auto_find_batch_size [AUTO_FIND_BATCH_SIZE], --auto-find-batch-size [AUTO_FIND_BATCH_SIZE]
+                        Whether to automatically decrease the batch size in
+                        half and rerun the training loop again each time a
+                        CUDA Out-of-Memory was reached (default: False)
+  --full_determinism [FULL_DETERMINISM], --full-determinism [FULL_DETERMINISM]
+                        Whether to call enable_full_determinism instead of
+                        set_seed for reproducibility in distributed training.
+                        Important: this will negatively impact the
+                        performance, so only use it for debugging. (default:
+                        False)
+  --torchdynamo TORCHDYNAMO
+                        This argument is deprecated, use
+                        `--torch_compile_backend` instead. (default: None)
+  --ray_scope RAY_SCOPE, --ray-scope RAY_SCOPE
+                        The scope to use when doing hyperparameter search with
+                        Ray. By default, `"last"` will be used. Ray will then
+                        use the last checkpoint of all trials, compare those,
+                        and select the best one. However, other options are
+                        also available. See the Ray documentation (https://doc
+                        s.ray.io/en/latest/tune/api_docs/analysis.html#ray.tun
+                        e.ExperimentAnalysis.get_best_trial) for more options.
+                        (default: last)
+  --ddp_timeout DDP_TIMEOUT, --ddp-timeout DDP_TIMEOUT
+                        Overrides the default timeout for distributed training
+                        (value should be given in seconds). (default: 1800)
+  --torch_compile [TORCH_COMPILE], --torch-compile [TORCH_COMPILE]
+                        If set to `True`, the model will be wrapped in
+                        `torch.compile`. (default: False)
+  --torch_compile_backend TORCH_COMPILE_BACKEND, --torch-compile-backend TORCH_COMPILE_BACKEND
+                        Which backend to use with `torch.compile`, passing one
+                        will trigger a model compilation. (default: None)
+  --torch_compile_mode TORCH_COMPILE_MODE, --torch-compile-mode TORCH_COMPILE_MODE
+                        Which mode to use with `torch.compile`, passing one
+                        will trigger a model compilation. (default: None)
+  --include_tokens_per_second [INCLUDE_TOKENS_PER_SECOND], --include-tokens-per-second [INCLUDE_TOKENS_PER_SECOND]
+                        If set to `True`, the speed metrics will include `tgs`
+                        (tokens per second per device). (default: False)
+  --include_num_input_tokens_seen [INCLUDE_NUM_INPUT_TOKENS_SEEN], --include-num-input-tokens-seen [INCLUDE_NUM_INPUT_TOKENS_SEEN]
+                        Whether to track the number of input tokens seen. Can
+                        be `'all'` to count all tokens, `'non_padding'` to
+                        count only non-padding tokens, or a boolean (`True`
+                        maps to `'all'`, `False` to `'no'`). (default: False)
+  --neftune_noise_alpha NEFTUNE_NOISE_ALPHA, --neftune-noise-alpha NEFTUNE_NOISE_ALPHA
+                        Activates neftune noise embeddings into the model.
+                        NEFTune has been proven to drastically improve model
+                        performances for instruction fine-tuning. Check out
+                        the original paper here:
+                        https://huggingface.co/papers/2310.05914 and the
+                        original code here:
+                        https://github.com/neelsjain/NEFTune. Only supported
+                        for `PreTrainedModel` and `PeftModel` classes.
+                        (default: None)
+  --optim_target_modules OPTIM_TARGET_MODULES, --optim-target-modules OPTIM_TARGET_MODULES
+                        Target modules for the optimizer defined in the
+                        `optim` argument. Only used for the GaLore optimizer
+                        at the moment. (default: None)
+  --batch_eval_metrics [BATCH_EVAL_METRICS], --batch-eval-metrics [BATCH_EVAL_METRICS]
+                        Break eval metrics calculation into batches to save
+                        memory. (default: False)
+  --eval_on_start [EVAL_ON_START], --eval-on-start [EVAL_ON_START]
+                        Whether to run through the entire `evaluation` step at
+                        the very beginning of training as a sanity check.
+                        (default: False)
+  --use_liger_kernel [USE_LIGER_KERNEL], --use-liger-kernel [USE_LIGER_KERNEL]
+                        Whether or not to enable the Liger Kernel for model
+                        training. (default: False)
+  --liger_kernel_config LIGER_KERNEL_CONFIG, --liger-kernel-config LIGER_KERNEL_CONFIG
+                        Configuration to be used for Liger Kernel. When
+                        use_liger_kernel=True, this dict is passed as keyword
+                        arguments to the `_apply_liger_kernel_to_instance`
+                        function, which specifies which kernels to apply.
+                        Available options vary by model but typically include:
+                        'rope', 'swiglu', 'cross_entropy',
+                        'fused_linear_cross_entropy', 'rms_norm', etc. If
+                        None, use the default kernel configurations. (default:
+                        None)
+  --eval_use_gather_object [EVAL_USE_GATHER_OBJECT], --eval-use-gather-object [EVAL_USE_GATHER_OBJECT]
+                        Whether to run recursively gather object in a nested
+                        list/tuple/dictionary of objects from all devices.
+                        (default: False)
+  --average_tokens_across_devices [AVERAGE_TOKENS_ACROSS_DEVICES], --average-tokens-across-devices [AVERAGE_TOKENS_ACROSS_DEVICES]
+                        Whether or not to average tokens across devices. If
+                        enabled, will use all_reduce to synchronize
+                        num_tokens_in_batch for precise loss calculation.
+                        Reference: https://github.com/huggingface/transformers
+                        /issues/34242 (default: True)
+  --no_average_tokens_across_devices, --no-average-tokens-across-devices
+                        Whether or not to average tokens across devices. If
+                        enabled, will use all_reduce to synchronize
+                        num_tokens_in_batch for precise loss calculation.
+                        Reference: https://github.com/huggingface/transformers
+                        /issues/34242 (default: False)
+  --sortish_sampler [SORTISH_SAMPLER], --sortish-sampler [SORTISH_SAMPLER]
+                        Whether to use SortishSampler or not. (default: False)
+  --predict_with_generate [PREDICT_WITH_GENERATE], --predict-with-generate [PREDICT_WITH_GENERATE]
+                        Whether to use generate to calculate generative
+                        metrics (ROUGE, BLEU). (default: False)
+  --generation_max_length GENERATION_MAX_LENGTH, --generation-max-length GENERATION_MAX_LENGTH
+                        The `max_length` to use on each evaluation loop when
+                        `predict_with_generate=True`. Will default to the
+                        `max_length` value of the model configuration.
+                        (default: None)
+  --generation_num_beams GENERATION_NUM_BEAMS, --generation-num-beams GENERATION_NUM_BEAMS
+                        The `num_beams` to use on each evaluation loop when
+                        `predict_with_generate=True`. Will default to the
+                        `num_beams` value of the model configuration.
+                        (default: None)
+  --generation_config GENERATION_CONFIG, --generation-config GENERATION_CONFIG
+                        Model id, file path or url pointing to a
+                        GenerationConfig json file, to use during prediction.
+                        (default: None)
+  --ray_run_name RAY_RUN_NAME, --ray-run-name RAY_RUN_NAME
+                        The training results will be saved at
+                        `<ray_storage_path>/ray_run_name`. (default: None)
+  --ray_storage_path RAY_STORAGE_PATH, --ray-storage-path RAY_STORAGE_PATH
+                        The storage path to save training results to (default:
+                        ./saves)
+  --ray_storage_filesystem {s3,gs,gcs}, --ray-storage-filesystem {s3,gs,gcs}
+                        The storage filesystem to use. If None specified,
+                        local filesystem will be used. (default: None)
+  --ray_num_workers RAY_NUM_WORKERS, --ray-num-workers RAY_NUM_WORKERS
+                        The number of workers for Ray training. Default is 1
+                        worker. (default: 1)
+  --resources_per_worker RESOURCES_PER_WORKER, --resources-per-worker RESOURCES_PER_WORKER
+                        The resources per worker for Ray training. Default is
+                        to use 1 GPU per worker. (default: {'GPU': 1})
+  --placement_strategy {SPREAD,PACK,STRICT_SPREAD,STRICT_PACK}, --placement-strategy {SPREAD,PACK,STRICT_SPREAD,STRICT_PACK}
+                        The placement strategy for Ray training. Default is
+                        PACK. (default: PACK)
+  --ray_init_kwargs RAY_INIT_KWARGS, --ray-init-kwargs RAY_INIT_KWARGS
+                        The arguments to pass to ray.init for Ray training.
+                        Default is None. (default: None)
+  --freeze_trainable_layers FREEZE_TRAINABLE_LAYERS, --freeze-trainable-layers FREEZE_TRAINABLE_LAYERS
+                        The number of trainable layers for freeze (partial-
+                        parameter) fine-tuning. Positive numbers mean the last
+                        n layers are set as trainable, negative numbers mean
+                        the first n layers are set as trainable. (default: 2)
+  --freeze_trainable_modules FREEZE_TRAINABLE_MODULES, --freeze-trainable-modules FREEZE_TRAINABLE_MODULES
+                        Name(s) of trainable modules for freeze (partial-
+                        parameter) fine-tuning. Use commas to separate
+                        multiple modules. Use `all` to specify all the
+                        available modules. (default: all)
+  --freeze_extra_modules FREEZE_EXTRA_MODULES, --freeze-extra-modules FREEZE_EXTRA_MODULES
+                        Name(s) of modules apart from hidden layers to be set
+                        as trainable for freeze (partial-parameter) fine-
+                        tuning. Use commas to separate multiple modules.
+                        (default: None)
+  --additional_target ADDITIONAL_TARGET, --additional-target ADDITIONAL_TARGET
+                        Name(s) of modules apart from LoRA layers to be set as
+                        trainable and saved in the final checkpoint. Use
+                        commas to separate multiple modules. (default: None)
+  --module_dropout MODULE_DROPOUT, --module-dropout MODULE_DROPOUT
+                        Dropout rate for the OFT fine-tuning. (default: 0.0)
+  --oft_rank OFT_RANK, --oft-rank OFT_RANK
+                        The intrinsic dimension for OFT fine-tuning. (default:
+                        0)
+  --oft_block_size OFT_BLOCK_SIZE, --oft-block-size OFT_BLOCK_SIZE
+                        The intrinsic dimension for OFT fine-tuning. (default:
+                        32)
+  --oft_target OFT_TARGET, --oft-target OFT_TARGET
+                        Name(s) of target modules to apply OFT. Use commas to
+                        separate multiple modules. Use `all` to specify all
+                        the linear modules. (default: all)
+  --create_new_adapter [CREATE_NEW_ADAPTER], --create-new-adapter [CREATE_NEW_ADAPTER]
+                        Whether or not to create a new adapter with randomly
+                        initialized weight. (default: False)
+  --lora_alpha LORA_ALPHA, --lora-alpha LORA_ALPHA
+                        The scale factor for LoRA fine-tuning (default:
+                        lora_rank * 2). (default: None)
+  --lora_dropout LORA_DROPOUT, --lora-dropout LORA_DROPOUT
+                        Dropout rate for the LoRA fine-tuning. (default: 0.0)
+  --lora_rank LORA_RANK, --lora-rank LORA_RANK
+                        The intrinsic dimension for LoRA fine-tuning.
+                        (default: 8)
+  --lora_target LORA_TARGET, --lora-target LORA_TARGET
+                        Name(s) of target modules to apply LoRA. Use commas to
+                        separate multiple modules. Use `all` to specify all
+                        the linear modules. (default: all)
+  --loraplus_lr_ratio LORAPLUS_LR_RATIO, --loraplus-lr-ratio LORAPLUS_LR_RATIO
+                        LoRA plus learning rate ratio (lr_B / lr_A). (default:
+                        None)
+  --loraplus_lr_embedding LORAPLUS_LR_EMBEDDING, --loraplus-lr-embedding LORAPLUS_LR_EMBEDDING
+                        LoRA plus learning rate for lora embedding layers.
+                        (default: 1e-06)
+  --use_rslora [USE_RSLORA], --use-rslora [USE_RSLORA]
+                        Whether or not to use the rank stabilization scaling
+                        factor for LoRA layer. (default: False)
+  --use_dora [USE_DORA], --use-dora [USE_DORA]
+                        Whether or not to use the weight-decomposed lora
+                        method (DoRA). (default: False)
+  --pissa_init [PISSA_INIT], --pissa-init [PISSA_INIT]
+                        Whether or not to initialize a PiSSA adapter.
+                        (default: False)
+  --pissa_iter PISSA_ITER, --pissa-iter PISSA_ITER
+                        The number of iteration steps performed by FSVD in
+                        PiSSA. Use -1 to disable it. (default: 16)
+  --pissa_convert [PISSA_CONVERT], --pissa-convert [PISSA_CONVERT]
+                        Whether or not to convert the PiSSA adapter to a
+                        normal LoRA adapter. (default: False)
+  --pref_beta PREF_BETA, --pref-beta PREF_BETA
+                        The beta parameter in the preference loss. (default:
+                        0.1)
+  --pref_ftx PREF_FTX, --pref-ftx PREF_FTX
+                        The supervised fine-tuning loss coefficient in DPO
+                        training. (default: 0.0)
+  --pref_bco_weight PREF_BCO_WEIGHT, --pref-bco-weight PREF_BCO_WEIGHT
+                        The Binary Classifier Optimization coefficient in DPO
+                        training. (default: 0.0)
+  --pref_loss {sigmoid,hinge,ipo,kto_pair,orpo,simpo}, --pref-loss {sigmoid,hinge,ipo,kto_pair,orpo,simpo}
+                        The type of DPO loss to use. (default: sigmoid)
+  --dpo_label_smoothing DPO_LABEL_SMOOTHING, --dpo-label-smoothing DPO_LABEL_SMOOTHING
+                        The robust DPO label smoothing parameter in cDPO that
+                        should be between 0 and 0.5. (default: 0.0)
+  --kto_chosen_weight KTO_CHOSEN_WEIGHT, --kto-chosen-weight KTO_CHOSEN_WEIGHT
+                        The weight factor of the desirable losses in KTO
+                        training. (default: 1.0)
+  --kto_rejected_weight KTO_REJECTED_WEIGHT, --kto-rejected-weight KTO_REJECTED_WEIGHT
+                        The weight factor of the undesirable losses in KTO
+                        training. (default: 1.0)
+  --simpo_gamma SIMPO_GAMMA, --simpo-gamma SIMPO_GAMMA
+                        The target reward margin term in SimPO loss. (default:
+                        0.5)
+  --ppo_buffer_size PPO_BUFFER_SIZE, --ppo-buffer-size PPO_BUFFER_SIZE
+                        The number of mini-batches to make experience buffer
+                        in a PPO optimization step. (default: 1)
+  --ppo_epochs PPO_EPOCHS, --ppo-epochs PPO_EPOCHS
+                        The number of epochs to perform in a PPO optimization
+                        step. (default: 4)
+  --ppo_score_norm [PPO_SCORE_NORM], --ppo-score-norm [PPO_SCORE_NORM]
+                        Use score normalization in PPO training. (default:
+                        False)
+  --ppo_target PPO_TARGET, --ppo-target PPO_TARGET
+                        Target KL value for adaptive KL control in PPO
+                        training. (default: 6.0)
+  --ppo_whiten_rewards [PPO_WHITEN_REWARDS], --ppo-whiten-rewards [PPO_WHITEN_REWARDS]
+                        Whiten the rewards before compute advantages in PPO
+                        training. (default: False)
+  --ref_model REF_MODEL, --ref-model REF_MODEL
+                        Path to the reference model used for the PPO or DPO
+                        training. (default: None)
+  --ref_model_adapters REF_MODEL_ADAPTERS, --ref-model-adapters REF_MODEL_ADAPTERS
+                        Path to the adapters of the reference model. (default:
+                        None)
+  --ref_model_quantization_bit REF_MODEL_QUANTIZATION_BIT, --ref-model-quantization-bit REF_MODEL_QUANTIZATION_BIT
+                        The number of bits to quantize the reference model.
+                        (default: None)
+  --reward_model REWARD_MODEL, --reward-model REWARD_MODEL
+                        Path to the reward model used for the PPO training.
+                        (default: None)
+  --reward_model_adapters REWARD_MODEL_ADAPTERS, --reward-model-adapters REWARD_MODEL_ADAPTERS
+                        Path to the adapters of the reward model. (default:
+                        None)
+  --reward_model_quantization_bit REWARD_MODEL_QUANTIZATION_BIT, --reward-model-quantization-bit REWARD_MODEL_QUANTIZATION_BIT
+                        The number of bits to quantize the reward model.
+                        (default: None)
+  --reward_model_type {lora,full,api}, --reward-model-type {lora,full,api}
+                        The type of the reward model in PPO training. Lora
+                        model only supports lora training. (default: lora)
+  --ld_alpha LD_ALPHA, --ld-alpha LD_ALPHA
+                        Alpha parameter from the LD-DPO paper, which controls
+                        the weighting of the verbose token log-probabilities
+                        in responses. (default: None)
+  --use_galore [USE_GALORE], --use-galore [USE_GALORE]
+                        Whether or not to use the gradient low-Rank projection
+                        (GaLore). (default: False)
+  --galore_target GALORE_TARGET, --galore-target GALORE_TARGET
+                        Name(s) of modules to apply GaLore. Use commas to
+                        separate multiple modules. Use `all` to specify all
+                        the linear modules. (default: all)
+  --galore_rank GALORE_RANK, --galore-rank GALORE_RANK
+                        The rank of GaLore gradients. (default: 16)
+  --galore_update_interval GALORE_UPDATE_INTERVAL, --galore-update-interval GALORE_UPDATE_INTERVAL
+                        Number of steps to update the GaLore projection.
+                        (default: 200)
+  --galore_scale GALORE_SCALE, --galore-scale GALORE_SCALE
+                        GaLore scaling coefficient. (default: 2.0)
+  --galore_proj_type {std,reverse_std,right,left,full}, --galore-proj-type {std,reverse_std,right,left,full}
+                        Type of GaLore projection. (default: std)
+  --galore_layerwise [GALORE_LAYERWISE], --galore-layerwise [GALORE_LAYERWISE]
+                        Whether or not to enable layer-wise update to further
+                        save memory. (default: False)
+  --use_apollo [USE_APOLLO], --use-apollo [USE_APOLLO]
+                        Whether or not to use the APOLLO optimizer. (default:
+                        False)
+  --apollo_target APOLLO_TARGET, --apollo-target APOLLO_TARGET
+                        Name(s) of modules to apply APOLLO. Use commas to
+                        separate multiple modules. Use `all` to specify all
+                        the linear modules. (default: all)
+  --apollo_rank APOLLO_RANK, --apollo-rank APOLLO_RANK
+                        The rank of APOLLO gradients. (default: 16)
+  --apollo_update_interval APOLLO_UPDATE_INTERVAL, --apollo-update-interval APOLLO_UPDATE_INTERVAL
+                        Number of steps to update the APOLLO projection.
+                        (default: 200)
+  --apollo_scale APOLLO_SCALE, --apollo-scale APOLLO_SCALE
+                        APOLLO scaling coefficient. (default: 32.0)
+  --apollo_proj {svd,random}, --apollo-proj {svd,random}
+                        Type of APOLLO low-rank projection algorithm (svd or
+                        random). (default: random)
+  --apollo_proj_type {std,right,left}, --apollo-proj-type {std,right,left}
+                        Type of APOLLO projection. (default: std)
+  --apollo_scale_type {channel,tensor}, --apollo-scale-type {channel,tensor}
+                        Type of APOLLO scaling (channel or tensor). (default:
+                        channel)
+  --apollo_layerwise [APOLLO_LAYERWISE], --apollo-layerwise [APOLLO_LAYERWISE]
+                        Whether or not to enable layer-wise update to further
+                        save memory. (default: False)
+  --apollo_scale_front [APOLLO_SCALE_FRONT], --apollo-scale-front [APOLLO_SCALE_FRONT]
+                        Whether or not to use the norm-growth limiter in front
+                        of gradient scaling. (default: False)
+  --use_badam [USE_BADAM], --use-badam [USE_BADAM]
+                        Whether or not to use the BAdam optimizer. (default:
+                        False)
+  --badam_mode {layer,ratio}, --badam-mode {layer,ratio}
+                        Whether to use layer-wise or ratio-wise BAdam
+                        optimizer. (default: layer)
+  --badam_start_block BADAM_START_BLOCK, --badam-start-block BADAM_START_BLOCK
+                        The starting block index for layer-wise BAdam.
+                        (default: None)
+  --badam_switch_mode {ascending,descending,random,fixed}, --badam-switch-mode {ascending,descending,random,fixed}
+                        the strategy of picking block to update for layer-wise
+                        BAdam. (default: ascending)
+  --badam_switch_interval BADAM_SWITCH_INTERVAL, --badam-switch-interval BADAM_SWITCH_INTERVAL
+                        Number of steps to update the block for layer-wise
+                        BAdam. Use -1 to disable the block update. (default:
+                        50)
+  --badam_update_ratio BADAM_UPDATE_RATIO, --badam-update-ratio BADAM_UPDATE_RATIO
+                        The ratio of the update for ratio-wise BAdam.
+                        (default: 0.05)
+  --badam_mask_mode {adjacent,scatter}, --badam-mask-mode {adjacent,scatter}
+                        The mode of the mask for BAdam optimizer. `adjacent`
+                        means that the trainable parameters are adjacent to
+                        each other, `scatter` means that trainable parameters
+                        are randomly choosed from the weight. (default:
+                        adjacent)
+  --badam_verbose BADAM_VERBOSE, --badam-verbose BADAM_VERBOSE
+                        The verbosity level of BAdam optimizer. 0 for no
+                        print, 1 for print the block prefix, 2 for print
+                        trainable parameters. (default: 0)
+  --use_swanlab [USE_SWANLAB], --use-swanlab [USE_SWANLAB]
+                        Whether or not to use the SwanLab (an experiment
+                        tracking and visualization tool). (default: False)
+  --swanlab_project SWANLAB_PROJECT, --swanlab-project SWANLAB_PROJECT
+                        The project name in SwanLab. (default: llamafactory)
+  --swanlab_workspace SWANLAB_WORKSPACE, --swanlab-workspace SWANLAB_WORKSPACE
+                        The workspace name in SwanLab. (default: None)
+  --swanlab_run_name SWANLAB_RUN_NAME, --swanlab-run-name SWANLAB_RUN_NAME
+                        The experiment name in SwanLab. (default: None)
+  --swanlab_mode {cloud,local}, --swanlab-mode {cloud,local}
+                        The mode of SwanLab. (default: cloud)
+  --swanlab_api_key SWANLAB_API_KEY, --swanlab-api-key SWANLAB_API_KEY
+                        The API key for SwanLab. (default: None)
+  --swanlab_logdir SWANLAB_LOGDIR, --swanlab-logdir SWANLAB_LOGDIR
+                        The log directory for SwanLab. (default: None)
+  --swanlab_lark_webhook_url SWANLAB_LARK_WEBHOOK_URL, --swanlab-lark-webhook-url SWANLAB_LARK_WEBHOOK_URL
+                        The Lark(飞书) webhook URL for SwanLab. (default: None)
+  --swanlab_lark_secret SWANLAB_LARK_SECRET, --swanlab-lark-secret SWANLAB_LARK_SECRET
+                        The Lark(飞书) secret for SwanLab. (default: None)
+  --pure_bf16 [PURE_BF16], --pure-bf16 [PURE_BF16]
+                        Whether or not to train model in purely bf16 precision
+                        (without AMP). (default: False)
+  --stage {pt,sft,rm,ppo,dpo,kto}
+                        Which stage will be performed in training. (default:
+                        sft)
+  --finetuning_type {lora,freeze,full}, --finetuning-type {lora,freeze,full}
+                        Which fine-tuning method to use. (default: lora)
+  --use_llama_pro [USE_LLAMA_PRO], --use-llama-pro [USE_LLAMA_PRO]
+                        Whether or not to make only the parameters in the
+                        expanded blocks trainable. (default: False)
+  --use_adam_mini [USE_ADAM_MINI], --use-adam-mini [USE_ADAM_MINI]
+                        Whether or not to use the Adam-mini optimizer.
+                        (default: False)
+  --use_muon [USE_MUON], --use-muon [USE_MUON]
+                        Whether or not to use the Muon optimizer. (default:
+                        False)
+  --use_dft_loss [USE_DFT_LOSS], --use-dft-loss [USE_DFT_LOSS]
+                        Whether to use the DFT loss. (default: False)
+  --freeze_vision_tower [FREEZE_VISION_TOWER], --freeze-vision-tower [FREEZE_VISION_TOWER]
+                        Whether ot not to freeze the vision tower in MLLM
+                        training. (default: True)
+  --no_freeze_vision_tower, --no-freeze-vision-tower
+                        Whether ot not to freeze the vision tower in MLLM
+                        training. (default: False)
+  --freeze_multi_modal_projector [FREEZE_MULTI_MODAL_PROJECTOR], --freeze-multi-modal-projector [FREEZE_MULTI_MODAL_PROJECTOR]
+                        Whether or not to freeze the multi modal projector in
+                        MLLM training. (default: True)
+  --no_freeze_multi_modal_projector, --no-freeze-multi-modal-projector
+                        Whether or not to freeze the multi modal projector in
+                        MLLM training. (default: False)
+  --freeze_language_model [FREEZE_LANGUAGE_MODEL], --freeze-language-model [FREEZE_LANGUAGE_MODEL]
+                        Whether or not to freeze the language model in MLLM
+                        training. (default: False)
+  --compute_accuracy [COMPUTE_ACCURACY], --compute-accuracy [COMPUTE_ACCURACY]
+                        Whether or not to compute the token-level accuracy at
+                        evaluation. (default: False)
+  --disable_shuffling [DISABLE_SHUFFLING], --disable-shuffling [DISABLE_SHUFFLING]
+                        Whether or not to disable the shuffling of the
+                        training set. (default: False)
+  --early_stopping_steps EARLY_STOPPING_STEPS, --early-stopping-steps EARLY_STOPPING_STEPS
+                        Number of steps to stop training if the
+                        `metric_for_best_model` does not improve. (default:
+                        None)
+  --plot_loss [PLOT_LOSS], --plot-loss [PLOT_LOSS]
+                        Whether or not to save the training loss curves.
+                        (default: False)
+  --include_effective_tokens_per_second [INCLUDE_EFFECTIVE_TOKENS_PER_SECOND], --include-effective-tokens-per-second [INCLUDE_EFFECTIVE_TOKENS_PER_SECOND]
+                        Whether or not to compute effective tokens per second.
+                        (default: False)
+  --do_sample [DO_SAMPLE], --do-sample [DO_SAMPLE]
+                        Whether or not to use sampling, use greedy decoding
+                        otherwise. (default: True)
+  --no_do_sample, --no-do-sample
+                        Whether or not to use sampling, use greedy decoding
+                        otherwise. (default: False)
+  --temperature TEMPERATURE
+                        The value used to modulate the next token
+                        probabilities. (default: 0.95)
+  --top_p TOP_P, --top-p TOP_P
+                        The smallest set of most probable tokens with
+                        probabilities that add up to top_p or higher are kept.
+                        (default: 0.7)
+  --top_k TOP_K, --top-k TOP_K
+                        The number of highest probability vocabulary tokens to
+                        keep for top-k filtering. (default: 50)
+  --num_beams NUM_BEAMS, --num-beams NUM_BEAMS
+                        Number of beams for beam search. 1 means no beam
+                        search. (default: 1)
+  --max_length MAX_LENGTH, --max-length MAX_LENGTH
+                        The maximum length the generated tokens can have. It
+                        can be overridden by max_new_tokens. (default: 1024)
+  --max_new_tokens MAX_NEW_TOKENS, --max-new-tokens MAX_NEW_TOKENS
+                        The maximum numbers of tokens to generate, ignoring
+                        the number of tokens in the prompt. (default: 1024)
+  --repetition_penalty REPETITION_PENALTY, --repetition-penalty REPETITION_PENALTY
+                        The parameter for repetition penalty. 1.0 means no
+                        penalty. (default: 1.0)
+  --length_penalty LENGTH_PENALTY, --length-penalty LENGTH_PENALTY
+                        Exponential penalty to the length that is used with
+                        beam-based generation. (default: 1.0)
+  --skip_special_tokens [SKIP_SPECIAL_TOKENS], --skip-special-tokens [SKIP_SPECIAL_TOKENS]
+                        Whether or not to remove special tokens in the
+                        decoding. (default: True)
+  --no_skip_special_tokens, --no-skip-special-tokens
+                        Whether or not to remove special tokens in the
+                        decoding. (default: False)
+================================================
+Collecting unsloth
+  Using cached unsloth-2025.11.1-py3-none-any.whl.metadata (61 kB)
+Collecting unsloth_zoo>=2025.11.1 (from unsloth)
+  Using cached unsloth_zoo-2025.11.1-py3-none-any.whl.metadata (32 kB)
+Requirement already satisfied: wheel>=0.42.0 in /opt/conda/lib/python3.11/site-packages (from unsloth) (0.45.1)
+Requirement already satisfied: packaging in /opt/conda/lib/python3.11/site-packages (from unsloth) (25.0)
+Requirement already satisfied: torch>=2.4.0 in /opt/conda/lib/python3.11/site-packages (from unsloth) (2.6.0+cu124)
+Requirement already satisfied: torchvision in /opt/conda/lib/python3.11/site-packages (from unsloth) (0.21.0+cu124)
+Requirement already satisfied: numpy in /opt/conda/lib/python3.11/site-packages (from unsloth) (1.26.4)
+Requirement already satisfied: tqdm in /opt/conda/lib/python3.11/site-packages (from unsloth) (4.67.1)
+Requirement already satisfied: psutil in /opt/conda/lib/python3.11/site-packages (from unsloth) (6.1.1)
+Requirement already satisfied: tyro in /opt/conda/lib/python3.11/site-packages (from unsloth) (0.8.14)
+Requirement already satisfied: protobuf in /opt/conda/lib/python3.11/site-packages (from unsloth) (6.32.1)
+Collecting xformers>=0.0.27.post2 (from unsloth)
+  Using cached xformers-0.0.32.post2-cp39-abi3-manylinux_2_28_x86_64.whl.metadata (1.1 kB)
+Collecting bitsandbytes!=0.46.0,!=0.48.0,>=0.45.5 (from unsloth)
+  Using cached bitsandbytes-0.48.2-py3-none-manylinux_2_24_x86_64.whl.metadata (10 kB)
+Requirement already satisfied: triton>=3.0.0 in /opt/conda/lib/python3.11/site-packages (from unsloth) (3.2.0)
+Requirement already satisfied: sentencepiece>=0.2.0 in /opt/conda/lib/python3.11/site-packages (from unsloth) (0.2.1)
+Collecting datasets!=4.0.*,!=4.1.0,>=3.4.1 (from unsloth)
+  Using cached datasets-4.3.0-py3-none-any.whl.metadata (18 kB)
+Requirement already satisfied: accelerate>=0.34.1 in /opt/conda/lib/python3.11/site-packages (from unsloth) (1.10.1)
+Requirement already satisfied: peft!=0.11.0,>=0.7.1 in /opt/conda/lib/python3.11/site-packages (from unsloth) (0.17.1)
+Requirement already satisfied: huggingface_hub>=0.34.0 in /opt/conda/lib/python3.11/site-packages (from unsloth) (0.35.3)
+Requirement already satisfied: hf_transfer in /opt/conda/lib/python3.11/site-packages (from unsloth) (0.1.9)
+Collecting diffusers (from unsloth)
+  Using cached diffusers-0.35.2-py3-none-any.whl.metadata (20 kB)
+Collecting transformers!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2,>=4.51.3 (from unsloth)
+  Using cached transformers-4.57.1-py3-none-any.whl.metadata (43 kB)
+Collecting trl!=0.19.0,<=0.23.0,>=0.18.2 (from unsloth)
+  Using cached trl-0.23.0-py3-none-any.whl.metadata (11 kB)
+Requirement already satisfied: filelock in /opt/conda/lib/python3.11/site-packages (from transformers!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2,>=4.51.3->unsloth) (3.17.0)
+Requirement already satisfied: pyyaml>=5.1 in /opt/conda/lib/python3.11/site-packages (from transformers!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2,>=4.51.3->unsloth) (6.0.2)
+Requirement already satisfied: regex!=2019.12.17 in /opt/conda/lib/python3.11/site-packages (from transformers!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2,>=4.51.3->unsloth) (2025.9.18)
+Requirement already satisfied: requests in /opt/conda/lib/python3.11/site-packages (from transformers!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2,>=4.51.3->unsloth) (2.32.3)
+Requirement already satisfied: tokenizers<=0.23.0,>=0.22.0 in /opt/conda/lib/python3.11/site-packages (from transformers!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2,>=4.51.3->unsloth) (0.22.1)
+Requirement already satisfied: safetensors>=0.4.3 in /opt/conda/lib/python3.11/site-packages (from transformers!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2,>=4.51.3->unsloth) (0.5.3)
+Requirement already satisfied: fsspec>=2023.5.0 in /opt/conda/lib/python3.11/site-packages (from huggingface_hub>=0.34.0->unsloth) (2024.12.0)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /opt/conda/lib/python3.11/site-packages (from huggingface_hub>=0.34.0->unsloth) (4.12.2)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /opt/conda/lib/python3.11/site-packages (from huggingface_hub>=0.34.0->unsloth) (1.1.10)
+Requirement already satisfied: networkx in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (3.4.2)
+Requirement already satisfied: jinja2 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (3.1.5)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.4.127 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (12.4.127)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.4.127 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (12.4.127)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.4.127 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (12.4.127)
+Requirement already satisfied: nvidia-cudnn-cu12==9.1.0.70 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (9.1.0.70)
+Requirement already satisfied: nvidia-cublas-cu12==12.4.5.8 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (12.4.5.8)
+Requirement already satisfied: nvidia-cufft-cu12==11.2.1.3 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (11.2.1.3)
+Requirement already satisfied: nvidia-curand-cu12==10.3.5.147 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (10.3.5.147)
+Requirement already satisfied: nvidia-cusolver-cu12==11.6.1.9 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (11.6.1.9)
+Requirement already satisfied: nvidia-cusparse-cu12==12.3.1.170 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (12.3.1.170)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.6.2 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (0.6.2)
+Requirement already satisfied: nvidia-nccl-cu12==2.21.5 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (2.21.5)
+Requirement already satisfied: nvidia-nvtx-cu12==12.4.127 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (12.4.127)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.4.127 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (12.4.127)
+Requirement already satisfied: sympy==1.13.1 in /opt/conda/lib/python3.11/site-packages (from torch>=2.4.0->unsloth) (1.13.1)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /opt/conda/lib/python3.11/site-packages (from sympy==1.13.1->torch>=2.4.0->unsloth) (1.3.0)
+Requirement already satisfied: pyarrow>=21.0.0 in /opt/conda/lib/python3.11/site-packages (from datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (21.0.0)
+Requirement already satisfied: dill<0.4.1,>=0.3.0 in /opt/conda/lib/python3.11/site-packages (from datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (0.3.8)
+Requirement already satisfied: pandas in /opt/conda/lib/python3.11/site-packages (from datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (2.3.3)
+Requirement already satisfied: httpx<1.0.0 in /opt/conda/lib/python3.11/site-packages (from datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (0.28.1)
+Requirement already satisfied: xxhash in /opt/conda/lib/python3.11/site-packages (from datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (3.6.0)
+Requirement already satisfied: multiprocess<0.70.17 in /opt/conda/lib/python3.11/site-packages (from datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (0.70.16)
+Requirement already satisfied: aiohttp!=4.0.0a0,!=4.0.0a1 in /opt/conda/lib/python3.11/site-packages (from fsspec[http]<=2025.9.0,>=2023.1.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (3.13.0)
+Requirement already satisfied: anyio in /opt/conda/lib/python3.11/site-packages (from httpx<1.0.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (4.11.0)
+Requirement already satisfied: certifi in /opt/conda/lib/python3.11/site-packages (from httpx<1.0.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (2024.12.14)
+Requirement already satisfied: httpcore==1.* in /opt/conda/lib/python3.11/site-packages (from httpx<1.0.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (1.0.9)
+Requirement already satisfied: idna in /opt/conda/lib/python3.11/site-packages (from httpx<1.0.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (3.10)
+Requirement already satisfied: h11>=0.16 in /opt/conda/lib/python3.11/site-packages (from httpcore==1.*->httpx<1.0.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (0.16.0)
+Requirement already satisfied: aiohappyeyeballs>=2.5.0 in /opt/conda/lib/python3.11/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.9.0,>=2023.1.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (2.6.1)
+Requirement already satisfied: aiosignal>=1.4.0 in /opt/conda/lib/python3.11/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.9.0,>=2023.1.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (1.4.0)
+Requirement already satisfied: attrs>=17.3.0 in /opt/conda/lib/python3.11/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.9.0,>=2023.1.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (25.1.0)
+Requirement already satisfied: frozenlist>=1.1.1 in /opt/conda/lib/python3.11/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.9.0,>=2023.1.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (1.8.0)
+Requirement already satisfied: multidict<7.0,>=4.5 in /opt/conda/lib/python3.11/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.9.0,>=2023.1.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (6.7.0)
+Requirement already satisfied: propcache>=0.2.0 in /opt/conda/lib/python3.11/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.9.0,>=2023.1.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (0.4.1)
+Requirement already satisfied: yarl<2.0,>=1.17.0 in /opt/conda/lib/python3.11/site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.9.0,>=2023.1.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (1.22.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in /opt/conda/lib/python3.11/site-packages (from requests->transformers!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2,>=4.51.3->unsloth) (3.4.1)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /opt/conda/lib/python3.11/site-packages (from requests->transformers!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2,>=4.51.3->unsloth) (2.3.0)
+Collecting torchao>=0.13.0 (from unsloth_zoo>=2025.11.1->unsloth)
+  Using cached torchao-0.14.1-cp310-abi3-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (19 kB)
+Collecting cut_cross_entropy (from unsloth_zoo>=2025.11.1->unsloth)
+  Using cached cut_cross_entropy-25.1.1-py3-none-any.whl.metadata (9.3 kB)
+Requirement already satisfied: pillow in /opt/conda/lib/python3.11/site-packages (from unsloth_zoo>=2025.11.1->unsloth) (11.0.0)
+Collecting msgspec (from unsloth_zoo>=2025.11.1->unsloth)
+  Using cached msgspec-0.19.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.9 kB)
+Collecting torch>=2.4.0 (from unsloth)
+  Using cached torch-2.8.0-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (30 kB)
+Collecting sympy>=1.13.3 (from torch>=2.4.0->unsloth)
+  Using cached sympy-1.14.0-py3-none-any.whl.metadata (12 kB)
+Collecting nvidia-cuda-nvrtc-cu12==12.8.93 (from torch>=2.4.0->unsloth)
+  Using cached nvidia_cuda_nvrtc_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cuda-runtime-cu12==12.8.90 (from torch>=2.4.0->unsloth)
+  Using cached nvidia_cuda_runtime_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cuda-cupti-cu12==12.8.90 (from torch>=2.4.0->unsloth)
+  Using cached nvidia_cuda_cupti_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cudnn-cu12==9.10.2.21 (from torch>=2.4.0->unsloth)
+  Using cached nvidia_cudnn_cu12-9.10.2.21-py3-none-manylinux_2_27_x86_64.whl.metadata (1.8 kB)
+Collecting nvidia-cublas-cu12 (from nvidia-cudnn-cu12==9.1.0.70->torch>=2.4.0->unsloth)
+  Using cached nvidia_cublas_cu12-12.8.4.1-py3-none-manylinux_2_27_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cufft-cu12==11.3.3.83 (from torch>=2.4.0->unsloth)
+  Using cached nvidia_cufft_cu12-11.3.3.83-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-curand-cu12==10.3.9.90 (from torch>=2.4.0->unsloth)
+  Using cached nvidia_curand_cu12-10.3.9.90-py3-none-manylinux_2_27_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cusolver-cu12==11.7.3.90 (from torch>=2.4.0->unsloth)
+  Using cached nvidia_cusolver_cu12-11.7.3.90-py3-none-manylinux_2_27_x86_64.whl.metadata (1.8 kB)
+Collecting nvidia-cusparse-cu12 (from nvidia-cusolver-cu12==11.6.1.9->torch>=2.4.0->unsloth)
+  Using cached nvidia_cusparse_cu12-12.5.8.93-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.8 kB)
+Collecting nvidia-cusparselt-cu12==0.7.1 (from torch>=2.4.0->unsloth)
+  Using cached nvidia_cusparselt_cu12-0.7.1-py3-none-manylinux2014_x86_64.whl.metadata (7.0 kB)
+Collecting nvidia-nccl-cu12==2.27.3 (from torch>=2.4.0->unsloth)
+  Using cached nvidia_nccl_cu12-2.27.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.0 kB)
+Collecting nvidia-nvtx-cu12==12.8.90 (from torch>=2.4.0->unsloth)
+  Using cached nvidia_nvtx_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.8 kB)
+Collecting nvidia-nvjitlink-cu12 (from nvidia-cusolver-cu12==11.6.1.9->torch>=2.4.0->unsloth)
+  Using cached nvidia_nvjitlink_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl.metadata (1.7 kB)
+Collecting nvidia-cufile-cu12==1.13.1.3 (from torch>=2.4.0->unsloth)
+  Using cached nvidia_cufile_cu12-1.13.1.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+Collecting triton>=3.0.0 (from unsloth)
+  Using cached triton-3.4.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (1.7 kB)
+Requirement already satisfied: setuptools>=40.8.0 in /opt/conda/lib/python3.11/site-packages (from triton>=3.0.0->unsloth) (80.9.0)
+Requirement already satisfied: sniffio>=1.1 in /opt/conda/lib/python3.11/site-packages (from anyio->httpx<1.0.0->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (1.3.1)
+Collecting importlib_metadata (from diffusers->unsloth)
+  Using cached importlib_metadata-8.7.0-py3-none-any.whl.metadata (4.8 kB)
+Requirement already satisfied: zipp>=3.20 in /opt/conda/lib/python3.11/site-packages (from importlib_metadata->diffusers->unsloth) (3.21.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /opt/conda/lib/python3.11/site-packages (from jinja2->torch>=2.4.0->unsloth) (3.0.2)
+Requirement already satisfied: python-dateutil>=2.8.2 in /opt/conda/lib/python3.11/site-packages (from pandas->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in /opt/conda/lib/python3.11/site-packages (from pandas->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (2024.2)
+Requirement already satisfied: tzdata>=2022.7 in /opt/conda/lib/python3.11/site-packages (from pandas->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (2025.2)
+Requirement already satisfied: six>=1.5 in /opt/conda/lib/python3.11/site-packages (from python-dateutil>=2.8.2->pandas->datasets!=4.0.*,!=4.1.0,>=3.4.1->unsloth) (1.17.0)
+INFO: pip is looking at multiple versions of torchvision to determine which version is compatible with other requirements. This could take a while.
+Collecting torchvision (from unsloth)
+  Using cached torchvision-0.24.0-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (5.9 kB)
+  Using cached torchvision-0.23.0-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (6.1 kB)
+Requirement already satisfied: docstring-parser>=0.16 in /opt/conda/lib/python3.11/site-packages (from tyro->unsloth) (0.17.0)
+Requirement already satisfied: rich>=11.1.0 in /opt/conda/lib/python3.11/site-packages (from tyro->unsloth) (14.2.0)
+Requirement already satisfied: shtab>=1.5.6 in /opt/conda/lib/python3.11/site-packages (from tyro->unsloth) (1.7.2)
+Requirement already satisfied: markdown-it-py>=2.2.0 in /opt/conda/lib/python3.11/site-packages (from rich>=11.1.0->tyro->unsloth) (4.0.0)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /opt/conda/lib/python3.11/site-packages (from rich>=11.1.0->tyro->unsloth) (2.19.1)
+Requirement already satisfied: mdurl~=0.1 in /opt/conda/lib/python3.11/site-packages (from markdown-it-py>=2.2.0->rich>=11.1.0->tyro->unsloth) (0.1.2)
+Using cached unsloth-2025.11.1-py3-none-any.whl (348 kB)
+Using cached transformers-4.57.1-py3-none-any.whl (12.0 MB)
+Using cached trl-0.23.0-py3-none-any.whl (564 kB)
+Using cached bitsandbytes-0.48.2-py3-none-manylinux_2_24_x86_64.whl (59.4 MB)
+Using cached datasets-4.3.0-py3-none-any.whl (506 kB)
+Using cached unsloth_zoo-2025.11.1-py3-none-any.whl (276 kB)
+Using cached torchao-0.14.1-cp310-abi3-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (7.2 MB)
+Downloading xformers-0.0.32.post2-cp39-abi3-manylinux_2_28_x86_64.whl (117.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 117.2/117.2 MB 99.6 MB/s  0:00:01
+Downloading torch-2.8.0-cp311-cp311-manylinux_2_28_x86_64.whl (888.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 888.1/888.1 MB 105.5 MB/s  0:00:07
+Downloading nvidia_cublas_cu12-12.8.4.1-py3-none-manylinux_2_27_x86_64.whl (594.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 594.3/594.3 MB 151.7 MB/s  0:00:02
+Downloading nvidia_cuda_cupti_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (10.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.2/10.2 MB 88.5 MB/s  0:00:00
+Downloading nvidia_cuda_nvrtc_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (88.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 88.0/88.0 MB 105.2 MB/s  0:00:00
+Downloading nvidia_cuda_runtime_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (954 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 954.8/954.8 kB 19.8 MB/s  0:00:00
+Downloading nvidia_cudnn_cu12-9.10.2.21-py3-none-manylinux_2_27_x86_64.whl (706.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 706.8/706.8 MB 185.2 MB/s  0:00:02
+Downloading nvidia_cufft_cu12-11.3.3.83-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (193.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 193.1/193.1 MB 176.3 MB/s  0:00:01
+Downloading nvidia_cufile_cu12-1.13.1.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 25.8 MB/s  0:00:00
+Downloading nvidia_curand_cu12-10.3.9.90-py3-none-manylinux_2_27_x86_64.whl (63.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 63.6/63.6 MB 168.6 MB/s  0:00:00
+Downloading nvidia_cusolver_cu12-11.7.3.90-py3-none-manylinux_2_27_x86_64.whl (267.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 267.5/267.5 MB 147.1 MB/s  0:00:01
+Downloading nvidia_cusparse_cu12-12.5.8.93-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (288.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 288.2/288.2 MB 196.5 MB/s  0:00:01
+Downloading nvidia_cusparselt_cu12-0.7.1-py3-none-manylinux2014_x86_64.whl (287.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 287.2/287.2 MB 165.0 MB/s  0:00:01
+Downloading nvidia_nccl_cu12-2.27.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (322.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 322.4/322.4 MB 91.5 MB/s  0:00:03
+Downloading nvidia_nvjitlink_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (39.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 39.3/39.3 MB 140.3 MB/s  0:00:00
+Downloading nvidia_nvtx_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (89 kB)
+Downloading triton-3.4.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (155.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 155.5/155.5 MB 122.9 MB/s  0:00:01
+Downloading sympy-1.14.0-py3-none-any.whl (6.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/6.3 MB 117.7 MB/s  0:00:00
+Downloading cut_cross_entropy-25.1.1-py3-none-any.whl (22 kB)
+Downloading diffusers-0.35.2-py3-none-any.whl (4.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.1/4.1 MB 88.0 MB/s  0:00:00
+Downloading importlib_metadata-8.7.0-py3-none-any.whl (27 kB)
+Downloading msgspec-0.19.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (210 kB)
+Downloading torchvision-0.23.0-cp311-cp311-manylinux_2_28_x86_64.whl (8.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.6/8.6 MB 67.5 MB/s  0:00:00
+Would install bitsandbytes-0.48.2 cut-cross-entropy-25.1.1 datasets-4.3.0 diffusers-0.35.2 importlib_metadata-8.7.0 msgspec-0.19.0 nvidia-cublas-cu12-12.8.4.1 nvidia-cuda-cupti-cu12-12.8.90 nvidia-cuda-nvrtc-cu12-12.8.93 nvidia-cuda-runtime-cu12-12.8.90 nvidia-cudnn-cu12-9.10.2.21 nvidia-cufft-cu12-11.3.3.83 nvidia-cufile-cu12-1.13.1.3 nvidia-curand-cu12-10.3.9.90 nvidia-cusolver-cu12-11.7.3.90 nvidia-cusparse-cu12-12.5.8.93 nvidia-cusparselt-cu12-0.7.1 nvidia-nccl-cu12-2.27.3 nvidia-nvjitlink-cu12-12.8.93 nvidia-nvtx-cu12-12.8.90 sympy-1.14.0 torch-2.8.0 torchao-0.14.1 torchvision-0.23.0 transformers-4.57.1 triton-3.4.0 trl-0.23.0 unsloth-2025.11.1 unsloth_zoo-2025.11.1 xformers-0.0.32.post2
+
+[notice] A new release of pip is available: 25.2 -> 25.3
+[notice] To update, run: pip install --upgrade pip

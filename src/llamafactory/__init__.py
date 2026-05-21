@@ -25,6 +25,32 @@ Use modelscope: USE_MODELSCOPE_HUB=1
 Use openmind: USE_OPENMIND_HUB=1
 """
 
+try:
+    import transformers
+
+    if not hasattr(transformers, "HybridCache"):
+        # Compatibility shim for older PEFT expecting HybridCache.
+        try:
+            from transformers import DynamicCache as _HybridCache
+        except Exception:
+            from transformers import Cache as _HybridCache
+        transformers.HybridCache = _HybridCache
+except Exception:
+    pass
+
+try:
+    from transformers.models.auto import modeling_auto as _modeling_auto
+
+    if not hasattr(_modeling_auto, "MODEL_FOR_VISION_2_SEQ_MAPPING_NAMES"):
+        if hasattr(_modeling_auto, "MODEL_FOR_IMAGE_TEXT_TO_TEXT_MAPPING_NAMES"):
+            _modeling_auto.MODEL_FOR_VISION_2_SEQ_MAPPING_NAMES = (
+                _modeling_auto.MODEL_FOR_IMAGE_TEXT_TO_TEXT_MAPPING_NAMES
+            )
+        else:
+            _modeling_auto.MODEL_FOR_VISION_2_SEQ_MAPPING_NAMES = {}
+except Exception:
+    pass
+
 from .extras.env import VERSION
 
 

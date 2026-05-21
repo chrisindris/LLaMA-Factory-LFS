@@ -27,3 +27,5 @@ llamafactory-cli help
 echo "================================================"
 llamafactory-cli train -h
 echo "================================================"
+
+pip install unsloth

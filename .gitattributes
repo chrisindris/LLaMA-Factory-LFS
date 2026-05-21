@@ -1,2 +1,10 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+preliminaries/qwen2_5vl_lora_sft_SQA3D/trig0012-qwen2_5vl_lora_sft_SQA3D-85299.out filter=lfs diff=lfs merge=lfs -text
+saves/qwen2_5vl-7b/lora/sft/checkpoint-54/adapter_model.safetensors filter=lfs diff=lfs merge=lfs -text
+saves/qwen2_5vl-7b/lora/sft/checkpoint-54/optimizer.pt filter=lfs diff=lfs merge=lfs -text
+saves/qwen2_5vl-7b/lora/sft/checkpoint-6/global_step6/bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt filter=lfs diff=lfs merge=lfs -text
+saves/qwen2_5vl-7b/lora/sft/checkpoint-6/global_step6/bf16_zero_pp_rank_1_mp_rank_00_optim_states.pt filter=lfs diff=lfs merge=lfs -text
+saves/qwen2_5vl-7b/lora/sft/checkpoint-6/global_step6/bf16_zero_pp_rank_2_mp_rank_00_optim_states.pt filter=lfs diff=lfs merge=lfs -text
+saves/qwen2_5vl-7b/lora/sft/checkpoint-6/global_step6/bf16_zero_pp_rank_3_mp_rank_00_optim_states.pt filter=lfs diff=lfs merge=lfs -text
+.git/lfs/objects/06/81/068151f07c62e4c446821e2e135369ed67202f14ea39a63ebe4d220961589846 filter=lfs diff=lfs merge=lfs -text

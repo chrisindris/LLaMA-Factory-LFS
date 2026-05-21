@@ -9,7 +9,7 @@ Computer nodes do not have internet access.
 
 # Using a python environment
 
-If you want to use a python environment on the login node that is identical to the pyhon environment that the compute node version of the code will see, you can activate it as follows:
+If you want to use a python environment on the login node that is identical to the python environment that the compute node version of the code will see, you can activate it as follows:
 `module load StdEnv/2023  gcc/12.3  openmpi/4.1.5 && module load python/3.12 cuda/12.6 opencv/4.12.0 && module load arrow && source /scratch/indrisch/venv_llamafactory_cu126/bin/activate`
 
 On Killarney, you can load the same modules and then source 

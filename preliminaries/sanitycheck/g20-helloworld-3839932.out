@@ -1,0 +1,344 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+Hello, world!
+================================================
+The current directory is /scratch/indrisch/LLaMA-Factory
+================================================
+The environment variables are: SHELL=/bin/bash
+EBROOTIMKL=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0
+SLURM_GPUS_PER_NODE=h100:1
+NV_LIBCUBLAS_VERSION=12.4.5.8-1
+NVIDIA_VISIBLE_DEVICES=all
+COLORTERM=truecolor
+NV_NVML_DEV_VERSION=12.4.127-1
+SLURM_JOB_USER=indrisch
+CLU=nib
+SLURM_TASKS_PER_NODE=1
+XDG_CONFIG_DIRS=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/etc/xdg:/etc/xdg
+API_PORT=8000
+SLURM_JOB_UID=3122343
+EBVERSIONOPENMPI=4.1.5
+HISTCONTROL=ignoredups
+TERM_PROGRAM_VERSION=2.0.43
+LMOD_FAMILY_APPTAINER=apptainer
+EBROOTPMIX=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4
+NV_LIBNCCL_DEV_PACKAGE=libnccl-dev=2.21.5-1+cuda12.4
+SLURM_HOME=/opt/software/slurm/24.11.6
+SLURM_TASK_PID=222054
+NV_LIBNCCL_DEV_PACKAGE_VERSION=2.21.5-1
+PKG_CONFIG_PATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/mkl/2023.2.0/lib/pkgconfig:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/lib/pkgconfig:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5/lib/pkgconfig:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4/lib/pkgconfig:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0/lib/pkgconfig:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1/lib/pkgconfig:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/lib/pkgconfig
+SLURM_JOB_GPUS=5
+SLURM_LOCALID=0
+SLURM_SUBMIT_DIR=/scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck
+HISTSIZE=1000
+HOSTNAME=g20
+SINGULARITY_NAME=llamafactory.sif
+EBDEVELLIBFABRIC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0/easybuild/x86-64-v4-Compiler-gcccore-libfabric-1.18.0-easybuild-devel
+EBVERSIONAPPTAINER=1.3.5
+SLURMD_NODENAME=g20
+FPATH=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/local/share/zsh/site-functions:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/site-functions:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Calendar:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Chpwd:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/AIX:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/BSD:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Base:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Cygwin:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Darwin:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Debian:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Linux:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Mandriva:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Redhat:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Solaris:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Unix:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/X:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/Zsh:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Completion/openSUSE:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Exceptions:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/MIME:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Math:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Misc:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Newuser:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Prompts:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/TCP:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/VCS_Info:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/VCS_Info/Backends:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Zftp:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/zsh/5.9/functions/Zle:/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/init/ksh_funcs
+NODE_OPTIONS=
+LMOD_FAMILY_BASE_OS=gentoo
+SLURM_JOB_START_TIME=1762194313
+_ModuleTable011_=c29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L0NvbXBpbGVyL2djYzEyL29wZW5tcGkvNC4xLjUubHVhIiwKZnVsbE5hbWUgPSAib3Blbm1waS80LjEuNSIsCmxvYWRPcmRlciA9IDEwLApwcm9wVCA9IHsKdHlwZV8gPSB7Cm1waSA9IDEsCn0sCn0sCnN0YWNrRGVwdGggPSAxLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAib3Blbm1waSIsCndWID0gIjAwMDAwMDAwNC4wMDAwMDAwMDEuMDAwMDAwMDA1Lip6ZmluYWwiLAp9LApwbWl4ID0gewpmbiA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L0NvbXBpbGVyL2djY2NvcmUvcG1peC80LjIuNC5sdWEi
+HYDRA_LAUNCHER_EXTRA_ARGS=--external-launcher
+NVIDIA_REQUIRE_CUDA=cuda>=12.4 brand=tesla,driver>=470,driver<471 brand=unknown,driver>=470,driver<471 brand=nvidia,driver>=470,driver<471 brand=nvidiartx,driver>=470,driver<471 brand=geforce,driver>=470,driver<471 brand=geforcertx,driver>=470,driver<471 brand=quadro,driver>=470,driver<471 brand=quadrortx,driver>=470,driver<471 brand=titan,driver>=470,driver<471 brand=titanrtx,driver>=470,driver<471 brand=tesla,driver>=525,driver<526 brand=unknown,driver>=525,driver<526 brand=nvidia,driver>=525,driver<526 brand=nvidiartx,driver>=525,driver<526 brand=geforce,driver>=525,driver<526 brand=geforcertx,driver>=525,driver<526 brand=quadro,driver>=525,driver<526 brand=quadrortx,driver>=525,driver<526 brand=titan,driver>=525,driver<526 brand=titanrtx,driver>=525,driver<526 brand=tesla,driver>=535,driver<536 brand=unknown,driver>=535,driver<536 brand=nvidia,driver>=535,driver<536 brand=nvidiartx,driver>=535,driver<536 brand=geforce,driver>=535,driver<536 brand=geforcertx,driver>=535,driver<536 brand=quadro,driver>=535,driver<536 brand=quadrortx,driver>=535,driver<536 brand=titan,driver>=535,driver<536 brand=titanrtx,driver>=535,driver<536
+_ModuleTable007_=L0NvbXBpbGVyL2djY2NvcmVcIikiLAp9LApmbiA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2N1c3RvbS9tb2R1bGVzL2dlbnRvby8yMDIzLmx1YSIsCmZ1bGxOYW1lID0gImdlbnRvby8yMDIzIiwKbG9hZE9yZGVyID0gMiwKcHJvcFQgPSB7Cmxtb2QgPSB7CnN0aWNreSA9IDEsCn0sCn0sCnN0YWNrRGVwdGggPSAxLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiZ2VudG9vLzIwMjMiLAp3ViA9ICIwMDAwMDIwMjMuKnpmaW5hbCIsCn0sCmh3bG9jID0gewpmbiA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L0NvbXBpbGVyL2djY2NvcmUvaHdsb2MvMi45LjEubHVhIiwKZnVsbE5hbWUg
+HF_HUB_CACHE=/scratch/indrisch/huggingface/hub
+_ModuleTable002_=Lip6ZmluYWwiLAp9LApTdGRFbnYgPSB7CmZuID0gIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvY3VzdG9tL21vZHVsZXMvU3RkRW52LzIwMjMubHVhIiwKZnVsbE5hbWUgPSAiU3RkRW52LzIwMjMiLApsb2FkT3JkZXIgPSAxMywKcHJvcFQgPSB7Cmxtb2QgPSB7CnN0aWNreSA9IDEsCn0sCn0sCnN0YWNrRGVwdGggPSAwLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiU3RkRW52IiwKd1YgPSAiczAwMDAyMDIzLip6ZmluYWwiLAp9LAphcHB0YWluZXIgPSB7CmZuID0gIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvZWFzeWJ1aWxkL21vZHVsZXMvMjAyMy94ODYtNjQtdjMvQ29yZS9hcHB0YWluZXIvMS4zLjUubHVhIiwKZnVsbE5hbWUgPSAiYXBwdGFp
+NV_LIBCUBLAS_DEV_PACKAGE=libcublas-dev-12-4=12.4.5.8-1
+NV_NVTX_VERSION=12.4.127-1
+__LMOD_REF_COUNT_MODULEPATH=/opt/software/modulefiles:2;/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/MPI/gcc12/openmpi4:1;/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcc12:1;/home/indrisch/.local/easybuild/modules/2023/x86-64-v4/Compiler/gcccore:1;/home/indrisch/.local/easybuild/modules/2023/x86-64-v3/Core:1;/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore:1;/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core:1;/cvmfs/soft.computecanada.ca/custom/modules:1
+EPREFIX=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3
+LMOD_AVAIL_EXTENSIONS=no
+OMPI_MCA_btl=^openib,ofi
+_ModuleTable005_=c2VyTmFtZSA9ICJnY2MiLAp3ViA9ICJeMDAwMDAwMTIuMDAwMDAwMDAzLip6ZmluYWwiLAp9LApnY2Njb3JlID0gewpmbiA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmUvZ2NjY29yZS8uMTIuMy5sdWEiLApmdWxsTmFtZSA9ICJnY2Njb3JlLy4xMi4zIiwKbG9hZE9yZGVyID0gMywKcHJvcFQgPSB7fSwKcmVmX2NvdW50ID0gMiwKc3RhY2tEZXB0aCA9IDIsCnN0YXR1cyA9ICJhY3RpdmUiLAp1c2VyTmFtZSA9ICJnY2Njb3JlLy4xMi4zIiwKd1YgPSAiMDAwMDAwMDAwLjAwMDAwMDAxMi4wMDAwMDAwMDMuKnpmaW5hbCIsCn0sCmdlbnRvbyA9IHsKYWN0aW9uQSA9IHsKCiJwcmVwZW5kX3BhdGgoXCJN
+NV_CUDA_CUDART_DEV_VERSION=12.4.127-1
+NV_LIBCUSPARSE_VERSION=12.3.1.170-1
+SLURM_CLUSTER_NAME=nibi
+EBROOTOPENMPI=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5
+EBVERSIONGENTOO=2023
+SLURM_JOB_END_TIME=1762194373
+EBVERSIONMII=1.1.2
+NV_LIBNPP_VERSION=12.2.5.30-1
+LMOD_ADMIN_FILE=/cvmfs/soft.computecanada.ca/config/lmod/admin.list
+SLURM_CPUS_ON_NODE=1
+EBVERSIONUCX=1.14.1
+EBROOTGENTOO=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr
+LMOD_RC=/cvmfs/soft.computecanada.ca/config/lmod/lmodrc.lua:/cvmfs/soft.computecanada.ca/config/lmod/lmodrc/cache_avx512_2025.lua
+SINGULARITY_ENVIRONMENT=/.singularity.d/env/91-environment.sh
+NCCL_VERSION=2.21.5-1
+SLURM_JOB_CPUS_PER_NODE=1
+EBROOTMII=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/mii/1.1.2
+EBVERSIONUCC=1.2.0
+EBROOTHWLOC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1
+LMOD_DIR=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/libexec
+RSNT_ARCH=avx512
+SACCT_FORMAT=Account,User,JobID,Start,End,AllocCPUS,Elapsed,AllocTRES%30,CPUTime,AveRSS,MaxRSS,MaxRSSTask,MaxRSSNode,NodeList,ExitCode,State%20
+SLURM_GPUS_ON_NODE=1
+PRTE_MCA_plm_slurm_args=--external-launcher
+PWD=/scratch/indrisch/LLaMA-Factory
+SLURM_GTIDS=0
+LOGNAME=indrisch
+MODULERCFILE=:/cvmfs/soft.computecanada.ca/config/lmod//modulerc_nibi:/cvmfs/soft.computecanada.ca/config/lmod//modulerc
+XDG_SESSION_TYPE=tty
+SLURM_JOB_PARTITION=gpubase_bygpu_b1
+MODULESHOME=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod
+NVIDIA_DRIVER_CAPABILITIES=compute,utility
+RSNT_INTERCONNECT=infiniband
+MANPATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/share/man:/opt/software/slurm/24.11.6/share/man:/opt/software/slurm/24.11.6/share/man:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/share/man:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5/share/man:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4/share/man:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0/share/man:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/share/man:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/gcc-data/x86_64-pc-linux-gnu/12/man:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/binutils-data/x86_64-pc-linux-gnu/2.40/man:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/man:/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/share/man::
+NV_NVPROF_DEV_PACKAGE=cuda-nvprof-12-4=12.4.127-1
+SLURM_TRES_PER_TASK=cpu=1
+NV_LIBNPP_PACKAGE=libnpp-12-4=12.2.5.30-1
+ROCR_VISIBLE_DEVICES=0
+SLURM_OOM_KILL_STEP=0
+EBDEVELIMKL=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/easybuild/x86-64-v3-Core-imkl-2023.2.0-easybuild-devel
+NV_LIBNCCL_DEV_PACKAGE_NAME=libnccl-dev
+SLURM_JOB_NUM_NODES=1
+OMPI_MCA_pml=^yalla
+FLEXIBLAS_LIBRARY_PATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/mkl/2023.2.0/lib/intel64/flexiblas
+VLLM_WORKER_MULTIPROC_METHOD=spawn
+_ModuleTable008_=PSAiaHdsb2MvMi45LjEiLApsb2FkT3JkZXIgPSA1LApwcm9wVCA9IHt9LApyZWZfY291bnQgPSAyLApzdGFja0RlcHRoID0gMiwKc3RhdHVzID0gImFjdGl2ZSIsCnVzZXJOYW1lID0gImh3bG9jLzIuOS4xIiwKd1YgPSAiMDAwMDAwMDAyLjAwMDAwMDAwOS4wMDAwMDAwMDEuKnpmaW5hbCIsCn0sCmlta2wgPSB7CmZuID0gIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvZWFzeWJ1aWxkL21vZHVsZXMvMjAyMy94ODYtNjQtdjMvQ29yZS9pbWtsLzIwMjMuMi4wLmx1YSIsCmZ1bGxOYW1lID0gImlta2wvMjAyMy4yLjAiLApsb2FkT3JkZXIgPSAxMiwKcHJvcFQgPSB7CnR5cGVfID0gewptYXRoID0gMSwKfSwKfSwKc3RhY2tEZXB0aCA9IDEsCnN0YXR1cyA9ICJhY3RpdmUi
+VSCODE_GIT_ASKPASS_NODE=/home/indrisch/.cursor-server/cli/servers/Stable-8e4da76ad196925accaa169efcae28c45454cce0/server/node
+EBVERSIONHWLOC=2.9.1
+SLURM_JOBID=3839932
+NV_LIBCUBLAS_DEV_VERSION=12.4.5.8-1
+PIP_CONFIG_FILE=/cvmfs/soft.computecanada.ca/config/python/pip-x86-64-v4-gentoo2023.conf
+_ModuleTable013_=ZSIsCnVzZXJOYW1lID0gInVjYy8xLjIuMCIsCndWID0gIjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpmaW5hbCIsCn0sCnVjeCA9IHsKZm4gPSAiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5jYS9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12NC9Db21waWxlci9nY2Njb3JlL3VjeC8xLjE0LjEubHVhIiwKZnVsbE5hbWUgPSAidWN4LzEuMTQuMSIsCmxvYWRPcmRlciA9IDYsCnByb3BUID0ge30sCnJlZl9jb3VudCA9IDIsCnN0YWNrRGVwdGggPSAyLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAidWN4LzEuMTQuMSIsCndWID0gIjAwMDAwMDAwMS4wMDAwMDAwMTQuMDAwMDAwMDAxLip6ZmluYWwiLAp9LAp9LAptcGF0aEEgPSB7CiIvb3B0L3NvZnR3YXJlL21v
+NVIDIA_PRODUCT_NAME=CUDA
+EBROOTFLEXIBLAS=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1
+I_MPI_HYDRA_BOOTSTRAP_EXEC_EXTRA_ARGS=--external-launcher
+SLURM_JOB_QOS=normal
+USER_PATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/bin:/opt/software/slurm/24.11.6/bin:/opt/software/slurm/bin:/home/indrisch/.cursor-server/cli/servers/Stable-8e4da76ad196925accaa169efcae28c45454cce0/server/bin/remote-cli:/home/indrisch/google-cloud-sdk/bin:/opt/software/slurm/24.11.6/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/mii/1.1.2/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucc/1.2.0/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1/bin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/sbin:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/bin:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/x86_64-pc-linux-gnu/gcc-bin/12:/cvmfs/soft.computecanada.ca/easybuild/bin:/cvmfs/soft.computecanada.ca/custom/bin:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin:/cvmfs/soft.computecanada.ca/custom/bin/computecanada:/opt/software/slurm/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/indrisch/.local/bin:/home/indrisch/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+NV_LIBCUBLAS_DEV_PACKAGE_NAME=libcublas-dev-12-4
+APPTAINER_ENVIRONMENT=/.singularity.d/env/91-environment.sh
+EBDEVELGCCCORE=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/x86_64-pc-linux-gnu/gcc-bin/easybuild/x86-64-v3-Core-gcccore-.12.3.1-easybuild-devel
+LMOD_SHORT_TIME=3600
+APPTAINER_APPNAME=
+NV_CUDA_CUDART_VERSION=12.4.127-1
+EBDEVELOPENMPI=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5/easybuild/x86-64-v4-Compiler-gcc12-openmpi-4.1.5-easybuild-devel
+HOME=/home/indrisch
+_ModuleTable015_=bXBpbGVyL2djY2NvcmUiCiwgIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvZWFzeWJ1aWxkL21vZHVsZXMvMjAyMy94ODYtNjQtdjMvQ29yZSIsICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2N1c3RvbS9tb2R1bGVzIiwKfSwKc3lzdGVtQmFzZU1QQVRIID0gIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvY3VzdG9tL21vZHVsZXMiLAp9Cg==
+_ModuleTable_Sz_=15
+LANG=C.UTF-8
+__LMOD_SET_KSH_FPATH=1
+LMOD_FAMILY_BASE_OS_VERSION=2023
+LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=01;36:*.au=01;36:*.flac=01;36:*.m4a=01;36:*.mid=01;36:*.midi=01;36:*.mka=01;36:*.mp3=01;36:*.mpc=01;36:*.ogg=01;36:*.ra=01;36:*.wav=01;36:*.oga=01;36:*.opus=01;36:*.spx=01;36:*.xspf=01;36:
+APPTAINER_COMMAND=run
+SLURM_PROCID=0
+EBROOTGCC=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/x86_64-pc-linux-gnu/gcc-bin
+SCRATCH=/scratch/indrisch
+CUDA_VERSION=12.4.1
+SINGULARITY_CONTAINER=/scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+SSL_CERT_DIR=/etc/pki/tls/certs
+NV_LIBCUBLAS_PACKAGE=libcublas-12-4=12.4.5.8-1
+LMOD_SETTARG_FULL_SUPPORT=no
+PYTORCH_VERSION=2.6.0
+MII=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/mii/1.1.2/bin/mii
+EBROOTLIBFABRIC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0
+NV_CUDA_NSIGHT_COMPUTE_DEV_PACKAGE=cuda-nsight-compute-12-4=12.4.1-1
+TMPDIR=/tmp
+GIT_ASKPASS=/home/indrisch/.cursor-server/cli/servers/Stable-8e4da76ad196925accaa169efcae28c45454cce0/server/extensions/git/dist/askpass.sh
+OMPI_MCA_mtl=^ofi
+CMAKE_PREFIX_PATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/mii/1.1.2:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucc/1.2.0:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1
+PROMPT_COMMAND=PS1="Apptainer> "; unset PROMPT_COMMAND
+RSNT_CPU_VENDOR_ID=intel
+https_proxy=
+EBVERSIONIMKL=2023.2.0
+_ModuleTable010_=dC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmUvbWlpLzEuMS4yLmx1YSIsCmZ1bGxOYW1lID0gIm1paS8xLjEuMiIsCmxvYWRPcmRlciA9IDE0LApwcm9wVCA9IHt9LApzdGFja0RlcHRoID0gMCwKc3RhdHVzID0gImFjdGl2ZSIsCnVzZXJOYW1lID0gIm1paSIsCndWID0gIjAwMDAwMDAwMS4wMDAwMDAwMDEuMDAwMDAwMDAyLip6ZmluYWwiLAp9LApvcGVubXBpID0gewphY3Rpb25BID0gewoicHJlcGVuZF9wYXRoKFwiTU9EVUxFUEFUSFwiLFwiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5jYS9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12NC9NUEkvZ2NjMTIvb3Blbm1waTRcIikiLAp9LApmbiA9ICIvY3ZtZnMv
+SLURM_CPUS_PER_TASK=1
+SLURM_NTASKS=1
+SSH_USER_AUTH=/tmp/sshauth.XXXXXXXXX9uN86l
+EBDEVELAPPTAINER=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/easybuild/x86-64-v3-Core-apptainer-1.3.5-easybuild-devel
+SLURM_TOPOLOGY_ADDR=top.gswitch.g20
+LMOD_VERSION=8.7.47
+SSH_CONNECTION=10.37.127.254 41224 10.37.36.13 22
+EBDEVELFLEXIBLAS=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/easybuild/x86-64-v4-Compiler-gcc12-flexiblas-3.3.1-easybuild-devel
+NV_LIBNPP_DEV_PACKAGE=libnpp-dev-12-4=12.2.5.30-1
+RSNT_ENABLE_LMOD_CACHE=yes
+CC_CLUSTER=nibi
+__LMOD_Priority_MODULEPATH=/opt/software/modulefiles:-10
+EBVERSIONGCC=12.3.1
+SLURM_RESTART_COUNT=0
+LMOD_PACKAGE_PATH=/cvmfs/soft.computecanada.ca/config/lmod/
+LMOD_FAMILY_APPTAINER_VERSION=1.3.5
+NV_LIBCUBLAS_PACKAGE_NAME=libcublas-12-4
+TRITON_CACHE_DIR=/local/scratch/indrisch.3839932.0/.triton_cache
+ZE_AFFINITY_MASK=0
+EBDEVELGCC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/gcc/12.3/easybuild/x86-64-v3-Core-gcc-12.3-easybuild-devel
+_ModuleTable003_=bmVyLzEuMy41IiwKbG9hZE9yZGVyID0gMTUsCnByb3BUID0ge30sCnN0YWNrRGVwdGggPSAwLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiYXBwdGFpbmVyIiwKd1YgPSAiXjAwMDAwMDAxLjAwMDAwMDAwMy4wMDAwMDAwMDUuKnpmaW5hbCIsCn0sCmZsZXhpYmxhcyA9IHsKZm4gPSAiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5jYS9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12NC9Db21waWxlci9nY2MxMi9mbGV4aWJsYXMvMy4zLjEubHVhIiwKZnVsbE5hbWUgPSAiZmxleGlibGFzLzMuMy4xIiwKbG9hZE9yZGVyID0gMTEsCnByb3BUID0ge30sCnN0YWNrRGVwdGggPSAxLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiZmxleGlibGFzIiwK
+HYDRA_BOOTSTRAP=slurm
+INFOPATH=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share/binutils-data/x86_64-pc-linux-gnu/2.40/info::
+NV_LIBNPP_DEV_VERSION=12.2.5.30-1
+MODULEPATH_ROOT=/cvmfs/soft.computecanada.ca/easybuild/modules
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+CUDA_VISIBLE_DEVICES=0
+SLURM_TOPOLOGY_ADDR_PATTERN=switch.switch.node
+HF_HOME=/scratch/indrisch/huggingface/hub
+EBROOTGCCCORE=/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/x86_64-pc-linux-gnu/gcc-bin
+XDG_SESSION_CLASS=user
+LMOD_PKG=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod
+APPTAINER_CONTAINER=/scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+SLURM_SCRIPT_CONTEXT=prolog_task
+SLURM_MEM_PER_NODE=16
+EBROOTAPPTAINER=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5
+PYTHONPATH=/cvmfs/soft.computecanada.ca/custom/python/site-packages
+TERM=xterm-256color
+NV_LIBCUSPARSE_DEV_VERSION=12.3.1.170-1
+MII_INDEX_FILE=/cvmfs/soft.computecanada.ca/custom/mii/data/avx512_intel
+MKL_EXAMPLES=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/mkl/2023.2.0/examples
+LESSOPEN=|lesspipe %s
+USER=indrisch
+CURL_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt
+LIBRARY_PATH=/usr/local/cuda/lib64/stubs
+SLURM_NODELIST=g20
+VSCODE_GIT_IPC_HANDLE=/run/user/3122343/vscode-git-1df9c521a3.sock
+ENVIRONMENT=BATCH
+GPU_DEVICE_ORDINAL=0
+RSNT_SLURM_MPI_TYPE=pmix
+ARCH=x86_64
+EBDEVELUCX=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1/easybuild/x86-64-v4-Compiler-gcccore-ucx-1.14.1-easybuild-devel
+EBDEVELUCC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucc/1.2.0/easybuild/x86-64-v4-Compiler-gcccore-ucc-1.2.0-easybuild-devel
+LOADEDMODULES=CCconfig:gentoo/2023:gcccore/.12.3:gcc/12.3:hwloc/2.9.1:ucx/1.14.1:libfabric/1.18.0:pmix/4.2.4:ucc/1.2.0:openmpi/4.1.5:flexiblas/3.3.1:imkl/2023.2.0:StdEnv/2023:mii/1.1.2:apptainer/1.3.5
+EBVERSIONFLEXIBLAS=3.3.1
+SLURM_JOB_ACCOUNT=def-wangcs_gpu
+SLURM_PRIO_PROCESS=0
+SLURM_NPROCS=1
+SLURM_TMPDIR=/local/scratch/indrisch.3839932.0
+LMOD_ROOT=/cvmfs/soft.computecanada.ca/custom/software/lmod
+EBDEVELMII=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/mii/1.1.2/easybuild/x86-64-v3-Core-mii-1.1.2-easybuild-devel
+SHLVL=4
+MAX_JOBS=16
+_ModuleTable012_=LApmdWxsTmFtZSA9ICJwbWl4LzQuMi40IiwKbG9hZE9yZGVyID0gOCwKcHJvcFQgPSB7fSwKcmVmX2NvdW50ID0gMSwKc3RhY2tEZXB0aCA9IDIsCnN0YXR1cyA9ICJhY3RpdmUiLAp1c2VyTmFtZSA9ICJwbWl4LzQuMi40IiwKd1YgPSAiMDAwMDAwMDA0LjAwMDAwMDAwMi4wMDAwMDAwMDQuKnpmaW5hbCIsCn0sCnVjYyA9IHsKZm4gPSAiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5jYS9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12NC9Db21waWxlci9nY2Njb3JlL3VjYy8xLjIuMC5sdWEiLApmdWxsTmFtZSA9ICJ1Y2MvMS4yLjAiLApsb2FkT3JkZXIgPSA5LApwcm9wVCA9IHt9LApyZWZfY291bnQgPSAxLApzdGFja0RlcHRoID0gMiwKc3RhdHVzID0gImFjdGl2
+SLURM_NNODES=1
+BASH_ENV=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/init/bash
+_ModuleTable006_=T0RVTEVQQVRIXCIsXCIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmVcIikiCiwgInByZXBlbmRfcGF0aChcIk1PRFVMRVBBVEhcIixcIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvZWFzeWJ1aWxkL21vZHVsZXMvMjAyMy94ODYtNjQtdjQvQ29tcGlsZXIvZ2NjY29yZVwiKSIKLCAicHJlcGVuZF9wYXRoKFwiTU9EVUxFUEFUSFwiLFwiL2hvbWUvaW5kcmlzY2gvLmxvY2FsL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmVcIikiLCAicHJlcGVuZF9wYXRoKFwiTU9EVUxFUEFUSFwiLFwiL2hvbWUvaW5kcmlzY2gvLmxvY2FsL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0
+NV_CUDA_LIB_VERSION=12.4.1-1
+NVARCH=x86_64
+LMOD_sys=Linux
+__LMOD_STACK_LESSOPEN=fGxlc3NwaXBlICVz:fHwvdXNyL2Jpbi9sZXNzcGlwZS5zaCAlcw==
+OMPI_MCA_coll=^hcoll
+EBROOTUCX=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1
+MPLCONFIGDIR=/local/scratch/indrisch.3839932.0/.config/matplotlib
+EBDEVELHWLOC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/easybuild/x86-64-v4-Compiler-gcccore-hwloc-2.9.1-easybuild-devel
+APPTAINER_NAME=llamafactory.sif
+SINGULARITY_BIND=/scratch/indrisch/LLaMA-Factory,/home/indrisch,/dev/shm,/etc/ssl/certs,/etc/pki,/project,/scratch
+_ModuleTable009_=LAp1c2VyTmFtZSA9ICJpbWtsIiwKd1YgPSAiXjAwMDAyMDIzLjAwMDAwMDAwMi4qemZpbmFsIiwKfSwKbGliZmFicmljID0gewpmbiA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L0NvbXBpbGVyL2djY2NvcmUvbGliZmFicmljLzEuMTguMC5sdWEiLApmdWxsTmFtZSA9ICJsaWJmYWJyaWMvMS4xOC4wIiwKbG9hZE9yZGVyID0gNywKcHJvcFQgPSB7fSwKcmVmX2NvdW50ID0gMSwKc3RhY2tEZXB0aCA9IDIsCnN0YXR1cyA9ICJhY3RpdmUiLAp1c2VyTmFtZSA9ICJsaWJmYWJyaWMvMS4xOC4wIiwKd1YgPSAiMDAwMDAwMDAxLjAwMDAwMDAxOC4qemZpbmFsIiwKfSwKbWlpID0gewpmbiA9ICIvY3ZtZnMvc29m
+EBROOTUCC=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucc/1.2.0
+CC_RESTRICTED=true
+XDG_SESSION_ID=107433
+http_proxy=
+RSNT_CUDA_DRIVER_VERSION=580.82.07
+SLURM_SUBMIT_HOST=l3.nibi.sharcnet
+NV_CUDA_COMPAT_PACKAGE=cuda-compat-12-4
+PIP_ROOT_USER_ACTION=ignore
+APPTAINER_BIND=/scratch/indrisch/LLaMA-Factory,/home/indrisch,/dev/shm,/etc/ssl/certs,/etc/pki,/project,/scratch
+_ModuleTable001_=X01vZHVsZVRhYmxlXyA9IHsKTVR2ZXJzaW9uID0gMywKY19yZWJ1aWxkVGltZSA9IGZhbHNlLApjX3Nob3J0VGltZSA9IGZhbHNlLApkZXB0aFQgPSB7fSwKZmFtaWx5ID0gewphcHB0YWluZXIgPSAiYXBwdGFpbmVyIiwKYmFzZV9vcyA9ICJnZW50b28iLApjb21waWxlciA9ICJnY2MiLAptcGkgPSAib3Blbm1waSIsCn0sCm1UID0gewpDQ2NvbmZpZyA9IHsKZm4gPSAiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5jYS9jdXN0b20vbW9kdWxlcy9DQ2NvbmZpZy5sdWEiLApmdWxsTmFtZSA9ICJDQ2NvbmZpZyIsCmxvYWRPcmRlciA9IDEsCnByb3BUID0ge30sCnN0YWNrRGVwdGggPSAxLApzdGF0dXMgPSAiYWN0aXZlIiwKdXNlck5hbWUgPSAiQ0Njb25maWciLAp3ViA9ICJN
+NV_LIBNCCL_PACKAGE=libnccl2=2.21.5-1+cuda12.4
+LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/.singularity.d/libs
+EASYBUILD_CONFIGFILES=/cvmfs/soft.computecanada.ca/easybuild/config.cfg
+EASYBUILD_BUILDPATH=/tmp/indrisch
+LMOD_FAMILY_COMPILER=gcc
+XDG_RUNTIME_DIR=/local/scratch/indrisch.3839932.0
+SLURM_JOB_ID=3839932
+_ModuleTable014_=ZHVsZWZpbGVzIgosICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L01QSS9nY2MxMi9vcGVubXBpNCIKLCAiL2N2bWZzL3NvZnQuY29tcHV0ZWNhbmFkYS5jYS9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12NC9Db21waWxlci9nY2MxMiIKLCAiL2hvbWUvaW5kcmlzY2gvLmxvY2FsL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L0NvbXBpbGVyL2djY2NvcmUiCiwgIi9ob21lL2luZHJpc2NoLy5sb2NhbC9lYXN5YnVpbGQvbW9kdWxlcy8yMDIzL3g4Ni02NC12My9Db3JlIgosICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXY0L0Nv
+SSL_CERT_FILE=/etc/pki/tls/certs/ca-bundle.crt
+SLURM_NODEID=0
+FLASHINFER_WORKSPACE_BASE=/scratch/indrisch/
+_ModuleTable004_=d1YgPSAiMDAwMDAwMDAzLjAwMDAwMDAwMy4wMDAwMDAwMDEuKnpmaW5hbCIsCn0sCmdjYyA9IHsKYWN0aW9uQSA9IHsKInByZXBlbmRfcGF0aChcIk1PRFVMRVBBVEhcIixcIi9jdm1mcy9zb2Z0LmNvbXB1dGVjYW5hZGEuY2EvZWFzeWJ1aWxkL21vZHVsZXMvMjAyMy94ODYtNjQtdjQvQ29tcGlsZXIvZ2NjMTJcIikiLAp9LApmbiA9ICIvY3ZtZnMvc29mdC5jb21wdXRlY2FuYWRhLmNhL2Vhc3lidWlsZC9tb2R1bGVzLzIwMjMveDg2LTY0LXYzL0NvcmUvZ2NjLzEyLjMubHVhIiwKZnVsbE5hbWUgPSAiZ2NjLzEyLjMiLApsb2FkT3JkZXIgPSA0LApwcm9wVCA9IHsKdHlwZV8gPSB7CnRvb2xzID0gMSwKfSwKfSwKc3RhY2tEZXB0aCA9IDEsCnN0YXR1cyA9ICJhY3RpdmUiLAp1
+LMOD_FAMILY_MPI_VERSION=4.1.5
+SSH_CLIENT=10.37.127.254 41224 22
+MKLROOT=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/mkl/2023.2.0
+NV_CUDA_NSIGHT_COMPUTE_VERSION=12.4.1-1
+RSNT_GPU_TYPES=H100
+HF_HUB_OFFLINE=1
+DEBUGINFOD_IMA_CERT_PATH=/etc/keys/ima:
+LMOD_FAMILY_MPI=openmpi
+SQUEUE_SORT=-t,e,S
+FLASH_ATTENTION_FORCE_BUILD=TRUE
+which_declare=declare -f
+NV_NVPROF_VERSION=12.4.127-1
+TMOUT=172800
+LMOD_FAMILY_COMPILER_VERSION=12.3
+EBVERSIONPMIX=4.2.4
+VSCODE_GIT_ASKPASS_MAIN=/home/indrisch/.cursor-server/cli/servers/Stable-8e4da76ad196925accaa169efcae28c45454cce0/server/extensions/git/dist/askpass-main.js
+SLURM_MPI_TYPE=pmix
+XDG_DATA_DIRS=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/mii/1.1.2/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1/share:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/share:/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/share:/home/indrisch/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share
+__Init_Default_Modules=1
+BROWSER=/home/indrisch/.cursor-server/cli/servers/Stable-8e4da76ad196925accaa169efcae28c45454cce0/server/bin/helpers/browser.sh
+SLURM_CONF=/opt/software/slurm/24.11.6/etc/slurm.conf
+PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/opt/conda/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+SLURM_JOB_NAME=helloworld.sh
+MODULEPATH=/opt/software/modulefiles:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/MPI/gcc12/openmpi4:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcc12:/home/indrisch/.local/easybuild/modules/2023/x86-64-v4/Compiler/gcccore:/home/indrisch/.local/easybuild/modules/2023/x86-64-v3/Core:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core:/cvmfs/soft.computecanada.ca/custom/modules
+SQUEUE_FORMAT=%.17i %.8u %.20a %.14j %.3t %.10L %.5D %.4C %.10b %.7m %N (%r) 
+NV_LIBNCCL_PACKAGE_NAME=libnccl2
+SLURM_NTASKS_PER_NODE=1
+_LMFILES_=/cvmfs/soft.computecanada.ca/custom/modules/CCconfig.lua:/cvmfs/soft.computecanada.ca/custom/modules/gentoo/2023.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core/gcccore/.12.3.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core/gcc/12.3.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcccore/ucc/1.2.0.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v4/Compiler/gcc12/flexiblas/3.3.1.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core/imkl/2023.2.0.lua:/cvmfs/soft.computecanada.ca/custom/modules/StdEnv/2023.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core/mii/1.1.2.lua:/cvmfs/soft.computecanada.ca/easybuild/modules/2023/x86-64-v3/Core/apptainer/1.3.5.lua
+NV_LIBNCCL_PACKAGE_VERSION=2.21.5-1
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/3122343/bus
+EBVERSIONLIBFABRIC=1.18.0
+EBDEVELPMIX=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4/easybuild/x86-64-v4-Compiler-gcccore-pmix-4.2.4-easybuild-devel
+LMOD_CMD=/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/libexec/lmod
+MAIL=/var/spool/mail/indrisch
+EBVERSIONGCCCORE=12.3.1
+GRADIO_SERVER_PORT=7860
+LMOD_SYSTEM_DEFAULT_MODULES=StdEnv mii
+OMPI_MCA_plm_slurm_args=--external-launcher
+SLURM_JOB_GID=3122343
+CPATH=/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/mkl/2023.2.0/include/fftw:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/imkl/2023.2.0/mkl/2023.2.0/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/include/flexiblas:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/flexiblascore/3.3.1/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcc12/openmpi/4.1.5/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucc/1.2.0/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/pmix/4.2.4/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/libfabric/1.18.0/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ucx/1.14.1/include:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/hwloc/2.9.1/include
+DEBIAN_FRONTEND=noninteractive
+OLDPWD=/scratch/indrisch/LLaMA-Factory
+CLUSTER=nibi
+SLURM_JOB_NODELIST=g20
+TERM_PROGRAM=vscode
+I_MPI_HYDRA_BOOTSTRAP=slurm
+VSCODE_IPC_HOOK_CLI=/run/user/3122343/vscode-ipc-8ef198c0-3e8d-48b1-97be-766f0f70ab5c.sock
+LMOD_AVAIL_STYLE=grouped:system
+BASH_FUNC_ml%%=() {  eval "$($LMOD_DIR/ml_cmd "$@")"
+}
+BASH_FUNC_which%%=() {  ( alias;
+ eval ${which_declare} ) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot $@
+}
+BASH_FUNC_module%%=() {  if [ -z "${LMOD_SH_DBG_ON+x}" ]; then
+ case "$-" in 
+ *v*x*)
+ __lmod_sh_dbg='vx'
+ ;;
+ *v*)
+ __lmod_sh_dbg='v'
+ ;;
+ *x*)
+ __lmod_sh_dbg='x'
+ ;;
+ esac;
+ fi;
+ if [ -n "${__lmod_sh_dbg:-}" ]; then
+ set +$__lmod_sh_dbg;
+ echo "Shell debugging temporarily silenced: export LMOD_SH_DBG_ON=1 for Lmod's output" 1>&2;
+ fi;
+ eval "$($LMOD_CMD shell "$@")" && eval "$(${LMOD_SETTARG_CMD:-:} -s sh)";
+ __lmod_my_status=$?;
+ if [ -n "${__lmod_sh_dbg:-}" ]; then
+ echo "Shell debugging restarted" 1>&2;
+ set -$__lmod_sh_dbg;
+ fi;
+ unset __lmod_sh_dbg;
+ return $__lmod_my_status
+}
+_=/usr/bin/env
+================================================
+/var/spool/slurmd/job3839932/slurm_script: line 28: 222073 Bus error               (core dumped) apptainer run --nv --writable-tmpfs -B /scratch/indrisch/LLaMA-Factory -B /home/indrisch -B /dev/shm:/dev/shm -B /etc/ssl/certs:/etc/ssl/certs:ro -B /etc/pki:/etc/pki:ro -W ${SLURM_TMPDIR} --env HF_HUB_OFFLINE=1 --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" --env HF_HOME="/scratch/indrisch/huggingface/hub" --env HF_HUB_CACHE="/scratch/indrisch/huggingface/hub" --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" --env FLASHINFER_WORKSPACE_BASE="/scratch/indrisch/" --pwd /scratch/indrisch/LLaMA-Factory /scratch/indrisch/easyr1_verl_sif/llamafactory.sif bash /scratch/indrisch/LLaMA-Factory/preliminaries/sanitycheck/sanitycheck.sh
+slurmstepd: error: Detected 1 oom_kill event in StepId=3839932.batch. Some of the step tasks have been OOM Killed.

@@ -2,9 +2,11 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1   
-#SBATCH --time=0-00:02:00
+#SBATCH --time=0-00:05:00
 #SBATCH --gpus-per-node=h100:1
 #SBATCH --output=%N-helloworld-%j.out
+
+# regarding memory; trillium doesn't use a --mem option and the default of 256M on nibi is needed, so we can leave it out.
 
 module load apptainer
 

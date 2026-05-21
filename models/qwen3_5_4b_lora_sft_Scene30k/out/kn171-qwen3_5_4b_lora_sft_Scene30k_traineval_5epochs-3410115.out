@@ -1,0 +1,30 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: None
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126_qwen35/
+RUNNING_MODE: VENV
+/project/aip-wangcs/indrisch/LLaMA-Factory /project/aip-wangcs/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/llamafactory-cli", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 17, in main
+    from .extras.misc import is_env_enabled
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/extras/misc.py", line 38, in <module>
+    from . import logging
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/extras/logging.py", line 26, in <module>
+    from .constants import RUNNING_LOG
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/extras/constants.py", line 20, in <module>
+    from peft.utils import SAFETENSORS_WEIGHTS_NAME as SAFE_ADAPTER_WEIGHTS_NAME
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/peft/__init__.py", line 17, in <module>
+    from .auto import (
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/peft/auto.py", line 32, in <module>
+    from .peft_model import (
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/peft/peft_model.py", line 37, in <module>
+    from transformers import Cache, DynamicCache, EncoderDecoderCache, HybridCache, PreTrainedModel
+ImportError: cannot import name 'HybridCache' from 'transformers' (/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/transformers/__init__.py)

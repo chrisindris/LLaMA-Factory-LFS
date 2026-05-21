@@ -71,6 +71,7 @@ export BEST_GPU="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$
 export TORCH_EXTENSIONS_DIR="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'TORCH_EXTENSIONS_DIR'))")" && echo "TORCH_EXTENSIONS_DIR: $TORCH_EXTENSIONS_DIR"
 export SIF_FILE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'SIF_FILE'))")" && echo "SIF_FILE: $SIF_FILE"
 export MEDIA_DIR="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'media_dir'))")" && echo "MEDIA_DIR: $MEDIA_DIR"
+export VENV_LLAMAFACTORY="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'VENV_LLAMAFACTORY'))")" && echo "VENV_LLAMAFACTORY: $VENV_LLAMAFACTORY"
 
 export WANDB_DIR="${PROJECT_DIR}/wandb/"
 if [[ "$BEST_GPU" == "h100" ]]; then
@@ -86,6 +87,10 @@ if [[ -n "$1" ]]; then
     RUNNING_MODE="$1"
 fi
 echo "RUNNING_MODE: $RUNNING_MODE"
+
+# for fragmentation
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export PYTORCH_CUDA_ALLOC_CONF
 
 # ----- EXPERIMENT -----
 
@@ -155,6 +160,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
             --env FORCE_TORCHRUN=1 \
             --env WANDB_MODE=offline \
             --env WANDB_DIR="${WANDB_DIR}" \
+            --env PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF}" \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
             llamafactory-cli train ${YAML_FILE}
@@ -272,6 +278,7 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
             --env FORCE_TORCHRUN=1 \
             --env WANDB_MODE=offline \
             --env WANDB_DIR="${WANDB_DIR}" \
+            --env PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF}" \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
             llamafactory-cli train ${YAML_FILE}
@@ -362,26 +369,138 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
             --env NCCL_DEBUG=INFO \
             --env NCCL_SOCKET_IFNAME=^docker0,lo \
             --env DISABLE_VERSION_CHECK=1 \
+            --env PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF}" \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
             llamafactory-cli train ${YAML_FILE}
 
-    elif [[ "$RUNNING_MODE" == "VENV" ]]; then
+
+    elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
 
         module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
         module load python/3.12 cuda/12.6 opencv/4.12.0
         module load arrow
+        
+        module load apptainer
 
-        source /project/aip-wangcs/indrisch/venv_llamafactory_cu126/bin/activate
+        MPI_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcc12/openmpi/4.1.5/lib"
+        HWLOC_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/hwloc/2.9.1/lib"
+        SLURM_TMPDIR="/tmp/"
+
+        # on the login node, run "apptainer overlay create --size 20000 /project/aip-wangcs/indrisch/LLaMA-Factory/apptainer/overlay.img"
+        # then run apptainer run --nv --overlay ../../apptainer/overlay.img -C -B /scratch/indrisch/ /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+        # then within it, conda install h5py -y
+        apptainer run --nv --overlay ${PROJECT_DIR}/apptainer/overlay.img \
+            -C \
+            -B ${PROJECT_DIR} \
+            -B ${HF_HOME} \
+            -B ${MEDIA_DIR} \
+            -B /home/indrisch \
+            -B /dev/shm:/dev/shm \
+            -B /etc/ssl/certs:/etc/ssl/certs:ro \
+            -B /etc/pki:/etc/pki:ro \
+            -B "${MPI_LIB_PATH}:${MPI_LIB_PATH}:ro" \
+            -B "${HWLOC_LIB_PATH}:${HWLOC_LIB_PATH}:ro" \
+            -W ${SLURM_TMPDIR} \
+            --env LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:/usr/lib64:/lib/x86_64-linux-gnu:/lib64:${MPI_LIB_PATH}:${HWLOC_LIB_PATH}:${LD_LIBRARY_PATH}" \
+            --env HF_HUB_OFFLINE=1 \
+            --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
+            --env HF_HOME="${HF_HOME}" \
+            --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
+            --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
+            --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
+            --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
+            --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
+            --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
+            --env FORCE_TORCHRUN=1 \
+            --env WANDB_MODE=offline \
+            --env WANDB_DIR="${WANDB_DIR}" \
+            --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
+            --env PYTHONNOUSERSITE=1 \
+            --env HOME="${SLURM_TMPDIR}" \
+            --env PYTHONPATH="${PROJECT_DIR}/src" \
+            --env NCCL_IB_DISABLE=0 \
+            --env NCCL_P2P_DISABLE=0 \
+            --env NCCL_DEBUG=INFO \
+            --env NCCL_SOCKET_IFNAME=^docker0,lo \
+            --env DISABLE_VERSION_CHECK=1 \
+            --env PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF}" \
+            --pwd ${PROJECT_DIR} \
+            ${SIF_FILE} \
+            bash
+
+    elif [[ "$RUNNING_MODE" == "VENV" ]]; then
+
+        # -- using cu12.9 due to the error in *3662965.out
+        # module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+        # module load python/3.12 cuda/12.6 opencv/4.12.0
+        # module load arrow
+        module load StdEnv gcc openmpi python/3.12 cuda/12.9 opencv arrow
+
+        # copying the venv to local storage is necessary on Killarney because the shared filesystems have very slow metadata performance, which makes using a venv directly on the shared filesystem extremely slow due to all the stat calls that pip packages require. Copying the venv to local storage and running from there avoids this issue.
+        echo "Copying venv ${VENV_LLAMAFACTORY} to local storage ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})..."
+        cp -a ${VENV_LLAMAFACTORY} ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
+        source ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})/bin/activate
+
         export CUDA_VISIBLE_DEVICES=0,1,2,3
         export FORCE_TORCHRUN=1 
         export HF_HUB_OFFLINE=1 
         export WANDB_MODE=offline 
         export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
         export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
+        # Use node-local cache to avoid NFS contention for datasets; this replaces the cache_dir from the yaml. 
+        export HF_DATASETS_CACHE="${SLURM_TMPDIR}/hf_datasets"
+        mkdir -p "${HF_DATASETS_CACHE}"
+        # Avoid NFS lock exhaustion when datasets cache is shared across ranks.
+        export HF_DATASETS_DISABLE_FILE_LOCKING=1
+        export DATASETS_DISABLE_FILE_LOCKING=1
         # giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
         pushd /project/aip-wangcs/indrisch/LLaMA-Factory
-        llamafactory-cli train ${YAML_FILE}
+
+        # if $SLURM_NNODES is a number 2 or greater:
+        if [[ "$SLURM_NNODES" -ge 2 ]]; then
+            echo "SLURM_NNODES: ${SLURM_NNODES}"
+            echo "HEAD_NODE: ${HEAD_NODE}"
+            echo "SLURM_NODEID: ${SLURM_NODEID}"
+            export NCCL_ASYNC_ERROR_HANDLING=1
+            export TORCH_NCCL_ASYNC_ERROR_HANDLING=1
+            export NCCL_DEBUG=INFO
+            export NCCL_SOCKET_IFNAME=^docker0,lo
+
+            # LLaMA-Factory's launcher reads these variables and then invokes
+            # torchrun once per node with the correct --node_rank. The outer
+            # 2-node SLURM wrapper must start this script through srun so that
+            # one parent process exists on every allocated node.
+            export NNODES="${SLURM_NNODES}"
+            export NODE_RANK="${SLURM_NODEID}"
+            export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE}}"
+            export MASTER_PORT="${MASTER_PORT:-29500}"
+            export NPROC_PER_NODE="4"
+
+            echo "NNODES: ${NNODES}"
+            echo "NODE_RANK: ${NODE_RANK}"
+            echo "MASTER_ADDR: ${MASTER_ADDR}"
+            echo "MASTER_PORT: ${MASTER_PORT}"
+            echo "NPROC_PER_NODE: ${NPROC_PER_NODE}"
+
+            # torchrun \
+            #     --nnodes $SLURM_NNODES \
+            #     --nproc_per_node 4 \ 
+            #     --rdzv_backend c10d \
+            #     --rdzv_endpoint "${HEAD_NODE}" \
+            #     llamafactory-cli train ${YAML_FILE}
+
+
+            llamafactory-cli train ${YAML_FILE}
+
+            # FORCE_TORCHRUN=1 NNODES=2 NODE_RANK=0 MASTER_ADDR="${HEAD_NODE}" llamafactory-cli train ${YAML_FILE}
+            # FORCE_TORCHRUN=1 NNODES=2 NODE_RANK=1 MASTER_ADDR="${HEAD_NODE}" llamafactory-cli train ${YAML_FILE}
+        else
+            echo "SLURM_NNODES: ${SLURM_NNODES}"
+            llamafactory-cli train ${YAML_FILE}
+        fi
+
+        
         # llamafactory-cli train \
         #     --model_name_or_path Qwen/Qwen3.5-4B \
         #     --no_use_fast_tokenizer \
