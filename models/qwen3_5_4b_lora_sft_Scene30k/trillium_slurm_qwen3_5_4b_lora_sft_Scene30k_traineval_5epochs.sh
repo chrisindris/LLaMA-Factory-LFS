@@ -5,6 +5,8 @@
 #SBATCH --cpus-per-task=96
 #SBATCH --time=1-00:00:00
 #SBATCH --gpus-per-node=h100:4
+#SBATCH --mail-user=christopher.indris@torontomu.ca
+#SBATCH --mail-type=ALL
 
 if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then
     PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"

@@ -53,7 +53,7 @@ if [[ "$PS1" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "$PS1" 
     RUNNING_MODE="APPTAINER" # running mode for RORQUAL
 elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
     CLUSTER="TRILLIUM"
-    RUNNING_MODE="APPTAINER" # running mode for TRILLIUM
+    RUNNING_MODE="VENV" # running mode for TRILLIUM when using Qwen3.5
 elif [[ "$PS1" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "$PS1" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
     CLUSTER="KILLARNEY"
     RUNNING_MODE="VENV" # running mode for KILLARNEY
@@ -284,14 +284,17 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
             llamafactory-cli train ${YAML_FILE}
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
-    
-        module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
-        module load python/3.12 cuda/12.6 opencv/4.12.0
-        module load arrow
 
-        echo "Copying venv to local storage..."
-        cp -a /scratch/indrisch/venv_llamafactory_cu126 ${SLURM_TMPDIR}/venv_llamafactory_cu126
-        source ${SLURM_TMPDIR}/venv_llamafactory_cu126/bin/activate
+        # --- Build the VENV ---
+        module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow # cu132 for updates, Qwen3.5 compatibility (through transformers)
+        echo "build from scratch" # from scratch on the compute node (no need to transfer the venv, all modules are available with compute canada's module system)
+        export DS_BUILD_CPU_ADAM=1 # we can build CPU ADAM for offloading
+        export BUILD_UTILS=1
+        export DS_BUILD_OPS=1
+        VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu132_qwen35/"
+        export VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
+        /scratch/indrisch/LLaMA-Factory/install_as_venv.sh TRILLIUM
+        source ${SLURM_TMPDIR}/venv_llamafactory_cu132_qwen35/bin/activate
 
         export PYTHONUNBUFFERED=1
         export NCCL_DEBUG=INFO
@@ -312,7 +315,34 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
         echo "=== END VENV DIAGNOSTICS ==="
 
         pushd /scratch/indrisch/LLaMA-Factory
-        llamafactory-cli train ${YAML_FILE}
+
+        # --- Handle N-Node (Single or Multi) Training ---
+        if [[ "$SLURM_NNODES" -ge 2 ]]; then
+            echo "SLURM_NNODES: ${SLURM_NNODES}"
+            echo "HEAD_NODE: ${HEAD_NODE}"
+            echo "SLURM_NODEID: ${SLURM_NODEID}"
+            export NCCL_ASYNC_ERROR_HANDLING=1
+            export TORCH_NCCL_ASYNC_ERROR_HANDLING=1
+            export NCCL_DEBUG=INFO
+            export NCCL_SOCKET_IFNAME=^docker0,lo
+
+            export NNODES="${SLURM_NNODES}"
+            export NODE_RANK="${SLURM_NODEID}"
+            export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE}}"
+            export MASTER_PORT="${MASTER_PORT:-29500}"
+            export NPROC_PER_NODE="4"
+
+            echo "NNODES: ${NNODES}"
+            echo "NODE_RANK: ${NODE_RANK}"
+            echo "MASTER_ADDR: ${MASTER_ADDR}"
+            echo "MASTER_PORT: ${MASTER_PORT}"
+            echo "NPROC_PER_NODE: ${NPROC_PER_NODE}"
+
+            llamafactory-cli train ${YAML_FILE}
+        else
+            echo "SLURM_NNODES: ${SLURM_NNODES}"
+            llamafactory-cli train ${YAML_FILE}
+        fi
 
     else
         echo "Invalid running mode: $RUNNING_MODE"

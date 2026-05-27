@@ -2,6 +2,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs-%j.out
+#SBATCH --error=err/%N-qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs-%j.err
 
 # RORQUAL:
 #SBATCH --cpus-per-task=64
@@ -53,7 +54,7 @@ if [[ "$PS1" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "$PS1" 
     RUNNING_MODE="APPTAINER" # running mode for RORQUAL
 elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
     CLUSTER="TRILLIUM"
-    RUNNING_MODE="APPTAINER" # running mode for TRILLIUM
+    RUNNING_MODE="VENV" # running mode for TRILLIUM when using Qwen3.5
 elif [[ "$PS1" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "$PS1" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
     CLUSTER="KILLARNEY"
     RUNNING_MODE="VENV" # running mode for KILLARNEY
@@ -285,13 +286,25 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
     
-        module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
-        module load python/3.12 cuda/12.6 opencv/4.12.0
-        module load arrow
+        # module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+        # module load python/3.12 cuda/12.6 opencv/4.12.0
+        # module load arrow
+        module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow
 
-        echo "Copying venv to local storage..."
-        cp -a /scratch/indrisch/venv_llamafactory_cu126 ${SLURM_TMPDIR}/venv_llamafactory_cu126
-        source ${SLURM_TMPDIR}/venv_llamafactory_cu126/bin/activate
+        # --- Either move the existing venv to SLURM, or build it. No forcing of CPU ADAM is fine, but we want the Qwen3.5 compatibility ---
+        if [[ -d "/scratch/indrisch/venv_llamafactory_cu132_qwen35/" ]]; then
+            echo "Copying venv to local storage..."
+            cp -a /scratch/indrisch/venv_llamafactory_cu132_qwen35/ ${SLURM_TMPDIR}/venv_llamafactory_cu132_qwen35/
+        else
+            echo "build from scratch"
+            export DS_BUILD_CPU_ADAM=0
+            export BUILD_UTILS=0
+            export DS_BUILD_OPS=0
+            VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu132_qwen35/"
+            VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
+            /scratch/indrisch/LLaMA-Factory/install_as_venv.sh TRILLIUM
+        fi
+        source ${SLURM_TMPDIR}/venv_llamafactory_cu132_qwen35/bin/activate
 
         export PYTHONUNBUFFERED=1
         export NCCL_DEBUG=INFO
@@ -435,12 +448,21 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         # module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
         # module load python/3.12 cuda/12.6 opencv/4.12.0
         # module load arrow
-        module load StdEnv gcc openmpi python/3.12 cuda/12.9 opencv arrow
+        module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow
 
         # copying the venv to local storage is necessary on Killarney because the shared filesystems have very slow metadata performance, which makes using a venv directly on the shared filesystem extremely slow due to all the stat calls that pip packages require. Copying the venv to local storage and running from there avoids this issue.
-        echo "Copying venv ${VENV_LLAMAFACTORY} to local storage ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})..."
-        cp -a ${VENV_LLAMAFACTORY} ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
-        source ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})/bin/activate
+        # echo "Copying venv ${VENV_LLAMAFACTORY} to local storage ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})..."
+        # cp -a ${VENV_LLAMAFACTORY} ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
+        # source ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})/bin/activate
+
+        # we can generate the venv on the local storage.
+        export DS_BUILD_CPU_ADAM=1
+        export BUILD_UTILS=1
+        export DS_BUILD_OPS=1
+        VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu132_qwen35/" # it's best to use a cuda 13.2 for this.
+        VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
+        /project/aip-wangcs/indrisch/LLaMA-Factory/install_as_venv.sh KILLARNEY
+        source ${VENV_LLAMAFACTORY}/bin/activate
 
         export CUDA_VISIBLE_DEVICES=0,1,2,3
         export FORCE_TORCHRUN=1 

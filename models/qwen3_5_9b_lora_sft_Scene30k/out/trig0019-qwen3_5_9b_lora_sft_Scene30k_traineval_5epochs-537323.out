@@ -1,0 +1,155 @@
+[2026-05-24T22:10:32.888] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:10:32.893] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:10:32.898] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:10:32.904] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:10:32.904] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:10:32.904] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:10:32.904] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:10:32.904] error: NVML: Failed to get Compute running process count(3): Not Supported
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+SIF_FILE: /scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+MEDIA_DIR: /project/def-wangcs/shared/data/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+RUNNING_MODE: VENV
+Copying venv to local storage...
+[2026-05-24T22:11:02.867] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:02.868] error: NVML: Failed to get Compute running process count(3): Not Supported
+=== VENV DIAGNOSTICS ===
+HOSTNAME: trig0019
+CUDA_VISIBLE_DEVICES: 0,1,2,3
+SLURM_GPUS: 
+SLURM_JOB_GPUS: 0,1,2,3
+Sun May 24 22:11:07 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 595.71.05              Driver Version: 595.71.05      CUDA Version: 13.2     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:06:00.0 N/A |                  N/A |
+|ERR!   44C    P0            N/A  /  N/A  |     975MiB /  81559MiB |     N/A      Default |
+|                                         |                        |                 ERR! |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:0C:00.0 N/A |                  N/A |
+|ERR!   43C    P0            N/A  /  N/A  |     975MiB /  81559MiB |     N/A      Default |
+|                                         |                        |                 ERR! |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:46:00.0 N/A |                  N/A |
+|ERR!   43C    P0            N/A  /  N/A  |     975MiB /  81559MiB |     N/A      Default |
+|                                         |                        |                 ERR! |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:4C:00.0 N/A |                  N/A |
+|ERR!   44C    P0            N/A  /  N/A  |     975MiB /  81559MiB |     N/A      Default |
+|                                         |                        |                 ERR! |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+CUDA available: False
+Device count: 4
+=== END VENV DIAGNOSTICS ===
+/scratch/indrisch/LLaMA-Factory /scratch/indrisch/LLaMA-Factory/models/qwen3_5_9b_lora_sft_Scene30k
+[INFO|2026-05-24 22:11:18] llamafactory.launcher:143 >> Initializing 0 distributed tasks at: 127.0.0.1:58171
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu132_qwen35/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu132_qwen35/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 367, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu132_qwen35/lib/python3.12/site-packages/torch/distributed/run.py", line 1016, in main
+    run(args)
+  File "/scratch/indrisch/venv_llamafactory_cu132_qwen35/lib/python3.12/site-packages/torch/distributed/run.py", line 1007, in run
+    elastic_launch(
+  File "/scratch/indrisch/venv_llamafactory_cu132_qwen35/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 191, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu132_qwen35/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 328, in launch_agent
+    spec = WorkerSpec(
+           ^^^^^^^^^^^
+  File "<string>", line 19, in __init__
+  File "/scratch/indrisch/venv_llamafactory_cu132_qwen35/lib/python3.12/site-packages/torch/distributed/elastic/agent/server/api.py", line 109, in __post_init__
+    raise AssertionError
+AssertionError
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu132_qwen35/bin/llamafactory-cli", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '0', '--master_addr', '127.0.0.1', '--master_port', '58171', '/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/scratch/indrisch//LLaMA-Factory/examples/train_lora/trillium_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.yaml']' returned non-zero exit status 1.
+[2026-05-24T22:11:21.245] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:21.246] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:21.246] error: NVML: Failed to get Compute running process count(3): Not Supported
+[2026-05-24T22:11:21.246] error: NVML: Failed to get Compute running process count(3): Not Supported
+
+scontrol show job 537323
+JobId=537323 JobName=trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=571248 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:00:52 TimeLimit=1-00:00:00 TimeMin=N/A
+   SubmitTime=2026-05-23T12:59:38 EligibleTime=2026-05-23T12:59:38
+   AccrueTime=2026-05-23T12:59:38
+   StartTime=2026-05-24T22:10:29 EndTime=2026-05-24T22:11:21 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-05-24T22:10:29 Scheduler=Backfill
+   Partition=compute_full_node AllocNode:Sid=trig-login01:2575770
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0019
+   BatchHost=trig0019
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_9b_lora_sft_Scene30k/trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh
+   SubmitLine=SBATCH --partition=compute_full_node --comment /opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh --export=NONE --get-user-env trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_9b_lora_sft_Scene30k
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh
+   StdErr=
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_9b_lora_sft_Scene30k/out/trig0019-qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs-537323.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   MailUser=christopher.indris@torontomu.ca MailType=INVALID_DEPEND,BEGIN,END,FAIL,REQUEUE,STAGE_OUT
+
+sacct -j 537323
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+537323       trillium_+ def-wangcs   00:00:52                         00:00:00   00:00:00      0:0 
+537323.batch      batch def-wangcs   00:00:52                         00:00:00   00:00:00      0:0 
+537323.exte+     extern def-wangcs   00:00:52                         00:00:00   00:00:00      0:0 
+

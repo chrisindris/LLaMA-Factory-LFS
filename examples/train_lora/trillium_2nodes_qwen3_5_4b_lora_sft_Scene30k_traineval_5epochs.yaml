@@ -20,14 +20,14 @@ media_dir: /project/def-wangcs/shared/data/
 template: qwen3_5
 cutoff_len: 65536 # Qwen3.5-4B: 1/2 of max length (131032) to lower worst-case memory spikes on long multimodal samples; this setting works for Qwen3.5-4B for image_max_pixels=65536 and video_max_pixels=16384.
 overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
-preprocessing_num_workers: 32
+preprocessing_num_workers: 8 # note: this number should be equal to 16 divided by the number of nodes being used, to reduce worker fan-out to avoid file-lock pressure on multi-node runs
 dataloader_num_workers: 4
 dataloader_prefetch_factor: 1 # when dataloader_num_workers > 0, this argument specifies the number of batches loaded in advance by each worker. Setting it to 1 can help reduce memory usage when working with large multimodal data.
 dataloader_pin_memory: false
 low_cpu_mem_usage: true
 
 ### output
-output_dir: saves/qwen3_5-4b/lora/sft/Scene30k_traineval_5epochs
+output_dir: saves/qwen3_5-4b/lora/sft/Scene30k_2nodes_traineval_5epochs
 logging_steps: 10
 save_steps: 426 # save after every 1.00 Scene30k epochs
 plot_loss: true

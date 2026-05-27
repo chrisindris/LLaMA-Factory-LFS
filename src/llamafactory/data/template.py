@@ -595,6 +595,7 @@ def get_template_and_fix_tokenizer(tokenizer: "PreTrainedTokenizer", data_args: 
     print(f"[DEBUG get_template_and_fix_tokenizer] Available templates: {sorted(list(TEMPLATES.keys()))[:20]}...", file=sys.stderr, flush=True)
     print(f"[DEBUG get_template_and_fix_tokenizer] Total templates registered: {len(TEMPLATES)}", file=sys.stderr, flush=True)
     print(f"[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: {'videor1' in TEMPLATES}", file=sys.stderr, flush=True)
+    print(f"[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: {'qwen3_5' in TEMPLATES}", file=sys.stderr, flush=True)
     
     if data_args.template is None:
         if isinstance(tokenizer.chat_template, str):

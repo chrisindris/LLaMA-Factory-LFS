@@ -105,18 +105,21 @@ pushd "$PROJECT_DIR" >/dev/null
 # module load python/3.12 cuda/12.6 opencv/4.12.0
 # module load arrow
 # module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow
+echo "CREATING VENV at ${VENV_LLAMAFACTORY}..."
 virtualenv --no-download ${VENV_LLAMAFACTORY}
+echo "SOURCING VENV at ${VENV_LLAMAFACTORY}..."
 source ${VENV_LLAMAFACTORY}/bin/activate
-pip install --upgrade pip setuptools wheel
+echo "UPGRADING PIP, SETUPTOOLS and WHEEL in the VENV..."
+pip install --no-index --upgrade pip setuptools wheel
 
 
 # --- if we want to use Qwen3.5, we need to use "transformers>=5.2.0"; otherwise, "transformers==4.57.1" is fine ---
 if [[ "$VENV_LLAMAFACTORY" == *qwen35* ]]; then
     echo "Installing transformers>=5.2.0 for Qwen3.5 compatibility"
-    pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers>=5.2.0" -e ".[torch,metrics,deepspeed,liger-kernel]"
+    pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py flash_attn "transformers>=5.2.0" -e ".[torch,metrics,deepspeed,liger-kernel]"
 else
     echo "Installing transformers==4.57.1 for compatibility with models like Qwen2.5 and LLaVa-3D"
-    pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers==4.57.1" -e ".[torch,metrics,deepspeed,liger-kernel]"
+    pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py flash_attn "transformers==4.57.1" -e ".[torch,metrics,deepspeed,liger-kernel]"
 fi
 
 # DeepSpeed's CPUAdam builder defaults to -march=x86-64-v3, which is too weak
