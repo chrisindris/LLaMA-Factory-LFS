@@ -23,7 +23,7 @@ from transformers import EarlyStoppingCallback, PreTrainedModel
 from ..data import get_template_and_fix_tokenizer
 from ..extras import logging
 from ..extras.constants import V_HEAD_SAFE_WEIGHTS_NAME, V_HEAD_WEIGHTS_NAME
-from ..extras.misc import infer_optim_dtype
+from ..extras.misc import infer_optim_dtype, is_env_enabled
 from ..extras.packages import is_mcore_adapter_available, is_ray_available
 from ..hparams import get_infer_args, get_ray_args, get_train_args, read_args
 from ..model import load_model, load_tokenizer
@@ -49,10 +49,50 @@ if TYPE_CHECKING:
 logger = logging.get_logger(__name__)
 
 
+def _get_sdp_backend_flags() -> dict[str, object]:
+    flags: dict[str, object] = {}
+    cuda_backends = getattr(torch.backends, "cuda", None)
+    if cuda_backends is None:
+        return flags
+
+    for name in ("flash", "mem_efficient", "math", "cudnn"):
+        fn = getattr(cuda_backends, f"{name}_sdp_enabled", None)
+        if callable(fn):
+            try:
+                flags[name] = fn()
+            except Exception as exc:
+                flags[name] = f"error: {exc}"
+
+    return flags
+
+
+def _apply_cudnn_sdp_override(model_args: "ModelArguments") -> None:
+    if not torch.cuda.is_available():
+        return
+
+    disable_cudnn_sdp = model_args.disable_cudnn_sdp or is_env_enabled("DISABLE_CUDNN_SDP")
+    if not disable_cudnn_sdp:
+        disable_cudnn_sdp = is_env_enabled("DISABLE_CUDNN_SDPA")
+
+    if disable_cudnn_sdp:
+        enable_fn = getattr(torch.backends.cuda, "enable_cudnn_sdp", None)
+        if callable(enable_fn):
+            enable_fn(False)
+            logger.info_rank0("Disabled cuDNN SDPA backend via torch.backends.cuda.enable_cudnn_sdp(False).")
+        else:
+            logger.info_rank0("Requested cuDNN SDPA disable, but torch.backends.cuda.enable_cudnn_sdp is missing.")
+
+    flags = _get_sdp_backend_flags()
+    if flags:
+        logger.info_rank0("SDPA backend flags: %s", flags)
+
+
 def _training_function(config: dict[str, Any]) -> None:
     args = config.get("args")
     callbacks: list[Any] = config.get("callbacks")
     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+
+    _apply_cudnn_sdp_override(model_args)
 
     callbacks.append(LogCallback())
     if finetuning_args.pissa_convert:

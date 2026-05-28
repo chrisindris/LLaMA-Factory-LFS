@@ -285,25 +285,24 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
             llamafactory-cli train ${YAML_FILE}
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
-    
-        # module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
-        # module load python/3.12 cuda/12.6 opencv/4.12.0
-        # module load arrow
-        module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow
 
-        # --- Either move the existing venv to SLURM, or build it. No forcing of CPU ADAM is fine, but we want the Qwen3.5 compatibility ---
-        if [[ -d "/scratch/indrisch/venv_llamafactory_cu132_qwen35/" ]]; then
-            echo "Copying venv to local storage..."
-            cp -a /scratch/indrisch/venv_llamafactory_cu132_qwen35/ ${SLURM_TMPDIR}/venv_llamafactory_cu132_qwen35/
-        else
-            echo "build from scratch"
-            export DS_BUILD_CPU_ADAM=0
-            export BUILD_UTILS=0
-            export DS_BUILD_OPS=0
-            VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu132_qwen35/"
-            VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
-            /scratch/indrisch/LLaMA-Factory/install_as_venv.sh TRILLIUM
-        fi
+        # Use node-local temp/cache dirs to avoid permission issues under ~/.local
+        export TMPDIR="${SLURM_TMPDIR:-/tmp}"
+        export XDG_DATA_HOME="${TMPDIR}/xdg-data"
+        export XDG_CACHE_HOME="${TMPDIR}/xdg-cache"
+        export VIRTUALENV_CACHE_DIR="${XDG_CACHE_HOME}/virtualenv"
+        export PIP_CACHE_DIR="${XDG_CACHE_HOME}/pip"
+        mkdir -p "${XDG_DATA_HOME}" "${VIRTUALENV_CACHE_DIR}" "${PIP_CACHE_DIR}"
+    
+        # --- Build the VENV ---
+        module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow # cu132 for updates, Qwen3.5 compatibility (through transformers)
+        echo "build from scratch" # from scratch on the compute node (no need to transfer the venv, all modules are available with compute canada's module system)
+        export DS_BUILD_CPU_ADAM=1 # we can build CPU ADAM for offloading
+        export BUILD_UTILS=1
+        export DS_BUILD_OPS=1
+        VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu132_qwen35/"
+        export VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
+        /scratch/indrisch/LLaMA-Factory/install_as_venv.sh TRILLIUM
         source ${SLURM_TMPDIR}/venv_llamafactory_cu132_qwen35/bin/activate
 
         export PYTHONUNBUFFERED=1

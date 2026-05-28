@@ -285,6 +285,14 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
+        # Use node-local temp/cache dirs to avoid permission issues under ~/.local
+        export TMPDIR="${SLURM_TMPDIR:-/tmp}"
+        export XDG_DATA_HOME="${TMPDIR}/xdg-data"
+        export XDG_CACHE_HOME="${TMPDIR}/xdg-cache"
+        export VIRTUALENV_CACHE_DIR="${XDG_CACHE_HOME}/virtualenv"
+        export PIP_CACHE_DIR="${XDG_CACHE_HOME}/pip"
+        mkdir -p "${XDG_DATA_HOME}" "${VIRTUALENV_CACHE_DIR}" "${PIP_CACHE_DIR}"
+
         # --- Build the VENV ---
         module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow # cu132 for updates, Qwen3.5 compatibility (through transformers)
         echo "build from scratch" # from scratch on the compute node (no need to transfer the venv, all modules are available with compute canada's module system)
