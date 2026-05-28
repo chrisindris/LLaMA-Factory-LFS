@@ -75,7 +75,23 @@ def run_sft(
 
     # Keyword arguments for `model.generate`
     gen_kwargs = generating_args.to_dict(obey_generation_config=True)
-    gen_kwargs["eos_token_id"] = [tokenizer.eos_token_id] + tokenizer.additional_special_tokens_ids
+    additional_special_tokens_ids = getattr(tokenizer, "additional_special_tokens_ids", None)
+    if additional_special_tokens_ids is None:
+        additional_special_tokens = getattr(tokenizer, "additional_special_tokens", None) or []
+        if additional_special_tokens:
+            additional_special_tokens_ids = tokenizer.convert_tokens_to_ids(additional_special_tokens)
+            if isinstance(additional_special_tokens_ids, int):
+                additional_special_tokens_ids = [additional_special_tokens_ids]
+        else:
+            additional_special_tokens_ids = []
+
+    if isinstance(additional_special_tokens_ids, int):
+        additional_special_tokens_ids = [additional_special_tokens_ids]
+
+    additional_special_tokens_ids = [
+        token_id for token_id in list(additional_special_tokens_ids) if token_id is not None
+    ]
+    gen_kwargs["eos_token_id"] = [tokenizer.eos_token_id] + additional_special_tokens_ids
     gen_kwargs["pad_token_id"] = tokenizer.pad_token_id
 
     # Initialize our Trainer

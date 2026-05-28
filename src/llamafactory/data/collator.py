@@ -16,6 +16,7 @@
 # limitations under the License.
 
 from dataclasses import dataclass
+import inspect
 from typing import TYPE_CHECKING, Any, Literal, Optional
 
 import numpy as np
@@ -105,6 +106,15 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
         else:
             self.get_rope_func = None
 
+        self._rope_index_requires_mm_token_type_ids = False
+        if self.get_rope_func is not None:
+            try:
+                self._rope_index_requires_mm_token_type_ids = (
+                    "mm_token_type_ids" in inspect.signature(self.get_rope_func).parameters
+                )
+            except (TypeError, ValueError):
+                self._rope_index_requires_mm_token_type_ids = False
+
     def __call__(self, features: list[dict[str, Any]]) -> dict[str, "torch.Tensor"]:
         batch_images, batch_videos, batch_audios = [], [], []
         batch_imglens, batch_vidlens, batch_audlens, batch_input_ids = [], [], [], []
@@ -189,6 +199,12 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
                 "video_grid_thw": mm_inputs.get("video_grid_thw"),
                 "attention_mask": (features["attention_mask"] >= 1).float(),
             }
+            if self._rope_index_requires_mm_token_type_ids:
+                mm_token_type_ids = features.get("token_type_ids")
+                if mm_token_type_ids is None:
+                    mm_token_type_ids = torch.zeros_like(features["input_ids"])
+
+                rope_index_kwargs["mm_token_type_ids"] = mm_token_type_ids
             if "second_per_grid_ts" in mm_inputs:  # for qwen2vl
                 rope_index_kwargs["second_per_grid_ts"] = mm_inputs.get("second_per_grid_ts")
             elif "video_second_per_grid" in mm_inputs:  # for qwen2.5 omni
@@ -217,6 +233,7 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
                 "qwen2_vl",
                 "qwen2_5_vl",
                 "qwen2_5_omni_thinker",
+                "qwen3_5",
                 "qwen3_omni_moe_thinker",
                 "qwen3_vl",
                 "qwen3_vl_moe",

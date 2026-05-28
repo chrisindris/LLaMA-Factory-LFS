@@ -28,11 +28,20 @@ logger = logging.get_logger(__name__)
 
 
 def configure_attn_implementation(config: "PretrainedConfig", model_args: "ModelArguments") -> None:
-    from transformers.utils import is_flash_attn_2_available
+    from transformers.utils import is_flash_attn_2_available, is_torch_sdpa_available
+
+    flash_attn_2_available = is_flash_attn_2_available()
+    sdpa_available = is_torch_sdpa_available()
+    logger.info_rank0(
+        "Attention backend request: %s | FlashAttention-2 available: %s | SDPA available: %s",
+        model_args.flash_attn,
+        flash_attn_2_available,
+        sdpa_available,
+    )
 
     if getattr(config, "model_type", None) == "gemma2":
         if model_args.flash_attn == AttentionFunction.AUTO or model_args.flash_attn == AttentionFunction.FA2:
-            if is_flash_attn_2_available():
+            if flash_attn_2_available:
                 if model_args.flash_attn != AttentionFunction.FA2:
                     logger.warning_rank0("Gemma 2 should use flash attention 2, change `flash_attn` to fa2.")
                     model_args.flash_attn = AttentionFunction.FA2
@@ -51,15 +60,13 @@ def configure_attn_implementation(config: "PretrainedConfig", model_args: "Model
         requested_attn_implementation = "eager"
 
     elif model_args.flash_attn == AttentionFunction.SDPA:
-        from transformers.utils import is_torch_sdpa_available
-
-        if not is_torch_sdpa_available():
+        if not sdpa_available:
             logger.warning_rank0("torch>=2.1.1 is required for SDPA attention.")
             return
 
         requested_attn_implementation = "sdpa"
     elif model_args.flash_attn == AttentionFunction.FA2:
-        if not is_flash_attn_2_available():
+        if not flash_attn_2_available:
             logger.warning_rank0("FlashAttention-2 is not installed.")
             return
 
@@ -81,6 +88,8 @@ def print_attn_implementation(config: "PretrainedConfig") -> None:
         attn_implementation = getattr(config, "attn_implementation", None)
     else:
         attn_implementation = getattr(config, "_attn_implementation", None)
+
+    logger.info_rank0("Resolved attention implementation in config: %s", attn_implementation)
 
     if attn_implementation == "flash_attention_2":
         logger.info_rank0("Using FlashAttention-2 for faster training and inference.")

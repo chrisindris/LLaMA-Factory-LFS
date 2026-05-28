@@ -6,6 +6,8 @@
 # Misc large folders
 None/
 apptainer/
+ENV/
+*merged/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

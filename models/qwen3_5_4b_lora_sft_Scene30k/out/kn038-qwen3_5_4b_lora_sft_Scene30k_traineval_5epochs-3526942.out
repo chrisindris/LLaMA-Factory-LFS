@@ -1,0 +1,2435 @@
+SLURM_JOB_NODELIST: kn[038-040]
+HEAD_NODE: kn038
+MASTER_ADDR: kn038
+MASTER_PORT: 29500
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+HF_HOME: /scratch/indrisch/huggingface/hub
+BEST_GPU: h100
+BEST_GPU: h100
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TORCH_EXTENSIONS_DIR: None
+TORCH_EXTENSIONS_DIR: None
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+BEST_GPU: h100
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126_qwen35/
+RUNNING_MODE: VENV
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126_qwen35/
+RUNNING_MODE: VENV
+TORCH_EXTENSIONS_DIR: None
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126_qwen35/
+RUNNING_MODE: VENV
+/project/aip-wangcs/indrisch/LLaMA-Factory /project/aip-wangcs/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+SLURM_NNODES: 3
+HEAD_NODE: kn038
+SLURM_NODEID: 1
+NNODES: 3
+NODE_RANK: 1
+MASTER_ADDR: kn038
+MASTER_PORT: 29500
+NPROC_PER_NODE: 4
+/project/aip-wangcs/indrisch/LLaMA-Factory /project/aip-wangcs/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+SLURM_NNODES: 3
+HEAD_NODE: kn038
+SLURM_NODEID: 0
+NNODES: 3
+NODE_RANK: 0
+MASTER_ADDR: kn038
+MASTER_PORT: 29500
+NPROC_PER_NODE: 4
+/project/aip-wangcs/indrisch/LLaMA-Factory /project/aip-wangcs/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+SLURM_NNODES: 3
+HEAD_NODE: kn038
+SLURM_NODEID: 2
+NNODES: 3
+NODE_RANK: 2
+MASTER_ADDR: kn038
+MASTER_PORT: 29500
+NPROC_PER_NODE: 4
+[INFO|2026-05-12 03:48:29] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: kn038:29500
+[INFO|2026-05-12 03:48:29] llamafactory.launcher:143 >> Multi-node training enabled: num nodes: 3, node rank: 0
+[INFO|2026-05-12 03:48:29] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: kn038:29500
+[INFO|2026-05-12 03:48:29] llamafactory.launcher:143 >> Multi-node training enabled: num nodes: 3, node rank: 1
+[INFO|2026-05-12 03:48:29] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: kn038:29500
+[INFO|2026-05-12 03:48:29] llamafactory.launcher:143 >> Multi-node training enabled: num nodes: 3, node rank: 2
+W0512 03:48:31.367000 1216773 torch/distributed/run.py:851] 
+W0512 03:48:31.367000 1216773 torch/distributed/run.py:851] *****************************************
+W0512 03:48:31.367000 1216773 torch/distributed/run.py:851] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0512 03:48:31.367000 1216773 torch/distributed/run.py:851] *****************************************
+W0512 03:48:31.470000 587905 torch/distributed/run.py:851] 
+W0512 03:48:31.470000 587905 torch/distributed/run.py:851] *****************************************
+W0512 03:48:31.470000 587905 torch/distributed/run.py:851] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0512 03:48:31.470000 587905 torch/distributed/run.py:851] *****************************************
+W0512 03:48:31.661000 847363 torch/distributed/run.py:851] 
+W0512 03:48:31.661000 847363 torch/distributed/run.py:851] *****************************************
+W0512 03:48:31.661000 847363 torch/distributed/run.py:851] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0512 03:48:31.661000 847363 torch/distributed/run.py:851] *****************************************
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[WARNING|2026-05-12 03:48:40] llamafactory.extras.misc:154 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[WARNING|2026-05-12 03:48:40] llamafactory.extras.misc:154 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode[INFO] Running in WANDB offline mode
+
+[INFO] Running in WANDB offline mode
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[WARNING|2026-05-12 03:48:40] llamafactory.extras.misc:154 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[2026-05-12 03:48:42,233] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-05-12 03:48:42,233] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-05-12 03:48:42,233] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-05-12 03:48:42,233] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-05-12 03:48:42,272] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-05-12 03:48:42,272] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-05-12 03:48:42,272] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-05-12 03:48:42,272] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+df: /tmp/.triton_cachedf: /tmp/.triton_cache: No such file or directory
+: No such file or directory
+df: /tmp/.triton_cachedf: /tmp/.triton_cache: No such file or directory
+: No such file or directory
+df: /tmp/.triton_cache: No such file or directory
+df: df: /tmp/.triton_cache/tmp/.triton_cache: No such file or directory: No such file or directory
+
+[2026-05-12 03:48:42,440] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-05-12 03:48:42,440] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-05-12 03:48:42,440] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-05-12 03:48:42,440] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+df: df: /tmp/.triton_cache/tmp/.triton_cachedf: df: /tmp/.triton_cache/tmp/.triton_cache: No such file or directory
+: No such file or directory
+: No such file or directory
+: No such file or directory
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-05-12 03:48:45,352] [INFO] [comm.py:658:init_distributed] cdb=None
+[W512 03:48:45.535433624 Utils.hpp:137] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W512 03:48:45.535454041 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-05-12 03:48:45,442] [INFO] [comm.py:658:init_distributed] cdb=None
+[W512 03:48:45.625554431 Utils.hpp:137] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W512 03:48:45.625582036 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-05-12 03:48:45,503] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-05-12 03:48:45,503] [INFO] [comm.py:658:init_distributed] cdb=None
+[W512 03:48:45.647613984 Utils.hpp:137] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[W512 03:48:45.647626118 Utils.hpp:137] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W512 03:48:45.647643154 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[W512 03:48:45.647649852 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[2026-05-12 03:48:45,509] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-05-12 03:48:45,509] [INFO] [comm.py:689:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[W512 03:48:45.653399038 Utils.hpp:137] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W512 03:48:45.653424530 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-05-12 03:48:45,523] [INFO] [comm.py:658:init_distributed] cdb=None
+[W512 03:48:45.667927326 Utils.hpp:137] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W512 03:48:45.667950920 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-05-12 03:48:45,540] [INFO] [comm.py:658:init_distributed] cdb=None
+[W512 03:48:45.722745516 Utils.hpp:137] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W512 03:48:45.722764959 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-05-12 03:48:45,576] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-05-12 03:48:45,577] [INFO] [comm.py:658:init_distributed] cdb=None
+[W512 03:48:45.263333083 Utils.hpp:137] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W512 03:48:45.263356442 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[W512 03:48:45.263352292 Utils.hpp:137] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W512 03:48:45.263379037 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-05-12 03:48:45,690] [INFO] [comm.py:658:init_distributed] cdb=None
+[W512 03:48:45.873701891 Utils.hpp:137] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W512 03:48:45.873728610 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-05-12 03:48:45,733] [INFO] [comm.py:658:init_distributed] cdb=None
+[W512 03:48:45.382645892 Utils.hpp:137] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W512 03:48:45.382670938 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[INFO|2026-05-12 03:48:45] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2026-05-12 03:48:45] llamafactory.hparams.parser:529 >> Process rank: 8, world size: 12, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-05-12 03:48:45] llamafactory.hparams.parser:529 >> Process rank: 11, world size: 12, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+[INFO|hub.py:364] 2026-05-12 03:48:45,763 >> Offline mode: forcing local_files_only=True
+[INFO|configuration_utils.py:778] 2026-05-12 03:48:45,767 >> loading configuration file config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/config.json
+[INFO|2026-05-12 03:48:45] llamafactory.hparams.parser:529 >> Process rank: 10, world size: 12, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[INFO|configuration_utils.py:854] 2026-05-12 03:48:45,795 >> Model config Qwen3_5Config {
+  "architectures": [
+    "Qwen3_5ForConditionalGeneration"
+  ],
+  "image_token_id": 248056,
+  "model_type": "qwen3_5",
+  "text_config": {
+    "attention_bias": false,
+    "attention_dropout": 0.0,
+    "attn_output_gate": true,
+    "bos_token_id": null,
+    "dtype": "bfloat16",
+    "eos_token_id": 248044,
+    "full_attention_interval": 4,
+    "head_dim": 256,
+    "hidden_act": "silu",
+    "hidden_size": 2560,
+    "initializer_range": 0.02,
+    "intermediate_size": 9216,
+    "layer_types": [
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention"
+    ],
+    "linear_conv_kernel_dim": 4,
+    "linear_key_head_dim": 128,
+    "linear_num_key_heads": 16,
+    "linear_num_value_heads": 32,
+    "linear_value_head_dim": 128,
+    "mamba_ssm_dtype": "float32",
+    "max_position_embeddings": 262144,
+    "mlp_only_layers": [],
+    "model_type": "qwen3_5_text",
+    "mtp_num_hidden_layers": 1,
+    "mtp_use_dedicated_embeddings": false,
+    "num_attention_heads": 16,
+    "num_hidden_layers": 32,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "partial_rotary_factor": 0.25,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_interleaved": true,
+      "mrope_section": [
+        11,
+        11,
+        10
+      ],
+      "partial_rotary_factor": 0.25,
+      "rope_theta": 10000000,
+      "rope_type": "default"
+    },
+    "tie_word_embeddings": true,
+    "use_cache": true,
+    "vocab_size": 248320
+  },
+  "tie_word_embeddings": true,
+  "transformers_version": "5.7.0",
+  "video_token_id": 248057,
+  "vision_config": {
+    "deepstack_visual_indexes": [],
+    "depth": 24,
+    "hidden_act": "gelu_pytorch_tanh",
+    "hidden_size": 1024,
+    "in_channels": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 4096,
+    "model_type": "qwen3_5_vision",
+    "num_heads": 16,
+    "num_position_embeddings": 2304,
+    "out_hidden_size": 2560,
+    "patch_size": 16,
+    "spatial_merge_size": 2,
+    "temporal_patch_size": 2
+  },
+  "vision_end_token_id": 248054,
+  "vision_start_token_id": 248053
+}
+
+[INFO|hub.py:364] 2026-05-12 03:48:45,795 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1595] 2026-05-12 03:48:45,800 >> Offline mode: forcing local_files_only=True
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-05-12 03:48:45,828] [INFO] [comm.py:658:init_distributed] cdb=None
+[W512 03:48:45.477590945 Utils.hpp:137] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W512 03:48:45.477614255 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[INFO|2026-05-12 03:48:45] llamafactory.hparams.parser:529 >> Process rank: 9, world size: 12, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-05-12 03:48:45] llamafactory.hparams.parser:529 >> Process rank: 3, world size: 12, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-05-12 03:48:45] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2026-05-12 03:48:45] llamafactory.hparams.parser:529 >> Process rank: 0, world size: 12, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-05-12 03:48:45] llamafactory.hparams.parser:529 >> Process rank: 1, world size: 12, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[INFO|hub.py:364] 2026-05-12 03:48:45,911 >> Offline mode: forcing local_files_only=True
+[INFO|2026-05-12 03:48:45] llamafactory.hparams.parser:529 >> Process rank: 2, world size: 12, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[INFO|configuration_utils.py:778] 2026-05-12 03:48:45,912 >> loading configuration file config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/config.json
+[INFO|configuration_utils.py:854] 2026-05-12 03:48:45,941 >> Model config Qwen3_5Config {
+  "architectures": [
+    "Qwen3_5ForConditionalGeneration"
+  ],
+  "image_token_id": 248056,
+  "model_type": "qwen3_5",
+  "text_config": {
+    "attention_bias": false,
+    "attention_dropout": 0.0,
+    "attn_output_gate": true,
+    "bos_token_id": null,
+    "dtype": "bfloat16",
+    "eos_token_id": 248044,
+    "full_attention_interval": 4,
+    "head_dim": 256,
+    "hidden_act": "silu",
+    "hidden_size": 2560,
+    "initializer_range": 0.02,
+    "intermediate_size": 9216,
+    "layer_types": [
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention"
+    ],
+    "linear_conv_kernel_dim": 4,
+    "linear_key_head_dim": 128,
+    "linear_num_key_heads": 16,
+    "linear_num_value_heads": 32,
+    "linear_value_head_dim": 128,
+    "mamba_ssm_dtype": "float32",
+    "max_position_embeddings": 262144,
+    "mlp_only_layers": [],
+    "model_type": "qwen3_5_text",
+    "mtp_num_hidden_layers": 1,
+    "mtp_use_dedicated_embeddings": false,
+    "num_attention_heads": 16,
+    "num_hidden_layers": 32,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "partial_rotary_factor": 0.25,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_interleaved": true,
+      "mrope_section": [
+        11,
+        11,
+        10
+      ],
+      "partial_rotary_factor": 0.25,
+      "rope_theta": 10000000,
+      "rope_type": "default"
+    },
+    "tie_word_embeddings": true,
+    "use_cache": true,
+    "vocab_size": 248320
+  },
+  "tie_word_embeddings": true,
+  "transformers_version": "5.7.0",
+  "video_token_id": 248057,
+  "vision_config": {
+    "deepstack_visual_indexes": [],
+    "depth": 24,
+    "hidden_act": "gelu_pytorch_tanh",
+    "hidden_size": 1024,
+    "in_channels": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 4096,
+    "model_type": "qwen3_5_vision",
+    "num_heads": 16,
+    "num_position_embeddings": 2304,
+    "out_hidden_size": 2560,
+    "patch_size": 16,
+    "spatial_merge_size": 2,
+    "temporal_patch_size": 2
+  },
+  "vision_end_token_id": 248054,
+  "vision_start_token_id": 248053
+}
+
+[INFO|hub.py:364] 2026-05-12 03:48:45,941 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1595] 2026-05-12 03:48:45,945 >> Offline mode: forcing local_files_only=True
+[INFO|2026-05-12 03:48:45] llamafactory.hparams.parser:529 >> Process rank: 7, world size: 12, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-05-12 03:48:45] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2026-05-12 03:48:45] llamafactory.hparams.parser:529 >> Process rank: 4, world size: 12, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|hub.py:364] 2026-05-12 03:48:45,985 >> Offline mode: forcing local_files_only=True
+[INFO|configuration_utils.py:778] 2026-05-12 03:48:45,987 >> loading configuration file config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/config.json
+[INFO|2026-05-12 03:48:46] llamafactory.hparams.parser:529 >> Process rank: 5, world size: 12, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[INFO|configuration_utils.py:854] 2026-05-12 03:48:46,024 >> Model config Qwen3_5Config {
+  "architectures": [
+    "Qwen3_5ForConditionalGeneration"
+  ],
+  "image_token_id": 248056,
+  "model_type": "qwen3_5",
+  "text_config": {
+    "attention_bias": false,
+    "attention_dropout": 0.0,
+    "attn_output_gate": true,
+    "bos_token_id": null,
+    "dtype": "bfloat16",
+    "eos_token_id": 248044,
+    "full_attention_interval": 4,
+    "head_dim": 256,
+    "hidden_act": "silu",
+    "hidden_size": 2560,
+    "initializer_range": 0.02,
+    "intermediate_size": 9216,
+    "layer_types": [
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention"
+    ],
+    "linear_conv_kernel_dim": 4,
+    "linear_key_head_dim": 128,
+    "linear_num_key_heads": 16,
+    "linear_num_value_heads": 32,
+    "linear_value_head_dim": 128,
+    "mamba_ssm_dtype": "float32",
+    "max_position_embeddings": 262144,
+    "mlp_only_layers": [],
+    "model_type": "qwen3_5_text",
+    "mtp_num_hidden_layers": 1,
+    "mtp_use_dedicated_embeddings": false,
+    "num_attention_heads": 16,
+    "num_hidden_layers": 32,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "partial_rotary_factor": 0.25,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_interleaved": true,
+      "mrope_section": [
+        11,
+        11,
+        10
+      ],
+      "partial_rotary_factor": 0.25,
+      "rope_theta": 10000000,
+      "rope_type": "default"
+    },
+    "tie_word_embeddings": true,
+    "use_cache": true,
+    "vocab_size": 248320
+  },
+  "tie_word_embeddings": true,
+  "transformers_version": "5.7.0",
+  "video_token_id": 248057,
+  "vision_config": {
+    "deepstack_visual_indexes": [],
+    "depth": 24,
+    "hidden_act": "gelu_pytorch_tanh",
+    "hidden_size": 1024,
+    "in_channels": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 4096,
+    "model_type": "qwen3_5_vision",
+    "num_heads": 16,
+    "num_position_embeddings": 2304,
+    "out_hidden_size": 2560,
+    "patch_size": 16,
+    "spatial_merge_size": 2,
+    "temporal_patch_size": 2
+  },
+  "vision_end_token_id": 248054,
+  "vision_start_token_id": 248053
+}
+
+[INFO|hub.py:364] 2026-05-12 03:48:46,024 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1595] 2026-05-12 03:48:46,030 >> Offline mode: forcing local_files_only=True
+[INFO|2026-05-12 03:48:46] llamafactory.hparams.parser:529 >> Process rank: 6, world size: 12, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[INFO|hub.py:364] 2026-05-12 03:48:46,561 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:364] 2026-05-12 03:48:46,562 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:268] 2026-05-12 03:48:46,563 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-05-12 03:48:46,565 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/preprocessor_config.json
+[INFO|processing_utils.py:950] 2026-05-12 03:48:46,572 >> Offline mode: forcing local_files_only=True
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|processing_utils.py:1124] 2026-05-12 03:48:46,576 >> loading configuration file processor_config.json from cache at None
+[INFO|image_processing_base.py:268] 2026-05-12 03:48:46,576 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-05-12 03:48:46,578 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/preprocessor_config.json
+[WARNING|logging.py:340] 2026-05-12 03:48:46,578 >> The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|image_processing_base.py:268] 2026-05-12 03:48:46,591 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-05-12 03:48:46,593 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/preprocessor_config.json
+[INFO|image_processing_base.py:385] 2026-05-12 03:48:46,594 >> Image processor Qwen2VLImageProcessorPil {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "merge_size": 2,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 16777216,
+    "shortest_edge": 65536
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|hub.py:364] 2026-05-12 03:48:46,594 >> Offline mode: forcing local_files_only=True
+[INFO|configuration_utils.py:778] 2026-05-12 03:48:46,595 >> loading configuration file config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/config.json
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|configuration_utils.py:854] 2026-05-12 03:48:46,609 >> Model config Qwen3_5Config {
+  "architectures": [
+    "Qwen3_5ForConditionalGeneration"
+  ],
+  "image_token_id": 248056,
+  "model_type": "qwen3_5",
+  "text_config": {
+    "attention_bias": false,
+    "attention_dropout": 0.0,
+    "attn_output_gate": true,
+    "bos_token_id": null,
+    "dtype": "bfloat16",
+    "eos_token_id": 248044,
+    "full_attention_interval": 4,
+    "head_dim": 256,
+    "hidden_act": "silu",
+    "hidden_size": 2560,
+    "initializer_range": 0.02,
+    "intermediate_size": 9216,
+    "layer_types": [
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention"
+    ],
+    "linear_conv_kernel_dim": 4,
+    "linear_key_head_dim": 128,
+    "linear_num_key_heads": 16,
+    "linear_num_value_heads": 32,
+    "linear_value_head_dim": 128,
+    "mamba_ssm_dtype": "float32",
+    "max_position_embeddings": 262144,
+    "mlp_only_layers": [],
+    "model_type": "qwen3_5_text",
+    "mtp_num_hidden_layers": 1,
+    "mtp_use_dedicated_embeddings": false,
+    "num_attention_heads": 16,
+    "num_hidden_layers": 32,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "partial_rotary_factor": 0.25,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_interleaved": true,
+      "mrope_section": [
+        11,
+        11,
+        10
+      ],
+      "partial_rotary_factor": 0.25,
+      "rope_theta": 10000000,
+      "rope_type": "default"
+    },
+    "tie_word_embeddings": true,
+    "use_cache": true,
+    "vocab_size": 248320
+  },
+  "tie_word_embeddings": true,
+  "transformers_version": "5.7.0",
+  "video_token_id": 248057,
+  "vision_config": {
+    "deepstack_visual_indexes": [],
+    "depth": 24,
+    "hidden_act": "gelu_pytorch_tanh",
+    "hidden_size": 1024,
+    "in_channels": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 4096,
+    "model_type": "qwen3_5_vision",
+    "num_heads": 16,
+    "num_position_embeddings": 2304,
+    "out_hidden_size": 2560,
+    "patch_size": 16,
+    "spatial_merge_size": 2,
+    "temporal_patch_size": 2
+  },
+  "vision_end_token_id": 248054,
+  "vision_start_token_id": 248053
+}
+
+[INFO|hub.py:364] 2026-05-12 03:48:46,609 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1595] 2026-05-12 03:48:46,610 >> Offline mode: forcing local_files_only=True
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|hub.py:364] 2026-05-12 03:48:46,706 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:364] 2026-05-12 03:48:46,707 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:268] 2026-05-12 03:48:46,707 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-05-12 03:48:46,709 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/preprocessor_config.json
+[INFO|processing_utils.py:950] 2026-05-12 03:48:46,717 >> Offline mode: forcing local_files_only=True
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|processing_utils.py:1124] 2026-05-12 03:48:46,722 >> loading configuration file processor_config.json from cache at None
+[INFO|image_processing_base.py:268] 2026-05-12 03:48:46,722 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-05-12 03:48:46,723 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/preprocessor_config.json
+[WARNING|logging.py:340] 2026-05-12 03:48:46,724 >> The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|image_processing_base.py:268] 2026-05-12 03:48:46,738 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-05-12 03:48:46,740 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/preprocessor_config.json
+[INFO|image_processing_base.py:385] 2026-05-12 03:48:46,741 >> Image processor Qwen2VLImageProcessorPil {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "merge_size": 2,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 16777216,
+    "shortest_edge": 65536
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|hub.py:364] 2026-05-12 03:48:46,741 >> Offline mode: forcing local_files_only=True
+[INFO|configuration_utils.py:778] 2026-05-12 03:48:46,742 >> loading configuration file config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/config.json
+[INFO|configuration_utils.py:854] 2026-05-12 03:48:46,756 >> Model config Qwen3_5Config {
+  "architectures": [
+    "Qwen3_5ForConditionalGeneration"
+  ],
+  "image_token_id": 248056,
+  "model_type": "qwen3_5",
+  "text_config": {
+    "attention_bias": false,
+    "attention_dropout": 0.0,
+    "attn_output_gate": true,
+    "bos_token_id": null,
+    "dtype": "bfloat16",
+    "eos_token_id": 248044,
+    "full_attention_interval": 4,
+    "head_dim": 256,
+    "hidden_act": "silu",
+    "hidden_size": 2560,
+    "initializer_range": 0.02,
+    "intermediate_size": 9216,
+    "layer_types": [
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention"
+    ],
+    "linear_conv_kernel_dim": 4,
+    "linear_key_head_dim": 128,
+    "linear_num_key_heads": 16,
+    "linear_num_value_heads": 32,
+    "linear_value_head_dim": 128,
+    "mamba_ssm_dtype": "float32",
+    "max_position_embeddings": 262144,
+    "mlp_only_layers": [],
+    "model_type": "qwen3_5_text",
+    "mtp_num_hidden_layers": 1,
+    "mtp_use_dedicated_embeddings": false,
+    "num_attention_heads": 16,
+    "num_hidden_layers": 32,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "partial_rotary_factor": 0.25,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_interleaved": true,
+      "mrope_section": [
+        11,
+        11,
+        10
+      ],
+      "partial_rotary_factor": 0.25,
+      "rope_theta": 10000000,
+      "rope_type": "default"
+    },
+    "tie_word_embeddings": true,
+    "use_cache": true,
+    "vocab_size": 248320
+  },
+  "tie_word_embeddings": true,
+  "transformers_version": "5.7.0",
+  "video_token_id": 248057,
+  "vision_config": {
+    "deepstack_visual_indexes": [],
+    "depth": 24,
+    "hidden_act": "gelu_pytorch_tanh",
+    "hidden_size": 1024,
+    "in_channels": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 4096,
+    "model_type": "qwen3_5_vision",
+    "num_heads": 16,
+    "num_position_embeddings": 2304,
+    "out_hidden_size": 2560,
+    "patch_size": 16,
+    "spatial_merge_size": 2,
+    "temporal_patch_size": 2
+  },
+  "vision_end_token_id": 248054,
+  "vision_start_token_id": 248053
+}
+
+[INFO|hub.py:364] 2026-05-12 03:48:46,756 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1595] 2026-05-12 03:48:46,757 >> Offline mode: forcing local_files_only=True
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|hub.py:364] 2026-05-12 03:48:46,790 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:364] 2026-05-12 03:48:46,790 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:268] 2026-05-12 03:48:46,791 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-05-12 03:48:46,793 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/preprocessor_config.json
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|processing_utils.py:950] 2026-05-12 03:48:46,800 >> Offline mode: forcing local_files_only=True
+[INFO|processing_utils.py:1124] 2026-05-12 03:48:46,804 >> loading configuration file processor_config.json from cache at None
+[INFO|image_processing_base.py:268] 2026-05-12 03:48:46,804 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-05-12 03:48:46,806 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/preprocessor_config.json
+[WARNING|logging.py:340] 2026-05-12 03:48:46,807 >> The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|image_processing_base.py:268] 2026-05-12 03:48:46,820 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-05-12 03:48:46,822 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/preprocessor_config.json
+[INFO|image_processing_base.py:385] 2026-05-12 03:48:46,822 >> Image processor Qwen2VLImageProcessorPil {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "merge_size": 2,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 16777216,
+    "shortest_edge": 65536
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|hub.py:364] 2026-05-12 03:48:46,822 >> Offline mode: forcing local_files_only=True
+[INFO|configuration_utils.py:778] 2026-05-12 03:48:46,823 >> loading configuration file config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/config.json
+[INFO|configuration_utils.py:854] 2026-05-12 03:48:46,837 >> Model config Qwen3_5Config {
+  "architectures": [
+    "Qwen3_5ForConditionalGeneration"
+  ],
+  "image_token_id": 248056,
+  "model_type": "qwen3_5",
+  "text_config": {
+    "attention_bias": false,
+    "attention_dropout": 0.0,
+    "attn_output_gate": true,
+    "bos_token_id": null,
+    "dtype": "bfloat16",
+    "eos_token_id": 248044,
+    "full_attention_interval": 4,
+    "head_dim": 256,
+    "hidden_act": "silu",
+    "hidden_size": 2560,
+    "initializer_range": 0.02,
+    "intermediate_size": 9216,
+    "layer_types": [
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention"
+    ],
+    "linear_conv_kernel_dim": 4,
+    "linear_key_head_dim": 128,
+    "linear_num_key_heads": 16,
+    "linear_num_value_heads": 32,
+    "linear_value_head_dim": 128,
+    "mamba_ssm_dtype": "float32",
+    "max_position_embeddings": 262144,
+    "mlp_only_layers": [],
+    "model_type": "qwen3_5_text",
+    "mtp_num_hidden_layers": 1,
+    "mtp_use_dedicated_embeddings": false,
+    "num_attention_heads": 16,
+    "num_hidden_layers": 32,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "partial_rotary_factor": 0.25,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_interleaved": true,
+      "mrope_section": [
+        11,
+        11,
+        10
+      ],
+      "partial_rotary_factor": 0.25,
+      "rope_theta": 10000000,
+      "rope_type": "default"
+    },
+    "tie_word_embeddings": true,
+    "use_cache": true,
+    "vocab_size": 248320
+  },
+  "tie_word_embeddings": true,
+  "transformers_version": "5.7.0",
+  "video_token_id": 248057,
+  "vision_config": {
+    "deepstack_visual_indexes": [],
+    "depth": 24,
+    "hidden_act": "gelu_pytorch_tanh",
+    "hidden_size": 1024,
+    "in_channels": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 4096,
+    "model_type": "qwen3_5_vision",
+    "num_heads": 16,
+    "num_position_embeddings": 2304,
+    "out_hidden_size": 2560,
+    "patch_size": 16,
+    "spatial_merge_size": 2,
+    "temporal_patch_size": 2
+  },
+  "vision_end_token_id": 248054,
+  "vision_start_token_id": 248053
+}
+
+[INFO|hub.py:364] 2026-05-12 03:48:46,837 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1595] 2026-05-12 03:48:46,838 >> Offline mode: forcing local_files_only=True
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|video_processing_utils.py:600] 2026-05-12 03:48:47,303 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:686] 2026-05-12 03:48:47,306 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/video_preprocessor_config.json
+[INFO|video_processing_utils.py:600] 2026-05-12 03:48:47,307 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:686] 2026-05-12 03:48:47,310 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/video_preprocessor_config.json
+[INFO|video_processing_utils.py:727] 2026-05-12 03:48:47,310 >> Video processor Qwen3VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": true,
+  "fps": 2,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 25165824,
+    "shortest_edge": 4096
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen3VLVideoProcessor"
+}
+
+[INFO|processing_utils.py:1199] 2026-05-12 03:48:47,311 >> Processor Qwen3VLProcessor:
+- image_processor: Qwen2VLImageProcessorPil {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "merge_size": 2,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 16777216,
+    "shortest_edge": 65536
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2Tokenizer(name_or_path='Qwen/Qwen3.5-4B', vocab_size=248044, model_max_length=262144, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'audio_bos_token': '<|audio_start|>', 'audio_eos_token': '<|audio_end|>', 'audio_token': '<|audio_pad|>', 'image_token': '<|image_pad|>', 'video_token': '<|video_pad|>', 'vision_bos_token': '<|vision_start|>', 'vision_eos_token': '<|vision_end|>'}, added_tokens_decoder={
+	248044: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248045: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248046: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248047: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248048: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248049: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248050: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248051: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248052: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248053: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248054: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248055: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248056: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248057: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248058: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248059: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248060: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248061: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248062: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248063: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248064: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248065: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248066: AddedToken("<tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248067: AddedToken("</tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248068: AddedToken("<think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248069: AddedToken("</think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248070: AddedToken("<|audio_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248071: AddedToken("<|audio_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248072: AddedToken("<tts_pad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248073: AddedToken("<tts_text_bos>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248074: AddedToken("<tts_text_eod>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248075: AddedToken("<tts_text_bos_single>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248076: AddedToken("<|audio_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+})
+- video_processor: Qwen3VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": true,
+  "fps": 2,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 25165824,
+    "shortest_edge": 4096
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen3VLVideoProcessor"
+}
+
+
+{
+  "image_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "image_mean": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "image_processor_type": "Qwen2VLImageProcessor",
+    "image_std": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "merge_size": 2,
+    "patch_size": 16,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "size": {
+      "longest_edge": 16777216,
+      "shortest_edge": 65536
+    },
+    "temporal_patch_size": 2
+  },
+  "processor_class": "Qwen3VLProcessor",
+  "video_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "do_sample_frames": true,
+    "fps": 2,
+    "image_mean": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "image_std": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "max_frames": 768,
+    "merge_size": 2,
+    "min_frames": 4,
+    "patch_size": 16,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "return_metadata": false,
+    "size": {
+      "longest_edge": 25165824,
+      "shortest_edge": 4096
+    },
+    "temporal_patch_size": 2,
+    "video_processor_type": "Qwen3VLVideoProcessor"
+  }
+}
+
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen3_5
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen3_5
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[INFO|2026-05-12 03:48:47] llamafactory.data.loader:143 >> Loading dataset /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen3_5
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen3_5
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[INFO|video_processing_utils.py:600] 2026-05-12 03:48:47,461 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:686] 2026-05-12 03:48:47,464 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/video_preprocessor_config.json
+[INFO|video_processing_utils.py:600] 2026-05-12 03:48:47,465 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:686] 2026-05-12 03:48:47,467 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/video_preprocessor_config.json
+[INFO|video_processing_utils.py:727] 2026-05-12 03:48:47,468 >> Video processor Qwen3VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": true,
+  "fps": 2,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 25165824,
+    "shortest_edge": 4096
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen3VLVideoProcessor"
+}
+
+[INFO|processing_utils.py:1199] 2026-05-12 03:48:47,469 >> Processor Qwen3VLProcessor:
+- image_processor: Qwen2VLImageProcessorPil {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "merge_size": 2,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 16777216,
+    "shortest_edge": 65536
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2Tokenizer(name_or_path='Qwen/Qwen3.5-4B', vocab_size=248044, model_max_length=262144, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'audio_bos_token': '<|audio_start|>', 'audio_eos_token': '<|audio_end|>', 'audio_token': '<|audio_pad|>', 'image_token': '<|image_pad|>', 'video_token': '<|video_pad|>', 'vision_bos_token': '<|vision_start|>', 'vision_eos_token': '<|vision_end|>'}, added_tokens_decoder={
+	248044: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248045: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248046: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248047: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248048: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248049: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248050: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248051: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248052: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248053: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248054: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248055: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248056: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248057: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248058: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248059: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248060: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248061: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248062: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248063: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248064: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248065: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248066: AddedToken("<tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248067: AddedToken("</tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248068: AddedToken("<think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248069: AddedToken("</think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248070: AddedToken("<|audio_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248071: AddedToken("<|audio_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248072: AddedToken("<tts_pad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248073: AddedToken("<tts_text_bos>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248074: AddedToken("<tts_text_eod>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248075: AddedToken("<tts_text_bos_single>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248076: AddedToken("<|audio_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+})
+- video_processor: Qwen3VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": true,
+  "fps": 2,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 25165824,
+    "shortest_edge": 4096
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen3VLVideoProcessor"
+}
+
+
+{
+  "image_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "image_mean": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "image_processor_type": "Qwen2VLImageProcessor",
+    "image_std": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "merge_size": 2,
+    "patch_size": 16,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "size": {
+      "longest_edge": 16777216,
+      "shortest_edge": 65536
+    },
+    "temporal_patch_size": 2
+  },
+  "processor_class": "Qwen3VLProcessor",
+  "video_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "do_sample_frames": true,
+    "fps": 2,
+    "image_mean": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "image_std": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "max_frames": 768,
+    "merge_size": 2,
+    "min_frames": 4,
+    "patch_size": 16,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "return_metadata": false,
+    "size": {
+      "longest_edge": 25165824,
+      "shortest_edge": 4096
+    },
+    "temporal_patch_size": 2,
+    "video_processor_type": "Qwen3VLVideoProcessor"
+  }
+}
+
+[rank8]:[W512 03:48:47.683209279 ProcessGroupNCCL.cpp:5188] Guessing device ID based on global rank. This can cause a hang if rank to GPU mapping is heterogeneous. You can specify device_id in init_process_group()
+[INFO|video_processing_utils.py:600] 2026-05-12 03:48:47,532 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:686] 2026-05-12 03:48:47,534 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/video_preprocessor_config.json
+[INFO|video_processing_utils.py:600] 2026-05-12 03:48:47,535 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:686] 2026-05-12 03:48:47,538 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen3.5-4B/snapshots/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a/video_preprocessor_config.json
+[INFO|video_processing_utils.py:727] 2026-05-12 03:48:47,538 >> Video processor Qwen3VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": true,
+  "fps": 2,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 25165824,
+    "shortest_edge": 4096
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen3VLVideoProcessor"
+}
+
+[INFO|processing_utils.py:1199] 2026-05-12 03:48:47,540 >> Processor Qwen3VLProcessor:
+- image_processor: Qwen2VLImageProcessorPil {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "merge_size": 2,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 16777216,
+    "shortest_edge": 65536
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2Tokenizer(name_or_path='Qwen/Qwen3.5-4B', vocab_size=248044, model_max_length=262144, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'audio_bos_token': '<|audio_start|>', 'audio_eos_token': '<|audio_end|>', 'audio_token': '<|audio_pad|>', 'image_token': '<|image_pad|>', 'video_token': '<|video_pad|>', 'vision_bos_token': '<|vision_start|>', 'vision_eos_token': '<|vision_end|>'}, added_tokens_decoder={
+	248044: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248045: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248046: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248047: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248048: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248049: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248050: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248051: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248052: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248053: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248054: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248055: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248056: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248057: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248058: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248059: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248060: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248061: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248062: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248063: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248064: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248065: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248066: AddedToken("<tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248067: AddedToken("</tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248068: AddedToken("<think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248069: AddedToken("</think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248070: AddedToken("<|audio_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248071: AddedToken("<|audio_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248072: AddedToken("<tts_pad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248073: AddedToken("<tts_text_bos>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248074: AddedToken("<tts_text_eod>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248075: AddedToken("<tts_text_bos_single>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248076: AddedToken("<|audio_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+})
+- video_processor: Qwen3VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": true,
+  "fps": 2,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 25165824,
+    "shortest_edge": 4096
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen3VLVideoProcessor"
+}
+
+
+{
+  "image_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "image_mean": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "image_processor_type": "Qwen2VLImageProcessor",
+    "image_std": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "merge_size": 2,
+    "patch_size": 16,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "size": {
+      "longest_edge": 16777216,
+      "shortest_edge": 65536
+    },
+    "temporal_patch_size": 2
+  },
+  "processor_class": "Qwen3VLProcessor",
+  "video_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "do_sample_frames": true,
+    "fps": 2,
+    "image_mean": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "image_std": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "max_frames": 768,
+    "merge_size": 2,
+    "min_frames": 4,
+    "patch_size": 16,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "return_metadata": false,
+    "size": {
+      "longest_edge": 25165824,
+      "shortest_edge": 4096
+    },
+    "temporal_patch_size": 2,
+    "video_processor_type": "Qwen3VLVideoProcessor"
+  }
+}
+
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen3_5
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen3_5
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen3_5[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[INFO|2026-05-12 03:48:47] llamafactory.data.loader:143 >> Loading dataset /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/...
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen3_5
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen3_5
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen3_5
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen3_5
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[INFO|2026-05-12 03:48:47] llamafactory.data.loader:143 >> Loading dataset /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/c10d_logger.py:83: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  return func(*args, **kwargs)
+[rank0]:[W512 03:48:47.807920260 ProcessGroupNCCL.cpp:5188] Guessing device ID based on global rank. This can cause a hang if rank to GPU mapping is heterogeneous. You can specify device_id in init_process_group()
+kn038:1216779:1216779 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn038:1216779:1216779 [0] NCCL INFO Bootstrap: Using eth0:10.1.1.38<0>
+kn038:1216779:1216779 [0] NCCL INFO cudaDriverVersion 12080
+kn038:1216779:1216779 [0] NCCL INFO NCCL version 2.27.7+cuda12.9
+kn038:1216779:1216779 [0] NCCL INFO Comm config Blocking set to 1
+kn038:1216782:1216782 [3] NCCL INFO cudaDriverVersion 12080
+kn038:1216782:1216782 [3] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn038:1216782:1216782 [3] NCCL INFO Bootstrap: Using eth0:10.1.1.38<0>
+kn038:1216782:1216782 [3] NCCL INFO NCCL version 2.27.7+cuda12.9
+kn039:587908:587908 [1] NCCL INFO cudaDriverVersion 12080
+kn039:587910:587910 [3] NCCL INFO cudaDriverVersion 12080
+kn040:847368:847368 [0] NCCL INFO cudaDriverVersion 12080
+kn039:587910:587910 [3] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn039:587908:587908 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn039:587910:587910 [3] NCCL INFO Bootstrap: Using eth0:10.1.1.39<0>
+kn039:587910:587910 [3] NCCL INFO NCCL version 2.27.7+cuda12.9
+kn039:587908:587908 [1] NCCL INFO Bootstrap: Using eth0:10.1.1.39<0>
+kn039:587908:587908 [1] NCCL INFO NCCL version 2.27.7+cuda12.9
+kn038:1216781:1216781 [2] NCCL INFO cudaDriverVersion 12080
+kn040:847368:847368 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn038:1216782:1216782 [3] NCCL INFO Comm config Blocking set to 1
+kn040:847368:847368 [0] NCCL INFO Bootstrap: Using eth0:10.1.1.40<0>
+kn040:847368:847368 [0] NCCL INFO NCCL version 2.27.7+cuda12.9
+kn038:1216780:1216780 [1] NCCL INFO cudaDriverVersion 12080
+kn038:1216781:1216781 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn038:1216781:1216781 [2] NCCL INFO Bootstrap: Using eth0:10.1.1.38<0>
+kn038:1216781:1216781 [2] NCCL INFO NCCL version 2.27.7+cuda12.9
+kn039:587910:587910 [3] NCCL INFO Comm config Blocking set to 1
+kn038:1216780:1216780 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn038:1216781:1216781 [2] NCCL INFO Comm config Blocking set to 1
+kn038:1216780:1216780 [1] NCCL INFO Bootstrap: Using eth0:10.1.1.38<0>
+kn038:1216780:1216780 [1] NCCL INFO NCCL version 2.27.7+cuda12.9
+kn039:587908:587908 [1] NCCL INFO Comm config Blocking set to 1
+kn040:847370:847370 [2] NCCL INFO cudaDriverVersion 12080
+kn040:847368:847368 [0] NCCL INFO Comm config Blocking set to 1
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen3_5
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+kn040:847370:847370 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn038:1216780:1216780 [1] NCCL INFO Comm config Blocking set to 1
+kn040:847370:847370 [2] NCCL INFO Bootstrap: Using eth0:10.1.1.40<0>
+kn040:847370:847370 [2] NCCL INFO NCCL version 2.27.7+cuda12.9
+kn040:847371:847371 [3] NCCL INFO cudaDriverVersion 12080
+kn040:847369:847369 [1] NCCL INFO cudaDriverVersion 12080
+kn040:847370:847370 [2] NCCL INFO Comm config Blocking set to 1
+kn040:847371:847371 [3] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn040:847369:847369 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn040:847371:847371 [3] NCCL INFO Bootstrap: Using eth0:10.1.1.40<0>
+kn040:847371:847371 [3] NCCL INFO NCCL version 2.27.7+cuda12.9
+kn040:847369:847369 [1] NCCL INFO Bootstrap: Using eth0:10.1.1.40<0>
+kn040:847369:847369 [1] NCCL INFO NCCL version 2.27.7+cuda12.9
+kn040:847369:847369 [1] NCCL INFO Comm config Blocking set to 1
+kn040:847371:847371 [3] NCCL INFO Comm config Blocking set to 1
+kn039:587909:587909 [2] NCCL INFO cudaDriverVersion 12080
+kn039:587909:587909 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn039:587909:587909 [2] NCCL INFO Bootstrap: Using eth0:10.1.1.39<0>
+kn039:587909:587909 [2] NCCL INFO NCCL version 2.27.7+cuda12.9
+kn039:587909:587909 [2] NCCL INFO Comm config Blocking set to 1
+[rank4]:[W512 03:48:47.371671429 ProcessGroupNCCL.cpp:5188] Guessing device ID based on global rank. This can cause a hang if rank to GPU mapping is heterogeneous. You can specify device_id in init_process_group()
+kn039:587907:587907 [0] NCCL INFO cudaDriverVersion 12080
+kn039:587907:587907 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn039:587907:587907 [0] NCCL INFO Bootstrap: Using eth0:10.1.1.39<0>
+kn039:587907:587907 [0] NCCL INFO NCCL version 2.27.7+cuda12.9
+kn039:587907:587907 [0] NCCL INFO Comm config Blocking set to 1
+kn038:1216779:1217218 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+kn038:1216779:1217218 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn038:1216779:1217218 [0] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB eth0:10.1.1.38<0>
+kn038:1216779:1217218 [0] NCCL INFO Initialized NET plugin IB
+kn038:1216779:1217218 [0] NCCL INFO Assigned NET plugin IB to comm
+kn038:1216779:1217218 [0] NCCL INFO Using network IB
+kn038:1216779:1217218 [0] NCCL INFO ncclCommInitRankConfig comm 0x15b3f8e0 rank 0 nranks 12 cudaDev 0 nvmlDev 0 busId 17000 commId 0x2ea3e2357c15b1b9 - Init START
+kn038:1216781:1217220 [2] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+kn039:587908:588349 [1] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+kn038:1216780:1217221 [1] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+kn038:1216782:1217219 [3] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+kn038:1216781:1217220 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn040:847368:847806 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+kn038:1216780:1217221 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn038:1216782:1217219 [3] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn039:587910:588348 [3] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+kn039:587908:588349 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn039:587910:588348 [3] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn040:847368:847806 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn038:1216781:1217220 [2] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB eth0:10.1.1.38<0>
+kn038:1216781:1217220 [2] NCCL INFO Initialized NET plugin IB
+kn038:1216781:1217220 [2] NCCL INFO Assigned NET plugin IB to comm
+kn038:1216781:1217220 [2] NCCL INFO Using network IB
+kn038:1216780:1217221 [1] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB eth0:10.1.1.38<0>
+kn038:1216780:1217221 [1] NCCL INFO Initialized NET plugin IB
+kn038:1216781:1217220 [2] NCCL INFO ncclCommInitRankConfig comm 0x15969f10 rank 2 nranks 12 cudaDev 2 nvmlDev 2 busId ca000 commId 0x2ea3e2357c15b1b9 - Init START
+kn038:1216782:1217219 [3] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB eth0:10.1.1.38<0>
+kn038:1216782:1217219 [3] NCCL INFO Initialized NET plugin IB
+kn038:1216780:1217221 [1] NCCL INFO Assigned NET plugin IB to comm
+kn038:1216780:1217221 [1] NCCL INFO Using network IB
+kn038:1216782:1217219 [3] NCCL INFO Assigned NET plugin IB to comm
+kn038:1216782:1217219 [3] NCCL INFO Using network IB
+kn039:587908:588349 [1] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB eth0:10.1.1.39<0>
+kn039:587908:588349 [1] NCCL INFO Initialized NET plugin IB
+kn039:587908:588349 [1] NCCL INFO Assigned NET plugin IB to comm
+kn039:587908:588349 [1] NCCL INFO Using network IB
+kn039:587910:588348 [3] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB eth0:10.1.1.39<0>
+kn039:587910:588348 [3] NCCL INFO Initialized NET plugin IB
+kn040:847370:847807 [2] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+kn039:587910:588348 [3] NCCL INFO Assigned NET plugin IB to comm
+kn039:587910:588348 [3] NCCL INFO Using network IB
+kn038:1216780:1217221 [1] NCCL INFO ncclCommInitRankConfig comm 0x15af58d0 rank 1 nranks 12 cudaDev 1 nvmlDev 1 busId 65000 commId 0x2ea3e2357c15b1b9 - Init START
+kn038:1216782:1217219 [3] NCCL INFO ncclCommInitRankConfig comm 0x15a637b0 rank 3 nranks 12 cudaDev 3 nvmlDev 3 busId e3000 commId 0x2ea3e2357c15b1b9 - Init START
+kn039:587908:588349 [1] NCCL INFO ncclCommInitRankConfig comm 0x15c3f9c0 rank 5 nranks 12 cudaDev 1 nvmlDev 1 busId 65000 commId 0x2ea3e2357c15b1b9 - Init START
+kn040:847368:847806 [0] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB eth0:10.1.1.40<0>
+kn040:847368:847806 [0] NCCL INFO Initialized NET plugin IB
+kn040:847368:847806 [0] NCCL INFO Assigned NET plugin IB to comm
+kn040:847368:847806 [0] NCCL INFO Using network IB
+kn038:1216780:1217221 [1] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+kn039:587910:588348 [3] NCCL INFO ncclCommInitRankConfig comm 0x179d8600 rank 7 nranks 12 cudaDev 3 nvmlDev 3 busId e3000 commId 0x2ea3e2357c15b1b9 - Init START
+kn038:1216781:1217220 [2] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+kn040:847370:847807 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn040:847368:847806 [0] NCCL INFO ncclCommInitRankConfig comm 0x10b24ac0 rank 8 nranks 12 cudaDev 0 nvmlDev 0 busId 17000 commId 0x2ea3e2357c15b1b9 - Init START
+kn040:847370:847807 [2] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB eth0:10.1.1.40<0>
+kn040:847370:847807 [2] NCCL INFO Initialized NET plugin IB
+kn040:847370:847807 [2] NCCL INFO Assigned NET plugin IB to comm
+kn040:847370:847807 [2] NCCL INFO Using network IB
+kn040:847370:847807 [2] NCCL INFO ncclCommInitRankConfig comm 0x10c89490 rank 10 nranks 12 cudaDev 2 nvmlDev 2 busId ca000 commId 0x2ea3e2357c15b1b9 - Init START
+kn040:847369:847808 [1] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+kn040:847369:847808 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn040:847371:847809 [3] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+kn040:847371:847809 [3] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn040:847369:847808 [1] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB eth0:10.1.1.40<0>
+kn040:847369:847808 [1] NCCL INFO Initialized NET plugin IB
+kn040:847369:847808 [1] NCCL INFO Assigned NET plugin IB to comm
+kn040:847369:847808 [1] NCCL INFO Using network IB
+kn040:847369:847808 [1] NCCL INFO ncclCommInitRankConfig comm 0x10970070 rank 9 nranks 12 cudaDev 1 nvmlDev 1 busId 65000 commId 0x2ea3e2357c15b1b9 - Init START
+kn040:847368:847806 [0] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+kn040:847369:847808 [1] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+kn040:847371:847809 [3] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB eth0:10.1.1.40<0>
+kn040:847371:847809 [3] NCCL INFO Initialized NET plugin IB
+kn040:847371:847809 [3] NCCL INFO Assigned NET plugin IB to comm
+kn040:847371:847809 [3] NCCL INFO Using network IB
+kn040:847371:847809 [3] NCCL INFO ncclCommInitRankConfig comm 0x159b00b0 rank 11 nranks 12 cudaDev 3 nvmlDev 3 busId e3000 commId 0x2ea3e2357c15b1b9 - Init START
+kn039:587909:588350 [2] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+kn040:847370:847807 [2] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+kn040:847371:847809 [3] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+kn038:1216779:1217218 [0] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+kn039:587909:588350 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn039:587909:588350 [2] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB eth0:10.1.1.39<0>
+kn039:587909:588350 [2] NCCL INFO Initialized NET plugin IB
+kn039:587909:588350 [2] NCCL INFO Assigned NET plugin IB to comm
+kn039:587909:588350 [2] NCCL INFO Using network IB
+kn039:587909:588350 [2] NCCL INFO ncclCommInitRankConfig comm 0x15b57ad0 rank 6 nranks 12 cudaDev 2 nvmlDev 2 busId ca000 commId 0x2ea3e2357c15b1b9 - Init START
+kn039:587910:588348 [3] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+kn039:587909:588350 [2] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+kn039:587907:588351 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+kn039:587907:588351 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn039:587907:588351 [0] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [RO]; OOB eth0:10.1.1.39<0>
+kn039:587907:588351 [0] NCCL INFO Initialized NET plugin IB
+kn039:587907:588351 [0] NCCL INFO Assigned NET plugin IB to comm
+kn039:587907:588351 [0] NCCL INFO Using network IB
+kn039:587907:588351 [0] NCCL INFO ncclCommInitRankConfig comm 0x15c3c750 rank 4 nranks 12 cudaDev 0 nvmlDev 0 busId 17000 commId 0x2ea3e2357c15b1b9 - Init START
+kn038:1216782:1217219 [3] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+kn039:587907:588351 [0] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+kn039:587908:588349 [1] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+kn039:587907:588351 [0] NCCL INFO Bootstrap timings total 0.001856 (create 0.000028, send 0.000175, recv 0.000483, ring 0.000894, delay 0.000000)
+kn039:587908:588349 [1] NCCL INFO Bootstrap timings total 0.044506 (create 0.000043, send 0.000186, recv 0.019269, ring 0.000883, delay 0.000001)
+kn039:587909:588350 [2] NCCL INFO Bootstrap timings total 0.025475 (create 0.000039, send 0.000169, recv 0.000381, ring 0.024566, delay 0.000000)
+kn038:1216779:1217218 [0] NCCL INFO Bootstrap timings total 0.055190 (create 0.000034, send 0.000109, recv 0.010586, ring 0.030062, delay 0.000000)
+kn038:1216781:1217220 [2] NCCL INFO Bootstrap timings total 0.046181 (create 0.000035, send 0.000099, recv 0.001892, ring 0.043863, delay 0.000000)
+kn038:1216780:1217221 [1] NCCL INFO Bootstrap timings total 0.044897 (create 0.000038, send 0.000117, recv 0.000434, ring 0.044039, delay 0.000000)
+kn038:1216782:1217219 [3] NCCL INFO Bootstrap timings total 0.044861 (create 0.000046, send 0.000091, recv 0.043151, ring 0.001163, delay 0.000001)
+kn039:587910:588348 [3] NCCL INFO Bootstrap timings total 0.044020 (create 0.000027, send 0.000185, recv 0.000811, ring 0.024584, delay 0.000000)
+kn040:847368:847806 [0] NCCL INFO Bootstrap timings total 0.043675 (create 0.000031, send 0.000247, recv 0.010998, ring 0.032102, delay 0.000000)
+kn040:847369:847808 [1] NCCL INFO Bootstrap timings total 0.032925 (create 0.000030, send 0.000165, recv 0.000483, ring 0.031969, delay 0.000000)
+kn040:847371:847809 [3] NCCL INFO Bootstrap timings total 0.031112 (create 0.000031, send 0.000182, recv 0.000405, ring 0.030140, delay 0.000000)
+kn040:847370:847807 [2] NCCL INFO Bootstrap timings total 0.040014 (create 0.000026, send 0.000186, recv 0.009184, ring 0.030313, delay 0.000000)
+kn040:847369:847808 [1] NCCL INFO Setting affinity for GPU 1 to 16-23
+kn040:847369:847808 [1] NCCL INFO NVLS multicast support is not available on dev 1 (NVLS_NCHANNELS 0)
+kn038:1216779:1217218 [0] NCCL INFO Setting affinity for GPU 0 to 0-15
+kn039:587907:588351 [0] NCCL INFO Setting affinity for GPU 0 to 0-15
+kn039:587909:588350 [2] NCCL INFO Setting affinity for GPU 2 to 48-55
+kn040:847368:847806 [0] NCCL INFO Setting affinity for GPU 0 to 0-15
+kn040:847368:847806 [0] NCCL INFO NVLS multicast support is not available on dev 0 (NVLS_NCHANNELS 0)
+kn038:1216779:1217218 [0] NCCL INFO NVLS multicast support is not available on dev 0 (NVLS_NCHANNELS 0)
+kn040:847370:847807 [2] NCCL INFO Setting affinity for GPU 2 to 48-55
+kn039:587909:588350 [2] NCCL INFO NVLS multicast support is not available on dev 2 (NVLS_NCHANNELS 0)
+kn039:587907:588351 [0] NCCL INFO NVLS multicast support is not available on dev 0 (NVLS_NCHANNELS 0)
+kn040:847370:847807 [2] NCCL INFO NVLS multicast support is not available on dev 2 (NVLS_NCHANNELS 0)
+kn038:1216780:1217221 [1] NCCL INFO Setting affinity for GPU 1 to 16-23
+kn038:1216781:1217220 [2] NCCL INFO Setting affinity for GPU 2 to 48-55
+kn038:1216780:1217221 [1] NCCL INFO NVLS multicast support is not available on dev 1 (NVLS_NCHANNELS 0)
+kn039:587910:588348 [3] NCCL INFO Setting affinity for GPU 3 to 48-55
+kn038:1216781:1217220 [2] NCCL INFO NVLS multicast support is not available on dev 2 (NVLS_NCHANNELS 0)
+kn040:847371:847809 [3] NCCL INFO Setting affinity for GPU 3 to 48-55
+kn039:587910:588348 [3] NCCL INFO NVLS multicast support is not available on dev 3 (NVLS_NCHANNELS 0)
+kn039:587908:588349 [1] NCCL INFO Setting affinity for GPU 1 to 16-23
+kn039:587908:588349 [1] NCCL INFO NVLS multicast support is not available on dev 1 (NVLS_NCHANNELS 0)
+kn038:1216782:1217219 [3] NCCL INFO Setting affinity for GPU 3 to 48-55
+kn040:847371:847809 [3] NCCL INFO NVLS multicast support is not available on dev 3 (NVLS_NCHANNELS 0)
+kn038:1216782:1217219 [3] NCCL INFO NVLS multicast support is not available on dev 3 (NVLS_NCHANNELS 0)
+kn040:847371:847809 [3] NCCL INFO comm 0x159b00b0 rank 11 nRanks 12 nNodes 3 localRanks 4 localRank 3 MNNVL 0
+kn040:847370:847807 [2] NCCL INFO comm 0x10c89490 rank 10 nRanks 12 nNodes 3 localRanks 4 localRank 2 MNNVL 0
+kn038:1216780:1217221 [1] NCCL INFO comm 0x15af58d0 rank 1 nRanks 12 nNodes 3 localRanks 4 localRank 1 MNNVL 0
+kn038:1216782:1217219 [3] NCCL INFO comm 0x15a637b0 rank 3 nRanks 12 nNodes 3 localRanks 4 localRank 3 MNNVL 0
+kn038:1216781:1217220 [2] NCCL INFO comm 0x15969f10 rank 2 nRanks 12 nNodes 3 localRanks 4 localRank 2 MNNVL 0
+kn040:847371:847809 [3] NCCL INFO Trees [0] 8/-1/-1->11->10 [1] -1/-1/-1->11->10 [2] 8/-1/-1->11->10 [3] -1/-1/-1->11->10
+kn040:847371:847809 [3] NCCL INFO P2P Chunksize set to 131072
+kn040:847370:847807 [2] NCCL INFO Trees [0] 11/5/-1->10->9 [1] 11/-1/-1->10->8 [2] 11/-1/-1->10->9 [3] 11/-1/-1->10->8
+kn038:1216780:1217221 [1] NCCL INFO Trees [0] 2/9/-1->1->-1 [1] 0/9/-1->1->-1 [2] 2/-1/-1->1->5 [3] 0/-1/-1->1->5
+kn038:1216781:1217220 [2] NCCL INFO Trees [0] 3/-1/-1->2->1 [1] 3/-1/-1->2->0 [2] 3/9/-1->2->1 [3] 3/-1/-1->2->0
+kn038:1216780:1217221 [1] NCCL INFO P2P Chunksize set to 131072
+kn038:1216781:1217220 [2] NCCL INFO P2P Chunksize set to 131072
+kn038:1216782:1217219 [3] NCCL INFO Trees [0] 0/-1/-1->3->2 [1] -1/-1/-1->3->2 [2] 0/-1/-1->3->2 [3] -1/-1/-1->3->2
+kn038:1216782:1217219 [3] NCCL INFO P2P Chunksize set to 131072
+kn038:1216779:1217218 [0] NCCL INFO comm 0x15b3f8e0 rank 0 nRanks 12 nNodes 3 localRanks 4 localRank 0 MNNVL 0
+kn038:1216779:1217218 [0] NCCL INFO Channel 00/04 :  0  3  2  5  4  7  6  9  8 11 10  1
+kn038:1216779:1217218 [0] NCCL INFO Channel 01/04 :  0  5  7  6  4  9 11 10  8  1  3  2
+kn038:1216779:1217218 [0] NCCL INFO Channel 02/04 :  0  3  2  5  4  7  6  9  8 11 10  1
+kn038:1216779:1217218 [0] NCCL INFO Channel 03/04 :  0  5  7  6  4  9 11 10  8  1  3  2
+kn038:1216779:1217218 [0] NCCL INFO Trees [0] -1/-1/-1->0->3 [1] 2/-1/-1->0->1 [2] -1/-1/-1->0->3 [3] 2/9/-1->0->1
+kn038:1216779:1217218 [0] NCCL INFO P2P Chunksize set to 131072
+kn040:847370:847807 [2] NCCL INFO P2P Chunksize set to 131072
+kn040:847368:847806 [0] NCCL INFO comm 0x10b24ac0 rank 8 nRanks 12 nNodes 3 localRanks 4 localRank 0 MNNVL 0
+kn040:847369:847808 [1] NCCL INFO comm 0x10970070 rank 9 nRanks 12 nNodes 3 localRanks 4 localRank 1 MNNVL 0
+kn039:587907:588351 [0] NCCL INFO comm 0x15c3c750 rank 4 nRanks 12 nNodes 3 localRanks 4 localRank 0 MNNVL 0
+kn039:587910:588348 [3] NCCL INFO comm 0x179d8600 rank 7 nRanks 12 nNodes 3 localRanks 4 localRank 3 MNNVL 0
+kn039:587908:588349 [1] NCCL INFO comm 0x15c3f9c0 rank 5 nRanks 12 nNodes 3 localRanks 4 localRank 1 MNNVL 0
+kn039:587909:588350 [2] NCCL INFO comm 0x15b57ad0 rank 6 nRanks 12 nNodes 3 localRanks 4 localRank 2 MNNVL 0
+kn040:847368:847806 [0] NCCL INFO Trees [0] -1/-1/-1->8->11 [1] 10/5/-1->8->9 [2] -1/-1/-1->8->11 [3] 10/-1/-1->8->9
+kn040:847368:847806 [0] NCCL INFO P2P Chunksize set to 131072
+kn040:847369:847808 [1] NCCL INFO Trees [0] 10/-1/-1->9->1 [1] 8/-1/-1->9->1 [2] 10/-1/-1->9->2 [3] 8/-1/-1->9->0
+kn040:847369:847808 [1] NCCL INFO P2P Chunksize set to 131072
+kn039:587910:588348 [3] NCCL INFO Trees [0] 4/-1/-1->7->6 [1] -1/-1/-1->7->6 [2] 4/-1/-1->7->6 [3] -1/-1/-1->7->6
+kn039:587907:588351 [0] NCCL INFO Trees [0] -1/-1/-1->4->7 [1] 6/-1/-1->4->5 [2] -1/-1/-1->4->7 [3] 6/-1/-1->4->5
+kn039:587910:588348 [3] NCCL INFO P2P Chunksize set to 131072
+kn039:587907:588351 [0] NCCL INFO P2P Chunksize set to 131072
+kn039:587908:588349 [1] NCCL INFO Trees [0] 6/-1/-1->5->10 [1] 4/-1/-1->5->8 [2] 6/1/-1->5->-1 [3] 4/1/-1->5->-1
+kn039:587908:588349 [1] NCCL INFO P2P Chunksize set to 131072
+kn039:587909:588350 [2] NCCL INFO Trees [0] 7/-1/-1->6->5 [1] 7/-1/-1->6->4 [2] 7/-1/-1->6->5 [3] 7/-1/-1->6->4
+kn039:587909:588350 [2] NCCL INFO P2P Chunksize set to 131072
+kn040:847369:847808 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+kn040:847371:847809 [3] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+kn040:847368:847806 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+kn040:847370:847807 [2] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+kn038:1216781:1217220 [2] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+kn038:1216782:1217219 [3] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+kn038:1216779:1217218 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+kn038:1216780:1217221 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+kn038:1216779:1217218 [0] NCCL INFO Check P2P Type isAllDirectP2p 0 directMode 0
+kn038:1216779:1217231 [0] NCCL INFO [Proxy Service] Device 0 CPU core 9
+kn040:847368:847820 [0] NCCL INFO [Proxy Service] Device 0 CPU core 13
+kn039:587907:588351 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+kn039:587908:588349 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+kn039:587909:588350 [2] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+kn039:587910:588348 [3] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+kn038:1216779:1217236 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 12
+kn038:1216781:1217230 [2] NCCL INFO [Proxy Service] Device 2 CPU core 51
+kn038:1216782:1217234 [3] NCCL INFO [Proxy Service UDS] Device 3 CPU core 52
+kn038:1216781:1217235 [2] NCCL INFO [Proxy Service UDS] Device 2 CPU core 53
+kn040:847369:847821 [1] NCCL INFO [Proxy Service] Device 1 CPU core 20
+kn040:847371:847822 [3] NCCL INFO [Proxy Service UDS] Device 3 CPU core 52
+kn038:1216780:1217233 [1] NCCL INFO [Proxy Service] Device 1 CPU core 18
+kn040:847368:847824 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 15
+kn040:847370:847823 [2] NCCL INFO [Proxy Service UDS] Device 2 CPU core 53
+kn040:847371:847818 [3] NCCL INFO [Proxy Service] Device 3 CPU core 50
+kn038:1216780:1217237 [1] NCCL INFO [Proxy Service UDS] Device 1 CPU core 19
+kn039:587907:588362 [0] NCCL INFO [Proxy Service] Device 0 CPU core 6
+kn040:847370:847819 [2] NCCL INFO [Proxy Service] Device 2 CPU core 51
+kn038:1216782:1217232 [3] NCCL INFO [Proxy Service] Device 3 CPU core 51
+kn039:587909:588366 [2] NCCL INFO [Proxy Service UDS] Device 2 CPU core 53
+kn039:587908:588364 [1] NCCL INFO [Proxy Service UDS] Device 1 CPU core 17
+kn039:587907:588367 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 7
+kn040:847369:847825 [1] NCCL INFO [Proxy Service UDS] Device 1 CPU core 16
+kn039:587910:588365 [3] NCCL INFO [Proxy Service UDS] Device 3 CPU core 52
+kn039:587908:588360 [1] NCCL INFO [Proxy Service] Device 1 CPU core 23
+kn039:587909:588363 [2] NCCL INFO [Proxy Service] Device 2 CPU core 51
+kn039:587910:588361 [3] NCCL INFO [Proxy Service] Device 3 CPU core 54
+kn039:587909:588350 [2] NCCL INFO threadThresholds 8/8/64 | 96/8/64 | 512 | 512
+kn039:587909:588350 [2] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 1 p2p channels per peer
+kn040:847370:847807 [2] NCCL INFO threadThresholds 8/8/64 | 96/8/64 | 512 | 512
+kn040:847370:847807 [2] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 1 p2p channels per peer
+kn040:847368:847806 [0] NCCL INFO threadThresholds 8/8/64 | 96/8/64 | 512 | 512
+kn040:847368:847806 [0] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 1 p2p channels per peer
+kn038:1216781:1217220 [2] NCCL INFO threadThresholds 8/8/64 | 96/8/64 | 512 | 512
+kn038:1216781:1217220 [2] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 1 p2p channels per peer
+kn038:1216782:1217219 [3] NCCL INFO threadThresholds 8/8/64 | 96/8/64 | 512 | 512
+kn038:1216782:1217219 [3] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 1 p2p channels per peer
+kn040:847369:847808 [1] NCCL INFO threadThresholds 8/8/64 | 96/8/64 | 512 | 512
+kn040:847369:847808 [1] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 1 p2p channels per peer
+kn039:587907:588351 [0] NCCL INFO threadThresholds 8/8/64 | 96/8/64 | 512 | 512
+kn039:587907:588351 [0] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 1 p2p channels per peer
+kn038:1216780:1217221 [1] NCCL INFO threadThresholds 8/8/64 | 96/8/64 | 512 | 512
+kn038:1216780:1217221 [1] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 1 p2p channels per peer
+kn040:847371:847809 [3] NCCL INFO threadThresholds 8/8/64 | 96/8/64 | 512 | 512
+kn040:847371:847809 [3] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 1 p2p channels per peer
+kn039:587908:588349 [1] NCCL INFO threadThresholds 8/8/64 | 96/8/64 | 512 | 512
+kn039:587908:588349 [1] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 1 p2p channels per peer
+kn038:1216779:1217218 [0] NCCL INFO threadThresholds 8/8/64 | 96/8/64 | 512 | 512
+kn038:1216779:1217218 [0] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 1 p2p channels per peer
+kn039:587910:588348 [3] NCCL INFO threadThresholds 8/8/64 | 96/8/64 | 512 | 512
+kn039:587910:588348 [3] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 1 p2p channels per peer
+kn038:1216779:1217218 [0] NCCL INFO CC Off, workFifoBytes 1048576
+kn040:847371:847809 [3] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+kn040:847370:847807 [2] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+kn040:847368:847806 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+kn040:847371:847809 [3] NCCL INFO ncclCommInitRankConfig comm 0x159b00b0 rank 11 nranks 12 cudaDev 3 nvmlDev 3 busId e3000 commId 0x2ea3e2357c15b1b9 - Init COMPLETE
+kn040:847369:847808 [1] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+kn040:847370:847807 [2] NCCL INFO ncclCommInitRankConfig comm 0x10c89490 rank 10 nranks 12 cudaDev 2 nvmlDev 2 busId ca000 commId 0x2ea3e2357c15b1b9 - Init COMPLETE
+kn040:847368:847806 [0] NCCL INFO ncclCommInitRankConfig comm 0x10b24ac0 rank 8 nranks 12 cudaDev 0 nvmlDev 0 busId 17000 commId 0x2ea3e2357c15b1b9 - Init COMPLETE
+kn040:847369:847808 [1] NCCL INFO ncclCommInitRankConfig comm 0x10970070 rank 9 nranks 12 cudaDev 1 nvmlDev 1 busId 65000 commId 0x2ea3e2357c15b1b9 - Init COMPLETE
+kn040:847371:847809 [3] NCCL INFO Init timings - ncclCommInitRankConfig: rank 11 nranks 12 total 0.20 (kernels 0.14, alloc 0.01, bootstrap 0.03, allgathers 0.01, topo 0.01, graphs 0.00, connections 0.00, rest 0.00)
+kn040:847370:847807 [2] NCCL INFO Init timings - ncclCommInitRankConfig: rank 10 nranks 12 total 0.21 (kernels 0.13, alloc 0.01, bootstrap 0.04, allgathers 0.00, topo 0.01, graphs 0.00, connections 0.00, rest 0.00)
+kn040:847368:847806 [0] NCCL INFO Init timings - ncclCommInitRankConfig: rank 8 nranks 12 total 0.21 (kernels 0.13, alloc 0.01, bootstrap 0.04, allgathers 0.01, topo 0.01, graphs 0.00, connections 0.00, rest 0.00)
+kn040:847369:847808 [1] NCCL INFO Init timings - ncclCommInitRankConfig: rank 9 nranks 12 total 0.20 (kernels 0.14, alloc 0.01, bootstrap 0.03, allgathers 0.01, topo 0.01, graphs 0.00, connections 0.00, rest 0.00)
+kn038:1216781:1217220 [2] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+kn038:1216782:1217219 [3] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+kn038:1216781:1217220 [2] NCCL INFO ncclCommInitRankConfig comm 0x15969f10 rank 2 nranks 12 cudaDev 2 nvmlDev 2 busId ca000 commId 0x2ea3e2357c15b1b9 - Init COMPLETE
+kn038:1216780:1217221 [1] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+kn038:1216782:1217219 [3] NCCL INFO ncclCommInitRankConfig comm 0x15a637b0 rank 3 nranks 12 cudaDev 3 nvmlDev 3 busId e3000 commId 0x2ea3e2357c15b1b9 - Init COMPLETE
+kn038:1216781:1217220 [2] NCCL INFO Init timings - ncclCommInitRankConfig: rank 2 nranks 12 total 0.21 (kernels 0.13, alloc 0.01, bootstrap 0.05, allgathers 0.01, topo 0.01, graphs 0.00, connections 0.00, rest 0.00)
+kn038:1216780:1217221 [1] NCCL INFO ncclCommInitRankConfig comm 0x15af58d0 rank 1 nranks 12 cudaDev 1 nvmlDev 1 busId 65000 commId 0x2ea3e2357c15b1b9 - Init COMPLETE
+kn038:1216779:1217218 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+kn038:1216782:1217219 [3] NCCL INFO Init timings - ncclCommInitRankConfig: rank 3 nranks 12 total 0.22 (kernels 0.14, alloc 0.01, bootstrap 0.04, allgathers 0.00, topo 0.01, graphs 0.00, connections 0.00, rest 0.00)
+kn038:1216779:1217218 [0] NCCL INFO ncclCommInitRankConfig comm 0x15b3f8e0 rank 0 nranks 12 cudaDev 0 nvmlDev 0 busId 17000 commId 0x2ea3e2357c15b1b9 - Init COMPLETE
+kn038:1216780:1217221 [1] NCCL INFO Init timings - ncclCommInitRankConfig: rank 1 nranks 12 total 0.21 (kernels 0.13, alloc 0.01, bootstrap 0.04, allgathers 0.01, topo 0.01, graphs 0.00, connections 0.00, rest 0.00)
+kn038:1216779:1217218 [0] NCCL INFO Init timings - ncclCommInitRankConfig: rank 0 nranks 12 total 0.23 (kernels 0.14, alloc 0.01, bootstrap 0.06, allgathers 0.01, topo 0.01, graphs 0.00, connections 0.01, rest 0.00)
+kn039:587907:588351 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+kn039:587908:588349 [1] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+kn039:587910:588348 [3] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+kn039:587907:588351 [0] NCCL INFO ncclCommInitRankConfig comm 0x15c3c750 rank 4 nranks 12 cudaDev 0 nvmlDev 0 busId 17000 commId 0x2ea3e2357c15b1b9 - Init COMPLETE
+kn039:587908:588349 [1] NCCL INFO ncclCommInitRankConfig comm 0x15c3f9c0 rank 5 nranks 12 cudaDev 1 nvmlDev 1 busId 65000 commId 0x2ea3e2357c15b1b9 - Init COMPLETE
+kn039:587909:588350 [2] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+kn039:587910:588348 [3] NCCL INFO ncclCommInitRankConfig comm 0x179d8600 rank 7 nranks 12 cudaDev 3 nvmlDev 3 busId e3000 commId 0x2ea3e2357c15b1b9 - Init COMPLETE
+kn039:587909:588350 [2] NCCL INFO ncclCommInitRankConfig comm 0x15b57ad0 rank 6 nranks 12 cudaDev 2 nvmlDev 2 busId ca000 commId 0x2ea3e2357c15b1b9 - Init COMPLETE
+kn039:587908:588349 [1] NCCL INFO Init timings - ncclCommInitRankConfig: rank 5 nranks 12 total 0.21 (kernels 0.13, alloc 0.01, bootstrap 0.04, allgathers 0.01, topo 0.01, graphs 0.00, connections 0.00, rest 0.00)
+kn039:587907:588351 [0] NCCL INFO Init timings - ncclCommInitRankConfig: rank 4 nranks 12 total 0.17 (kernels 0.13, alloc 0.01, bootstrap 0.00, allgathers 0.01, topo 0.01, graphs 0.00, connections 0.00, rest 0.00)
+kn039:587910:588348 [3] NCCL INFO Init timings - ncclCommInitRankConfig: rank 7 nranks 12 total 0.22 (kernels 0.14, alloc 0.01, bootstrap 0.04, allgathers 0.01, topo 0.01, graphs 0.00, connections 0.00, rest 0.00)
+kn039:587909:588350 [2] NCCL INFO Init timings - ncclCommInitRankConfig: rank 6 nranks 12 total 0.19 (kernels 0.13, alloc 0.01, bootstrap 0.03, allgathers 0.01, topo 0.01, graphs 0.00, connections 0.00, rest 0.00)
+kn038:1216779:1217239 [0] NCCL INFO Channel 01 : 0[0] -> 1[1] via SHM/direct/direct
+kn039:587907:588368 [0] NCCL INFO Channel 01 : 4[0] -> 5[1] via SHM/direct/direct
+kn038:1216779:1217239 [0] NCCL INFO Channel 03 : 0[0] -> 1[1] via SHM/direct/direct
+kn039:587907:588368 [0] NCCL INFO Channel 03 : 4[0] -> 5[1] via SHM/direct/direct
+kn040:847368:847828 [0] NCCL INFO Channel 01 : 8[0] -> 9[1] via SHM/direct/direct
+kn039:587908:588370 [1] NCCL INFO Channel 00 : 5[1] -> 6[2] via SHM/direct/direct
+kn040:847368:847828 [0] NCCL INFO Channel 03 : 8[0] -> 9[1] via SHM/direct/direct
+kn038:1216781:1217240 [2] NCCL INFO Channel 00 : 2[2] -> 3[3] via SHM/direct/direct
+kn038:1216780:1217241 [1] NCCL INFO Channel 00 : 1[1] -> 2[2] via SHM/direct/direct
+kn038:1216781:1217240 [2] NCCL INFO Channel 01 : 2[2] -> 3[3] via SHM/direct/direct
+kn038:1216780:1217241 [1] NCCL INFO Channel 02 : 1[1] -> 2[2] via SHM/direct/direct
+kn039:587908:588370 [1] NCCL INFO Channel 02 : 5[1] -> 6[2] via SHM/direct/direct
+kn038:1216781:1217240 [2] NCCL INFO Channel 02 : 2[2] -> 3[3] via SHM/direct/direct
+kn038:1216779:1217239 [0] NCCL INFO Channel 01 : 0[0] -> 2[2] via SHM/direct/direct
+kn040:847369:847827 [1] NCCL INFO Channel 00 : 9[1] -> 10[2] via SHM/direct/direct
+kn040:847370:847826 [2] NCCL INFO Channel 00 : 10[2] -> 11[3] via SHM/direct/direct
+kn039:587907:588368 [0] NCCL INFO Channel 01 : 4[0] -> 6[2] via SHM/direct/direct
+kn039:587909:588371 [2] NCCL INFO Channel 00 : 6[2] -> 7[3] via SHM/direct/direct
+kn038:1216781:1217240 [2] NCCL INFO Channel 03 : 2[2] -> 3[3] via SHM/direct/direct
+kn038:1216779:1217239 [0] NCCL INFO Channel 03 : 0[0] -> 2[2] via SHM/direct/direct
+kn040:847369:847827 [1] NCCL INFO Channel 02 : 9[1] -> 10[2] via SHM/direct/direct
+kn040:847370:847826 [2] NCCL INFO Channel 01 : 10[2] -> 11[3] via SHM/direct/direct
+kn039:587907:588368 [0] NCCL INFO Channel 03 : 4[0] -> 6[2] via SHM/direct/direct
+kn039:587909:588371 [2] NCCL INFO Channel 01 : 6[2] -> 7[3] via SHM/direct/direct
+kn039:587909:588371 [2] NCCL INFO Channel 02 : 6[2] -> 7[3] via SHM/direct/direct
+kn039:587909:588371 [2] NCCL INFO Channel 03 : 6[2] -> 7[3] via SHM/direct/direct
+kn040:847368:847828 [0] NCCL INFO Channel 01 : 8[0] -> 10[2] via SHM/direct/direct
+kn040:847370:847826 [2] NCCL INFO Channel 02 : 10[2] -> 11[3] via SHM/direct/direct
+kn040:847368:847828 [0] NCCL INFO Channel 03 : 8[0] -> 10[2] via SHM/direct/direct
+kn040:847370:847826 [2] NCCL INFO Channel 03 : 10[2] -> 11[3] via SHM/direct/direct
+kn039:587909:588371 [2] NCCL INFO Channel 01 : 6[2] -> 4[0] via SHM/direct/direct
+kn039:587907:588368 [0] NCCL INFO Channel 00 : 4[0] -> 7[3] via SHM/direct/direct
+kn039:587909:588371 [2] NCCL INFO Channel 03 : 6[2] -> 4[0] via SHM/direct/direct
+kn039:587907:588368 [0] NCCL INFO Channel 02 : 4[0] -> 7[3] via SHM/direct/direct
+kn039:587910:588369 [3] NCCL INFO Channel 00 : 7[3] -> 4[0] via SHM/direct/direct
+kn039:587910:588369 [3] NCCL INFO Channel 02 : 7[3] -> 4[0] via SHM/direct/direct
+kn039:587910:588369 [3] NCCL INFO Channel 00 : 7[3] -> 6[2] via SHM/direct/direct
+kn039:587910:588369 [3] NCCL INFO Channel 01 : 7[3] -> 6[2] via SHM/direct/direct
+kn039:587910:588369 [3] NCCL INFO Channel 02 : 7[3] -> 6[2] via SHM/direct/direct
+kn039:587908:588370 [1] NCCL INFO Channel 01/0 : 5[1] -> 8[0] [send] via NET/IB/0
+kn039:587908:588372 [1] NCCL INFO [Proxy Progress] Device 1 CPU core 23
+kn038:1216780:1217241 [1] NCCL INFO Channel 00/0 : 9[1] -> 1[1] [receive] via NET/IB/0
+kn038:1216780:1217242 [1] NCCL INFO [Proxy Progress] Device 1 CPU core 20
+kn038:1216780:1217241 [1] NCCL INFO Channel 01/0 : 9[1] -> 1[1] [receive] via NET/IB/0
+kn038:1216780:1217241 [1] NCCL INFO Channel 02/0 : 1[1] -> 5[1] [send] via NET/IB/0
+kn038:1216780:1217241 [1] NCCL INFO Channel 03/0 : 1[1] -> 5[1] [send] via NET/IB/0
+kn040:847369:847827 [1] NCCL INFO Channel 03/0 : 9[1] -> 0[0] [send] via NET/IB/0
+kn040:847369:847830 [1] NCCL INFO [Proxy Progress] Device 1 CPU core 19
+kn038:1216781:1217240 [2] NCCL INFO Channel 02/0 : 9[1] -> 2[2] [receive] via NET/IB/0
+kn038:1216781:1217243 [2] NCCL INFO [Proxy Progress] Device 2 CPU core 54
+kn039:587910:588369 [3] NCCL INFO Channel 03 : 7[3] -> 6[2] via SHM/direct/direct
+kn038:1216779:1217239 [0] NCCL INFO Channel 03/0 : 9[1] -> 0[0] [receive] via NET/IB/0
+kn038:1216779:1217244 [0] NCCL INFO [Proxy Progress] Device 0 CPU core 14
+kn038:1216779:1217239 [0] NCCL INFO Channel 00 : 0[0] -> 3[3] via SHM/direct/direct
+kn038:1216779:1217239 [0] NCCL INFO Channel 02 : 0[0] -> 3[3] via SHM/direct/direct
+kn040:847369:847827 [1] NCCL INFO Channel 00/0 : 9[1] -> 1[1] [send] via NET/IB/0
+kn040:847369:847827 [1] NCCL INFO Channel 01/0 : 9[1] -> 1[1] [send] via NET/IB/0
+kn040:847369:847827 [1] NCCL INFO Channel 02/0 : 9[1] -> 2[2] [send] via NET/IB/0
+kn040:847369:847827 [1] NCCL INFO Channel 02/0 : 2[2] -> 9[1] [receive] via NET/IB/0
+kn038:1216781:1217240 [2] NCCL INFO Channel 02/0 : 2[2] -> 9[1] [send] via NET/IB/0
+kn040:847369:847827 [1] NCCL INFO Channel 00/0 : 1[1] -> 9[1] [receive] via NET/IB/0
+kn040:847369:847827 [1] NCCL INFO Channel 01/0 : 1[1] -> 9[1] [receive] via NET/IB/0
+kn040:847370:847826 [2] NCCL INFO Channel 00/0 : 5[1] -> 10[2] [receive] via NET/IB/0
+kn040:847370:847831 [2] NCCL INFO [Proxy Progress] Device 2 CPU core 54
+kn038:1216781:1217240 [2] NCCL INFO Channel 01 : 2[2] -> 0[0] via SHM/direct/direct
+kn038:1216782:1217238 [3] NCCL INFO Channel 00 : 3[3] -> 0[0] via SHM/direct/direct
+kn040:847368:847828 [0] NCCL INFO Channel 01/0 : 5[1] -> 8[0] [receive] via NET/IB/0
+kn040:847368:847832 [0] NCCL INFO [Proxy Progress] Device 0 CPU core 3
+kn038:1216781:1217240 [2] NCCL INFO Channel 03 : 2[2] -> 0[0] via SHM/direct/direct
+kn040:847368:847828 [0] NCCL INFO Channel 00 : 8[0] -> 11[3] via SHM/direct/direct
+kn038:1216782:1217238 [3] NCCL INFO Channel 02 : 3[3] -> 0[0] via SHM/direct/direct
+kn038:1216779:1217239 [0] NCCL INFO Channel 03/0 : 0[0] -> 9[1] [send] via NET/IB/0
+kn039:587909:588371 [2] NCCL INFO Channel 00 : 6[2] -> 5[1] via SHM/direct/direct
+kn040:847368:847828 [0] NCCL INFO Channel 02 : 8[0] -> 11[3] via SHM/direct/direct
+kn039:587908:588370 [1] NCCL INFO Channel 02/0 : 1[1] -> 5[1] [receive] via NET/IB/0
+kn039:587908:588370 [1] NCCL INFO Channel 03/0 : 1[1] -> 5[1] [receive] via NET/IB/0
+kn039:587909:588371 [2] NCCL INFO Channel 02 : 6[2] -> 5[1] via SHM/direct/direct
+kn038:1216782:1217238 [3] NCCL INFO Channel 00 : 3[3] -> 2[2] via SHM/direct/direct
+kn039:587908:588370 [1] NCCL INFO Channel 00/0 : 5[1] -> 10[2] [send] via NET/IB/0
+kn038:1216780:1217241 [1] NCCL INFO Channel 02/0 : 5[1] -> 1[1] [receive] via NET/IB/0
+kn038:1216780:1217241 [1] NCCL INFO Channel 03/0 : 5[1] -> 1[1] [receive] via NET/IB/0
+kn038:1216780:1217241 [1] NCCL INFO Channel 00/0 : 1[1] -> 9[1] [send] via NET/IB/0
+kn039:587908:588370 [1] NCCL INFO Channel 00/0 : 10[2] -> 5[1] [receive] via NET/IB/0
+kn040:847370:847826 [2] NCCL INFO Channel 00/0 : 10[2] -> 5[1] [send] via NET/IB/0
+kn038:1216780:1217241 [1] NCCL INFO Channel 01/0 : 1[1] -> 9[1] [send] via NET/IB/0
+kn038:1216782:1217238 [3] NCCL INFO Channel 01 : 3[3] -> 2[2] via SHM/direct/direct
+kn040:847369:847827 [1] NCCL INFO Channel 03/0 : 0[0] -> 9[1] [receive] via NET/IB/0
+kn039:587908:588370 [1] NCCL INFO Channel 02/0 : 5[1] -> 1[1] [send] via NET/IB/0
+kn039:587908:588370 [1] NCCL INFO Channel 03/0 : 5[1] -> 1[1] [send] via NET/IB/0
+kn039:587908:588370 [1] NCCL INFO Channel 01/0 : 8[0] -> 5[1] [receive] via NET/IB/0
+kn040:847370:847826 [2] NCCL INFO Channel 01 : 10[2] -> 8[0] via SHM/direct/direct
+kn040:847371:847829 [3] NCCL INFO Channel 00 : 11[3] -> 8[0] via SHM/direct/direct
+kn038:1216782:1217238 [3] NCCL INFO Channel 02 : 3[3] -> 2[2] via SHM/direct/direct
+kn040:847370:847826 [2] NCCL INFO Channel 03 : 10[2] -> 8[0] via SHM/direct/direct
+kn040:847371:847829 [3] NCCL INFO Channel 02 : 11[3] -> 8[0] via SHM/direct/direct
+kn040:847368:847828 [0] NCCL INFO Channel 01/0 : 8[0] -> 5[1] [send] via NET/IB/0
+kn038:1216782:1217238 [3] NCCL INFO Channel 03 : 3[3] -> 2[2] via SHM/direct/direct
+kn040:847369:847827 [1] NCCL INFO Channel 01 : 9[1] -> 8[0] via SHM/direct/direct
+kn040:847371:847829 [3] NCCL INFO Channel 00 : 11[3] -> 10[2] via SHM/direct/direct
+kn038:1216780:1217241 [1] NCCL INFO Channel 01 : 1[1] -> 0[0] via SHM/direct/direct
+kn040:847371:847829 [3] NCCL INFO Channel 01 : 11[3] -> 10[2] via SHM/direct/direct
+kn040:847369:847827 [1] NCCL INFO Channel 03 : 9[1] -> 8[0] via SHM/direct/direct
+kn038:1216780:1217241 [1] NCCL INFO Channel 03 : 1[1] -> 0[0] via SHM/direct/direct
+kn039:587908:588370 [1] NCCL INFO Channel 01 : 5[1] -> 4[0] via SHM/direct/direct
+kn040:847371:847829 [3] NCCL INFO Channel 02 : 11[3] -> 10[2] via SHM/direct/direct
+kn039:587908:588370 [1] NCCL INFO Channel 03 : 5[1] -> 4[0] via SHM/direct/direct
+kn040:847371:847829 [3] NCCL INFO Channel 03 : 11[3] -> 10[2] via SHM/direct/direct
+kn038:1216781:1217240 [2] NCCL INFO Channel 00 : 2[2] -> 1[1] via SHM/direct/direct
+kn038:1216781:1217240 [2] NCCL INFO Channel 02 : 2[2] -> 1[1] via SHM/direct/direct
+kn040:847370:847826 [2] NCCL INFO Channel 00 : 10[2] -> 9[1] via SHM/direct/direct
+kn040:847370:847826 [2] NCCL INFO Channel 02 : 10[2] -> 9[1] via SHM/direct/direct
+kn039:587910:588369 [3] NCCL INFO Connected all trees
+kn038:1216782:1217238 [3] NCCL INFO Connected all trees
+kn038:1216779:1217239 [0] NCCL INFO Connected all trees
+kn038:1216781:1217240 [2] NCCL INFO Connected all trees
+kn038:1216780:1217241 [1] NCCL INFO Connected all trees
+kn039:587907:588368 [0] NCCL INFO Connected all trees
+kn039:587909:588371 [2] NCCL INFO Connected all trees
+kn039:587908:588370 [1] NCCL INFO Connected all trees
+kn040:847368:847828 [0] NCCL INFO Connected all trees
+kn040:847369:847827 [1] NCCL INFO Connected all trees
+kn040:847371:847829 [3] NCCL INFO Connected all trees
+kn040:847370:847826 [2] NCCL INFO Connected all trees
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank3]:     run_exp()
+[rank3]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank3]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank3]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank3]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank3]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 51, in run_sft
+[rank3]:     dataset_module = get_dataset(template, model_args, data_args, training_args, stage="sft", **tokenizer_module)
+[rank3]:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/data/loader.py", line 305, in get_dataset
+[rank3]:     dataset = _get_merged_dataset(data_args.dataset, model_args, data_args, training_args, stage)
+[rank3]:               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/data/loader.py", line 183, in _get_merged_dataset
+[rank3]:     datasets[dataset_name] = _load_single_dataset(dataset_attr, model_args, data_args, training_args)
+[rank3]:                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/data/loader.py", line 132, in _load_single_dataset
+[rank3]:     dataset = load_dataset(
+[rank3]:               ^^^^^^^^^^^^^
+[rank3]:   File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/datasets/load.py", line 1392, in load_dataset
+[rank3]:     builder_instance = load_dataset_builder(
+[rank3]:                        ^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/datasets/load.py", line 1166, in load_dataset_builder
+[rank3]:     builder_instance: DatasetBuilder = builder_cls(
+[rank3]:                                        ^^^^^^^^^^^^
+[rank3]:   File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/datasets/builder.py", line 388, in __init__
+[rank3]:     with FileLock(lock_path):
+[rank3]:   File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/filelock/_api.py", line 571, in __exit__
+[rank3]:     self.release()
+[rank3]:   File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/filelock/_api.py", line 542, in release
+[rank3]:     self._release()
+[rank3]:   File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/filelock/_unix.py", line 108, in _release
+[rank3]:     fcntl.flock(fd, fcntl.LOCK_UN)
+[rank3]: OSError: [Errno 37] No locks available
+[rank11]: Traceback (most recent call last):
+[rank11]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank11]:     run_exp()
+[rank11]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank11]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank11]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank11]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank11]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 51, in run_sft
+[rank11]:     dataset_module = get_dataset(template, model_args, data_args, training_args, stage="sft", **tokenizer_module)
+[rank11]:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank11]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/data/loader.py", line 305, in get_dataset
+[rank11]:     dataset = _get_merged_dataset(data_args.dataset, model_args, data_args, training_args, stage)
+[rank11]:               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank11]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/data/loader.py", line 183, in _get_merged_dataset
+[rank11]:     datasets[dataset_name] = _load_single_dataset(dataset_attr, model_args, data_args, training_args)
+[rank11]:                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank11]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/data/loader.py", line 132, in _load_single_dataset
+[rank11]:     dataset = load_dataset(
+[rank11]:               ^^^^^^^^^^^^^
+[rank11]:   File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/datasets/load.py", line 1392, in load_dataset
+[rank11]:     builder_instance = load_dataset_builder(
+[rank11]:                        ^^^^^^^^^^^^^^^^^^^^^
+[rank11]:   File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/datasets/load.py", line 1166, in load_dataset_builder
+[rank11]:     builder_instance: DatasetBuilder = builder_cls(
+[rank11]:                                        ^^^^^^^^^^^^
+[rank11]:   File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/datasets/builder.py", line 388, in __init__
+[rank11]:     with FileLock(lock_path):
+[rank11]:   File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/filelock/_api.py", line 571, in __exit__
+[rank11]:     self.release()
+[rank11]:   File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/filelock/_api.py", line 542, in release
+[rank11]:     self._release()
+[rank11]:   File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/filelock/_unix.py", line 108, in _release
+[rank11]:     fcntl.flock(fd, fcntl.LOCK_UN)
+[rank11]: OSError: [Errno 37] No locks available
+kn038:1216782:1217258 [3] NCCL INFO misc/socket.cc:64 -> 3
+kn038:1216782:1217258 [3] NCCL INFO misc/socket.cc:81 -> 3
+kn038:1216782:1217258 [3] NCCL INFO misc/socket.cc:864 -> 3
+kn038:1216782:1217258 [3] NCCL INFO misc/socket.cc:64 -> 3
+kn038:1216782:1217258 [3] NCCL INFO misc/socket.cc:81 -> 3
+kn038:1216782:1217258 [3] NCCL INFO misc/socket.cc:864 -> 3
+kn038:1216782:1217258 [3] NCCL INFO misc/socket.cc:64 -> 3
+kn038:1216782:1217258 [3] NCCL INFO misc/socket.cc:81 -> 3
+kn038:1216782:1217258 [3] NCCL INFO misc/socket.cc:864 -> 3
+kn038:1216782:1217232 [3] NCCL INFO misc/socket.cc:916 -> 3
+kn040:847371:847846 [3] NCCL INFO misc/socket.cc:64 -> 3
+kn040:847371:847846 [3] NCCL INFO misc/socket.cc:81 -> 3
+kn040:847371:847846 [3] NCCL INFO misc/socket.cc:864 -> 3
+kn040:847371:847846 [3] NCCL INFO misc/socket.cc:64 -> 3
+kn040:847371:847846 [3] NCCL INFO misc/socket.cc:81 -> 3
+kn040:847371:847846 [3] NCCL INFO misc/socket.cc:864 -> 3
+kn040:847371:847846 [3] NCCL INFO misc/socket.cc:64 -> 3
+kn040:847371:847846 [3] NCCL INFO misc/socket.cc:81 -> 3
+kn040:847371:847846 [3] NCCL INFO misc/socket.cc:864 -> 3
+kn040:847371:847818 [3] NCCL INFO misc/socket.cc:916 -> 3
+kn038:1216782:1217258 [3] NCCL INFO comm 0x15a637b0 rank 3 nranks 12 cudaDev 3 busId e3000 - Abort COMPLETE
+kn040:847371:847846 [3] NCCL INFO comm 0x159b00b0 rank 11 nranks 12 cudaDev 3 busId e3000 - Abort COMPLETE
+W0512 03:48:50.406000 1216773 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 1216779 closing signal SIGTERM
+W0512 03:48:50.409000 1216773 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 1216780 closing signal SIGTERM
+W0512 03:48:50.410000 1216773 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 1216781 closing signal SIGTERM
+E0512 03:48:50.774000 1216773 torch/distributed/elastic/multiprocessing/api.py:986] failed (exitcode: 1) local_rank: 3 (pid: 1216782) of binary: /scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/python
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 362, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/run.py", line 990, in main
+    run(args)
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/run.py", line 981, in run
+    elastic_launch(
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 170, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 317, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+[1]:
+  time      : 2026-05-12_03:48:50
+  host      : kn038.paice.vectorinstitute.ai
+  rank      : 0 (local_rank: 0)
+  exitcode  : -15 (pid: 1216779)
+  error_file: <N/A>
+  traceback : Signal 15 (SIGTERM) received by PID 1216779
+[2]:
+  time      : 2026-05-12_03:48:50
+  host      : kn038.paice.vectorinstitute.ai
+  rank      : 1 (local_rank: 1)
+  exitcode  : -15 (pid: 1216780)
+  error_file: <N/A>
+  traceback : Signal 15 (SIGTERM) received by PID 1216780
+[3]:
+  time      : 2026-05-12_03:48:50
+  host      : kn038.paice.vectorinstitute.ai
+  rank      : 2 (local_rank: 2)
+  exitcode  : -15 (pid: 1216781)
+  error_file: <N/A>
+  traceback : Signal 15 (SIGTERM) received by PID 1216781
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-05-12_03:48:50
+  host      : kn038.paice.vectorinstitute.ai
+  rank      : 3 (local_rank: 3)
+  exitcode  : 1 (pid: 1216782)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+W0512 03:48:50.793000 847363 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 847368 closing signal SIGTERM
+W0512 03:48:50.797000 847363 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 847369 closing signal SIGTERM
+W0512 03:48:50.797000 847363 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 847370 closing signal SIGTERM
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/llamafactory-cli", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/python/3.12.4/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '3', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', 'kn038', '--master_port', '29500', '/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.yaml']' returned non-zero exit status 1.
+E0512 03:48:51.162000 847363 torch/distributed/elastic/multiprocessing/api.py:986] failed (exitcode: 1) local_rank: 3 (pid: 847371) of binary: /scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/python
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 362, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/run.py", line 990, in main
+    run(args)
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/run.py", line 981, in run
+    elastic_launch(
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 170, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 317, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+[1]:
+  time      : 2026-05-12_03:48:51
+  host      : kn040.paice.vectorinstitute.ai
+  rank      : 8 (local_rank: 0)
+  exitcode  : -15 (pid: 847368)
+  error_file: <N/A>
+  traceback : Signal 15 (SIGTERM) received by PID 847368
+[2]:
+  time      : 2026-05-12_03:48:51
+  host      : kn040.paice.vectorinstitute.ai
+  rank      : 9 (local_rank: 1)
+  exitcode  : -15 (pid: 847369)
+  error_file: <N/A>
+  traceback : Signal 15 (SIGTERM) received by PID 847369
+[3]:
+  time      : 2026-05-12_03:48:51
+  host      : kn040.paice.vectorinstitute.ai
+  rank      : 10 (local_rank: 2)
+  exitcode  : -15 (pid: 847370)
+  error_file: <N/A>
+  traceback : Signal 15 (SIGTERM) received by PID 847370
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-05-12_03:48:50
+  host      : kn040.paice.vectorinstitute.ai
+  rank      : 11 (local_rank: 3)
+  exitcode  : 1 (pid: 847371)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/llamafactory-cli", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/python/3.12.4/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '3', '--node_rank', '2', '--nproc_per_node', '4', '--master_addr', 'kn038', '--master_port', '29500', '/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.yaml']' returned non-zero exit status 1.
+Running tokenizer on dataset (num_proc=16):   0%|          | 0/30238 [00:00<?, ? examples/s][rank4]:[W512 03:48:51.265538293 TCPStore.cpp:125] [c10d] recvValue failed on SocketImpl(fd=43, addr=[kn039.paice.vectorinstitute.ai]:46920, remote=[kn038.paice.vectorinstitute.ai]:29500): Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+Exception raised from recvBytes at /tmp/build_wheels_tmp.60750/python-3.12/torch/torch/csrc/distributed/c10d/Utils.hpp:682 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x97 (0x1554f9587f17 in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x678a81d (0x15553717381d in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #2: c10d::TCPStore::check(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) + 0x1eb (0x15553716f4cb in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #3: c10d::ProcessGroupNCCL::HeartbeatMonitor::runLoop() + 0x3f7 (0x1554faadf8d7 in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: <unknown function> + 0xe07f0 (0x1555436e07f0 in /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib/gcc/x86_64-pc-linux-gnu/14/libstdc++.so.6)
+frame #5: <unknown function> + 0x84a9d (0x155554bd7a9d in /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib64/libc.so.6)
+frame #6: <unknown function> + 0x10509c (0x155554c5809c in /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib64/libc.so.6)
+
+[rank4]:[W512 03:48:51.273271280 ProcessGroupNCCL.cpp:1826] [PG ID 0 PG GUID 0(default_pg) Rank 4] Failed to check the "should dump" flag on TCPStore, (maybe TCPStore server has shut down too early), with error: Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+[rank7]:[W512 03:48:51.325964375 TCPStore.cpp:125] [c10d] recvValue failed on SocketImpl(fd=43, addr=[kn039.paice.vectorinstitute.ai]:46924, remote=[kn038.paice.vectorinstitute.ai]:29500): Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+Exception raised from recvBytes at /tmp/build_wheels_tmp.60750/python-3.12/torch/torch/csrc/distributed/c10d/Utils.hpp:682 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x97 (0x1554f9587f17 in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x678a81d (0x15553717381d in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #2: c10d::TCPStore::check(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) + 0x1eb (0x15553716f4cb in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #3: c10d::ProcessGroupNCCL::HeartbeatMonitor::runLoop() + 0x3f7 (0x1554faadf8d7 in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: <unknown function> + 0xe07f0 (0x1555436e07f0 in /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib/gcc/x86_64-pc-linux-gnu/14/libstdc++.so.6)
+frame #5: <unknown function> + 0x84a9d (0x155554bd7a9d in /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib64/libc.so.6)
+frame #6: <unknown function> + 0x10509c (0x155554c5809c in /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib64/libc.so.6)
+
+[rank7]:[W512 03:48:51.333422937 ProcessGroupNCCL.cpp:1826] [PG ID 0 PG GUID 0(default_pg) Rank 7] Failed to check the "should dump" flag on TCPStore, (maybe TCPStore server has shut down too early), with error: Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+[rank5]:[W512 03:48:51.384759715 TCPStore.cpp:125] [c10d] recvValue failed on SocketImpl(fd=43, addr=[kn039.paice.vectorinstitute.ai]:46936, remote=[kn038.paice.vectorinstitute.ai]:29500): Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+Exception raised from recvBytes at /tmp/build_wheels_tmp.60750/python-3.12/torch/torch/csrc/distributed/c10d/Utils.hpp:682 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x97 (0x1554f9587f17 in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x678a81d (0x15553717381d in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #2: c10d::TCPStore::check(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) + 0x1eb (0x15553716f4cb in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #3: c10d::ProcessGroupNCCL::HeartbeatMonitor::runLoop() + 0x3f7 (0x1554faadf8d7 in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: <unknown function> + 0xe07f0 (0x1555436e07f0 in /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib/gcc/x86_64-pc-linux-gnu/14/libstdc++.so.6)
+frame #5: <unknown function> + 0x84a9d (0x155554bd7a9d in /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib64/libc.so.6)
+frame #6: <unknown function> + 0x10509c (0x155554c5809c in /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib64/libc.so.6)
+
+[rank5]:[W512 03:48:51.392414713 ProcessGroupNCCL.cpp:1826] [PG ID 0 PG GUID 0(default_pg) Rank 5] Failed to check the "should dump" flag on TCPStore, (maybe TCPStore server has shut down too early), with error: Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+[rank6]:[W512 03:48:51.479958545 TCPStore.cpp:125] [c10d] recvValue failed on SocketImpl(fd=43, addr=[kn039.paice.vectorinstitute.ai]:46952, remote=[kn038.paice.vectorinstitute.ai]:29500): Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+Exception raised from recvBytes at /tmp/build_wheels_tmp.60750/python-3.12/torch/torch/csrc/distributed/c10d/Utils.hpp:682 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x97 (0x1554f9587f17 in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x678a81d (0x15553717381d in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #2: c10d::TCPStore::check(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) + 0x1eb (0x15553716f4cb in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #3: c10d::ProcessGroupNCCL::HeartbeatMonitor::runLoop() + 0x3f7 (0x1554faadf8d7 in /scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: <unknown function> + 0xe07f0 (0x1555436e07f0 in /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib/gcc/x86_64-pc-linux-gnu/14/libstdc++.so.6)
+frame #5: <unknown function> + 0x84a9d (0x155554bd7a9d in /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib64/libc.so.6)
+frame #6: <unknown function> + 0x10509c (0x155554c5809c in /cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/lib64/libc.so.6)
+
+[rank6]:[W512 03:48:51.487308862 ProcessGroupNCCL.cpp:1826] [PG ID 0 PG GUID 0(default_pg) Rank 6] Failed to check the "should dump" flag on TCPStore, (maybe TCPStore server has shut down too early), with error: Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+srun: error: kn038: task 0: Exited with exit code 1
+srun: Terminating StepId=3526942.0
+srun: error: kn040: task 2: Terminated
+srun: error: kn039: task 1: Terminated
+srun: Force Terminated StepId=3526942.0

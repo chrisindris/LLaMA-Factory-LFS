@@ -1,0 +1,87 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+SIF_FILE: /scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+MEDIA_DIR: /project/def-wangcs/shared/data/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+RUNNING_MODE: VENV
+build from scratch
+VENV_LLAMAFACTORY: /dev/shm/slurm.indrisch.549220/venv_llamafactory_cu132_qwen35
+AVX-512 support detected — enabling AVX-512 compile flags for native extensions
+gcc (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+g++ (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Setting up environment for CUDA 13.x
+CREATING VENV at /dev/shm/slurm.indrisch.549220/venv_llamafactory_cu132_qwen35...
+RuntimeError: failed to build image pip because:
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/site-packages/virtualenv/seed/embed/via_app_data/via_app_data.py", line 54, in _install
+    with parent.non_reentrant_lock_for_key(wheel_img.name):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/site-packages/virtualenv/util/lock.py", line 142, in non_reentrant_lock_for_key
+    with _CountedFileLock(str(self.path / f"{name}.lock")):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/site-packages/filelock/_api.py", line 314, in __enter__
+    self.acquire()
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/site-packages/virtualenv/util/lock.py", line 30, in acquire
+    super().acquire(timeout, poll_interval)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/site-packages/filelock/_api.py", line 270, in acquire
+    self._acquire()
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/site-packages/filelock/_unix.py", line 42, in _acquire
+    fd = os.open(self.lock_file, open_flags, self._context.mode)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '/home/indrisch/.local/share/virtualenv/wheel/3.12/image/1/CopyPipInstall/pip-26.1.1-py3-none-any.lock'
+
+[2026-05-27T14:37:01.922] error: *** JOB 549220 ON trig0048 CANCELLED AT 2026-05-27T14:37:01 DUE to SIGNAL Terminated ***
+
+scontrol show job 549220
+JobId=549220 JobName=trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=535198 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=None Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:15
+   RunTime=00:02:21 TimeLimit=01:00:00 TimeMin=N/A
+   SubmitTime=2026-05-27T14:34:25 EligibleTime=2026-05-27T14:34:25
+   AccrueTime=2026-05-27T14:34:25
+   StartTime=2026-05-27T14:34:40 EndTime=2026-05-27T14:37:01 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-05-27T14:34:40 Scheduler=Backfill
+   Partition=compute_full_node AllocNode:Sid=trig-login01:338929
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0048
+   BatchHost=trig0048
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_9b_lora_sft_Scene30k/trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh
+   SubmitLine=SBATCH --partition=compute_full_node --comment /opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh --export=NONE --get-user-env trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_9b_lora_sft_Scene30k
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh
+   StdErr=
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_9b_lora_sft_Scene30k/out/trig0048-qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs-549220.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   MailUser=christopher.indris@torontomu.ca MailType=INVALID_DEPEND,BEGIN,END,FAIL,REQUEUE,STAGE_OUT
+
+sacct -j 549220
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+549220       trillium_+ def-wangcs   00:02:21                        00:00.017  00:01.012      0:0 
+549220.batch      batch def-wangcs   00:02:22          0     45504K  00:00.017  00:01.012     0:15 
+549220.exte+     extern def-wangcs   00:02:23                         00:00:00   00:00:00      0:0 
+
