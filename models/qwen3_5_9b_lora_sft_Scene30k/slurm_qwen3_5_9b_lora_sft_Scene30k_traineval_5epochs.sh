@@ -296,17 +296,26 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
         export VIRTUALENV_CACHE_DIR="${XDG_CACHE_HOME}/virtualenv"
         export PIP_CACHE_DIR="${XDG_CACHE_HOME}/pip"
         mkdir -p "${XDG_DATA_HOME}" "${VIRTUALENV_CACHE_DIR}" "${PIP_CACHE_DIR}"
-    
+
         # --- Build the VENV ---
-        module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow # cu132 for updates, Qwen3.5 compatibility (through transformers)
+        module load StdEnv/2023 gcc/12.3 openmpi/4.1.5 python/3.12 cuda/12.6 opencv/4.12.0 arrow # cu126 for GPU compatibility
         echo "build from scratch" # from scratch on the compute node (no need to transfer the venv, all modules are available with compute canada's module system)
         export DS_BUILD_CPU_ADAM=1 # we can build CPU ADAM for offloading
         export BUILD_UTILS=1
         export DS_BUILD_OPS=1
-        VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu132_qwen35/"
-        export VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
-        /scratch/indrisch/LLaMA-Factory/install_as_venv.sh TRILLIUM
-        source ${SLURM_TMPDIR}/venv_llamafactory_cu132_qwen35/bin/activate
+        VLF="/scratch/indrisch/venv_llamafactory_cu126_qwen35/"
+        export VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VLF})
+
+        if [[ -d "$VLF" ]]; then
+            echo "VENV already exists at $VLF, copying to ${SLURM_TMPDIR}"
+            cp -r "$VLF" "${SLURM_TMPDIR}/"
+        else
+            echo "VENV does not exist at $VLF, building from scratch"
+            /scratch/indrisch/LLaMA-Factory/install_as_venv.sh TRILLIUM
+        fi
+        source ${SLURM_TMPDIR}/venv_llamafactory_cu126_qwen35/bin/activate
+        python -c "import torch; print('torch cuda version:', torch.version.cuda)"
+        python -c "import transformers; print('transformers version:', transformers.__version__)"
 
         export PYTHONUNBUFFERED=1
         export NCCL_DEBUG=INFO

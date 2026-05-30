@@ -28,7 +28,16 @@ logger = logging.get_logger(__name__)
 
 
 def configure_attn_implementation(config: "PretrainedConfig", model_args: "ModelArguments") -> None:
-    from transformers.utils import is_flash_attn_2_available, is_torch_sdpa_available
+    try:
+        from transformers.utils import is_flash_attn_2_available, is_torch_sdpa_available
+    except ImportError:
+        from transformers.utils import is_flash_attn_2_available
+
+        import torch
+        from packaging import version
+
+        def is_torch_sdpa_available() -> bool:
+            return version.parse(torch.__version__) >= version.parse("2.1.1")
 
     flash_attn_2_available = is_flash_attn_2_available()
     sdpa_available = is_torch_sdpa_available()
