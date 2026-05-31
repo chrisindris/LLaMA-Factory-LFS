@@ -23,6 +23,7 @@ from ...extras.logging import get_logger
 from ...extras.misc import calculate_tps
 from ...extras.ploting import plot_loss
 from ...model import load_model, load_tokenizer
+from ..callbacks import DebugMultimodalCallback
 from ..trainer_utils import create_modelcard_and_push
 from .metric import ComputeAccuracy, ComputeSimilarity, eval_logit_processor
 from .trainer import CustomSeq2SeqTrainer
@@ -62,8 +63,17 @@ def run_sft(
         block_diag_attn=model_args.block_diag_attn,
         attn_implementation=getattr(model.config, "_attn_implementation", None),
         compute_dtype=model_args.compute_dtype,
+        debug_mm_training=finetuning_args.debug_mm_training,
+        debug_mm_steps=finetuning_args.debug_mm_steps,
         **tokenizer_module,
     )
+
+    if callbacks is None:
+        callbacks = []
+
+    if finetuning_args.debug_mm_training:
+        callbacks = list(callbacks)
+        callbacks.append(DebugMultimodalCallback(finetuning_args))
 
     # Metric utils
     metric_module = {}

@@ -70,6 +70,8 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             self.model_accepts_loss_kwargs = False
 
         self.finetuning_args = finetuning_args
+        self._debug_mm_steps = max(int(getattr(finetuning_args, "debug_mm_steps", 0)), 0)
+        self._debug_mm_seen = 0
         if gen_kwargs is not None:
             # https://github.com/huggingface/transformers/blob/v4.45.0/src/transformers/trainer_seq2seq.py#L287
             self._gen_kwargs = gen_kwargs
@@ -112,9 +114,185 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
 
         return super()._get_train_sampler(*args, **kwargs)
 
+    def _get_rank(self) -> int:
+        return int(os.getenv("RANK", os.getenv("LOCAL_RANK", "0")))
+
+    def _bytes_to_gb(self, value: int) -> float:
+        return round(value / (1024**3), 3)
+
+    def _get_gpu_memory_snapshot(self) -> list[dict[str, float]]:
+        if not torch.cuda.is_available():
+            return []
+
+        snapshot = []
+        for device_id in range(torch.cuda.device_count()):
+            free_bytes, total_bytes = torch.cuda.mem_get_info(device_id)
+            snapshot.append(
+                {
+                    "device": int(device_id),
+                    "free_gb": self._bytes_to_gb(free_bytes),
+                    "total_gb": self._bytes_to_gb(total_bytes),
+                }
+            )
+        return snapshot
+
+    def _get_model_cuda_bytes(self) -> tuple[int, int]:
+        param_bytes = 0
+        buffer_bytes = 0
+        for param in self.model.parameters():
+            if param.is_cuda:
+                param_bytes += param.numel() * param.element_size()
+
+        for buffer in self.model.buffers():
+            if buffer.is_cuda:
+                buffer_bytes += buffer.numel() * buffer.element_size()
+
+        return param_bytes, buffer_bytes
+
+    def _summarize_inputs(self, inputs: dict[str, Any]) -> dict[str, Any]:
+        tensor_shapes: dict[str, dict[str, Any]] = {}
+        total_bytes = 0
+        for key, value in inputs.items():
+            if torch.is_tensor(value):
+                tensor_shapes[key] = {
+                    "shape": list(value.shape),
+                    "dtype": str(value.dtype),
+                }
+                total_bytes += value.numel() * value.element_size()
+
+        summary: dict[str, Any] = {
+            "tensor_shapes": tensor_shapes,
+            "batch_bytes": total_bytes,
+            "batch_gb": self._bytes_to_gb(total_bytes),
+        }
+
+        image_feature_keys = (
+            "pixel_values",
+            "pixel_values_videos",
+            "image_features",
+            "image_embeds",
+            "vision_x",
+        )
+        image_features: dict[str, dict[str, Any]] = {}
+        for key in image_feature_keys:
+            value = inputs.get(key)
+            if torch.is_tensor(value):
+                feature_bytes = value.numel() * value.element_size()
+                image_features[key] = {
+                    "shape": list(value.shape),
+                    "dtype": str(value.dtype),
+                    "bytes": feature_bytes,
+                    "gb": self._bytes_to_gb(feature_bytes),
+                }
+
+        if image_features:
+            summary["image_features"] = image_features
+
+        image_tokens: dict[str, Any] = {}
+        image_grid = inputs.get("image_grid_thw")
+        if torch.is_tensor(image_grid) and image_grid.numel() > 0:
+            grid_cpu = image_grid.detach().to("cpu")
+            tokens_per_image = torch.prod(grid_cpu, dim=-1)
+            image_tokens.update(
+                {
+                    "image_grid_thw_shape": list(image_grid.shape),
+                    "image_tokens_total": int(tokens_per_image.sum().item()),
+                    "image_tokens_min": int(tokens_per_image.min().item()),
+                    "image_tokens_max": int(tokens_per_image.max().item()),
+                    "image_token_count": int(tokens_per_image.numel()),
+                }
+            )
+
+        image_num_patches = inputs.get("image_num_patches")
+        if image_num_patches is None:
+            image_num_patches = inputs.get("num_patches")
+        if torch.is_tensor(image_num_patches) and image_num_patches.numel() > 0:
+            patches_cpu = image_num_patches.detach().to("cpu")
+            image_tokens.update(
+                {
+                    "image_num_patches_shape": list(image_num_patches.shape),
+                    "image_num_patches_total": int(patches_cpu.sum().item()),
+                }
+            )
+
+        video_grid = inputs.get("video_grid_thw")
+        if torch.is_tensor(video_grid) and video_grid.numel() > 0:
+            grid_cpu = video_grid.detach().to("cpu")
+            tokens_per_video = torch.prod(grid_cpu, dim=-1)
+            image_tokens.update(
+                {
+                    "video_grid_thw_shape": list(video_grid.shape),
+                    "video_tokens_total": int(tokens_per_video.sum().item()),
+                }
+            )
+
+        if image_tokens:
+            summary["image_tokens"] = image_tokens
+
+        return summary
+
+    def _build_mm_debug_payload(
+        self, inputs: dict[str, Any], debug_samples: Optional[list[dict[str, Any]]] = None
+    ) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "rank": self._get_rank(),
+            "step": int(getattr(self.state, "global_step", -1)),
+            "gpu_memory": self._get_gpu_memory_snapshot(),
+        }
+
+        if torch.cuda.is_available():
+            payload["gpu_allocated_gb"] = self._bytes_to_gb(torch.cuda.memory_allocated())
+            payload["gpu_reserved_gb"] = self._bytes_to_gb(torch.cuda.memory_reserved())
+            payload["gpu_device"] = int(torch.cuda.current_device())
+
+        param_bytes, buffer_bytes = self._get_model_cuda_bytes()
+        payload["model_cuda_param_gb"] = self._bytes_to_gb(param_bytes)
+        payload["model_cuda_buffer_gb"] = self._bytes_to_gb(buffer_bytes)
+        payload["model_cuda_total_gb"] = self._bytes_to_gb(param_bytes + buffer_bytes)
+        if debug_samples is not None:
+            payload["samples"] = debug_samples
+        payload.update(self._summarize_inputs(inputs))
+        return payload
+
+    def _should_log_mm_debug(self) -> bool:
+        return self.finetuning_args.debug_mm_training and self._debug_mm_seen < self._debug_mm_steps
+
+    def _log_mm_debug(
+        self,
+        inputs: dict[str, Any],
+        when: str,
+        error: Optional[BaseException] = None,
+        debug_samples: Optional[list[dict[str, Any]]] = None,
+    ) -> None:
+        try:
+            payload = self._build_mm_debug_payload(inputs, debug_samples=debug_samples)
+            payload["event"] = when
+            if error is not None:
+                payload["error"] = {"type": type(error).__name__, "message": str(error)}
+
+            message = f"[rank{payload['rank']}] mm_debug {when}: {json.dumps(payload, default=str)}"
+            if error is None:
+                logger.info(message)
+            else:
+                logger.error(message)
+        except Exception as log_error:  # avoid masking the original error
+            logger.warning(f"[rank{self._get_rank()}] mm_debug logging failed: {log_error}")
+
     @override
     def compute_loss(self, model, inputs, *args, **kwargs):
-        return super().compute_loss(model, inputs, *args, **kwargs)
+        debug_samples = inputs.pop("debug_samples", None)
+        if model.training and self._should_log_mm_debug():
+            self._log_mm_debug(inputs, when="pre_forward", debug_samples=debug_samples)
+            self._debug_mm_seen += 1
+
+        try:
+            return super().compute_loss(model, inputs, *args, **kwargs)
+        except Exception as error:
+            if self.finetuning_args.debug_mm_training:
+                message = str(error)
+                if "CUDA out of memory" in message or "Image features and image tokens do not match" in message:
+                    self._log_mm_debug(inputs, when="exception", error=error, debug_samples=debug_samples)
+            raise
 
     @override
     def prediction_step(

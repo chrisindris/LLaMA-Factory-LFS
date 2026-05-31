@@ -113,10 +113,10 @@ pip install --upgrade pip setuptools wheel
 # --- if we want to use Qwen3.5, we need to use "transformers>=5.2.0"; otherwise, "transformers==4.57.1" is fine ---
 if [[ "$VENV_LLAMAFACTORY" == *qwen35* ]]; then
     echo "Installing transformers>=5.2.0 for Qwen3.5 compatibility"
-    pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers>=5.2.0" -e ".[torch,metrics,deepspeed,liger-kernel]"
+    pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers>=5.2.0" flash_linear_attention causal_conv1d -e ".[torch,metrics,deepspeed,liger-kernel]"
 else
     echo "Installing transformers==4.57.1 for compatibility with models like Qwen2.5 and LLaVa-3D"
-    pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers==4.57.1" -e ".[torch,metrics,deepspeed,liger-kernel]"
+    pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers==4.57.1" flash_linear_attention causal_conv1d -e ".[torch,metrics,deepspeed,liger-kernel]"
 fi
 
 # DeepSpeed's CPUAdam builder defaults to -march=x86-64-v3, which is too weak

@@ -16,6 +16,8 @@
 # limitations under the License.
 
 from dataclasses import dataclass
+import json
+import os
 import inspect
 from typing import TYPE_CHECKING, Any, Literal, Optional
 
@@ -26,6 +28,7 @@ from peft import PeftModel
 from transformers import DataCollatorForSeq2Seq
 
 from ..extras.constants import AUDIO_PLACEHOLDER, IGNORE_INDEX, IMAGE_PLACEHOLDER
+from ..extras.logging import get_logger
 from ..extras.packages import is_pillow_available
 
 
@@ -37,6 +40,9 @@ if TYPE_CHECKING:
     from transformers import ProcessorMixin
 
     from .template import Template
+
+
+logger = get_logger(__name__)
 
 
 def prepare_4d_attention_mask(attention_mask_with_indices: "torch.Tensor", dtype: "torch.dtype") -> "torch.Tensor":
@@ -91,8 +97,11 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
 
     template: Optional["Template"] = None
     processor: Optional["ProcessorMixin"] = None
+    debug_mm_training: bool = False
+    debug_mm_steps: int = 0
 
     def __post_init__(self):
+        self._debug_mm_seen = 0
         if self.template is None:
             raise ValueError("Template is required for MultiModalDataCollator.")
 
@@ -115,13 +124,65 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
             except (TypeError, ValueError):
                 self._rope_index_requires_mm_token_type_ids = False
 
+    def _get_rank(self) -> int:
+        return int(os.getenv("RANK", os.getenv("LOCAL_RANK", "0")))
+
+    def _format_media_item(self, item: Any) -> str:
+        if isinstance(item, str):
+            return item
+        if isinstance(item, dict):
+            path = item.get("path")
+            if path:
+                return path
+        return f"<{type(item).__name__}>"
+
+    def _summarize_media_list(self, medias: Any, max_items: int = 5) -> Optional[dict[str, Any]]:
+        if medias is None:
+            return None
+        if not isinstance(medias, list):
+            medias = [medias]
+        if len(medias) == 0:
+            return {"count": 0, "items": []}
+        if all(isinstance(item, list) for item in medias):
+            sample_frames = medias[0][:max_items] if medias[0] else []
+            return {
+                "nested": True,
+                "count": len(medias),
+                "sample": [self._format_media_item(frame) for frame in sample_frames],
+            }
+        items = [self._format_media_item(item) for item in medias[:max_items]]
+        remaining = len(medias) - max_items
+        if remaining > 0:
+            items.append(f"...({remaining} more)")
+        return {"count": len(medias), "items": items}
+
+    def _build_media_summary(self, images: Any, videos: Any, audios: Any) -> dict[str, Any]:
+        return {
+            "images": self._summarize_media_list(images),
+            "videos": self._summarize_media_list(videos),
+            "audios": self._summarize_media_list(audios),
+        }
+
     def __call__(self, features: list[dict[str, Any]]) -> dict[str, "torch.Tensor"]:
+        debug_samples = None
+        collect_enabled = (
+            self.debug_mm_training and self.model is not None and getattr(self.model, "training", False)
+        )
+        log_enabled = collect_enabled and self._debug_mm_seen < max(int(self.debug_mm_steps), 0)
+        if collect_enabled:
+            debug_samples = []
         batch_images, batch_videos, batch_audios = [], [], []
         batch_imglens, batch_vidlens, batch_audlens, batch_input_ids = [], [], [], []
         for feature in features:
+            sample_idx = feature.pop("sample_idx", None)
+            sample_media = feature.pop("sample_media", None)
             images = feature.pop("images", None) or []
             videos = feature.pop("videos", None) or []
             audios = feature.pop("audios", None) or []
+            if debug_samples is not None:
+                if sample_media is None:
+                    sample_media = self._build_media_summary(images, videos, audios)
+                debug_samples.append({"sample_idx": sample_idx, "media": sample_media})
             batch_images.extend(images)
             batch_videos.extend(videos)
             batch_audios.extend(audios)
@@ -191,6 +252,17 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
                 feature["token_type_ids"] = token_type_ids[i]
 
         features: dict[str, torch.Tensor] = super().__call__(features)
+        if debug_samples is not None:
+            if log_enabled:
+                payload = {
+                    "rank": self._get_rank(),
+                    "batch_index": self._debug_mm_seen,
+                    "samples": debug_samples,
+                }
+                logger.info(f"[rank{payload['rank']}] mm_debug batch_samples: {json.dumps(payload, default=str)}")
+            features["debug_samples"] = debug_samples
+            if log_enabled:
+                self._debug_mm_seen += 1
 
         if self.get_rope_func is not None:
             rope_index_kwargs = {

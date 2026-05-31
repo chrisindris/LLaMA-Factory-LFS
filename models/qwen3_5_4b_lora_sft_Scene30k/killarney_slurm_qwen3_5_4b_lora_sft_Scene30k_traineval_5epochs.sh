@@ -2,10 +2,10 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs-%j.out
-#SBATCH --cpus-per-task=6
+#SBATCH --cpus-per-task=48
 #SBATCH --time=1-00:00:00
-#SBATCH --mem=240GB
-#SBATCH --gpus-per-node=h100:1
+#SBATCH --mem=1950GB
+#SBATCH --gpus-per-node=h100:8
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 #SBATCH --mail-type=ALL
 

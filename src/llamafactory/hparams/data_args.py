@@ -79,6 +79,10 @@ class DataArguments:
         default=1000,
         metadata={"help": "The number of examples in one group in pre-processing."},
     )
+    image_sample_stride: int = field(
+        default=1,
+        metadata={"help": "Keep every nth image per sample during preprocessing to reduce multimodal memory usage."},
+    )
     preprocessing_num_workers: Optional[int] = field(
         default=None,
         metadata={"help": "The number of processes to use for the pre-processing."},
@@ -172,6 +176,9 @@ class DataArguments:
 
         if self.streaming and self.max_samples is not None:
             raise ValueError("`max_samples` is incompatible with `streaming`.")
+
+        if self.image_sample_stride < 1:
+            raise ValueError("`image_sample_stride` should be greater than or equal to 1.")
 
         if self.mask_history and self.train_on_prompt:
             raise ValueError("`mask_history` is incompatible with `train_on_prompt`.")

@@ -431,11 +431,11 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
-        # -- using cu12.9 due to the error in *3662965.out
-        # module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
-        # module load python/3.12 cuda/12.6 opencv/4.12.0
-        # module load arrow
-        module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow
+        # -- using cu12.6 due to the error in 3787717 when we try to use flash_linear_attention & causal_conv1d
+        module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+        module load python/3.12 cuda/12.6 opencv/4.12.0
+        module load arrow
+        # module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow
 
         # copying the venv to local storage is necessary on Killarney because the shared filesystems have very slow metadata performance, which makes using a venv directly on the shared filesystem extremely slow due to all the stat calls that pip packages require. Copying the venv to local storage and running from there avoids this issue.
         # echo "Copying venv ${VENV_LLAMAFACTORY} to local storage ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})..."
@@ -446,7 +446,7 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         export DS_BUILD_CPU_ADAM=1
         export BUILD_UTILS=1
         export DS_BUILD_OPS=1
-        VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu132_qwen35/" # it's best to use a cuda 13.2 for this.
+        VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu126_qwen35/" # it's best to use a cuda 12.6 for this.
         VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
         /project/aip-wangcs/indrisch/LLaMA-Factory/install_as_venv.sh KILLARNEY
         source ${VENV_LLAMAFACTORY}/bin/activate

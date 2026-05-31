@@ -517,6 +517,19 @@ class FinetuningArguments(
         default=False,
         metadata={"help": "Whether or not to compute effective tokens per second."},
     )
+    debug_mm_training: bool = field(
+        default=False,
+        metadata={"help": "Enable multimodal debug logging for GPU memory and batch tensor statistics."},
+    )
+    debug_mm_steps: int = field(
+        default=1,
+        metadata={
+            "help": (
+                "Number of initial steps to emit multimodal debug logs. "
+                "Exceptions always log when debug_mm_training is enabled."
+            )
+        },
+    )
 
     def __post_init__(self):
         def split_arg(arg):
