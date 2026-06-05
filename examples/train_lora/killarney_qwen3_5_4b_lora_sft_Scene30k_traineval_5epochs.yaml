@@ -52,16 +52,17 @@ resume_from_checkpoint: null
 log_level: passive
 log_level_replica: passive
 print_param_status: false
+image_sample_stride: 2 # Also shown to be needed for A100s for the Qwen3.5 series models
 
 # acceleration
 flash_attn: fa2
 enable_liger_kernel: true
 
 # distribution
-deepspeed: examples/deepspeed/ds_z3_config.json # Qwen3.5_4b is small enough to fit on a single l40s (48GB) or A100 (80GB). On Killarney, ds_z3_offload_config.json seems to have issues with the ADAM cpu.
+deepspeed: examples/deepspeed/ds_z3_offload_config.json # Qwen3.5_4b is small enough to fit on a single l40s (48GB) or A100 (80GB). On Killarney, ds_z3_offload_config.json seems to have issues with the ADAM cpu.
 
 ## eval
 val_size: 0.1
 per_device_eval_batch_size: 1
 eval_strategy: steps
-eval_steps: 426 # evaluate after every 1.00 Scene30k epochs
+eval_steps: 213 # evaluate after every 1.00 Scene30k epochs; on 8 A100 GPU runs (killarney), one epoch is every 213.

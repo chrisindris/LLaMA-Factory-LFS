@@ -1,5 +1,5 @@
 ### model
-model_name_or_path: Qwen/Qwen3.5-4B
+model_name_or_path: Qwen/Qwen3.5-9B
 # cache_dir is intentionally unset so HF_DATASETS_CACHE can point to node-local storage.
 image_max_pixels: 65536 # reduced for l40s to lower activation memory.
 video_max_pixels: 16384 # reduced for l40s to lower activation memory.
@@ -28,7 +28,7 @@ dataloader_pin_memory: false
 low_cpu_mem_usage: true
 
 ### output
-output_dir: saves/qwen3_5-4b/lora/sft/Scene30k_traineval_2nodes_5epochs
+output_dir: saves/qwen3_5-9b/lora/sft/Scene30k_traineval_2nodes_5epochs
 logging_steps: 10
 save_steps: 426 # save after every 1.00 Scene30k epochs
 plot_loss: true
@@ -62,7 +62,7 @@ flash_attn: fa2
 enable_liger_kernel: true
 
 # distribution
-deepspeed: examples/deepspeed/ds_z3_offload_config.json # Qwen3.5_4b is small enough to fit on a single l40s (48GB) or A100 (80GB). On Killarney, ds_z3_offload_config.json seems to have issues with the ADAM cpu; we need to build the venv on the compute node with DS_BUILD_CPU_ADAM=1.
+deepspeed: examples/deepspeed/ds_z3_offload_config.json # Qwen3.5_9b is small enough to fit on a single l40s (48GB) or A100 (80GB). On Killarney, ds_z3_offload_config.json seems to have issues with the ADAM cpu; we need to build the venv on the compute node with DS_BUILD_CPU_ADAM=1.
 
 ## eval
 val_size: 0.1

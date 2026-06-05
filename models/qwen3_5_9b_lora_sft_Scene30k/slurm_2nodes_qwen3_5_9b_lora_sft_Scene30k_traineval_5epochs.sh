@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
-#SBATCH --output=out/%N-2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs-%j.out
+#SBATCH --output=out/%N-2nodes_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs-%j.out
 
 # RORQUAL:
 #SBATCH --cpus-per-task=64
@@ -21,7 +21,7 @@
 #SBATCH --gpus-per-node=h100:8
 
 # ---------------------------------------------------------------------
-# ------------ 2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs ----------
+# ------------ 2nodes_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs ----------
 # ---------------------------------------------------------------------
 #
 # This script will train (SFT, LoRA) a Qwen3.5 model on the Scene30k dataset for 5 epochs.
@@ -30,7 +30,7 @@
 
 # ----- HEADER: ENV VARIABLES -----
 
-EXPERIMENT_NAME="2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs"
+EXPERIMENT_NAME="2nodes_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs"
 
 # --- for reading cluster-specific settings ---
 
@@ -106,7 +106,7 @@ else
 fi
 
 YAML_FILE="${PROJECT_DIR}/examples/train_lora/${CLUSTER,,}_${EXPERIMENT_NAME}.yaml"
-OUTPUT_DIR="${PROJECT_DIR}/saves/qwen3_5-4b/lora/sft/Scene30k_traineval_5epochs"
+OUTPUT_DIR="${PROJECT_DIR}/saves/qwen3_5-9b/lora/sft/Scene30k_traineval_5epochs"
 
 if [[ -n "$1" ]]; then
     RUNNING_MODE="$1"
@@ -223,7 +223,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         pushd /scratch/indrisch/LLaMA-Factory
         llamafactory-cli train ${YAML_FILE}
         # llamafactory-cli train \
-        #     --model_name_or_path Qwen/Qwen3.5-4B \
+        #     --model_name_or_path Qwen/Qwen3.5-9b \
         #     --no_use_fast_tokenizer \
         #     --cache_dir /scratch/indrisch/huggingface/hub \
         #     --image_max_pixels 65536 \
@@ -242,7 +242,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         #     --dataloader_num_workers 0 \
         #     --dataloader_pin_memory false \
         #     --low_cpu_mem_usage \
-        #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-4b/lora/sft/Scene30k_traineval \
+        #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-9b/lora/sft/Scene30k_traineval \
         #     --logging_steps 10 \
         #     --save_steps 200 \
         #     --plot_loss \
@@ -472,12 +472,13 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         export DS_BUILD_CPU_ADAM=1
         export BUILD_UTILS=1
         export DS_BUILD_OPS=1
-        VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu126_qwen35/" # it's best to use a cuda 12.6 for this. We also want to have Qwen3.5 as an option.
+        VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu126_qwen35/" # it's best to use a cuda 12.6 for this.
         VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
         /project/aip-wangcs/indrisch/LLaMA-Factory/install_as_venv.sh KILLARNEY
         source ${VENV_LLAMAFACTORY}/bin/activate
 
-        # export CUDA_VISIBLE_DEVICES=0,1,2,3 # we can leave this out and let CUDA decide.
+
+        export CUDA_VISIBLE_DEVICES=0,1,2,3
         export FORCE_TORCHRUN=1 
         export HF_HUB_OFFLINE=1 
         export WANDB_MODE=offline 
@@ -496,27 +497,7 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
         # giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
         pushd /project/aip-wangcs/indrisch/LLaMA-Factory
 
-        # --- VENV correctness check ---
-
-        if [[ ! -f "${VENV_LLAMAFACTORY}/bin/activate" ]]; then
-            echo "ERROR: expected venv activation script is missing: ${VENV_LLAMAFACTORY}/bin/activate"
-            echo "ERROR: install_as_venv.sh likely failed before creating the environment."
-            exit 1
-        fi
         # if $SLURM_NNODES is a number 2 or greater:
-        if ! source "${VENV_LLAMAFACTORY}/bin/activate"; then
-            echo "ERROR: failed to activate venv: ${VENV_LLAMAFACTORY}"
-            exit 1
-        fi
-
-        if ! command -v llamafactory-cli >/dev/null 2>&1; then
-            echo "ERROR: llamafactory-cli is not available after activating ${VENV_LLAMAFACTORY}."
-            echo "ERROR: check the preceding install_as_venv.sh output for the root cause."
-            exit 1
-        fi
-
-        # --- LAUNCH! ---
-
         if [[ "$SLURM_NNODES" -ge 2 ]]; then
             echo "SLURM_NNODES: ${SLURM_NNODES}"
             echo "HEAD_NODE: ${HEAD_NODE}"
@@ -558,6 +539,55 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
             echo "SLURM_NNODES: ${SLURM_NNODES}"
             llamafactory-cli train ${YAML_FILE}
         fi
+
+        
+        # llamafactory-cli train \
+        #     --model_name_or_path Qwen/Qwen3.5-9b \
+        #     --no_use_fast_tokenizer \
+        #     --cache_dir /scratch/indrisch/huggingface/hub \
+        #     --image_max_pixels 65536 \
+        #     --video_max_pixels 16384 \
+        #     --trust_remote_code \
+        #     --stage sft \
+        #     --do_train \
+        #     --finetuning_type lora \
+        #     --lora_rank 8 \
+        #     --lora_target all \
+        #     --dataset Scene30k \
+        #     --media_dir /project/aip-wangcs/shared/data/ \
+        #     --template qwen3_5 \
+        #     --cutoff_len 131072 \
+        #     --preprocessing_num_workers 32 \
+        #     --dataloader_num_workers 0 \
+        #     --dataloader_pin_memory false \
+        #     --low_cpu_mem_usage \
+        #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-9b/lora/sft/Scene30k_traineval \
+        #     --logging_steps 10 \
+        #     --save_steps 200 \
+        #     --plot_loss \
+        #     --overwrite_output_dir \
+        #     --save_only_model false \
+        #     --report_to wandb \
+        #     --per_device_train_batch_size 2 \
+        #     --gradient_accumulation_steps 8 \
+        #     --learning_rate 1.0e-4 \
+        #     --num_train_epochs 2.0 \
+        #     --lr_scheduler_type cosine \
+        #     --warmup_ratio 0.1 \
+        #     --bf16 \
+        #     --ddp_timeout 180000000 \
+        #     --debug underflow_overflow \
+        #     --log_level debug \
+        #     --log_level_replica debug \
+        #     --print_param_status \
+        #     --flash_attn fa2 \
+        #     --enable_liger_kernel \
+        #     --gradient_checkpointing \
+        #     --deepspeed /project/aip-wangcs/indrisch/LLaMA-Factory/examples/deepspeed/ds_z3_offload_config.json \
+        #     --val_size 0.1 \
+        #     --per_device_eval_batch_size 1 \
+        #     --eval_strategy steps \
+        #     --eval_steps 200
 
     else
         echo "Invalid running mode: $RUNNING_MODE"
