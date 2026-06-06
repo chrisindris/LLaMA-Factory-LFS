@@ -47,6 +47,9 @@ export VENV_LLAMAFACTORY="$(python3 -c "import sysconfigtool; print(sysconfigtoo
 unset PYTHONPATH
 
 source $VENV_LLAMAFACTORY/bin/activate
+pip install --upgrade pip setuptools wheel
+pip install packaging
+pip install --no-index huggingface_hub
 
 echo "Cluster name: $1"
 echo "HF_HOME: $HF_HOME"
@@ -67,8 +70,8 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 Video-R1/Video-R1-7B # Video-R1 is Qwen2.5VL-7B that was used by Video-R1.
 # hf download --max-workers=4 Video-R1/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
 # hf download --max-workers=4 Qwen/Qwen3-VL-8B-Instruct # The Qwen3 counterpart to Qwen2.5VL-7B, which is what we have been using.
-hf download --max-workers=4 Qwen/Qwen3.5-4B # Qwen3.5 multimodal base model used for mirrored SFT runs.
-hf download --max-workers=4 Qwen/Qwen3.5-9B # Qwen3.5 multimodal base model used for mirrored SFT runs.
+# hf download --max-workers=4 Qwen/Qwen3.5-4B # Qwen3.5 multimodal base model used for mirrored SFT runs.
+# hf download --max-workers=4 Qwen/Qwen3.5-9B # Qwen3.5 multimodal base model used for mirrored SFT runs.
 #hf download --max-workers=4 Qwen/Qwen3-VL-8B-Thinking # Same as above but with extra thinking capabilities.
 #hf download --max-workers=8 zd11024/Video3D-LLM-LLaVA-Qwen-Uniform-32 # Resulting model of Video3D-LLM
 # hf download --max-workers=4 Video-R1/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
@@ -116,7 +119,7 @@ hf download --max-workers=4 Qwen/Qwen3.5-9B # Qwen3.5 multimodal base model used
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # scene30k
-# hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
+hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
 
 deactivate
 # rm -r temp_env

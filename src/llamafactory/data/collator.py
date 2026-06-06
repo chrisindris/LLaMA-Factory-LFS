@@ -251,6 +251,23 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
             for i, feature in enumerate(features):
                 feature["token_type_ids"] = token_type_ids[i]
 
+        if debug_samples is not None:
+            video_frame_counts = mm_inputs.get("video_frame_counts")
+            if video_frame_counts is not None:
+                if torch.is_tensor(video_frame_counts):
+                    video_frame_counts = video_frame_counts.detach().cpu().tolist()
+                else:
+                    video_frame_counts = list(video_frame_counts)
+
+                offset = 0
+                for sample, video_count in zip(debug_samples, batch_vidlens):
+                    sample_frame_counts = [int(count) for count in video_frame_counts[offset : offset + video_count]]
+                    offset += video_count
+                    sample_media = sample.setdefault("media", {})
+                    videos_summary = sample_media.setdefault("videos", {})
+                    videos_summary["frame_counts"] = sample_frame_counts
+                    videos_summary["frame_total"] = int(sum(sample_frame_counts))
+
         features: dict[str, torch.Tensor] = super().__call__(features)
         if debug_samples is not None:
             if log_enabled:

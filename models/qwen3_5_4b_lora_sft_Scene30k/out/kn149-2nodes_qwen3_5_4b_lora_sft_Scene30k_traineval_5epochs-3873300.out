@@ -1,0 +1,454 @@
+SLURM_JOB_NODELIST: kn[149,156]
+HEAD_NODE: kn149
+MASTER_ADDR: kn149
+MASTER_PORT: 29500
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126_qwen35/
+RUNNING_MODE: VENV
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126_qwen35/
+RUNNING_MODE: VENV
+VENV_LLAMAFACTORY: /tmp/venv_llamafactory_cu126_qwen35
+AVX-512 support detected — enabling AVX-512 compile flags for native extensions
+VENV_LLAMAFACTORY: /tmp/venv_llamafactory_cu126_qwen35
+gcc (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+AVX-512 support detected — enabling AVX-512 compile flags for native extensions
+g++ (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Setting up environment for CUDA 12.x
+gcc (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+g++ (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Setting up environment for CUDA 12.x
+created virtual environment CPython3.12.4.final.0-64 in 321ms
+  creator CPython3Posix(dest=/tmp/venv_llamafactory_cu126_qwen35, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=/home/indrisch/.local/share/virtualenv)
+    added seed packages: pip==26.1.1
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+created virtual environment CPython3.12.4.final.0-64 in 1083ms
+  creator CPython3Posix(dest=/tmp/venv_llamafactory_cu126_qwen35, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=/home/indrisch/.local/share/virtualenv)
+    added seed packages: pip==26.1.1
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages (26.1.1)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages (26.1.1)
+Collecting pip
+  Using cached pip-26.1.2-py3-none-any.whl.metadata (4.6 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/setuptools-82.0.1+computecanada-py3-none-any.whl
+Collecting wheel
+  Using cached wheel-0.47.0-py3-none-any.whl.metadata (2.3 kB)
+Requirement already satisfied: packaging>=24.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from wheel) (26.0+computecanada)
+Using cached pip-26.1.2-py3-none-any.whl (1.8 MB)
+Using cached wheel-0.47.0-py3-none-any.whl (32 kB)
+Installing collected packages: wheel, setuptools, pip
+  Attempting uninstall: pip
+    Found existing installation: pip 26.1.1
+Collecting pip
+  Using cached pip-26.1.2-py3-none-any.whl.metadata (4.6 kB)
+    Uninstalling pip-26.1.1:
+      Successfully uninstalled pip-26.1.1
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/setuptools-82.0.1+computecanada-py3-none-any.whl
+Collecting wheel
+  Using cached wheel-0.47.0-py3-none-any.whl.metadata (2.3 kB)
+Requirement already satisfied: packaging>=24.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from wheel) (26.0+computecanada)
+Using cached pip-26.1.2-py3-none-any.whl (1.8 MB)
+Using cached wheel-0.47.0-py3-none-any.whl (32 kB)
+Installing collected packages: wheel, setuptools, pip
+
+Successfully installed pip-26.1.2 setuptools-82.0.1+computecanada wheel-0.47.0
+Installing transformers>=5.2.0 for Qwen3.5 compatibility
+  Attempting uninstall: pip
+    Found existing installation: pip 26.1.1
+    Uninstalling pip-26.1.1:
+      Successfully uninstalled pip-26.1.1
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Obtaining file:///project/6110552/indrisch/LLaMA-Factory
+  Installing build dependencies: started
+
+Successfully installed pip-26.1.2 setuptools-82.0.1+computecanada wheel-0.47.0
+Installing transformers>=5.2.0 for Qwen3.5 compatibility
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Obtaining file:///project/6110552/indrisch/LLaMA-Factory
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (26.0+computecanada)
+Requirement already satisfied: psutil in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (7.2.2+computecanada)
+Requirement already satisfied: pandas in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (3.0.0+computecanada)
+Requirement already satisfied: pillow in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (12.1.0+computecanada)
+Requirement already satisfied: decorator in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (5.2.1+computecanada)
+Requirement already satisfied: scipy in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (1.17.0+computecanada)
+Requirement already satisfied: matplotlib in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (3.10.8+computecanada)
+Requirement already satisfied: platformdirs in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (4.5.1+computecanada)
+Requirement already satisfied: pyarrow in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/arrow/24.0.0/lib/python3.12/site-packages (24.0.0)
+Requirement already satisfied: sympy in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (1.14.0+computecanada)
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (26.0+computecanada)
+Requirement already satisfied: psutil in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (7.2.2+computecanada)
+Requirement already satisfied: pandas in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (3.0.0+computecanada)
+Requirement already satisfied: pillow in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (12.1.0+computecanada)
+Requirement already satisfied: decorator in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (5.2.1+computecanada)
+Requirement already satisfied: scipy in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (1.17.0+computecanada)
+Requirement already satisfied: matplotlib in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (3.10.8+computecanada)
+Requirement already satisfied: platformdirs in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (4.5.1+computecanada)
+Requirement already satisfied: pyarrow in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/arrow/24.0.0/lib/python3.12/site-packages (24.0.0)
+Requirement already satisfied: sympy in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (1.14.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/wandb-0.24.0+computecanada-py3-none-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/ray-2.54.1+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/h5py-3.16.0+computecanada-cp312-cp312-linux_x86_64.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.10.2-py3-none-any.whl.metadata (33 kB)
+Collecting flash_linear_attention
+  Using cached flash_linear_attention-0.5.0-py3-none-any.whl.metadata (44 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/causal_conv1d-1.5.4+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/datasets-4.0.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/accelerate-1.11.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/peft-0.19.1+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/trl-0.9.6+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting gradio<=5.45.0,>=4.38.0 (from llamafactory==0.9.4.dev0)
+  Using cached gradio-5.45.0-py3-none-any.whl.metadata (16 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/tyro-0.8.14+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/einops-0.8.2+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/wandb-0.24.0+computecanada-py3-none-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/numpy-1.26.4+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/sentencepiece-0.2.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/ray-2.54.1+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/tiktoken-0.12.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Collecting modelscope>=1.14.0 (from llamafactory==0.9.4.dev0)
+  Using cached modelscope-1.37.1-py3-none-any.whl.metadata (43 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/hf_transfer-0.1.9+computecanada-cp38-abi3-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/safetensors-0.5.3+computecanada-cp38-abi3-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/h5py-3.16.0+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fire-0.7.1+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/omegaconf-2.3.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting transformers>=5.2.0
+  Using cached transformers-5.10.2-py3-none-any.whl.metadata (33 kB)
+Collecting flash_linear_attention
+  Using cached flash_linear_attention-0.5.0-py3-none-any.whl.metadata (44 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/causal_conv1d-1.5.4+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/protobuf-7.35.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pyyaml-6.0.3+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pydantic-2.10.6+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting uvicorn (from llamafactory==0.9.4.dev0)
+  Using cached uvicorn-0.49.0-py3-none-any.whl.metadata (6.7 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fastapi-0.136.3+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/datasets-4.0.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/sse_starlette-3.4.4+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/accelerate-1.11.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/peft-0.19.1+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/av-15.1.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/trl-0.9.6+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/librosa-0.11.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/propcache-0.5.2+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Collecting gradio<=5.45.0,>=4.38.0 (from llamafactory==0.9.4.dev0)
+  Using cached gradio-5.45.0-py3-none-any.whl.metadata (16 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/torch-2.12.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/tyro-0.8.14+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/einops-0.8.2+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/numpy-1.26.4+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/sentencepiece-0.2.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/tiktoken-0.12.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Collecting modelscope>=1.14.0 (from llamafactory==0.9.4.dev0)
+  Using cached modelscope-1.37.1-py3-none-any.whl.metadata (43 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/hf_transfer-0.1.9+computecanada-cp38-abi3-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/safetensors-0.5.3+computecanada-cp38-abi3-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/torchvision-0.27.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Collecting nltk (from llamafactory==0.9.4.dev0)
+  Using cached nltk-3.9.4-py3-none-any.whl.metadata (3.2 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fire-0.7.1+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jieba-0.42.1+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/omegaconf-2.3.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting rouge-chinese (from llamafactory==0.9.4.dev0)
+  Using cached rouge_chinese-1.0.3-py3-none-any.whl.metadata (7.6 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/deepspeed-0.16.4+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting liger-kernel>=0.5.5 (from llamafactory==0.9.4.dev0)
+  Using cached liger_kernel-0.8.0-py3-none-any.whl.metadata (27 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/huggingface_hub-1.17.0+computecanada-py3-none-any.whl (from accelerate<=1.11.0,>=1.3.0->llamafactory==0.9.4.dev0)
+Collecting filelock (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+  Using cached filelock-3.29.1-py3-none-any.whl.metadata (2.0 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/protobuf-7.35.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/dill-0.3.8+computecanada-py3-none-any.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/requests-2.34.2+computecanada-py3-none-any.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pyyaml-6.0.3+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/tqdm-4.67.3+computecanada-py3-none-any.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/xxhash-3.5.0+computecanada-cp312-cp312-linux_x86_64.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/multiprocess-0.70.16+computecanada-py3-none-any.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pydantic-2.10.6+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting uvicorn (from llamafactory==0.9.4.dev0)
+  Using cached uvicorn-0.49.0-py3-none-any.whl.metadata (6.7 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fsspec-2025.3.0+computecanada-py3-none-any.whl (from fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/hjson-3.1.0+computecanada-py3-none-any.whl (from deepspeed<=0.16.9,>=0.10.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fastapi-0.136.3+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/sse_starlette-3.4.4+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/msgpack-1.1.2+computecanada-cp312-cp312-linux_x86_64.whl (from deepspeed<=0.16.9,>=0.10.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/av-15.1.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/ninja-1.13.0+computecanada-py3-none-linux_x86_64.whl (from deepspeed<=0.16.9,>=0.10.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/py_cpuinfo-9.0.0+computecanada-py3-none-any.whl (from deepspeed<=0.16.9,>=0.10.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/librosa-0.11.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/propcache-0.5.2+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/torch-2.12.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/aiohttp-3.13.3+computecanada-cp312-cp312-linux_x86_64.whl (from fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/aiofiles-24.1.0+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/anyio-4.13.0+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/brotli-1.2.0+computecanada-cp312-cp312-linux_x86_64.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Collecting ffmpy (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached ffmpy-1.0.0-py3-none-any.whl.metadata (3.0 kB)
+Collecting gradio-client==1.13.0 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached gradio_client-1.13.0-py3-none-any.whl.metadata (7.1 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/groovy-0.1.2+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/httpx-0.28.1+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/huggingface_hub-0.36.2+computecanada-py3-none-any.whl (from accelerate<=1.11.0,>=1.3.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jinja2-3.1.6+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/markupsafe-3.0.3+computecanada-cp312-cp312-linux_x86_64.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/orjson-3.11.7+computecanada-cp312-cp312-linux_x86_64.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/pandas-2.3.3+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/pillow-11.1.0+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pydub-0.25.1+computecanada-py2.py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Collecting python-multipart>=0.0.18 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached python_multipart-0.0.32-py3-none-any.whl.metadata (2.1 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/torchvision-0.27.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Collecting nltk (from llamafactory==0.9.4.dev0)
+  Using cached nltk-3.9.4-py3-none-any.whl.metadata (3.2 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jieba-0.42.1+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting rouge-chinese (from llamafactory==0.9.4.dev0)
+  Using cached rouge_chinese-1.0.3-py3-none-any.whl.metadata (7.6 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/deepspeed-0.16.4+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting liger-kernel>=0.5.5 (from llamafactory==0.9.4.dev0)
+  Using cached liger_kernel-0.8.0-py3-none-any.whl.metadata (27 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/huggingface_hub-1.17.0+computecanada-py3-none-any.whl (from accelerate<=1.11.0,>=1.3.0->llamafactory==0.9.4.dev0)
+Collecting filelock (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+  Using cached filelock-3.29.1-py3-none-any.whl.metadata (2.0 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/ruff-0.11.0+computecanada-py3-none-linux_x86_64.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/dill-0.3.8+computecanada-py3-none-any.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Collecting safehttpx<0.2.0,>=0.1.6 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached safehttpx-0.1.7-py3-none-any.whl.metadata (4.2 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/requests-2.34.2+computecanada-py3-none-any.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/semantic_version-2.10.0+computecanada-py2.py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/tqdm-4.67.3+computecanada-py3-none-any.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/starlette-0.52.1+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/tomlkit-0.13.3+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Collecting typer<1.0,>=0.12 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached typer-0.26.7-py3-none-any.whl.metadata (16 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/typing_extensions-4.15.0+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/xxhash-3.5.0+computecanada-cp312-cp312-linux_x86_64.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/multiprocess-0.70.16+computecanada-py3-none-any.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fsspec-2025.3.0+computecanada-py3-none-any.whl (from fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/websockets-15.0.1+computecanada-cp312-cp312-linux_x86_64.whl (from gradio-client==1.13.0->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Requirement already satisfied: python-dateutil>=2.8.2 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from pandas) (2.9.0.post0+computecanada)
+Requirement already satisfied: pytz>=2020.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from pandas) (2025.2+computecanada)
+Requirement already satisfied: tzdata>=2022.7 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from pandas) (2025.3+computecanada)
+Collecting idna>=2.8 (from anyio<5.0,>=3.0->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/hjson-3.1.0+computecanada-py3-none-any.whl (from deepspeed<=0.16.9,>=0.10.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/typing_inspection-0.4.2+computecanada-py3-none-any.whl (from fastapi->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/annotated_doc-0.0.4+computecanada-py3-none-any.whl (from fastapi->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/certifi-2026.5.20+computecanada-py3-none-any.whl (from httpx<1.0,>=0.24.1->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/msgpack-1.1.2+computecanada-cp312-cp312-linux_x86_64.whl (from deepspeed<=0.16.9,>=0.10.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/httpcore-1.0.9+computecanada-py3-none-any.whl (from httpx<1.0,>=0.24.1->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/h11-0.16.0+computecanada-py3-none-any.whl (from httpcore==1.*->httpx<1.0,>=0.24.1->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/ninja-1.13.0+computecanada-py3-none-linux_x86_64.whl (from deepspeed<=0.16.9,>=0.10.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/py_cpuinfo-9.0.0+computecanada-py3-none-any.whl (from deepspeed<=0.16.9,>=0.10.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/hf_xet-1.5.0+computecanada-cp37-abi3-linux_x86_64.whl (from huggingface_hub>=0.21.0->accelerate<=1.11.0,>=1.3.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/annotated_types-0.7.0+computecanada-py3-none-any.whl (from pydantic<=2.10.6->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/aiohttp-3.13.3+computecanada-cp312-cp312-linux_x86_64.whl (from fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/aiofiles-24.1.0+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/anyio-4.13.0+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/brotli-1.2.0+computecanada-cp312-cp312-linux_x86_64.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Collecting ffmpy (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached ffmpy-1.0.0-py3-none-any.whl.metadata (3.0 kB)
+Collecting gradio-client==1.13.0 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached gradio_client-1.13.0-py3-none-any.whl.metadata (7.1 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/groovy-0.1.2+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/httpx-0.28.1+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/huggingface_hub-0.36.2+computecanada-py3-none-any.whl (from accelerate<=1.11.0,>=1.3.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jinja2-3.1.6+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/pydantic_core-2.27.2+computecanada-cp312-cp312-linux_x86_64.whl (from pydantic<=2.10.6->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/shellingham-1.5.4+computecanada-py2.py3-none-any.whl (from typer<1.0,>=0.12->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/rich-15.0.0+computecanada-py3-none-any.whl (from typer<1.0,>=0.12->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/markupsafe-3.0.3+computecanada-cp312-cp312-linux_x86_64.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/docstring_parser-0.18.0+computecanada-py3-none-any.whl (from tyro<0.9.0->llamafactory==0.9.4.dev0)
+Collecting shtab>=1.5.6 (from tyro<0.9.0->llamafactory==0.9.4.dev0)
+  Using cached shtab-1.8.0-py3-none-any.whl.metadata (7.3 kB)
+Requirement already satisfied: contourpy>=1.0.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (1.3.3+computecanada)
+Requirement already satisfied: cycler>=0.10 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (0.12.1+computecanada)
+Requirement already satisfied: fonttools>=4.22.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (4.61.1+computecanada)
+Requirement already satisfied: kiwisolver>=1.3.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (1.4.9+computecanada)
+Requirement already satisfied: pyparsing>=3 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (3.3.2+computecanada)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from sympy) (1.3.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/click-8.4.1+computecanada-py3-none-any.whl (from wandb)
+Collecting gitpython!=3.1.29,>=1.0.0 (from wandb)
+  Using cached gitpython-3.1.50-py3-none-any.whl.metadata (14 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/protobuf-6.33.6+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Collecting sentry-sdk>=2.0.0 (from wandb)
+  Using cached sentry_sdk-2.61.1-py3-none-any.whl.metadata (10 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/orjson-3.11.7+computecanada-cp312-cp312-linux_x86_64.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/charset_normalizer-3.4.7+computecanada-py3-none-any.whl (from requests>=2.32.2->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/pandas-2.3.3+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/urllib3-2.7.0+computecanada-py3-none-any.whl (from requests>=2.32.2->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jsonschema-4.26.0+computecanada-py3-none-any.whl (from ray)
+INFO: pip is looking at multiple versions of transformers to determine which version is compatible with other requirements. This could take a while.
+Collecting transformers>=5.2.0
+  Using cached transformers-5.10.1-py3-none-any.whl.metadata (33 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.9.0+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.9.0-py3-none-any.whl.metadata (33 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.8.1+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/pillow-11.1.0+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pydub-0.25.1+computecanada-py2.py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Collecting transformers>=5.2.0
+  Using cached transformers-5.8.1-py3-none-any.whl.metadata (33 kB)
+Collecting python-multipart>=0.0.18 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached python_multipart-0.0.32-py3-none-any.whl.metadata (2.1 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.8.0+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.8.0-py3-none-any.whl.metadata (33 kB)
+INFO: pip is still looking at multiple versions of transformers to determine which version is compatible with other requirements. This could take a while.
+  Using cached transformers-5.7.0-py3-none-any.whl.metadata (33 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.6.2+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.6.2-py3-none-any.whl.metadata (33 kB)
+  Using cached transformers-5.6.1-py3-none-any.whl.metadata (33 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.6.0+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/ruff-0.11.0+computecanada-py3-none-linux_x86_64.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Collecting safehttpx<0.2.0,>=0.1.6 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached safehttpx-0.1.7-py3-none-any.whl.metadata (4.2 kB)
+INFO: This is taking longer than usual. You might need to provide the dependency resolver with stricter constraints to reduce runtime. See https://pip.pypa.io/warnings/backtracking for guidance. If you want to abort this run, press Ctrl + C.
+Collecting transformers>=5.2.0
+  Using cached transformers-5.6.0-py3-none-any.whl.metadata (33 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/semantic_version-2.10.0+computecanada-py2.py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.5.4+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/starlette-0.52.1+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/tomlkit-0.13.3+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Collecting typer<1.0,>=0.12 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached typer-0.26.7-py3-none-any.whl.metadata (16 kB)
+Collecting transformers>=5.2.0
+  Using cached transformers-5.5.4-py3-none-any.whl.metadata (32 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/typing_extensions-4.15.0+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached transformers-5.5.3-py3-none-any.whl.metadata (32 kB)
+  Using cached transformers-5.5.2-py3-none-any.whl.metadata (32 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/websockets-15.0.1+computecanada-cp312-cp312-linux_x86_64.whl (from gradio-client==1.13.0->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Requirement already satisfied: python-dateutil>=2.8.2 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from pandas) (2.9.0.post0+computecanada)
+Requirement already satisfied: pytz>=2020.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from pandas) (2025.2+computecanada)
+Requirement already satisfied: tzdata>=2022.7 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from pandas) (2025.3+computecanada)
+  Using cached transformers-5.5.1-py3-none-any.whl.metadata (32 kB)
+Collecting idna>=2.8 (from anyio<5.0,>=3.0->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.5.0+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/typing_inspection-0.4.2+computecanada-py3-none-any.whl (from fastapi->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/annotated_doc-0.0.4+computecanada-py3-none-any.whl (from fastapi->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/certifi-2026.5.20+computecanada-py3-none-any.whl (from httpx<1.0,>=0.24.1->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Collecting transformers>=5.2.0
+  Using cached transformers-5.5.0-py3-none-any.whl.metadata (32 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/httpcore-1.0.9+computecanada-py3-none-any.whl (from httpx<1.0,>=0.24.1->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/h11-0.16.0+computecanada-py3-none-any.whl (from httpcore==1.*->httpx<1.0,>=0.24.1->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached transformers-5.4.0-py3-none-any.whl.metadata (32 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/hf_xet-1.5.0+computecanada-cp37-abi3-linux_x86_64.whl (from huggingface_hub>=0.21.0->accelerate<=1.11.0,>=1.3.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.3.0+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/annotated_types-0.7.0+computecanada-py3-none-any.whl (from pydantic<=2.10.6->llamafactory==0.9.4.dev0)
+Collecting transformers>=5.2.0
+  Using cached transformers-5.3.0-py3-none-any.whl.metadata (32 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.2.0+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.2.0-py3-none-any.whl.metadata (32 kB)
+Collecting trl<=0.9.6,>=0.8.6 (from llamafactory==0.9.4.dev0)
+  Using cached trl-0.9.6-py3-none-any.whl.metadata (12 kB)
+Collecting gradio<=5.45.0,>=4.38.0 (from llamafactory==0.9.4.dev0)
+  Using cached gradio-5.44.1-py3-none-any.whl.metadata (16 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/regex-2026.1.15+computecanada-cp312-cp312-linux_x86_64.whl (from transformers>=5.2.0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/tokenizers-0.22.2+computecanada-cp39-abi3-linux_x86_64.whl (from transformers>=5.2.0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/pydantic_core-2.27.2+computecanada-cp312-cp312-linux_x86_64.whl (from pydantic<=2.10.6->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/typer-0.25.1+computecanada-py3-none-any.whl (from transformers>=5.2.0)
+Collecting gradio-client==1.12.1 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached gradio_client-1.12.1-py3-none-any.whl.metadata (7.1 kB)
+INFO: pip is looking at multiple versions of gradio to determine which version is compatible with other requirements. This could take a while.
+Collecting gradio<=5.45.0,>=4.38.0 (from llamafactory==0.9.4.dev0)
+  Using cached gradio-5.44.0-py3-none-any.whl.metadata (16 kB)
+  Using cached gradio-5.43.1-py3-none-any.whl.metadata (16 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/shellingham-1.5.4+computecanada-py2.py3-none-any.whl (from typer<1.0,>=0.12->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached gradio-5.43.0-py3-none-any.whl.metadata (16 kB)
+Collecting gradio-client==1.12.0 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached gradio_client-1.12.0-py3-none-any.whl.metadata (7.1 kB)
+Collecting gradio<=5.45.0,>=4.38.0 (from llamafactory==0.9.4.dev0)
+  Using cached gradio-5.42.0-py3-none-any.whl.metadata (16 kB)
+Collecting gradio-client==1.11.1 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached gradio_client-1.11.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting gradio<=5.45.0,>=4.38.0 (from llamafactory==0.9.4.dev0)
+  Using cached gradio-5.41.1-py3-none-any.whl.metadata (16 kB)
+Collecting gradio-client==1.11.0 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached gradio_client-1.11.0-py3-none-any.whl.metadata (7.1 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/rich-15.0.0+computecanada-py3-none-any.whl (from typer<1.0,>=0.12->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Collecting gradio<=5.45.0,>=4.38.0 (from llamafactory==0.9.4.dev0)
+  Using cached gradio-5.41.0-py3-none-any.whl.metadata (16 kB)
+  Using cached gradio-5.40.0-py3-none-any.whl.metadata (16 kB)
+INFO: pip is still looking at multiple versions of gradio to determine which version is compatible with other requirements. This could take a while.
+  Using cached gradio-5.39.0-py3-none-any.whl.metadata (16 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/docstring_parser-0.18.0+computecanada-py3-none-any.whl (from tyro<0.9.0->llamafactory==0.9.4.dev0)
+  Using cached gradio-5.38.2-py3-none-any.whl.metadata (16 kB)
+Collecting shtab>=1.5.6 (from tyro<0.9.0->llamafactory==0.9.4.dev0)
+  Using cached shtab-1.8.0-py3-none-any.whl.metadata (7.3 kB)
+Requirement already satisfied: contourpy>=1.0.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (1.3.3+computecanada)
+Requirement already satisfied: cycler>=0.10 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (0.12.1+computecanada)
+Requirement already satisfied: fonttools>=4.22.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (4.61.1+computecanada)
+Requirement already satisfied: kiwisolver>=1.3.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (1.4.9+computecanada)
+Requirement already satisfied: pyparsing>=3 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (3.3.2+computecanada)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from sympy) (1.3.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/click-8.4.1+computecanada-py3-none-any.whl (from wandb)
+Collecting gitpython!=3.1.29,>=1.0.0 (from wandb)
+  Using cached gitpython-3.1.50-py3-none-any.whl.metadata (14 kB)
+Collecting fla-core==0.5.0 (from flash_linear_attention)
+  Using cached fla_core-0.5.0-py3-none-any.whl.metadata (44 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/protobuf-6.33.6+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/torch-2.9.1+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Collecting sentry-sdk>=2.0.0 (from wandb)
+  Using cached sentry_sdk-2.61.1-py3-none-any.whl.metadata (10 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/charset_normalizer-3.4.7+computecanada-py3-none-any.whl (from requests>=2.32.2->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/urllib3-2.7.0+computecanada-py3-none-any.whl (from requests>=2.32.2->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jsonschema-4.26.0+computecanada-py3-none-any.whl (from ray)
+INFO: pip is looking at multiple versions of transformers to determine which version is compatible with other requirements. This could take a while.
+Collecting transformers>=5.2.0
+  Using cached transformers-5.10.1-py3-none-any.whl.metadata (33 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.9.0+computecanada-py3-none-any.whl
+srun: Job step aborted: Waiting up to 62 seconds for job step to finish.
+slurmstepd: error: *** JOB 3873300 ON kn149 CANCELLED AT 2026-06-05T02:42:47 ***
+slurmstepd: error: *** STEP 3873300.0 ON kn149 CANCELLED AT 2026-06-05T02:42:47 ***

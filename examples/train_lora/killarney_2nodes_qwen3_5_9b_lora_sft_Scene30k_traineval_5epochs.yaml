@@ -30,7 +30,7 @@ low_cpu_mem_usage: true
 ### output
 output_dir: saves/qwen3_5-9b/lora/sft/Scene30k_traineval_2nodes_5epochs
 logging_steps: 10
-save_steps: 426 # save after every 1.00 Scene30k epochs
+save_steps: 213 # save after every 1.00 Scene30k epochs
 plot_loss: true
 overwrite_output_dir: true
 save_only_model: false
@@ -45,17 +45,19 @@ num_train_epochs: 5.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
+bf16_full_eval: true # set to true to use bf16 during evaluation as well, which can reduce memory usage and speed up evaluation on compatible hardware.
+# pure_bf16: true # pure_bf16` is incompatible with DeepSpeed ZeRO-3 (*3874065.out)
 ddp_timeout: 180000000
 resume_from_checkpoint: null
 
 # debugging level
-# debug: none # to turn off debugging, we must simply comment out this line.
-log_level: passive
-log_level_replica: passive
-print_param_status: false
-# debug_mm_training: true
-# debug_mm_steps: 1
-image_sample_stride: 4 # use every 4th image frame when on l40s GPUs.
+debug: underflow_overflow
+log_level: debug
+log_level_replica: debug
+print_param_status: true
+debug_mm_training: true
+debug_mm_steps: 1
+image_sample_stride: 8 # use every 8th image frame when on l40s GPUs. It seems like every 10th is too sparse.
 
 # acceleration
 flash_attn: fa2

@@ -251,6 +251,19 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         payload["model_cuda_total_gb"] = self._bytes_to_gb(param_bytes + buffer_bytes)
         if debug_samples is not None:
             payload["samples"] = debug_samples
+            video_frame_totals: list[int] = []
+            video_frame_counts: list[list[int]] = []
+            for sample in debug_samples:
+                frame_counts = sample.get("media", {}).get("videos", {}).get("frame_counts")
+                if isinstance(frame_counts, list) and len(frame_counts) != 0:
+                    sample_frame_counts = [int(count) for count in frame_counts]
+                    video_frame_counts.append(sample_frame_counts)
+                    video_frame_totals.append(sum(sample_frame_counts))
+            if video_frame_counts:
+                payload["video_frame_counts"] = video_frame_counts
+                payload["video_frame_total"] = int(sum(video_frame_totals))
+                payload["video_frame_total_min"] = int(min(video_frame_totals))
+                payload["video_frame_total_max"] = int(max(video_frame_totals))
         payload.update(self._summarize_inputs(inputs))
         return payload
 

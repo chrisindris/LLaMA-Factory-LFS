@@ -63453,3 +63453,147 @@ kn144:3705806:3712830 [1] NCCL INFO Connected all trees
 kn148:3347665:3354642 [0] NCCL INFO Connected all trees
 kn148:3347666:3354643 [1] NCCL INFO Connected all trees
 kn148:3347667:3354644 [2] NCCL INFO Connected all trees
+{'loss': '1.395', 'grad_norm': '0.7319', 'learning_rate': '8.411e-06', 'epoch': '0.04703'}
+  0%|          | 0/1065 [00:00<?, ?it/s]  0%|          | 1/1065 [02:27<43:40:33, 147.78s/it]  0%|          | 2/1065 [04:06<35:01:48, 118.63s/it]  0%|          | 3/1065 [04:49<24:55:42, 84.50s/it]   0%|          | 4/1065 [05:34<20:14:43, 68.69s/it]  0%|          | 5/1065 [06:18<17:36:41, 59.81s/it]  1%|          | 6/1065 [07:02<15:58:58, 54.33s/it]  1%|          | 7/1065 [07:45<14:56:14, 50.83s/it]  1%|          | 8/1065 [08:28<14:10:37, 48.29s/it]  1%|          | 9/1065 [09:12<13:45:19, 46.89s/it]  1%|          | 10/1065 [09:54<13:18:47, 45.43s/it]                                                      1%|          | 10/1065 [09:54<13:18:47, 45.43s/it]  1%|          | 11/1065 [10:38<13:11:13, 45.04s/it]  1%|          | 12/1065 [11:20<12:55:29, 44.19s/it]  1%|          | 13/1065 [12:02<12:43:09, 43.53s/it]  1%|▏         | 14/1065 [12:45<12:35:40, 43.14s/it]  1%|▏         | 15/1065 [13:29<12:42:22, 43.56s/it]  2%|▏         | 16/1065 [14:13<12:40:48, 43.52s/it]  2%|▏         | 17/1065 {'loss': '1.333', 'grad_norm': '0.5545', 'learning_rate': '1.776e-05', 'epoch': '0.09406'}
+{'loss': '1.199', 'grad_norm': '0.3732', 'learning_rate': '2.71e-05', 'epoch': '0.1411'}
+[14:56<12:36:48, 43.33s/it]  2%|▏         | 18/1065 [15:38<12:30:35, 43.01s/it]  2%|▏         | 19/1065 [16:21<12:28:43, 42.95s/it]  2%|▏         | 20/1065 [17:03<12:23:20, 42.68s/it]                                                      2%|▏         | 20/1065 [17:03<12:23:20, 42.68s/it]  2%|▏         | 21/1065 [17:47<12:30:45, 43.15s/it]  2%|▏         | 22/1065 [18:29<12:25:48, 42.90s/it]  2%|▏         | 23/1065 [19:14<12:36:21, 43.55s/it]  2%|▏         | 24/1065 [19:57<12:33:11, 43.41s/it]  2%|▏         | 25/1065 [20:40<12:27:27, 43.12s/it]  2%|▏         | 26/1065 [21:23<12:27:56, 43.19s/it]  3%|▎         | 27/1065 [22:06<12:26:35, 43.16s/it]  3%|▎         | 28/1065 [22:49<12:22:16, 42.95s/it]  3%|▎         | 29/1065 [24:00<14:50:02, 51.55s/it]  3%|▎         | 30/1065 [24:43<14:04:45, 48.97s/it]                                                      3%|▎         | 30/1065 [24:43<14:04:45, 48.97s/it]  3%|▎         | 31/1065 [25:28<13:41:57, 47.70s/it]  3%|▎[rank4]: Traceback (most recent call last):
+[rank4]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank4]:     run_exp()
+[rank4]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 122, in run_exp
+[rank4]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank4]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 84, in _training_function
+[rank4]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank4]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 122, in run_sft
+[rank4]:     train_result = trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
+[rank4]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
+[rank4]:     return inner_training_loop(
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/transformers/trainer.py", line 1515, in _inner_training_loop
+[rank4]:     self._run_epoch(
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/transformers/trainer.py", line 1743, in _run_epoch
+[rank4]:     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+[rank4]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/transformers/trainer.py", line 1915, in training_step
+[rank4]:     loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 289, in compute_loss
+[rank4]:     return super().compute_loss(model, inputs, *args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/transformers/trainer.py", line 1987, in compute_loss
+[rank4]:     outputs = model(**inputs)
+[rank4]:               ^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank4]:     return self._call_impl(*args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[rank4]:     return forward_call(*args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/deepspeed/utils/nvtx.py", line 18, in wrapped_fn
+[rank4]:     ret_val = func(*args, **kwargs)
+[rank4]:               ^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1987, in forward
+[rank4]:     loss = self.module(*inputs, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank4]:     return self._call_impl(*args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank4]:     return inner()
+[rank4]:            ^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank4]:     result = forward_call(*args, **kwargs)
+[rank4]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/peft/peft_model.py", line 1993, in forward
+[rank4]:     return self.base_model(
+[rank4]:            ^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank4]:     return self._call_impl(*args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank4]:     return inner()
+[rank4]:            ^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank4]:     result = forward_call(*args, **kwargs)
+[rank4]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 330, in forward
+[rank4]:     return self.model.forward(*args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/transformers/utils/generic.py", line 903, in wrapper
+[rank4]:     output = func(self, *args, **kwargs)
+[rank4]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/transformers/models/qwen3_5/modeling_qwen3_5.py", line 1840, in forward
+[rank4]:     loss = self.loss_function(logits=logits, labels=labels, vocab_size=self.config.text_config.vocab_size)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/transformers/loss/loss_utils.py", line 69, in ForCausalLMLoss
+[rank4]:     loss = fixed_cross_entropy(logits, shift_labels, num_items_in_batch, ignore_index, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/transformers/loss/loss_utils.py", line 39, in fixed_cross_entropy
+[rank4]:     loss = nn.functional.cross_entropy(source, target, ignore_index=ignore_index, reduction=reduction)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/nn/functional.py", line 3458, in cross_entropy
+[rank4]:     return torch._C._nn.cross_entropy_loss(
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 15.66 GiB. GPU 0 has a total capacity of 44.39 GiB of which 14.42 GiB is free. Including non-PyTorch memory, this process has 29.96 GiB memory in use. Of the allocated memory 28.87 GiB is allocated by PyTorch, and 274.65 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+[rank4]:[W604 23:15:26.294507793 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+kn148:3347666:3354469 [1] NCCL INFO [Service thread] Connection closed by localRank 0
+kn148:3347667:3354467 [2] NCCL INFO [Service thread] Connection closed by localRank 0
+kn148:3347668:3354465 [3] NCCL INFO [Service thread] Connection closed by localRank 0
+kn148:3347668:3348183 [3] NCCL INFO [Service thread] Connection closed by localRank 0
+kn148:3347667:3348181 [2] NCCL INFO [Service thread] Connection closed by localRank 0
+kn148:3347666:3348182 [1] NCCL INFO [Service thread] Connection closed by localRank 0
+W0604 23:15:27.249000 3347663 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 3347666 closing signal SIGTERM
+W0604 23:15:27.254000 3347663 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 3347667 closing signal SIGTERM
+W0604 23:15:27.257000 3347663 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 3347668 closing signal SIGTERM
+E0604 23:15:28.740000 3347663 torch/distributed/elastic/multiprocessing/api.py:882] failed (exitcode: 1) local_rank: 0 (pid: 3347665) of binary: /tmp/venv_llamafactory_cu126_qwen35/bin/python3
+Traceback (most recent call last):
+  File "/tmp/venv_llamafactory_cu126_qwen35/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 357, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/run.py", line 936, in main
+    run(args)
+  File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/run.py", line 927, in run
+    elastic_launch(
+  File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 156, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 293, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-06-04_23:15:27
+  host      : kn148.paice.vectorinstitute.ai
+  rank      : 4 (local_rank: 0)
+  exitcode  : 1 (pid: 3347665)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+[W604 23:15:28.908619323 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+Traceback (most recent call last):
+  File "/tmp/venv_llamafactory_cu126_qwen35/bin/llamafactory-cli", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/python/3.12.4/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '2', '--node_rank', '1', '--nproc_per_node', '4', '--master_addr', 'kn144', '--master_port', '29500', '/project/6110552/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.yaml']' returned non-zero exit status 1.
+[W604 23:15:29.599257599 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+srun: error: kn148: task 1: Exited with exit code 1
+srun: Terminating StepId=3869418.0
+         | 32/1065 [26:10<13:13:02, 46.06s/it]  3%|▎         | 33/1065 [26:53<12:52:38, 44.92s/it]slurmstepd: error: *** STEP 3869418.0 ON kn144 CANCELLED AT 2026-06-04T23:15:29 ***
+srun: error: kn144: task 0: Terminated
+srun: Force Terminated StepId=3869418.0
