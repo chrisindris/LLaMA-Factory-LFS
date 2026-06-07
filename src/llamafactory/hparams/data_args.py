@@ -83,6 +83,10 @@ class DataArguments:
         default=1,
         metadata={"help": "Keep every nth image per sample during preprocessing to reduce multimodal memory usage."},
     )
+    image_sample_count: int = field(
+        default=-1,
+        metadata={"help": "Keep a fixed number of evenly spaced images per sample during preprocessing."},
+    )
     preprocessing_num_workers: Optional[int] = field(
         default=None,
         metadata={"help": "The number of processes to use for the pre-processing."},
@@ -179,6 +183,12 @@ class DataArguments:
 
         if self.image_sample_stride < 1:
             raise ValueError("`image_sample_stride` should be greater than or equal to 1.")
+
+        if self.image_sample_count < -1 or self.image_sample_count == 0:
+            raise ValueError("`image_sample_count` should be -1 or greater than 0.")
+
+        if self.image_sample_count > 0 and self.image_sample_stride > 1:
+            raise ValueError("`image_sample_count` and `image_sample_stride` are mutually exclusive.")
 
         if self.mask_history and self.train_on_prompt:
             raise ValueError("`mask_history` is incompatible with `train_on_prompt`.")

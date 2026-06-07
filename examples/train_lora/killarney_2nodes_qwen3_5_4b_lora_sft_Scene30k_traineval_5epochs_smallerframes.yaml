@@ -55,9 +55,10 @@ debug: underflow_overflow
 log_level: debug
 log_level_replica: debug
 print_param_status: true
-debug_mm_training: true
+debug_mm_training: true # this is really for fine-grained debugging of memory usage; for runs, output is much cleaner if we turn this off.
 debug_mm_steps: 1
-image_sample_stride: 8 # use every 8th image frame when on l40s GPUs. It seems like every 10th is too sparse.
+# image_sample_stride: 16 # use every 16th image frame when on l40s GPUs.
+image_sample_count: 36 # I noticed that before we were using at most 18 frames per GPU per training step and we weren't OOMing.
 
 # acceleration
 flash_attn: fa2

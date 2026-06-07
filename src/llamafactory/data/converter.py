@@ -42,10 +42,31 @@ class DatasetConverter:
     dataset_attr: "DatasetAttr"
     data_args: "DataArguments"
 
-    def _subsample_image_placeholders(self, messages: list[dict[str, Any]]) -> list[dict[str, Any]]:
-        r"""Keep every nth image placeholder to match image subsampling."""
+    def _sample_image_indices(self, num_images: int) -> list[int]:
+        r"""Select image indices according to the configured sampling mode."""
+        if num_images <= 0:
+            return []
+
+        if self.data_args.image_sample_count > 0:
+            sample_count = min(self.data_args.image_sample_count, num_images)
+            if sample_count >= num_images:
+                return list(range(num_images))
+            if sample_count == 1:
+                return [0]
+
+            return [round(i * (num_images - 1) / (sample_count - 1)) for i in range(sample_count)]
+
         stride = self.data_args.image_sample_stride
         if stride <= 1:
+            return list(range(num_images))
+
+        return list(range(0, num_images, stride))
+
+    def _subsample_image_placeholders(self, messages: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        r"""Keep image placeholders aligned with the sampled image indices."""
+        total_placeholders = sum(message.get("content", "").count(IMAGE_PLACEHOLDER) for message in messages)
+        selected_indices = set(self._sample_image_indices(total_placeholders))
+        if len(selected_indices) == total_placeholders:
             return messages
 
         image_placeholder = IMAGE_PLACEHOLDER
@@ -62,7 +83,7 @@ class DatasetConverter:
             last_end = 0
             for match in image_pattern.finditer(content):
                 new_content_parts.append(content[last_end:match.start()])
-                if placeholder_index % stride == 0:
+                if placeholder_index in selected_indices:
                     new_content_parts.append(image_placeholder)
                 placeholder_index += 1
                 last_end = match.end()
@@ -132,8 +153,8 @@ class DatasetConverter:
         else:
             images = images[:]
 
-        if self.data_args.image_sample_stride > 1 and not isinstance(images[0], list):
-            images = images[:: self.data_args.image_sample_stride]
+        if not isinstance(images[0], list):
+            images = [images[index] for index in self._sample_image_indices(len(images))]
 
         return self._find_medias(images)
 
