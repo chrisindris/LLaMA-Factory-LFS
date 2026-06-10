@@ -12,9 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import pytest
+
 from llamafactory.data import Role
 from llamafactory.data.converter import get_dataset_converter
 from llamafactory.data.parser import DatasetAttr
+from llamafactory.extras.constants import IMAGE_PLACEHOLDER
 from llamafactory.hparams import DataArguments
 
 
@@ -58,3 +61,52 @@ def test_sharegpt_converter():
         "_videos": None,
         "_audios": None,
     }
+
+
+def test_image_sample_stride_and_count():
+    dataset_attr = DatasetAttr("hf_hub", "llamafactory/tiny-supervised-dataset", images="images")
+
+    stride_data_args = DataArguments(image_sample_stride=2)
+    stride_example = {
+        "instruction": IMAGE_PLACEHOLDER * 5,
+        "input": "",
+        "output": "The answer is 7.",
+        "images": ["frame_0.jpg", "frame_1.jpg", "frame_2.jpg", "frame_3.jpg", "frame_4.jpg"],
+    }
+    stride_converter = get_dataset_converter("alpaca", dataset_attr, stride_data_args)
+    stride_output = stride_converter(stride_example)
+    assert stride_output["_images"] == ["frame_0.jpg", "frame_2.jpg", "frame_4.jpg"]
+    assert stride_output["_prompt"][0]["content"] == IMAGE_PLACEHOLDER * 3
+
+    count_data_args = DataArguments(image_sample_count=3)
+    count_example = {
+        "instruction": IMAGE_PLACEHOLDER * 5,
+        "input": "",
+        "output": "The answer is 7.",
+        "images": ["frame_0.jpg", "frame_1.jpg", "frame_2.jpg", "frame_3.jpg", "frame_4.jpg"],
+    }
+    count_converter = get_dataset_converter("alpaca", dataset_attr, count_data_args)
+    count_output = count_converter(count_example)
+    assert count_output["_images"] == ["frame_0.jpg", "frame_2.jpg", "frame_4.jpg"]
+    assert count_output["_prompt"][0]["content"] == IMAGE_PLACEHOLDER * 3
+
+
+def test_image_sample_count_clamps_to_available_images():
+    dataset_attr = DatasetAttr("hf_hub", "llamafactory/tiny-supervised-dataset", images="images")
+    data_args = DataArguments(image_sample_count=10)
+    example = {
+        "instruction": IMAGE_PLACEHOLDER * 2,
+        "input": "",
+        "output": "The answer is 7.",
+        "images": ["frame_0.jpg", "frame_1.jpg"],
+    }
+    dataset_converter = get_dataset_converter("alpaca", dataset_attr, data_args)
+    output = dataset_converter(example)
+
+    assert output["_images"] == ["frame_0.jpg", "frame_1.jpg"]
+    assert output["_prompt"][0]["content"] == IMAGE_PLACEHOLDER * 2
+
+
+def test_image_sample_stride_and_count_are_mutually_exclusive():
+    with pytest.raises(ValueError, match="mutually exclusive"):
+        DataArguments(image_sample_stride=2, image_sample_count=3)

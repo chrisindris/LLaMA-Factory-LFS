@@ -13,11 +13,13 @@
 # limitations under the License.
 import json
 import os
+import re
 from abc import abstractmethod
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Optional, Union
 
 from ..extras import logging
+from ..extras.constants import IMAGE_PLACEHOLDER
 from .data_utils import Role
 from .data_packing.h5py_data import retrieve_image
 
@@ -39,6 +41,59 @@ logger = logging.get_logger(__name__)
 class DatasetConverter:
     dataset_attr: "DatasetAttr"
     data_args: "DataArguments"
+
+    def _sample_image_indices(self, num_images: int) -> list[int]:
+        r"""Select image indices according to the configured sampling mode."""
+        if num_images <= 0:
+            return []
+
+        if self.data_args.image_sample_count > 0:
+            sample_count = min(self.data_args.image_sample_count, num_images)
+            if sample_count >= num_images:
+                return list(range(num_images))
+            if sample_count == 1:
+                return [0]
+
+            return [round(i * (num_images - 1) / (sample_count - 1)) for i in range(sample_count)]
+
+        stride = self.data_args.image_sample_stride
+        if stride <= 1:
+            return list(range(num_images))
+
+        return list(range(0, num_images, stride))
+
+    def _subsample_image_placeholders(self, messages: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        r"""Keep image placeholders aligned with the sampled image indices."""
+        total_placeholders = sum(message.get("content", "").count(IMAGE_PLACEHOLDER) for message in messages)
+        selected_indices = set(self._sample_image_indices(total_placeholders))
+        if len(selected_indices) == total_placeholders:
+            return messages
+
+        image_placeholder = IMAGE_PLACEHOLDER
+        image_pattern = re.compile(re.escape(image_placeholder))
+        placeholder_index = 0
+        new_messages = []
+        for message in messages:
+            content = message.get("content", "")
+            if image_placeholder not in content:
+                new_messages.append(message)
+                continue
+
+            new_content_parts = []
+            last_end = 0
+            for match in image_pattern.finditer(content):
+                new_content_parts.append(content[last_end:match.start()])
+                if placeholder_index in selected_indices:
+                    new_content_parts.append(image_placeholder)
+                placeholder_index += 1
+                last_end = match.end()
+            new_content_parts.append(content[last_end:])
+
+            new_message = dict(message)
+            new_message["content"] = "".join(new_content_parts)
+            new_messages.append(new_message)
+
+        return new_messages
 
     def _find_medias(self, medias: Union["MediaType", list["MediaType"], None]) -> Optional[list["MediaType"]]:
         r"""Optionally concatenate media path to media dir when loading from local disk."""
@@ -86,6 +141,22 @@ class DatasetConverter:
                                 )
 
         return medias
+
+    def _find_images(self, images: Union["ImageInput", list["ImageInput"], None]) -> Optional[list["ImageInput"]]:
+        r"""Optionally subsample image lists before resolving local paths."""
+        if images is None:
+            return None
+        if not isinstance(images, list):
+            images = [images]
+        elif len(images) == 0:
+            return None
+        else:
+            images = images[:]
+
+        if not isinstance(images[0], list):
+            images = [images[index] for index in self._sample_image_indices(len(images))]
+
+        return self._find_medias(images)
 
     @abstractmethod
     def __call__(self, example: dict[str, Any]) -> dict[str, Any]:
@@ -136,10 +207,11 @@ class AlpacaDatasetConverter(DatasetConverter):
             "_response": response,
             "_system": example[self.dataset_attr.system] if self.dataset_attr.system else "",
             "_tools": example[self.dataset_attr.tools] if self.dataset_attr.tools else "",
-            "_images": self._find_medias(example[self.dataset_attr.images]) if self.dataset_attr.images else None,
+            "_images": self._find_images(example[self.dataset_attr.images]) if self.dataset_attr.images else None,
             "_videos": self._find_medias(example[self.dataset_attr.videos]) if self.dataset_attr.videos else None,
             "_audios": self._find_medias(example[self.dataset_attr.audios]) if self.dataset_attr.audios else None,
         }
+        output["_prompt"] = self._subsample_image_placeholders(output["_prompt"])
         return output
 
 
@@ -232,10 +304,11 @@ class SharegptDatasetConverter(DatasetConverter):
             "_response": response,
             "_system": system,
             "_tools": example[self.dataset_attr.tools] if self.dataset_attr.tools else "",
-            "_images": self._find_medias(example[self.dataset_attr.images]) if self.dataset_attr.images else None,
+            "_images": self._find_images(example[self.dataset_attr.images]) if self.dataset_attr.images else None,
             "_videos": self._find_medias(example[self.dataset_attr.videos]) if self.dataset_attr.videos else None,
             "_audios": self._find_medias(example[self.dataset_attr.audios]) if self.dataset_attr.audios else None,
         }
+        output["_prompt"] = self._subsample_image_placeholders(output["_prompt"])
         return output
 
 
@@ -372,10 +445,11 @@ class OpenAIDatasetConverter(DatasetConverter):
             "_response": response,
             "_system": system,
             "_tools": tools,
-            "_images": self._find_medias(example[self.dataset_attr.images]) if self.dataset_attr.images else None,
+            "_images": self._find_images(example[self.dataset_attr.images]) if self.dataset_attr.images else None,
             "_videos": self._find_medias(example[self.dataset_attr.videos]) if self.dataset_attr.videos else None,
             "_audios": self._find_medias(example[self.dataset_attr.audios]) if self.dataset_attr.audios else None,
         }
+        output["_prompt"] = self._subsample_image_placeholders(output["_prompt"])
         return output
 
 
