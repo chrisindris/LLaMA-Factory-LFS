@@ -28,6 +28,45 @@ if TYPE_CHECKING:
 logger = logging.get_logger(__name__)
 
 
+def _format_media_item(item: Any) -> str:
+    if isinstance(item, str):
+        return item
+    if isinstance(item, dict):
+        path = item.get("path")
+        if path:
+            return path
+    return f"<{type(item).__name__}>"
+
+
+def _summarize_media_list(medias: Any, max_items: int = 5) -> Optional[dict[str, Any]]:
+    if medias is None:
+        return None
+    if not isinstance(medias, list):
+        medias = [medias]
+    if len(medias) == 0:
+        return {"count": 0, "items": []}
+    if all(isinstance(item, list) for item in medias):
+        sample_frames = medias[0][:max_items] if medias[0] else []
+        return {
+            "nested": True,
+            "count": len(medias),
+            "sample": [_format_media_item(frame) for frame in sample_frames],
+        }
+    items = [_format_media_item(item) for item in medias[:max_items]]
+    remaining = len(medias) - max_items
+    if remaining > 0:
+        items.append(f"...({remaining} more)")
+    return {"count": len(medias), "items": items}
+
+
+def _build_media_summary(images: Any, videos: Any, audios: Any) -> dict[str, Any]:
+    return {
+        "images": _summarize_media_list(images),
+        "videos": _summarize_media_list(videos),
+        "audios": _summarize_media_list(audios),
+    }
+
+
 @dataclass
 class SupervisedDatasetProcessor(DatasetProcessor):
     def _encode_data_example(
@@ -89,6 +128,7 @@ class SupervisedDatasetProcessor(DatasetProcessor):
         # build inputs with format `<bos> X Y <eos>` and labels with format `<ignore> ... <ignore> Y <eos>`
         # for multiturn examples, we only mask the prompt part in each prompt-response pair.
         model_inputs = defaultdict(list)
+        indices = examples.get("_indices")
         for i in range(len(examples["_prompt"])):
             if len(examples["_prompt"][i]) % 2 != 1 or len(examples["_response"][i]) != 1:
                 logger.warning_rank0(
@@ -111,6 +151,11 @@ class SupervisedDatasetProcessor(DatasetProcessor):
             model_inputs["images"].append(examples["_images"][i])
             model_inputs["videos"].append(examples["_videos"][i])
             model_inputs["audios"].append(examples["_audios"][i])
+            if indices is not None:
+                model_inputs["sample_idx"].append(int(indices[i]))
+                model_inputs["sample_media"].append(
+                    _build_media_summary(examples["_images"][i], examples["_videos"][i], examples["_audios"][i])
+                )
 
         return model_inputs
 
@@ -130,8 +175,10 @@ class PackedSupervisedDatasetProcessor(SupervisedDatasetProcessor):
         # and labels with format `<ignore> ... <ignore> Y1 <eos> <ignore> ... <ignore> Y2 <eos>`
         valid_num = 0
         batch_input_ids, batch_labels, batch_images, batch_videos, batch_audios = [], [], [], [], []
+        batch_indices, batch_media = [], []
         lengths = []
         length2indexes = defaultdict(list)
+        indices = examples.get("_indices")
         for i in range(len(examples["_prompt"])):
             if len(examples["_prompt"][i]) % 2 != 1 or len(examples["_response"][i]) != 1:
                 logger.warning_rank0(
@@ -159,6 +206,13 @@ class PackedSupervisedDatasetProcessor(SupervisedDatasetProcessor):
                 batch_images.append(examples["_images"][i] or [])
                 batch_videos.append(examples["_videos"][i] or [])
                 batch_audios.append(examples["_audios"][i] or [])
+                if indices is not None:
+                    batch_indices.append(int(indices[i]))
+                    batch_media.append(
+                        _build_media_summary(
+                            examples["_images"][i], examples["_videos"][i], examples["_audios"][i]
+                        )
+                    )
                 valid_num += 1
 
         model_inputs = defaultdict(list)
@@ -166,6 +220,7 @@ class PackedSupervisedDatasetProcessor(SupervisedDatasetProcessor):
         for knapsack in knapsacks:
             packed_input_ids, packed_attention_masks, packed_position_ids, packed_labels = [], [], [], []
             packed_images, packed_videos, packed_audios = [], [], []
+            packed_indices, packed_media = [], []
             for i, length in enumerate(knapsack):
                 index = length2indexes[length].pop()
                 packed_input_ids += batch_input_ids[index]
@@ -174,6 +229,9 @@ class PackedSupervisedDatasetProcessor(SupervisedDatasetProcessor):
                 packed_images += batch_images[index]
                 packed_videos += batch_videos[index]
                 packed_audios += batch_audios[index]
+                if indices is not None:
+                    packed_indices.append(batch_indices[index])
+                    packed_media.append(batch_media[index])
                 if self.data_args.neat_packing:
                     packed_attention_masks += [i + 1] * len(batch_input_ids[index])  # start from 1
                 else:
@@ -199,5 +257,8 @@ class PackedSupervisedDatasetProcessor(SupervisedDatasetProcessor):
             model_inputs["images"].append(packed_images or None)
             model_inputs["videos"].append(packed_videos or None)
             model_inputs["audios"].append(packed_audios or None)
+            if indices is not None:
+                model_inputs["sample_idx"].append(packed_indices)
+                model_inputs["sample_media"].append(packed_media)
 
         return model_inputs

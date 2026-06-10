@@ -47,6 +47,9 @@ export VENV_LLAMAFACTORY="$(python3 -c "import sysconfigtool; print(sysconfigtoo
 unset PYTHONPATH
 
 source $VENV_LLAMAFACTORY/bin/activate
+pip install --upgrade pip setuptools wheel
+pip install packaging
+pip install --no-index huggingface_hub
 
 echo "Cluster name: $1"
 echo "HF_HOME: $HF_HOME"
@@ -134,7 +137,7 @@ hf download --max-workers=12 cvis-tmu/compute_canada_sif_files llamafactory.sif 
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # scene30k
-# hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
+hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
 
 deactivate
 # rm -r temp_env

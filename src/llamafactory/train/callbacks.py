@@ -31,7 +31,7 @@ from typing_extensions import override
 
 from ..extras import logging
 from ..extras.constants import TRAINER_LOG, V_HEAD_SAFE_WEIGHTS_NAME, V_HEAD_WEIGHTS_NAME
-from ..extras.misc import get_peak_memory, is_env_enabled, use_ray
+from ..extras.misc import get_current_memory, get_peak_memory, is_env_enabled, use_ray
 from ..extras.packages import is_safetensors_available
 
 
@@ -334,6 +334,67 @@ class LogCallback(TrainerCallback):
                     remaining_time=self.remaining_time,
                 )
                 self.thread_pool.submit(self._write_log, args.output_dir, logs)
+
+
+class DebugMultimodalCallback(TrainerCallback):
+    r"""A callback for logging early-step multimodal memory diagnostics."""
+
+    def __init__(self, finetuning_args: "FinetuningArguments") -> None:
+        self.enabled = finetuning_args.debug_mm_training
+        self.max_steps = max(int(finetuning_args.debug_mm_steps), 0)
+
+    def _should_log(self, state: "TrainerState") -> bool:
+        return self.enabled and state.global_step < self.max_steps
+
+    def _rank_prefix(self) -> str:
+        rank = int(os.getenv("RANK", os.getenv("LOCAL_RANK", "0")))
+        return f"[rank{rank}]"
+
+    def _get_cuda_memory(self) -> Optional[tuple[float, float]]:
+        if not torch.cuda.is_available():
+            return None
+
+        allocated = torch.cuda.memory_allocated()
+        reserved = torch.cuda.memory_reserved()
+        return allocated, reserved
+
+    @override
+    def on_step_begin(self, args: "TrainingArguments", state: "TrainerState", control: "TrainerControl", **kwargs):
+        if not self._should_log(state):
+            return
+
+        free_bytes, total_bytes = get_current_memory()
+        cuda_memory = self._get_cuda_memory()
+        message = (
+            f"{self._rank_prefix()} mm_debug step_begin step={state.global_step} "
+            f"free_gb={free_bytes / (1024**3):.3f} total_gb={total_bytes / (1024**3):.3f}"
+        )
+        if cuda_memory is not None:
+            allocated, reserved = cuda_memory
+            message += (
+                f" allocated_gb={allocated / (1024**3):.3f} reserved_gb={reserved / (1024**3):.3f}"
+            )
+
+        logger.info(message)
+
+    @override
+    def on_step_end(self, args: "TrainingArguments", state: "TrainerState", control: "TrainerControl", **kwargs):
+        if not self._should_log(state):
+            return
+
+        free_bytes, total_bytes = get_current_memory()
+        cuda_memory = self._get_cuda_memory()
+        message = (
+            f"{self._rank_prefix()} mm_debug step_end step={state.global_step} "
+            f"free_gb={free_bytes / (1024**3):.3f} total_gb={total_bytes / (1024**3):.3f}"
+        )
+        if cuda_memory is not None:
+            allocated, reserved = cuda_memory
+            message += (
+                f" allocated_gb={allocated / (1024**3):.3f} reserved_gb={reserved / (1024**3):.3f}"
+            )
+
+        logger.info(message)
 
 
 class ReporterCallback(TrainerCallback):

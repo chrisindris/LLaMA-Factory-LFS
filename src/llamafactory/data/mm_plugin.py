@@ -1446,7 +1446,7 @@ class Qwen2VLPlugin(BasePlugin):
 
     @override
     def _regularize_videos(self, videos: list["VideoInput"], **kwargs) -> "RegularizedVideoOutput":
-        results, fps_per_video, durations = [], [], []
+        results, fps_per_video, durations, frame_counts = [], [], [], []
         for video in videos:
             frames: list[ImageObject] = []
             if _check_video_is_nested_images(video):
@@ -1477,9 +1477,10 @@ class Qwen2VLPlugin(BasePlugin):
                 frames.append(frames[-1])
 
             frames = self._regularize_images(frames, **kwargs)["images"]
+            frame_counts.append(len(frames))
             results.append(frames)
 
-        return {"videos": results, "fps_per_video": fps_per_video, "durations": durations}
+        return {"videos": results, "fps_per_video": fps_per_video, "durations": durations, "frame_counts": frame_counts}
 
     @override
     def _get_mm_inputs(
@@ -1508,6 +1509,7 @@ class Qwen2VLPlugin(BasePlugin):
                 video_maxlen=getattr(processor, "video_maxlen", 128),
             )
             mm_inputs.update(image_processor(images=None, videos=video_data["videos"], return_tensors="pt"))
+            mm_inputs["video_frame_counts"] = video_data["frame_counts"]
             temporal_patch_size: int = getattr(image_processor, "temporal_patch_size", 2)
             if "second_per_grid_ts" in processor.model_input_names:
                 mm_inputs["second_per_grid_ts"] = [temporal_patch_size / fps for fps in video_data["fps_per_video"]]
@@ -1598,6 +1600,7 @@ class Qwen3VLPlugin(Qwen2VLPlugin):
                 video_fps=getattr(processor, "video_fps", 2.0),
                 video_maxlen=getattr(processor, "video_maxlen", 128),
             )
+            video_frame_counts = videos["frame_counts"]
             video_metadata = [
                 {"fps": getattr(processor, "video_fps", 24.0), "duration": duration, "total_num_frames": len(video)}
                 for video, duration in zip(videos["videos"], videos["durations"])
@@ -1605,6 +1608,7 @@ class Qwen3VLPlugin(Qwen2VLPlugin):
             mm_inputs.update(
                 video_processor(videos=videos["videos"], video_metadata=video_metadata, return_metadata=True)
             )
+            mm_inputs["video_frame_counts"] = video_frame_counts
             temporal_patch_size: int = getattr(image_processor, "temporal_patch_size", 2)
             if "second_per_grid_ts" in processor.model_input_names:
                 mm_inputs["second_per_grid_ts"] = [temporal_patch_size / fps for fps in videos["fps_per_video"]]
