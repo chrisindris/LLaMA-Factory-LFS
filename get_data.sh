@@ -71,7 +71,7 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 Qwen/Qwen3.5-9B # Qwen3.5 multimodal base model used for mirrored SFT runs.
 #hf download --max-workers=4 Qwen/Qwen3-VL-8B-Thinking # Same as above but with extra thinking capabilities.
 #hf download --max-workers=8 zd11024/Video3D-LLM-LLaVA-Qwen-Uniform-32 # Resulting model of Video3D-LLM
-# hf download --max-workers=4 Video-R1/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
+hf download --max-workers=4 cvis-tmu/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
 # hf download --max-workers=4 Qwen/Qwen3-VL-8B-Instruct # The Qwen3 counterpart to Qwen2.5VL-7B, which is what we have been using.
 # hf download --max-workers=4 Qwen/Qwen3-VL-8B-Thinking # Same as above but with extra thinking capabilities.
 # hf download --max-workers=8 zd11024/Video3D-LLM-LLaVA-Qwen-Uniform-32 # Resulting model of Video3D-LLM
@@ -94,6 +94,10 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_426steps
 # hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_852steps
 # hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_5epochs
+# hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_426steps_merged
+# hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_852steps_merged
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_426steps_merged
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_852steps_merged
 
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R1.0_C0.0_F0.0_X0.0 --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C1.0_F0.0_X0.0 --repo-type=dataset

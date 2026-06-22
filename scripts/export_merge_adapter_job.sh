@@ -9,7 +9,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=16G
 #SBATCH --time=00:15:00
-#SBATCH --array=3-3
+#SBATCH --array=0-1
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 
@@ -42,10 +42,12 @@ ADAPTER_PATHS=(
     # "cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_C1_465steps" # 1 epoch of Qwen2.5VL on C1 version of SQA3D (corrections made)
     # "cvis-tmu/videor1-lora-sft-Scene30k_traineval_852steps" # 2 epochs of VideoR1 on Scene30k dataset
     # "cvis-tmu/qwen2_5vl-7b-lora-sft-Scene30k_traineval_2130steps" # 5 epochs of Qwen2.5VL on Scene30k dataset
-    cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_426steps 
-    cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_852steps
-    cvis-tmu/videor1-lora-sft-Scene30k_traineval_426steps
-    cvis-tmu/videor1-lora-sft-Scene30k_traineval_852steps
+    # cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_426steps 
+    # cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_852steps
+    # cvis-tmu/videor1-lora-sft-Scene30k_traineval_426steps
+    # cvis-tmu/videor1-lora-sft-Scene30k_traineval_852steps
+    # cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_5epochs
+    # cvis-tmu/videor1-lora-sft-Scene30k_traineval_5epochs
 )
 
 # Get the index from SLURM_ARRAY_TASK_ID, default to 0
