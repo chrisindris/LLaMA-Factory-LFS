@@ -1,0 +1,53 @@
+SLURM_JOB_NODELIST: kn130
+HEAD_NODE: kn130
+MASTER_ADDR: kn130
+MASTER_PORT: 29500
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: None
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126_qwen35/
+RUNNING_MODE: VENV
+VENV_LLAMAFACTORY: /tmp/venv_llamafactory_cu126_qwen35
+AVX-512 support detected — enabling AVX-512 compile flags for native extensions
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) ucc-cuda/1.2.0     2) ucx-cuda/1.14.1
+
+The following have been reloaded with a version change:
+  1) cuda/12.9 => cuda/12.6                   3) nccl/2.27.7 => nccl/2.26.2
+  2) cudacore/.12.9.1 => cudacore/.12.6.2     4) opencv/4.13.0 => opencv/4.12.0
+
+created virtual environment CPython3.12.4.final.0-64 in 1093ms
+  creator CPython3Posix(dest=/tmp/venv_llamafactory_cu126_qwen35, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=/home/indrisch/.local/share/virtualenv)
+    added seed packages: pip==25.3
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+/project/aip-wangcs/indrisch/LLaMA-Factory/install_as_venv.sh: line 106: popd: directory stack empty
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages (25.3)
+Collecting pip
+  Using cached pip-26.1.1-py3-none-any.whl.metadata (4.6 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/setuptools-82.0.1+computecanada-py3-none-any.whl
+Collecting wheel
+  Using cached wheel-0.47.0-py3-none-any.whl.metadata (2.3 kB)
+Requirement already satisfied: packaging>=24.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from wheel) (26.0+computecanada)
+Using cached pip-26.1.1-py3-none-any.whl (1.8 MB)
+Using cached wheel-0.47.0-py3-none-any.whl (32 kB)
+Installing collected packages: wheel, setuptools, pip
+  Attempting uninstall: pip
+    Found existing installation: pip 25.3
+    Uninstalling pip-25.3:
+      Successfully uninstalled pip-25.3
+
+Successfully installed pip-26.1.1 setuptools-82.0.1+computecanada wheel-0.47.0
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Obtaining file:///project/6110552/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+ERROR: file:///project/6110552/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k does not appear to be a Python project: neither 'setup.py' nor 'pyproject.toml' found.
+/project/aip-wangcs/indrisch/LLaMA-Factory /project/aip-wangcs/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+SLURM_NNODES: 1
+/project/aip-wangcs/indrisch//LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/slurm_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh: llamafactory-cli: command not found

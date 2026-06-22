@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import os
-from typing import TYPE_CHECKING, Literal, Optional, Union
+from typing import TYPE_CHECKING, Literal, Optional, Union, Any
 
 import numpy as np
 from datasets import Dataset, load_dataset, load_from_disk
@@ -254,13 +254,27 @@ def _get_preprocessed_dataset(
             desc="Running tokenizer on dataset",
         )
 
-    dataset = dataset.map(
-        dataset_processor.preprocess_dataset,
-        batched=True,
-        batch_size=data_args.preprocessing_batch_size,
-        remove_columns=column_names,
-        **kwargs,
-    )
+    if data_args.streaming:
+        dataset = dataset.map(
+            dataset_processor.preprocess_dataset,
+            batched=True,
+            batch_size=data_args.preprocessing_batch_size,
+            remove_columns=column_names,
+            **kwargs,
+        )
+    else:
+        def _preprocess_with_indices(examples: dict[str, list[Any]], indices: list[int]) -> dict[str, list[Any]]:
+            examples["_indices"] = indices
+            return dataset_processor.preprocess_dataset(examples)
+
+        dataset = dataset.map(
+            _preprocess_with_indices,
+            batched=True,
+            with_indices=True,
+            batch_size=data_args.preprocessing_batch_size,
+            remove_columns=column_names,
+            **kwargs,
+        )
 
     if training_args.should_log:
         try:

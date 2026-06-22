@@ -18,9 +18,9 @@ lora_target: all
 dataset: Scene30k
 media_dir: /project/def-wangcs/shared/data/
 template: qwen3_5
-cutoff_len: 131072 # max len of the model
+cutoff_len: 65536 # Qwen3.5-4B: 1/2 of max length (131032) to lower worst-case memory spikes on long multimodal samples; this setting works for Qwen3.5-4B for image_max_pixels=65536 and video_max_pixels=16384.
 overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
-preprocessing_num_workers: 16 # reduced from 32 to 16 to avoid memory issues with large multimodal data; adjust based on your system's capabilities
+preprocessing_num_workers: 32
 dataloader_num_workers: 4
 dataloader_prefetch_factor: 1 # when dataloader_num_workers > 0, this argument specifies the number of batches loaded in advance by each worker. Setting it to 1 can help reduce memory usage when working with large multimodal data.
 dataloader_pin_memory: false
@@ -38,6 +38,7 @@ report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 ### train
 per_device_train_batch_size: 1 # preferred by Qwen3
 gradient_accumulation_steps: 16 # preferred by Qwen3
+gradient_checkpointing: true # reduces activation memory; trades speed for stability
 learning_rate: 1.0e-4
 num_train_epochs: 5.0
 lr_scheduler_type: cosine
@@ -47,17 +48,17 @@ ddp_timeout: 180000000
 resume_from_checkpoint: null
 
 # debugging level
-# debug: none # to turn off debugging, we must simply comment out this line.
-log_level: passive
-log_level_replica: passive
-print_param_status: false
+debug: underflow_overflow
+log_level: debug
+log_level_replica: debug
+print_param_status: true
 
 # acceleration
 flash_attn: fa2
 enable_liger_kernel: true
 
 # distribution
-deepspeed: examples/deepspeed/ds_z2_config.json # as long as we aren't on Killarney, we can use offload.
+deepspeed: examples/deepspeed/ds_z3_offload_config.json # for Qwen3.5, ds_z2_config.json leads to OOM on 80GB. 
 
 ## eval
 val_size: 0.1

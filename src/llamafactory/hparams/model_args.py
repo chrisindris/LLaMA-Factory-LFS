@@ -118,6 +118,10 @@ class BaseModelArguments:
         default=AttentionFunction.AUTO,
         metadata={"help": "Enable FlashAttention for faster training and inference."},
     )
+    disable_cudnn_sdp: bool = field(
+        default=False,
+        metadata={"help": "Disable cuDNN SDPA backend (use flash/mem/math only). Useful for debugging."},
+    )
     shift_attn: bool = field(
         default=False,
         metadata={"help": "Enable shift short attention (S^2-Attn) proposed by LongLoRA."},

@@ -1,8 +1,8 @@
 ### model
 model_name_or_path: Qwen/Qwen3.5-4B
-cache_dir: /scratch/indrisch/huggingface/hub
-image_max_pixels: 65536
-video_max_pixels: 16384
+# cache_dir is intentionally unset so HF_DATASETS_CACHE can point to node-local storage.
+image_max_pixels: 65536 # when using l40s, we need to set it lower.
+video_max_pixels: 16384 # when using l40s, we need to set it lower.
 use_fast_tokenizer: false
 # giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
 trust_remote_code: true
@@ -18,10 +18,10 @@ lora_target: all
 dataset: Scene30k
 media_dir: /project/aip-wangcs/shared/data/
 template: qwen3_5
-cutoff_len: 131072 # max len of the model
+cutoff_len: 131072 # max len of the model = 131072; to save memory, we can set this to 16384, which is 1/8 of the max len. This is a common practice since the model's attention mechanism has quadratic complexity with respect to sequence length. However, when using Zero-3 without offload on l40s, we need to set it lower.
 overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
-preprocessing_num_workers: 16 # reduced from 32 to 16 to avoid memory issues with large multimodal data; adjust based on your system's capabilities
-dataloader_num_workers: 4
+preprocessing_num_workers: 32 # note: this number should be equal to 16 divided by the number of nodes being used, to reduce worker fan-out to avoid file-lock pressure on multi-node runs
+dataloader_num_workers: 8 # for full runs, this should be 4.
 dataloader_prefetch_factor: 1 # when dataloader_num_workers > 0, this argument specifies the number of batches loaded in advance by each worker. Setting it to 1 can help reduce memory usage when working with large multimodal data.
 dataloader_pin_memory: false
 low_cpu_mem_usage: true
@@ -38,6 +38,7 @@ report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 ### train
 per_device_train_batch_size: 1 # preferred by Qwen3
 gradient_accumulation_steps: 16 # preferred by Qwen3
+gradient_checkpointing: true # to save memory at the expense of training time; this is mutually exclusive with use_unsloth, which partitions in a more complex manner than gradient checkpointing.
 learning_rate: 1.0e-4
 num_train_epochs: 5.0
 lr_scheduler_type: cosine
@@ -51,16 +52,17 @@ resume_from_checkpoint: null
 log_level: passive
 log_level_replica: passive
 print_param_status: false
+image_sample_stride: 2 # Also shown to be needed for A100s for the Qwen3.5 series models
 
 # acceleration
 flash_attn: fa2
 enable_liger_kernel: true
 
 # distribution
-deepspeed: examples/deepspeed/ds_z2_config.json # as long as we aren't on Killarney, we can use offload.
+deepspeed: examples/deepspeed/ds_z3_offload_config.json # Qwen3.5_4b is small enough to fit on a single l40s (48GB) or A100 (80GB). On Killarney, ds_z3_offload_config.json seems to have issues with the ADAM cpu.
 
 ## eval
 val_size: 0.1
 per_device_eval_batch_size: 1
 eval_strategy: steps
-eval_steps: 426 # evaluate after every 1.00 Scene30k epochs
+eval_steps: 213 # evaluate after every 1.00 Scene30k epochs; on 8 A100 GPU runs (killarney), one epoch is every 213.

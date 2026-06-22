@@ -2,6 +2,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs-%j.out
+#SBATCH --error=err/%N-qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs-%j.err
 
 # RORQUAL:
 #SBATCH --cpus-per-task=64
@@ -45,6 +46,31 @@ fi
 SYSCONFIG_DIR_PATH="$PROJECT_DIR/scripts"
 export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
 
+lmod_preflight() {
+    local lmod_init="/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/init/bash"
+    local lmod_exec="/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/libexec/lmod"
+    local resolved_init
+    local resolved_exec
+
+    if [[ ! -e "$lmod_init" || ! -e "$lmod_exec" ]]; then
+        echo "ERROR: Lmod bootstrap path is unavailable on this node."
+        echo "  lmod init: $lmod_init"
+        echo "  lmod exec: $lmod_exec"
+        ls -l "$lmod_init" "$lmod_exec" 2>/dev/null || true
+        exit 1
+    fi
+
+    resolved_init=$(readlink -f "$lmod_init" 2>/dev/null || true)
+    resolved_exec=$(readlink -f "$lmod_exec" 2>/dev/null || true)
+    if [[ -z "$resolved_init" || -z "$resolved_exec" ]]; then
+        echo "ERROR: Lmod symlink resolution failed before module initialization."
+        echo "  lmod init: $lmod_init"
+        echo "  lmod exec: $lmod_exec"
+        ls -l "$lmod_init" "$lmod_exec" 2>/dev/null || true
+        exit 1
+    fi
+}
+
 # --- setting environment ---
 
 # Detect cluster based on terminal prompt or hostname
@@ -53,7 +79,7 @@ if [[ "$PS1" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "$PS1" 
     RUNNING_MODE="APPTAINER" # running mode for RORQUAL
 elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
     CLUSTER="TRILLIUM"
-    RUNNING_MODE="APPTAINER" # running mode for TRILLIUM
+    RUNNING_MODE="VENV" # running mode for TRILLIUM when using Qwen3.5
 elif [[ "$PS1" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "$PS1" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
     CLUSTER="KILLARNEY"
     RUNNING_MODE="VENV" # running mode for KILLARNEY
@@ -87,6 +113,10 @@ if [[ -n "$1" ]]; then
     RUNNING_MODE="$1"
 fi
 echo "RUNNING_MODE: $RUNNING_MODE"
+
+# for fragmentation
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export PYTORCH_CUDA_ALLOC_CONF
 
 # ----- EXPERIMENT -----
 
@@ -156,6 +186,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
             --env FORCE_TORCHRUN=1 \
             --env WANDB_MODE=offline \
             --env WANDB_DIR="${WANDB_DIR}" \
+            --env PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF}" \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
             llamafactory-cli train ${YAML_FILE}
@@ -273,19 +304,31 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
             --env FORCE_TORCHRUN=1 \
             --env WANDB_MODE=offline \
             --env WANDB_DIR="${WANDB_DIR}" \
+            --env PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF}" \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
             llamafactory-cli train ${YAML_FILE}
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
-    
-        module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
-        module load python/3.12 cuda/12.6 opencv/4.12.0
-        module load arrow
 
-        echo "Copying venv to local storage..."
-        cp -a /scratch/indrisch/venv_llamafactory_cu126 ${SLURM_TMPDIR}/venv_llamafactory_cu126
-        source ${SLURM_TMPDIR}/venv_llamafactory_cu126/bin/activate
+        # Use node-local temp/cache dirs to avoid permission issues under ~/.local
+        export TMPDIR="${SLURM_TMPDIR:-/tmp}"
+        export XDG_DATA_HOME="${TMPDIR}/xdg-data"
+        export XDG_CACHE_HOME="${TMPDIR}/xdg-cache"
+        export VIRTUALENV_CACHE_DIR="${XDG_CACHE_HOME}/virtualenv"
+        export PIP_CACHE_DIR="${XDG_CACHE_HOME}/pip"
+        mkdir -p "${XDG_DATA_HOME}" "${VIRTUALENV_CACHE_DIR}" "${PIP_CACHE_DIR}"
+    
+        # --- Build the VENV ---
+        module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow # cu132 for updates, Qwen3.5 compatibility (through transformers)
+        echo "build from scratch" # from scratch on the compute node (no need to transfer the venv, all modules are available with compute canada's module system)
+        export DS_BUILD_CPU_ADAM=1 # we can build CPU ADAM for offloading
+        export BUILD_UTILS=1
+        export DS_BUILD_OPS=1
+        VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu132_qwen35/"
+        export VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
+        /scratch/indrisch/LLaMA-Factory/install_as_venv.sh TRILLIUM
+        source ${SLURM_TMPDIR}/venv_llamafactory_cu132_qwen35/bin/activate
 
         export PYTHONUNBUFFERED=1
         export NCCL_DEBUG=INFO
@@ -363,6 +406,7 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
             --env NCCL_DEBUG=INFO \
             --env NCCL_SOCKET_IFNAME=^docker0,lo \
             --env DISABLE_VERSION_CHECK=1 \
+            --env PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF}" \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
             llamafactory-cli train ${YAML_FILE}
@@ -417,73 +461,79 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
             --env NCCL_DEBUG=INFO \
             --env NCCL_SOCKET_IFNAME=^docker0,lo \
             --env DISABLE_VERSION_CHECK=1 \
+            --env PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF}" \
             --pwd ${PROJECT_DIR} \
             ${SIF_FILE} \
             bash
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
+        lmod_preflight
+        # -- using cu12.9 due to the error in *3662965.out can be done; however, let's use cu12.6 since it works in the 2node version.
+        # module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+        # module load python/3.12 cuda/12.6 opencv/4.12.0
+        # module load arrow
+        # module load StdEnv gcc openmpi python/3.12 cuda/12.9 opencv arrow
+        # -- using cu12.6 due to the error in 3787717 when we try to use flash_linear_attention & causal_conv1d
         module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
         module load python/3.12 cuda/12.6 opencv/4.12.0
         module load arrow
 
+        # copying the venv to local storage is necessary on Killarney because the shared filesystems have very slow metadata performance, which makes using a venv directly on the shared filesystem extremely slow due to all the stat calls that pip packages require. Copying the venv to local storage and running from there avoids this issue.
+        # echo "Copying venv ${VENV_LLAMAFACTORY} to local storage ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})..."
+        # cp -a ${VENV_LLAMAFACTORY} ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
+        # source ${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})/bin/activate
+
+        # we can generate the venv on the local storage.
+        export DS_BUILD_CPU_ADAM=1
+        export BUILD_UTILS=1
+        export DS_BUILD_OPS=1
+        VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu126_qwen35/" # it's best to use a cuda 12.6 for this. We also want to have Qwen3.5 as an option.
+        VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
+        /project/aip-wangcs/indrisch/LLaMA-Factory/install_as_venv.sh KILLARNEY
         source ${VENV_LLAMAFACTORY}/bin/activate
-        export CUDA_VISIBLE_DEVICES=0,1,2,3
+
+        # export CUDA_VISIBLE_DEVICES=0,1,2,3 # we can leave this out and let CUDA decide.
         export FORCE_TORCHRUN=1 
         export HF_HUB_OFFLINE=1 
         export WANDB_MODE=offline 
         export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
+        export TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions"
+        mkdir -p "${TORCH_EXTENSIONS_DIR}"
+        export CFLAGS="-O3 -march=native -mavx512f -mavx512dq -mavx512bw"
+        export CXXFLAGS="-O3 -std=c++17 -march=native -mavx512f -mavx512dq -mavx512bw"
         export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
+        # Use node-local cache to avoid NFS contention for datasets; this replaces the cache_dir from the yaml. 
+        export HF_DATASETS_CACHE="${SLURM_TMPDIR}/hf_datasets"
+        mkdir -p "${HF_DATASETS_CACHE}"
+        # Avoid NFS lock exhaustion when datasets cache is shared across ranks.
+        export HF_DATASETS_DISABLE_FILE_LOCKING=1
+        export DATASETS_DISABLE_FILE_LOCKING=1
         # giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
         pushd /project/aip-wangcs/indrisch/LLaMA-Factory
+
+        # --- VENV correctness check ---
+
+        if [[ ! -f "${VENV_LLAMAFACTORY}/bin/activate" ]]; then
+            echo "ERROR: expected venv activation script is missing: ${VENV_LLAMAFACTORY}/bin/activate"
+            echo "ERROR: install_as_venv.sh likely failed before creating the environment."
+            exit 1
+        fi
+        # if $SLURM_NNODES is a number 2 or greater:
+        if ! source "${VENV_LLAMAFACTORY}/bin/activate"; then
+            echo "ERROR: failed to activate venv: ${VENV_LLAMAFACTORY}"
+            exit 1
+        fi
+
+        if ! command -v llamafactory-cli >/dev/null 2>&1; then
+            echo "ERROR: llamafactory-cli is not available after activating ${VENV_LLAMAFACTORY}."
+            echo "ERROR: check the preceding install_as_venv.sh output for the root cause."
+            exit 1
+        fi
+
+        # --- LAUNCH! ---
+
         llamafactory-cli train ${YAML_FILE}
-        # llamafactory-cli train \
-        #     --model_name_or_path Qwen/Qwen3.5-4B \
-        #     --no_use_fast_tokenizer \
-        #     --cache_dir /scratch/indrisch/huggingface/hub \
-        #     --image_max_pixels 65536 \
-        #     --video_max_pixels 16384 \
-        #     --trust_remote_code \
-        #     --stage sft \
-        #     --do_train \
-        #     --finetuning_type lora \
-        #     --lora_rank 8 \
-        #     --lora_target all \
-        #     --dataset Scene30k \
-        #     --media_dir /project/aip-wangcs/shared/data/ \
-        #     --template qwen3_5 \
-        #     --cutoff_len 131072 \
-        #     --preprocessing_num_workers 32 \
-        #     --dataloader_num_workers 0 \
-        #     --dataloader_pin_memory false \
-        #     --low_cpu_mem_usage \
-        #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-4b/lora/sft/Scene30k_traineval \
-        #     --logging_steps 10 \
-        #     --save_steps 200 \
-        #     --plot_loss \
-        #     --overwrite_output_dir \
-        #     --save_only_model false \
-        #     --report_to wandb \
-        #     --per_device_train_batch_size 2 \
-        #     --gradient_accumulation_steps 8 \
-        #     --learning_rate 1.0e-4 \
-        #     --num_train_epochs 2.0 \
-        #     --lr_scheduler_type cosine \
-        #     --warmup_ratio 0.1 \
-        #     --bf16 \
-        #     --ddp_timeout 180000000 \
-        #     --debug underflow_overflow \
-        #     --log_level debug \
-        #     --log_level_replica debug \
-        #     --print_param_status \
-        #     --flash_attn fa2 \
-        #     --enable_liger_kernel \
-        #     --gradient_checkpointing \
-        #     --deepspeed /project/aip-wangcs/indrisch/LLaMA-Factory/examples/deepspeed/ds_z3_offload_config.json \
-        #     --val_size 0.1 \
-        #     --per_device_eval_batch_size 1 \
-        #     --eval_strategy steps \
-        #     --eval_steps 200
 
     else
         echo "Invalid running mode: $RUNNING_MODE"

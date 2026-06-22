@@ -1,0 +1,35 @@
+
+scontrol show job 1455916
+JobId=1455916 JobName=interactive
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=2042188 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=None Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=0 Reboot=0 ExitCode=0:0
+   RunTime=00:17:10 TimeLimit=01:00:00 TimeMin=N/A
+   SubmitTime=2026-04-29T05:06:48 EligibleTime=2026-04-29T05:06:48
+   AccrueTime=2026-04-29T05:06:48
+   StartTime=2026-04-29T05:11:57 EndTime=2026-04-29T05:29:07 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-04-29T05:11:57 Scheduler=Backfill
+   Partition=compute AllocNode:Sid=tri-login03:329345
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=tri0547
+   BatchHost=tri0547
+   NumNodes=1 NumCPUs=192 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=767000M,node=1,billing=1
+   AllocTRES=cpu=192,mem=767000M,node=1,billing=192
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=767000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/bin/sh
+   SubmitLine=SALLOC --comment /opt/slurm/bin/salloc --time=1:0:0 --ntasks=1 --time=1:0:0 --ntasks=1
+   WorkDir=/scratch/indrisch/LLaMA-Factory
+   Comment=/opt/slurm/bin/salloc --time=1:0:0 --ntasks=1
+
+sacct -j 1455916
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+1455916      interacti+ def-wangcs   00:17:10                         00:00:00   00:00:00      0:0 
+1455916.int+ interacti+ def-wangcs   00:17:10                         00:00:00   00:00:00      0:0 
+1455916.ext+     extern def-wangcs   00:17:10                         00:00:00   00:00:00      0:0 
+

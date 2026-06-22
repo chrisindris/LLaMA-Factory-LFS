@@ -16,6 +16,9 @@
 # limitations under the License.
 
 from dataclasses import dataclass
+import json
+import os
+import inspect
 from typing import TYPE_CHECKING, Any, Literal, Optional
 
 import numpy as np
@@ -25,6 +28,7 @@ from peft import PeftModel
 from transformers import DataCollatorForSeq2Seq
 
 from ..extras.constants import AUDIO_PLACEHOLDER, IGNORE_INDEX, IMAGE_PLACEHOLDER
+from ..extras.logging import get_logger
 from ..extras.packages import is_pillow_available
 
 
@@ -36,6 +40,9 @@ if TYPE_CHECKING:
     from transformers import ProcessorMixin
 
     from .template import Template
+
+
+logger = get_logger(__name__)
 
 
 def prepare_4d_attention_mask(attention_mask_with_indices: "torch.Tensor", dtype: "torch.dtype") -> "torch.Tensor":
@@ -90,8 +97,11 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
 
     template: Optional["Template"] = None
     processor: Optional["ProcessorMixin"] = None
+    debug_mm_training: bool = False
+    debug_mm_steps: int = 0
 
     def __post_init__(self):
+        self._debug_mm_seen = 0
         if self.template is None:
             raise ValueError("Template is required for MultiModalDataCollator.")
 
@@ -105,13 +115,74 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
         else:
             self.get_rope_func = None
 
+        self._rope_index_requires_mm_token_type_ids = False
+        if self.get_rope_func is not None:
+            try:
+                self._rope_index_requires_mm_token_type_ids = (
+                    "mm_token_type_ids" in inspect.signature(self.get_rope_func).parameters
+                )
+            except (TypeError, ValueError):
+                self._rope_index_requires_mm_token_type_ids = False
+
+    def _get_rank(self) -> int:
+        return int(os.getenv("RANK", os.getenv("LOCAL_RANK", "0")))
+
+    def _format_media_item(self, item: Any) -> str:
+        if isinstance(item, str):
+            return item
+        if isinstance(item, dict):
+            path = item.get("path")
+            if path:
+                return path
+        return f"<{type(item).__name__}>"
+
+    def _summarize_media_list(self, medias: Any, max_items: int = 5) -> Optional[dict[str, Any]]:
+        if medias is None:
+            return None
+        if not isinstance(medias, list):
+            medias = [medias]
+        if len(medias) == 0:
+            return {"count": 0, "items": []}
+        if all(isinstance(item, list) for item in medias):
+            sample_frames = medias[0][:max_items] if medias[0] else []
+            return {
+                "nested": True,
+                "count": len(medias),
+                "sample": [self._format_media_item(frame) for frame in sample_frames],
+            }
+        items = [self._format_media_item(item) for item in medias[:max_items]]
+        remaining = len(medias) - max_items
+        if remaining > 0:
+            items.append(f"...({remaining} more)")
+        return {"count": len(medias), "items": items}
+
+    def _build_media_summary(self, images: Any, videos: Any, audios: Any) -> dict[str, Any]:
+        return {
+            "images": self._summarize_media_list(images),
+            "videos": self._summarize_media_list(videos),
+            "audios": self._summarize_media_list(audios),
+        }
+
     def __call__(self, features: list[dict[str, Any]]) -> dict[str, "torch.Tensor"]:
+        debug_samples = None
+        collect_enabled = (
+            self.debug_mm_training and self.model is not None and getattr(self.model, "training", False)
+        )
+        log_enabled = collect_enabled and self._debug_mm_seen < max(int(self.debug_mm_steps), 0)
+        if collect_enabled:
+            debug_samples = []
         batch_images, batch_videos, batch_audios = [], [], []
         batch_imglens, batch_vidlens, batch_audlens, batch_input_ids = [], [], [], []
         for feature in features:
+            sample_idx = feature.pop("sample_idx", None)
+            sample_media = feature.pop("sample_media", None)
             images = feature.pop("images", None) or []
             videos = feature.pop("videos", None) or []
             audios = feature.pop("audios", None) or []
+            if debug_samples is not None:
+                if sample_media is None:
+                    sample_media = self._build_media_summary(images, videos, audios)
+                debug_samples.append({"sample_idx": sample_idx, "media": sample_media})
             batch_images.extend(images)
             batch_videos.extend(videos)
             batch_audios.extend(audios)
@@ -180,7 +251,35 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
             for i, feature in enumerate(features):
                 feature["token_type_ids"] = token_type_ids[i]
 
+        if debug_samples is not None:
+            video_frame_counts = mm_inputs.get("video_frame_counts")
+            if video_frame_counts is not None:
+                if torch.is_tensor(video_frame_counts):
+                    video_frame_counts = video_frame_counts.detach().cpu().tolist()
+                else:
+                    video_frame_counts = list(video_frame_counts)
+
+                offset = 0
+                for sample, video_count in zip(debug_samples, batch_vidlens):
+                    sample_frame_counts = [int(count) for count in video_frame_counts[offset : offset + video_count]]
+                    offset += video_count
+                    sample_media = sample.setdefault("media", {})
+                    videos_summary = sample_media.setdefault("videos", {})
+                    videos_summary["frame_counts"] = sample_frame_counts
+                    videos_summary["frame_total"] = int(sum(sample_frame_counts))
+
         features: dict[str, torch.Tensor] = super().__call__(features)
+        if debug_samples is not None:
+            if log_enabled:
+                payload = {
+                    "rank": self._get_rank(),
+                    "batch_index": self._debug_mm_seen,
+                    "samples": debug_samples,
+                }
+                logger.info(f"[rank{payload['rank']}] mm_debug batch_samples: {json.dumps(payload, default=str)}")
+            features["debug_samples"] = debug_samples
+            if log_enabled:
+                self._debug_mm_seen += 1
 
         if self.get_rope_func is not None:
             rope_index_kwargs = {
@@ -189,6 +288,12 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
                 "video_grid_thw": mm_inputs.get("video_grid_thw"),
                 "attention_mask": (features["attention_mask"] >= 1).float(),
             }
+            if self._rope_index_requires_mm_token_type_ids:
+                mm_token_type_ids = features.get("token_type_ids")
+                if mm_token_type_ids is None:
+                    mm_token_type_ids = torch.zeros_like(features["input_ids"])
+
+                rope_index_kwargs["mm_token_type_ids"] = mm_token_type_ids
             if "second_per_grid_ts" in mm_inputs:  # for qwen2vl
                 rope_index_kwargs["second_per_grid_ts"] = mm_inputs.get("second_per_grid_ts")
             elif "video_second_per_grid" in mm_inputs:  # for qwen2.5 omni

@@ -1,0 +1,165 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+SIF_FILE: /scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+MEDIA_DIR: /project/def-wangcs/shared/data/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+RUNNING_MODE: VENV
+build from scratch
+VENV_LLAMAFACTORY: /dev/shm/slurm.indrisch.549227/venv_llamafactory_cu132_qwen35
+AVX-512 support detected — enabling AVX-512 compile flags for native extensions
+gcc (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+g++ (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Setting up environment for CUDA 13.x
+CREATING VENV at /dev/shm/slurm.indrisch.549227/venv_llamafactory_cu132_qwen35...
+created virtual environment CPython3.12.4.final.0-64 in 385ms
+  creator CPython3Posix(dest=/dev/shm/slurm.indrisch.549227/venv_llamafactory_cu132_qwen35, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=/dev/shm/slurm.indrisch.549227/xdg-data/virtualenv)
+    added seed packages: pip==24.0
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+SOURCING VENV at /dev/shm/slurm.indrisch.549227/venv_llamafactory_cu132_qwen35...
+UPGRADING PIP, SETUPTOOLS and WHEEL in the VENV...
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /dev/shm/slurm.indrisch.549227/venv_llamafactory_cu132_qwen35/lib/python3.12/site-packages (24.0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pip-26.0.1+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/setuptools-82.0.1+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/wheel-0.46.3+computecanada-py3-none-any.whl
+Requirement already satisfied: packaging>=24.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from wheel) (26.0+computecanada)
+Installing collected packages: wheel, setuptools, pip
+  Attempting uninstall: pip
+    Found existing installation: pip 24.0
+    Uninstalling pip-24.0:
+      Successfully uninstalled pip-24.0
+Successfully installed pip-26.0.1+computecanada setuptools-82.0.1+computecanada wheel-0.46.3+computecanada
+Installing transformers>=5.2.0 for Qwen3.5 compatibility
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Obtaining file:///scratch/indrisch/LLaMA-Factory
+  Installing build dependencies: started
+  Installing build dependencies: still running...
+  Installing build dependencies: still running...
+  Installing build dependencies: still running...
+  Installing build dependencies: still running...
+  Installing build dependencies: still running...
+  Installing build dependencies: still running...
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (26.0+computecanada)
+Requirement already satisfied: psutil in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (7.2.2+computecanada)
+Requirement already satisfied: pandas in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (3.0.0+computecanada)
+Requirement already satisfied: pillow in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (12.1.0+computecanada)
+Requirement already satisfied: decorator in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (5.2.1+computecanada)
+Requirement already satisfied: scipy in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (1.17.0+computecanada)
+Requirement already satisfied: matplotlib in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (3.10.8+computecanada)
+Requirement already satisfied: platformdirs in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (4.5.1+computecanada)
+Requirement already satisfied: pyarrow in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/arrow/24.0.0/lib/python3.12/site-packages (24.0.0)
+Requirement already satisfied: sympy in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (1.14.0+computecanada)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9ce70b0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/wandb/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9ce7890>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/wandb/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9ce7c80>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/wandb/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9ce7e90>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/wandb/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9ce7ef0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/wandb/
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/wandb-0.24.0+computecanada-py3-none-linux_x86_64.whl
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9c10b60>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/ray/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9c10fe0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/ray/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9c111c0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/ray/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9c113d0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/ray/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9c03e60>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/ray/
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/ray-2.54.1+computecanada-cp312-cp312-linux_x86_64.whl
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa01f260>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/h5py/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa01e4b0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/h5py/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa01db20>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/h5py/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa01c320>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/h5py/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa01cf20>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/h5py/
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/h5py-3.16.0+computecanada-cp312-cp312-linux_x86_64.whl
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa01e390>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/flash-attn/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa005d30>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/flash-attn/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa0344d0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/flash-attn/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa034a10>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/flash-attn/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa034e00>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/flash-attn/
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/flash_attn-2.8.3+torch29.computecanada-cp312-cp312-linux_x86_64.whl
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa037410>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/transformers/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa005dc0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/transformers/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa01eb10>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/transformers/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa01f620>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/transformers/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473aa037620>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/transformers/
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.8.1+computecanada-py3-none-any.whl
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a99c7c80>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/datasets/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a99c7ec0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/datasets/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a99d0230>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/datasets/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a99d0320>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/datasets/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a99c69c0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/datasets/
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/datasets-4.0.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a1e7b0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/accelerate/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a1e990>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/accelerate/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a07d40>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/accelerate/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a07650>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/accelerate/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a04d10>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/accelerate/
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/accelerate-1.11.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a5a7e0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/peft/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a5aa20>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/peft/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a5aba0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/peft/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a5ae40>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/peft/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a5aff0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/peft/
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/peft-0.19.1+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a738c0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/trl/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a73a40>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/trl/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a73cb0>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/trl/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1473a9a46300>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /simple/trl/
+[2026-05-27T15:50:11.016] error: *** JOB 549227 ON trig0049 CANCELLED AT 2026-05-27T15:50:11 DUE TO TIME LIMIT ***
+
+scontrol show job 549227
+JobId=549227 JobName=trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=535211 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=TimeLimit Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:15
+   RunTime=01:00:00 TimeLimit=01:00:00 TimeMin=N/A
+   SubmitTime=2026-05-27T14:40:03 EligibleTime=2026-05-27T14:40:03
+   AccrueTime=2026-05-27T14:40:03
+   StartTime=2026-05-27T14:50:11 EndTime=2026-05-27T15:50:11 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-05-27T14:50:11 Scheduler=Backfill
+   Partition=compute_full_node AllocNode:Sid=trig-login01:338929
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0049
+   BatchHost=trig0049
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_9b_lora_sft_Scene30k/trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh
+   SubmitLine=SBATCH --partition=compute_full_node --comment /opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh --export=NONE --get-user-env trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_9b_lora_sft_Scene30k
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh
+   StdErr=
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_9b_lora_sft_Scene30k/out/trig0049-qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs-549227.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   MailUser=christopher.indris@torontomu.ca MailType=INVALID_DEPEND,BEGIN,END,FAIL,REQUEUE,STAGE_OUT
+
+sacct -j 549227
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+549227       trillium_+ def-wangcs   01:00:00                        00:01.024  00:13.005      0:0 
+549227.batch      batch def-wangcs   01:00:01          0    424000K  00:01.024  00:13.005     0:15 
+549227.exte+     extern def-wangcs   01:00:01                         00:00:00   00:00:00      0:0 
+

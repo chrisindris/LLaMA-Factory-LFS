@@ -23,6 +23,7 @@ from ...extras.logging import get_logger
 from ...extras.misc import calculate_tps
 from ...extras.ploting import plot_loss
 from ...model import load_model, load_tokenizer
+from ..callbacks import DebugMultimodalCallback
 from ..trainer_utils import create_modelcard_and_push
 from .metric import ComputeAccuracy, ComputeSimilarity, eval_logit_processor
 from .trainer import CustomSeq2SeqTrainer
@@ -62,8 +63,17 @@ def run_sft(
         block_diag_attn=model_args.block_diag_attn,
         attn_implementation=getattr(model.config, "_attn_implementation", None),
         compute_dtype=model_args.compute_dtype,
+        debug_mm_training=finetuning_args.debug_mm_training,
+        debug_mm_steps=finetuning_args.debug_mm_steps,
         **tokenizer_module,
     )
+
+    if callbacks is None:
+        callbacks = []
+
+    if finetuning_args.debug_mm_training:
+        callbacks = list(callbacks)
+        callbacks.append(DebugMultimodalCallback(finetuning_args))
 
     # Metric utils
     metric_module = {}
@@ -75,7 +85,23 @@ def run_sft(
 
     # Keyword arguments for `model.generate`
     gen_kwargs = generating_args.to_dict(obey_generation_config=True)
-    gen_kwargs["eos_token_id"] = [tokenizer.eos_token_id] + tokenizer.additional_special_tokens_ids
+    additional_special_tokens_ids = getattr(tokenizer, "additional_special_tokens_ids", None)
+    if additional_special_tokens_ids is None:
+        additional_special_tokens = getattr(tokenizer, "additional_special_tokens", None) or []
+        if additional_special_tokens:
+            additional_special_tokens_ids = tokenizer.convert_tokens_to_ids(additional_special_tokens)
+            if isinstance(additional_special_tokens_ids, int):
+                additional_special_tokens_ids = [additional_special_tokens_ids]
+        else:
+            additional_special_tokens_ids = []
+
+    if isinstance(additional_special_tokens_ids, int):
+        additional_special_tokens_ids = [additional_special_tokens_ids]
+
+    additional_special_tokens_ids = [
+        token_id for token_id in list(additional_special_tokens_ids) if token_id is not None
+    ]
+    gen_kwargs["eos_token_id"] = [tokenizer.eos_token_id] + additional_special_tokens_ids
     gen_kwargs["pad_token_id"] = tokenizer.pad_token_id
 
     # Initialize our Trainer
