@@ -89,9 +89,7 @@ fi
 
 if [[ "$VENV_LLAMAFACTORY" == *cu12* ]]; then
     echo "Setting up environment for CUDA 12.x"
-    module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
-    module load python/3.12 cuda/12.6 opencv/4.12.0
-    module load arrow
+    module load StdEnv/2023  gcc/12.3  openmpi/4.1.5 python/3.12 cuda/12.6 opencv/4.12.0 arrow
 elif [[ "$VENV_LLAMAFACTORY" == *cu13* ]]; then
     echo "Setting up environment for CUDA 13.x"
     module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow

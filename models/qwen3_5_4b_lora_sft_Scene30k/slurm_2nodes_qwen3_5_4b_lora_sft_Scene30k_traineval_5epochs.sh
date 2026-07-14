@@ -49,7 +49,7 @@ export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
 
 # Detect cluster based on terminal prompt or hostname
 if [[ "$PS1" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "$PS1" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]]; then
-    CLUSTER="RORQUAL"
+    CLUSTER="VENV" # running mode for RORQUAL when using Qwen3.5
     RUNNING_MODE="APPTAINER" # running mode for RORQUAL
 elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
     CLUSTER="TRILLIUM"
@@ -60,7 +60,7 @@ elif [[ "$PS1" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "$PS1" 
 else
     echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to RORQUAL."
     CLUSTER="RORQUAL"
-    RUNNING_MODE="APPTAINER" # running mode for unknown cluster
+    RUNNING_MODE="VENV" # running mode for unknown cluster
 fi
 
 export HF_HOME="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'HF_HOME'))")" && echo "HF_HOME: $HF_HOME"
@@ -167,13 +167,31 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
-        module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
-        module load python/3.12 cuda/12.6 opencv/4.12.0
-        module load arrow
+        # Use node-local temp/cache dirs to avoid permission issues under ~/.local
+        export TMPDIR="${SLURM_TMPDIR:-/tmp}"
+        export XDG_DATA_HOME="${TMPDIR}/xdg-data"
+        export XDG_CACHE_HOME="${TMPDIR}/xdg-cache"
+        export VIRTUALENV_CACHE_DIR="${XDG_CACHE_HOME}/virtualenv"
+        export PIP_CACHE_DIR="${XDG_CACHE_HOME}/pip"
+        mkdir -p "${XDG_DATA_HOME}" "${VIRTUALENV_CACHE_DIR}" "${PIP_CACHE_DIR}"
 
-        echo "Copying venv to local storage..."
-        cp -a /scratch/indrisch/venv_llamafactory_cu126 ${SLURM_TMPDIR}/venv_llamafactory_cu126
-        source ${SLURM_TMPDIR}/venv_llamafactory_cu126/bin/activate
+        # --- Build the VENV ---
+        module load StdEnv/2023 gcc/12.3 openmpi/4.1.5 python/3.12 cuda/12.6 opencv/4.12.0 arrow # cu126 for GPU compatibility
+        echo "build from scratch" # from scratch on the compute node (no need to transfer the venv, all modules are available with compute canada's module system)
+        export DS_BUILD_CPU_ADAM=1 # we can build CPU ADAM for offloading
+        export BUILD_UTILS=1
+        export DS_BUILD_OPS=1
+        VLF="/scratch/indrisch/venv_llamafactory_cu126_qwen35/"
+        export VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VLF})
+
+        if [[ -d "$VLF" ]]; then
+            echo "VENV already exists at $VLF, copying to ${SLURM_TMPDIR}"
+            cp -r "$VLF" "${SLURM_TMPDIR}/"
+        else
+            echo "VENV does not exist at $VLF, building from scratch"
+            /scratch/indrisch/LLaMA-Factory/install_as_venv.sh RORQUAL
+        fi
+        source ${SLURM_TMPDIR}/venv_llamafactory_cu126_qwen35/bin/activate
 
         #source /scratch/indrisch/venv_llamafactory_cu126/bin/activate
 
@@ -196,54 +214,34 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
         echo "=== END VENV DIAGNOSTICS ==="
 
         pushd /scratch/indrisch/LLaMA-Factory
-        llamafactory-cli train ${YAML_FILE}
-        # llamafactory-cli train \
-        #     --model_name_or_path Qwen/Qwen3.5-4B \
-        #     --no_use_fast_tokenizer \
-        #     --cache_dir /scratch/indrisch/huggingface/hub \
-        #     --image_max_pixels 65536 \
-        #     --video_max_pixels 16384 \
-        #     --trust_remote_code \
-        #     --stage sft \
-        #     --do_train \
-        #     --finetuning_type lora \
-        #     --lora_rank 8 \
-        #     --lora_target all \
-        #     --dataset Scene30k \
-        #     --media_dir /project/aip-wangcs/shared/data/ \
-        #     --template qwen3_5 \
-        #     --cutoff_len 131072 \
-        #     --preprocessing_num_workers 32 \
-        #     --dataloader_num_workers 0 \
-        #     --dataloader_pin_memory false \
-        #     --low_cpu_mem_usage \
-        #     --output_dir /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-4b/lora/sft/Scene30k_traineval \
-        #     --logging_steps 10 \
-        #     --save_steps 200 \
-        #     --plot_loss \
-        #     --overwrite_output_dir \
-        #     --save_only_model false \
-        #     --report_to wandb \
-        #     --per_device_train_batch_size 2 \
-        #     --gradient_accumulation_steps 8 \
-        #     --learning_rate 1.0e-4 \
-        #     --num_train_epochs 2.0 \
-        #     --lr_scheduler_type cosine \
-        #     --warmup_ratio 0.1 \
-        #     --bf16 \
-        #     --ddp_timeout 180000000 \
-        #     --debug underflow_overflow \
-        #     --log_level debug \
-        #     --log_level_replica debug \
-        #     --print_param_status \
-        #     --flash_attn fa2 \
-        #     --enable_liger_kernel \
-        #     --gradient_checkpointing \
-        #     --deepspeed /project/aip-wangcs/indrisch/LLaMA-Factory/examples/deepspeed/ds_z3_offload_config.json \
-        #     --val_size 0.1 \
-        #     --per_device_eval_batch_size 1 \
-        #     --eval_strategy steps \
-        #     --eval_steps 200
+
+        # --- Handle N-Node (Single or Multi) Training ---
+        if [[ "$SLURM_NNODES" -ge 2 ]]; then
+            echo "SLURM_NNODES: ${SLURM_NNODES}"
+            echo "HEAD_NODE: ${HEAD_NODE}"
+            echo "SLURM_NODEID: ${SLURM_NODEID}"
+            export NCCL_ASYNC_ERROR_HANDLING=1
+            export TORCH_NCCL_ASYNC_ERROR_HANDLING=1
+            export NCCL_DEBUG=INFO
+            export NCCL_SOCKET_IFNAME=^docker0,lo
+
+            export NNODES="${SLURM_NNODES}"
+            export NODE_RANK="${SLURM_NODEID}"
+            export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE}}"
+            export MASTER_PORT="${MASTER_PORT:-29500}"
+            export NPROC_PER_NODE="4"
+
+            echo "NNODES: ${NNODES}"
+            echo "NODE_RANK: ${NODE_RANK}"
+            echo "MASTER_ADDR: ${MASTER_ADDR}"
+            echo "MASTER_PORT: ${MASTER_PORT}"
+            echo "NPROC_PER_NODE: ${NPROC_PER_NODE}"
+
+            llamafactory-cli train ${YAML_FILE}
+        else
+            echo "SLURM_NNODES: ${SLURM_NNODES}"
+            llamafactory-cli train ${YAML_FILE}
+        fi
 
     else
         echo "Invalid running mode: $RUNNING_MODE"
