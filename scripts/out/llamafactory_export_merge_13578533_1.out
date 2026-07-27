@@ -1,0 +1,62 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: None
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: None
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+note: h5py is not installed, therefore running programs with h5py data will fail.
+[WARNING|2026-05-09 06:21:14] llamafactory.extras.misc:154 >> Version checking has been disabled, may lead to unexpected behaviors.
+[2026-05-09 06:21:14,774] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[INFO|2026-05-09 06:21:19] llamafactory.model.model_utils.kv_cache:143 >> KV cache is enabled for faster generation.
+[INFO|2026-05-09 06:21:59] llamafactory.model.model_utils.attention:143 >> Using torch SDPA for faster training and inference.
+[INFO|2026-05-09 06:22:07] llamafactory.model.adapter:143 >> Merged 1 adapter(s).
+[INFO|2026-05-09 06:22:07] llamafactory.model.adapter:143 >> Loaded adapter(s): cvis-tmu/videor1-lora-sft-Scene30k_traineval_5epochs
+[INFO|2026-05-09 06:22:07] llamafactory.model.loader:143 >> all params: 8,292,166,656
+[INFO|2026-05-09 06:22:07] llamafactory.train.tuner:143 >> Convert model dtype to: torch.bfloat16.
+[INFO|2026-05-09 06:22:36] llamafactory.train.tuner:143 >> Ollama modelfile saved in /scratch/indrisch//LLaMA-Factory/models/merged-model/videor1-lora-sft-Scene30k_traineval_5epochs/Modelfile
+Model exported successfully to /scratch/indrisch//LLaMA-Factory/models/merged-model/videor1-lora-sft-Scene30k_traineval_5epochs
+Defaulting to user installation because normal site-packages is not writeable
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: huggingface_hub in /home/indrisch/.local/lib/python3.12/site-packages (1.14.0)
+Requirement already satisfied: filelock>=3.10.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/site-packages (from huggingface_hub) (3.13.4)
+Requirement already satisfied: fsspec>=2023.5.0 in /home/indrisch/.local/lib/python3.12/site-packages (from huggingface_hub) (2026.4.0+computecanada)
+Requirement already satisfied: hf-xet<2.0.0,>=1.4.3 in /home/indrisch/.local/lib/python3.12/site-packages (from huggingface_hub) (1.5.0+computecanada)
+Requirement already satisfied: httpx<1,>=0.23.0 in /home/indrisch/.local/lib/python3.12/site-packages (from huggingface_hub) (0.28.1+computecanada)
+Requirement already satisfied: packaging>=20.9 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from huggingface_hub) (26.0+computecanada)
+Requirement already satisfied: pyyaml>=5.1 in /home/indrisch/.local/lib/python3.12/site-packages (from huggingface_hub) (6.0.3+computecanada)
+Requirement already satisfied: tqdm>=4.42.1 in /home/indrisch/.local/lib/python3.12/site-packages (from huggingface_hub) (4.67.3+computecanada)
+Requirement already satisfied: typer>=0.20.0 in /home/indrisch/.local/lib/python3.12/site-packages (from huggingface_hub) (0.25.1)
+Requirement already satisfied: typing-extensions>=4.1.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/site-packages (from huggingface_hub) (4.12.1)
+Requirement already satisfied: anyio in /home/indrisch/.local/lib/python3.12/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (4.13.0+computecanada)
+Requirement already satisfied: certifi in /home/indrisch/.local/lib/python3.12/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (2026.4.22)
+Requirement already satisfied: httpcore==1.* in /home/indrisch/.local/lib/python3.12/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (1.0.9+computecanada)
+Requirement already satisfied: idna in /home/indrisch/.local/lib/python3.12/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (3.13)
+Requirement already satisfied: h11>=0.16 in /home/indrisch/.local/lib/python3.12/site-packages (from httpcore==1.*->httpx<1,>=0.23.0->huggingface_hub) (0.16.0+computecanada)
+Requirement already satisfied: click>=8.2.1 in /home/indrisch/.local/lib/python3.12/site-packages (from typer>=0.20.0->huggingface_hub) (8.3.3+computecanada)
+Requirement already satisfied: shellingham>=1.3.0 in /home/indrisch/.local/lib/python3.12/site-packages (from typer>=0.20.0->huggingface_hub) (1.5.4+computecanada)
+Requirement already satisfied: rich>=13.8.0 in /home/indrisch/.local/lib/python3.12/site-packages (from typer>=0.20.0->huggingface_hub) (15.0.0+computecanada)
+Requirement already satisfied: annotated-doc>=0.0.2 in /home/indrisch/.local/lib/python3.12/site-packages (from typer>=0.20.0->huggingface_hub) (0.0.4+computecanada)
+Requirement already satisfied: markdown-it-py>=2.2.0 in /home/indrisch/.local/lib/python3.12/site-packages (from rich>=13.8.0->typer>=0.20.0->huggingface_hub) (4.2.0)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (from rich>=13.8.0->typer>=0.20.0->huggingface_hub) (2.19.2+computecanada)
+Requirement already satisfied: mdurl~=0.1 in /home/indrisch/.local/lib/python3.12/site-packages (from markdown-it-py>=2.2.0->rich>=13.8.0->typer>=0.20.0->huggingface_hub) (0.1.2+computecanada)
+[32m✓ Uploaded[0m
+  url: https://huggingface.co/cvis-tmu/videor1-lora-sft-Scene30k_traineval_5epochs_merged/commit/b02c387e51311b75485aa82f021f486559171419
+Model uploaded successfully to Hugging Face Hub

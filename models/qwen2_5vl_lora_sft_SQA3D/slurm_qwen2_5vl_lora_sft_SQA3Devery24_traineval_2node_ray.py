@@ -1,4 +1,5 @@
-import ray
+if is_ray_available():
+    import ray
 import os
 import time
 import sys

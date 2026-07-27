@@ -1,6 +1,14 @@
 #!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=2
+#SBATCH --time=0-00:15:00
+#SBATCH --mem=2G
+#SBATCH --output=out/%N-get_data-%j.out
+#SBATCH --mail-user=christopher.indris@torontomu.ca
+#SBATCH --mail-type=ALL
 
-# RUN ON: Login Node
+# RUN ON: Login Node (or sbatch ./get_data.sh <cluster_name> on clusters with internet access on compute nodes)
 # RUN AS: ./get_data.sh <cluster_name>
 
 export HF_DEBUG=1
@@ -18,7 +26,7 @@ git-lfs install
 # pip install --upgrade pip setuptools wheel
 # pip install packaging
 # pip install --no-index huggingface_hub
-source /scratch/indrisch/venv_llamafactory_cu126/bin/activate
+source /scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/activate
 
 # --- default location: $HOME/.cache/huggingface/hub; modify with HF_HOME and HFHUB_CACHE. ---
 #huggingface-cli download moonshotai/Kimi-VL-A3B-Thinking-2506 # default location: $HOME/.cache/huggingface/hub
@@ -76,7 +84,7 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=8 zd11024/Video3D-LLM-LLaVA-Qwen-Uniform-32 # Resulting model of Video3D-LLM
 #hf download --max-workers=4 Qwen/Qwen3-VL-8B-Thinking # Same as above but with extra thinking capabilities.
 #hf download --max-workers=8 zd11024/Video3D-LLM-LLaVA-Qwen-Uniform-32 # Resulting model of Video3D-LLM
-# hf download --max-workers=4 Video-R1/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
+# hf download --max-workers=4 cvis-tmu/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
 # hf download --max-workers=4 Qwen/Qwen3-VL-8B-Instruct # The Qwen3 counterpart to Qwen2.5VL-7B, which is what we have been using.
 # hf download --max-workers=4 Qwen/Qwen3-VL-8B-Thinking # Same as above but with extra thinking capabilities.
 # hf download --max-workers=8 zd11024/Video3D-LLM-LLaVA-Qwen-Uniform-32 # Resulting model of Video3D-LLM
@@ -89,16 +97,16 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # Some models which we would like to merge with the base
-hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_426steps
-hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_852steps
-hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_5epochs
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_426steps
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_852steps
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_5epochs
 
-hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_426steps
-hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_852steps
-hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_5epochs
+# hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_426steps
+# hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_852steps
+# hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_5epochs
 
 # hf download --max-workers=12 cvis-tmu/easyr1_verl_sif --repo-type=dataset
-hf download --max-workers=12 cvis-tmu/compute_canada_sif_files llamafactory.sif --repo-type=dataset --revision 382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a
+# hf download --max-workers=12 cvis-tmu/compute_canada_sif_files llamafactory.sif --repo-type=dataset
 # hf download --max-workers=12 cvis-tmu/compute_canada_sif_files vsibench_eval.sif --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62 --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa --repo-type=dataset
@@ -108,6 +116,10 @@ hf download --max-workers=12 cvis-tmu/compute_canada_sif_files llamafactory.sif 
 # hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_426steps
 # hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_852steps
 # hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_5epochs
+# hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_426steps_merged
+# hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_852steps_merged
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_426steps_merged
+# hf download --max-workers=4 cvis-tmu/videor1-lora-sft-Scene30k_traineval_852steps_merged
 
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R1.0_C0.0_F0.0_X0.0 --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C1.0_F0.0_X0.0 --repo-type=dataset
@@ -137,7 +149,16 @@ hf download --max-workers=12 cvis-tmu/compute_canada_sif_files llamafactory.sif 
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # scene30k
-hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
+# hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
+
+# SPAR-7M-RGBD (annotations) -> https://huggingface.co/datasets/jasonzhango/SPAR-7M-RGBD/blob/main/README.md
+# hf download --max-workers=8 jasonzhango/SPAR-7M-RGBD --repo-type dataset
+# hf download --max-workers=2 jasonzhango/SPAR-7M --repo-type dataset
+hf download --max-workers=4 internlm/Spatial-SSRL-81k --repo-type=dataset # SSRL
+hf download --max-workers=4 MLL-Lab/MindCube --repo-type=dataset # Suggested by the 3DThinker authors
+hf download --max-workers=4 jankin123/3DThinker-10K --repo-type=dataset # 3D Thinker 10k: suggested by Leihan (how is this different from the one above)?
+hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type=dataset # Leihan's version of the one above, which is MCQs only.
+hf download --max-workers=4 jankin123/3DThinker-Mindcube # the model weights used by 3D-Thinker; may or may not be usede by us
 
 deactivate
 # rm -r temp_env

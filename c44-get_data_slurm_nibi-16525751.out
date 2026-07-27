@@ -1,0 +1,29 @@
+Hook already exists: pre-push
+
+	#!/bin/sh
+	command -v git-lfs >/dev/null 2>&1 || { printf >&2 "\n%s\n\n" "This repository is configured for Git LFS but 'git-lfs' was not found on your path. If you no longer wish to use Git LFS, remove this hook by deleting the 'pre-push' file in the hooks directory (set by 'core.hookspath'; usually '.git/hooks')."; exit 2; }
+	git lfs pre-push "$@"
+
+To resolve this, either:
+  1: run `git lfs update --manual` for instructions on how to merge hooks.
+  2: run `git lfs update --force` to overwrite your hook.
+PROJECT_DIR: /scratch/indrisch//LLaMA-Factory
+SYSCONFIG_DIR_PATH: /scratch/indrisch//LLaMA-Factory/scripts
+PWD: /scratch/indrisch/LLaMA-Factory
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/indrisch//LLaMA-Factory/scripts
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (26.1.1)
+Collecting pip
+  Downloading pip-26.1.2-py3-none-any.whl.metadata (4.6 kB)
+Requirement already satisfied: setuptools in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (81.0.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/setuptools-82.0.1+computecanada-py3-none-any.whl
+Requirement already satisfied: wheel in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (0.47.0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/packaging-26.2+computecanada-py3-none-any.whl (from wheel)
+Downloading pip-26.1.2-py3-none-any.whl (1.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 13.9 MB/s  0:00:00
+Installing collected packages: setuptools, pip, packaging
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 81.0.0+computecanada
+    Uninstalling setuptools-81.0.0+computecanada:
+      Successfully uninstalled setuptools-81.0.0+computecanada
+slurmstepd: error: *** JOB 16525751 ON c44 CANCELLED AT 2026-06-22T15:25:49 DUE TO TIME LIMIT ***
