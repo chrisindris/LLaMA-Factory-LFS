@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --nodes=2
+#SBATCH --nodes=3
 #SBATCH --ntasks-per-node=1
-#SBATCH --output=out/%N-2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs-%j.out
+#SBATCH --output=out/%N-3nodes_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs-%j.out
 #SBATCH --cpus-per-task=64
 #SBATCH --time=1-00:00:00
 #SBATCH --mem=480GB
@@ -37,4 +37,4 @@ srun \
     --ntasks "${SLURM_NNODES}" \
     --ntasks-per-node 1 \
     --kill-on-bad-exit=1 \
-    bash ${PROJECT_DIR}/models/qwen3_5_4b_lora_sft_Scene30k/slurm_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh "$@"
+    bash ${PROJECT_DIR}/models/qwen3_5_9b_lora_sft_Scene30k/slurm_3nodes_qwen3_5_9b_lora_sft_Scene30k_traineval_5epochs.sh "$@"

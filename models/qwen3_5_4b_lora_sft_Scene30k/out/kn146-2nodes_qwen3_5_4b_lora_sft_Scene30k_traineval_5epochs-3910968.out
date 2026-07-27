@@ -1,0 +1,16 @@
+SLURM_JOB_NODELIST: kn[146-148]
+HEAD_NODE: kn146
+MASTER_ADDR: kn146
+MASTER_PORT: 29500
+[2026-06-10T10:46:34.452] error: couldn't chdir to `/project/6110552/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k': No such file or directory: going to /tmp instead
+[2026-06-10T10:46:34.454] error: couldn't chdir to `/project/6110552/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k': No such file or directory: going to /tmp instead
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+/cvmfs/soft.computecanada.ca/gentoo/2023/x86-64-v3/usr/bin/bash: /project/aip-wangcs/indrisch//LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/slurm_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh: No such file or directory
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+srun: error: kn148: task 2: Exited with exit code 127
+srun: Terminating StepId=3910968.0
+[2026-06-10T10:46:34.727] error: *** STEP 3910968.0 ON kn146 CANCELLED AT 2026-06-10T10:46:34 DUE TO TASK FAILURE ***
+srun: error: kn147: task 1: Terminated
+srun: error: kn146: task 0: Terminated
+srun: Force Terminated StepId=3910968.0

@@ -271,3 +271,104 @@
   --repo-id "cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_5epochs_merged" \
   --checkpoint "/scratch/indrisch/LLaMA-Factory/models/videor1sft-lora-sft-Scene30k_traineval_5epochs_merged/" \
   --commit-message "videor1sft-lora-sft-Scene30k_traineval_5epochs_merged"
+
+# ./upload_model_checkpoint.sh \
+#     --id videor1sft-lora-sft-Scene30k_traineval_4epochs \
+#     --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1sft/lora/sft/Scene30k_traineval_5epochs/checkpoint-852/ \
+#     --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260427_072733-1abe7g77 \
+#     --commit-message "VideoR1 (SFT-only, no RL) LoRA adapter checkpoint trained for 852 steps on 8 GPUs (4 epoch) total on the Scene30k dataset (corrected)" \
+#     --no-wandb-upload
+
+# ./upload_model_checkpoint.sh \
+#     --id videor1sft-lora-sft-Scene30k_traineval_5epochs \
+#     --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1sft/lora/sft/Scene30k_traineval_5epochs/checkpoint-1065/ \
+#     --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260427_072733-1abe7g77 \
+#     --commit-message "VideoR1 (SFT-only, no RL) LoRA adapter checkpoint trained for 1065 steps on 8 GPUs (5 epoch) total on the Scene30k dataset (corrected)" \
+
+# ./upload_model_checkpoint.sh \
+#     --id videor1-lora-sft-Scene30k_traineval_2epochs \
+#     --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1/lora/sft/Scene30k_traineval_5epochs/checkpoint-426/ \
+#     --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260425_075152-5bx1dfj1 \
+#     --commit-message "VideoR1 LoRA adapter checkpoint trained for 426 steps on 8 GPUs (2 epoch) total on the Scene30k dataset (corrected)" \
+#     --no-wandb-upload
+
+# ./upload_model_checkpoint.sh \
+#     --id videor1-lora-sft-Scene30k_traineval_4epochs \
+#     --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1/lora/sft/Scene30k_traineval_5epochs/checkpoint-852/ \
+#     --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260425_075152-5bx1dfj1 \
+#     --commit-message "VideoR1 LoRA adapter checkpoint trained for 852 steps on 8 GPUs (4 epoch) total on the Scene30k dataset (corrected)" \
+#     --no-wandb-upload
+
+# ./upload_model_checkpoint.sh \
+#     --id videor1-lora-sft-Scene30k_traineval_5epochs \
+#     --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/videor1/lora/sft/Scene30k_traineval_5epochs/checkpoint-1065/ \
+#     --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260425_075152-5bx1dfj1 \
+#     --commit-message "VideoR1 LoRA adapter checkpoint trained for 1065 steps on 8 GPUs (5 epoch) total on the Scene30k dataset (corrected)" \
+
+# ./upload_model_checkpoint.sh \
+#     --id qwen3_5-4b-lora-sft-Scene30k_traineval_1epochs \
+#     --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-4b/lora/sft/Scene30k_traineval_3nodes_5epochs/checkpoint-142/ \
+#     --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260611_065120-joa6eq0o \
+#     --commit-message "Qwen3.5 4B LoRA adapter checkpoint trained for 142 steps on 12 l40s GPUs (1 epoch) total on the Scene30k dataset (corrected)" \
+#     --no-wandb-upload
+
+# ./upload_model_checkpoint.sh \
+#     --id qwen3_5-4b-lora-sft-Scene30k_traineval_2epochs \
+#     --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-4b/lora/sft/Scene30k_traineval_3nodes_5epochs/checkpoint-284/ \
+#     --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260611_065120-joa6eq0o \
+#     --commit-message "Qwen3.5 4B LoRA adapter checkpoint trained for 284 steps on 12 l40s GPUs (2 epoch) total on the Scene30k dataset (corrected)" \
+#     --no-wandb-upload
+
+# ./upload_model_checkpoint.sh \
+#     --id qwen3_5-4b-lora-sft-Scene30k_traineval_3epochs \
+#     --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-4b/lora/sft/Scene30k_traineval_3nodes_5epochs/checkpoint-426/ \
+#     --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260611_065120-joa6eq0o \
+#     --commit-message "Qwen3.5 4B LoRA adapter checkpoint trained for 426 steps on 12 l40s GPUs (3 epoch) total on the Scene30k dataset (corrected)" \
+#     --no-wandb-upload
+
+# ./upload_model_checkpoint.sh \
+#     --id qwen3_5-4b-lora-sft-Scene30k_traineval_4epochs \
+#     --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-4b/lora/sft/Scene30k_traineval_3nodes_5epochs/checkpoint-568/ \
+#     --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260611_065120-joa6eq0o \
+#     --commit-message "Qwen3.5 4B LoRA adapter checkpoint trained for 568 steps on 12 l40s GPUs (4 epoch) total on the Scene30k dataset (corrected)" \
+#     --no-wandb-upload
+
+# ./upload_model_checkpoint.sh \
+#     --id qwen3_5-4b-lora-sft-Scene30k_traineval_5epochs \
+#     --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-4b/lora/sft/Scene30k_traineval_3nodes_5epochs/checkpoint-710/ \
+#     --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260611_065120-joa6eq0o \
+#     --commit-message "Qwen3.5 4B LoRA adapter checkpoint trained for 710 steps on 12 l40s GPUs (5 epoch) total on the Scene30k dataset (corrected)" \
+
+./upload_model_checkpoint.sh \
+    --id qwen3_5-9b-lora-sft-Scene30k_traineval_1epochs \
+    --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-9b/lora/sft/Scene30k_traineval_3nodes_5epochs/checkpoint-142/ \
+    --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260614_064218-gevkf1vc \
+    --commit-message "Qwen3.5 9B LoRA adapter checkpoint trained for 142 steps on 12 l40s GPUs (1 epoch) total on the Scene30k dataset (corrected)" \
+    --no-wandb-upload
+
+./upload_model_checkpoint.sh \
+    --id qwen3_5-9b-lora-sft-Scene30k_traineval_2epochs \
+    --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-9b/lora/sft/Scene30k_traineval_3nodes_5epochs/checkpoint-284/ \
+    --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260614_064218-gevkf1vc \
+    --commit-message "Qwen3.5 9B LoRA adapter checkpoint trained for 284 steps on 12 l40s GPUs (2 epoch) total on the Scene30k dataset (corrected)" \
+    --no-wandb-upload
+
+./upload_model_checkpoint.sh \
+    --id qwen3_5-9b-lora-sft-Scene30k_traineval_3epochs \
+    --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-9b/lora/sft/Scene30k_traineval_3nodes_5epochs/checkpoint-426/ \
+    --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260614_064218-gevkf1vc \
+    --commit-message "Qwen3.5 9B LoRA adapter checkpoint trained for 426 steps on 12 l40s GPUs (3 epoch) total on the Scene30k dataset (corrected)" \
+    --no-wandb-upload
+
+./upload_model_checkpoint.sh \
+    --id qwen3_5-9b-lora-sft-Scene30k_traineval_4epochs \
+    --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-9b/lora/sft/Scene30k_traineval_3nodes_5epochs/checkpoint-568/ \
+    --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260614_064218-gevkf1vc \
+    --commit-message "Qwen3.5 9B LoRA adapter checkpoint trained for 568 steps on 12 l40s GPUs (4 epoch) total on the Scene30k dataset (corrected)" \
+    --no-wandb-upload
+
+./upload_model_checkpoint.sh \
+    --id qwen3_5-9b-lora-sft-Scene30k_traineval_5epochs \
+    --checkpoint /project/aip-wangcs/indrisch/LLaMA-Factory/saves/qwen3_5-9b/lora/sft/Scene30k_traineval_3nodes_5epochs/checkpoint-710/ \
+    --wandb-log /project/aip-wangcs/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260614_064218-gevkf1vc \
+    --commit-message "Qwen3.5 9B LoRA adapter checkpoint trained for 710 steps on 12 l40s GPUs (5 epoch) total on the Scene30k dataset (corrected)" \

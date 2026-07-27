@@ -1,0 +1,74 @@
+### model
+model_name_or_path: Qwen/Qwen3.5-9B
+# cache_dir is intentionally unset so HF_DATASETS_CACHE can point to node-local storage.
+image_max_pixels: 65536 # reduced for l40s to lower activation memory.
+video_max_pixels: 16384 # reduced for l40s to lower activation memory.
+use_fast_tokenizer: false
+# giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_rank: 8
+lora_target: all
+
+### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
+dataset: Scene30k
+# max_samples: 1000 # for debugging; set to null or remove for full dataset
+media_dir: /project/aip-wangcs/shared/data/
+template: qwen3_5
+cutoff_len: 8192 # max len of the model = 131072; lowering to 8192 reduces quadratic attention memory on l40s.
+overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
+preprocessing_num_workers: 8 # note: this number should be equal to 16 divided by the number of nodes being used, to reduce worker fan-out to avoid file-lock pressure on multi-node runs
+dataloader_num_workers: 4
+dataloader_prefetch_factor: 1 # when dataloader_num_workers > 0, this argument specifies the number of batches loaded in advance by each worker. Setting it to 1 can help reduce memory usage when working with large multimodal data.
+dataloader_pin_memory: false
+low_cpu_mem_usage: true
+
+### output
+output_dir: saves/qwen3_5-9b/lora/sft/Scene30k_traineval_3nodes_5epochs
+logging_steps: 10
+save_steps: 142 # save after every 1.00 Scene30k epochs; when using 3 nodes (12 GPUs) total it is 142 steps per epoch
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
+
+### train
+per_device_train_batch_size: 1 # preferred by Qwen3
+gradient_accumulation_steps: 16 # preferred by Qwen3
+gradient_checkpointing: true # to save memory at the expense of training time; this is mutually exclusive with use_unsloth, which partitions in a more complex manner than gradient checkpointing.
+learning_rate: 1.0e-4
+num_train_epochs: 5.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+bf16_full_eval: true # set to true to use bf16 during evaluation as well, which can reduce memory usage and speed up evaluation on compatible hardware.
+# pure_bf16: true # pure_bf16` is incompatible with DeepSpeed ZeRO-3 (*3874065.out)
+ddp_timeout: 180000000
+resume_from_checkpoint: null
+
+# debugging level
+# debug: none # to turn off debugging, we must simply comment out this line.
+log_level: passive
+log_level_replica: passive
+print_param_status: false
+debug_mm_training: false # this is really for fine-grained debugging of memory usage; for runs, output is much cleaner if we turn this off.
+# debug_mm_steps: 1
+# image_sample_stride: 16 # use every 16th image frame when on l40s GPUs.
+image_sample_count: 24 # I noticed that before we were using at most 18 frames per GPU per training step and we weren't OOMing. Let's try 24.
+
+# acceleration
+flash_attn: fa2
+enable_liger_kernel: true
+
+# distribution
+deepspeed: examples/deepspeed/ds_z3_offload_config.json # Qwen3.5_9b is small enough to fit on a single l40s (48GB) or A100 (80GB). On Killarney, ds_z3_offload_config.json seems to have issues with the ADAM cpu; we need to build the venv on the compute node with DS_BUILD_CPU_ADAM=1.
+
+## eval
+val_size: 0.1
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 142 # evaluate after every 1.00 Scene30k epochs; when using 3 nodes (12 GPUs) total it is 142 steps per epoch
