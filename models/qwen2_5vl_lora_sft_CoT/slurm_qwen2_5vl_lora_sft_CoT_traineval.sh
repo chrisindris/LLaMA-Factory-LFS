@@ -135,18 +135,23 @@ HWLOC_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/C
 
 # ----- EXPERIMENT -----
 
-# it seems like we want to bind the nvcc.
-"""
-This, oddly, doesn't work
-        -B $(dirname $(dirname $(which nvcc))) \
-        -B $(dirname $(which nvcc)) \
-        -B $(which nvcc) \
-"""
+# Note: binding host nvcc via -B $(dirname $(which nvcc)) does not work
+# reliably on these clusters; use the CUDA toolkit inside the SIF instead.
 
 run_llamafactory_apptainer() {
-    # $1 optional: extra bind args string is not used; uses globals
+    # $1 optional: extra NVIDIA driver bind args (e.g. "-B /usr/lib64/nvidia")
     local extra_nv_bind="${1:-}"
-    
+
+    # CUDA toolkit path *inside* the NGC/SIF image (not the host module path).
+    # Rules for the container command / env:
+    #   - Do NOT pass "export ..." as the command: nvidia_entrypoint.sh does
+    #     `exec "$@"` and fails with "exec: export: not found".
+    #   - Do NOT force --env PATH=...${PATH}: that expands the *host* PATH and
+    #     drops /opt/conda/bin where llamafactory-cli lives in this SIF.
+    #   - Prefer leaving PATH/LD_LIBRARY_PATH alone so the image defaults
+    #     (/opt/conda/bin, /usr/local/cuda/bin, ...) stay intact.
+    export APPTAINERENV_CUDA_HOME=/usr/local/cuda
+
     apptainer run --nv --fakeroot --overlay /scratch/indrisch/LLaMA-Factory/apptainer/overlay.img \
         ${extra_nv_bind} \
         -B ${PROJECT_DIR} \
@@ -175,11 +180,11 @@ run_llamafactory_apptainer() {
         --env NCCL_P2P_DISABLE=0 \
         --env NCCL_DEBUG=INFO \
         --env NCCL_SOCKET_IFNAME=^docker0,lo \
-        --env CUDA_HOME=$(dirname $(dirname $(which nvcc))) \
+        --env CUDA_HOME="${APPTAINERENV_CUDA_HOME}" \
         "${APPTAINER_H5_ENV[@]}" \
         --pwd ${PROJECT_DIR} \
         ${SIF_FILE} \
-        export CUDA_HOME=/usr/local/cuda && export PATH=$CUDA_HOME/bin:$PATH && export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH && llamafactory-cli train ${YAML_FILE}
+        llamafactory-cli train ${YAML_FILE}
 }
 
 
@@ -222,7 +227,7 @@ if [[ "$CLUSTER" == "NIBI" ]]; then
             nvidia-smi
         echo "=== END APPTAINER GPU SANITY TEST (exit code: $?) ==="
 
-        run_llamafactory_apptainer
+        run_llamafactory_apptainer "${NVIDIA_BIND_ARGS}"
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 

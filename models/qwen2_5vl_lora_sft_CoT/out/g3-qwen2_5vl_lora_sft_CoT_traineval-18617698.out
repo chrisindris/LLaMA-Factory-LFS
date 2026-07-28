@@ -1,0 +1,115 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /scratch/indrisch/ScanNet_h5
+SCANNET_H5_DIR: /scratch/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/indrisch/3DThinker10K_images_h5
+CLUSTER: NIBI
+YAML_FILE: /scratch/indrisch//LLaMA-Factory/examples/train_lora/nibi_qwen2_5vl_lora_sft_CoT_traineval.yaml
+OUTPUT_DIR: /scratch/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval
+RUNNING_MODE: APPTAINER
+/scratch/indrisch//LLaMA-Factory/models/qwen2_5vl_lora_sft_CoT/slurm_qwen2_5vl_lora_sft_CoT_traineval.sh: line 144: 
+This, oddly, doesn't work
+        -B /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2         -B /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2/bin         -B /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2/bin/nvcc : No such file or directory
+=== HOST DIAGNOSTICS ===
+HOSTNAME: g3.nibi.sharcnet
+CUDA_VISIBLE_DEVICES: 0
+SLURM_GPUS: 
+SLURM_JOB_GPUS: 6
+Tue Jul 28 01:09:08 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   31C    P0             68W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+crw-rw-rw- 1 root root 195, 254 Jul 12 10:10 /dev/nvidia-modeset
+crw-rw-rw- 1 root root 509,   0 Jul 12 10:10 /dev/nvidia-nvlink
+crw-rw-rw- 1 root root 508,   0 Jul 12 10:10 /dev/nvidia-nvswitch0
+crw-rw-rw- 1 root root 508,   1 Jul 12 10:10 /dev/nvidia-nvswitch1
+crw-rw-rw- 1 root root 508,   2 Jul 12 10:10 /dev/nvidia-nvswitch2
+crw-rw-rw- 1 root root 508,   3 Jul 12 10:10 /dev/nvidia-nvswitch3
+crw-rw-rw- 1 root root 508, 255 Jul 12 10:10 /dev/nvidia-nvswitchctl
+crw-rw-rw- 1 root root 505,   0 Jul 12 10:10 /dev/nvidia-uvm
+crw-rw-rw- 1 root root 505,   1 Jul 12 10:10 /dev/nvidia-uvm-tools
+crw-rw-rw- 1 root root 195,   0 Jul 12 10:10 /dev/nvidia0
+crw-rw-rw- 1 root root 195,   1 Jul 12 10:10 /dev/nvidia1
+crw-rw-rw- 1 root root 195,   2 Jul 12 10:10 /dev/nvidia2
+crw-rw-rw- 1 root root 195,   3 Jul 12 10:10 /dev/nvidia3
+crw-rw-rw- 1 root root 195,   4 Jul 12 10:10 /dev/nvidia4
+crw-rw-rw- 1 root root 195,   5 Jul 12 10:10 /dev/nvidia5
+crw-rw-rw- 1 root root 195,   6 Jul 12 10:10 /dev/nvidia6
+crw-rw-rw- 1 root root 195,   7 Jul 12 10:10 /dev/nvidia7
+crw-rw-rw- 1 root root 195, 255 Jul 12 10:09 /dev/nvidiactl
+
+/dev/nvidia-caps:
+total 0
+drwxr-xr-x  2 root root    100 Jul 12 10:10 .
+drwxr-xr-x 22 root root   4360 Jul 12 10:10 ..
+cr--------  1 root root 510, 0 Jul 12 10:10 nvidia-cap0
+cr--------  1 root root 510, 1 Jul 12 10:10 nvidia-cap1
+cr--r--r--  1 root root 510, 2 Jul 12 10:10 nvidia-cap2
+=== END HOST DIAGNOSTICS ===
+Found NVIDIA driver libs at: /usr/lib64/nvidia
+=== APPTAINER GPU SANITY TEST ===
+Tue Jul 28 01:09:16 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   31C    P0             68W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+=== END APPTAINER GPU SANITY TEST (exit code: 0) ===
+INFO:    User not listed in /etc/subuid, trying root-mapped namespace
+INFO:    Using fakeroot command combined with root-mapped namespace
+WARNING: Environment variable TORCH_EXTENSIONS_DIR already has value [/local/scratch/indrisch.18617698.0/.cache/torch_extensions], will not forward new value [/scratch/indrisch/.cache/torch_extensions] from parent process environment
+WARNING: Environment variable TRITON_CACHE_DIR already has value [/local/scratch/indrisch.18617698.0/.triton_cache], will not forward new value [/scratch/indrisch/.triton_cache] from parent process environment
+WARNING: Environment variable CUDA_HOME already has value [/usr/local/cuda], will not forward new value [/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2] from parent process environment
+WARNING: While bind mounting '/scratch/indrisch/ScanNet_h5:/scratch/indrisch/ScanNet_h5': destination is already in the mount point list
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+/opt/nvidia/nvidia_entrypoint.sh: line 67: exec: export: not found
