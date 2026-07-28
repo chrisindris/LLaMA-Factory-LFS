@@ -1,0 +1,1182 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /scratch/indrisch/ScanNet_h5
+SCANNET_H5_DIR: /scratch/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/indrisch/3DThinker10K_images_h5
+CLUSTER: NIBI
+YAML_FILE: /scratch/indrisch//LLaMA-Factory/examples/train_lora/nibi_qwen2_5vl_lora_sft_CoT_traineval.yaml
+OUTPUT_DIR: /scratch/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval
+RUNNING_MODE: APPTAINER
+=== HOST DIAGNOSTICS ===
+HOSTNAME: g27.nibi.sharcnet
+CUDA_VISIBLE_DEVICES: 0
+SLURM_GPUS: 
+SLURM_JOB_GPUS: 0
+Tue Jul 28 02:43:22 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:19:00.0 Off |                    0 |
+| N/A   33C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+crw-rw-rw- 1 root root 195, 254 Jul 12 10:10 /dev/nvidia-modeset
+crw-rw-rw- 1 root root 509,   0 Jul 12 10:10 /dev/nvidia-nvlink
+crw-rw-rw- 1 root root 508,   0 Jul 12 10:10 /dev/nvidia-nvswitch0
+crw-rw-rw- 1 root root 508,   1 Jul 12 10:10 /dev/nvidia-nvswitch1
+crw-rw-rw- 1 root root 508,   2 Jul 12 10:10 /dev/nvidia-nvswitch2
+crw-rw-rw- 1 root root 508,   3 Jul 12 10:10 /dev/nvidia-nvswitch3
+crw-rw-rw- 1 root root 508, 255 Jul 12 10:10 /dev/nvidia-nvswitchctl
+crw-rw-rw- 1 root root 505,   0 Jul 12 10:10 /dev/nvidia-uvm
+crw-rw-rw- 1 root root 505,   1 Jul 12 10:10 /dev/nvidia-uvm-tools
+crw-rw-rw- 1 root root 195,   0 Jul 12 10:10 /dev/nvidia0
+crw-rw-rw- 1 root root 195,   1 Jul 12 10:10 /dev/nvidia1
+crw-rw-rw- 1 root root 195,   2 Jul 12 10:10 /dev/nvidia2
+crw-rw-rw- 1 root root 195,   3 Jul 12 10:10 /dev/nvidia3
+crw-rw-rw- 1 root root 195,   4 Jul 12 10:10 /dev/nvidia4
+crw-rw-rw- 1 root root 195,   5 Jul 12 10:10 /dev/nvidia5
+crw-rw-rw- 1 root root 195,   6 Jul 12 10:10 /dev/nvidia6
+crw-rw-rw- 1 root root 195,   7 Jul 12 10:10 /dev/nvidia7
+crw-rw-rw- 1 root root 195, 255 Jul 12 10:09 /dev/nvidiactl
+
+/dev/nvidia-caps:
+total 0
+drwxr-xr-x  2 root root    100 Jul 12 10:10 .
+drwxr-xr-x 22 root root   4360 Jul 12 10:10 ..
+cr--------  1 root root 510, 0 Jul 12 10:10 nvidia-cap0
+cr--------  1 root root 510, 1 Jul 12 10:10 nvidia-cap1
+cr--r--r--  1 root root 510, 2 Jul 12 10:10 nvidia-cap2
+=== END HOST DIAGNOSTICS ===
+Found NVIDIA driver libs at: /usr/lib64/nvidia
+=== APPTAINER GPU SANITY TEST ===
+Tue Jul 28 02:43:23 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:19:00.0 Off |                    0 |
+| N/A   33C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+=== END APPTAINER GPU SANITY TEST (exit code: 0) ===
+INFO:    User not listed in /etc/subuid, trying root-mapped namespace
+INFO:    Using fakeroot command combined with root-mapped namespace
+WARNING: Environment variable TORCH_EXTENSIONS_DIR already has value [/local/scratch/indrisch.18621031.0/.cache/torch_extensions], will not forward new value [/scratch/indrisch/.cache/torch_extensions] from parent process environment
+WARNING: Environment variable TRITON_CACHE_DIR already has value [/local/scratch/indrisch.18621031.0/.triton_cache], will not forward new value [/scratch/indrisch/.triton_cache] from parent process environment
+WARNING: Environment variable PYTHONPATH already has value [/scratch/indrisch//LLaMA-Factory/src:/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/indrisch/LLaMA-Factory/scripts:/scratch/indrisch/LLaMA-Factory/scripts], will not forward new value [/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/indrisch/LLaMA-Factory/scripts:/scratch/indrisch/LLaMA-Factory/scripts] from parent process environment
+WARNING: Environment variable CUDA_HOME already has value [/usr/local/cuda], will not forward new value [/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2] from parent process environment
+WARNING: While bind mounting '/scratch/indrisch/ScanNet_h5:/scratch/indrisch/ScanNet_h5': destination is already in the mount point list
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2026-07-28 02:43:49] llamafactory.launcher:143 >> Initializing 1 distributed tasks at: 127.0.0.1:44909
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+⚙️  Running in WANDB offline mode
+[2026-07-28 02:43:59,868] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2026-07-28 02:44:06,715] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-07-28 02:44:06,715] [INFO] [comm.py:700:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[INFO|2026-07-28 02:44:06] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2026-07-28 02:44:06] llamafactory.hparams.parser:529 >> Process rank: 0, world size: 1, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-07-28 02:44:06] llamafactory.train.tuner:143 >> SDPA backend flags: {'flash': True, 'mem_efficient': True, 'math': True, 'cudnn': True}
+[INFO|hub.py:421] 2026-07-28 02:44:06,835 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1949] 2026-07-28 02:44:07,178 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:07,374 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:07,374 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:07,374 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:07,374 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:07,374 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:07,374 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:07,374 >> loading file chat_template.jinja from cache at None
+[INFO|tokenization_utils_base.py:2364] 2026-07-28 02:44:07,805 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|hub.py:421] 2026-07-28 02:44:07,806 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:421] 2026-07-28 02:44:07,829 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:316] 2026-07-28 02:44:07,847 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2026-07-28 02:44:07,903 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:316] 2026-07-28 02:44:07,905 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2026-07-28 02:44:07,942 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:428] 2026-07-28 02:44:07,951 >> Image processor Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|tokenization_utils_base.py:1949] 2026-07-28 02:44:07,951 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:08,046 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:08,046 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:08,046 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:08,046 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:08,046 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:08,046 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2026-07-28 02:44:08,046 >> loading file chat_template.jinja from cache at None
+[INFO|tokenization_utils_base.py:2364] 2026-07-28 02:44:08,202 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|video_processing_utils.py:660] 2026-07-28 02:44:08,203 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:726] 2026-07-28 02:44:08,257 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:770] 2026-07-28 02:44:08,260 >> Video processor Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+[INFO|processing_utils.py:928] 2026-07-28 02:44:08,260 >> Offline mode: forcing local_files_only=True
+[INFO|processing_utils.py:1116] 2026-07-28 02:44:08,363 >> loading configuration file processor_config.json from cache at None
+[INFO|processing_utils.py:1199] 2026-07-28 02:44:08,651 >> Processor Qwen2_5_VLProcessor:
+- image_processor: Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2TokenizerFast(name_or_path='Qwen/Qwen2.5-VL-7B-Instruct', vocab_size=151643, model_max_length=131072, is_fast=True, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'additional_special_tokens': ['<|im_start|>', '<|im_end|>', '<|object_ref_start|>', '<|object_ref_end|>', '<|box_start|>', '<|box_end|>', '<|quad_start|>', '<|quad_end|>', '<|vision_start|>', '<|vision_end|>', '<|vision_pad|>', '<|image_pad|>', '<|video_pad|>']}, clean_up_tokenization_spaces=False, added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151647: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151648: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151649: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151650: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151651: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151652: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151653: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151654: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151655: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151656: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151657: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151658: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151659: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151660: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151661: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151662: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151663: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151664: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+}
+)
+- video_processor: Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+
+{
+  "processor_class": "Qwen2_5_VLProcessor"
+}
+
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+[INFO|2026-07-28 02:44:08] llamafactory.data.loader:143 >> Loading dataset /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.parquet...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+Setting num_proc from 32 back to 1 for the train split to disable multiprocessing as it only contains one shard.
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 1000 examples [00:00, 4168.86 examples/s]Generating train split: 15000 examples [00:00, 47015.14 examples/s]Generating train split: 30238 examples [00:00, 46298.31 examples/s]
+Converting format of dataset (num_proc=32):   0%|          | 0/30238 [00:00<?, ? examples/s][INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:11] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 1/30238 [00:02<22:55:11,  2.73s/ examples][INFO|2026-07-28 02:44:13] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:13] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 3/30238 [00:02<6:30:50,  1.29 examples/s] [INFO|2026-07-28 02:44:13] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:13] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 5/30238 [00:03<3:25:55,  2.45 examples/s][INFO|2026-07-28 02:44:13] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:13] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 7/30238 [00:03<2:09:50,  3.88 examples/s][INFO|2026-07-28 02:44:13] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:13] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:13] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:13] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:13] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 13/30238 [00:03<52:09,  9.66 examples/s] [INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 22/30238 [00:03<26:01, 19.35 examples/s][INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 34/30238 [00:03<14:34, 34.53 examples/s][INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 48/30238 [00:03<09:36, 52.34 examples/s][INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 62/30238 [00:03<07:15, 69.28 examples/s][INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 77/30238 [00:03<05:56, 84.58 examples/s][INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 93/30238 [00:03<04:58, 101.11 examples/s][INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 107/30238 [00:04<04:33, 110.11 examples/s][INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 120/30238 [00:04<04:33, 110.30 examples/s][INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:14] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 133/30238 [00:04<04:33, 110.26 examples/s][INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 145/30238 [00:04<04:38, 108.01 examples/s][INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 157/30238 [00:04<04:39, 107.77 examples/s][INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 169/30238 [00:04<05:17, 94.83 examples/s] [INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 181/30238 [00:04<05:01, 99.59 examples/s][INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 192/30238 [00:04<05:24, 92.64 examples/s][INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 202/30238 [00:05<05:55, 84.38 examples/s][INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 211/30238 [00:05<06:03, 82.70 examples/s][INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:15] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 220/30238 [00:05<06:13, 80.27 examples/s][INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 229/30238 [00:05<06:35, 75.81 examples/s][INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 237/30238 [00:05<08:06, 61.63 examples/s][INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 244/30238 [00:05<08:01, 62.34 examples/s][INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 251/30238 [00:05<07:59, 62.58 examples/s][INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 261/30238 [00:05<07:08, 69.99 examples/s][INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 269/30238 [00:06<07:26, 67.05 examples/s][INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 276/30238 [00:06<07:59, 62.51 examples/s][INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:16] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 284/30238 [00:06<07:45, 64.41 examples/s][INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 291/30238 [00:06<09:19, 53.51 examples/s][INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 299/30238 [00:06<08:49, 56.49 examples/s][INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 309/30238 [00:06<07:30, 66.41 examples/s][INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 317/30238 [00:06<07:50, 63.54 examples/s][INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 324/30238 [00:07<08:13, 60.66 examples/s][INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 331/30238 [00:07<08:20, 59.69 examples/s][INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:17] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 338/30238 [00:07<08:08, 61.18 examples/s][INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 346/30238 [00:07<07:50, 63.60 examples/s][INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 354/30238 [00:07<07:26, 66.86 examples/s][INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 361/30238 [00:07<07:27, 66.71 examples/s][INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 368/30238 [00:07<08:56, 55.70 examples/s][INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|          | 374/30238 [00:07<10:03, 49.49 examples/s][INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|▏         | 383/30238 [00:08<08:32, 58.20 examples/s][INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|▏         | 390/30238 [00:08<08:51, 56.21 examples/s][INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:18] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|▏         | 397/30238 [00:08<08:55, 55.71 examples/s][INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|▏         | 405/30238 [00:08<08:10, 60.87 examples/s][INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|▏         | 413/30238 [00:08<07:34, 65.59 examples/s][INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|▏         | 421/30238 [00:08<07:16, 68.27 examples/s][INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|▏         | 429/30238 [00:08<07:01, 70.72 examples/s][INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|▏         | 437/30238 [00:08<08:36, 57.66 examples/s][INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|▏         | 444/30238 [00:09<08:53, 55.81 examples/s][INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   1%|▏         | 450/30238 [00:09<09:37, 51.60 examples/s][INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:19] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 456/30238 [00:09<09:25, 52.62 examples/s][INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 464/30238 [00:09<08:42, 56.95 examples/s][INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 471/30238 [00:09<08:22, 59.23 examples/s][INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 478/30238 [00:09<08:20, 59.50 examples/s][INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 485/30238 [00:09<08:53, 55.79 examples/s][INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 492/30238 [00:09<08:24, 58.98 examples/s][INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 499/30238 [00:09<08:56, 55.44 examples/s][INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 505/30238 [00:10<09:14, 53.61 examples/s][INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:20] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 513/30238 [00:10<09:10, 54.02 examples/s][INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 520/30238 [00:10<09:09, 54.07 examples/s][INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 527/30238 [00:10<08:54, 55.54 examples/s][INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 534/30238 [00:10<08:35, 57.63 examples/s][INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 540/30238 [00:10<09:15, 53.47 examples/s][INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 548/30238 [00:10<08:31, 58.08 examples/s][INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 554/30238 [00:10<08:44, 56.60 examples/s][INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 560/30238 [00:11<08:53, 55.65 examples/s][INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:21] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 568/30238 [00:11<08:59, 55.00 examples/s][INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 577/30238 [00:11<07:59, 61.82 examples/s][INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 584/30238 [00:11<08:23, 58.84 examples/s][INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 590/30238 [00:11<08:42, 56.71 examples/s][INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 596/30238 [00:11<08:41, 56.86 examples/s][INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 603/30238 [00:11<08:49, 55.99 examples/s][INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 609/30238 [00:11<09:23, 52.56 examples/s][INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 617/30238 [00:12<08:20, 59.18 examples/s][INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 624/30238 [00:12<08:23, 58.81 examples/s][INFO|2026-07-28 02:44:22] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 630/30238 [00:12<09:42, 50.85 examples/s][INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 638/30238 [00:12<09:10, 53.76 examples/s][INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 644/30238 [00:12<09:54, 49.81 examples/s][INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 650/30238 [00:12<09:46, 50.47 examples/s][INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 656/30238 [00:12<10:09, 48.55 examples/s][INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 663/30238 [00:12<09:16, 53.13 examples/s][INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 669/30238 [00:13<09:13, 53.47 examples/s][INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 675/30238 [00:13<08:56, 55.06 examples/s][INFO|2026-07-28 02:44:23] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 681/30238 [00:13<09:06, 54.09 examples/s][INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 687/30238 [00:13<09:26, 52.17 examples/s][INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 693/30238 [00:13<09:19, 52.84 examples/s][INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 699/30238 [00:13<10:00, 49.17 examples/s][INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 705/30238 [00:13<09:48, 50.22 examples/s][INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 713/30238 [00:13<08:39, 56.84 examples/s][INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 719/30238 [00:14<09:05, 54.12 examples/s][INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 725/30238 [00:14<09:54, 49.67 examples/s][INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:24] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 731/30238 [00:14<10:16, 47.83 examples/s][INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 739/30238 [00:14<08:57, 54.85 examples/s][INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 745/30238 [00:14<08:56, 54.93 examples/s][INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   2%|▏         | 751/30238 [00:14<09:46, 50.27 examples/s][INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   3%|▎         | 760/30238 [00:14<08:34, 57.29 examples/s][INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   3%|▎         | 766/30238 [00:15<10:27, 46.99 examples/s][INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   3%|▎         | 778/30238 [00:15<07:59, 61.44 examples/s][INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:25] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:26] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+slurmstepd: error: *** JOB 18621031 ON g27 CANCELLED AT 2026-07-28T02:44:26 DUE TO TIME LIMIT ***
+[INFO|2026-07-28 02:44:26] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:26] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+[INFO|2026-07-28 02:44:26] llamafactory.data.converter:143 >> DEBUG _find_medias: load_from=file, media_dir=/scratch/indrisch/ScanNet_h5
+Converting format of dataset (num_proc=32):   3%|▎         | 785/30238 [00:15<09:27, 51.89 examples/s]

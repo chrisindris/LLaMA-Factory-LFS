@@ -152,6 +152,8 @@ run_llamafactory_apptainer() {
     #     (/opt/conda/bin, /usr/local/cuda/bin, ...) stay intact.
     export APPTAINERENV_CUDA_HOME=/usr/local/cuda
 
+    # Prefer host src so H5 image backends (ScanNet_h5 / Spatial-SSRL / 3DThinker)
+    # from this checkout override the older /app/src baked into the SIF.
     apptainer run --nv --fakeroot --overlay /scratch/indrisch/LLaMA-Factory/apptainer/overlay.img \
         ${extra_nv_bind} \
         -B ${PROJECT_DIR} \
@@ -176,6 +178,7 @@ run_llamafactory_apptainer() {
         --env WANDB_DIR="${WANDB_DIR}" \
         --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
         --env PYTHONNOUSERSITE=1 \
+        --env PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}" \
         --env NCCL_IB_DISABLE=0 \
         --env NCCL_P2P_DISABLE=0 \
         --env NCCL_DEBUG=INFO \

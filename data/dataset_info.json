@@ -844,7 +844,7 @@
     }
   },
   "Scene30k": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/",
+    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.parquet",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags",

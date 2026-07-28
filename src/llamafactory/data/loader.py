@@ -75,12 +75,25 @@ def _load_single_dataset(
         data_files = []
         local_path = os.path.join(data_args.dataset_dir, dataset_attr.dataset_name)
         if os.path.isdir(local_path):  # is directory
-            for file_name in os.listdir(local_path):
-                data_files.append(os.path.join(local_path, file_name))
+            for file_name in sorted(os.listdir(local_path)):
+                # Skip hidden files (e.g. .gitattributes) and incomplete HF snapshot dirs.
+                if file_name.startswith("."):
+                    continue
+                candidate = os.path.join(local_path, file_name)
+                if os.path.isfile(candidate) or os.path.islink(candidate):
+                    data_files.append(candidate)
         elif os.path.isfile(local_path):  # is file
             data_files.append(local_path)
         else:
             raise ValueError(f"File {local_path} not found.")
+
+        if not data_files:
+            raise ValueError(
+                f"No data files found under {local_path!r}. "
+                "If this is a Hugging Face hub cache path, the snapshot may be incomplete "
+                "(blobs present but snapshot symlinks missing). Re-download the dataset or "
+                "point file_name at a concrete .parquet/.json file."
+            )
 
         data_path = FILEEXT2TYPE.get(os.path.splitext(data_files[0])[-1][1:], None)
         if data_path is None:

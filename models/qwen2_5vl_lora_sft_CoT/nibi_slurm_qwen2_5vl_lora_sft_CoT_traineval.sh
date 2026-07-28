@@ -2,10 +2,10 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=16GB
-#SBATCH --time=0-00:01:00
-#SBATCH --gpus-per-node=h100:1
+#SBATCH --cpus-per-task=112
+#SBATCH --mem=0
+#SBATCH --time=2-00:00:00
+#SBATCH --gpus-per-node=h100:8
 
 # Nibi wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k).
 # Submit from models/qwen2_5vl_lora_sft_CoT/ so SLURM out/ lands next to this script:

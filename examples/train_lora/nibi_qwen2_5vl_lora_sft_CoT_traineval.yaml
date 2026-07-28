@@ -13,10 +13,17 @@ lora_rank: 8
 lora_target: all
 
 ### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
-# CoT mix: Scene30k + SpatialSSRL_coldstart + 3DThinker10k (full concat each epoch)
+# CoT mix: Scene30k + SpatialSSRL_coldstart + 3DThinker10k (full concat each epoch).
+# LLaMA-Factory has a single --media_dir (filesystem join for relative paths only).
+# Multi-root H5 images do NOT need a shared media tree; this fork dispatches by path
+# shape in h5_image_store and uses env roots (set by the CoT job script):
+#   SCANNET_H5_DIR     default /scratch/indrisch/ScanNet_h5/scans
+#   SPATIALSSRL_H5_DIR default /scratch/indrisch/Spatial-SSRL_images_h5
+#   THINKER10K_H5_DIR  default /scratch/indrisch/3DThinker10K_images_h5
+# media_dir below is only a non-authoritative filesystem join prefix (Scene30k-style
+# paths); Spatial/Thinker annotations resolve via the env roots above, not media_dir.
 dataset: Scene30k,SpatialSSRL_coldstart,3DThinker10k
 mix_strategy: concat
-# ScanNet H5 root (scans/<scene>/images.hdf5). Spatial/Thinker resolve via H5 env roots.
 media_dir: /scratch/indrisch/ScanNet_h5
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
@@ -40,7 +47,7 @@ report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 per_device_train_batch_size: 2
 gradient_accumulation_steps: 8
 learning_rate: 1.0e-4
-num_train_epochs: 1.0
+num_train_epochs: 5.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
