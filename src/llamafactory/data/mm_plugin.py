@@ -40,7 +40,7 @@ from ..extras.packages import (
     is_pyav_available,
     is_transformers_version_greater_than,
 )
-from .data_packing.h5py_data import retrieve_image
+from .data_packing.h5_image_store import resolve_h5_image
 
 
 if is_librosa_available():
@@ -261,22 +261,49 @@ class MMPluginMixin:
         r"""Regularize images to avoid error. Including reading and pre-processing."""
         results = []
         for image in images:
-            if isinstance(image, (str, BinaryIO)):
-                try: # if the path given points to an image on the system, or BinaryIO
-                    image = Image.open(image)
-                except FileNotFoundError:
-                    try: # check to see if we can get it from an h5py file
-                        image = retrieve_image(image_path=image)
-                        image = Image.open(BytesIO(image))
+            if isinstance(image, ImageObject):
+                pass  # already a PIL image (e.g. from H5 stores)
+            elif isinstance(image, (str, BinaryIO)):
+                opened = False
+                if isinstance(image, str) and os.path.isfile(image):
+                    try:
+                        image = Image.open(image)
+                        opened = True
+                    except Exception:
+                        opened = False
+                if not opened and isinstance(image, BinaryIO):
+                    try:
+                        image = Image.open(image)
+                        opened = True
+                    except Exception:
+                        opened = False
+                if not opened:
+                    try:
+                        resolved = resolve_h5_image(image) if isinstance(image, str) else None
+                        if isinstance(resolved, ImageObject):
+                            image = resolved
+                        elif isinstance(resolved, bytes):
+                            image = Image.open(BytesIO(resolved))
+                        else:
+                            # last resort: try Image.open on the path string
+                            image = Image.open(image)
                     except Exception as e:
-                        raise ValueError(f"Failed to retrieve image from {image}: {e}")
+                        raise ValueError(f"Failed to retrieve image from {image}: {e}") from e
             elif isinstance(image, bytes):
                 image = Image.open(BytesIO(image))
             elif isinstance(image, dict):
                 if image["bytes"] is not None:
                     image = Image.open(BytesIO(image["bytes"]))
                 else:
-                    image = Image.open(image["path"])
+                    path = image["path"]
+                    if isinstance(path, str) and not os.path.isfile(path):
+                        resolved = resolve_h5_image(path)
+                        if isinstance(resolved, ImageObject):
+                            image = resolved
+                        else:
+                            image = Image.open(BytesIO(resolved))
+                    else:
+                        image = Image.open(path)
 
             if not isinstance(image, ImageObject):
                 raise ValueError(f"Expect input is a list of images, but got {type(image)}.")

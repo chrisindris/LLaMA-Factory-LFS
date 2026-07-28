@@ -1,0 +1,52 @@
+### model
+# Adapted from /scratch/indrisch/3DThinker/SFT/train_sft.yaml for this LLaMA-Factory fork.
+# Images are loaded from packed H5 (THINKER10K_H5_DIR, default /scratch/indrisch/3DThinker10K_images_h5).
+model_name_or_path: Qwen/Qwen2.5-VL-7B-Instruct
+cache_dir: /scratch/indrisch/huggingface/hub
+image_max_pixels: 262144
+video_max_pixels: 16384
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_rank: 8
+lora_target: all
+
+### dataset
+dataset: 3DThinker10k
+# media_dir is unused when paths resolve via H5; keep a valid path for LLaMA-Factory.
+media_dir: ./data
+template: qwen2_vl
+cutoff_len: 2048
+max_samples: 50000
+overwrite_cache: true
+preprocessing_num_workers: 16
+dataloader_num_workers: 4
+
+### output
+output_dir: saves/qwen2_5vl-7b/lora/sft/3DThinker10k
+logging_steps: 10
+save_steps: 200
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+report_to: none  # choices: [none, wandb, tensorboard, swanlab, mlflow]
+
+### train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 1.0e-4
+num_train_epochs: 3.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+resume_from_checkpoint: null
+
+### eval
+val_size: 0.1
+per_device_eval_batch_size: 2
+eval_strategy: steps
+eval_steps: 100

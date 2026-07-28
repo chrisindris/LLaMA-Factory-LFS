@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Optional
 
 from ...extras import logging
-from ...extras.constants import IGNORE_INDEX
+from ...extras.constants import IGNORE_INDEX, IMAGE_PLACEHOLDER
 from .processor_utils import DatasetProcessor, greedy_knapsack, infer_seqlen
 
 
@@ -79,7 +79,20 @@ class SupervisedDatasetProcessor(DatasetProcessor):
         videos: list["VideoInput"],
         audios: list["AudioInput"],
     ) -> tuple[list[int], list[int]]:
-        messages = self.template.mm_plugin.process_messages(prompt + response, images, videos, audios, self.processor)
+        # When image placeholders live in the system string (e.g. 3DThinker mindcube_input),
+        # process_messages must see them so VL templates expand vision tokens correctly.
+        system = system or ""
+        if system and IMAGE_PLACEHOLDER in system:
+            temp_messages = [{"role": "user", "content": system}] + prompt + response
+            processed = self.template.mm_plugin.process_messages(
+                temp_messages, images, videos, audios, self.processor
+            )
+            system = processed[0]["content"]
+            messages = processed[1:]
+        else:
+            messages = self.template.mm_plugin.process_messages(
+                prompt + response, images, videos, audios, self.processor
+            )
         input_ids, labels = self.template.mm_plugin.process_token_ids(
             [], [], images, videos, audios, self.tokenizer, self.processor
         )

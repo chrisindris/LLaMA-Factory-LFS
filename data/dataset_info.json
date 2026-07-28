@@ -857,5 +857,25 @@
       "user_tag": "user",
       "assistant_tag": "assistant"
     }
+  },
+  "SpatialSSRL_coldstart": {
+    "file_name": "/scratch/indrisch/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "images": "images"
+    }
+  },
+  "3DThinker10k": {
+    "file_name": "3DThinker-10K/out/3dthinker10k_cot.jsonl",
+    "formatting": "alpaca",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "response": "output",
+      "images": "images"
+    }
   }
 }

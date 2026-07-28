@@ -21,7 +21,7 @@ from typing import TYPE_CHECKING, Any, Optional, Union
 from ..extras import logging
 from ..extras.constants import IMAGE_PLACEHOLDER
 from .data_utils import Role
-from .data_packing.h5py_data import retrieve_image
+from .data_packing.h5_image_store import can_resolve_h5_image
 
 if TYPE_CHECKING:
     from datasets import Dataset, IterableDataset
@@ -112,33 +112,39 @@ class DatasetConverter:
         if self.dataset_attr.load_from in ["script", "file"]:
             if isinstance(medias[0], str):
                 for i in range(len(medias)):
-                    media_path = os.path.join(self.data_args.media_dir, medias[i])
-                    if os.path.isfile(media_path): # if the path given points to an image on the system
+                    original = medias[i]
+                    media_path = os.path.join(self.data_args.media_dir, original)
+                    if os.path.isfile(media_path):  # filesystem path under media_dir
                         medias[i] = media_path
+                    elif os.path.isfile(original):  # already absolute / cwd-relative file
+                        medias[i] = original
+                    elif can_resolve_h5_image(original) or can_resolve_h5_image(media_path):
+                        # Keep a resolvable path string for lazy H5 decode in mm_plugin.
+                        # Prefer the annotation-relative key (original) for index normalize.
+                        medias[i] = original if can_resolve_h5_image(original) else media_path
                     else:
-                        try: # if we get a result from the h5py file, we can still put the media path in the dataset.
-                            image = retrieve_image(image_path=media_path)
-                            medias[i] = media_path
-                        except Exception as e:
-                            logger.warning_rank0_once(
-                                f"Media {media_path} does not exist in `media_dir`. Use original path."
-                            )
-                            raise ValueError(f"Failed to retrieve image from {media_path}: {e}")
+                        logger.warning_rank0_once(
+                            f"Media {media_path} does not exist in `media_dir` and is not in H5 indexes."
+                        )
+                        raise ValueError(f"Failed to resolve image path: original={original!r}, media_path={media_path!r}")
             elif isinstance(medias[0], list):  # for processed video frames
                 # medias is a list of lists, e.g., [[frame1.jpg, frame2.jpg], [frame3.jpg, frame4.jpg]]
                 for i in range(len(medias)):
                     for j in range(len(medias[i])):
-                        media_path = os.path.join(self.data_args.media_dir, medias[i][j])
+                        original = medias[i][j]
+                        if not isinstance(original, str):
+                            continue
+                        media_path = os.path.join(self.data_args.media_dir, original)
                         if os.path.isfile(media_path):
                             medias[i][j] = media_path
+                        elif os.path.isfile(original):
+                            medias[i][j] = original
+                        elif can_resolve_h5_image(original) or can_resolve_h5_image(media_path):
+                            medias[i][j] = original if can_resolve_h5_image(original) else media_path
                         else:
-                            try: # if we get a result from the h5py file, we can still put the media path in the dataset.
-                                image = retrieve_image(image_path=media_path)
-                                medias[i][j] = image
-                            except Exception as e:
-                                logger.warning_rank0_once(
-                                    f"Media {medias[i][j]} does not exist in `media_dir`. Use original path."
-                                )
+                            logger.warning_rank0_once(
+                                f"Media {medias[i][j]} does not exist in `media_dir` and is not in H5 indexes."
+                            )
 
         return medias
 

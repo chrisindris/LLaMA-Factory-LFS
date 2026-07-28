@@ -266,6 +266,54 @@ def _process_scene_wrapper(args):
         return (scene_name, False, str(e))
 
 
+# Default ScanNet H5 root on Nibi (per-scene images.hdf5 + image_mapping.json).
+# Override with SCANNET_H5_DIR when annotations point at a different cluster prefix.
+DEFAULT_SCANNET_H5_DIR = "/scratch/indrisch/ScanNet_h5/scans"
+ENV_SCANNET_H5_DIR = "SCANNET_H5_DIR"
+
+
+def _scannet_h5_root() -> Path:
+    return Path(os.environ.get(ENV_SCANNET_H5_DIR, DEFAULT_SCANNET_H5_DIR))
+
+
+def _resolve_scannet_scene_path(
+    output_dir: Path,
+    scene_name: str,
+    h5py_filename: str = "images.hdf5",
+    json_filename: str = "image_mapping.json",
+) -> Path:
+    """Pick the first scene directory that has both H5 and mapping JSON.
+
+    Tries the path-derived prefix first (annotation-local), then SCANNET_H5_DIR.
+    This lets Scene30k paths from other clusters resolve against Nibi packs.
+    """
+    candidates = [
+        Path(output_dir) / scene_name,
+        _scannet_h5_root() / scene_name,
+    ]
+    # De-dupe while preserving order
+    seen = set()
+    unique = []
+    for c in candidates:
+        key = str(c.resolve()) if c.exists() else str(c)
+        if key not in seen:
+            seen.add(key)
+            unique.append(c)
+
+    tried = []
+    for scene_path in unique:
+        h5py_file = scene_path / h5py_filename
+        json_file = scene_path / json_filename
+        tried.append(str(scene_path))
+        if h5py_file.is_file() and json_file.is_file():
+            return scene_path
+
+    raise FileNotFoundError(
+        f"Scene H5 not found for {scene_name!r}. Tried: {tried}. "
+        f"Set {ENV_SCANNET_H5_DIR} (default {DEFAULT_SCANNET_H5_DIR})."
+    )
+
+
 def retrieve_image(image_path=None, output_dir=None, scene_name=None, image_name=None, output_path=None, 
                    h5py_filename="images.hdf5", json_filename="image_mapping.json", 
                    verbose=False):
@@ -293,7 +341,8 @@ def retrieve_image(image_path=None, output_dir=None, scene_name=None, image_name
     """
     if image_path:
         # Extract output_dir, scene_name, and image_name from image_path
-        r = re.search(r"(.*)(scene\d+_\d+).*color/(.*jpg)", image_path)
+        # Accept .jpg / .jpeg (annotations vary); case-insensitive extension.
+        r = re.search(r"(.*)(scene\d+_\d+).*color/(.*\.jpe?g)", image_path, re.IGNORECASE)
         if r:
             output_dir = Path(r.group(1)) # this is the path up to "scans"
             scene_name = r.group(2) # the scene name 
@@ -303,33 +352,22 @@ def retrieve_image(image_path=None, output_dir=None, scene_name=None, image_name
     
     
     output_dir_path = Path(output_dir)
-    scene_path = output_dir_path / scene_name
-    
-    # Check if scene directory exists
-    if not scene_path.exists():
-        error_msg = f"Scene directory does not exist: {scene_path}"
+    try:
+        scene_path = _resolve_scannet_scene_path(
+            output_dir_path, scene_name, h5py_filename=h5py_filename, json_filename=json_filename
+        )
+    except FileNotFoundError as e:
         if output_path is None:
-            raise FileNotFoundError(error_msg)
-        print(f"Error: {error_msg}")
+            raise
+        print(f"Error: {e}")
         return False
-    
-    # Check if h5py and JSON files exist
+
+    if verbose and str(scene_path) != str(output_dir_path / scene_name):
+        print(f"Remapped ScanNet scene {scene_name} -> {scene_path} (via {ENV_SCANNET_H5_DIR})")
+
+    # H5 and JSON are guaranteed present by _resolve_scannet_scene_path
     h5py_file = scene_path / h5py_filename
     json_file = scene_path / json_filename
-    
-    if not h5py_file.exists():
-        error_msg = f"H5py file does not exist: {h5py_file}"
-        if output_path is None:
-            raise FileNotFoundError(error_msg)
-        print(f"Error: {error_msg}")
-        return False
-    
-    if not json_file.exists():
-        error_msg = f"JSON mapping file does not exist: {json_file}"
-        if output_path is None:
-            raise FileNotFoundError(error_msg)
-        print(f"Error: {error_msg}")
-        return False
     
     # Extract image number from image name (e.g., "4.jpg" -> "4")
     image_ext = Path(image_name).suffix

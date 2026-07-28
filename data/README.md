@@ -1,5 +1,17 @@
 The [dataset_info.json](dataset_info.json) contains all available datasets. If you are using a custom dataset, please **make sure** to add a *dataset description* in `dataset_info.json` and specify `dataset: dataset_name` before training to use it.
 
+## Project multimodal datasets (this fork)
+
+| Dataset name | Docs | Images |
+|--------------|------|--------|
+| `Scene30k` | `data/Scene30k/` | ScanNet H5 via `SCANNET_H5_DIR` (default `/scratch/indrisch/ScanNet_h5/scans`) |
+| `SpatialSSRL_coldstart` | [`data/Spatial-SSRL/README.md`](Spatial-SSRL/README.md) | H5 via `SPATIALSSRL_H5_DIR` |
+| `3DThinker10k` | [`data/3DThinker-10K/README.md`](3DThinker-10K/README.md) | H5 via `THINKER10K_H5_DIR` |
+
+**CoT train mix** (Nibi): set `dataset: Scene30k,SpatialSSRL_coldstart,3DThinker10k` with `mix_strategy: concat` so each epoch includes all three. Example: `examples/train_lora/nibi_qwen2_5vl_lora_sft_CoT_traineval.yaml` and `models/qwen2_5vl_lora_sft_CoT/`.
+
+H5-backed datasets keep annotation path strings and decode images lazily through `src/llamafactory/data/data_packing/h5_image_store.py` (no need to unpack JPEG trees for Spatial-SSRL or 3DThinker-10k). Scene30k paths that point at another cluster’s ScanNet root are remapped via `SCANNET_H5_DIR`.
+
 The `dataset_info.json` file should be put in the `dataset_dir` directory. You can change `dataset_dir` to use another directory. The default value is `./data`.
 
 Currently we support datasets in **alpaca** and **sharegpt** format. Allowed file types include json, jsonl, csv, parquet, arrow.

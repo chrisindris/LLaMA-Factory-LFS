@@ -1,0 +1,228 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /scratch/indrisch/ScanNet_h5
+SCANNET_H5_DIR: /scratch/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/indrisch/3DThinker10K_images_h5
+CLUSTER: NIBI
+YAML_FILE: /scratch/indrisch//LLaMA-Factory/examples/train_lora/nibi_qwen2_5vl_lora_sft_CoT_traineval.yaml
+OUTPUT_DIR: /scratch/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval
+RUNNING_MODE: APPTAINER
+/scratch/indrisch//LLaMA-Factory/models/qwen2_5vl_lora_sft_CoT/slurm_qwen2_5vl_lora_sft_CoT_traineval.sh: line 142: 
+This works:
+        -B /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2/bin/nvcc : No such file or directory
+=== HOST DIAGNOSTICS ===
+HOSTNAME: g4.nibi.sharcnet
+CUDA_VISIBLE_DEVICES: 0
+SLURM_GPUS: 
+SLURM_JOB_GPUS: 7
+Mon Jul 27 20:50:53 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   33C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+crw-rw-rw- 1 root root 195, 254 Jul 12 10:10 /dev/nvidia-modeset
+crw-rw-rw- 1 root root 509,   0 Jul 12 10:11 /dev/nvidia-nvlink
+crw-rw-rw- 1 root root 508,   0 Jul 12 10:11 /dev/nvidia-nvswitch0
+crw-rw-rw- 1 root root 508,   1 Jul 12 10:11 /dev/nvidia-nvswitch1
+crw-rw-rw- 1 root root 508,   2 Jul 12 10:11 /dev/nvidia-nvswitch2
+crw-rw-rw- 1 root root 508,   3 Jul 12 10:11 /dev/nvidia-nvswitch3
+crw-rw-rw- 1 root root 508, 255 Jul 12 10:11 /dev/nvidia-nvswitchctl
+crw-rw-rw- 1 root root 505,   0 Jul 12 10:11 /dev/nvidia-uvm
+crw-rw-rw- 1 root root 505,   1 Jul 12 10:11 /dev/nvidia-uvm-tools
+crw-rw-rw- 1 root root 195,   0 Jul 12 10:10 /dev/nvidia0
+crw-rw-rw- 1 root root 195,   1 Jul 12 10:10 /dev/nvidia1
+crw-rw-rw- 1 root root 195,   2 Jul 12 10:10 /dev/nvidia2
+crw-rw-rw- 1 root root 195,   3 Jul 12 10:10 /dev/nvidia3
+crw-rw-rw- 1 root root 195,   4 Jul 12 10:10 /dev/nvidia4
+crw-rw-rw- 1 root root 195,   5 Jul 12 10:10 /dev/nvidia5
+crw-rw-rw- 1 root root 195,   6 Jul 12 10:10 /dev/nvidia6
+crw-rw-rw- 1 root root 195,   7 Jul 12 10:10 /dev/nvidia7
+crw-rw-rw- 1 root root 195, 255 Jul 12 10:09 /dev/nvidiactl
+
+/dev/nvidia-caps:
+total 0
+drwxr-xr-x  2 root root    100 Jul 12 10:11 .
+drwxr-xr-x 22 root root   4360 Jul 12 10:11 ..
+cr--------  1 root root 510, 0 Jul 12 10:11 nvidia-cap0
+cr--------  1 root root 510, 1 Jul 12 10:10 nvidia-cap1
+cr--r--r--  1 root root 510, 2 Jul 12 10:10 nvidia-cap2
+=== END HOST DIAGNOSTICS ===
+Found NVIDIA driver libs at: /usr/lib64/nvidia
+=== APPTAINER GPU SANITY TEST ===
+Mon Jul 27 20:50:56 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   33C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+=== END APPTAINER GPU SANITY TEST (exit code: 0) ===
+INFO:    User not listed in /etc/subuid, trying root-mapped namespace
+INFO:    Using fakeroot command combined with root-mapped namespace
+WARNING: Environment variable TORCH_EXTENSIONS_DIR already has value [/local/scratch/indrisch.18607486.0/.cache/torch_extensions], will not forward new value [/scratch/indrisch/.cache/torch_extensions] from parent process environment
+WARNING: Environment variable TRITON_CACHE_DIR already has value [/local/scratch/indrisch.18607486.0/.triton_cache], will not forward new value [/scratch/indrisch/.triton_cache] from parent process environment
+WARNING: While bind mounting '/scratch/indrisch/ScanNet_h5:/scratch/indrisch/ScanNet_h5': destination is already in the mount point list
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2026-07-27 20:51:14] llamafactory.launcher:143 >> Initializing 1 distributed tasks at: 127.0.0.1:49571
+⚙️  Running in WANDB offline mode
+[2026-07-27 20:51:20,592] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 180, in _get_module
+    return importlib.import_module("." + module_name, self.__name__)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/dpo_trainer.py", line 47, in <module>
+    from .utils import (
+  File "/opt/conda/lib/python3.11/site-packages/trl/trainer/utils.py", line 51, in <module>
+    import deepspeed
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/__init__.py", line 25, in <module>
+    from . import ops
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/__init__.py", line 15, in <module>
+    from ..git_version_info import compatible_ops as __compatible_ops__
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/git_version_info.py", line 29, in <module>
+    op_compatible = builder.is_compatible()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/op_builder/fp_quantizer.py", line 35, in is_compatible
+    sys_cuda_major, _ = installed_cuda_version()
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/deepspeed/ops/op_builder/builder.py", line 53, in installed_cuda_version
+    output = subprocess.check_output([cuda_home + "/bin/nvcc", "-V"], universal_newlines=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/opt/conda/lib/python3.11/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2/bin/nvcc'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/src/llamafactory/launcher.py", line 178, in <module>
+    from llamafactory.train.tuner import run_exp  # use absolute import
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/llamafactory/train/tuner.py", line 31, in <module>
+    from .dpo import run_dpo
+  File "/app/src/llamafactory/train/dpo/__init__.py", line 15, in <module>
+    from .workflow import run_dpo
+  File "/app/src/llamafactory/train/dpo/workflow.py", line 27, in <module>
+    from .trainer import CustomDPOTrainer
+  File "/app/src/llamafactory/train/dpo/trainer.py", line 27, in <module>
+    from trl import DPOTrainer
+  File "<frozen importlib._bootstrap>", line 1229, in _handle_fromlist
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 171, in __getattr__
+    value = getattr(module, name)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 170, in __getattr__
+    module = self._get_module(self._class_to_module[name])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/trl/import_utils.py", line 182, in _get_module
+    raise RuntimeError(
+RuntimeError: Failed to import trl.trainer.dpo_trainer because of the following error (look up to see its traceback):
+[Errno 2] No such file or directory: '/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2/bin/nvcc'
+E0727 20:51:23.864000 2692558 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 2692562) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/app/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-07-27_20:51:23
+  host      : g4
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 2692562)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 110, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '1', '--master_addr', '127.0.0.1', '--master_port', '49571', '/app/src/llamafactory/launcher.py', '/scratch/indrisch//LLaMA-Factory/examples/train_lora/nibi_qwen2_5vl_lora_sft_CoT_traineval.yaml']' returned non-zero exit status 1.
