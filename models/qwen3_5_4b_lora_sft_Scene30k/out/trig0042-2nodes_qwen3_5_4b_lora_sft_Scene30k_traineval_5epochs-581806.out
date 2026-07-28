@@ -1,0 +1,90 @@
+SLURM_JOB_NODELIST: trig0042
+HEAD_NODE: trig0042
+MASTER_ADDR: trig0042
+MASTER_PORT: 29500
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+SIF_FILE: /scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+MEDIA_DIR: /project/def-wangcs/shared/data/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+RUNNING_MODE: VENV
+/scratch/indrisch/LLaMA-Factory /scratch/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+VENV_LLAMAFACTORY: /dev/shm/slurm.indrisch.581806/venv_llamafactory_cu126_qwen35
+AVX-512 support detected — enabling AVX-512 compile flags for native extensions
+gcc (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+g++ (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Setting up environment for CUDA 12.x
+created virtual environment CPython3.12.4.final.0-64 in 317ms
+  creator CPython3Posix(dest=/dev/shm/slurm.indrisch.581806/venv_llamafactory_cu126_qwen35, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=/dev/shm/slurm.indrisch.581806/xdg-data/virtualenv)
+    added seed packages: pip==24.0
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+
+Usage:   
+  /dev/shm/slurm.indrisch.581806/venv_llamafactory_cu126_qwen35/bin/python3 -m pip <command> [options]
+
+no such option: --no-index
+Installing transformers>=5.2.0 for Qwen3.5 compatibility
+
+Usage:   
+  /dev/shm/slurm.indrisch.581806/venv_llamafactory_cu126_qwen35/bin/python3 -m pip <command> [options]
+
+no such option: --no-index
+ERROR: llamafactory-cli is not available after activating /dev/shm/slurm.indrisch.581806/venv_llamafactory_cu126_qwen35.
+ERROR: check the preceding install_as_venv.sh output for the root cause.
+srun: error: trig0042: task 0: Exited with exit code 1
+srun: Terminating StepId=581806.0
+
+scontrol show job 581806
+JobId=581806 JobName=trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=694061 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:00:11 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2026-06-10T01:49:36 EligibleTime=2026-06-10T01:49:36
+   AccrueTime=2026-06-10T01:49:36
+   StartTime=2026-06-10T01:49:39 EndTime=2026-06-10T01:49:50 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-06-10T01:49:39 Scheduler=Main
+   Partition=compute AllocNode:Sid=trig-login01:4080479
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0042
+   BatchHost=trig0042
+   NumNodes=1 NumCPUs=24 NumTasks=1 CPUs/Task=24 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=24 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh
+   SubmitLine=SBATCH --comment /opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh --export=NONE --get-user-env trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh
+   StdErr=
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/out/trig0042-2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs-581806.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=24
+   MailUser=christopher.indris@torontomu.ca MailType=INVALID_DEPEND,BEGIN,END,FAIL,REQUEUE,STAGE_OUT
+
+sacct -j 581806
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+581806       trillium_+ def-wangcs   00:00:11                         00:00:00   00:00:00      0:0 
+581806.batch      batch def-wangcs   00:00:11                         00:00:00   00:00:00      0:0 
+581806.exte+     extern def-wangcs   00:00:11                         00:00:00   00:00:00      0:0 
+581806.0           bash def-wangcs   00:00:07                         00:00:00   00:00:00      0:0 
+

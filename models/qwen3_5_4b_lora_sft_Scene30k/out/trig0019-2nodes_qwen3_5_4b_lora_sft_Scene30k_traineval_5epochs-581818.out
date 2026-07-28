@@ -1,0 +1,151 @@
+SLURM_JOB_NODELIST: trig0019
+HEAD_NODE: trig0019
+MASTER_ADDR: trig0019
+MASTER_PORT: 29500
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+SIF_FILE: /scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+MEDIA_DIR: /project/def-wangcs/shared/data/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+RUNNING_MODE: VENV
+/scratch/indrisch/LLaMA-Factory /scratch/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+VENV_LLAMAFACTORY: /dev/shm/slurm.indrisch.581818/venv_llamafactory_cu126_qwen35
+AVX-512 support detected — enabling AVX-512 compile flags for native extensions
+gcc (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+g++ (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Setting up environment for CUDA 12.x
+created virtual environment CPython3.12.4.final.0-64 in 275ms
+  creator CPython3Posix(dest=/dev/shm/slurm.indrisch.581818/venv_llamafactory_cu126_qwen35, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=/dev/shm/slurm.indrisch.581818/xdg-data/virtualenv)
+    added seed packages: pip==24.0
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /dev/shm/slurm.indrisch.581818/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages (24.0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pip-26.0.1+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/setuptools-82.0.1+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/wheel-0.46.3+computecanada-py3-none-any.whl
+Requirement already satisfied: packaging>=24.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from wheel) (26.0+computecanada)
+Installing collected packages: wheel, setuptools, pip
+  Attempting uninstall: pip
+    Found existing installation: pip 24.0
+    Uninstalling pip-24.0:
+      Successfully uninstalled pip-24.0
+Successfully installed pip-26.0.1+computecanada setuptools-82.0.1+computecanada wheel-0.46.3+computecanada
+Installing transformers>=5.2.0 for Qwen3.5 compatibility
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic, /scratch/indrisch//LLaMA-Factory/wheels
+Obtaining file:///scratch/indrisch/LLaMA-Factory
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (26.0+computecanada)
+Requirement already satisfied: psutil in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (7.2.2+computecanada)
+Requirement already satisfied: pandas in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (3.0.0+computecanada)
+Requirement already satisfied: pillow in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (12.1.0+computecanada)
+Requirement already satisfied: decorator in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (5.2.1+computecanada)
+Requirement already satisfied: scipy in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (1.17.0+computecanada)
+Requirement already satisfied: matplotlib in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (3.10.8+computecanada)
+Requirement already satisfied: platformdirs in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (4.5.1+computecanada)
+Requirement already satisfied: pyarrow in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/arrow/24.0.0/lib/python3.12/site-packages (24.0.0)
+Requirement already satisfied: sympy in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (1.14.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/wandb-0.24.0+computecanada-py3-none-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/ray-2.54.1+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/h5py-3.16.0+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.9.0+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/flash_linear_attention-0.4.1+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/causal_conv1d-1.5.4+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/datasets-4.0.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/accelerate-1.11.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/peft-0.19.1+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/trl-0.9.6+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/gradio-5.31.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/tyro-0.8.14+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/einops-0.8.2+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/numpy-1.26.4+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/sentencepiece-0.2.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/tiktoken-0.12.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/modelscope-1.30.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/hf_transfer-0.1.9+computecanada-cp38-abi3-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/safetensors-0.5.3+computecanada-cp38-abi3-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fire-0.7.1+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/omegaconf-2.3.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/protobuf-7.35.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pyyaml-6.0.3+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pydantic-2.10.6+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/uvicorn-0.48.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fastapi-0.136.3+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/sse_starlette-3.4.4+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/av-15.1.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/librosa-0.11.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/propcache-0.5.2+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/torch-2.12.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/torchvision-0.27.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/nltk-3.9.2+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jieba-0.42.1+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing ./wheels/rouge_chinese-1.0.3-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/deepspeed-0.16.4+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+INFO: pip is looking at multiple versions of llamafactory[deepspeed,liger-kernel,metrics,torch] to determine which version is compatible with other requirements. This could take a while.
+ERROR: Could not find a version that satisfies the requirement liger-kernel>=0.5.5; extra == "liger-kernel" (from llamafactory[deepspeed,liger-kernel,metrics,torch]) (from versions: none)
+ERROR: No matching distribution found for liger-kernel>=0.5.5; extra == "liger-kernel"
+ERROR: llamafactory-cli is not available after activating /dev/shm/slurm.indrisch.581818/venv_llamafactory_cu126_qwen35.
+ERROR: check the preceding install_as_venv.sh output for the root cause.
+srun: error: trig0019: task 0: Exited with exit code 1
+srun: Terminating StepId=581818.0
+
+scontrol show job 581818
+JobId=581818 JobName=trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=694061 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:00:20 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2026-06-10T02:27:23 EligibleTime=2026-06-10T02:27:23
+   AccrueTime=2026-06-10T02:27:23
+   StartTime=2026-06-10T02:27:24 EndTime=2026-06-10T02:27:44 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-06-10T02:27:24 Scheduler=Main
+   Partition=compute AllocNode:Sid=trig-login01:4080479
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0019
+   BatchHost=trig0019
+   NumNodes=1 NumCPUs=24 NumTasks=1 CPUs/Task=24 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=24 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh
+   SubmitLine=SBATCH --comment /opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh --export=NONE --get-user-env trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh
+   StdErr=
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/out/trig0019-2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs-581818.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=24
+   MailUser=christopher.indris@torontomu.ca MailType=INVALID_DEPEND,BEGIN,END,FAIL,REQUEUE,STAGE_OUT
+
+sacct -j 581818
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+581818       trillium_+ def-wangcs   00:00:20                         00:00:00   00:00:00      0:0 
+581818.batch      batch def-wangcs   00:00:20                         00:00:00   00:00:00      0:0 
+581818.exte+     extern def-wangcs   00:00:20                         00:00:00   00:00:00      0:0 
+581818.0           bash def-wangcs   00:00:16                         00:00:00   00:00:00      0:0 
+

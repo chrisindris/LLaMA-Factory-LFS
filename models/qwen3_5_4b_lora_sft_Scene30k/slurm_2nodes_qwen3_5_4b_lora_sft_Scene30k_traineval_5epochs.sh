@@ -99,7 +99,7 @@ export MEDIA_DIR="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('
 export VENV_LLAMAFACTORY="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'VENV_LLAMAFACTORY'))")" && echo "VENV_LLAMAFACTORY: $VENV_LLAMAFACTORY"
 
 export WANDB_DIR="${PROJECT_DIR}/wandb/"
-if [[ "$BEST_GPU" == "h100" ]]; then
+if [[ "$BEST_GPU" == "h100" || "$BEST_GPU" == "a100" ]]; then
     export TORCH_CUDA_ARCH_LIST="9.0"
 else
     export TORCH_CUDA_ARCH_LIST="8.0"
@@ -310,6 +310,11 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
+        lmod_preflight
+
+        # --- Misc. Environment Settings ---
+
+        # - cache dirs -
         # Use node-local temp/cache dirs to avoid permission issues under ~/.local
         export TMPDIR="${SLURM_TMPDIR:-/tmp}"
         export XDG_DATA_HOME="${TMPDIR}/xdg-data"
@@ -318,32 +323,62 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
         export PIP_CACHE_DIR="${XDG_CACHE_HOME}/pip"
         mkdir -p "${XDG_DATA_HOME}" "${VIRTUALENV_CACHE_DIR}" "${PIP_CACHE_DIR}"
 
-        # --- Build the VENV ---
-        module load StdEnv/2023 gcc/12.3 openmpi/4.1.5 python/3.12 cuda/12.6 opencv/4.12.0 arrow # cu126 for GPU compatibility
-        echo "build from scratch" # from scratch on the compute node (no need to transfer the venv, all modules are available with compute canada's module system)
-        export DS_BUILD_CPU_ADAM=1 # we can build CPU ADAM for offloading
-        export BUILD_UTILS=1
-        export DS_BUILD_OPS=1
-        VLF="/scratch/indrisch/venv_llamafactory_cu126_qwen35/"
-        export VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VLF})
-
-        if [[ -d "$VLF" ]]; then
-            echo "VENV already exists at $VLF, copying to ${SLURM_TMPDIR}"
-            cp -r "$VLF" "${SLURM_TMPDIR}/"
-        else
-            echo "VENV does not exist at $VLF, building from scratch"
-            /scratch/indrisch/LLaMA-Factory/install_as_venv.sh RORQUAL
-        fi
-        source ${SLURM_TMPDIR}/venv_llamafactory_cu126_qwen35/bin/activate
-
-        export PYTHONUNBUFFERED=1
-        export NCCL_DEBUG=INFO
-        export TORCH_CUDA_ARCH_LIST="9.0"
-        export FORCE_TORCHRUN=1
+        # - Data (offline) settings -
         export HF_HUB_OFFLINE=1
         export WANDB_MODE=offline
+        # Avoid NFS lock exhaustion when datasets cache is shared across ranks.
+        export HF_DATASETS_DISABLE_FILE_LOCKING=1
+        export DATASETS_DISABLE_FILE_LOCKING=1
+        # Use node-local cache to avoid NFS contention for datasets; this replaces the cache_dir from the yaml. 
+        export HF_DATASETS_CACHE="${SLURM_TMPDIR}/hf_datasets"
+        mkdir -p "${HF_DATASETS_CACHE}"
+
+        # - torch/GPU/env settings -
+        export FORCE_TORCHRUN=1 
+        # export CUDA_VISIBLE_DEVICES=0,1,2,3 # we can leave this out and let CUDA decide.
+        export PYTHONUNBUFFERED=1
+        export NCCL_DEBUG=INFO
         export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
-        export DISABLE_VERSION_CHECK=1
+        export TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions"
+        mkdir -p "${TORCH_EXTENSIONS_DIR}"
+        export CFLAGS="-O3 -march=native -mavx512f -mavx512dq -mavx512bw"
+        export CXXFLAGS="-O3 -std=c++17 -march=native -mavx512f -mavx512dq -mavx512bw"
+        export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatically see that transformers==4.57.1+computecanada is the same as transformers==4.57.1
+        # giving the slow tokenizer a try: https://github.com/hiyouga/LLaMA-Factory/issues/8600#issuecomment-3227071979
+        
+        pushd /scratch/indrisch/LLaMA-Factory/ 
+        
+        # --- Build the VENV ---
+        module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+        module load python/3.12 cuda/12.6 opencv/4.12.0 # cu126 for GPU compatibility, and due to the error in 3787717 when we try to use flash_linear_attention & causal_conv1d
+        module load arrow
+        # module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow
+        export DS_BUILD_CPU_ADAM=1
+        export BUILD_UTILS=1
+        export DS_BUILD_OPS=1
+        VENV_LLAMAFACTORY="/scratch/indrisch/venv_llamafactory_cu126_qwen35/" # it's best to use a cuda 12.6 for this. We also want to have Qwen3.5 as an option.
+        VENV_LLAMAFACTORY=${SLURM_TMPDIR}/$(basename ${VENV_LLAMAFACTORY})
+        /scratch/indrisch/LLaMA-Factory/install_as_venv.sh TRILLIUM
+        source ${VENV_LLAMAFACTORY}/bin/activate
+
+        # --- VENV correctness check ---
+
+        if [[ ! -f "${VENV_LLAMAFACTORY}/bin/activate" ]]; then
+            echo "ERROR: expected venv activation script is missing: ${VENV_LLAMAFACTORY}/bin/activate"
+            echo "ERROR: install_as_venv.sh likely failed before creating the environment."
+            exit 1
+        fi
+        # if $SLURM_NNODES is a number 2 or greater:
+        if ! source "${VENV_LLAMAFACTORY}/bin/activate"; then
+            echo "ERROR: failed to activate venv: ${VENV_LLAMAFACTORY}"
+            exit 1
+        fi
+
+        if ! command -v llamafactory-cli >/dev/null 2>&1; then
+            echo "ERROR: llamafactory-cli is not available after activating ${VENV_LLAMAFACTORY}."
+            echo "ERROR: check the preceding install_as_venv.sh output for the root cause."
+            exit 1
+        fi
 
         echo "=== VENV DIAGNOSTICS ==="
         echo "HOSTNAME: $(hostname)"
@@ -356,7 +391,7 @@ elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
 
         pushd /scratch/indrisch/LLaMA-Factory
 
-        # --- Handle N-Node (Single or Multi) Training ---
+        # --- LAUNCH! Handle N-Node (Single or Multi) Training ---
         if [[ "$SLURM_NNODES" -ge 2 ]]; then
             echo "SLURM_NNODES: ${SLURM_NNODES}"
             echo "HEAD_NODE: ${HEAD_NODE}"

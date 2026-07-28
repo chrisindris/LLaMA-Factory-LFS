@@ -1,0 +1,63 @@
+SLURM_JOB_NODELIST: trig0027
+HEAD_NODE: trig0027
+MASTER_ADDR: trig0027
+MASTER_PORT: 29500
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+SIF_FILE: /scratch/indrisch/easyr1_verl_sif/llamafactory.sif
+MEDIA_DIR: /project/def-wangcs/shared/data/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+RUNNING_MODE: VENV
+/scratch/indrisch//LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/slurm_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh: line 349: pushd: /project/aip-wangcs/indrisch/LLaMA-Factory: No such file or directory
+/scratch/indrisch//LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/slurm_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh: line 361: /project/aip-wangcs/indrisch/LLaMA-Factory/install_as_venv.sh: No such file or directory
+/scratch/indrisch//LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/slurm_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh: line 362: /dev/shm/slurm.indrisch.581802/venv_llamafactory_cu126_qwen35/bin/activate: No such file or directory
+ERROR: expected venv activation script is missing: /dev/shm/slurm.indrisch.581802/venv_llamafactory_cu126_qwen35/bin/activate
+ERROR: install_as_venv.sh likely failed before creating the environment.
+srun: error: trig0027: task 0: Exited with exit code 1
+srun: Terminating StepId=581802.0
+
+scontrol show job 581802
+JobId=581802 JobName=trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=694061 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:00:05 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2026-06-10T01:42:09 EligibleTime=2026-06-10T01:42:09
+   AccrueTime=2026-06-10T01:42:09
+   StartTime=2026-06-10T01:42:10 EndTime=2026-06-10T01:42:15 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-06-10T01:42:10 Scheduler=Main
+   Partition=compute AllocNode:Sid=trig-login01:4080479
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0027
+   BatchHost=trig0027
+   NumNodes=1 NumCPUs=24 NumTasks=1 CPUs/Task=24 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=24 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh
+   SubmitLine=SBATCH --comment /opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh --export=NONE --get-user-env trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_debug_2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs.sh
+   StdErr=
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k/out/trig0027-2nodes_qwen3_5_4b_lora_sft_Scene30k_traineval_5epochs-581802.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=24
+   MailUser=christopher.indris@torontomu.ca MailType=INVALID_DEPEND,BEGIN,END,FAIL,REQUEUE,STAGE_OUT
+
+sacct -j 581802
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+581802       trillium_+ def-wangcs   00:00:05                         00:00:00   00:00:00      0:0 
+581802.batch      batch def-wangcs   00:00:05                         00:00:00   00:00:00      0:0 
+581802.exte+     extern def-wangcs   00:00:05                         00:00:00   00:00:00      0:0 
+581802.0           bash def-wangcs   00:00:02                         00:00:00   00:00:00      0:0 
+

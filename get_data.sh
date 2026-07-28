@@ -46,6 +46,10 @@ export HF_HUB_DISABLE_XET="$(python3 -c "import sysconfigtool; print(sysconfigto
 export VENV_LLAMAFACTORY="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'VENV_LLAMAFACTORY'))")"
 unset PYTHONPATH
 
+# on certain clusters, we must download additional packages to local so that they are accessible offline.
+if [[ "$1" == "TRILLIUM" ]]; then
+    ./scripts/download_pip_wheels.sh --no-deps <(echo -e "rouge-chinese\nliger-kernel") ./wheels
+
 source $VENV_LLAMAFACTORY/bin/activate
 pip install --upgrade pip setuptools wheel
 pip install packaging

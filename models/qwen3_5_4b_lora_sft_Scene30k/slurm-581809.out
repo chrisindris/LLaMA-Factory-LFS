@@ -1,0 +1,37 @@
+
+scontrol show job 581809
+JobId=581809 JobName=interactive
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=693942 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=None Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=0 Reboot=0 ExitCode=0:0
+   RunTime=00:00:26 TimeLimit=00:30:00 TimeMin=N/A
+   SubmitTime=2026-06-10T01:55:43 EligibleTime=2026-06-10T01:55:43
+   AccrueTime=2026-06-10T01:55:43
+   StartTime=2026-06-10T01:55:44 EndTime=2026-06-10T01:56:10 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-06-10T01:55:44 Scheduler=Main
+   Partition=compute AllocNode:Sid=trig-login01:4080479
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0042
+   BatchHost=trig0042
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=1,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/bin/sh
+   SubmitLine=SALLOC --comment /opt/slurm/bin/salloc -pcompute --nodes=1 --time=0-0:30 --gpus-per-node=h100:1 --account=def-wangcs --cpus-per-task=1 -pcompute --nodes=1 --time=0-0:30 --gpus-per-node=h100:1 --account=def-wangcs --cpus-per-task=1
+   WorkDir=/scratch/indrisch/LLaMA-Factory/models/qwen3_5_4b_lora_sft_Scene30k
+   Comment=/opt/slurm/bin/salloc -pcompute --nodes=1 --time=0-0:30 --gpus-per-node=h100:1 --account=def-wangcs --cpus-per-task=1
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=1
+
+sacct -j 581809
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+581809       interacti+ def-wangcs   00:00:26                        00:00.091  00:00.159      0:0 
+581809.inte+ interacti+ def-wangcs   00:00:26          0     10260K  00:00.091  00:00.159      0:0 
+581809.exte+     extern def-wangcs   00:00:26                         00:00:00   00:00:00      0:0 
+

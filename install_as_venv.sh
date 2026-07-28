@@ -132,6 +132,12 @@ pushd "$PROJECT_DIR" >/dev/null
 # module load python/3.12 cuda/12.6 opencv/4.12.0
 # module load arrow
 # module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow
+LOCAL_WHEELHOUSE="${PROJECT_DIR}/wheels"
+PIP_FIND_LINKS_ARGS=()
+if [[ -d "${LOCAL_WHEELHOUSE}" ]]; then
+    PIP_FIND_LINKS_ARGS+=(--find-links "${LOCAL_WHEELHOUSE}")
+fi
+
 if ! command -v virtualenv >/dev/null 2>&1; then
     echo "ERROR: virtualenv is not available after module initialization."
     exit 1
@@ -142,16 +148,16 @@ if [[ ! -f "${VENV_LLAMAFACTORY}/bin/activate" ]]; then
     exit 1
 fi
 source ${VENV_LLAMAFACTORY}/bin/activate
-python3 -m pip install --upgrade pip setuptools wheel
+pip install --no-index --upgrade pip setuptools wheel
 
 
 # --- if we want to use Qwen3.5, we need to use "transformers>=5.2.0"; otherwise, "transformers==4.57.1" is fine ---
 if [[ "$VENV_LLAMAFACTORY" == *qwen35* ]]; then
     echo "Installing transformers>=5.2.0 for Qwen3.5 compatibility"
-    python3 -m pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers>=5.2.0" flash_linear_attention causal_conv1d -e ".[torch,metrics,deepspeed,liger-kernel]"
+    pip install --no-index "${PIP_FIND_LINKS_ARGS[@]}" packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers>=5.2.0" flash_linear_attention causal_conv1d -e ".[torch,metrics,deepspeed,liger-kernel]"
 else
     echo "Installing transformers==4.57.1 for compatibility with models like Qwen2.5 and LLaVa-3D"
-    python3 -m pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers==4.57.1" flash_linear_attention causal_conv1d -e ".[torch,metrics,deepspeed,liger-kernel]"
+    pip install --no-index "${PIP_FIND_LINKS_ARGS[@]}" packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers==4.57.1" flash_linear_attention causal_conv1d -e ".[torch,metrics,deepspeed,liger-kernel]"
 fi
 
 # DeepSpeed's CPUAdam builder defaults to -march=x86-64-v3, which is too weak
