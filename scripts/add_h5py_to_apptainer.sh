@@ -13,6 +13,12 @@ module load apptainer 2>/dev/null || true
 
 echo "SIF: ${SIF}"
 echo "OVERLAY: ${OVERLAY}"
+
+if [[ ! -f "${OVERLAY}" ]]; then
+    echo "Creating overlay image..."
+    apptainer overlay create --fakeroot --size 1024 "${OVERLAY}"
+fi
+
 echo "Container Python:"
 apptainer exec --cleanenv --env PYTHONNOUSERSITE=1 "${SIF}" python -c "import sys; print(sys.version)"
 

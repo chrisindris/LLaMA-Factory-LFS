@@ -26,7 +26,7 @@ git-lfs install
 # pip install --upgrade pip setuptools wheel
 # pip install packaging
 # pip install --no-index huggingface_hub
-source /scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/activate
+# source /scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/activate
 
 # --- default location: $HOME/.cache/huggingface/hub; modify with HF_HOME and HFHUB_CACHE. ---
 #huggingface-cli download moonshotai/Kimi-VL-A3B-Thinking-2506 # default location: $HOME/.cache/huggingface/hub
@@ -65,7 +65,7 @@ echo "HF_HUB_CACHE: $HF_HUB_CACHE"
 echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 
 # hf download --max-workers=7 moonshotai/Kimi-VL-A3B-Thinking-2506 # model for generating traces (the "teacher")
-# hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a student (in addition to LLaVa-3D)
+hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a student (in addition to LLaVa-3D)
 # hf download --max-workers=4 Qwen/Qwen2.5-7B-Instruct-1M # text-only long-context model used to assess the traces
 #hf download --max-workers=4 Qwen/Qwen2.5-7B-Instruct # text-only model used to assess the traces; the 1M version doesn't seem to load
 #hf download --max-workers=4 Qwen/Qwen2.5-0.5B-Instruct # text-only model used to assess the traces; the 1M version doesn't seem to load
@@ -78,14 +78,14 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 Video-R1/Video-R1-7B # Video-R1 is Qwen2.5VL-7B that was used by Video-R1.
 # hf download --max-workers=4 Video-R1/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
 # hf download --max-workers=4 Qwen/Qwen3-VL-8B-Instruct # The Qwen3 counterpart to Qwen2.5VL-7B, which is what we have been using.
-# hf download --max-workers=4 Qwen/Qwen3.5-4B # Qwen3.5 multimodal base model used for mirrored SFT runs.
-# hf download --max-workers=4 Qwen/Qwen3.5-9B # Qwen3.5 multimodal base model used for mirrored SFT runs.
+hf download --max-workers=4 Qwen/Qwen3.5-4B # Qwen3.5 multimodal base model used for mirrored SFT runs.
+hf download --max-workers=4 Qwen/Qwen3.5-9B # Qwen3.5 multimodal base model used for mirrored SFT runs.
 # hf download --max-workers=4 Qwen/Qwen3-VL-8B-Thinking # Same as above but with extra thinking capabilities.
 # hf download --max-workers=8 zd11024/Video3D-LLM-LLaVA-Qwen-Uniform-32 # Resulting model of Video3D-LLM
 #hf download --max-workers=4 Qwen/Qwen3-VL-8B-Thinking # Same as above but with extra thinking capabilities.
 #hf download --max-workers=8 zd11024/Video3D-LLM-LLaVA-Qwen-Uniform-32 # Resulting model of Video3D-LLM
 # hf download --max-workers=4 cvis-tmu/Qwen2.5-VL-7B-COT-SFT # this is the video-R1, but with 1 epoch of SFT training on their dataset. This should work perfectly with LLaMA-Factory out of box.
-# hf download --max-workers=4 Qwen/Qwen3-VL-8B-Instruct # The Qwen3 counterpart to Qwen2.5VL-7B, which is what we have been using.
+hf download --max-workers=4 Qwen/Qwen3-VL-8B-Instruct # The Qwen3 counterpart to Qwen2.5VL-7B, which is what we have been using.
 # hf download --max-workers=4 Qwen/Qwen3-VL-8B-Thinking # Same as above but with extra thinking capabilities.
 # hf download --max-workers=8 zd11024/Video3D-LLM-LLaVA-Qwen-Uniform-32 # Resulting model of Video3D-LLM
 
@@ -106,7 +106,7 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_5epochs
 
 # hf download --max-workers=12 cvis-tmu/easyr1_verl_sif --repo-type=dataset
-# hf download --max-workers=12 cvis-tmu/compute_canada_sif_files llamafactory.sif --repo-type=dataset
+hf download --max-workers=4 cvis-tmu/compute_canada_sif_files llamafactory.sif --repo-type=dataset
 # hf download --max-workers=12 cvis-tmu/compute_canada_sif_files vsibench_eval.sif --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62 --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa --repo-type=dataset
@@ -149,16 +149,16 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # scene30k
-# hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
+hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
 
 # SPAR-7M-RGBD (annotations) -> https://huggingface.co/datasets/jasonzhango/SPAR-7M-RGBD/blob/main/README.md
 # hf download --max-workers=8 jasonzhango/SPAR-7M-RGBD --repo-type dataset
 # hf download --max-workers=2 jasonzhango/SPAR-7M --repo-type dataset
-hf download --max-workers=4 internlm/Spatial-SSRL-81k --repo-type=dataset # SSRL
-hf download --max-workers=4 MLL-Lab/MindCube --repo-type=dataset # Suggested by the 3DThinker authors
+hf download --max-workers=4 internlm/Spatial-SSRL-81k --repo-type=dataset # SSRL 
+# hf download --max-workers=4 MLL-Lab/MindCube --repo-type=dataset # Suggested by the 3DThinker authors
 hf download --max-workers=4 jankin123/3DThinker-10K --repo-type=dataset # 3D Thinker 10k: suggested by Leihan (how is this different from the one above)?
-hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type=dataset # Leihan's version of the one above, which is MCQs only.
-hf download --max-workers=4 jankin123/3DThinker-Mindcube # the model weights used by 3D-Thinker; may or may not be usede by us
+# hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type=dataset # Leihan's version of the one above, which is MCQs only.
+# hf download --max-workers=4 jankin123/3DThinker-Mindcube # the model weights used by 3D-Thinker; may or may not be usede by us
 
 deactivate
 # rm -r temp_env
