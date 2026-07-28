@@ -3,7 +3,7 @@
 # Safe for multimodal H5 training (ScanNet_h5 / Spatial-SSRL / 3DThinker).
 set -euo pipefail
 
-SIF="${SIF:-/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif}"
+SIF="${SIF:-/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/c0b06aa9c1c5df915b12e11e74015483257991b8/llamafactory.sif}"
 OVERLAY="${OVERLAY:-/scratch/indrisch/LLaMA-Factory/apptainer/overlay.img}"
 WHEELHOUSE="${WHEELHOUSE:-/scratch/indrisch/wheels/llamafactory_py311}"
 H5PY_VERSION="${H5PY_VERSION:-3.16.0}"
@@ -16,6 +16,7 @@ echo "OVERLAY: ${OVERLAY}"
 
 if [[ ! -f "${OVERLAY}" ]]; then
     echo "Creating overlay image..."
+    mkdir -p $(dirname "${OVERLAY}")
     apptainer overlay create --fakeroot --size 1024 "${OVERLAY}"
 fi
 
