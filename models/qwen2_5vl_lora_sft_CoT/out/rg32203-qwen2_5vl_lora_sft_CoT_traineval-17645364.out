@@ -1,0 +1,125 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /project/def-wangcs/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /project/def-wangcs/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/c0b06aa9c1c5df915b12e11e74015483257991b8/llamafactory.sif
+MEDIA_DIR: /scratch/indrisch/data/
+SCANNET_H5_DIR: /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/indrisch/3DThinker10K_images_h5
+CLUSTER: RORQUAL
+YAML_FILE: /scratch/indrisch//LLaMA-Factory-LFS/examples/train_lora/rorqual_qwen2_5vl_lora_sft_CoT_traineval.yaml
+OUTPUT_DIR: /scratch/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval
+RUNNING_MODE: APPTAINER
+=== HOST DIAGNOSTICS ===
+HOSTNAME: rg32203
+CUDA_VISIBLE_DEVICES: 0
+Tue Jul 28 15:51:41 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          Off |   00000000:5F:00.0 Off |                    0 |
+| N/A   43C    P0             71W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+=== END HOST DIAGNOSTICS ===
+INFO:    User not listed in /etc/subuid, trying root-mapped namespace
+INFO:    Using fakeroot command combined with root-mapped namespace
+WARNING: Environment variable TORCH_EXTENSIONS_DIR already has value [/localscratch/indrisch.17645364.0/.cache/torch_extensions], will not forward new value [/scratch/indrisch/.cache/torch_extensions] from parent process environment
+WARNING: Environment variable TRITON_CACHE_DIR already has value [/localscratch/indrisch.17645364.0/.triton_cache], will not forward new value [/project/def-wangcs/indrisch/.triton_cache] from parent process environment
+WARNING: Environment variable PYTHONPATH already has value [/scratch/indrisch//LLaMA-Factory-LFS/src:/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/indrisch/LLaMA-Factory-LFS/scripts:/scratch/indrisch/LLaMA-Factory-LFS/scripts], will not forward new value [/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/indrisch/LLaMA-Factory-LFS/scripts:/scratch/indrisch/LLaMA-Factory-LFS/scripts] from parent process environment
+WARNING: Environment variable CUDA_HOME already has value [/usr/local/cuda], will not forward new value [/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2] from parent process environment
+INFO:    fuse2fs mount took an unexpectedly long time: 6.2s
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2026-07-28 15:52:03] llamafactory.launcher:143 >> Initializing 1 distributed tasks at: 127.0.0.1:51311
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[WARNING|2026-07-28 15:52:11] llamafactory.extras.misc:154 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO] Running in WANDB offline mode
+Traceback (most recent call last):
+  File "/scratch/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 182, in <module>
+    from llamafactory.train.tuner import run_exp  # use absolute import
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 33, in <module>
+    from .ppo import run_ppo
+  File "/scratch/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/ppo/__init__.py", line 15, in <module>
+    from .workflow import run_ppo
+  File "/scratch/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/ppo/workflow.py", line 25, in <module>
+    from .trainer import CustomPPOTrainer
+  File "/scratch/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/ppo/trainer.py", line 36, in <module>
+    from trl.core import PPODecorators, logprobs_from_logits
+ImportError: cannot import name 'PPODecorators' from 'trl.core' (/opt/conda/lib/python3.11/site-packages/trl/core.py)
+E0728 15:52:20.428000 287578 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 287603) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-07-28_15:52:20
+  host      : rg32203.rorqual.calcul.quebec
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 287603)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/indrisch/LLaMA-Factory-LFS/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/scratch/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '1', '--master_addr', '127.0.0.1', '--master_port', '51311', '/scratch/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py', '/scratch/indrisch//LLaMA-Factory-LFS/examples/train_lora/rorqual_qwen2_5vl_lora_sft_CoT_traineval.yaml']' returned non-zero exit status 1.

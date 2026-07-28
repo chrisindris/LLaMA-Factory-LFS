@@ -56,6 +56,7 @@ export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
 if [[ "$PS1" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "$PS1" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]]; then
     CLUSTER="RORQUAL"
     RUNNING_MODE="APPTAINER"
+    SCANNET_H5_DIR="/project/def-wangcs/indrisch/scratch_saves/ScanNet_h5/scans"
 elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
     CLUSTER="TRILLIUM"
     RUNNING_MODE="APPTAINER"
@@ -69,6 +70,10 @@ else
     echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to NIBI."
     CLUSTER="NIBI"
     RUNNING_MODE="APPTAINER"
+fi
+
+if [[ "$RUNNING_MODE" == "SHELL" ]]; then
+    export SLURM_TMPDIR="/tmp"
 fi
 
 export HF_HOME="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'HF_HOME'))")" && echo "HF_HOME: $HF_HOME"
@@ -128,6 +133,8 @@ done
 # Also bind ScanNet_h5 parent when MEDIA_DIR points there
 if [[ -d /scratch/indrisch/ScanNet_h5 ]]; then
     APPTAINER_H5_BINDS+=(-B /scratch/indrisch/ScanNet_h5)
+elif [[ -d /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5 ]]; then
+    APPTAINER_H5_BINDS+=(-B /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5)
 fi
 
 MPI_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcc12/openmpi/4.1.5/lib"
@@ -165,10 +172,11 @@ run_llamafactory_apptainer() {
         -B /etc/pki:/etc/pki:ro \
         -W ${SLURM_TMPDIR} \
         --env HF_HUB_OFFLINE=1 \
-        --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
         --env HF_HOME="${HF_HOME}" \
         --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
+        --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
         --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
+        --env DISABLE_VERSION_CHECK=1 \
         --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
         --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
         --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
@@ -178,6 +186,7 @@ run_llamafactory_apptainer() {
         --env WANDB_DIR="${WANDB_DIR}" \
         --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
         --env PYTHONNOUSERSITE=1 \
+        --env PYTHONUNBUFFERED=1 \
         --env PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}" \
         --env NCCL_IB_DISABLE=0 \
         --env NCCL_P2P_DISABLE=0 \
@@ -285,43 +294,45 @@ elif [[ "$CLUSTER" == "RORQUAL" ]]; then
         nvidia-smi
         echo "=== END HOST DIAGNOSTICS ==="
 
-        NVIDIA_LIB_DIR=$(dirname "$(ldconfig -p 2>/dev/null | grep 'libcuda\.so ' | awk '{print $NF}' | head -1)" 2>/dev/null)
-        NVIDIA_BIND_ARGS=""
-        if [[ -n "$NVIDIA_LIB_DIR" && -d "$NVIDIA_LIB_DIR" ]]; then
-            echo "Found NVIDIA driver libs at: $NVIDIA_LIB_DIR"
-            NVIDIA_BIND_ARGS="-B ${NVIDIA_LIB_DIR}"
-        fi
+        run_llamafactory_apptainer
 
-        apptainer run --nv --writable-tmpfs \
-            ${NVIDIA_BIND_ARGS} \
-            -B ${PROJECT_DIR} \
-            -B ${HF_HOME} \
-            ${APPTAINER_H5_BINDS[@]+"${APPTAINER_H5_BINDS[@]}"} \
-            -B /home/indrisch \
-            -B /dev/shm:/dev/shm \
-            -B /etc/ssl/certs:/etc/ssl/certs:ro \
-            -B /etc/pki:/etc/pki:ro \
-            -W ${SLURM_TMPDIR} \
-            --env LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" \
-            --env PYTHONUNBUFFERED=1 \
-            --env NCCL_DEBUG=INFO \
-            --env HF_HUB_OFFLINE=1 \
-            --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
-            --env HF_HOME="${HF_HOME}" \
-            --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
-            --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
-            --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
-            --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
-            --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
-            --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
-            --env FORCE_TORCHRUN=1 \
-            --env WANDB_MODE=offline \
-            --env WANDB_DIR="${WANDB_DIR}" \
-            --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
-            "${APPTAINER_H5_ENV[@]}" \
-            --pwd ${PROJECT_DIR} \
-            ${SIF_FILE} \
-            llamafactory-cli train ${YAML_FILE}
+        # NVIDIA_LIB_DIR=$(dirname "$(ldconfig -p 2>/dev/null | grep 'libcuda\.so ' | awk '{print $NF}' | head -1)" 2>/dev/null)
+        # NVIDIA_BIND_ARGS=""
+        # if [[ -n "$NVIDIA_LIB_DIR" && -d "$NVIDIA_LIB_DIR" ]]; then
+        #     echo "Found NVIDIA driver libs at: $NVIDIA_LIB_DIR"
+        #     NVIDIA_BIND_ARGS="-B ${NVIDIA_LIB_DIR}"
+        # fi
+
+        # apptainer run --nv --fakeroot --overlay /scratch/indrisch/LLaMA-Factory/apptainer/overlay.img \
+        #     ${NVIDIA_BIND_ARGS} \
+        #     -B ${PROJECT_DIR} \
+        #     -B ${HF_HOME} \
+        #     ${APPTAINER_H5_BINDS[@]+"${APPTAINER_H5_BINDS[@]}"} \
+        #     -B /home/indrisch \
+        #     -B /dev/shm:/dev/shm \
+        #     -B /etc/ssl/certs:/etc/ssl/certs:ro \
+        #     -B /etc/pki:/etc/pki:ro \
+        #     -W ${SLURM_TMPDIR} \
+        #     --env LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" \
+        #     --env PYTHONUNBUFFERED=1 \
+        #     --env NCCL_DEBUG=INFO \
+        #     --env HF_HUB_OFFLINE=1 \
+        #     --env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
+        #     --env HF_HOME="${HF_HOME}" \
+        #     --env HF_HUB_CACHE="${HF_HUB_CACHE}" \
+        #     --env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
+        #     --env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
+        #     --env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
+        #     --env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
+        #     --env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
+        #     --env FORCE_TORCHRUN=1 \
+        #     --env WANDB_MODE=offline \
+        #     --env WANDB_DIR="${WANDB_DIR}" \
+        #     --env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
+        #     "${APPTAINER_H5_ENV[@]}" \
+        #     --pwd ${PROJECT_DIR} \
+        #     ${SIF_FILE} \
+        #     llamafactory-cli train ${YAML_FILE}
 
     elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
@@ -347,6 +358,21 @@ elif [[ "$CLUSTER" == "RORQUAL" ]]; then
 
         pushd ${PROJECT_DIR}
         llamafactory-cli train ${YAML_FILE}
+
+    elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
+
+        module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+        module load python/3.12 cuda/12.6 opencv/4.12.0
+        module load arrow
+        module load apptainer
+
+        echo "=== HOST DIAGNOSTICS ==="
+        echo "HOSTNAME: $(hostname)"
+        echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
+        nvidia-smi
+        echo "=== END HOST DIAGNOSTICS ==="
+
+        run_llamafactory_apptainer
 
     else
         echo "Invalid running mode: $RUNNING_MODE"

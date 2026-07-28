@@ -2,8 +2,8 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=0
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64GB
 #SBATCH --time=0-00:01:00
 #SBATCH --gpus-per-node=h100:1
 
