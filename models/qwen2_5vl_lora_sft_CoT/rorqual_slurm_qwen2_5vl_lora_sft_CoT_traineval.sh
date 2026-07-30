@@ -2,10 +2,12 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=64GB
-#SBATCH --time=0-00:01:00
-#SBATCH --gpus-per-node=h100:1
+#SBATCH --cpus-per-task=64
+#SBATCH --mem=0
+#SBATCH --time=1-00:00:00
+#SBATCH --gpus-per-node=h100:4
+#SBATCH --mail-user=christopher.indris@torontomu.ca
+#SBATCH --mail-type=ALL
 
 # Rorqual wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k).
 # Submit from models/qwen2_5vl_lora_sft_CoT/ so SLURM out/ lands next to this script:

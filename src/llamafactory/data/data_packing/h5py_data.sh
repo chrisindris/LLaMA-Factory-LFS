@@ -42,7 +42,7 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
     mkdir -p /scratch/indrisch/data_h5py/ScanNet/scans/
     chmod -R 777 /scratch/indrisch/data_h5py/ScanNet/scans/
 
-    python h5py_data.py --input_dir /scratch/indrisch/data/ScanNet/scans/ --output_dir /scratch/indrisch/data_h5py/ScanNet/scans/ --verbose --num_workers 32
+    python h5py_data.py --input_dir /scratch/indrisch/data/ScanNet/scans/ --output_dir /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5/scans/ --verbose --num_workers 32
 
 elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
 
