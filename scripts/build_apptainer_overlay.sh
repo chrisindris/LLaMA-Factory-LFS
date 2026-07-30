@@ -39,12 +39,12 @@ apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
   --bind /scratch/indrisch:/scratch/indrisch \
   --env PYTHONNOUSERSITE=1 \
   "${SIF}" \
-  python -m pip install --no-deps "${WHEEL}"
+  python -m pip install --no-deps "${WHEEL}" wandb
 
 echo "Verify:"
 apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
   --env PYTHONNOUSERSITE=1 \
   "${SIF}" \
-  python -c "import h5py, numpy; print('h5py', h5py.__version__, 'numpy', numpy.__version__)"
+  python -c "import h5py, numpy, wandb; print('h5py', h5py.__version__, 'numpy', numpy.__version__, 'wandb', wandb.__version__)"
 
 echo "Done."
