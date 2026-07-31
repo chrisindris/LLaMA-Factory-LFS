@@ -159,6 +159,12 @@ run_llamafactory_apptainer() {
     #     (/opt/conda/bin, /usr/local/cuda/bin, ...) stay intact.
     export APPTAINERENV_CUDA_HOME=/usr/local/cuda
 
+    if [[ "$RUNNING_MODE" == "SHELL" ]]; then
+        PROGRAM="bash"
+    elif [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
+        PROGRAM="llamafactory-cli train ${YAML_FILE}"
+    fi
+
     # Prefer host src so H5 image backends (ScanNet_h5 / Spatial-SSRL / 3DThinker)
     # from this checkout override the older /app/src baked into the SIF.
     apptainer run --nv --fakeroot --overlay /scratch/indrisch/LLaMA-Factory/apptainer/overlay.img \
@@ -196,7 +202,7 @@ run_llamafactory_apptainer() {
         "${APPTAINER_H5_ENV[@]}" \
         --pwd ${PROJECT_DIR} \
         ${SIF_FILE} \
-        llamafactory-cli train ${YAML_FILE}
+        ${PROGRAM}
 }
 
 
