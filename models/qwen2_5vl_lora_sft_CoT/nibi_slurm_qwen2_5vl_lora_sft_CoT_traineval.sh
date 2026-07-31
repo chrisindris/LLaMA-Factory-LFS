@@ -1,4 +1,4 @@
-#!/bin/bash
+q#!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
@@ -12,12 +12,12 @@
 #   sbatch nibi_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh
 
 if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then
-    PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
+	PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
 elif [[ "$PWD" == *LLaMA-Factory* ]]; then
-    PROJECT_DIR="${PWD%%LLaMA-Factory*}/LLaMA-Factory"
+	PROJECT_DIR="${PWD%%LLaMA-Factory*}/LLaMA-Factory"
 else
-    echo "Error: Could not find 'LLaMA-Factory' or 'LLaMA-Factory-LFS' in the current path."
-    exit 1
+	echo "Error: Could not find 'LLaMA-Factory' or 'LLaMA-Factory-LFS' in the current path."
+	exit 1
 fi
 SYSCONFIG_DIR_PATH="$PROJECT_DIR/scripts"
 export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
