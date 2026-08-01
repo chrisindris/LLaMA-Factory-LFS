@@ -16,7 +16,7 @@ fi
 # --- build apptainer overlay ---
 
 SIF="${SIF:-$HF_HOME/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif}" && echo "SIF: $SIF"
-OVERLAY="${OVERLAY:-$PROJECT_DIR/apptainer/overlay.img}" && echo "OVERLAY: $OVERLAY"
+OVERLAY="${OVERLAY:-$PROJECT_DIR/apptainer/overlay_1.img}" && echo "OVERLAY: $OVERLAY"
 WHEELHOUSE="${WHEELHOUSE:-/scratch/indrisch/wheels/llamafactory_py311}" && echo "WHEELHOUSE: $WHEELHOUSE"
 H5PY_VERSION="${H5PY_VERSION:-3.16.0}" && echo "H5PY_VERSION: $H5PY_VERSION"
 

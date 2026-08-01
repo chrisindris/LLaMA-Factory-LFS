@@ -2,14 +2,15 @@
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
-#SBATCH --cpus-per-task=112
-#SBATCH --mem=0
+#SBATCH --cpus-per-task=96
 #SBATCH --time=0-00:01:00
-#SBATCH --gpus-per-node=h100:8
+#SBATCH --gpus-per-node=h100:4
+#SBATCH --mail-user=christopher.indris@torontomu.ca
+#SBATCH --mail-type=ALL
 
-# Nibi wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k).
+# Trillium wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k).
 # Submit from models/qwen2_5vl_lora_sft_CoT/ so SLURM out/ lands next to this script:
-#   sbatch nibi_slurm_multinode_qwen2_5vl_lora_sft_CoT_traineval.sh
+#   sbatch trillium_slurm_multinode_qwen2_5vl_lora_sft_CoT_traineval.sh
 
 . ../../scripts/utils/env.sh
 

@@ -146,9 +146,15 @@ run_llamafactory_apptainer() {
 	export MASTER_PORT="${MASTER_PORT:-29500}" && echo "MASTER_PORT: ${MASTER_PORT}"
 	export NPROC_PER_NODE="4" && echo "NPROC_PER_NODE: ${NPROC_PER_NODE}"
 
+	if [[ "$NODE_RANK" == 0 ]]; then
+		OVERLAY="${PROJECT_DIR}/apptainer/overlay.img"
+	else
+		OVERLAY="${PROJECT_DIR}/apptainer/overlay_${NODE_RANK}.img"
+	fi
+
 	# Prefer host src so H5 image backends (ScanNet_h5 / Spatial-SSRL / 3DThinker)
 	# from this checkout override the older /app/src baked into the SIF.
-	apptainer run --nv --fakeroot --overlay /scratch/indrisch/LLaMA-Factory/apptainer/overlay.img \
+	apptainer run --nv --fakeroot --overlay "${OVERLAY}" \
 		${extra_nv_bind} \
 		-B ${PROJECT_DIR} \
 		-B ${HF_HOME} \
