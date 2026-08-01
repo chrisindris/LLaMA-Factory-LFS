@@ -32,6 +32,20 @@ def read(system, key):
     config = _load_config()
     return config.get(system, {}).get(key)
 
+def read_all(system):
+    """
+    Reads all configuration key-value pairs for a system.
+
+    Args:
+        system (str): The system name (e.g., "RORQUAL").
+
+    Returns:
+        dict: Mapping of configuration keys to values for the system,
+              or an empty dict if the system is not found.
+    """
+    config = _load_config()
+    return config.get(system, {})
+
 def write(system, key, value):
     """
     Writes a value to the sysconfig.json file.

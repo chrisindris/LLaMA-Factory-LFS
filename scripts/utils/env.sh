@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+get_project_dir() {
+	if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then
+		export PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
+	elif [[ "$PWD" == *LLaMA-Factory* ]]; then
+		export PROJECT_DIR="${PWD%%LLaMA-Factory*}/LLaMA-Factory"
+	else
+		echo "Error: Could not find 'LLaMA-Factory' or 'LLaMA-Factory-LFS' in the current path."
+		exit 1
+	fi
+	export SYSCONFIG_DIR_PATH="$PROJECT_DIR/scripts"
+	export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
+	echo "PROJECT_DIR: $PROJECT_DIR"
+	echo "SYSCONFIG_DIR_PATH: $SYSCONFIG_DIR_PATH"
+	echo "PYTHONPATH: $PYTHONPATH"
+}
+
+get_cluster_settings() {
+	# Detect cluster based on terminal prompt or hostname
+	if [[ "${PS1:-}" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "${PS1:-}" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]]; then
+		export CLUSTER="RORQUAL"
+		export RUNNING_MODE="APPTAINER"
+	elif [[ "${PS1:-}" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
+		export CLUSTER="TRILLIUM"
+		export RUNNING_MODE="APPTAINER"
+	elif [[ "${PS1:-}" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "${PS1:-}" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
+		export CLUSTER="KILLARNEY"
+		export RUNNING_MODE="VENV"
+	elif [[ "$HOSTNAME" == *"nibi"* ]] || [[ "${PS1:-}" == *"nibi"* ]] || [[ "${PS1:-}" == *"g"* ]] || [[ "$HOSTNAME" == *"g"* ]]; then
+		export CLUSTER="NIBI"
+		export RUNNING_MODE="APPTAINER"
+	else
+		echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to NIBI."
+		export CLUSTER="NIBI"
+		export RUNNING_MODE="APPTAINER"
+	fi
+
+	if [[ "$RUNNING_MODE" == "SHELL" ]]; then
+		export SLURM_TMPDIR="/tmp"
+	fi
+
+	echo "CLUSTER: $CLUSTER"
+	echo "RUNNING_MODE: $RUNNING_MODE"
+}
+
+get_sysconfig_settings() {
+	# Export every key/value from sysconfig.json for the current CLUSTER.
+	# Keys are uppercased so e.g. media_dir becomes MEDIA_DIR.
+	eval "$(python3 -c "
+import shlex
+import sysconfigtool
+for key, value in sysconfigtool.read_all('${CLUSTER}').items():
+    env_key = key.upper()
+    print(f'export {env_key}={shlex.quote(str(value))}')
+    print(f'echo {shlex.quote(env_key + \": \" + str(value))}')
+")"
+}
+
+get_project_dir
+
+get_cluster_settings
+
+get_sysconfig_settings

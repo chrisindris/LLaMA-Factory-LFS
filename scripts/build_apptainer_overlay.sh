@@ -3,10 +3,22 @@
 # Safe for multimodal H5 training (ScanNet_h5 / Spatial-SSRL / 3DThinker).
 set -euo pipefail
 
-SIF="${SIF:-/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif}"
-OVERLAY="${OVERLAY:-/scratch/indrisch/LLaMA-Factory/apptainer/overlay.img}"
-WHEELHOUSE="${WHEELHOUSE:-/scratch/indrisch/wheels/llamafactory_py311}"
-H5PY_VERSION="${H5PY_VERSION:-3.16.0}"
+. ./utils/env.sh
+
+# --- setting environment ---
+
+EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval"
+
+if [[ "$CLUSTER" == "RORQUAL" ]]; then
+	SCANNET_H5_DIR="/project/def-wangcs/indrisch/scratch_saves/ScanNet_h5/scans"
+fi
+
+# --- build apptainer overlay ---
+
+SIF="${SIF:-$HF_HOME/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif}" && echo "SIF: $SIF"
+OVERLAY="${OVERLAY:-$PROJECT_DIR/apptainer/overlay.img}" && echo "OVERLAY: $OVERLAY"
+WHEELHOUSE="${WHEELHOUSE:-/scratch/indrisch/wheels/llamafactory_py311}" && echo "WHEELHOUSE: $WHEELHOUSE"
+H5PY_VERSION="${H5PY_VERSION:-3.16.0}" && echo "H5PY_VERSION: $H5PY_VERSION"
 
 mkdir -p "${WHEELHOUSE}"
 module load apptainer 2>/dev/null || true
@@ -39,12 +51,12 @@ apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
 	--bind /scratch/indrisch:/scratch/indrisch \
 	--env PYTHONNOUSERSITE=1 \
 	"${SIF}" \
-	python -m pip install --no-deps "${WHEEL}" wandb
+	python -m pip install --no-deps "${WHEEL}" wandb sentry-sdk
 
 echo "Verify:"
 apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
 	--env PYTHONNOUSERSITE=1 \
 	"${SIF}" \
-	python -c "import h5py, numpy, wandb; print('h5py', h5py.__version__, 'numpy', numpy.__version__, 'wandb', wandb.__version__)"
+	python -c "import h5py, numpy, wandb, sentry_sdk; print('h5py', h5py.__version__, 'numpy', numpy.__version__, 'wandb', wandb.__version__, 'sentry_sdk', sentry_sdk.VERSION)"
 
 echo "Done."
