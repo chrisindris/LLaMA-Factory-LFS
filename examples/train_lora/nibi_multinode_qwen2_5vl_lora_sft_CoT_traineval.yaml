@@ -28,16 +28,16 @@ media_dir: /scratch/indrisch/ScanNet_h5
 template: qwen2_vl
 cutoff_len: 131072 # max len of the model
 overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
-preprocessing_num_workers: 32
+preprocessing_num_workers: 16 # use 32 / num_nodes
 dataloader_num_workers: 4
 dataloader_prefetch_factor: 1 # when dataloader_num_workers > 0, this argument specifies the number of batches loaded in advance by each worker. Setting it to 1 can help reduce memory usage when working with large multimodal data.
 dataloader_pin_memory: false
 low_cpu_mem_usage: true
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval
+output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_multinode
 logging_steps: 10
-save_steps: 620 # ~1.00 CoT epoch (4xH100, bs=2, ga=8, val_size=0.1; ~43.9k samples)
+save_steps: 155 # ~1.00 CoT epoch (8xH100 per node x2 nodes)
 plot_loss: true
 overwrite_output_dir: true
 save_only_model: false
@@ -73,4 +73,4 @@ deepspeed: examples/deepspeed/ds_z2_config.json # as long as we aren't on Killar
 val_size: 0.1
 per_device_eval_batch_size: 1
 eval_strategy: steps
-eval_steps: 620 # evaluate after every ~1.00 CoT epoch
+eval_steps: 155 # evaluate after every ~1.00 CoT epoch (2480 / (8 GPUs * 2 nodes))
