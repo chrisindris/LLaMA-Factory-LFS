@@ -9,7 +9,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=16G
 #SBATCH --time=00:15:00
-#SBATCH --array=0-1
+#SBATCH --array=0-0
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 
