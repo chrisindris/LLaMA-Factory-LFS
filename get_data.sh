@@ -161,7 +161,7 @@ hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a
 # hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type=dataset # Leihan's version of the one above, which is MCQs only.
 # hf download --max-workers=4 jankin123/3DThinker-Mindcube # the model weights used by 3D-Thinker; may or may not be usede by us
 
-# huggingface-cli download --max-workers=8 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged --local-dir-use-symlinks False
+huggingface-cli download --max-workers=8 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged --local-dir-use-symlinks False
 
 deactivate
 # rm -r temp_env

@@ -1,0 +1,82 @@
+### model
+model_name_or_path: Qwen/Qwen2.5-VL-7B-Instruct
+# cache_dir is intentionally unset so HF_DATASETS_CACHE can point to node-local storage.
+image_max_pixels: 65536 # reduced for l40s to lower activation memory.
+video_max_pixels: 16384 # reduced for l40s to lower activation memory.
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_rank: 8
+lora_target: all
+
+### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
+# CoT mix: Scene30k + SpatialSSRL_coldstart + 3DThinker10k (full concat each epoch).
+# LLaMA-Factory has a single --media_dir (filesystem join for relative paths only).
+# Multi-root H5 images do NOT need a shared media tree; this fork dispatches by path
+# shape in h5_image_store and uses env roots (set by the CoT job script):
+#   SCANNET_H5_DIR     default /scratch/indrisch/ScanNet_h5/scans
+#   SPATIALSSRL_H5_DIR default /scratch/indrisch/Spatial-SSRL_images_h5
+#   THINKER10K_H5_DIR  default /scratch/indrisch/3DThinker10K_images_h5
+# media_dir below is only a non-authoritative filesystem join prefix (Scene30k-style
+# paths); Spatial/Thinker annotations resolve via the env roots above, not media_dir.
+dataset: Scene30k,SpatialSSRL_coldstart,3DThinker10k
+mix_strategy: concat
+media_dir: /scratch/indrisch/ScanNet_h5
+template: qwen2_vl
+cutoff_len: 8192 # max len of the model = 131072; lowering to 8192 reduces quadratic attention memory on l40s.
+overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
+preprocessing_num_workers: 8 # note: this number should be equal to 16 divided by the number of nodes being used, to reduce worker fan-out to avoid file-lock pressure on multi-node runs
+dataloader_num_workers: 4
+dataloader_prefetch_factor: 1 # when dataloader_num_workers > 0, this argument specifies the number of batches loaded in advance by each worker. Setting it to 1 can help reduce memory usage when working with large multimodal data.
+dataloader_pin_memory: false
+low_cpu_mem_usage: true
+
+### output
+output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_multinode_killarney_l40s
+logging_steps: 10
+save_steps: 310 # ~1.00 CoT epoch (2 nodes x 4xL40S, bs=1, ga=16; global batch 128)
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
+
+### train
+per_device_train_batch_size: 1 # reduced for l40s (48GB) vs h100 (80GB)
+gradient_accumulation_steps: 16 # keep global batch ~128 with 8 GPUs (8 * 1 * 16)
+gradient_checkpointing: true # to save memory at the expense of training time
+learning_rate: 1.0e-4
+num_train_epochs: 5.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+bf16_full_eval: true # set to true to use bf16 during evaluation as well, which can reduce memory usage and speed up evaluation on compatible hardware.
+ddp_timeout: 180000000
+resume_from_checkpoint: null
+
+# debugging level
+debug: underflow_overflow # debug: none # to turn off debugging, we must simply comment out this line.
+log_level: debug
+log_level_replica: debug
+print_param_status: true
+debug_mm_training: true # this is really for fine-grained debugging of memory usage; for runs, output is much cleaner if we turn this off.
+debug_mm_steps: 1
+# image_sample_stride: 16 # use every 16th image frame when on l40s GPUs.
+image_sample_count: 24 # cap frames per sample for l40s memory; lower to 16/12 if OOM.
+
+# acceleration
+flash_attn: fa2
+enable_liger_kernel: true
+
+# distribution
+# Prefer ZeRO-2 (resume-friendly). ZeRO-3 has historically broken 2nd-epoch resume.
+# If OOM after frame-cap + checkpointing: try ds_z2_offload_config.json (needs DS_BUILD_CPU_ADAM=1).
+deepspeed: examples/deepspeed/ds_z2_config.json
+
+## eval
+val_size: 0.1
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 310 # evaluate after every ~1.00 CoT epoch (2 nodes x 4xL40S, bs=1, ga=16)
