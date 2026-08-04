@@ -1,0 +1,792 @@
+(venv_llamafactory_cu126_qwen35) indrisch@klogin04:/project/aip-wangcs/indrisch/LLaMA-Factory/models/qwen3_5_9b_lora_sft_Scene30k$ DISABLE_VERSION_CHECK=1 llamafactory-cli train -h
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[WARNING|2026-06-05 00:15:17] llamafactory.extras.misc:154 >> Version checking has been disabled, may lead to unexpected behaviors.
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/cuda/__init__.py:1061: UserWarning: Can't initialize NVML
+  raw_cnt = _raw_device_count_nvml()
+[2026-06-05 00:15:22,004] [WARNING] [real_accelerator.py:181:get_accelerator] Setting accelerator to CPU. If you have GPU or other accelerator, we were unable to detect it.
+[2026-06-05 00:15:22,007] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cpu (auto detect)
+/scratch/indrisch/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+usage: llamafactory-cli [-h] [--model_name_or_path MODEL_NAME_OR_PATH] [--adapter_name_or_path ADAPTER_NAME_OR_PATH] [--adapter_folder ADAPTER_FOLDER] [--cache_dir CACHE_DIR]
+                        [--use_fast_tokenizer [USE_FAST_TOKENIZER]] [--no_use_fast_tokenizer] [--resize_vocab [RESIZE_VOCAB]] [--split_special_tokens [SPLIT_SPECIAL_TOKENS]] [--add_tokens ADD_TOKENS]
+                        [--add_special_tokens ADD_SPECIAL_TOKENS] [--new_special_tokens_config NEW_SPECIAL_TOKENS_CONFIG] [--init_special_tokens {noise_init,desc_init,desc_init_w_noise}]
+                        [--model_revision MODEL_REVISION] [--low_cpu_mem_usage [LOW_CPU_MEM_USAGE]] [--no_low_cpu_mem_usage] [--rope_scaling {linear,dynamic,yarn,llama3}] [--flash_attn {auto,disabled,sdpa,fa2}]
+                        [--shift_attn [SHIFT_ATTN]] [--mixture_of_depths {convert,load}] [--use_unsloth [USE_UNSLOTH]] [--use_unsloth_gc [USE_UNSLOTH_GC]] [--enable_liger_kernel [ENABLE_LIGER_KERNEL]]
+                        [--moe_aux_loss_coef MOE_AUX_LOSS_COEF] [--disable_gradient_checkpointing [DISABLE_GRADIENT_CHECKPOINTING]] [--use_reentrant_gc [USE_REENTRANT_GC]] [--no_use_reentrant_gc]
+                        [--upcast_layernorm [UPCAST_LAYERNORM]] [--upcast_lmhead_output [UPCAST_LMHEAD_OUTPUT]] [--train_from_scratch [TRAIN_FROM_SCRATCH]] [--infer_backend {huggingface,vllm,sglang}]
+                        [--offload_folder OFFLOAD_FOLDER] [--use_kv_cache [USE_KV_CACHE]] [--no_use_kv_cache] [--infer_dtype {auto,float16,bfloat16,float32}] [--hf_hub_token HF_HUB_TOKEN]
+                        [--ms_hub_token MS_HUB_TOKEN] [--om_hub_token OM_HUB_TOKEN] [--print_param_status [PRINT_PARAM_STATUS]] [--trust_remote_code [TRUST_REMOTE_CODE]]
+                        [--quantization_method {bnb,gptq,awq,aqlm,quanto,eetq,hqq,mxfp4}] [--quantization_bit QUANTIZATION_BIT] [--quantization_type {fp4,nf4}] [--double_quantization [DOUBLE_QUANTIZATION]]
+                        [--no_double_quantization] [--quantization_device_map {auto}] [--fp8 [FP8]] [--fp8_backend FP8_BACKEND] [--fp8_enable_fsdp_float8_all_gather [FP8_ENABLE_FSDP_FLOAT8_ALL_GATHER]]
+                        [--image_max_pixels IMAGE_MAX_PIXELS] [--image_min_pixels IMAGE_MIN_PIXELS] [--image_do_pan_and_scan [IMAGE_DO_PAN_AND_SCAN]] [--crop_to_patches [CROP_TO_PATCHES]]
+                        [--video_max_pixels VIDEO_MAX_PIXELS] [--video_min_pixels VIDEO_MIN_PIXELS] [--video_fps VIDEO_FPS] [--video_maxlen VIDEO_MAXLEN] [--use_audio_in_video [USE_AUDIO_IN_VIDEO]]
+                        [--audio_sampling_rate AUDIO_SAMPLING_RATE] [--export_dir EXPORT_DIR] [--export_size EXPORT_SIZE] [--export_device {cpu,auto}] [--export_quantization_bit EXPORT_QUANTIZATION_BIT]
+                        [--export_quantization_dataset EXPORT_QUANTIZATION_DATASET] [--export_quantization_nsamples EXPORT_QUANTIZATION_NSAMPLES] [--export_quantization_maxlen EXPORT_QUANTIZATION_MAXLEN]
+                        [--export_legacy_format [EXPORT_LEGACY_FORMAT]] [--export_hub_model_id EXPORT_HUB_MODEL_ID] [--vllm_maxlen VLLM_MAXLEN] [--vllm_gpu_util VLLM_GPU_UTIL]
+                        [--vllm_enforce_eager [VLLM_ENFORCE_EAGER]] [--vllm_max_lora_rank VLLM_MAX_LORA_RANK] [--vllm_config VLLM_CONFIG] [--sglang_maxlen SGLANG_MAXLEN] [--sglang_mem_fraction SGLANG_MEM_FRACTION]
+                        [--sglang_tp_size SGLANG_TP_SIZE] [--sglang_config SGLANG_CONFIG] [--sglang_lora_backend {triton,flashinfer}] [--template TEMPLATE] [--dataset DATASET] [--eval_dataset EVAL_DATASET]
+                        [--dataset_dir DATASET_DIR] [--media_dir MEDIA_DIR] [--cutoff_len CUTOFF_LEN] [--train_on_prompt [TRAIN_ON_PROMPT]] [--mask_history [MASK_HISTORY]] [--streaming [STREAMING]]
+                        [--buffer_size BUFFER_SIZE] [--mix_strategy {concat,interleave_under,interleave_over}] [--interleave_probs INTERLEAVE_PROBS] [--overwrite_cache [OVERWRITE_CACHE]]
+                        [--preprocessing_batch_size PREPROCESSING_BATCH_SIZE] [--image_sample_stride IMAGE_SAMPLE_STRIDE] [--preprocessing_num_workers PREPROCESSING_NUM_WORKERS] [--max_samples MAX_SAMPLES]
+                        [--eval_num_beams EVAL_NUM_BEAMS] [--ignore_pad_token_for_loss [IGNORE_PAD_TOKEN_FOR_LOSS]] [--no_ignore_pad_token_for_loss] [--val_size VAL_SIZE]
+                        [--eval_on_each_dataset [EVAL_ON_EACH_DATASET]] [--packing PACKING] [--neat_packing [NEAT_PACKING]] [--tool_format TOOL_FORMAT] [--default_system DEFAULT_SYSTEM]
+                        [--enable_thinking [ENABLE_THINKING]] [--no_enable_thinking] [--tokenized_path TOKENIZED_PATH] [--data_shared_file_system [DATA_SHARED_FILE_SYSTEM]] [--output_dir OUTPUT_DIR]
+                        [--per_device_train_batch_size PER_DEVICE_TRAIN_BATCH_SIZE] [--num_train_epochs NUM_TRAIN_EPOCHS] [--max_steps MAX_STEPS] [--learning_rate LEARNING_RATE]
+                        [--lr_scheduler_type {linear,cosine,cosine_with_restarts,polynomial,constant,constant_with_warmup,inverse_sqrt,reduce_lr_on_plateau,cosine_with_min_lr,cosine_warmup_with_min_lr,warmup_stable_decay,greedy}]
+                        [--lr_scheduler_kwargs LR_SCHEDULER_KWARGS] [--warmup_steps WARMUP_STEPS]
+                        [--optim {adamw_torch,adamw_torch_fused,adamw_torch_xla,adamw_torch_npu_fused,adamw_apex_fused,adafactor,adamw_anyprecision,adamw_torch_4bit,adamw_torch_8bit,ademamix,sgd,adagrad,adamw_bnb_8bit,adamw_8bit,ademamix_8bit,lion_8bit,lion_32bit,paged_adamw_32bit,paged_adamw_8bit,paged_ademamix_32bit,paged_ademamix_8bit,paged_lion_32bit,paged_lion_8bit,rmsprop,rmsprop_bnb,rmsprop_bnb_8bit,rmsprop_bnb_32bit,galore_adamw,galore_adamw_8bit,galore_adafactor,galore_adamw_layerwise,galore_adamw_8bit_layerwise,galore_adafactor_layerwise,lomo,adalomo,grokadamw,schedule_free_radam,schedule_free_adamw,schedule_free_sgd,apollo_adamw,apollo_adamw_layerwise,stable_adamw}]
+                        [--optim_args OPTIM_ARGS] [--weight_decay WEIGHT_DECAY] [--adam_beta1 ADAM_BETA1] [--adam_beta2 ADAM_BETA2] [--adam_epsilon ADAM_EPSILON] [--optim_target_modules OPTIM_TARGET_MODULES]
+                        [--gradient_accumulation_steps GRADIENT_ACCUMULATION_STEPS] [--average_tokens_across_devices [AVERAGE_TOKENS_ACROSS_DEVICES]] [--no_average_tokens_across_devices]
+                        [--max_grad_norm MAX_GRAD_NORM] [--label_smoothing_factor LABEL_SMOOTHING_FACTOR] [--bf16 [BF16]] [--fp16 [FP16]] [--bf16_full_eval [BF16_FULL_EVAL]] [--fp16_full_eval [FP16_FULL_EVAL]]
+                        [--tf32 TF32] [--gradient_checkpointing [GRADIENT_CHECKPOINTING]] [--gradient_checkpointing_kwargs GRADIENT_CHECKPOINTING_KWARGS] [--torch_compile [TORCH_COMPILE]]
+                        [--torch_compile_backend TORCH_COMPILE_BACKEND] [--torch_compile_mode TORCH_COMPILE_MODE] [--use_liger_kernel [USE_LIGER_KERNEL]] [--liger_kernel_config LIGER_KERNEL_CONFIG]
+                        [--use_cache [USE_CACHE]] [--neftune_noise_alpha NEFTUNE_NOISE_ALPHA] [--torch_empty_cache_steps TORCH_EMPTY_CACHE_STEPS] [--auto_find_batch_size [AUTO_FIND_BATCH_SIZE]]
+                        [--logging_strategy {no,steps,epoch}] [--logging_steps LOGGING_STEPS] [--logging_first_step [LOGGING_FIRST_STEP]] [--log_on_each_node [LOG_ON_EACH_NODE]] [--no_log_on_each_node]
+                        [--logging_nan_inf_filter [LOGGING_NAN_INF_FILTER]] [--no_logging_nan_inf_filter] [--include_num_input_tokens_seen [INCLUDE_NUM_INPUT_TOKENS_SEEN]]
+                        [--log_level {detail,debug,info,warning,error,critical,passive}] [--log_level_replica {detail,debug,info,warning,error,critical,passive}] [--disable_tqdm DISABLE_TQDM] [--report_to REPORT_TO]
+                        [--run_name RUN_NAME] [--project PROJECT] [--trackio_space_id TRACKIO_SPACE_ID] [--trackio_bucket_id TRACKIO_BUCKET_ID] [--trackio_static_space_id TRACKIO_STATIC_SPACE_ID]
+                        [--eval_strategy {no,steps,epoch}] [--eval_steps EVAL_STEPS] [--eval_delay EVAL_DELAY] [--per_device_eval_batch_size PER_DEVICE_EVAL_BATCH_SIZE]
+                        [--prediction_loss_only [PREDICTION_LOSS_ONLY]] [--eval_on_start [EVAL_ON_START]] [--eval_do_concat_batches [EVAL_DO_CONCAT_BATCHES]] [--no_eval_do_concat_batches]
+                        [--eval_use_gather_object [EVAL_USE_GATHER_OBJECT]] [--eval_accumulation_steps EVAL_ACCUMULATION_STEPS] [--include_for_metrics INCLUDE_FOR_METRICS [INCLUDE_FOR_METRICS ...]]
+                        [--batch_eval_metrics [BATCH_EVAL_METRICS]] [--save_only_model [SAVE_ONLY_MODEL]] [--save_strategy {no,steps,epoch,best}] [--save_steps SAVE_STEPS] [--save_on_each_node [SAVE_ON_EACH_NODE]]
+                        [--save_total_limit SAVE_TOTAL_LIMIT] [--enable_jit_checkpoint [ENABLE_JIT_CHECKPOINT]] [--push_to_hub [PUSH_TO_HUB]] [--hub_token HUB_TOKEN] [--hub_private_repo HUB_PRIVATE_REPO]
+                        [--hub_model_id HUB_MODEL_ID] [--hub_strategy {end,every_save,checkpoint,all_checkpoints}] [--hub_always_push [HUB_ALWAYS_PUSH]] [--hub_revision HUB_REVISION]
+                        [--load_best_model_at_end [LOAD_BEST_MODEL_AT_END]] [--metric_for_best_model METRIC_FOR_BEST_MODEL] [--greater_is_better GREATER_IS_BETTER] [--ignore_data_skip [IGNORE_DATA_SKIP]]
+                        [--restore_callback_states_from_checkpoint [RESTORE_CALLBACK_STATES_FROM_CHECKPOINT]] [--full_determinism [FULL_DETERMINISM]] [--seed SEED] [--data_seed DATA_SEED] [--use_cpu [USE_CPU]]
+                        [--accelerator_config ACCELERATOR_CONFIG] [--parallelism_config PARALLELISM_CONFIG] [--dataloader_drop_last [DATALOADER_DROP_LAST]] [--dataloader_num_workers DATALOADER_NUM_WORKERS]
+                        [--dataloader_pin_memory [DATALOADER_PIN_MEMORY]] [--no_dataloader_pin_memory] [--dataloader_persistent_workers [DATALOADER_PERSISTENT_WORKERS]]
+                        [--dataloader_prefetch_factor DATALOADER_PREFETCH_FACTOR] [--remove_unused_columns [REMOVE_UNUSED_COLUMNS]] [--no_remove_unused_columns] [--label_names LABEL_NAMES [LABEL_NAMES ...]]
+                        [--train_sampling_strategy {random,sequential,group_by_length}] [--length_column_name LENGTH_COLUMN_NAME] [--ddp_find_unused_parameters DDP_FIND_UNUSED_PARAMETERS]
+                        [--ddp_bucket_cap_mb DDP_BUCKET_CAP_MB] [--ddp_broadcast_buffers DDP_BROADCAST_BUFFERS] [--ddp_static_graph DDP_STATIC_GRAPH] [--ddp_backend {nccl,gloo,mpi,xccl,hccl,cncl,mccl}]
+                        [--ddp_timeout DDP_TIMEOUT] [--fsdp FSDP] [--fsdp_config FSDP_CONFIG] [--deepspeed DEEPSPEED] [--debug DEBUG [DEBUG ...]] [--skip_memory_metrics [SKIP_MEMORY_METRICS]]
+                        [--no_skip_memory_metrics] [--do_train [DO_TRAIN]] [--do_eval [DO_EVAL]] [--do_predict [DO_PREDICT]] [--resume_from_checkpoint RESUME_FROM_CHECKPOINT] [--warmup_ratio WARMUP_RATIO]
+                        [--logging_dir LOGGING_DIR] [--local_rank LOCAL_RANK] [--sortish_sampler [SORTISH_SAMPLER]] [--predict_with_generate [PREDICT_WITH_GENERATE]] [--generation_max_length GENERATION_MAX_LENGTH]
+                        [--generation_num_beams GENERATION_NUM_BEAMS] [--generation_config GENERATION_CONFIG] [--ray_run_name RAY_RUN_NAME] [--ray_storage_path RAY_STORAGE_PATH]
+                        [--ray_storage_filesystem {s3,gs,gcs}] [--ray_num_workers RAY_NUM_WORKERS] [--resources_per_worker RESOURCES_PER_WORKER] [--placement_strategy {SPREAD,PACK,STRICT_SPREAD,STRICT_PACK}]
+                        [--ray_init_kwargs RAY_INIT_KWARGS] [--overwrite_output_dir [OVERWRITE_OUTPUT_DIR]] [--freeze_trainable_layers FREEZE_TRAINABLE_LAYERS] [--freeze_trainable_modules FREEZE_TRAINABLE_MODULES]
+                        [--freeze_extra_modules FREEZE_EXTRA_MODULES] [--additional_target ADDITIONAL_TARGET] [--module_dropout MODULE_DROPOUT] [--oft_rank OFT_RANK] [--oft_block_size OFT_BLOCK_SIZE]
+                        [--oft_target OFT_TARGET] [--create_new_adapter [CREATE_NEW_ADAPTER]] [--lora_alpha LORA_ALPHA] [--lora_dropout LORA_DROPOUT] [--lora_rank LORA_RANK] [--lora_target LORA_TARGET]
+                        [--loraplus_lr_ratio LORAPLUS_LR_RATIO] [--loraplus_lr_embedding LORAPLUS_LR_EMBEDDING] [--use_rslora [USE_RSLORA]] [--use_dora [USE_DORA]] [--pissa_init [PISSA_INIT]]
+                        [--pissa_iter PISSA_ITER] [--pissa_convert [PISSA_CONVERT]] [--pref_beta PREF_BETA] [--pref_ftx PREF_FTX] [--pref_bco_weight PREF_BCO_WEIGHT]
+                        [--pref_loss {sigmoid,hinge,ipo,kto_pair,orpo,simpo}] [--dpo_label_smoothing DPO_LABEL_SMOOTHING] [--kto_chosen_weight KTO_CHOSEN_WEIGHT] [--kto_rejected_weight KTO_REJECTED_WEIGHT]
+                        [--simpo_gamma SIMPO_GAMMA] [--ppo_buffer_size PPO_BUFFER_SIZE] [--ppo_epochs PPO_EPOCHS] [--ppo_score_norm [PPO_SCORE_NORM]] [--ppo_target PPO_TARGET]
+                        [--ppo_whiten_rewards [PPO_WHITEN_REWARDS]] [--ref_model REF_MODEL] [--ref_model_adapters REF_MODEL_ADAPTERS] [--ref_model_quantization_bit REF_MODEL_QUANTIZATION_BIT]
+                        [--reward_model REWARD_MODEL] [--reward_model_adapters REWARD_MODEL_ADAPTERS] [--reward_model_quantization_bit REWARD_MODEL_QUANTIZATION_BIT] [--reward_model_type {lora,full,api}]
+                        [--ld_alpha LD_ALPHA] [--use_galore [USE_GALORE]] [--galore_target GALORE_TARGET] [--galore_rank GALORE_RANK] [--galore_update_interval GALORE_UPDATE_INTERVAL] [--galore_scale GALORE_SCALE]
+                        [--galore_proj_type {std,reverse_std,right,left,full}] [--galore_layerwise [GALORE_LAYERWISE]] [--use_apollo [USE_APOLLO]] [--apollo_target APOLLO_TARGET] [--apollo_rank APOLLO_RANK]
+                        [--apollo_update_interval APOLLO_UPDATE_INTERVAL] [--apollo_scale APOLLO_SCALE] [--apollo_proj {svd,random}] [--apollo_proj_type {std,right,left}] [--apollo_scale_type {channel,tensor}]
+                        [--apollo_layerwise [APOLLO_LAYERWISE]] [--apollo_scale_front [APOLLO_SCALE_FRONT]] [--use_badam [USE_BADAM]] [--badam_mode {layer,ratio}] [--badam_start_block BADAM_START_BLOCK]
+                        [--badam_switch_mode {ascending,descending,random,fixed}] [--badam_switch_interval BADAM_SWITCH_INTERVAL] [--badam_update_ratio BADAM_UPDATE_RATIO] [--badam_mask_mode {adjacent,scatter}]
+                        [--badam_verbose BADAM_VERBOSE] [--use_swanlab [USE_SWANLAB]] [--swanlab_project SWANLAB_PROJECT] [--swanlab_workspace SWANLAB_WORKSPACE] [--swanlab_run_name SWANLAB_RUN_NAME]
+                        [--swanlab_mode {cloud,local}] [--swanlab_api_key SWANLAB_API_KEY] [--swanlab_logdir SWANLAB_LOGDIR] [--swanlab_lark_webhook_url SWANLAB_LARK_WEBHOOK_URL]
+                        [--swanlab_lark_secret SWANLAB_LARK_SECRET] [--pure_bf16 [PURE_BF16]] [--stage {pt,sft,rm,ppo,dpo,kto}] [--finetuning_type {lora,oft,freeze,full}] [--use_llama_pro [USE_LLAMA_PRO]]
+                        [--use_adam_mini [USE_ADAM_MINI]] [--use_mca [USE_MCA]] [--use_muon [USE_MUON]] [--use_dft_loss [USE_DFT_LOSS]] [--freeze_vision_tower [FREEZE_VISION_TOWER]] [--no_freeze_vision_tower]
+                        [--freeze_multi_modal_projector [FREEZE_MULTI_MODAL_PROJECTOR]] [--no_freeze_multi_modal_projector] [--freeze_language_model [FREEZE_LANGUAGE_MODEL]] [--compute_accuracy [COMPUTE_ACCURACY]]
+                        [--disable_shuffling [DISABLE_SHUFFLING]] [--early_stopping_steps EARLY_STOPPING_STEPS] [--plot_loss [PLOT_LOSS]] [--include_effective_tokens_per_second [INCLUDE_EFFECTIVE_TOKENS_PER_SECOND]]
+                        [--debug_mm_training [DEBUG_MM_TRAINING]] [--debug_mm_steps DEBUG_MM_STEPS] [--do_sample [DO_SAMPLE]] [--no_do_sample] [--temperature TEMPERATURE] [--top_p TOP_P] [--top_k TOP_K]
+                        [--num_beams NUM_BEAMS] [--max_length MAX_LENGTH] [--max_new_tokens MAX_NEW_TOKENS] [--repetition_penalty REPETITION_PENALTY] [--length_penalty LENGTH_PENALTY]
+                        [--skip_special_tokens [SKIP_SPECIAL_TOKENS]] [--no_skip_special_tokens]
+
+options:
+  -h, --help            show this help message and exit
+  --model_name_or_path MODEL_NAME_OR_PATH, --model-name-or-path MODEL_NAME_OR_PATH
+                        Path to the model weight or identifier from huggingface.co/models or modelscope.cn/models. (default: None)
+  --adapter_name_or_path ADAPTER_NAME_OR_PATH, --adapter-name-or-path ADAPTER_NAME_OR_PATH
+                        Path to the adapter weight or identifier from huggingface.co/models. Use commas to separate multiple adapters. (default: None)
+  --adapter_folder ADAPTER_FOLDER, --adapter-folder ADAPTER_FOLDER
+                        The folder containing the adapter weights to load. (default: None)
+  --cache_dir CACHE_DIR, --cache-dir CACHE_DIR
+                        Where to store the pre-trained models downloaded from huggingface.co or modelscope.cn. (default: None)
+  --use_fast_tokenizer [USE_FAST_TOKENIZER], --use-fast-tokenizer [USE_FAST_TOKENIZER]
+                        Whether or not to use one of the fast tokenizer (backed by the tokenizers library). (default: True)
+  --no_use_fast_tokenizer, --no-use-fast-tokenizer
+                        Whether or not to use one of the fast tokenizer (backed by the tokenizers library). (default: False)
+  --resize_vocab [RESIZE_VOCAB], --resize-vocab [RESIZE_VOCAB]
+                        Whether or not to resize the tokenizer vocab and the embedding layers. (default: False)
+  --split_special_tokens [SPLIT_SPECIAL_TOKENS], --split-special-tokens [SPLIT_SPECIAL_TOKENS]
+                        Whether or not the special tokens should be split during the tokenization process. (default: False)
+  --add_tokens ADD_TOKENS, --add-tokens ADD_TOKENS
+                        Non-special tokens to be added into the tokenizer. Use commas to separate multiple tokens. (default: None)
+  --add_special_tokens ADD_SPECIAL_TOKENS, --add-special-tokens ADD_SPECIAL_TOKENS
+                        Special tokens to be added into the tokenizer. Use commas to separate multiple tokens. (default: None)
+  --new_special_tokens_config NEW_SPECIAL_TOKENS_CONFIG, --new-special-tokens-config NEW_SPECIAL_TOKENS_CONFIG
+                        Path to YAML config with special token descriptions for semantic initialization. If set, this takes precedence over add_special_tokens. YAML format: {'<token>': 'description text', ...}
+                        (default: None)
+  --init_special_tokens {noise_init,desc_init,desc_init_w_noise}, --init-special-tokens {noise_init,desc_init,desc_init_w_noise}
+                        Initialization method for new special tokens: 'noise_init' (default, random noise around mean), 'desc_init' (semantic initialization from descriptions), 'desc_init_w_noise' (semantic + random
+                        noise). Note: 'desc_init' methods require new_special_tokens_config. (default: noise_init)
+  --model_revision MODEL_REVISION, --model-revision MODEL_REVISION
+                        The specific model version to use (can be a branch name, tag name or commit id). (default: main)
+  --low_cpu_mem_usage [LOW_CPU_MEM_USAGE], --low-cpu-mem-usage [LOW_CPU_MEM_USAGE]
+                        Whether or not to use memory-efficient model loading. (default: True)
+  --no_low_cpu_mem_usage, --no-low-cpu-mem-usage
+                        Whether or not to use memory-efficient model loading. (default: False)
+  --rope_scaling {linear,dynamic,yarn,llama3}, --rope-scaling {linear,dynamic,yarn,llama3}
+                        Which scaling strategy should be adopted for the RoPE embeddings. (default: None)
+  --flash_attn {auto,disabled,sdpa,fa2}, --flash-attn {auto,disabled,sdpa,fa2}
+                        Enable FlashAttention for faster training and inference. (default: AttentionFunction.AUTO)
+  --shift_attn [SHIFT_ATTN], --shift-attn [SHIFT_ATTN]
+                        Enable shift short attention (S^2-Attn) proposed by LongLoRA. (default: False)
+  --mixture_of_depths {convert,load}, --mixture-of-depths {convert,load}
+                        Convert the model to mixture-of-depths (MoD) or load the MoD model. (default: None)
+  --use_unsloth [USE_UNSLOTH], --use-unsloth [USE_UNSLOTH]
+                        Whether or not to use unsloth's optimization for the LoRA training. (default: False)
+  --use_unsloth_gc [USE_UNSLOTH_GC], --use-unsloth-gc [USE_UNSLOTH_GC]
+                        Whether or not to use unsloth's gradient checkpointing (no need to install unsloth). (default: False)
+  --enable_liger_kernel [ENABLE_LIGER_KERNEL], --enable-liger-kernel [ENABLE_LIGER_KERNEL]
+                        Whether or not to enable liger kernel for faster training. (default: False)
+  --moe_aux_loss_coef MOE_AUX_LOSS_COEF, --moe-aux-loss-coef MOE_AUX_LOSS_COEF
+                        Coefficient of the auxiliary router loss in mixture-of-experts model. (default: None)
+  --disable_gradient_checkpointing [DISABLE_GRADIENT_CHECKPOINTING], --disable-gradient-checkpointing [DISABLE_GRADIENT_CHECKPOINTING]
+                        Whether or not to disable gradient checkpointing. (default: False)
+  --use_reentrant_gc [USE_REENTRANT_GC], --use-reentrant-gc [USE_REENTRANT_GC]
+                        Whether or not to use reentrant gradient checkpointing. (default: True)
+  --no_use_reentrant_gc, --no-use-reentrant-gc
+                        Whether or not to use reentrant gradient checkpointing. (default: False)
+  --upcast_layernorm [UPCAST_LAYERNORM], --upcast-layernorm [UPCAST_LAYERNORM]
+                        Whether or not to upcast the layernorm weights in fp32. (default: False)
+  --upcast_lmhead_output [UPCAST_LMHEAD_OUTPUT], --upcast-lmhead-output [UPCAST_LMHEAD_OUTPUT]
+                        Whether or not to upcast the output of lm_head in fp32. (default: False)
+  --train_from_scratch [TRAIN_FROM_SCRATCH], --train-from-scratch [TRAIN_FROM_SCRATCH]
+                        Whether or not to randomly initialize the model weights. (default: False)
+  --infer_backend {huggingface,vllm,sglang}, --infer-backend {huggingface,vllm,sglang}
+                        Backend engine used at inference. (default: EngineName.HF)
+  --offload_folder OFFLOAD_FOLDER, --offload-folder OFFLOAD_FOLDER
+                        Path to offload model weights. (default: offload)
+  --use_kv_cache [USE_KV_CACHE], --use-kv-cache [USE_KV_CACHE]
+                        Whether or not to use KV cache in generation. (default: True)
+  --no_use_kv_cache, --no-use-kv-cache
+                        Whether or not to use KV cache in generation. (default: False)
+  --infer_dtype {auto,float16,bfloat16,float32}, --infer-dtype {auto,float16,bfloat16,float32}
+                        Data type for model weights and activations at inference. (default: auto)
+  --hf_hub_token HF_HUB_TOKEN, --hf-hub-token HF_HUB_TOKEN
+                        Auth token to log in with Hugging Face Hub. (default: None)
+  --ms_hub_token MS_HUB_TOKEN, --ms-hub-token MS_HUB_TOKEN
+                        Auth token to log in with ModelScope Hub. (default: None)
+  --om_hub_token OM_HUB_TOKEN, --om-hub-token OM_HUB_TOKEN
+                        Auth token to log in with Modelers Hub. (default: None)
+  --print_param_status [PRINT_PARAM_STATUS], --print-param-status [PRINT_PARAM_STATUS]
+                        For debugging purposes, print the status of the parameters in the model. (default: False)
+  --trust_remote_code [TRUST_REMOTE_CODE], --trust-remote-code [TRUST_REMOTE_CODE]
+                        Whether to trust the execution of code from datasets/models defined on the Hub or not. (default: False)
+  --quantization_method {bnb,gptq,awq,aqlm,quanto,eetq,hqq,mxfp4}, --quantization-method {bnb,gptq,awq,aqlm,quanto,eetq,hqq,mxfp4}
+                        Quantization method to use for on-the-fly quantization. (default: QuantizationMethod.BNB)
+  --quantization_bit QUANTIZATION_BIT, --quantization-bit QUANTIZATION_BIT
+                        The number of bits to quantize the model using on-the-fly quantization. (default: None)
+  --quantization_type {fp4,nf4}, --quantization-type {fp4,nf4}
+                        Quantization data type to use in bitsandbytes int4 training. (default: nf4)
+  --double_quantization [DOUBLE_QUANTIZATION], --double-quantization [DOUBLE_QUANTIZATION]
+                        Whether or not to use double quantization in bitsandbytes int4 training. (default: True)
+  --no_double_quantization, --no-double-quantization
+                        Whether or not to use double quantization in bitsandbytes int4 training. (default: False)
+  --quantization_device_map {auto}, --quantization-device-map {auto}
+                        Device map used to infer the 4-bit quantized model, needs bitsandbytes>=0.43.0. (default: None)
+  --fp8 [FP8]           Enable FP8 mixed precision training via HuggingFace Accelerate. Requires PyTorch 2.7+ and Hopper architecture GPUs. (default: False)
+  --fp8_backend FP8_BACKEND, --fp8-backend FP8_BACKEND
+                        FP8 backend to use ('auto', 'torchao', 'te', 'msamp'). 'auto' selects best available backend. (default: auto)
+  --fp8_enable_fsdp_float8_all_gather [FP8_ENABLE_FSDP_FLOAT8_ALL_GATHER], --fp8-enable-fsdp-float8-all-gather [FP8_ENABLE_FSDP_FLOAT8_ALL_GATHER]
+                        Enable FP8 optimizations for FSDP2 all-gather operations. (default: False)
+  --image_max_pixels IMAGE_MAX_PIXELS, --image-max-pixels IMAGE_MAX_PIXELS
+                        The maximum number of pixels of image inputs. (default: 589824)
+  --image_min_pixels IMAGE_MIN_PIXELS, --image-min-pixels IMAGE_MIN_PIXELS
+                        The minimum number of pixels of image inputs. (default: 1024)
+  --image_do_pan_and_scan [IMAGE_DO_PAN_AND_SCAN], --image-do-pan-and-scan [IMAGE_DO_PAN_AND_SCAN]
+                        Use pan and scan to process image for gemma3. (default: False)
+  --crop_to_patches [CROP_TO_PATCHES], --crop-to-patches [CROP_TO_PATCHES]
+                        Whether to crop the image to patches for internvl. (default: False)
+  --video_max_pixels VIDEO_MAX_PIXELS, --video-max-pixels VIDEO_MAX_PIXELS
+                        The maximum number of pixels of video inputs. (default: 65536)
+  --video_min_pixels VIDEO_MIN_PIXELS, --video-min-pixels VIDEO_MIN_PIXELS
+                        The minimum number of pixels of video inputs. (default: 256)
+  --video_fps VIDEO_FPS, --video-fps VIDEO_FPS
+                        The frames to sample per second for video inputs. (default: 2.0)
+  --video_maxlen VIDEO_MAXLEN, --video-maxlen VIDEO_MAXLEN
+                        The maximum number of sampled frames for video inputs. (default: 128)
+  --use_audio_in_video [USE_AUDIO_IN_VIDEO], --use-audio-in-video [USE_AUDIO_IN_VIDEO]
+                        Whether or not to use audio in video inputs. (default: False)
+  --audio_sampling_rate AUDIO_SAMPLING_RATE, --audio-sampling-rate AUDIO_SAMPLING_RATE
+                        The sampling rate of audio inputs. (default: 16000)
+  --export_dir EXPORT_DIR, --export-dir EXPORT_DIR
+                        Path to the directory to save the exported model. (default: None)
+  --export_size EXPORT_SIZE, --export-size EXPORT_SIZE
+                        The file shard size (in GB) of the exported model. (default: 5)
+  --export_device {cpu,auto}, --export-device {cpu,auto}
+                        The device used in model export, use `auto` to accelerate exporting. (default: cpu)
+  --export_quantization_bit EXPORT_QUANTIZATION_BIT, --export-quantization-bit EXPORT_QUANTIZATION_BIT
+                        The number of bits to quantize the exported model. (default: None)
+  --export_quantization_dataset EXPORT_QUANTIZATION_DATASET, --export-quantization-dataset EXPORT_QUANTIZATION_DATASET
+                        Path to the dataset or dataset name to use in quantizing the exported model. (default: None)
+  --export_quantization_nsamples EXPORT_QUANTIZATION_NSAMPLES, --export-quantization-nsamples EXPORT_QUANTIZATION_NSAMPLES
+                        The number of samples used for quantization. (default: 128)
+  --export_quantization_maxlen EXPORT_QUANTIZATION_MAXLEN, --export-quantization-maxlen EXPORT_QUANTIZATION_MAXLEN
+                        The maximum length of the model inputs used for quantization. (default: 1024)
+  --export_legacy_format [EXPORT_LEGACY_FORMAT], --export-legacy-format [EXPORT_LEGACY_FORMAT]
+                        Whether or not to save the `.bin` files instead of `.safetensors`. (default: False)
+  --export_hub_model_id EXPORT_HUB_MODEL_ID, --export-hub-model-id EXPORT_HUB_MODEL_ID
+                        The name of the repository if push the model to the Hugging Face hub. (default: None)
+  --vllm_maxlen VLLM_MAXLEN, --vllm-maxlen VLLM_MAXLEN
+                        Maximum sequence (prompt + response) length of the vLLM engine. (default: 4096)
+  --vllm_gpu_util VLLM_GPU_UTIL, --vllm-gpu-util VLLM_GPU_UTIL
+                        The fraction of GPU memory in (0,1) to be used for the vLLM engine. (default: 0.7)
+  --vllm_enforce_eager [VLLM_ENFORCE_EAGER], --vllm-enforce-eager [VLLM_ENFORCE_EAGER]
+                        Whether or not to disable CUDA graph in the vLLM engine. (default: False)
+  --vllm_max_lora_rank VLLM_MAX_LORA_RANK, --vllm-max-lora-rank VLLM_MAX_LORA_RANK
+                        Maximum rank of all LoRAs in the vLLM engine. (default: 32)
+  --vllm_config VLLM_CONFIG, --vllm-config VLLM_CONFIG
+                        Config to initialize the vllm engine. Please use JSON strings. (default: None)
+  --sglang_maxlen SGLANG_MAXLEN, --sglang-maxlen SGLANG_MAXLEN
+                        Maximum sequence (prompt + response) length of the SGLang engine. (default: 4096)
+  --sglang_mem_fraction SGLANG_MEM_FRACTION, --sglang-mem-fraction SGLANG_MEM_FRACTION
+                        The memory fraction (0-1) to be used for the SGLang engine. (default: 0.7)
+  --sglang_tp_size SGLANG_TP_SIZE, --sglang-tp-size SGLANG_TP_SIZE
+                        Tensor parallel size for the SGLang engine. (default: -1)
+  --sglang_config SGLANG_CONFIG, --sglang-config SGLANG_CONFIG
+                        Config to initialize the SGLang engine. Please use JSON strings. (default: None)
+  --sglang_lora_backend {triton,flashinfer}, --sglang-lora-backend {triton,flashinfer}
+                        The backend of running GEMM kernels for Lora modules. Recommend using the Triton LoRA backend for better performance and stability. (default: triton)
+  --template TEMPLATE   Which template to use for constructing prompts in training and inference. (default: None)
+  --dataset DATASET     The name of dataset(s) to use for training. Use commas to separate multiple datasets. (default: None)
+  --eval_dataset EVAL_DATASET, --eval-dataset EVAL_DATASET
+                        The name of dataset(s) to use for evaluation. Use commas to separate multiple datasets. (default: None)
+  --dataset_dir DATASET_DIR, --dataset-dir DATASET_DIR
+                        Path to the folder containing the datasets. (default: data)
+  --media_dir MEDIA_DIR, --media-dir MEDIA_DIR
+                        Path to the folder containing the images, videos or audios. Defaults to `dataset_dir`. (default: None)
+  --cutoff_len CUTOFF_LEN, --cutoff-len CUTOFF_LEN
+                        The cutoff length of the tokenized inputs in the dataset. (default: 2048)
+  --train_on_prompt [TRAIN_ON_PROMPT], --train-on-prompt [TRAIN_ON_PROMPT]
+                        Whether or not to disable the mask on the prompt. (default: False)
+  --mask_history [MASK_HISTORY], --mask-history [MASK_HISTORY]
+                        Whether or not to mask the history and train on the last turn only. (default: False)
+  --streaming [STREAMING]
+                        Enable dataset streaming. (default: False)
+  --buffer_size BUFFER_SIZE, --buffer-size BUFFER_SIZE
+                        Size of the buffer to randomly sample examples from in dataset streaming. (default: 16384)
+  --mix_strategy {concat,interleave_under,interleave_over}, --mix-strategy {concat,interleave_under,interleave_over}
+                        Strategy to use in dataset mixing (concat/interleave) (undersampling/oversampling). (default: concat)
+  --interleave_probs INTERLEAVE_PROBS, --interleave-probs INTERLEAVE_PROBS
+                        Probabilities to sample data from datasets. Use commas to separate multiple datasets. (default: None)
+  --overwrite_cache [OVERWRITE_CACHE], --overwrite-cache [OVERWRITE_CACHE]
+                        Overwrite the cached training and evaluation sets. (default: False)
+  --preprocessing_batch_size PREPROCESSING_BATCH_SIZE, --preprocessing-batch-size PREPROCESSING_BATCH_SIZE
+                        The number of examples in one group in pre-processing. (default: 1000)
+  --image_sample_stride IMAGE_SAMPLE_STRIDE, --image-sample-stride IMAGE_SAMPLE_STRIDE
+                        Keep every nth image per sample during preprocessing to reduce multimodal memory usage. (default: 1)
+  --preprocessing_num_workers PREPROCESSING_NUM_WORKERS, --preprocessing-num-workers PREPROCESSING_NUM_WORKERS
+                        The number of processes to use for the pre-processing. (default: None)
+  --max_samples MAX_SAMPLES, --max-samples MAX_SAMPLES
+                        For debugging purposes, truncate the number of examples for each dataset. (default: None)
+  --eval_num_beams EVAL_NUM_BEAMS, --eval-num-beams EVAL_NUM_BEAMS
+                        Number of beams to use for evaluation. This argument will be passed to `model.generate` (default: None)
+  --ignore_pad_token_for_loss [IGNORE_PAD_TOKEN_FOR_LOSS], --ignore-pad-token-for-loss [IGNORE_PAD_TOKEN_FOR_LOSS]
+                        Whether or not to ignore the tokens corresponding to the pad label in loss computation. (default: True)
+  --no_ignore_pad_token_for_loss, --no-ignore-pad-token-for-loss
+                        Whether or not to ignore the tokens corresponding to the pad label in loss computation. (default: False)
+  --val_size VAL_SIZE, --val-size VAL_SIZE
+                        Size of the validation set, should be an integer or a float in range `[0,1)`. (default: 0.0)
+  --eval_on_each_dataset [EVAL_ON_EACH_DATASET], --eval-on-each-dataset [EVAL_ON_EACH_DATASET]
+                        Whether or not to evaluate on each dataset separately. (default: False)
+  --packing PACKING     Enable sequences packing in training. Will automatically enable in pre-training. (default: None)
+  --neat_packing [NEAT_PACKING], --neat-packing [NEAT_PACKING]
+                        Enable sequence packing without cross-attention. (default: False)
+  --tool_format TOOL_FORMAT, --tool-format TOOL_FORMAT
+                        Tool format to use for constructing function calling examples. (default: None)
+  --default_system DEFAULT_SYSTEM, --default-system DEFAULT_SYSTEM
+                        Override the default system message in the template. (default: None)
+  --enable_thinking [ENABLE_THINKING], --enable-thinking [ENABLE_THINKING]
+                        Whether or not to enable thinking mode for reasoning models. (default: True)
+  --no_enable_thinking, --no-enable-thinking
+                        Whether or not to enable thinking mode for reasoning models. (default: False)
+  --tokenized_path TOKENIZED_PATH, --tokenized-path TOKENIZED_PATH
+                        Path to save or load the tokenized datasets. If tokenized_path not exists, it will save the tokenized datasets. If tokenized_path exists, it will load the tokenized datasets. (default: None)
+  --data_shared_file_system [DATA_SHARED_FILE_SYSTEM], --data-shared-file-system [DATA_SHARED_FILE_SYSTEM]
+                        Whether or not to use a shared file system for the datasets. (default: False)
+  --output_dir OUTPUT_DIR, --output-dir OUTPUT_DIR
+                        The output directory where the model predictions and checkpoints will be written. (default: None)
+  --per_device_train_batch_size PER_DEVICE_TRAIN_BATCH_SIZE, --per-device-train-batch-size PER_DEVICE_TRAIN_BATCH_SIZE
+                        The batch size per device for training. (default: 8)
+  --num_train_epochs NUM_TRAIN_EPOCHS, --num-train-epochs NUM_TRAIN_EPOCHS
+                        Total number of training epochs to perform. (default: 3.0)
+  --max_steps MAX_STEPS, --max-steps MAX_STEPS
+                        Overrides `num_train_epochs`. If set to a positive number, the total number of training steps to perform. (default: -1)
+  --learning_rate LEARNING_RATE, --learning-rate LEARNING_RATE
+                        The initial learning rate for the optimizer. (default: 5e-05)
+  --lr_scheduler_type {linear,cosine,cosine_with_restarts,polynomial,constant,constant_with_warmup,inverse_sqrt,reduce_lr_on_plateau,cosine_with_min_lr,cosine_warmup_with_min_lr,warmup_stable_decay,greedy}, --lr-scheduler-type {linear,cosine,cosine_with_restarts,polynomial,constant,constant_with_warmup,inverse_sqrt,reduce_lr_on_plateau,cosine_with_min_lr,cosine_warmup_with_min_lr,warmup_stable_decay,greedy}
+                        The learning rate scheduler type to use. See `SchedulerType` for all possible values. (default: linear)
+  --lr_scheduler_kwargs LR_SCHEDULER_KWARGS, --lr-scheduler-kwargs LR_SCHEDULER_KWARGS
+                        The extra arguments for the lr_scheduler. See the documentation of each scheduler for possible values. (default: None)
+  --warmup_steps WARMUP_STEPS, --warmup-steps WARMUP_STEPS
+                        Number of steps for a linear warmup from 0 to `learning_rate`. Can be an integer (exact steps) or a float in [0, 1) (ratio of total steps). (default: 0)
+  --optim {adamw_torch,adamw_torch_fused,adamw_torch_xla,adamw_torch_npu_fused,adamw_apex_fused,adafactor,adamw_anyprecision,adamw_torch_4bit,adamw_torch_8bit,ademamix,sgd,adagrad,adamw_bnb_8bit,adamw_8bit,ademamix_8bit,lion_8bit,lion_32bit,paged_adamw_32bit,paged_adamw_8bit,paged_ademamix_32bit,paged_ademamix_8bit,paged_lion_32bit,paged_lion_8bit,rmsprop,rmsprop_bnb,rmsprop_bnb_8bit,rmsprop_bnb_32bit,galore_adamw,galore_adamw_8bit,galore_adafactor,galore_adamw_layerwise,galore_adamw_8bit_layerwise,galore_adafactor_layerwise,lomo,adalomo,grokadamw,schedule_free_radam,schedule_free_adamw,schedule_free_sgd,apollo_adamw,apollo_adamw_layerwise,stable_adamw}
+                        The optimizer to use. See `OptimizerNames` for the complete list. (default: adamw_torch_fused)
+  --optim_args OPTIM_ARGS, --optim-args OPTIM_ARGS
+                        Optional arguments supplied to optimizers such as AnyPrecisionAdamW, AdEMAMix, and GaLore. (default: None)
+  --weight_decay WEIGHT_DECAY, --weight-decay WEIGHT_DECAY
+                        Weight decay coefficient applied by the optimizer. Automatically excluded from bias and LayerNorm parameters. (default: 0.0)
+  --adam_beta1 ADAM_BETA1, --adam-beta1 ADAM_BETA1
+                        The exponential decay rate for the first moment estimates (momentum) in Adam-based optimizers. (default: 0.9)
+  --adam_beta2 ADAM_BETA2, --adam-beta2 ADAM_BETA2
+                        The exponential decay rate for the second moment estimates (variance) in Adam-based optimizers. (default: 0.999)
+  --adam_epsilon ADAM_EPSILON, --adam-epsilon ADAM_EPSILON
+                        Epsilon value for numerical stability in Adam-based optimizers. (default: 1e-08)
+  --optim_target_modules OPTIM_TARGET_MODULES, --optim-target-modules OPTIM_TARGET_MODULES
+                        The target modules to optimize. Currently used for the GaLore and APOLLO algorithms. (default: None)
+  --gradient_accumulation_steps GRADIENT_ACCUMULATION_STEPS, --gradient-accumulation-steps GRADIENT_ACCUMULATION_STEPS
+                        Number of update steps to accumulate gradients before performing a backward/update pass. Effective batch size = per_device_train_batch_size * num_devices * gradient_accumulation_steps.
+                        (default: 1)
+  --average_tokens_across_devices [AVERAGE_TOKENS_ACROSS_DEVICES], --average-tokens-across-devices [AVERAGE_TOKENS_ACROSS_DEVICES]
+                        Whether or not to average tokens across devices. If enabled, will use all_reduce to synchronize num_tokens_in_batch for precise loss calculation. Reference:
+                        https://github.com/huggingface/transformers/issues/34242 (default: True)
+  --no_average_tokens_across_devices, --no-average-tokens-across-devices
+                        Whether or not to average tokens across devices. If enabled, will use all_reduce to synchronize num_tokens_in_batch for precise loss calculation. Reference:
+                        https://github.com/huggingface/transformers/issues/34242 (default: False)
+  --max_grad_norm MAX_GRAD_NORM, --max-grad-norm MAX_GRAD_NORM
+                        Maximum gradient norm for gradient clipping. Set to 0 to disable. (default: 1.0)
+  --label_smoothing_factor LABEL_SMOOTHING_FACTOR, --label-smoothing-factor LABEL_SMOOTHING_FACTOR
+                        Label smoothing factor to prevent overconfidence. Zero means no smoothing. (default: 0.0)
+  --bf16 [BF16]         Enable bfloat16 (BF16) mixed precision training. Generally preferred over FP16 due to better numerical stability. (default: False)
+  --fp16 [FP16]         Enable float16 (FP16) mixed precision training. Consider using BF16 instead if your hardware supports it. (default: False)
+  --bf16_full_eval [BF16_FULL_EVAL], --bf16-full-eval [BF16_FULL_EVAL]
+                        Use full BF16 precision for evaluation (not just mixed precision). Faster and saves memory. (default: False)
+  --fp16_full_eval [FP16_FULL_EVAL], --fp16-full-eval [FP16_FULL_EVAL]
+                        Use full FP16 precision for evaluation (not just mixed precision). Faster and saves memory. (default: False)
+  --tf32 TF32           Enable TF32 mode on Ampere and newer GPUs. Provides up to 8x speedup with negligible accuracy loss. (default: None)
+  --gradient_checkpointing [GRADIENT_CHECKPOINTING], --gradient-checkpointing [GRADIENT_CHECKPOINTING]
+                        Enable gradient checkpointing to trade compute for memory. Reduces memory at the cost of ~20% slower training. (default: False)
+  --gradient_checkpointing_kwargs GRADIENT_CHECKPOINTING_KWARGS, --gradient-checkpointing-kwargs GRADIENT_CHECKPOINTING_KWARGS
+                        Keyword arguments passed to `gradient_checkpointing_enable()`. (default: None)
+  --torch_compile [TORCH_COMPILE], --torch-compile [TORCH_COMPILE]
+                        Compile the model using `torch.compile()` for faster training. (default: False)
+  --torch_compile_backend TORCH_COMPILE_BACKEND, --torch-compile-backend TORCH_COMPILE_BACKEND
+                        Backend for `torch.compile()`. If set, automatically enables `torch_compile`. (default: None)
+  --torch_compile_mode TORCH_COMPILE_MODE, --torch-compile-mode TORCH_COMPILE_MODE
+                        Compilation mode for `torch.compile()`. If set, automatically enables `torch_compile`. (default: None)
+  --use_liger_kernel [USE_LIGER_KERNEL], --use-liger-kernel [USE_LIGER_KERNEL]
+                        Enable Liger Kernel optimizations. Increases throughput by ~20% and reduces memory by ~60%. (default: False)
+  --liger_kernel_config LIGER_KERNEL_CONFIG, --liger-kernel-config LIGER_KERNEL_CONFIG
+                        Configuration for Liger Kernel. Passed as kwargs to `_apply_liger_kernel_to_instance()`. If None, uses default configuration. (default: None)
+  --use_cache [USE_CACHE], --use-cache [USE_CACHE]
+                        Whether or not to use cache for the model For training, this is usually not needed apart from some PEFT methods that uses `past_key_values`. (default: False)
+  --neftune_noise_alpha NEFTUNE_NOISE_ALPHA, --neftune-noise-alpha NEFTUNE_NOISE_ALPHA
+                        If not None, activates NEFTune noise embeddings. Can drastically improve performance for instruction fine-tuning. Typical range: [5.0, 15.0]. (default: None)
+  --torch_empty_cache_steps TORCH_EMPTY_CACHE_STEPS, --torch-empty-cache-steps TORCH_EMPTY_CACHE_STEPS
+                        Number of steps to wait before calling `torch.<device>.empty_cache()`. Helps avoid CUDA OOM at a cost of ~10% slower performance. If None, cache will not be emptied. (default: None)
+  --auto_find_batch_size [AUTO_FIND_BATCH_SIZE], --auto-find-batch-size [AUTO_FIND_BATCH_SIZE]
+                        Whether to find a batch size that will fit into memory automatically through exponential decay, avoiding CUDA Out-of-Memory errors. (default: False)
+  --logging_strategy {no,steps,epoch}, --logging-strategy {no,steps,epoch}
+                        The logging strategy to adopt during training. Options: 'no', 'epoch', 'steps'. (default: steps)
+  --logging_steps LOGGING_STEPS, --logging-steps LOGGING_STEPS
+                        Log every X updates steps. Should be an integer or a float in range `[0,1)`. If smaller than 1, will be interpreted as ratio of total training steps. (default: 500)
+  --logging_first_step [LOGGING_FIRST_STEP], --logging-first-step [LOGGING_FIRST_STEP]
+                        Whether to log the first `global_step` or not. (default: False)
+  --log_on_each_node [LOG_ON_EACH_NODE], --log-on-each-node [LOG_ON_EACH_NODE]
+                        When doing a multinode distributed training, whether to log once per node or just once on the main node. (default: True)
+  --no_log_on_each_node, --no-log-on-each-node
+                        When doing a multinode distributed training, whether to log once per node or just once on the main node. (default: False)
+  --logging_nan_inf_filter [LOGGING_NAN_INF_FILTER], --logging-nan-inf-filter [LOGGING_NAN_INF_FILTER]
+                        Filter out NaN and Inf losses when logging. Does not affect gradient computation, only logging. (default: True)
+  --no_logging_nan_inf_filter, --no-logging-nan-inf-filter
+                        Filter out NaN and Inf losses when logging. Does not affect gradient computation, only logging. (default: False)
+  --include_num_input_tokens_seen [INCLUDE_NUM_INPUT_TOKENS_SEEN], --include-num-input-tokens-seen [INCLUDE_NUM_INPUT_TOKENS_SEEN]
+                        Whether to track the number of input tokens seen. Must be one of [`all`, `non_padding`, `no`] or a boolean value which map to `all` or `no` (default: no)
+  --log_level {detail,debug,info,warning,error,critical,passive}, --log-level {detail,debug,info,warning,error,critical,passive}
+                        Logging level for the main process. Options: 'debug', 'info', 'warning', 'error', 'critical', 'passive'. (default: passive)
+  --log_level_replica {detail,debug,info,warning,error,critical,passive}, --log-level-replica {detail,debug,info,warning,error,critical,passive}
+                        Logging level for replica processes in distributed training. Same options as `log_level`. (default: warning)
+  --disable_tqdm DISABLE_TQDM, --disable-tqdm DISABLE_TQDM
+                        Disable tqdm progress bars. Defaults to True if log_level is warning or lower. (default: None)
+  --report_to REPORT_TO, --report-to REPORT_TO
+                        The list of integrations to report the results and logs to. Use 'all' for all installed integrations, 'none' for no integrations. (default: none)
+  --run_name RUN_NAME, --run-name RUN_NAME
+                        An optional descriptor for the run. Notably used for trackio, wandb, mlflow comet and swanlab logging. (default: None)
+  --project PROJECT     The name of the project to use for logging. Currently, only used by Trackio. (default: huggingface)
+  --trackio_space_id TRACKIO_SPACE_ID, --trackio-space-id TRACKIO_SPACE_ID
+                        Hugging Face Space id for live Gradio-based Trackio logging (read/write Bucket access). Use 'username/reponame', 'orgname/reponame', or 'reponame' (current user's namespace). None: log only
+                        locally, no Space. Prefer trackio_static_space_id for stable post-training dashboard links. Public unless hub_private_repo=True or org default. (default: None)
+  --trackio_bucket_id TRACKIO_BUCKET_ID, --trackio-bucket-id TRACKIO_BUCKET_ID
+                        Optional HF Bucket id when using a Trackio Space; if unset, Trackio picks a default. (default: None)
+  --trackio_static_space_id TRACKIO_STATIC_SPACE_ID, --trackio-static-space-id TRACKIO_STATIC_SPACE_ID
+                        Static read-only Trackio Space over the Bucket (stable model-card links). False: no static sync on Hub push and no freeze after training. None/str: allow static Space; for local-only logging,
+                        Hub push runs sync(static); after training, freeze runs only if trackio_space_id was set (Gradio Space). str sets explicit static Space id. Public unless hub_private_repo=True or org default.
+                        (default: None)
+  --eval_strategy {no,steps,epoch}, --eval-strategy {no,steps,epoch}
+                        When to run evaluation. Options: 'no', 'steps', 'epoch'. (default: no)
+  --eval_steps EVAL_STEPS, --eval-steps EVAL_STEPS
+                        Number of update steps between evaluations if `eval_strategy='steps'`. Defaults to `logging_steps` if not set. Should be an integer or a float in range `[0,1)`. If smaller than 1, will be
+                        interpreted as ratio of total training steps. (default: None)
+  --eval_delay EVAL_DELAY, --eval-delay EVAL_DELAY
+                        Number of epochs or steps to wait for before the first evaluation can be performed, depending on the eval_strategy. (default: 0)
+  --per_device_eval_batch_size PER_DEVICE_EVAL_BATCH_SIZE, --per-device-eval-batch-size PER_DEVICE_EVAL_BATCH_SIZE
+                        The batch size per device (GPU/TPU core/CPU) for evaluation. (default: 8)
+  --prediction_loss_only [PREDICTION_LOSS_ONLY], --prediction-loss-only [PREDICTION_LOSS_ONLY]
+                        When performing evaluation and generating predictions, only returns the loss. (default: False)
+  --eval_on_start [EVAL_ON_START], --eval-on-start [EVAL_ON_START]
+                        Whether to run through the entire `evaluation` step at the very beginning of training as a sanity check. (default: False)
+  --eval_do_concat_batches [EVAL_DO_CONCAT_BATCHES], --eval-do-concat-batches [EVAL_DO_CONCAT_BATCHES]
+                        Whether to recursively concat inputs/losses/labels/predictions across batches. If `False`, will instead store them as lists, with each batch kept separate. (default: True)
+  --no_eval_do_concat_batches, --no-eval-do-concat-batches
+                        Whether to recursively concat inputs/losses/labels/predictions across batches. If `False`, will instead store them as lists, with each batch kept separate. (default: False)
+  --eval_use_gather_object [EVAL_USE_GATHER_OBJECT], --eval-use-gather-object [EVAL_USE_GATHER_OBJECT]
+                        Whether to run recursively gather object in a nested list/tuple/dictionary of objects from all devices. (default: False)
+  --eval_accumulation_steps EVAL_ACCUMULATION_STEPS, --eval-accumulation-steps EVAL_ACCUMULATION_STEPS
+                        Number of predictions steps to accumulate the output tensors for, before moving the results to the CPU. If unset, predictions are accumulated on the accelerator before being moved to the CPU.
+                        (default: None)
+  --include_for_metrics INCLUDE_FOR_METRICS [INCLUDE_FOR_METRICS ...], --include-for-metrics INCLUDE_FOR_METRICS [INCLUDE_FOR_METRICS ...]
+                        Include additional data in the `compute_metrics` function. Options: 'inputs', 'loss'. (default: [])
+  --batch_eval_metrics [BATCH_EVAL_METRICS], --batch-eval-metrics [BATCH_EVAL_METRICS]
+                        Break eval metrics calculation into batches to save memory. (default: False)
+  --save_only_model [SAVE_ONLY_MODEL], --save-only-model [SAVE_ONLY_MODEL]
+                        Save only model weights, not optimizer/scheduler/RNG state. Prevents resuming training from checkpoint. (default: False)
+  --save_strategy {no,steps,epoch,best}, --save-strategy {no,steps,epoch,best}
+                        The checkpoint save strategy to adopt during training. Options: 'no', 'epoch', 'steps', 'best'. (default: steps)
+  --save_steps SAVE_STEPS, --save-steps SAVE_STEPS
+                        Save checkpoint every X updates steps. Should be an integer or a float in range `[0,1)`. If smaller than 1, will be interpreted as ratio of total training steps. (default: 500)
+  --save_on_each_node [SAVE_ON_EACH_NODE], --save-on-each-node [SAVE_ON_EACH_NODE]
+                        When doing multi-node distributed training, whether to save models and checkpoints on each node, or only on the main one (default: False)
+  --save_total_limit SAVE_TOTAL_LIMIT, --save-total-limit SAVE_TOTAL_LIMIT
+                        Maximum number of checkpoints to keep. Deletes older checkpoints in `output_dir`. The best checkpoint is always retained when `load_best_model_at_end=True`. (default: None)
+  --enable_jit_checkpoint [ENABLE_JIT_CHECKPOINT], --enable-jit-checkpoint [ENABLE_JIT_CHECKPOINT]
+                        Enable JIT checkpointing on SIGTERM signal for graceful termination on preemptible workloads. Configure your orchestrator's graceful shutdown period accordingly. (default: False)
+  --push_to_hub [PUSH_TO_HUB], --push-to-hub [PUSH_TO_HUB]
+                        Whether or not to push the model to the Hub every time the model is saved. (default: False)
+  --hub_token HUB_TOKEN, --hub-token HUB_TOKEN
+                        The token to use to push the model to the Hub. Defaults to the token from `hf auth login`. (default: None)
+  --hub_private_repo HUB_PRIVATE_REPO, --hub-private-repo HUB_PRIVATE_REPO
+                        Whether to make the repo private. If `None` (default), the repo will be public unless the organization's default is private. This value is ignored if the repo already exists. If reporting to
+                        Trackio Spaces created or synced (including on Hub push when `trackio_space_id` is None) use the same logic for whether the Space is private. (default: None)
+  --hub_model_id HUB_MODEL_ID, --hub-model-id HUB_MODEL_ID
+                        The name of the repository to keep in sync with the local `output_dir`. (default: None)
+  --hub_strategy {end,every_save,checkpoint,all_checkpoints}, --hub-strategy {end,every_save,checkpoint,all_checkpoints}
+                        Defines what and when to push to Hub. Options: 'end', 'every_save', 'checkpoint', 'all_checkpoints'. (default: every_save)
+  --hub_always_push [HUB_ALWAYS_PUSH], --hub-always-push [HUB_ALWAYS_PUSH]
+                        Unless `True`, the Trainer will skip pushes if the previous one wasn't finished yet. (default: False)
+  --hub_revision HUB_REVISION, --hub-revision HUB_REVISION
+                        The revision to use when pushing to the Hub. Can be a branch name, a tag, or a commit hash. (default: None)
+  --load_best_model_at_end [LOAD_BEST_MODEL_AT_END], --load-best-model-at-end [LOAD_BEST_MODEL_AT_END]
+                        Load the best checkpoint at the end of training. Requires `eval_strategy` to be set. (default: False)
+  --metric_for_best_model METRIC_FOR_BEST_MODEL, --metric-for-best-model METRIC_FOR_BEST_MODEL
+                        Metric to use for comparing models when `load_best_model_at_end=True`. Defaults to 'loss'. (default: None)
+  --greater_is_better GREATER_IS_BETTER, --greater-is-better GREATER_IS_BETTER
+                        Whether higher metric values are better. Defaults based on `metric_for_best_model`. (default: None)
+  --ignore_data_skip [IGNORE_DATA_SKIP], --ignore-data-skip [IGNORE_DATA_SKIP]
+                        When resuming training, skip fast-forwarding through the dataset to reach the previous state. If True, training starts from the beginning of the dataset. (default: False)
+  --restore_callback_states_from_checkpoint [RESTORE_CALLBACK_STATES_FROM_CHECKPOINT], --restore-callback-states-from-checkpoint [RESTORE_CALLBACK_STATES_FROM_CHECKPOINT]
+                        Whether to restore the callback states from the checkpoint. If `True`, will override callbacks passed to the `Trainer` if they exist in the checkpoint. (default: False)
+  --full_determinism [FULL_DETERMINISM], --full-determinism [FULL_DETERMINISM]
+                        Whether to call enable_full_determinism instead of set_seed for reproducibility in distributed training. Important: this will negatively impact the performance, so only use it for debugging.
+                        (default: False)
+  --seed SEED           Random seed that will be set at the beginning of training. (default: 42)
+  --data_seed DATA_SEED, --data-seed DATA_SEED
+                        Random seed to be used with data samplers. If not set, uses the same seed as `seed`. (default: None)
+  --use_cpu [USE_CPU], --use-cpu [USE_CPU]
+                        Whether or not to use cpu. If set to False, we will use the available torch device/backend. (default: False)
+  --accelerator_config ACCELERATOR_CONFIG, --accelerator-config ACCELERATOR_CONFIG
+                        Configuration for the internal Accelerate integration. Can be a path to a JSON config file or a dict. (default: None)
+  --parallelism_config PARALLELISM_CONFIG, --parallelism-config PARALLELISM_CONFIG
+                        Parallelism configuration for the training run. Requires Accelerate `1.10.1`. (default: None)
+  --dataloader_drop_last [DATALOADER_DROP_LAST], --dataloader-drop-last [DATALOADER_DROP_LAST]
+                        Drop the last incomplete batch if it is not divisible by the batch size. (default: False)
+  --dataloader_num_workers DATALOADER_NUM_WORKERS, --dataloader-num-workers DATALOADER_NUM_WORKERS
+                        Number of subprocesses to use for data loading (PyTorch only). 0 means that the data will be loaded in the main process. (default: 0)
+  --dataloader_pin_memory [DATALOADER_PIN_MEMORY], --dataloader-pin-memory [DATALOADER_PIN_MEMORY]
+                        Whether or not to pin memory for DataLoader. (default: True)
+  --no_dataloader_pin_memory, --no-dataloader-pin-memory
+                        Whether or not to pin memory for DataLoader. (default: False)
+  --dataloader_persistent_workers [DATALOADER_PERSISTENT_WORKERS], --dataloader-persistent-workers [DATALOADER_PERSISTENT_WORKERS]
+                        If True, the data loader will not shut down the worker processes after a dataset has been consumed once. This allows to maintain the workers Dataset instances alive. Can potentially speed up
+                        training, but will increase RAM usage. (default: False)
+  --dataloader_prefetch_factor DATALOADER_PREFETCH_FACTOR, --dataloader-prefetch-factor DATALOADER_PREFETCH_FACTOR
+                        Number of batches loaded in advance by each worker. 2 means there will be a total of 2 * num_workers batches prefetched across all workers. (default: None)
+  --remove_unused_columns [REMOVE_UNUSED_COLUMNS], --remove-unused-columns [REMOVE_UNUSED_COLUMNS]
+                        Whether or not to automatically remove the columns unused by the model forward method. (default: True)
+  --no_remove_unused_columns, --no-remove-unused-columns
+                        Whether or not to automatically remove the columns unused by the model forward method. (default: False)
+  --label_names LABEL_NAMES [LABEL_NAMES ...], --label-names LABEL_NAMES [LABEL_NAMES ...]
+                        The list of keys in your dictionary of inputs that correspond to the labels. (default: None)
+  --train_sampling_strategy {random,sequential,group_by_length}, --train-sampling-strategy {random,sequential,group_by_length}
+                        Sampler for training: 'random' (default), 'sequential', or 'group_by_length'. (default: random)
+  --length_column_name LENGTH_COLUMN_NAME, --length-column-name LENGTH_COLUMN_NAME
+                        Column name for precomputed lengths. Ignored unless `train_sampling_strategy` is 'group_by_length'. (default: length)
+  --ddp_find_unused_parameters DDP_FIND_UNUSED_PARAMETERS, --ddp-find-unused-parameters DDP_FIND_UNUSED_PARAMETERS
+                        When using distributed training, the value of the flag `find_unused_parameters` passed to `DistributedDataParallel`. (default: None)
+  --ddp_bucket_cap_mb DDP_BUCKET_CAP_MB, --ddp-bucket-cap-mb DDP_BUCKET_CAP_MB
+                        When using distributed training, the value of the flag `bucket_cap_mb` passed to `DistributedDataParallel`. (default: None)
+  --ddp_broadcast_buffers DDP_BROADCAST_BUFFERS, --ddp-broadcast-buffers DDP_BROADCAST_BUFFERS
+                        When using distributed training, the value of the flag `broadcast_buffers` passed to `DistributedDataParallel`. (default: None)
+  --ddp_static_graph DDP_STATIC_GRAPH, --ddp-static-graph DDP_STATIC_GRAPH
+                        When using distributed training, the value of the flag `static_graph` passed to `DistributedDataParallel`. (default: None)
+  --ddp_backend {nccl,gloo,mpi,xccl,hccl,cncl,mccl}, --ddp-backend {nccl,gloo,mpi,xccl,hccl,cncl,mccl}
+                        The backend to use for distributed training. Must be one of 'nccl', 'mpi', 'xccl', 'gloo', 'hccl'. (default: None)
+  --ddp_timeout DDP_TIMEOUT, --ddp-timeout DDP_TIMEOUT
+                        The timeout for `torch.distributed.init_process_group` calls (in seconds). (default: 1800)
+  --fsdp FSDP           Enable PyTorch FSDP for distributed training. Options: 'full_shard', 'shard_grad_op', 'hybrid_shard', 'hybrid_shard_zero2', 'offload', 'auto_wrap'. (default: None)
+  --fsdp_config FSDP_CONFIG, --fsdp-config FSDP_CONFIG
+                        Config to be used with FSDP (Pytorch Fully Sharded Data Parallel). The value is either a fsdp json config file (e.g., `fsdp_config.json`) or an already loaded json file as `dict`. (default:
+                        None)
+  --deepspeed DEEPSPEED
+                        Enable DeepSpeed integration. Value is a path to a JSON config file or a dict. (default: None)
+  --debug DEBUG [DEBUG ...]
+                        Enable one or more debug features. Options: 'underflow_overflow' (detect overflow in model I/O), 'tpu_metrics_debug' (print TPU metrics). (default: None)
+  --skip_memory_metrics [SKIP_MEMORY_METRICS], --skip-memory-metrics [SKIP_MEMORY_METRICS]
+                        Whether to skip adding memory profiler reports to metrics. Skipped by default because it slows down training. (default: True)
+  --no_skip_memory_metrics, --no-skip-memory-metrics
+                        Whether to skip adding memory profiler reports to metrics. Skipped by default because it slows down training. (default: False)
+  --do_train [DO_TRAIN], --do-train [DO_TRAIN]
+                        Whether to run training. Not directly used by Trainer; intended for training/evaluation scripts. (default: False)
+  --do_eval [DO_EVAL], --do-eval [DO_EVAL]
+                        Whether to run evaluation. Not directly used by Trainer; intended for training/evaluation scripts. (default: False)
+  --do_predict [DO_PREDICT], --do-predict [DO_PREDICT]
+                        Whether to run predictions on the test set. Not directly used by Trainer; intended for training/evaluation scripts. (default: False)
+  --resume_from_checkpoint RESUME_FROM_CHECKPOINT, --resume-from-checkpoint RESUME_FROM_CHECKPOINT
+                        Path to a folder with a valid checkpoint for your model. Not directly used by Trainer; intended for training/evaluation scripts. (default: None)
+  --warmup_ratio WARMUP_RATIO, --warmup-ratio WARMUP_RATIO
+                        This argument is deprecated and will be removed in v5.2. Use `warmup_steps` instead as it also works with float values. (default: None)
+  --logging_dir LOGGING_DIR, --logging-dir LOGGING_DIR
+                        Deprecated and will be removed in v5.2. Set env var `TENSORBOARD_LOGGING_DIR` instead. TensorBoard log directory. (default: None)
+  --local_rank LOCAL_RANK, --local-rank LOCAL_RANK
+                        When using torch.distributed.launch (Deprecated), it will pass `local_rank` in the script, so we need this for the parser. To get the local rank, prefer using the property
+                        `local_process_index` (default: -1)
+  --sortish_sampler [SORTISH_SAMPLER], --sortish-sampler [SORTISH_SAMPLER]
+                        Whether to use SortishSampler or not. (default: False)
+  --predict_with_generate [PREDICT_WITH_GENERATE], --predict-with-generate [PREDICT_WITH_GENERATE]
+                        Whether to use generate to calculate generative metrics (ROUGE, BLEU). (default: False)
+  --generation_max_length GENERATION_MAX_LENGTH, --generation-max-length GENERATION_MAX_LENGTH
+                        The `max_length` to use on each evaluation loop when `predict_with_generate=True`. Will default to the `max_length` value of the model configuration. (default: None)
+  --generation_num_beams GENERATION_NUM_BEAMS, --generation-num-beams GENERATION_NUM_BEAMS
+                        The `num_beams` to use on each evaluation loop when `predict_with_generate=True`. Will default to the `num_beams` value of the model configuration. (default: None)
+  --generation_config GENERATION_CONFIG, --generation-config GENERATION_CONFIG
+                        Model id, file path or url pointing to a GenerationConfig json file, to use during prediction. (default: None)
+  --ray_run_name RAY_RUN_NAME, --ray-run-name RAY_RUN_NAME
+                        The training results will be saved at `<ray_storage_path>/ray_run_name`. (default: None)
+  --ray_storage_path RAY_STORAGE_PATH, --ray-storage-path RAY_STORAGE_PATH
+                        The storage path to save training results to (default: ./saves)
+  --ray_storage_filesystem {s3,gs,gcs}, --ray-storage-filesystem {s3,gs,gcs}
+                        The storage filesystem to use. If None specified, local filesystem will be used. (default: None)
+  --ray_num_workers RAY_NUM_WORKERS, --ray-num-workers RAY_NUM_WORKERS
+                        The number of workers for Ray training. Default is 1 worker. (default: 1)
+  --resources_per_worker RESOURCES_PER_WORKER, --resources-per-worker RESOURCES_PER_WORKER
+                        The resources per worker for Ray training. Default is to use 1 GPU per worker. (default: {'GPU': 1})
+  --placement_strategy {SPREAD,PACK,STRICT_SPREAD,STRICT_PACK}, --placement-strategy {SPREAD,PACK,STRICT_SPREAD,STRICT_PACK}
+                        The placement strategy for Ray training. Default is PACK. (default: PACK)
+  --ray_init_kwargs RAY_INIT_KWARGS, --ray-init-kwargs RAY_INIT_KWARGS
+                        The arguments to pass to ray.init for Ray training. Default is None. (default: None)
+  --overwrite_output_dir [OVERWRITE_OUTPUT_DIR], --overwrite-output-dir [OVERWRITE_OUTPUT_DIR]
+                        deprecated (default: False)
+  --freeze_trainable_layers FREEZE_TRAINABLE_LAYERS, --freeze-trainable-layers FREEZE_TRAINABLE_LAYERS
+                        The number of trainable layers for freeze (partial-parameter) fine-tuning. Positive numbers mean the last n layers are set as trainable, negative numbers mean the first n layers are set as
+                        trainable. (default: 2)
+  --freeze_trainable_modules FREEZE_TRAINABLE_MODULES, --freeze-trainable-modules FREEZE_TRAINABLE_MODULES
+                        Name(s) of trainable modules for freeze (partial-parameter) fine-tuning. Use commas to separate multiple modules. Use `all` to specify all the available modules. (default: all)
+  --freeze_extra_modules FREEZE_EXTRA_MODULES, --freeze-extra-modules FREEZE_EXTRA_MODULES
+                        Name(s) of modules apart from hidden layers to be set as trainable for freeze (partial-parameter) fine-tuning. Use commas to separate multiple modules. (default: None)
+  --additional_target ADDITIONAL_TARGET, --additional-target ADDITIONAL_TARGET
+                        Name(s) of modules apart from LoRA layers to be set as trainable and saved in the final checkpoint. Use commas to separate multiple modules. (default: None)
+  --module_dropout MODULE_DROPOUT, --module-dropout MODULE_DROPOUT
+                        Dropout rate for the OFT fine-tuning. (default: 0.0)
+  --oft_rank OFT_RANK, --oft-rank OFT_RANK
+                        The intrinsic dimension for OFT fine-tuning. (default: 0)
+  --oft_block_size OFT_BLOCK_SIZE, --oft-block-size OFT_BLOCK_SIZE
+                        The intrinsic dimension for OFT fine-tuning. (default: 32)
+  --oft_target OFT_TARGET, --oft-target OFT_TARGET
+                        Name(s) of target modules to apply OFT. Use commas to separate multiple modules. Use `all` to specify all the linear modules. (default: all)
+  --create_new_adapter [CREATE_NEW_ADAPTER], --create-new-adapter [CREATE_NEW_ADAPTER]
+                        Whether or not to create a new adapter with randomly initialized weight. (default: False)
+  --lora_alpha LORA_ALPHA, --lora-alpha LORA_ALPHA
+                        The scale factor for LoRA fine-tuning (default: lora_rank * 2). (default: None)
+  --lora_dropout LORA_DROPOUT, --lora-dropout LORA_DROPOUT
+                        Dropout rate for the LoRA fine-tuning. (default: 0.0)
+  --lora_rank LORA_RANK, --lora-rank LORA_RANK
+                        The intrinsic dimension for LoRA fine-tuning. (default: 8)
+  --lora_target LORA_TARGET, --lora-target LORA_TARGET
+                        Name(s) of target modules to apply LoRA. Use commas to separate multiple modules. Use `all` to specify all the linear modules. (default: all)
+  --loraplus_lr_ratio LORAPLUS_LR_RATIO, --loraplus-lr-ratio LORAPLUS_LR_RATIO
+                        LoRA plus learning rate ratio (lr_B / lr_A). (default: None)
+  --loraplus_lr_embedding LORAPLUS_LR_EMBEDDING, --loraplus-lr-embedding LORAPLUS_LR_EMBEDDING
+                        LoRA plus learning rate for lora embedding layers. (default: 1e-06)
+  --use_rslora [USE_RSLORA], --use-rslora [USE_RSLORA]
+                        Whether or not to use the rank stabilization scaling factor for LoRA layer. (default: False)
+  --use_dora [USE_DORA], --use-dora [USE_DORA]
+                        Whether or not to use the weight-decomposed lora method (DoRA). (default: False)
+  --pissa_init [PISSA_INIT], --pissa-init [PISSA_INIT]
+                        Whether or not to initialize a PiSSA adapter. (default: False)
+  --pissa_iter PISSA_ITER, --pissa-iter PISSA_ITER
+                        The number of iteration steps performed by FSVD in PiSSA. Use -1 to disable it. (default: 16)
+  --pissa_convert [PISSA_CONVERT], --pissa-convert [PISSA_CONVERT]
+                        Whether or not to convert the PiSSA adapter to a normal LoRA adapter. (default: False)
+  --pref_beta PREF_BETA, --pref-beta PREF_BETA
+                        The beta parameter in the preference loss. (default: 0.1)
+  --pref_ftx PREF_FTX, --pref-ftx PREF_FTX
+                        The supervised fine-tuning loss coefficient in DPO training. (default: 0.0)
+  --pref_bco_weight PREF_BCO_WEIGHT, --pref-bco-weight PREF_BCO_WEIGHT
+                        The Binary Classifier Optimization coefficient in DPO training. (default: 0.0)
+  --pref_loss {sigmoid,hinge,ipo,kto_pair,orpo,simpo}, --pref-loss {sigmoid,hinge,ipo,kto_pair,orpo,simpo}
+                        The type of DPO loss to use. (default: sigmoid)
+  --dpo_label_smoothing DPO_LABEL_SMOOTHING, --dpo-label-smoothing DPO_LABEL_SMOOTHING
+                        The robust DPO label smoothing parameter in cDPO that should be between 0 and 0.5. (default: 0.0)
+  --kto_chosen_weight KTO_CHOSEN_WEIGHT, --kto-chosen-weight KTO_CHOSEN_WEIGHT
+                        The weight factor of the desirable losses in KTO training. (default: 1.0)
+  --kto_rejected_weight KTO_REJECTED_WEIGHT, --kto-rejected-weight KTO_REJECTED_WEIGHT
+                        The weight factor of the undesirable losses in KTO training. (default: 1.0)
+  --simpo_gamma SIMPO_GAMMA, --simpo-gamma SIMPO_GAMMA
+                        The target reward margin term in SimPO loss. (default: 0.5)
+  --ppo_buffer_size PPO_BUFFER_SIZE, --ppo-buffer-size PPO_BUFFER_SIZE
+                        The number of mini-batches to make experience buffer in a PPO optimization step. (default: 1)
+  --ppo_epochs PPO_EPOCHS, --ppo-epochs PPO_EPOCHS
+                        The number of epochs to perform in a PPO optimization step. (default: 4)
+  --ppo_score_norm [PPO_SCORE_NORM], --ppo-score-norm [PPO_SCORE_NORM]
+                        Use score normalization in PPO training. (default: False)
+  --ppo_target PPO_TARGET, --ppo-target PPO_TARGET
+                        Target KL value for adaptive KL control in PPO training. (default: 6.0)
+  --ppo_whiten_rewards [PPO_WHITEN_REWARDS], --ppo-whiten-rewards [PPO_WHITEN_REWARDS]
+                        Whiten the rewards before compute advantages in PPO training. (default: False)
+  --ref_model REF_MODEL, --ref-model REF_MODEL
+                        Path to the reference model used for the PPO or DPO training. (default: None)
+  --ref_model_adapters REF_MODEL_ADAPTERS, --ref-model-adapters REF_MODEL_ADAPTERS
+                        Path to the adapters of the reference model. (default: None)
+  --ref_model_quantization_bit REF_MODEL_QUANTIZATION_BIT, --ref-model-quantization-bit REF_MODEL_QUANTIZATION_BIT
+                        The number of bits to quantize the reference model. (default: None)
+  --reward_model REWARD_MODEL, --reward-model REWARD_MODEL
+                        Path to the reward model used for the PPO training. (default: None)
+  --reward_model_adapters REWARD_MODEL_ADAPTERS, --reward-model-adapters REWARD_MODEL_ADAPTERS
+                        Path to the adapters of the reward model. (default: None)
+  --reward_model_quantization_bit REWARD_MODEL_QUANTIZATION_BIT, --reward-model-quantization-bit REWARD_MODEL_QUANTIZATION_BIT
+                        The number of bits to quantize the reward model. (default: None)
+  --reward_model_type {lora,full,api}, --reward-model-type {lora,full,api}
+                        The type of the reward model in PPO training. Lora model only supports lora training. (default: lora)
+  --ld_alpha LD_ALPHA, --ld-alpha LD_ALPHA
+                        Alpha parameter from the LD-DPO paper, which controls the weighting of the verbose token log-probabilities in responses. (default: None)
+  --use_galore [USE_GALORE], --use-galore [USE_GALORE]
+                        Whether or not to use the gradient low-Rank projection (GaLore). (default: False)
+  --galore_target GALORE_TARGET, --galore-target GALORE_TARGET
+                        Name(s) of modules to apply GaLore. Use commas to separate multiple modules. Use `all` to specify all the linear modules. (default: all)
+  --galore_rank GALORE_RANK, --galore-rank GALORE_RANK
+                        The rank of GaLore gradients. (default: 16)
+  --galore_update_interval GALORE_UPDATE_INTERVAL, --galore-update-interval GALORE_UPDATE_INTERVAL
+                        Number of steps to update the GaLore projection. (default: 200)
+  --galore_scale GALORE_SCALE, --galore-scale GALORE_SCALE
+                        GaLore scaling coefficient. (default: 2.0)
+  --galore_proj_type {std,reverse_std,right,left,full}, --galore-proj-type {std,reverse_std,right,left,full}
+                        Type of GaLore projection. (default: std)
+  --galore_layerwise [GALORE_LAYERWISE], --galore-layerwise [GALORE_LAYERWISE]
+                        Whether or not to enable layer-wise update to further save memory. (default: False)
+  --use_apollo [USE_APOLLO], --use-apollo [USE_APOLLO]
+                        Whether or not to use the APOLLO optimizer. (default: False)
+  --apollo_target APOLLO_TARGET, --apollo-target APOLLO_TARGET
+                        Name(s) of modules to apply APOLLO. Use commas to separate multiple modules. Use `all` to specify all the linear modules. (default: all)
+  --apollo_rank APOLLO_RANK, --apollo-rank APOLLO_RANK
+                        The rank of APOLLO gradients. (default: 16)
+  --apollo_update_interval APOLLO_UPDATE_INTERVAL, --apollo-update-interval APOLLO_UPDATE_INTERVAL
+                        Number of steps to update the APOLLO projection. (default: 200)
+  --apollo_scale APOLLO_SCALE, --apollo-scale APOLLO_SCALE
+                        APOLLO scaling coefficient. (default: 32.0)
+  --apollo_proj {svd,random}, --apollo-proj {svd,random}
+                        Type of APOLLO low-rank projection algorithm (svd or random). (default: random)
+  --apollo_proj_type {std,right,left}, --apollo-proj-type {std,right,left}
+                        Type of APOLLO projection. (default: std)
+  --apollo_scale_type {channel,tensor}, --apollo-scale-type {channel,tensor}
+                        Type of APOLLO scaling (channel or tensor). (default: channel)
+  --apollo_layerwise [APOLLO_LAYERWISE], --apollo-layerwise [APOLLO_LAYERWISE]
+                        Whether or not to enable layer-wise update to further save memory. (default: False)
+  --apollo_scale_front [APOLLO_SCALE_FRONT], --apollo-scale-front [APOLLO_SCALE_FRONT]
+                        Whether or not to use the norm-growth limiter in front of gradient scaling. (default: False)
+  --use_badam [USE_BADAM], --use-badam [USE_BADAM]
+                        Whether or not to use the BAdam optimizer. (default: False)
+  --badam_mode {layer,ratio}, --badam-mode {layer,ratio}
+                        Whether to use layer-wise or ratio-wise BAdam optimizer. (default: layer)
+  --badam_start_block BADAM_START_BLOCK, --badam-start-block BADAM_START_BLOCK
+                        The starting block index for layer-wise BAdam. (default: None)
+  --badam_switch_mode {ascending,descending,random,fixed}, --badam-switch-mode {ascending,descending,random,fixed}
+                        the strategy of picking block to update for layer-wise BAdam. (default: ascending)
+  --badam_switch_interval BADAM_SWITCH_INTERVAL, --badam-switch-interval BADAM_SWITCH_INTERVAL
+                        Number of steps to update the block for layer-wise BAdam. Use -1 to disable the block update. (default: 50)
+  --badam_update_ratio BADAM_UPDATE_RATIO, --badam-update-ratio BADAM_UPDATE_RATIO
+                        The ratio of the update for ratio-wise BAdam. (default: 0.05)
+  --badam_mask_mode {adjacent,scatter}, --badam-mask-mode {adjacent,scatter}
+                        The mode of the mask for BAdam optimizer. `adjacent` means that the trainable parameters are adjacent to each other, `scatter` means that trainable parameters are randomly choosed from the
+                        weight. (default: adjacent)
+  --badam_verbose BADAM_VERBOSE, --badam-verbose BADAM_VERBOSE
+                        The verbosity level of BAdam optimizer. 0 for no print, 1 for print the block prefix, 2 for print trainable parameters. (default: 0)
+  --use_swanlab [USE_SWANLAB], --use-swanlab [USE_SWANLAB]
+                        Whether or not to use the SwanLab (an experiment tracking and visualization tool). (default: False)
+  --swanlab_project SWANLAB_PROJECT, --swanlab-project SWANLAB_PROJECT
+                        The project name in SwanLab. (default: llamafactory)
+  --swanlab_workspace SWANLAB_WORKSPACE, --swanlab-workspace SWANLAB_WORKSPACE
+                        The workspace name in SwanLab. (default: None)
+  --swanlab_run_name SWANLAB_RUN_NAME, --swanlab-run-name SWANLAB_RUN_NAME
+                        The experiment name in SwanLab. (default: None)
+  --swanlab_mode {cloud,local}, --swanlab-mode {cloud,local}
+                        The mode of SwanLab. (default: cloud)
+  --swanlab_api_key SWANLAB_API_KEY, --swanlab-api-key SWANLAB_API_KEY
+                        The API key for SwanLab. (default: None)
+  --swanlab_logdir SWANLAB_LOGDIR, --swanlab-logdir SWANLAB_LOGDIR
+                        The log directory for SwanLab. (default: None)
+  --swanlab_lark_webhook_url SWANLAB_LARK_WEBHOOK_URL, --swanlab-lark-webhook-url SWANLAB_LARK_WEBHOOK_URL
+                        The Lark(飞书) webhook URL for SwanLab. (default: None)
+  --swanlab_lark_secret SWANLAB_LARK_SECRET, --swanlab-lark-secret SWANLAB_LARK_SECRET
+                        The Lark(飞书) secret for SwanLab. (default: None)
+  --pure_bf16 [PURE_BF16], --pure-bf16 [PURE_BF16]
+                        Whether or not to train model in purely bf16 precision (without AMP). (default: False)
+  --stage {pt,sft,rm,ppo,dpo,kto}
+                        Which stage will be performed in training. (default: sft)
+  --finetuning_type {lora,oft,freeze,full}, --finetuning-type {lora,oft,freeze,full}
+                        Which fine-tuning method to use. (default: lora)
+  --use_llama_pro [USE_LLAMA_PRO], --use-llama-pro [USE_LLAMA_PRO]
+                        Whether or not to make only the parameters in the expanded blocks trainable. (default: False)
+  --use_adam_mini [USE_ADAM_MINI], --use-adam-mini [USE_ADAM_MINI]
+                        Whether or not to use the Adam-mini optimizer. (default: False)
+  --use_mca [USE_MCA], --use-mca [USE_MCA]
+                        Whether or not to use MCA (Megatron Core Adapter) training. Controlled by USE_MCA environment variable. (default: False)
+  --use_muon [USE_MUON], --use-muon [USE_MUON]
+                        Whether or not to use the Muon optimizer. (default: False)
+  --use_dft_loss [USE_DFT_LOSS], --use-dft-loss [USE_DFT_LOSS]
+                        Whether to use the DFT loss. (default: False)
+  --freeze_vision_tower [FREEZE_VISION_TOWER], --freeze-vision-tower [FREEZE_VISION_TOWER]
+                        Whether ot not to freeze the vision tower in MLLM training. (default: True)
+  --no_freeze_vision_tower, --no-freeze-vision-tower
+                        Whether ot not to freeze the vision tower in MLLM training. (default: False)
+  --freeze_multi_modal_projector [FREEZE_MULTI_MODAL_PROJECTOR], --freeze-multi-modal-projector [FREEZE_MULTI_MODAL_PROJECTOR]
+                        Whether or not to freeze the multi modal projector in MLLM training. (default: True)
+  --no_freeze_multi_modal_projector, --no-freeze-multi-modal-projector
+                        Whether or not to freeze the multi modal projector in MLLM training. (default: False)
+  --freeze_language_model [FREEZE_LANGUAGE_MODEL], --freeze-language-model [FREEZE_LANGUAGE_MODEL]
+                        Whether or not to freeze the language model in MLLM training. (default: False)
+  --compute_accuracy [COMPUTE_ACCURACY], --compute-accuracy [COMPUTE_ACCURACY]
+                        Whether or not to compute the token-level accuracy at evaluation. (default: False)
+  --disable_shuffling [DISABLE_SHUFFLING], --disable-shuffling [DISABLE_SHUFFLING]
+                        Whether or not to disable the shuffling of the training set. (default: False)
+  --early_stopping_steps EARLY_STOPPING_STEPS, --early-stopping-steps EARLY_STOPPING_STEPS
+                        Number of steps to stop training if the `metric_for_best_model` does not improve. (default: None)
+  --plot_loss [PLOT_LOSS], --plot-loss [PLOT_LOSS]
+                        Whether or not to save the training loss curves. (default: False)
+  --include_effective_tokens_per_second [INCLUDE_EFFECTIVE_TOKENS_PER_SECOND], --include-effective-tokens-per-second [INCLUDE_EFFECTIVE_TOKENS_PER_SECOND]
+                        Whether or not to compute effective tokens per second. (default: False)
+  --debug_mm_training [DEBUG_MM_TRAINING], --debug-mm-training [DEBUG_MM_TRAINING]
+                        Enable multimodal debug logging for GPU memory and batch tensor statistics. (default: False)
+  --debug_mm_steps DEBUG_MM_STEPS, --debug-mm-steps DEBUG_MM_STEPS
+                        Number of initial steps to emit multimodal debug logs. Exceptions always log when debug_mm_training is enabled. (default: 1)
+  --do_sample [DO_SAMPLE], --do-sample [DO_SAMPLE]
+                        Whether or not to use sampling, use greedy decoding otherwise. (default: True)
+  --no_do_sample, --no-do-sample
+                        Whether or not to use sampling, use greedy decoding otherwise. (default: False)
+  --temperature TEMPERATURE
+                        The value used to modulate the next token probabilities. (default: 0.95)
+  --top_p TOP_P, --top-p TOP_P
+                        The smallest set of most probable tokens with probabilities that add up to top_p or higher are kept. (default: 0.7)
+  --top_k TOP_K, --top-k TOP_K
+                        The number of highest probability vocabulary tokens to keep for top-k filtering. (default: 50)
+  --num_beams NUM_BEAMS, --num-beams NUM_BEAMS
+                        Number of beams for beam search. 1 means no beam search. (default: 1)
+  --max_length MAX_LENGTH, --max-length MAX_LENGTH
+                        The maximum length the generated tokens can have. It can be overridden by max_new_tokens. (default: 1024)
+  --max_new_tokens MAX_NEW_TOKENS, --max-new-tokens MAX_NEW_TOKENS
+                        The maximum numbers of tokens to generate, ignoring the number of tokens in the prompt. (default: 1024)
+  --repetition_penalty REPETITION_PENALTY, --repetition-penalty REPETITION_PENALTY
+                        The parameter for repetition penalty. 1.0 means no penalty. (default: 1.0)
+  --length_penalty LENGTH_PENALTY, --length-penalty LENGTH_PENALTY
+                        Exponential penalty to the length that is used with beam-based generation. (default: 1.0)
+  --skip_special_tokens [SKIP_SPECIAL_TOKENS], --skip-special-tokens [SKIP_SPECIAL_TOKENS]
+                        Whether or not to remove special tokens in the decoding. (default: True)
+  --no_skip_special_tokens, --no-skip-special-tokens
+                        Whether or not to remove special tokens in the decoding. (default: False)

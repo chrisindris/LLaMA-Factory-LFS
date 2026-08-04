@@ -15,16 +15,12 @@
 
 """Merge a base model snapshot and a LoRA checkpoint into a full model.
 
-This script is designed for warm-start continuation workflows where you want to
-switch from LoRA checkpoint loading (`adapter_name_or_path`) to full-model
-loading (`model_name_or_path` and optionally `resume_from_checkpoint`).
+By default this also packages a ``resume_bundle/`` sidecar from the LoRA
+checkpoint so continuous training (Adam + LoRA + scheduler + RNG) remains
+available next to the merged dense weights used for inference.
 
-Important:
-- The merged output preserves model weights but does not preserve optimizer/
-  scheduler/momentum continuity from the LoRA checkpoint.
-- For the first run after merging, start without `resume_from_checkpoint`.
-- `resume_from_checkpoint` should be used only for checkpoints created by that
-  new run.
+Perfect train resume still uses base + LoRA adapter + optim from
+``resume_bundle/``, not optim loaded onto a fresh LoRA on the merged dense model.
 """
 
 from __future__ import annotations
@@ -35,6 +31,7 @@ import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Optional
 
 
 SCRIPT_PATH = Path(__file__).resolve()
@@ -138,6 +135,30 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Only validate inputs and print planned export args.",
     )
+    parser.add_argument(
+        "--include-resume-bundle",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Copy LoRA/optimizer/scheduler/RNG/trainer_state from the adapter "
+            "checkpoint into output_dir/resume_bundle/ (default: true)."
+        ),
+    )
+    parser.add_argument(
+        "--resume-bundle-source",
+        default=None,
+        help="Source checkpoint for the resume bundle (default: --adapter-checkpoint).",
+    )
+    parser.add_argument(
+        "--resume-bundle-subdir",
+        default="resume_bundle",
+        help="Subdirectory name under output_dir for the resume bundle.",
+    )
+    parser.add_argument(
+        "--resume-bundle-symlinks",
+        action="store_true",
+        help="Symlink resume-bundle files instead of copying (saves disk).",
+    )
     return parser.parse_args()
 
 
@@ -220,8 +241,42 @@ def write_manifest(
     base_model: Path,
     adapter_checkpoint: Path,
     export_args: dict,
+    *,
+    include_resume_bundle: bool,
+    resume_bundle_dir: Optional[Path],
+    resume_bundle_complete: Optional[bool],
 ) -> Path:
     manifest_path = output_dir / "merge_manifest.json"
+    notes = [
+        "Model weights are merged and preserved for inference / eval.",
+    ]
+    if include_resume_bundle and resume_bundle_complete:
+        notes.extend(
+            [
+                f"Resume bundle attached at {resume_bundle_dir} (LoRA + optim + scheduler + RNG).",
+                "For continuous train resume, use base_model + resume_bundle (adapter/optim), "
+                "not a fresh LoRA on the merged dense weights.",
+                "LLaMA-Factory will auto-detect <merged>/resume_bundle when present.",
+            ]
+        )
+        mode = "merged_with_resume_bundle"
+    elif include_resume_bundle:
+        notes.extend(
+            [
+                "Resume bundle was requested but is incomplete — only warm-start train is safe.",
+                "Check resume_bundle/resume_manifest.json for missing artifacts.",
+            ]
+        )
+        mode = "merged_warm_start_incomplete_bundle"
+    else:
+        notes.extend(
+            [
+                "Optimizer/scheduler/LoRA continuity from the LoRA checkpoint was not packaged.",
+                "Start the first new training run without resume_from_checkpoint (warm start only).",
+            ]
+        )
+        mode = "merged_warm_start"
+
     manifest = {
         "script": str(SCRIPT_PATH.relative_to(REPO_ROOT)),
         "created_utc": datetime.now(timezone.utc).isoformat(),
@@ -229,30 +284,39 @@ def write_manifest(
         "adapter_checkpoint": str(adapter_checkpoint),
         "output_dir": str(output_dir),
         "export_args": export_args,
-        "mode": "merged_warm_start",
-        "notes": [
-            "Model weights are merged and preserved.",
-            "Optimizer/scheduler continuity from LoRA checkpoint is not preserved.",
-            "Start the first new training run without resume_from_checkpoint.",
-        ],
+        "mode": mode,
+        "include_resume_bundle": include_resume_bundle,
+        "resume_bundle_dir": str(resume_bundle_dir) if resume_bundle_dir else None,
+        "resume_bundle_complete": resume_bundle_complete,
+        "notes": notes,
     }
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     return manifest_path
 
 
-def print_next_steps(output_dir: Path) -> None:
+def print_next_steps(output_dir: Path, *, include_resume_bundle: bool, resume_bundle_complete: bool) -> None:
     print("\nMerged model is ready.")
-    print("\nUse this in your next training YAML:")
-    print("---")
-    print("### model")
-    print(f"model_name_or_path: {output_dir}")
-    print("# adapter_name_or_path: null")
-    print("\n### train")
-    print("# First run after merge:")
-    print("resume_from_checkpoint: null")
-    print("---")
-    print("\nAfter this new run creates checkpoints, you can use resume_from_checkpoint")
-    print("with those new checkpoints only.")
+    if include_resume_bundle and resume_bundle_complete:
+        print("\nContinuous train resume (preferred):")
+        print("---")
+        print("### model")
+        print(f"# either point at the merged dir (auto-picks resume_bundle) or set explicitly:")
+        print(f"model_name_or_path: <original base model>")
+        print(f"adapter_name_or_path: {output_dir / 'resume_bundle'}")
+        print(f"resume_from_checkpoint: {output_dir / 'resume_bundle'}")
+        print("# keep num_train_epochs equal to the ORIGINAL schedule horizon")
+        print("---")
+        print("\nInference / eval only:")
+        print(f"  model_name_or_path: {output_dir}")
+    else:
+        print("\nWarm-start training only (no optim/LoRA continuity):")
+        print("---")
+        print("### model")
+        print(f"model_name_or_path: {output_dir}")
+        print("# adapter_name_or_path: null")
+        print("\n### train")
+        print("resume_from_checkpoint: null")
+        print("---")
 
 
 def main() -> int:
@@ -260,12 +324,16 @@ def main() -> int:
     base_model = Path(args.base_model).expanduser().resolve()
     adapter_checkpoint = Path(args.adapter_checkpoint).expanduser().resolve()
     output_dir = Path(args.output_dir).expanduser().resolve()
+    resume_source = Path(args.resume_bundle_source or args.adapter_checkpoint).expanduser().resolve()
 
     validate_inputs(base_model, adapter_checkpoint, output_dir, args.overwrite)
     export_args = build_export_args(args, base_model, adapter_checkpoint, output_dir)
 
     print("Planned export arguments:")
     print(json.dumps(export_args, indent=2))
+    print(f"include_resume_bundle: {args.include_resume_bundle}")
+    if args.include_resume_bundle:
+        print(f"resume_bundle_source: {resume_source}")
 
     if args.dry_run:
         print("\nDry run complete. No files were written.")
@@ -274,17 +342,55 @@ def main() -> int:
     export_model = load_export_model()
     export_model(export_args)
     warnings = verify_output(output_dir)
-    manifest_path = write_manifest(output_dir, base_model, adapter_checkpoint, export_args)
+
+    resume_bundle_dir: Optional[Path] = None
+    resume_bundle_complete: Optional[bool] = None
+    if args.include_resume_bundle:
+        from llamafactory.train.resume_bundle import package_resume_bundle
+
+        resume_bundle_dir = output_dir / args.resume_bundle_subdir
+        inventory, rb_manifest = package_resume_bundle(
+            resume_source,
+            resume_bundle_dir,
+            base_model_name_or_path=str(base_model),
+            finetuning_type="lora",
+            merged_weights_parent=True,
+            use_symlinks=args.resume_bundle_symlinks,
+        )
+        resume_bundle_complete = inventory.resume_capable
+        print(f"\nPackaged resume bundle -> {resume_bundle_dir}")
+        print(f"  classification: {inventory.classification.value}")
+        print(f"  resume_capable: {inventory.resume_capable}")
+        print(f"  manifest: {rb_manifest}")
+        if not inventory.resume_capable:
+            warnings.append(
+                f"Resume bundle incomplete (missing: {', '.join(inventory.missing_required)}). "
+                "Warm-start only."
+            )
+
+    manifest_path = write_manifest(
+        output_dir,
+        base_model,
+        adapter_checkpoint,
+        export_args,
+        include_resume_bundle=args.include_resume_bundle,
+        resume_bundle_dir=resume_bundle_dir,
+        resume_bundle_complete=resume_bundle_complete,
+    )
 
     print(f"\nWrote merge manifest: {manifest_path}")
     for warning in warnings:
         print(f"WARNING: {warning}")
 
-    print(
-        "\nWARNING: This merged output is a warm-start artifact. "
-        "It does not preserve exact optimizer/scheduler state continuity from the LoRA checkpoint."
+    if not (args.include_resume_bundle and resume_bundle_complete):
+        print(
+            "\nWARNING: Without a complete resume_bundle, this merged output is a warm-start artifact only."
+        )
+    print_next_steps(
+        output_dir,
+        include_resume_bundle=args.include_resume_bundle,
+        resume_bundle_complete=bool(resume_bundle_complete),
     )
-    print_next_steps(output_dir)
     return 0
 
 

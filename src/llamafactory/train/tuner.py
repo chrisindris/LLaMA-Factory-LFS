@@ -27,7 +27,7 @@ from ..extras.misc import infer_optim_dtype, is_env_enabled
 from ..extras.packages import is_mcore_adapter_available, is_ray_available
 from ..hparams import get_infer_args, get_ray_args, get_train_args, read_args
 from ..model import load_model, load_tokenizer
-from .callbacks import LogCallback, PissaConvertCallback, ReporterCallback
+from .callbacks import LogCallback, PissaConvertCallback, ReporterCallback, ResumeBundleCallback, StopAtGlobalStepCallback
 from .dpo import run_dpo
 from .kto import run_kto
 from .ppo import run_ppo
@@ -95,6 +95,7 @@ def _training_function(config: dict[str, Any]) -> None:
     _apply_cudnn_sdp_override(model_args)
 
     callbacks.append(LogCallback())
+    callbacks.append(ResumeBundleCallback(model_args, finetuning_args))
     if finetuning_args.pissa_convert:
         callbacks.append(PissaConvertCallback())
 
@@ -103,6 +104,9 @@ def _training_function(config: dict[str, Any]) -> None:
 
     if finetuning_args.early_stopping_steps is not None:
         callbacks.append(EarlyStoppingCallback(early_stopping_patience=finetuning_args.early_stopping_steps))
+
+    if finetuning_args.stop_at_global_step is not None:
+        callbacks.append(StopAtGlobalStepCallback(finetuning_args.stop_at_global_step))
 
     callbacks.append(ReporterCallback(model_args, data_args, finetuning_args, generating_args))  # add to last
 

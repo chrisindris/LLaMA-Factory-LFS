@@ -530,6 +530,43 @@ class FinetuningArguments(
             )
         },
     )
+    allow_warm_start_resume: bool = field(
+        default=True,
+        metadata={
+            "help": (
+                "If True, missing optimizer/scheduler/LoRA resume artifacts fall back to warm-start "
+                "(fresh optim/sched) instead of aborting. If False, incomplete resume bundles raise."
+            )
+        },
+    )
+    require_resume_bundle: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "If True and save_only_model is False, raise when a checkpoint save is missing "
+                "required resume artifacts (Adam/scheduler/LoRA/trainer_state)."
+            )
+        },
+    )
+    resume_bundle_dir: Optional[str] = field(
+        default=None,
+        metadata={
+            "help": (
+                "Optional explicit path to a resume_bundle directory (or full LoRA checkpoint). "
+                "Also auto-detected at <model_name_or_path>/resume_bundle when present."
+            )
+        },
+    )
+    stop_at_global_step: Optional[int] = field(
+        default=None,
+        metadata={
+            "help": (
+                "Stop training when global_step reaches this value (inclusive). "
+                "Use with the original num_train_epochs so the LR scheduler horizon is preserved "
+                "while ending early (e.g. stop_at_global_step=1240 with num_train_epochs=5)."
+            )
+        },
+    )
 
     def __post_init__(self):
         def split_arg(arg):

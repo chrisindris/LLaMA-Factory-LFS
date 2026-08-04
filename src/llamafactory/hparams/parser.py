@@ -33,6 +33,12 @@ from ..extras import logging
 from ..extras.constants import ADAPTER_WEIGHTS_NAME, CHECKPOINT_NAMES, EngineName, SAFE_ADAPTER_WEIGHTS_NAME
 from ..extras.misc import check_dependencies, check_version, get_current_device, is_env_enabled
 from ..extras.packages import is_mcore_adapter_available, is_transformers_version_greater_than
+from ..train.resume_bundle import (
+    RESUME_BUNDLE_SUBDIR,
+    ResumeClass,
+    classify_resume_source,
+    inventory_resume_dir,
+)
 from .data_args import DataArguments
 from .evaluation_args import EvaluationArguments
 from .finetuning_args import FinetuningArguments
@@ -240,6 +246,7 @@ def _parse_eval_args(args: Optional[Union[dict[str, Any], list[str]]] = None) ->
 
 
 def _get_missing_adapter_resume_artifacts(adapter_checkpoint: str) -> list[str]:
+    """Backward-compatible minimal list (adapter + trainer_state only). """
     missing_artifacts: list[str] = []
 
     if not os.path.isfile(os.path.join(adapter_checkpoint, _ADAPTER_CONFIG_NAME)):
@@ -257,44 +264,176 @@ def _get_missing_adapter_resume_artifacts(adapter_checkpoint: str) -> list[str]:
     return missing_artifacts
 
 
-def _try_auto_resume_from_adapter(
+def _apply_full_resume(
+    model_args: "ModelArguments",
+    training_args: "TrainingArguments",
+    checkpoint_dir: str,
+    inventory_notes: Optional[list[str]] = None,
+) -> None:
+    training_args.resume_from_checkpoint = checkpoint_dir
+    # Ensure LoRA weights load from the same dir when finetuning with LoRA.
+    if model_args.adapter_name_or_path is None:
+        model_args.adapter_name_or_path = [checkpoint_dir]
+    elif checkpoint_dir not in model_args.adapter_name_or_path:
+        # Keep prior adapters for merge, put resume adapter last (trainable).
+        model_args.adapter_name_or_path = list(model_args.adapter_name_or_path) + [checkpoint_dir]
+
+    inv = inventory_resume_dir(checkpoint_dir)
+    logger.info_rank0(
+        f"FULL RESUME from {checkpoint_dir} "
+        f"(global_step={inv.global_step}, epoch={inv.epoch}, max_steps={inv.max_steps}, "
+        f"world_size={inv.world_size_inferred})."
+    )
+    if inventory_notes:
+        for note in inventory_notes:
+            logger.info_rank0(f"  resume note: {note}")
+
+
+def _handle_incomplete_resume(
+    finetuning_args: "FinetuningArguments",
+    path: str,
+    classification: ResumeClass,
+    missing: list[str],
+) -> None:
+    msg = (
+        f"Resume artifacts at {path} are {classification.value} "
+        f"(missing: {', '.join(missing) or 'n/a'}). "
+        "Falling back to WARM START (fresh optimizer/scheduler; not continuous training)."
+    )
+    if not finetuning_args.allow_warm_start_resume:
+        raise ValueError(
+            msg + " Set allow_warm_start_resume: true to approximate, or provide a complete resume bundle."
+        )
+    logger.warning_rank0(msg)
+
+
+def _try_resume_from_bundle_or_adapter(
     model_args: "ModelArguments",
     training_args: "TrainingArguments",
     finetuning_args: "FinetuningArguments",
     can_resume_from_checkpoint: bool,
 ) -> None:
-    if (
-        training_args.resume_from_checkpoint is not None
-        or not training_args.do_train
-        or not can_resume_from_checkpoint
-        or finetuning_args.stage != "sft"
-        or finetuning_args.finetuning_type != "lora"
-        or finetuning_args.create_new_adapter
-        or model_args.adapter_name_or_path is None
-    ):
+    if not training_args.do_train or not can_resume_from_checkpoint or finetuning_args.create_new_adapter:
         return
 
-    adapter_checkpoint = model_args.adapter_name_or_path[-1]
-    if not os.path.isdir(adapter_checkpoint):
+    # Explicit resume_from_checkpoint: classify and warn/error if incomplete.
+    if training_args.resume_from_checkpoint is not None:
+        resume_path = training_args.resume_from_checkpoint
+        if not os.path.isdir(resume_path):
+            return
+        inventory = inventory_resume_dir(resume_path)
+        if inventory.classification == ResumeClass.FULL:
+            logger.info_rank0(
+                f"FULL RESUME (explicit) from {resume_path} "
+                f"(global_step={inventory.global_step}, epoch={inventory.epoch})."
+            )
+            if model_args.adapter_name_or_path is None and inventory.artifacts.get("adapter_weights", None) and inventory.artifacts["adapter_weights"].present:
+                model_args.adapter_name_or_path = [resume_path]
+        elif inventory.classification in (ResumeClass.PARTIAL, ResumeClass.WEIGHTS_ONLY):
+            # Keep user-set resume_from_checkpoint; HF may still load what it can.
+            _handle_incomplete_resume(
+                finetuning_args,
+                resume_path,
+                inventory.classification,
+                inventory.missing_required,
+            )
         return
 
     if is_deepspeed_zero3_enabled():
-        logger.warning_rank0(
-            f"Skipping adapter auto-resume from {adapter_checkpoint} because DeepSpeed ZeRO-3 is enabled. "
-            "Set `resume_from_checkpoint` explicitly to override this behavior."
-        )
+        # Mirror previous behavior for auto paths under ZeRO-3.
+        if model_args.adapter_name_or_path is not None:
+            logger.warning_rank0(
+                "Skipping adapter auto-resume because DeepSpeed ZeRO-3 is enabled. "
+                "Set `resume_from_checkpoint` explicitly to override this behavior."
+            )
         return
 
-    missing_artifacts = _get_missing_adapter_resume_artifacts(adapter_checkpoint)
-    if missing_artifacts:
-        logger.warning_rank0(
-            f"Skipping adapter auto-resume from {adapter_checkpoint} because missing "
-            f"{', '.join(missing_artifacts)}."
-        )
-        return
+    candidates: list[str] = []
 
-    training_args.resume_from_checkpoint = adapter_checkpoint
-    logger.info_rank0(f"Resuming training from adapter checkpoint {training_args.resume_from_checkpoint}.")
+    # 1) Explicit resume_bundle_dir
+    if finetuning_args.resume_bundle_dir:
+        candidates.append(finetuning_args.resume_bundle_dir)
+
+    # 2) adapter_name_or_path last entry
+    if (
+        finetuning_args.stage == "sft"
+        and finetuning_args.finetuning_type == "lora"
+        and model_args.adapter_name_or_path is not None
+    ):
+        candidates.append(model_args.adapter_name_or_path[-1])
+
+    # 3) model_name_or_path/resume_bundle (merged package sidecar)
+    if model_args.model_name_or_path:
+        bundle_sidecar = os.path.join(model_args.model_name_or_path, RESUME_BUNDLE_SUBDIR)
+        candidates.append(bundle_sidecar)
+
+    seen: set[str] = set()
+    for candidate in candidates:
+        if not candidate or candidate in seen:
+            continue
+        seen.add(candidate)
+        if not os.path.isdir(candidate):
+            continue
+
+        inventory = classify_resume_source(candidate)
+        # classify_resume_source may point at .../resume_bundle; use inventory.directory
+        resume_dir = inventory.directory
+
+        if inventory.classification == ResumeClass.FULL:
+            # If this is a sidecar under a merged model, re-point base to original if manifest has it.
+            manifest_path = os.path.join(resume_dir, "resume_manifest.json")
+            if os.path.isfile(manifest_path):
+                try:
+                    import json as _json
+
+                    with open(manifest_path, encoding="utf-8") as f:
+                        manifest = _json.load(f)
+                    base_for_lora = manifest.get("base_model_for_lora_resume") or manifest.get(
+                        "base_model_name_or_path"
+                    )
+                    # Only retarget when candidate was the merged package's resume_bundle.
+                    if (
+                        base_for_lora
+                        and candidate.rstrip("/").endswith(RESUME_BUNDLE_SUBDIR)
+                        and model_args.model_name_or_path
+                        and os.path.abspath(os.path.dirname(candidate.rstrip("/")))
+                        == os.path.abspath(model_args.model_name_or_path)
+                    ):
+                        logger.info_rank0(
+                            f"Merged package has complete resume_bundle; using base_model_for_lora_resume="
+                            f"{base_for_lora} (not merged dense weights) for continuous LoRA resume."
+                        )
+                        model_args.model_name_or_path = base_for_lora
+                except (OSError, ValueError, TypeError):
+                    pass
+
+            _apply_full_resume(model_args, training_args, resume_dir, inventory.notes)
+            return
+
+        if inventory.classification == ResumeClass.PARTIAL:
+            # Still enable HF resume for step counters if trainer_state exists; warn about optim.
+            training_args.resume_from_checkpoint = resume_dir
+            if model_args.adapter_name_or_path is None and inventory.artifacts.get("adapter_weights") and inventory.artifacts["adapter_weights"].present:
+                model_args.adapter_name_or_path = [resume_dir]
+            _handle_incomplete_resume(
+                finetuning_args,
+                resume_dir,
+                inventory.classification,
+                inventory.missing_required,
+            )
+            return
+
+        # weights_only: only emit warm-start warning when user clearly pointed at a resume path
+        if candidate == finetuning_args.resume_bundle_dir or (
+            model_args.adapter_name_or_path is not None and candidate == model_args.adapter_name_or_path[-1]
+        ):
+            _handle_incomplete_resume(
+                finetuning_args,
+                resume_dir,
+                inventory.classification,
+                inventory.missing_required,
+            )
+            return
 
 
 def _try_auto_resume_from_output_dir(training_args: "TrainingArguments", can_resume_from_checkpoint: bool) -> None:
@@ -312,8 +451,12 @@ def _try_auto_resume_from_output_dir(training_args: "TrainingArguments", can_res
         raise ValueError("Output directory already exists and is not empty. Please set `overwrite_output_dir`.")
 
     if last_checkpoint is not None:
+        inventory = inventory_resume_dir(last_checkpoint)
         training_args.resume_from_checkpoint = last_checkpoint
-        logger.info_rank0(f"Resuming training from {training_args.resume_from_checkpoint}.")
+        if inventory.classification == ResumeClass.FULL:
+            logger.info_rank0(f"FULL RESUME from output_dir checkpoint {last_checkpoint}.")
+        else:
+            logger.info_rank0(f"Resuming training from {last_checkpoint} (class={inventory.classification.value}).")
         logger.info_rank0("Change `output_dir` or use `overwrite_output_dir` to avoid.")
 
 
@@ -323,7 +466,7 @@ def _set_resume_from_checkpoint(
     finetuning_args: "FinetuningArguments",
     can_resume_from_checkpoint: bool,
 ) -> None:
-    _try_auto_resume_from_adapter(model_args, training_args, finetuning_args, can_resume_from_checkpoint)
+    _try_resume_from_bundle_or_adapter(model_args, training_args, finetuning_args, can_resume_from_checkpoint)
     _try_auto_resume_from_output_dir(training_args, can_resume_from_checkpoint)
 
 

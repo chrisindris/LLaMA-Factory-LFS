@@ -2,7 +2,7 @@
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
-#SBATCH --cpus-per-task=96
+#SBATCH --cpus-per-task=24
 #SBATCH --time=1-00:00:00
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
