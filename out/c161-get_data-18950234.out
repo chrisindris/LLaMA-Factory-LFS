@@ -1,0 +1,53 @@
+Hook already exists: pre-push
+
+	#!/bin/sh
+	command -v git-lfs >/dev/null 2>&1 || { printf >&2 "\n%s\n\n" "This repository is configured for Git LFS but 'git-lfs' was not found on your path. If you no longer wish to use Git LFS, remove this hook by deleting the 'pre-push' file in the hooks directory (set by 'core.hookspath'; usually '.git/hooks')."; exit 2; }
+	git lfs pre-push "$@"
+
+To resolve this, either:
+  1: run `git lfs update --manual` for instructions on how to merge hooks.
+  2: run `git lfs update --force` to overwrite your hook.
+PROJECT_DIR: /scratch/indrisch//LLaMA-Factory
+SYSCONFIG_DIR_PATH: /scratch/indrisch//LLaMA-Factory/scripts
+PWD: /scratch/indrisch/LLaMA-Factory
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/indrisch//LLaMA-Factory/scripts
+/var/spool/slurmd/job18950234/slurm_script: line 57: None/bin/activate: No such file or directory
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ipykernel/2026a/bin/pip", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/indrisch/.local/lib/python3.12/site-packages/pip/_internal/cli/main.py", line 47, in main
+    from pip._internal.cli.autocompletion import autocomplete
+  File "/home/indrisch/.local/lib/python3.12/site-packages/pip/_internal/cli/autocompletion.py", line 12, in <module>
+    from pip._internal.cli.main_parser import create_main_parser
+  File "/home/indrisch/.local/lib/python3.12/site-packages/pip/_internal/cli/main_parser.py", line 9, in <module>
+    from pip._vendor.rich.markup import escape
+ModuleNotFoundError: No module named 'pip._vendor.rich'
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ipykernel/2026a/bin/pip", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/indrisch/.local/lib/python3.12/site-packages/pip/_internal/cli/main.py", line 47, in main
+    from pip._internal.cli.autocompletion import autocomplete
+  File "/home/indrisch/.local/lib/python3.12/site-packages/pip/_internal/cli/autocompletion.py", line 12, in <module>
+    from pip._internal.cli.main_parser import create_main_parser
+  File "/home/indrisch/.local/lib/python3.12/site-packages/pip/_internal/cli/main_parser.py", line 9, in <module>
+    from pip._vendor.rich.markup import escape
+ModuleNotFoundError: No module named 'pip._vendor.rich'
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/ipykernel/2026a/bin/pip", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/indrisch/.local/lib/python3.12/site-packages/pip/_internal/cli/main.py", line 47, in main
+    from pip._internal.cli.autocompletion import autocomplete
+  File "/home/indrisch/.local/lib/python3.12/site-packages/pip/_internal/cli/autocompletion.py", line 12, in <module>
+    from pip._internal.cli.main_parser import create_main_parser
+  File "/home/indrisch/.local/lib/python3.12/site-packages/pip/_internal/cli/main_parser.py", line 9, in <module>
+    from pip._vendor.rich.markup import escape
+ModuleNotFoundError: No module named 'pip._vendor.rich'
+Cluster name: 
+HF_HOME: None
+HF_HUB_CACHE: None
+HF_HUB_DISABLE_XET: None
+/var/spool/slurmd/job18950234/slurm_script: hf: command not found
+/var/spool/slurmd/job18950234/slurm_script: deactivate: command not found
