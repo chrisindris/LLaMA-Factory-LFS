@@ -46,10 +46,14 @@ def vllm_infer(
     model_name_or_path: str,
     adapter_name_or_path: str = None,
     dataset: str = "alpaca_en_demo",
-    dataset_dir: str = "data",
+    media_dir: str = "data",
+    dataset_dir: str = "/project/aip-wangcs/indrisch/LLaMA-Factory/data/",
     template: str = "default",
     cutoff_len: int = 2048,
     max_samples: Optional[int] = None,
+    overwrite_cache: bool = False,
+    preprocessing_num_workers: int = 16,
+    low_cpu_mem_usage: bool = True,
     vllm_config: str = "{}",
     save_name: str = "generated_predictions.jsonl",
     temperature: float = 0.95,
@@ -80,11 +84,14 @@ def vllm_infer(
             model_name_or_path=model_name_or_path,
             adapter_name_or_path=adapter_name_or_path,
             dataset=dataset,
+            media_dir=media_dir,
             dataset_dir=dataset_dir,
             template=template,
             cutoff_len=cutoff_len,
             max_samples=max_samples,
-            preprocessing_num_workers=16,
+            overwrite_cache=overwrite_cache,
+            preprocessing_num_workers=preprocessing_num_workers,
+            low_cpu_mem_usage=low_cpu_mem_usage,
             default_system=default_system,
             enable_thinking=enable_thinking,
             vllm_config=vllm_config,
@@ -221,8 +228,12 @@ def vllm_infer(
 
     # Write all results at once outside the loop
     with open(save_name, "w", encoding="utf-8") as f:
-        for text, pred, label in zip(all_prompts, all_preds, all_labels):
-            f.write(json.dumps({"prompt": text, "predict": pred, "label": label}, ensure_ascii=False) + "\n")
+        with open(save_name[:-6] + "_formatted.jsonl", "w", encoding="utf-8") as f_formatted:
+            d = []
+            for index, (text, pred, label) in enumerate(zip(all_prompts, all_preds, all_labels)):
+                f.write(json.dumps({"prompt": text, "predict": pred, "label": label}, ensure_ascii=False) + "\n")
+                d.append({"prompt": text, "predict": pred, "label": label})
+            f_formatted.write(json.dumps(d, ensure_ascii=False, indent=4) + "\n")
 
     print("*" * 70)
     print(f"{len(all_prompts)} total generated results have been saved at {save_name}.")

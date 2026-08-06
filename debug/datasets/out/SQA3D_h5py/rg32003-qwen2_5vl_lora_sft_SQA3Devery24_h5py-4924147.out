@@ -1,0 +1,77 @@
+WARNING: Skipping /dev/shm bind mount: already mounted
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2026-01-09 05:14:41] llamafactory.launcher:143 >> Initializing 1 distributed tasks at: 127.0.0.1:36091
+Traceback (most recent call last):
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 182, in <module>
+    from llamafactory.train.tuner import run_exp  # use absolute import
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 23, in <module>
+    from ..data import get_template_and_fix_tokenizer
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/data/__init__.py", line 22, in <module>
+    from .loader import get_dataset
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/data/loader.py", line 24, in <module>
+    from .converter import align_dataset
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/data/converter.py", line 22, in <module>
+    from .data_packing.h5py_data import retrieve_image
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/data/data_packing/h5py_data.py", line 19, in <module>
+    import h5py
+ModuleNotFoundError: No module named 'h5py'
+E0109 05:14:48.244000 69 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 86) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-01-09_05:14:48
+  host      : rg32003.rorqual.calcul.quebec
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 86)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '1', '--master_addr', '127.0.0.1', '--master_port', '36091', '/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/scratch/indrisch/LLaMA-Factory/examples/train_lora/videor1_lora_sft_SQA3Devery24_h5py.yaml']' returned non-zero exit status 1.

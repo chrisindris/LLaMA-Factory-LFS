@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/data/data_packing/h5py_data.py", line 19, in <module>
+    import h5py
+ModuleNotFoundError: No module named 'h5py'

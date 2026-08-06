@@ -30,7 +30,7 @@ from transformers.training_args import ParallelMode
 from transformers.utils import is_torch_bf16_gpu_available, is_torch_npu_available
 
 from ..extras import logging
-from ..extras.constants import CHECKPOINT_NAMES, EngineName
+from ..extras.constants import ADAPTER_WEIGHTS_NAME, CHECKPOINT_NAMES, EngineName, SAFE_ADAPTER_WEIGHTS_NAME
 from ..extras.misc import check_dependencies, check_version, get_current_device, is_env_enabled
 from ..extras.packages import is_mcore_adapter_available, is_transformers_version_greater_than
 from .data_args import DataArguments
@@ -52,6 +52,8 @@ _INFER_ARGS = [ModelArguments, DataArguments, FinetuningArguments, GeneratingArg
 _INFER_CLS = tuple[ModelArguments, DataArguments, FinetuningArguments, GeneratingArguments]
 _EVAL_ARGS = [ModelArguments, DataArguments, EvaluationArguments, FinetuningArguments]
 _EVAL_CLS = tuple[ModelArguments, DataArguments, EvaluationArguments, FinetuningArguments]
+_ADAPTER_CONFIG_NAME = "adapter_config.json"
+_TRAINER_STATE_NAME = "trainer_state.json"
 
 if is_mcore_adapter_available() and is_env_enabled("USE_MCA"):
     from mcore_adapter import TrainingArguments as McaTrainingArguments
@@ -237,6 +239,94 @@ def _parse_eval_args(args: Optional[Union[dict[str, Any], list[str]]] = None) ->
     return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
 
 
+def _get_missing_adapter_resume_artifacts(adapter_checkpoint: str) -> list[str]:
+    missing_artifacts: list[str] = []
+
+    if not os.path.isfile(os.path.join(adapter_checkpoint, _ADAPTER_CONFIG_NAME)):
+        missing_artifacts.append(_ADAPTER_CONFIG_NAME)
+
+    if not any(
+        os.path.isfile(os.path.join(adapter_checkpoint, name))
+        for name in (SAFE_ADAPTER_WEIGHTS_NAME, ADAPTER_WEIGHTS_NAME)
+    ):
+        missing_artifacts.append(f"{SAFE_ADAPTER_WEIGHTS_NAME} or {ADAPTER_WEIGHTS_NAME}")
+
+    if not os.path.isfile(os.path.join(adapter_checkpoint, _TRAINER_STATE_NAME)):
+        missing_artifacts.append(_TRAINER_STATE_NAME)
+
+    return missing_artifacts
+
+
+def _try_auto_resume_from_adapter(
+    model_args: "ModelArguments",
+    training_args: "TrainingArguments",
+    finetuning_args: "FinetuningArguments",
+    can_resume_from_checkpoint: bool,
+) -> None:
+    if (
+        training_args.resume_from_checkpoint is not None
+        or not training_args.do_train
+        or not can_resume_from_checkpoint
+        or finetuning_args.stage != "sft"
+        or finetuning_args.finetuning_type != "lora"
+        or finetuning_args.create_new_adapter
+        or model_args.adapter_name_or_path is None
+    ):
+        return
+
+    adapter_checkpoint = model_args.adapter_name_or_path[-1]
+    if not os.path.isdir(adapter_checkpoint):
+        return
+
+    if is_deepspeed_zero3_enabled():
+        logger.warning_rank0(
+            f"Skipping adapter auto-resume from {adapter_checkpoint} because DeepSpeed ZeRO-3 is enabled. "
+            "Set `resume_from_checkpoint` explicitly to override this behavior."
+        )
+        return
+
+    missing_artifacts = _get_missing_adapter_resume_artifacts(adapter_checkpoint)
+    if missing_artifacts:
+        logger.warning_rank0(
+            f"Skipping adapter auto-resume from {adapter_checkpoint} because missing "
+            f"{', '.join(missing_artifacts)}."
+        )
+        return
+
+    training_args.resume_from_checkpoint = adapter_checkpoint
+    logger.info_rank0(f"Resuming training from adapter checkpoint {training_args.resume_from_checkpoint}.")
+
+
+def _try_auto_resume_from_output_dir(training_args: "TrainingArguments", can_resume_from_checkpoint: bool) -> None:
+    if (
+        training_args.resume_from_checkpoint is not None
+        or not training_args.do_train
+        or not os.path.isdir(training_args.output_dir)
+        or training_args.overwrite_output_dir
+        or not can_resume_from_checkpoint
+    ):
+        return
+
+    last_checkpoint = get_last_checkpoint(training_args.output_dir)
+    if last_checkpoint is None and any(os.path.isfile(os.path.join(training_args.output_dir, name)) for name in CHECKPOINT_NAMES):
+        raise ValueError("Output directory already exists and is not empty. Please set `overwrite_output_dir`.")
+
+    if last_checkpoint is not None:
+        training_args.resume_from_checkpoint = last_checkpoint
+        logger.info_rank0(f"Resuming training from {training_args.resume_from_checkpoint}.")
+        logger.info_rank0("Change `output_dir` or use `overwrite_output_dir` to avoid.")
+
+
+def _set_resume_from_checkpoint(
+    model_args: "ModelArguments",
+    training_args: "TrainingArguments",
+    finetuning_args: "FinetuningArguments",
+    can_resume_from_checkpoint: bool,
+) -> None:
+    _try_auto_resume_from_adapter(model_args, training_args, finetuning_args, can_resume_from_checkpoint)
+    _try_auto_resume_from_output_dir(training_args, can_resume_from_checkpoint)
+
+
 def get_ray_args(args: Optional[Union[dict[str, Any], list[str]]] = None) -> RayArguments:
     parser = HfArgumentParser(RayArguments)
     (ray_args,) = _parse_args(parser, args, allow_extra_keys=True)
@@ -413,23 +503,7 @@ def get_train_args(args: Optional[Union[dict[str, Any], list[str]]] = None) -> _
     else:
         can_resume_from_checkpoint = True
 
-    if (
-        training_args.resume_from_checkpoint is None
-        and training_args.do_train
-        and os.path.isdir(training_args.output_dir)
-        and not training_args.overwrite_output_dir
-        and can_resume_from_checkpoint
-    ):
-        last_checkpoint = get_last_checkpoint(training_args.output_dir)
-        if last_checkpoint is None and any(
-            os.path.isfile(os.path.join(training_args.output_dir, name)) for name in CHECKPOINT_NAMES
-        ):
-            raise ValueError("Output directory already exists and is not empty. Please set `overwrite_output_dir`.")
-
-        if last_checkpoint is not None:
-            training_args.resume_from_checkpoint = last_checkpoint
-            logger.info_rank0(f"Resuming training from {training_args.resume_from_checkpoint}.")
-            logger.info_rank0("Change `output_dir` or use `overwrite_output_dir` to avoid.")
+    _set_resume_from_checkpoint(model_args, training_args, finetuning_args, can_resume_from_checkpoint)
 
     if (
         finetuning_args.stage in ["rm", "ppo"]

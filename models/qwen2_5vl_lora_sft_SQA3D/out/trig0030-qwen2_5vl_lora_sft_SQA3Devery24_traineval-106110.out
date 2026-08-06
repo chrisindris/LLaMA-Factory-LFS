@@ -1,0 +1,171 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2025-11-27 07:30:56] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: 127.0.0.1:35933
+W1127 07:30:57.261000 656437 site-packages/torch/distributed/run.py:792] 
+W1127 07:30:57.261000 656437 site-packages/torch/distributed/run.py:792] *****************************************
+W1127 07:30:57.261000 656437 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W1127 07:30:57.261000 656437 site-packages/torch/distributed/run.py:792] *****************************************
+[2025-11-27 07:31:04,751] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-27 07:31:04,790] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-27 07:31:04,980] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-11-27 07:31:05,099] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2025-11-27 07:31:07,271] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-11-27 07:31:07,271] [INFO] [comm.py:700:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[2025-11-27 07:31:07,271] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-11-27 07:31:07,271] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-11-27 07:31:07,283] [INFO] [comm.py:669:init_distributed] cdb=None
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/app/src/llamafactory/launcher.py", line 180, in <module>
+[rank0]:     run_exp()
+[rank0]:   File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+[rank0]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank0]:   File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+[rank0]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank0]:                                                                              ^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/app/src/llamafactory/hparams/parser.py", line 274, in get_train_args
+[rank0]:     raise ValueError("`predict_with_generate` is incompatible with DeepSpeed ZeRO-3.")
+[rank0]: ValueError: `predict_with_generate` is incompatible with DeepSpeed ZeRO-3.
+[rank0]:[W1127 07:31:08.391589834 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/app/src/llamafactory/launcher.py", line 180, in <module>
+[rank2]:     run_exp()
+[rank2]:   File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+[rank2]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank2]:   File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+[rank2]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank2]:                                                                              ^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/app/src/llamafactory/hparams/parser.py", line 274, in get_train_args
+[rank2]:     raise ValueError("`predict_with_generate` is incompatible with DeepSpeed ZeRO-3.")
+[rank2]: ValueError: `predict_with_generate` is incompatible with DeepSpeed ZeRO-3.
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/app/src/llamafactory/launcher.py", line 180, in <module>
+[rank1]:     run_exp()
+[rank1]:   File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+[rank1]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank1]:   File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+[rank1]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank1]:                                                                              ^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/app/src/llamafactory/hparams/parser.py", line 274, in get_train_args
+[rank1]:     raise ValueError("`predict_with_generate` is incompatible with DeepSpeed ZeRO-3.")
+[rank1]: ValueError: `predict_with_generate` is incompatible with DeepSpeed ZeRO-3.
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/app/src/llamafactory/launcher.py", line 180, in <module>
+[rank3]:     run_exp()
+[rank3]:   File "/app/src/llamafactory/train/tuner.py", line 110, in run_exp
+[rank3]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank3]:   File "/app/src/llamafactory/train/tuner.py", line 55, in _training_function
+[rank3]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank3]:                                                                              ^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/app/src/llamafactory/hparams/parser.py", line 274, in get_train_args
+[rank3]:     raise ValueError("`predict_with_generate` is incompatible with DeepSpeed ZeRO-3.")
+[rank3]: ValueError: `predict_with_generate` is incompatible with DeepSpeed ZeRO-3.
+W1127 07:31:10.085000 656437 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 656503 closing signal SIGTERM
+W1127 07:31:10.085000 656437 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 656504 closing signal SIGTERM
+W1127 07:31:10.085000 656437 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 656505 closing signal SIGTERM
+E1127 07:31:10.399000 656437 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 656502) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/app/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-11-27_07:31:10
+  host      : trig0030.scinet.local
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 656502)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/app/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/app/src/llamafactory/launcher.py", line 110, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', '127.0.0.1', '--master_port', '35933', '/app/src/llamafactory/launcher.py', '/scratch/indrisch/LLaMA-Factory/examples/train_lora/qwen2_5vl_lora_sft_SQA3Devery24_traineval.yaml']' returned non-zero exit status 1.
+INFO:    Cleanup error: while stopping driver for /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/apptainer/1.3.5/var/apptainer/mnt/session/final: fuse-overlayfs exited: fuse: reading device: Software caused connection abort
+
+scontrol show job 106110
+JobId=106110 JobName=slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=121467 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:00:33 TimeLimit=01:00:00 TimeMin=N/A
+   SubmitTime=2025-11-27T07:29:50 EligibleTime=2025-11-27T07:29:50
+   AccrueTime=2025-11-27T07:29:50
+   StartTime=2025-11-27T07:30:39 EndTime=2025-11-27T07:31:12 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-27T07:30:39 Scheduler=Backfill
+   Partition=compute_full_node AllocNode:Sid=trig-login01:973769
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0030
+   BatchHost=trig0030
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval-106110.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval-106110.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+sacct -j 106110
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+106110       slurm_qwe+ def-wangcs   00:00:33                         00:00:00   00:00:00      0:0 
+106110.batch      batch def-wangcs   00:00:33                         00:00:00   00:00:00      0:0 
+106110.exte+     extern def-wangcs   00:00:33                         00:00:00   00:00:00      0:0 
+

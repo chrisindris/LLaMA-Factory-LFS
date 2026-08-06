@@ -1,0 +1,20 @@
+/cm/local/apps/slurm/var/spool/job1653943/slurm_script: line 64: /project/aip-wangcs/indrisch/venv_llamafactory_cu126/bin/activate: No such file or directory
+/project/aip-wangcs/indrisch /project/aip-wangcs/indrisch/LLaMA-Factory/preliminaries/videor1
+created virtual environment CPython3.12.4.final.0-64 in 2527ms
+  creator CPython3Posix(dest=/project/6110552/indrisch/venv_llamafactory_cu126, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=/home/indrisch/.local/share/virtualenv)
+    added seed packages: pip==25.3
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+/project/aip-wangcs/indrisch/LLaMA-Factory/preliminaries/videor1
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (25.3)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/setuptools-80.9.0+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/wheel-0.45.1+computecanada-py3-none-any.whl
+Installing collected packages: wheel, setuptools
+
+Successfully installed setuptools-80.9.0+computecanada wheel-0.45.1+computecanada
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Obtaining file:///project/6110552/indrisch/LLaMA-Factory/preliminaries/videor1
+ERROR: file:///project/6110552/indrisch/LLaMA-Factory/preliminaries/videor1 does not appear to be a Python project: neither 'setup.py' nor 'pyproject.toml' found.
+/project/aip-wangcs/indrisch/LLaMA-Factory /project/aip-wangcs/indrisch/LLaMA-Factory/preliminaries/videor1
+/cm/local/apps/slurm/var/spool/job1653943/slurm_script: llamafactory-cli: command not found

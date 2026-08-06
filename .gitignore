@@ -1,3 +1,12 @@
+# Misc large files
+*.sif
+*rg31703-videor1_lora_sft_SQA3Devery24_traineval-4471227.out
+*kn176-qwen2_5vl_lora_sft_SQA3Devery24_traineval-1534331.out
+
+# Misc large folders
+None/
+apptainer/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -5,6 +14,7 @@ __pycache__/
 
 # Large data worker outputs
 *pt_data_worker*
+core*python3.11*
 
 # C extensions
 *.so

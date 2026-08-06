@@ -1,0 +1,272 @@
+fail
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/indrisch/.local/share/virtualenv/wheel/3.11/embed/3'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/indrisch/.local/share/virtualenv/wheel/3.11/embed'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/embed/via_app_data/via_app_data.py", line 84, in _get
+    result = get_wheel(
+             ^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/acquire.py", line 32, in get_wheel
+    wheel = from_bundle(distribution, version, for_py_version, search_dirs, app_data, do_periodic_update, env)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/bundle.py", line 18, in from_bundle
+    wheel = periodic_update(distribution, of_version, for_py_version, wheel, search_dirs, app_data, per, env)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/periodic_update.py", line 43, in periodic_update
+    handle_auto_update(distribution, for_py_version, wheel, search_dirs, app_data, env)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/periodic_update.py", line 77, in handle_auto_update
+    embed_update_log.write(u_log.to_dict())
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/app_data/via_disk_folder.py", line 149, in write
+    folder.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1120, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1120, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [Errno 13] Permission denied: '/home/indrisch/.local/share/virtualenv/wheel/3.11'
+fail
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/indrisch/.local/share/virtualenv/wheel/3.11/embed/3'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/indrisch/.local/share/virtualenv/wheel/3.11/embed'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/embed/via_app_data/via_app_data.py", line 84, in _get
+    result = get_wheel(
+             ^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/acquire.py", line 32, in get_wheel
+    wheel = from_bundle(distribution, version, for_py_version, search_dirs, app_data, do_periodic_update, env)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/bundle.py", line 18, in from_bundle
+    wheel = periodic_update(distribution, of_version, for_py_version, wheel, search_dirs, app_data, per, env)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/periodic_update.py", line 43, in periodic_update
+    handle_auto_update(distribution, for_py_version, wheel, search_dirs, app_data, env)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/periodic_update.py", line 77, in handle_auto_update
+    embed_update_log.write(u_log.to_dict())
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/app_data/via_disk_folder.py", line 149, in write
+    folder.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1120, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1120, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [Errno 13] Permission denied: '/home/indrisch/.local/share/virtualenv/wheel/3.11'
+fail
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/indrisch/.local/share/virtualenv/wheel/3.11/embed/3'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/indrisch/.local/share/virtualenv/wheel/3.11/embed'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/embed/via_app_data/via_app_data.py", line 84, in _get
+    result = get_wheel(
+             ^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/acquire.py", line 32, in get_wheel
+    wheel = from_bundle(distribution, version, for_py_version, search_dirs, app_data, do_periodic_update, env)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/bundle.py", line 18, in from_bundle
+    wheel = periodic_update(distribution, of_version, for_py_version, wheel, search_dirs, app_data, per, env)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/periodic_update.py", line 43, in periodic_update
+    handle_auto_update(distribution, for_py_version, wheel, search_dirs, app_data, env)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/periodic_update.py", line 77, in handle_auto_update
+    embed_update_log.write(u_log.to_dict())
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/app_data/via_disk_folder.py", line 149, in write
+    folder.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1120, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1120, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [Errno 13] Permission denied: '/home/indrisch/.local/share/virtualenv/wheel/3.11'
+fail
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/indrisch/.local/share/virtualenv/wheel/3.11/embed/3'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/indrisch/.local/share/virtualenv/wheel/3.11/embed'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/embed/via_app_data/via_app_data.py", line 84, in _get
+    result = get_wheel(
+             ^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/acquire.py", line 32, in get_wheel
+    wheel = from_bundle(distribution, version, for_py_version, search_dirs, app_data, do_periodic_update, env)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/bundle.py", line 18, in from_bundle
+    wheel = periodic_update(distribution, of_version, for_py_version, wheel, search_dirs, app_data, per, env)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/periodic_update.py", line 43, in periodic_update
+    handle_auto_update(distribution, for_py_version, wheel, search_dirs, app_data, env)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/periodic_update.py", line 77, in handle_auto_update
+    embed_update_log.write(u_log.to_dict())
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/app_data/via_disk_folder.py", line 149, in write
+    folder.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1120, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1120, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [Errno 13] Permission denied: '/home/indrisch/.local/share/virtualenv/wheel/3.11'
+fail
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/indrisch/.local/share/virtualenv/wheel/3.11/embed/3'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/indrisch/.local/share/virtualenv/wheel/3.11/embed'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/embed/via_app_data/via_app_data.py", line 84, in _get
+    result = get_wheel(
+             ^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/acquire.py", line 32, in get_wheel
+    wheel = from_bundle(distribution, version, for_py_version, search_dirs, app_data, do_periodic_update, env)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/bundle.py", line 18, in from_bundle
+    wheel = periodic_update(distribution, of_version, for_py_version, wheel, search_dirs, app_data, per, env)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/periodic_update.py", line 43, in periodic_update
+    handle_auto_update(distribution, for_py_version, wheel, search_dirs, app_data, env)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/periodic_update.py", line 77, in handle_auto_update
+    embed_update_log.write(u_log.to_dict())
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/app_data/via_disk_folder.py", line 149, in write
+    folder.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1120, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1120, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [Errno 13] Permission denied: '/home/indrisch/.local/share/virtualenv/wheel/3.11'
+fail
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/indrisch/.local/share/virtualenv/wheel/3.11/embed/3'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/indrisch/.local/share/virtualenv/wheel/3.11/embed'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/embed/via_app_data/via_app_data.py", line 84, in _get
+    result = get_wheel(
+             ^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/acquire.py", line 32, in get_wheel
+    wheel = from_bundle(distribution, version, for_py_version, search_dirs, app_data, do_periodic_update, env)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/bundle.py", line 18, in from_bundle
+    wheel = periodic_update(distribution, of_version, for_py_version, wheel, search_dirs, app_data, per, env)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/periodic_update.py", line 43, in periodic_update
+    handle_auto_update(distribution, for_py_version, wheel, search_dirs, app_data, env)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/seed/wheels/periodic_update.py", line 77, in handle_auto_update
+    embed_update_log.write(u_log.to_dict())
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/site-packages/virtualenv/app_data/via_disk_folder.py", line 149, in write
+    folder.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1120, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1120, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.11.5/lib/python3.11/pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [Errno 13] Permission denied: '/home/indrisch/.local/share/virtualenv/wheel/3.11'
+srun: Job step aborted: Waiting up to 62 seconds for job step to finish.
+slurmstepd: error: *** JOB 125114 ON trig0016 CANCELLED AT 2025-12-05T01:05:28 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 125114.0 ON trig0016 CANCELLED AT 2025-12-05T01:05:28 DUE TO TIME LIMIT ***
+
+scontrol show job 125114
+JobId=125114 JobName=slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=230669 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=TimeLimit Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:15
+   RunTime=00:02:24 TimeLimit=00:02:00 TimeMin=N/A
+   SubmitTime=2025-12-04T12:09:55 EligibleTime=2025-12-04T12:09:55
+   AccrueTime=2025-12-04T12:09:55
+   StartTime=2025-12-05T01:03:03 EndTime=2025-12-05T01:05:27 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-12-05T01:03:03 Scheduler=Backfill
+   Partition=compute_full_node AllocNode:Sid=trig-login01:3495626
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig[0016,0054]
+   BatchHost=trig0016
+   NumNodes=2 NumCPUs=192 NumTasks=2 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=192,mem=1540000M,node=2,billing=8,gres/gpu=8
+   AllocTRES=cpu=192,mem=1540000M,node=2,billing=8,gres/gpu=8
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L /scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node-125114.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node-125114.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+sacct -j 125114
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+125114       slurm_qwe+ def-wangcs   00:02:24                        00:01.079  00:09.555      0:0 
+125114.batch      batch def-wangcs   00:02:26          0      6328K  00:00.307  00:00.882     0:15 
+125114.exte+     extern def-wangcs   00:02:28          0        72K  00:00.002   00:00:00      0:0 
+125114.0     config_en+ def-wangcs   00:02:23          0    179636K  00:00.769  00:08.673     0:15 
+

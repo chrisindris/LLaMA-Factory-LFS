@@ -56,7 +56,7 @@ LAYERNORM_NAMES = {"norm", "ln"}
 
 LLAMABOARD_CONFIG = "llamaboard_config.yaml"
 
-MCA_SUPPORTED_MODELS = {"deepseek_v3", "llama", "mistral", "mixtral", "qwen2", "qwen2_vl", "qwen2_5_vl", "qwen3", "qwen3_moe", "qwen3_next"}
+MCA_SUPPORTED_MODELS = {"deepseek_v3", "llama", "mistral", "mixtral", "qwen2", "qwen2_vl", "qwen2_5_vl", "qwen3", "qwen3_moe", "qwen3_next", "videor1"}
 
 METHODS = ["full", "freeze", "lora", "oft"]
 
@@ -3199,6 +3199,20 @@ register_model_group(
 
 register_model_group(
     models={
+        "qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1": {
+            DownloadSource.DEFAULT: "cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1",
+        },
+        "qwen2_5vl-7b-lora-sft-SQA3Devery24_R12C12F12X62_400steps": {
+            DownloadSource.DEFAULT: "cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_R12C12F12X62_400steps",
+        },
+    },
+    template="qwen2_vl",
+    multimodal=True,
+)
+
+
+register_model_group(
+    models={
         "Qwen3-VL-2B-Instruct": {
             DownloadSource.DEFAULT: "Qwen/Qwen3-VL-2B-Instruct",
             DownloadSource.MODELSCOPE: "Qwen/Qwen3-VL-2B-Instruct",
@@ -3257,6 +3271,22 @@ register_model_group(
         },
     },
     template="qwen3_vl",
+    multimodal=True,
+)
+
+
+register_model_group(
+    models={
+        "Qwen3.5-4B": {
+            DownloadSource.DEFAULT: "Qwen/Qwen3.5-4B",
+            DownloadSource.MODELSCOPE: "Qwen/Qwen3.5-4B",
+        },
+        "Qwen3.5-9B": {
+            DownloadSource.DEFAULT: "Qwen/Qwen3.5-9B",
+            DownloadSource.MODELSCOPE: "Qwen/Qwen3.5-9B",
+        },
+    },
+    template="qwen3_5",
     multimodal=True,
 )
 
@@ -3472,6 +3502,20 @@ register_model_group(
         },
     },
     template="vicuna",
+)
+
+
+register_model_group(
+    models={
+        "Video-R1-Qwen2.5-VL-7B-COT-SFT": {
+            DownloadSource.DEFAULT: "Video-R1/Qwen2.5-VL-7B-COT-SFT",
+        },
+        "Video-R1-7B": {
+            DownloadSource.DEFAULT: "Video-R1/Video-R1-7B",
+        },
+    },
+    template="videor1",
+    multimodal=True,
 )
 
 

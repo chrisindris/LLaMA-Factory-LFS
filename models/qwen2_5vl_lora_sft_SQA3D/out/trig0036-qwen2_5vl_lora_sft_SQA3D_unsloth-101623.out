@@ -1,0 +1,41 @@
+FATAL:   "llamafactory-cli": executable file not found in $PATH
+
+scontrol show job 101623
+JobId=101623 JobName=slurm_qwen2_5vl_lora_sft_SQA3D_unsloth.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=342710 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=255:0
+   RunTime=00:00:12 TimeLimit=03:00:00 TimeMin=N/A
+   SubmitTime=2025-11-24T02:06:33 EligibleTime=2025-11-24T02:06:33
+   AccrueTime=2025-11-24T02:06:33
+   StartTime=2025-11-24T02:40:20 EndTime=2025-11-24T02:40:32 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-11-24T02:40:20 Scheduler=Main
+   Partition=compute_full_node AllocNode:Sid=trig-login01:993958
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0036
+   BatchHost=trig0036
+   NumNodes=1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   AllocTRES=cpu=96,mem=770000M,node=1,billing=4,gres/gpu=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3D_unsloth.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L slurm_qwen2_5vl_lora_sft_SQA3D_unsloth.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D_unsloth-101623.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3D_unsloth-101623.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+sacct -j 101623
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+101623       slurm_qwe+ def-wangcs   00:00:12                         00:00:00   00:00:00      0:0 
+101623.batch      batch def-wangcs   00:00:12                         00:00:00   00:00:00      0:0 
+101623.exte+     extern def-wangcs   00:00:12                         00:00:00   00:00:00      0:0 
+

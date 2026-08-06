@@ -1,0 +1,102 @@
+slurmstepd: error: execve(): config_env.sh: Permission denied
+slurmstepd: error: execve(): config_env.sh: Permission denied
+srun: error: trig0006: task 0: Exited with exit code 13
+srun: Terminating StepId=124605.0
+srun: error: trig0038: task 1: Exited with exit code 13
+/var/spool/slurm/slurmd/job124605/slurm_script: line 22: /dev/shm/slurm.indrisch.124605/ENV/bin/activate: No such file or directory
+import: unable to open X server `' @ error/import.c/ImportImageCommand/348.
+import: unable to open X server `' @ error/import.c/ImportImageCommand/348.
+NODE_RANK: 0
+HEAD_NODE: trig0006
+RAY_PORT: 58085
+  File "<string>", line 1
+    import ray; ray.init(address=f{os.environ[HEAD_NODE]}:{os.environ[RAY_PORT]},_node_ip_address=os.environ['HEAD_NODE'])
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+  File "<string>", line 1
+    print(Nodes
+         ^
+SyntaxError: '(' was never closed
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'ray'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'ray'
+WARNING: skipping mount of /scratch/apptainer-home: stat /scratch/apptainer-home: no such file or directory
+WARNING: skipping mount of /scratch/apptainer-tmp: stat /scratch/apptainer-tmp: no such file or directory
+slurmstepd: error: execve(): ray: No such file or directory
+slurmstepd: error: execve(): ray: No such file or directory
+srun: error: trig0006: task 0: Exited with exit code 2
+srun: Terminating StepId=124605.1
+srun: error: trig0038: task 1: Exited with exit code 2
+INFO:    Terminating fuse-overlayfs after timeout
+INFO:    Timeouts can be caused by a running background process
+FATAL:   container creation failed: mount hook function failure: mount /scratch/apptainer-tmp->/scratch/apptainer-tmp/ error: while mounting /scratch/apptainer-tmp: mount source /scratch/apptainer-tmp doesn't exist
+import: unable to open X server `' @ error/import.c/ImportImageCommand/348.
+import: unable to open X server `' @ error/import.c/ImportImageCommand/348.
+NODE_RANK: 1
+HEAD_NODE: trig0006
+RAY_PORT: 58085
+  File "<string>", line 1
+    import ray; ray.init(address=f{os.environ[HEAD_NODE]}:{os.environ[RAY_PORT]},_node_ip_address=os.environ['HEAD_NODE'])
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+  File "<string>", line 1
+    print(Nodes
+         ^
+SyntaxError: '(' was never closed
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'ray'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'ray'
+WARNING: skipping mount of /scratch/apptainer-home: stat /scratch/apptainer-home: no such file or directory
+WARNING: skipping mount of /scratch/apptainer-tmp: stat /scratch/apptainer-tmp: no such file or directory
+INFO:    Terminating fuse-overlayfs after timeout
+INFO:    Timeouts can be caused by a running background process
+FATAL:   container creation failed: mount hook function failure: mount /scratch/apptainer-tmp->/scratch/apptainer-tmp/ error: while mounting /scratch/apptainer-tmp: mount source /scratch/apptainer-tmp doesn't exist
+/var/spool/slurm/slurmd/job124605/slurm_script: line 75: kill: (2780465) - No such process
+
+scontrol show job 124605
+JobId=124605 JobName=slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=247704 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=None Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:20 TimeLimit=00:02:00 TimeMin=N/A
+   SubmitTime=2025-12-03T19:13:09 EligibleTime=2025-12-03T19:13:09
+   AccrueTime=2025-12-03T19:13:09
+   StartTime=2025-12-04T02:32:58 EndTime=2025-12-04T02:33:18 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-12-04T02:32:58 Scheduler=Main
+   Partition=compute_full_node AllocNode:Sid=trig-login01:3495626
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig[0006,0038]
+   BatchHost=trig0006
+   NumNodes=2 NumCPUs=192 NumTasks=2 CPUs/Task=96 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=192,mem=1540000M,node=2,billing=8,gres/gpu=8
+   AllocTRES=cpu=192,mem=1540000M,node=2,billing=8,gres/gpu=8
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=96 MinMemoryNode=770000M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env=L /scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/slurm_qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node.sh 
+   StdErr=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node-124605.out
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/preliminaries/qwen2_5vl_lora_sft_SQA3D/%N-qwen2_5vl_lora_sft_SQA3Devery24_traineval_2node-124605.out
+   TresPerNode=gres/gpu:h100:4
+   TresPerTask=cpu=96
+   
+
+sacct -j 124605
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+124605       slurm_qwe+ def-wangcs   00:00:20                        00:00.089  00:00.032      0:0 
+124605.batch      batch def-wangcs   00:00:20                         00:00:00   00:00:00      0:0 
+124605.exte+     extern def-wangcs   00:00:20                         00:00:00   00:00:00      0:0 
+124605.0     config_en+ def-wangcs   00:00:00          0      1988K  00:00.045  00:00.015     13:0 
+124605.1     ray-multi+ def-wangcs   00:00:01          0      2296K  00:00.044  00:00.016      2:0 
+

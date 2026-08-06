@@ -1,0 +1,48 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: None
+RUNNING_MODE: APPTAINER
+FATAL:   While checking container encryption: could not open image /scratch/indrisch/LLaMA-Factory/llamafactory.sif: failed to retrieve path for /scratch/indrisch/LLaMA-Factory/llamafactory.sif: lstat /scratch/indrisch/LLaMA-Factory/llamafactory.sif: no such file or directory
+
+scontrol show job 390498
+JobId=390498 JobName=trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=1115745 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=255:0
+   RunTime=00:00:05 TimeLimit=00:15:00 TimeMin=N/A
+   SubmitTime=2026-03-30T14:48:42 EligibleTime=2026-03-30T14:48:42
+   AccrueTime=2026-03-30T14:48:42
+   StartTime=2026-03-30T14:50:11 EndTime=2026-03-30T14:50:16 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-03-30T14:50:11 Scheduler=Main
+   Partition=compute AllocNode:Sid=trig-login01:237613
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0056
+   BatchHost=trig0056
+   NumNodes=1 NumCPUs=24 NumTasks=1 CPUs/Task=24 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=24,mem=192500M,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=24 MinMemoryNode=192500M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k/trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   SubmitLine=SBATCH --comment /opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_Scene30k_traineval_debug.sh
+   StdErr=
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_Scene30k/out/trig0056-qwen2_5vl_lora_sft_Scene30k_traineval_debug-390498.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=24
+
+sacct -j 390498
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+390498       trillium_+ def-wangcs   00:00:05                         00:00:00   00:00:00      0:0 
+390498.batch      batch def-wangcs   00:00:05                         00:00:00   00:00:00      0:0 
+390498.exte+     extern def-wangcs   00:00:05                         00:00:00   00:00:00      0:0 
+

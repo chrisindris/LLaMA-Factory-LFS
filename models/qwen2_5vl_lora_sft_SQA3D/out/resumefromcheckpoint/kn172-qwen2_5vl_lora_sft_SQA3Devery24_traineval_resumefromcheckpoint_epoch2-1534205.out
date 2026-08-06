@@ -1,0 +1,293 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2025-12-01 09:38:56] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: 127.0.0.1:46905
+W1201 09:38:58.219000 16063 site-packages/torch/distributed/run.py:792] 
+W1201 09:38:58.219000 16063 site-packages/torch/distributed/run.py:792] *****************************************
+W1201 09:38:58.219000 16063 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W1201 09:38:58.219000 16063 site-packages/torch/distributed/run.py:792] *****************************************
+⚙️  Running in WANDB offline mode⚙️  Running in WANDB offline mode
+
+⚙️  Running in WANDB offline mode
+⚙️  Running in WANDB offline mode
+[2025-12-01 09:39:06,423] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-12-01 09:39:06,423] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-12-01 09:39:06,423] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-12-01 09:39:06,423] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/opt/conda/lib/python3.11/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2025-12-01 09:39:12,597] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-12-01 09:39:12,598] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-12-01 09:39:12,599] [INFO] [comm.py:700:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[2025-12-01 09:39:12,599] [INFO] [comm.py:669:init_distributed] cdb=None
+[2025-12-01 09:39:12,599] [INFO] [comm.py:669:init_distributed] cdb=None
+[INFO|2025-12-01 09:39:13] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2025-12-01 09:39:13] llamafactory.hparams.parser:423 >> Process rank: 0, world size: 4, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|hub.py:421] 2025-12-01 09:39:13,031 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1949] 2025-12-01 09:39:13,052 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,060 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,060 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,060 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,060 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,060 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,060 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,061 >> loading file chat_template.jinja from cache at None
+[INFO|tokenization_utils_base.py:2364] 2025-12-01 09:39:13,423 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|hub.py:421] 2025-12-01 09:39:13,423 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:421] 2025-12-01 09:39:13,424 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:316] 2025-12-01 09:39:13,425 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2025-12-01 09:39:13,427 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:316] 2025-12-01 09:39:13,440 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2025-12-01 09:39:13,442 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:428] 2025-12-01 09:39:13,457 >> Image processor Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|tokenization_utils_base.py:1949] 2025-12-01 09:39:13,457 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,461 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,461 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,461 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,461 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,461 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,461 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2025-12-01 09:39:13,461 >> loading file chat_template.jinja from cache at None
+[INFO|2025-12-01 09:39:13] llamafactory.hparams.parser:423 >> Process rank: 3, world size: 4, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2025-12-01 09:39:13] llamafactory.hparams.parser:423 >> Process rank: 2, world size: 4, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2025-12-01 09:39:13] llamafactory.hparams.parser:423 >> Process rank: 1, world size: 4, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[INFO|tokenization_utils_base.py:2364] 2025-12-01 09:39:13,665 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|video_processing_utils.py:660] 2025-12-01 09:39:13,668 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:726] 2025-12-01 09:39:13,671 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:770] 2025-12-01 09:39:13,697 >> Video processor Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+[INFO|processing_utils.py:928] 2025-12-01 09:39:13,697 >> Offline mode: forcing local_files_only=True
+[INFO|processing_utils.py:1116] 2025-12-01 09:39:13,701 >> loading configuration file processor_config.json from cache at None
+[INFO|processing_utils.py:1199] 2025-12-01 09:39:14,046 >> Processor Qwen2_5_VLProcessor:
+- image_processor: Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2TokenizerFast(name_or_path='Qwen/Qwen2.5-VL-7B-Instruct', vocab_size=151643, model_max_length=131072, is_fast=True, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'additional_special_tokens': ['<|im_start|>', '<|im_end|>', '<|object_ref_start|>', '<|object_ref_end|>', '<|box_start|>', '<|box_end|>', '<|quad_start|>', '<|quad_end|>', '<|vision_start|>', '<|vision_end|>', '<|vision_pad|>', '<|image_pad|>', '<|video_pad|>']}, clean_up_tokenization_spaces=False, added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151647: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151648: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151649: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151650: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151651: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151652: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151653: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151654: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151655: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151656: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151657: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151658: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151659: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151660: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151661: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151662: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151663: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151664: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+}
+)
+- video_processor: Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+
+{
+  "processor_class": "Qwen2_5_VLProcessor"
+}
+
+[INFO|2025-12-01 09:39:14] llamafactory.data.loader:143 >> Loading dataset /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+Converting format of dataset (num_proc=32): 100%|██████████| 33047/33047 [00:00<?, ? examples/s][rank1]:[W1201 09:39:14.931226001 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank3]:[W1201 09:39:14.957416886 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank2]:[W1201 09:39:14.982792819 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+Converting format of dataset (num_proc=32): 33049 examples [00:00,  4.12 examples/s]            Converting format of dataset (num_proc=32): 33152 examples [00:00, 236.68 examples/s]Converting format of dataset (num_proc=32): 33320 examples [00:00, 585.49 examples/s]Converting format of dataset (num_proc=32): 33560 examples [00:00, 1051.51 examples/s]Converting format of dataset (num_proc=32): 33926 examples [00:00, 1713.94 examples/s]Converting format of dataset (num_proc=32): 34483 examples [00:01, 2670.37 examples/s]Converting format of dataset (num_proc=32): 36100 examples [00:01, 6333.69 examples/s]Converting format of dataset (num_proc=32): 40803 examples [00:01, 17650.78 examples/s]Converting format of dataset (num_proc=32): 45143 examples [00:01, 24935.69 examples/s]Converting format of dataset (num_proc=32): 49429 examples [00:01, 30062.45 examples/s]Converting format of dataset (num_proc=32): 53933 examples [00:01, 34313.80 examples/s]Converting format of dataset (num_proc=32): 57687 examples [00:01, 35254.01 examples/s]Converting format of dataset (num_proc=32): 61361 examples [00:01, 35446.20 examples/s]Converting format of dataset (num_proc=32): 64996 examples [00:01, 33699.13 examples/s]Converting format of dataset (num_proc=32): 66094 examples [00:02, 15898.09 examples/s]
+[rank0]:[W1201 09:39:16.766781828 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+Running tokenizer on dataset (num_proc=32):   0%|          | 0/33047 [00:00<?, ? examples/s]Running tokenizer on dataset (num_proc=32):   3%|▎         | 1000/33047 [27:20<14:36:19,  1.64s/ examples]Running tokenizer on dataset (num_proc=32):   6%|▌         | 2000/33047 [27:21<5:49:56,  1.48 examples/s] Running tokenizer on dataset (num_proc=32):   6%|▌         | 2000/33047 [27:35<5:49:56,  1.48 examples/s]Running tokenizer on dataset (num_proc=32):   9%|▉         | 3000/33047 [27:50<3:10:38,  2.63 examples/s]Running tokenizer on dataset (num_proc=32):  12%|█▏        | 4000/33047 [27:55<1:52:26,  4.31 examples/s]Running tokenizer on dataset (num_proc=32):  15%|█▌        | 5000/33047 [28:03<1:10:48,  6.60 examples/s]Running tokenizer on dataset (num_proc=32):  18%|█▊        | 6000/33047 [28:14<46:38,  9.67 examples/s]  Running tokenizer on dataset (num_proc=32):  18%|█▊        | 6033/33047 [28:16<46:23,  9.71 examples/s]Running tokenizer on dataset (num_proc=32):  18%|█▊        | 6066/33047 [28:18<45:57,  9.78 examples/s]Running tokenizer on dataset (num_proc=32):  21%|██▏       | 7066/33047 [28:23<23:33, 18.38 examples/s]Running tokenizer on dataset (num_proc=32):  24%|██▍       | 8066/33047 [28:35<22:39, 18.38 examples/s]Running tokenizer on dataset (num_proc=32):  27%|██▋       | 9066/33047 [28:37<10:46, 37.12 examples/s]Running tokenizer on dataset (num_proc=32):  28%|██▊       | 9099/33047 [28:44<11:42, 34.11 examples/s]Running tokenizer on dataset (num_proc=32):  28%|██▊       | 9132/33047 [28:44<11:34, 34.42 examples/s]Running tokenizer on dataset (num_proc=32):  31%|███       | 10132/33047 [28:46<06:25, 59.37 examples/s]Running tokenizer on dataset (num_proc=32):  34%|███▎      | 11132/33047 [28:49<04:07, 88.55 examples/s]Running tokenizer on dataset (num_proc=32):  37%|███▋      | 12165/33047 [28:54<03:07, 111.29 examples/s]Running tokenizer on dataset (num_proc=32):  37%|███▋      | 12198/33047 [28:57<03:33, 97.70 examples/s] Running tokenizer on dataset (num_proc=32):  37%|███▋      | 12231/33047 [29:02<04:40, 74.15 examples/s]slurmstepd: error: *** JOB 1534205 ON kn172 CANCELLED AT 2025-12-01T10:08:24 DUE TO TIME LIMIT ***
