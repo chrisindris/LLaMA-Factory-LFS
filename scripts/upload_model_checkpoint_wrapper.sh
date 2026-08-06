@@ -379,7 +379,18 @@
 #     --wandb-log /scratch/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260731_151153-a23xxsjc \
 #     --commit-message "Qwen2.5-VL-7B LoRA adapter. Trained for 1 epoch (620 steps) on 4x H100 GPUs (job: 697713 on Trillium). Dataset: Scene30k + SpatialSSRL_coldstart + 3DThinker10k (mix_strategy=concat)"
 
-./upload_merged_checkpoint.sh \
-  --repo-id "cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged" \
-  --checkpoint "/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_CoT_merged/" \
-  --commit-message "Same as cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs, but merged with base Qwen2.5-VL-7B-Instruct model."
+# ./upload_merged_checkpoint.sh \
+#   --repo-id "cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged" \
+#   --checkpoint "/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_CoT_merged/" \
+#   --commit-message "Same as cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs, but merged with base Qwen2.5-VL-7B-Instruct model."
+
+./upload_model_checkpoint.sh \
+    --id qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs \
+    --checkpoint /scratch/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep2/checkpoint-1240/ \
+    --wandb-log /scratch/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260805_041207-kndki0jm \
+    --commit-message "Qwen2.5-VL-7B LoRA adapter. Trained for 2 epoch (1240 steps) on 4x H100 GPUs (job: 713342 on Trillium). Dataset: Scene30k + SpatialSSRL_coldstart + 3DThinker10k (mix_strategy=concat)" \
+
+# ./upload_merged_checkpoint.sh \
+#   --repo-id "cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs_merged" \
+#   --checkpoint "/scratch/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_CoT_merged/" \
+#   --commit-message "Same as cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs, but merged with base Qwen2.5-VL-7B-Instruct model."
