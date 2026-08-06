@@ -369,6 +369,6 @@
 #     --commit-message "Qwen3.5 9B LoRA adapter checkpoint trained for 710 steps on 12 l40s GPUs (5 epoch) total on the Scene30k dataset (corrected)" \
 
 ./upload_merged_checkpoint.sh \
-	--repo-id "cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged" \
-	--checkpoint "/scratch/indrisch//LLaMA-Factory/models/merged-model/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs" \
-	--commit-message "qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged, but using 'export_merge_adapter_job.sh'"
+	--repo-id "cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs_merged" \
+	--checkpoint "/scratch/indrisch//LLaMA-Factory/models/merged-model/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs/" \
+	--commit-message "qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs_merged, but using 'export_merge_adapter_job.sh'"

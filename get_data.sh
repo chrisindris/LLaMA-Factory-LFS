@@ -161,7 +161,8 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type=dataset # Leihan's version of the one above, which is MCQs only.
 # hf download --max-workers=4 jankin123/3DThinker-Mindcube # the model weights used by 3D-Thinker; may or may not be usede by us
 
-hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs
+# hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs
+hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs
 
 deactivate
 # rm -r temp_env
