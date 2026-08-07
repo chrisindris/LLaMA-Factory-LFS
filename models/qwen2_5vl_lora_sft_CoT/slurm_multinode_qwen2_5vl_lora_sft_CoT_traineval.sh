@@ -421,63 +421,71 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
 		MPI_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcc12/openmpi/4.1.5/lib"
 		HWLOC_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/hwloc/2.9.1/lib"
 
-		# Node-local datasets cache (replaces yaml cache_dir).
-		export HF_DATASETS_CACHE="${SLURM_TMPDIR}/hf_datasets"
-		mkdir -p "${HF_DATASETS_CACHE}"
-		export HF_DATASETS_DISABLE_FILE_LOCKING=1
-		export DATASETS_DISABLE_FILE_LOCKING=1
+		APPTAINER_H5_BINDS+=(-B "${MPI_LIB_PATH}:${MPI_LIB_PATH}:ro")
+		APPTAINER_H5_BINDS+=(-B "${HWLOC_LIB_PATH}:${HWLOC_LIB_PATH}:ro")
 
-		export NNODES="${SLURM_NNODES:-1}"
-		export NODE_RANK="${SLURM_NODEID:-0}"
-		export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE}}"
-		export MASTER_PORT="${MASTER_PORT:-29500}"
-		export NPROC_PER_NODE="4"
+		# APPTAINER_H5_BINDS is a global array already expanded inside
+		# run_llamafactory_apptainer; do not pass its name as $1 (that slot is
+		# optional NVIDIA bind args, e.g. "-B /usr/lib64/nvidia").
+		run_llamafactory_apptainer
 
-		apptainer run --nv --overlay ${PROJECT_DIR}/apptainer/overlay.img \
-			-C \
-			-B ${PROJECT_DIR} \
-			-B ${HF_HOME} \
-			${APPTAINER_H5_BINDS[@]+"${APPTAINER_H5_BINDS[@]}"} \
-			-B /home/indrisch \
-			-B /dev/shm:/dev/shm \
-			-B /etc/ssl/certs:/etc/ssl/certs:ro \
-			-B /etc/pki:/etc/pki:ro \
-			-B "${MPI_LIB_PATH}:${MPI_LIB_PATH}:ro" \
-			-B "${HWLOC_LIB_PATH}:${HWLOC_LIB_PATH}:ro" \
-			-W ${SLURM_TMPDIR} \
-			--env LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:/usr/lib64:/lib/x86_64-linux-gnu:/lib64:${MPI_LIB_PATH}:${HWLOC_LIB_PATH}:${LD_LIBRARY_PATH}" \
-			--env HF_HUB_OFFLINE=1 \
-			--env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
-			--env HF_HOME="${HF_HOME}" \
-			--env HF_HUB_CACHE="${HF_HUB_CACHE}" \
-			--env HF_DATASETS_CACHE="${HF_DATASETS_CACHE}" \
-			--env HF_DATASETS_DISABLE_FILE_LOCKING=1 \
-			--env DATASETS_DISABLE_FILE_LOCKING=1 \
-			--env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
-			--env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
-			--env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
-			--env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
-			--env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
-			--env FORCE_TORCHRUN=1 \
-			--env WANDB_MODE=offline \
-			--env WANDB_DIR="${WANDB_DIR}" \
-			--env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
-			--env PYTHONNOUSERSITE=1 \
-			--env HOME="${SLURM_TMPDIR}" \
-			--env PYTHONPATH="${PROJECT_DIR}/src" \
-			--env NCCL_IB_DISABLE=0 \
-			--env NCCL_P2P_DISABLE=0 \
-			--env NCCL_DEBUG=INFO \
-			--env NCCL_SOCKET_IFNAME=^docker0,lo \
-			--env NNODES="${NNODES}" \
-			--env NODE_RANK="${NODE_RANK}" \
-			--env MASTER_ADDR="${MASTER_ADDR}" \
-			--env MASTER_PORT="${MASTER_PORT}" \
-			--env NPROC_PER_NODE="${NPROC_PER_NODE}" \
-			"${APPTAINER_H5_ENV[@]}" \
-			--pwd ${PROJECT_DIR} \
-			${SIF_FILE} \
-			llamafactory-cli train ${YAML_FILE}
+		# # Node-local datasets cache (replaces yaml cache_dir).
+		# export HF_DATASETS_CACHE="${SLURM_TMPDIR}/hf_datasets"
+		# mkdir -p "${HF_DATASETS_CACHE}"
+		# export HF_DATASETS_DISABLE_FILE_LOCKING=1
+		# export DATASETS_DISABLE_FILE_LOCKING=1
+
+		# export NNODES="${SLURM_NNODES:-1}"
+		# export NODE_RANK="${SLURM_NODEID:-0}"
+		# export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE}}"
+		# export MASTER_PORT="${MASTER_PORT:-29500}"
+		# export NPROC_PER_NODE="4"
+
+		# apptainer run --nv --overlay ${PROJECT_DIR}/apptainer/overlay.img \
+		# 	-C \
+		# 	-B ${PROJECT_DIR} \
+		# 	-B ${HF_HOME} \
+		# 	${APPTAINER_H5_BINDS[@]+"${APPTAINER_H5_BINDS[@]}"} \
+		# 	-B /home/indrisch \
+		# 	-B /dev/shm:/dev/shm \
+		# 	-B /etc/ssl/certs:/etc/ssl/certs:ro \
+		# 	-B /etc/pki:/etc/pki:ro \
+		# 	-B "${MPI_LIB_PATH}:${MPI_LIB_PATH}:ro" \
+		# 	-B "${HWLOC_LIB_PATH}:${HWLOC_LIB_PATH}:ro" \
+		# 	-W ${SLURM_TMPDIR} \
+		# 	--env LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:/usr/lib64:/lib/x86_64-linux-gnu:/lib64:${MPI_LIB_PATH}:${HWLOC_LIB_PATH}:${LD_LIBRARY_PATH}" \
+		# 	--env HF_HUB_OFFLINE=1 \
+		# 	--env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
+		# 	--env HF_HOME="${HF_HOME}" \
+		# 	--env HF_HUB_CACHE="${HF_HUB_CACHE}" \
+		# 	--env HF_DATASETS_CACHE="${HF_DATASETS_CACHE}" \
+		# 	--env HF_DATASETS_DISABLE_FILE_LOCKING=1 \
+		# 	--env DATASETS_DISABLE_FILE_LOCKING=1 \
+		# 	--env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
+		# 	--env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
+		# 	--env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
+		# 	--env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
+		# 	--env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
+		# 	--env FORCE_TORCHRUN=1 \
+		# 	--env WANDB_MODE=offline \
+		# 	--env WANDB_DIR="${WANDB_DIR}" \
+		# 	--env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
+		# 	--env PYTHONNOUSERSITE=1 \
+		# 	--env HOME="${SLURM_TMPDIR}" \
+		# 	--env PYTHONPATH="${PROJECT_DIR}/src" \
+		# 	--env NCCL_IB_DISABLE=0 \
+		# 	--env NCCL_P2P_DISABLE=0 \
+		# 	--env NCCL_DEBUG=INFO \
+		# 	--env NCCL_SOCKET_IFNAME=^docker0,lo \
+		# 	--env NNODES="${NNODES}" \
+		# 	--env NODE_RANK="${NODE_RANK}" \
+		# 	--env MASTER_ADDR="${MASTER_ADDR}" \
+		# 	--env MASTER_PORT="${MASTER_PORT}" \
+		# 	--env NPROC_PER_NODE="${NPROC_PER_NODE}" \
+		# 	"${APPTAINER_H5_ENV[@]}" \
+		# 	--pwd ${PROJECT_DIR} \
+		# 	${SIF_FILE} \
+		# 	llamafactory-cli train ${YAML_FILE}
 
 	elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 

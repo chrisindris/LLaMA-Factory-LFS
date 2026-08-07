@@ -65,7 +65,7 @@ echo "HF_HUB_CACHE: $HF_HUB_CACHE"
 echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 
 # hf download --max-workers=7 moonshotai/Kimi-VL-A3B-Thinking-2506 # model for generating traces (the "teacher")
-hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a student (in addition to LLaVa-3D)
+# huggingface-cli download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct --local-dir-use-symlinks False # model we will use as a student (in addition to LLaVa-3D)
 # hf download --max-workers=4 Qwen/Qwen2.5-7B-Instruct-1M # text-only long-context model used to assess the traces
 #hf download --max-workers=4 Qwen/Qwen2.5-7B-Instruct # text-only model used to assess the traces; the 1M version doesn't seem to load
 #hf download --max-workers=4 Qwen/Qwen2.5-0.5B-Instruct # text-only model used to assess the traces; the 1M version doesn't seem to load
@@ -106,7 +106,7 @@ hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a
 # hf download --max-workers=4 cvis-tmu/videor1sft-lora-sft-Scene30k_traineval_5epochs
 
 # hf download --max-workers=12 cvis-tmu/easyr1_verl_sif --repo-type=dataset
-# hf download --max-workers=4 cvis-tmu/compute_canada_sif_files llamafactory.sif --repo-type=dataset --revision 382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a
+# huggingface-cli download --max-workers=4 cvis-tmu/compute_canada_sif_files llamafactory.sif --repo-type=dataset --revision 382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a --local-dir-use-symlinks False
 # hf download --max-workers=4 cvis-tmu/compute_canada_sif_files llamafactory.sif --repo-type=dataset --revision c0b06aa9c1c5df915b12e11e74015483257991b8
 # hf download --max-workers=12 cvis-tmu/compute_canada_sif_files vsibench_eval.sif --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62 --repo-type=dataset
@@ -150,7 +150,7 @@ hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # scene30k
-# hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
+hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
 
 # SPAR-7M-RGBD (annotations) -> https://huggingface.co/datasets/jasonzhango/SPAR-7M-RGBD/blob/main/README.md
 # hf download --max-workers=8 jasonzhango/SPAR-7M-RGBD --repo-type dataset
@@ -159,9 +159,11 @@ hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct # model we will use as a
 # hf download --max-workers=4 MLL-Lab/MindCube --repo-type=dataset # Suggested by the 3DThinker authors
 # hf download --max-workers=4 jankin123/3DThinker-10K --repo-type=dataset # 3D Thinker 10k: suggested by Leihan (how is this different from the one above)?
 # hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type=dataset # Leihan's version of the one above, which is MCQs only.
-# hf download --max-workers=4 jankin123/3DThinker-Mindcube # the model weights used by 3D-Thinker; may or may not be usede by us
+# hf download --max-workers=4 jankin123/3DThinker-Mindcube # the model weights used by 3D-Thinker; may or may not be used by us
 
-huggingface-cli download --max-workers=8 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged --local-dir-use-symlinks False
+# huggingface-cli download --max-workers=8 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged --local-dir-use-symlinks False
+
+# huggingface-cli download --max-workers=4 cvis-tmu/Scene30K --local-dir-use-symlinks False
 
 deactivate
 # rm -r temp_env

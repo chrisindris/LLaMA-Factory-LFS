@@ -174,6 +174,10 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
         batch_images, batch_videos, batch_audios = [], [], []
         batch_imglens, batch_vidlens, batch_audlens, batch_input_ids = [], [], [], []
         for feature in features:
+            if os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV":
+                # HACK: to avoid "liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'"
+                # Non-model bookkeeping from preprocessing / mm debug; never pass to forward.
+                feature.pop("_indices", None)
             sample_idx = feature.pop("sample_idx", None)
             sample_media = feature.pop("sample_media", None)
             images = feature.pop("images", None) or []

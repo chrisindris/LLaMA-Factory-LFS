@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --nodes=2
+#SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
-#SBATCH --cpus-per-task=64
-#SBATCH --time=1-00:00:00
-#SBATCH --mem=480GB
-#SBATCH --gpus-per-node=l40s:4
+#SBATCH --cpus-per-task=16
+#SBATCH --time=0-00:05:00
+#SBATCH --mem=120GB
+#SBATCH --gpus-per-node=l40s:1
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 #SBATCH --mail-type=ALL
 

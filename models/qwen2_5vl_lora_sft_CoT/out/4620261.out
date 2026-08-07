@@ -1,0 +1,981 @@
+[INFO|trainer.py:2519] 2026-08-05 19:40:24,393 >> ***** Running training *****
+[INFO|trainer.py:2520] 2026-08-05 19:40:24,393 >>   Num examples = 39,451
+[INFO|trainer.py:2521] 2026-08-05 19:40:24,393 >>   Num Epochs = 5
+[INFO|trainer.py:2522] 2026-08-05 19:40:24,393 >>   Instantaneous batch size per device = 1
+[INFO|trainer.py:2525] 2026-08-05 19:40:24,393 >>   Total train batch size (w. parallel, distributed & accumulation) = 128
+[INFO|trainer.py:2526] 2026-08-05 19:40:24,393 >>   Gradient Accumulation steps = 16
+[INFO|trainer.py:2527] 2026-08-05 19:40:24,393 >>   Total optimization steps = 1,545
+[INFO|2026-08-05 19:40:24] llamafactory.data.collator:279 >> [rank5] mm_debug batch_samples: {"rank": 5, "batch_index": 0, "samples": [{"sample_idx": 3579, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0062_00/color/0.jpg", "ScanNet/scans/scene0062_00/color/24.jpg", "ScanNet/scans/scene0062_00/color/72.jpg", "ScanNet/scans/scene0062_00/color/96.jpg", "ScanNet/scans/scene0062_00/color/120.jpg", "...(19 more)"]}, "videos": null, "audios": null}}]}
+[INFO|trainer.py:2528] 2026-08-05 19:40:24,400 >>   Number of trainable parameters = 20,185,088
+[INFO|integration_utils.py:867] 2026-08-05 19:40:24,406 >> Automatic Weights & Biases logging enabled, to disable set os.environ["WANDB_DISABLED"] = "true"
+[INFO|2026-08-05 19:40:24] llamafactory.data.collator:279 >> [rank1] mm_debug batch_samples: {"rank": 1, "batch_index": 0, "samples": [{"sample_idx": 24195, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0667_00/color/0.jpg", "ScanNet/scans/scene0667_00/color/192.jpg", "ScanNet/scans/scene0667_00/color/408.jpg", "ScanNet/scans/scene0667_00/color/600.jpg", "ScanNet/scans/scene0667_00/color/816.jpg", "...(19 more)"]}, "videos": null, "audios": null}}]}
+[INFO|2026-08-05 19:40:24] llamafactory.data.collator:279 >> [rank6] mm_debug batch_samples: {"rank": 6, "batch_index": 0, "samples": [{"sample_idx": 11049, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0362_00/color/0.jpg", "ScanNet/scans/scene0362_00/color/72.jpg", "ScanNet/scans/scene0362_00/color/144.jpg", "ScanNet/scans/scene0362_00/color/216.jpg", "ScanNet/scans/scene0362_00/color/288.jpg", "...(19 more)"]}, "videos": null, "audios": null}}]}
+[INFO|2026-08-05 19:40:24] llamafactory.data.collator:279 >> [rank5] mm_debug batch_samples: {"rank": 5, "batch_index": 0, "samples": [{"sample_idx": 22402, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0615_00/color/0.jpg", "ScanNet/scans/scene0615_00/color/48.jpg", "ScanNet/scans/scene0615_00/color/96.jpg", "ScanNet/scans/scene0615_00/color/144.jpg", "ScanNet/scans/scene0615_00/color/192.jpg", "...(19 more)"]}, "videos": null, "audios": null}}]}
+[INFO|2026-08-05 19:40:24] llamafactory.data.collator:279 >> [rank4] mm_debug batch_samples: {"rank": 4, "batch_index": 0, "samples": [{"sample_idx": 12377, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0394_00/color/0.jpg", "ScanNet/scans/scene0394_00/color/192.jpg", "ScanNet/scans/scene0394_00/color/360.jpg", "ScanNet/scans/scene0394_00/color/552.jpg", "ScanNet/scans/scene0394_00/color/720.jpg", "...(19 more)"]}, "videos": null, "audios": null}}]}
+wandb: WARNING Changes to your `wandb` environment variables will be ignored because your `wandb` session has already started. For more information on how to modify your settings with `wandb.init()` arguments, please refer to https://wandb.me/wandb-init.
+[INFO|2026-08-05 19:40:24] llamafactory.data.collator:279 >> [rank6] mm_debug batch_samples: {"rank": 6, "batch_index": 0, "samples": [{"sample_idx": 22112, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0612_00/color/0.jpg", "ScanNet/scans/scene0612_00/color/48.jpg", "ScanNet/scans/scene0612_00/color/96.jpg", "ScanNet/scans/scene0612_00/color/144.jpg", "ScanNet/scans/scene0612_00/color/192.jpg", "...(19 more)"]}, "videos": null, "audios": null}}]}
+[INFO|2026-08-05 19:40:24] llamafactory.data.collator:279 >> [rank6] mm_debug batch_samples: {"rank": 6, "batch_index": 0, "samples": [{"sample_idx": 8237, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0291_00/color/0.jpg", "ScanNet/scans/scene0291_00/color/72.jpg", "ScanNet/scans/scene0291_00/color/144.jpg", "ScanNet/scans/scene0291_00/color/240.jpg", "ScanNet/scans/scene0291_00/color/312.jpg", "...(19 more)"]}, "videos": null, "audios": null}}]}
+wandb: Tracking run with wandb version 0.21.2
+wandb: W&B syncing is set to `offline` in this directory. Run `wandb online` or set WANDB_MODE=online to enable cloud syncing.
+wandb: Run data is saved locally in /project/aip-wangcs/indrisch//LLaMA-Factory/wandb/wandb/offline-run-20260805_194024-vmcgarx9
+[INFO|2026-08-05 19:40:26] llamafactory.train.callbacks:379 >> [rank1] mm_debug step_begin step=0 free_gb=27.960 total_gb=44.392 allocated_gb=15.740 reserved_gb=15.748
+[INFO|2026-08-05 19:40:26] llamafactory.data.collator:279 >> [rank0] mm_debug batch_samples: {"rank": 0, "batch_index": 0, "samples": [{"sample_idx": 41193, "media": {"images": {"count": 4, "items": ["data/other_all_image_resize/among/plane_196/front_012.jpg", "data/other_all_image_resize/among/plane_196/left_065.jpg", "data/other_all_image_resize/among/plane_196/back_129.jpg", "data/other_all_image_resize/among/plane_196/right_203.jpg"]}, "videos": null, "audios": null}}]}
+[INFO|2026-08-05 19:40:26] llamafactory.train.callbacks:379 >> [rank3] mm_debug step_begin step=0 free_gb=27.982 total_gb=44.392 allocated_gb=15.709 reserved_gb=15.727
+[INFO|2026-08-05 19:40:26] llamafactory.train.callbacks:379 >> [rank7] mm_debug step_begin step=0 free_gb=27.980 total_gb=44.392 allocated_gb=15.707 reserved_gb=15.729
+[INFO|2026-08-05 19:40:26] llamafactory.train.callbacks:379 >> [rank6] mm_debug step_begin step=0 free_gb=28.021 total_gb=44.392 allocated_gb=15.678 reserved_gb=15.688
+[INFO|2026-08-05 19:40:26] llamafactory.train.callbacks:379 >> [rank2] mm_debug step_begin step=0 free_gb=27.921 total_gb=44.392 allocated_gb=15.773 reserved_gb=15.787
+[INFO|2026-08-05 19:40:26] llamafactory.train.callbacks:379 >> [rank5] mm_debug step_begin step=0 free_gb=27.949 total_gb=44.392 allocated_gb=15.710 reserved_gb=15.727
+[INFO|2026-08-05 19:40:26] llamafactory.data.collator:279 >> [rank0] mm_debug batch_samples: {"rank": 0, "batch_index": 0, "samples": [{"sample_idx": 5145, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0156_00/color/0.jpg", "ScanNet/scans/scene0156_00/color/48.jpg", "ScanNet/scans/scene0156_00/color/96.jpg", "ScanNet/scans/scene0156_00/color/168.jpg", "ScanNet/scans/scene0156_00/color/216.jpg", "...(19 more)"]}, "videos": null, "audios": null}}]}
+[INFO|2026-08-05 19:40:26] llamafactory.data.collator:279 >> [rank0] mm_debug batch_samples: {"rank": 0, "batch_index": 0, "samples": [{"sample_idx": 3076, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0047_00/color/0.jpg", "ScanNet/scans/scene0047_00/color/48.jpg", "ScanNet/scans/scene0047_00/color/120.jpg", "ScanNet/scans/scene0047_00/color/168.jpg", "ScanNet/scans/scene0047_00/color/240.jpg", "...(19 more)"]}, "videos": null, "audios": null}}]}
+[INFO|2026-08-05 19:40:26] llamafactory.train.callbacks:379 >> [rank4] mm_debug step_begin step=0 free_gb=27.141 total_gb=44.392 allocated_gb=15.693 reserved_gb=15.709
+[INFO|2026-08-05 19:40:26] llamafactory.data.collator:279 >> [rank0] mm_debug batch_samples: {"rank": 0, "batch_index": 0, "samples": [{"sample_idx": 12431, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0395_00/color/0.jpg", "ScanNet/scans/scene0395_00/color/120.jpg", "ScanNet/scans/scene0395_00/color/216.jpg", "ScanNet/scans/scene0395_00/color/336.jpg", "ScanNet/scans/scene0395_00/color/456.jpg", "...(19 more)"]}, "videos": null, "audios": null}}]}
+[INFO|2026-08-05 19:40:27] llamafactory.train.sft.trainer:385 >> [rank3] mm_debug pre_forward: {"rank": 3, "step": 0, "gpu_memory": [{"device": 0, "free_gb": 26.855, "total_gb": 44.392}, {"device": 1, "free_gb": 27.118, "total_gb": 44.392}, {"device": 2, "free_gb": 27.079, "total_gb": 44.392}, {"device": 3, "free_gb": 27.139, "total_gb": 44.392}], "gpu_allocated_gb": 15.709, "gpu_reserved_gb": 15.727, "gpu_device": 3, "model_cuda_param_gb": 15.483, "model_cuda_buffer_gb": 0.0, "model_cuda_total_gb": 15.483, "samples": [{"sample_idx": 43436, "media": {"images": {"count": 4, "items": ["data/other_all_image_resize/among/bottle_064/front_334.jpg", "data/other_all_image_resize/among/bottle_064/left_077.jpg", "data/other_all_image_resize/among/bottle_064/back_172.jpg", "data/other_all_image_resize/among/bottle_064/right_252.jpg"]}, "videos": null, "audios": null}}], "tensor_shapes": {"_indices": {"shape": [1], "dtype": "torch.int64"}, "input_ids": {"shape": [1, 1080], "dtype": "torch.int64"}, "attention_mask": {"shape": [1, 1080], "dtype": "torch.int64"}, "labels": {"shape": [1, 1080], "dtype": "torch.int64"}, "position_ids": {"shape": [3, 1, 1080], "dtype": "torch.int64"}, "rope_deltas": {"shape": [1, 1], "dtype": "torch.int64"}, "pixel_values": {"shape": [1408, 1176], "dtype": "torch.bfloat16"}, "image_grid_thw": {"shape": [4, 3], "dtype": "torch.int64"}}, "batch_bytes": 3363568, "batch_gb": 0.003, "image_features": {"pixel_values": {"shape": [1408, 1176], "dtype": "torch.bfloat16", "bytes": 3311616, "gb": 0.003}}, "image_tokens": {"image_grid_thw_shape": [4, 3], "image_tokens_total": 1408, "image_tokens_min": 352, "image_tokens_max": 352, "image_token_count": 4}, "event": "pre_forward"}
+[INFO|2026-08-05 19:40:27] llamafactory.train.sft.trainer:385 >> [rank1] mm_debug pre_forward: {"rank": 1, "step": 0, "gpu_memory": [{"device": 0, "free_gb": 26.855, "total_gb": 44.392}, {"device": 1, "free_gb": 27.118, "total_gb": 44.392}, {"device": 2, "free_gb": 27.079, "total_gb": 44.392}, {"device": 3, "free_gb": 27.139, "total_gb": 44.392}], "gpu_allocated_gb": 15.74, "gpu_reserved_gb": 15.748, "gpu_device": 1, "model_cuda_param_gb": 15.483, "model_cuda_buffer_gb": 0.0, "model_cuda_total_gb": 15.483, "samples": [{"sample_idx": 19027, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0540_00/color/0.jpg", "ScanNet/scans/scene0540_00/color/48.jpg", "ScanNet/scans/scene0540_00/color/96.jpg", "ScanNet/scans/scene0540_00/color/120.jpg", "ScanNet/scans/scene0540_00/color/168.jpg", "...(19 more)"]}, "videos": null, "audios": null}}], "tensor_shapes": {"_indices": {"shape": [1], "dtype": "torch.int64"}, "input_ids": {"shape": [1, 2744], "dtype": "torch.int64"}, "attention_mask": {"shape": [1, 2744], "dtype": "torch.int64"}, "labels": {"shape": [1, 2744], "dtype": "torch.int64"}, "position_ids": {"shape": [3, 1, 2744], "dtype": "torch.int64"}, "rope_deltas": {"shape": [1, 1], "dtype": "torch.int64"}, "pixel_values": {"shape": [8448, 1176], "dtype": "torch.bfloat16"}, "image_grid_thw": {"shape": [24, 3], "dtype": "torch.int64"}}, "batch_bytes": 20002000, "batch_gb": 0.019, "image_features": {"pixel_values": {"shape": [8448, 1176], "dtype": "torch.bfloat16", "bytes": 19869696, "gb": 0.019}}, "image_tokens": {"image_grid_thw_shape": [24, 3], "image_tokens_total": 8448, "image_tokens_min": 352, "image_tokens_max": 352, "image_token_count": 24}, "event": "pre_forward"}
+[INFO|2026-08-05 19:40:27] llamafactory.train.sft.trainer:385 >> [rank2] mm_debug pre_forward: {"rank": 2, "step": 0, "gpu_memory": [{"device": 0, "free_gb": 26.855, "total_gb": 44.392}, {"device": 1, "free_gb": 26.727, "total_gb": 44.392}, {"device": 2, "free_gb": 27.079, "total_gb": 44.392}, {"device": 3, "free_gb": 26.28, "total_gb": 44.392}], "gpu_allocated_gb": 15.773, "gpu_reserved_gb": 15.787, "gpu_device": 2, "model_cuda_param_gb": 15.483, "model_cuda_buffer_gb": 0.0, "model_cuda_total_gb": 15.483, "samples": [{"sample_idx": 19665, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0555_00/color/0.jpg", "ScanNet/scans/scene0555_00/color/72.jpg", "ScanNet/scans/scene0555_00/color/168.jpg", "ScanNet/scans/scene0555_00/color/240.jpg", "ScanNet/scans/scene0555_00/color/312.jpg", "...(19 more)"]}, "videos": null, "audios": null}}], "tensor_shapes": {"_indices": {"shape": [1], "dtype": "torch.int64"}, "input_ids": {"shape": [1, 3120], "dtype": "torch.int64"}, "attention_mask": {"shape": [1, 3120], "dtype": "torch.int64"}, "labels": {"shape": [1, 3120], "dtype": "torch.int64"}, "position_ids": {"shape": [3, 1, 3120], "dtype": "torch.int64"}, "rope_deltas": {"shape": [1, 1], "dtype": "torch.int64"}, "pixel_values": {"shape": [8448, 1176], "dtype": "torch.bfloat16"}, "image_grid_thw": {"shape": [24, 3], "dtype": "torch.int64"}}, "batch_bytes": 20020048, "batch_gb": 0.019, "image_features": {"pixel_values": {"shape": [8448, 1176], "dtype": "torch.bfloat16", "bytes": 19869696, "gb": 0.019}}, "image_tokens": {"image_grid_thw_shape": [24, 3], "image_tokens_total": 8448, "image_tokens_min": 352, "image_tokens_max": 352, "image_token_count": 24}, "event": "pre_forward"}
+[INFO|2026-08-05 19:40:27] llamafactory.train.sft.trainer:385 >> [rank7] mm_debug pre_forward: {"rank": 7, "step": 0, "gpu_memory": [{"device": 0, "free_gb": 26.736, "total_gb": 44.392}, {"device": 1, "free_gb": 26.718, "total_gb": 44.392}, {"device": 2, "free_gb": 27.567, "total_gb": 44.392}, {"device": 3, "free_gb": 27.559, "total_gb": 44.392}], "gpu_allocated_gb": 15.707, "gpu_reserved_gb": 15.729, "gpu_device": 3, "model_cuda_param_gb": 15.483, "model_cuda_buffer_gb": 0.0, "model_cuda_total_gb": 15.483, "samples": [{"sample_idx": 17990, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0510_00/color/0.jpg", "ScanNet/scans/scene0510_00/color/72.jpg", "ScanNet/scans/scene0510_00/color/144.jpg", "ScanNet/scans/scene0510_00/color/216.jpg", "ScanNet/scans/scene0510_00/color/288.jpg", "...(19 more)"]}, "videos": null, "audios": null}}], "tensor_shapes": {"_indices": {"shape": [1], "dtype": "torch.int64"}, "input_ids": {"shape": [1, 2480], "dtype": "torch.int64"}, "attention_mask": {"shape": [1, 2480], "dtype": "torch.int64"}, "labels": {"shape": [1, 2480], "dtype": "torch.int64"}, "position_ids": {"shape": [3, 1, 2480], "dtype": "torch.int64"}, "rope_deltas": {"shape": [1, 1], "dtype": "torch.int64"}, "pixel_values": {"shape": [8448, 1176], "dtype": "torch.bfloat16"}, "image_grid_thw": {"shape": [24, 3], "dtype": "torch.int64"}}, "batch_bytes": 19989328, "batch_gb": 0.019, "image_features": {"pixel_values": {"shape": [8448, 1176], "dtype": "torch.bfloat16", "bytes": 19869696, "gb": 0.019}}, "image_tokens": {"image_grid_thw_shape": [24, 3], "image_tokens_total": 8448, "image_tokens_min": 352, "image_tokens_max": 352, "image_token_count": 24}, "event": "pre_forward"}
+[INFO|2026-08-05 19:40:27] llamafactory.train.sft.trainer:385 >> [rank6] mm_debug pre_forward: {"rank": 6, "step": 0, "gpu_memory": [{"device": 0, "free_gb": 26.736, "total_gb": 44.392}, {"device": 1, "free_gb": 26.718, "total_gb": 44.392}, {"device": 2, "free_gb": 27.148, "total_gb": 44.392}, {"device": 3, "free_gb": 26.543, "total_gb": 44.392}], "gpu_allocated_gb": 15.678, "gpu_reserved_gb": 15.688, "gpu_device": 2, "model_cuda_param_gb": 15.483, "model_cuda_buffer_gb": 0.0, "model_cuda_total_gb": 15.483, "samples": [{"sample_idx": 8237, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0291_00/color/0.jpg", "ScanNet/scans/scene0291_00/color/72.jpg", "ScanNet/scans/scene0291_00/color/144.jpg", "ScanNet/scans/scene0291_00/color/240.jpg", "ScanNet/scans/scene0291_00/color/312.jpg", "...(19 more)"]}, "videos": null, "audios": null}}], "tensor_shapes": {"_indices": {"shape": [1], "dtype": "torch.int64"}, "input_ids": {"shape": [1, 2728], "dtype": "torch.int64"}, "attention_mask": {"shape": [1, 2728], "dtype": "torch.int64"}, "labels": {"shape": [1, 2728], "dtype": "torch.int64"}, "position_ids": {"shape": [3, 1, 2728], "dtype": "torch.int64"}, "rope_deltas": {"shape": [1, 1], "dtype": "torch.int64"}, "pixel_values": {"shape": [8448, 1176], "dtype": "torch.bfloat16"}, "image_grid_thw": {"shape": [24, 3], "dtype": "torch.int64"}}, "batch_bytes": 20001232, "batch_gb": 0.019, "image_features": {"pixel_values": {"shape": [8448, 1176], "dtype": "torch.bfloat16", "bytes": 19869696, "gb": 0.019}}, "image_tokens": {"image_grid_thw_shape": [24, 3], "image_tokens_total": 8448, "image_tokens_min": 352, "image_tokens_max": 352, "image_token_count": 24}, "event": "pre_forward"}
+[INFO|2026-08-05 19:40:27] llamafactory.train.sft.trainer:143 >> [rank4] mm_debug pre_step step=0 optimizer_step=0 frames=24 batch_gb=0.019 free_gb=26.734 total_gb=44.392 gpu_allocated_gb=15.693 gpu_reserved_gb=15.709 model_cuda_total_gb=15.483
+[INFO|2026-08-05 19:40:27] llamafactory.train.sft.trainer:385 >> [rank5] mm_debug pre_forward: {"rank": 5, "step": 0, "gpu_memory": [{"device": 0, "free_gb": 26.734, "total_gb": 44.392}, {"device": 1, "free_gb": 26.718, "total_gb": 44.392}, {"device": 2, "free_gb": 25.208, "total_gb": 44.392}, {"device": 3, "free_gb": 25.187, "total_gb": 44.392}], "gpu_allocated_gb": 15.71, "gpu_reserved_gb": 15.727, "gpu_device": 1, "model_cuda_param_gb": 15.483, "model_cuda_buffer_gb": 0.0, "model_cuda_total_gb": 15.483, "samples": [{"sample_idx": 3579, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0062_00/color/0.jpg", "ScanNet/scans/scene0062_00/color/24.jpg", "ScanNet/scans/scene0062_00/color/72.jpg", "ScanNet/scans/scene0062_00/color/96.jpg", "ScanNet/scans/scene0062_00/color/120.jpg", "...(19 more)"]}, "videos": null, "audios": null}}], "tensor_shapes": {"_indices": {"shape": [1], "dtype": "torch.int64"}, "input_ids": {"shape": [1, 2464], "dtype": "torch.int64"}, "attention_mask": {"shape": [1, 2464], "dtype": "torch.int64"}, "labels": {"shape": [1, 2464], "dtype": "torch.int64"}, "position_ids": {"shape": [3, 1, 2464], "dtype": "torch.int64"}, "rope_deltas": {"shape": [1, 1], "dtype": "torch.int64"}, "pixel_values": {"shape": [8448, 1176], "dtype": "torch.bfloat16"}, "image_grid_thw": {"shape": [24, 3], "dtype": "torch.int64"}}, "batch_bytes": 19988560, "batch_gb": 0.019, "image_features": {"pixel_values": {"shape": [8448, 1176], "dtype": "torch.bfloat16", "bytes": 19869696, "gb": 0.019}}, "image_tokens": {"image_grid_thw_shape": [24, 3], "image_tokens_total": 8448, "image_tokens_min": 352, "image_tokens_max": 352, "image_token_count": 24}, "event": "pre_forward"}
+[INFO|2026-08-05 19:40:27] llamafactory.train.sft.trainer:385 >> [rank4] mm_debug pre_forward: {"rank": 4, "step": 0, "gpu_memory": [{"device": 0, "free_gb": 26.734, "total_gb": 44.392}, {"device": 1, "free_gb": 26.699, "total_gb": 44.392}, {"device": 2, "free_gb": 25.208, "total_gb": 44.392}, {"device": 3, "free_gb": 25.187, "total_gb": 44.392}], "gpu_allocated_gb": 15.693, "gpu_reserved_gb": 15.709, "gpu_device": 0, "model_cuda_param_gb": 15.483, "model_cuda_buffer_gb": 0.0, "model_cuda_total_gb": 15.483, "samples": [{"sample_idx": 17342, "media": {"images": {"count": 24, "items": ["ScanNet/scans/scene0503_00/color/0.jpg", "ScanNet/scans/scene0503_00/color/48.jpg", "ScanNet/scans/scene0503_00/color/96.jpg", "ScanNet/scans/scene0503_00/color/120.jpg", "ScanNet/scans/scene0503_00/color/168.jpg", "...(19 more)"]}, "videos": null, "audios": null}}], "tensor_shapes": {"_indices": {"shape": [1], "dtype": "torch.int64"}, "input_ids": {"shape": [1, 2768], "dtype": "torch.int64"}, "attention_mask": {"shape": [1, 2768], "dtype": "torch.int64"}, "labels": {"shape": [1, 2768], "dtype": "torch.int64"}, "position_ids": {"shape": [3, 1, 2768], "dtype": "torch.int64"}, "rope_deltas": {"shape": [1, 1], "dtype": "torch.int64"}, "pixel_values": {"shape": [8448, 1176], "dtype": "torch.bfloat16"}, "image_grid_thw": {"shape": [24, 3], "dtype": "torch.int64"}}, "batch_bytes": 20003152, "batch_gb": 0.019, "image_features": {"pixel_values": {"shape": [8448, 1176], "dtype": "torch.bfloat16", "bytes": 19869696, "gb": 0.019}}, "image_tokens": {"image_grid_thw_shape": [24, 3], "image_tokens_total": 8448, "image_tokens_min": 352, "image_tokens_max": 352, "image_token_count": 24}, "event": "pre_forward"}
+[INFO|2026-08-05 19:40:28] llamafactory.train.callbacks:379 >> [rank0] mm_debug step_begin step=0 free_gb=26.716 total_gb=44.392 allocated_gb=15.709 reserved_gb=15.729
+[INFO|2026-08-05 19:40:29] llamafactory.train.sft.trainer:143 >> [rank0] mm_debug pre_step step=0 optimizer_step=0 frames=4 batch_gb=0.003 free_gb=26.714 total_gb=44.392 gpu_allocated_gb=15.709 gpu_reserved_gb=15.729 model_cuda_total_gb=15.483
+[INFO|2026-08-05 19:40:29] llamafactory.train.sft.trainer:385 >> [rank0] mm_debug pre_forward: {"rank": 0, "step": 0, "gpu_memory": [{"device": 0, "free_gb": 26.714, "total_gb": 44.392}, {"device": 1, "free_gb": 25.148, "total_gb": 44.392}, {"device": 2, "free_gb": 25.107, "total_gb": 44.392}, {"device": 3, "free_gb": 25.185, "total_gb": 44.392}], "gpu_allocated_gb": 15.709, "gpu_reserved_gb": 15.729, "gpu_device": 0, "model_cuda_param_gb": 15.483, "model_cuda_buffer_gb": 0.0, "model_cuda_total_gb": 15.483, "samples": [{"sample_idx": 41193, "media": {"images": {"count": 4, "items": ["data/other_all_image_resize/among/plane_196/front_012.jpg", "data/other_all_image_resize/among/plane_196/left_065.jpg", "data/other_all_image_resize/among/plane_196/back_129.jpg", "data/other_all_image_resize/among/plane_196/right_203.jpg"]}, "videos": null, "audios": null}}], "tensor_shapes": {"_indices": {"shape": [1], "dtype": "torch.int64"}, "input_ids": {"shape": [1, 1152], "dtype": "torch.int64"}, "attention_mask": {"shape": [1, 1152], "dtype": "torch.int64"}, "labels": {"shape": [1, 1152], "dtype": "torch.int64"}, "position_ids": {"shape": [3, 1, 1152], "dtype": "torch.int64"}, "rope_deltas": {"shape": [1, 1], "dtype": "torch.int64"}, "pixel_values": {"shape": [1408, 1176], "dtype": "torch.bfloat16"}, "image_grid_thw": {"shape": [4, 3], "dtype": "torch.int64"}}, "batch_bytes": 3367024, "batch_gb": 0.003, "image_features": {"pixel_values": {"shape": [1408, 1176], "dtype": "torch.bfloat16", "bytes": 3311616, "gb": 0.003}}, "image_tokens": {"image_grid_thw_shape": [4, 3], "image_tokens_total": 1408, "image_tokens_min": 352, "image_tokens_max": 352, "image_token_count": 4}, "event": "pre_forward"}
+
+  0%|          | 0/1545 [00:00<?, ?it/s]/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py:1171: UserWarning: Specified kernel cache directory could not be created! This disables kernel caching. Specified directory is /tmp/.cache/torch/kernels. This warning will appear only once per process. (Triggered internally at /tmp/build_wheels_tmp.6038/python-3.12/torch/aten/src/ATen/native/cuda/jit_utils.cpp:1487.)
+  split_sizes = (image_grid_thw.prod(-1) // self.visual.spatial_merge_size**2).tolist()
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py:1171: UserWarning: Specified kernel cache directory could not be created! This disables kernel caching. Specified directory is /tmp/.cache/torch/kernels. This warning will appear only once per process. (Triggered internally at /tmp/build_wheels_tmp.6038/python-3.12/torch/aten/src/ATen/native/cuda/jit_utils.cpp:1487.)
+  split_sizes = (image_grid_thw.prod(-1) // self.visual.spatial_merge_size**2).tolist()
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py:1171: UserWarning: Specified kernel cache directory could not be created! This disables kernel caching. Specified directory is /tmp/.cache/torch/kernels. This warning will appear only once per process. (Triggered internally at /tmp/build_wheels_tmp.6038/python-3.12/torch/aten/src/ATen/native/cuda/jit_utils.cpp:1487.)
+  split_sizes = (image_grid_thw.prod(-1) // self.visual.spatial_merge_size**2).tolist()
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py:1171: UserWarning: Specified kernel cache directory could not be created! This disables kernel caching. Specified directory is /tmp/.cache/torch/kernels. This warning will appear only once per process. (Triggered internally at /tmp/build_wheels_tmp.6038/python-3.12/torch/aten/src/ATen/native/cuda/jit_utils.cpp:1487.)
+  split_sizes = (image_grid_thw.prod(-1) // self.visual.spatial_merge_size**2).tolist()
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py:1171: UserWarning: Specified kernel cache directory could not be created! This disables kernel caching. Specified directory is /tmp/.cache/torch/kernels. This warning will appear only once per process. (Triggered internally at /tmp/build_wheels_tmp.6038/python-3.12/torch/aten/src/ATen/native/cuda/jit_utils.cpp:1487.)
+  split_sizes = (image_grid_thw.prod(-1) // self.visual.spatial_merge_size**2).tolist()
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py:1171: UserWarning: Specified kernel cache directory could not be created! This disables kernel caching. Specified directory is /tmp/.cache/torch/kernels. This warning will appear only once per process. (Triggered internally at /tmp/build_wheels_tmp.6038/python-3.12/torch/aten/src/ATen/native/cuda/jit_utils.cpp:1487.)
+  split_sizes = (image_grid_thw.prod(-1) // self.visual.spatial_merge_size**2).tolist()
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py:1171: UserWarning: Specified kernel cache directory could not be created! This disables kernel caching. Specified directory is /tmp/.cache/torch/kernels. This warning will appear only once per process. (Triggered internally at /tmp/build_wheels_tmp.6038/python-3.12/torch/aten/src/ATen/native/cuda/jit_utils.cpp:1487.)
+  split_sizes = (image_grid_thw.prod(-1) // self.visual.spatial_merge_size**2).tolist()
+/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py:1171: UserWarning: Specified kernel cache directory could not be created! This disables kernel caching. Specified directory is /tmp/.cache/torch/kernels. This warning will appear only once per process. (Triggered internally at /tmp/build_wheels_tmp.6038/python-3.12/torch/aten/src/ATen/native/cuda/jit_utils.cpp:1487.)
+  split_sizes = (image_grid_thw.prod(-1) // self.visual.spatial_merge_size**2).tolist()
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank3]:     run_exp()
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 166, in run_exp
+[rank3]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 128, in _training_function
+[rank3]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 122, in run_sft
+[rank3]:     train_result = trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
+[rank3]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2325, in train
+[rank3]:     return inner_training_loop(
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2674, in _inner_training_loop
+[rank3]:     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+[rank3]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 404, in training_step
+[rank3]:     return super().training_step(model, inputs, num_items_in_batch)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4020, in training_step
+[rank3]:     loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 414, in compute_loss
+[rank3]:     return super().compute_loss(model, inputs, *args, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4110, in compute_loss
+[rank3]:     outputs = model(**inputs)
+[rank3]:               ^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank3]:     return self._call_impl(*args, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[rank3]:     return forward_call(*args, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/utils/nvtx.py", line 18, in wrapped_fn
+[rank3]:     ret_val = func(*args, **kwargs)
+[rank3]:               ^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1987, in forward
+[rank3]:     loss = self.module(*inputs, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank3]:     return self._call_impl(*args, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank3]:     return inner()
+[rank3]:            ^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank3]:     result = forward_call(*args, **kwargs)
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/peft_model.py", line 1850, in forward
+[rank3]:     return self.base_model(
+[rank3]:            ^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank3]:     return self._call_impl(*args, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank3]:     return inner()
+[rank3]:            ^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank3]:     result = forward_call(*args, **kwargs)
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 222, in forward
+[rank3]:     return self.model.forward(*args, **kwargs)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/generic.py", line 918, in wrapper
+[rank3]:     output = func(self, *args, **kwargs)
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/qwen2_5_vl.py", line 127, in lce_forward
+[rank3]:     result = LigerForCausalLMLoss(
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 85, in LigerForCausalLMLoss
+[rank3]:     result = fixed_fused_linear_cross_entropy(
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 39, in fixed_fused_linear_cross_entropy
+[rank3]:     result = F.liger_fused_linear_cross_entropy(
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]: TypeError: liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'
+Traceback (most recent call last):
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+    run_exp()
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 166, in run_exp
+    _training_function(config={"args": args, "callbacks": callbacks})
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 128, in _training_function
+    run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 122, in run_sft
+    train_result = trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2325, in train
+    return inner_training_loop(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2674, in _inner_training_loop
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 404, in training_step
+    return super().training_step(model, inputs, num_items_in_batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4020, in training_step
+    loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 414, in compute_loss
+    return super().compute_loss(model, inputs, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4110, in compute_loss
+    outputs = model(**inputs)
+              ^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/utils/nvtx.py", line 18, in wrapped_fn
+    ret_val = func(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1987, in forward
+    loss = self.module(*inputs, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+    return inner()
+           ^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+    result = forward_call(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/peft_model.py", line 1850, in forward
+    return self.base_model(
+           ^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+    return inner()
+           ^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+    result = forward_call(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 222, in forward
+    return self.model.forward(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/generic.py", line 918, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/qwen2_5_vl.py", line 127, in lce_forward
+    result = LigerForCausalLMLoss(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 85, in LigerForCausalLMLoss
+    result = fixed_fused_linear_cross_entropy(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 39, in fixed_fused_linear_cross_entropy
+    result = F.liger_fused_linear_cross_entropy(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank0]:     run_exp()
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 166, in run_exp
+[rank0]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 128, in _training_function
+[rank0]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 122, in run_sft
+[rank0]:     train_result = trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
+[rank0]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2325, in train
+[rank0]:     return inner_training_loop(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2674, in _inner_training_loop
+[rank0]:     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+[rank0]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 404, in training_step
+[rank0]:     return super().training_step(model, inputs, num_items_in_batch)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4020, in training_step
+[rank0]:     loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 414, in compute_loss
+[rank0]:     return super().compute_loss(model, inputs, *args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4110, in compute_loss
+[rank0]:     outputs = model(**inputs)
+[rank0]:               ^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/utils/nvtx.py", line 18, in wrapped_fn
+[rank0]:     ret_val = func(*args, **kwargs)
+[rank0]:               ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1987, in forward
+[rank0]:     loss = self.module(*inputs, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank0]:     return inner()
+[rank0]:            ^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank0]:     result = forward_call(*args, **kwargs)
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/peft_model.py", line 1850, in forward
+[rank0]:     return self.base_model(
+[rank0]:            ^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank0]:     return inner()
+[rank0]:            ^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank0]:     result = forward_call(*args, **kwargs)
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 222, in forward
+[rank0]:     return self.model.forward(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/generic.py", line 918, in wrapper
+[rank0]:     output = func(self, *args, **kwargs)
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/qwen2_5_vl.py", line 127, in lce_forward
+[rank0]:     result = LigerForCausalLMLoss(
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 85, in LigerForCausalLMLoss
+[rank0]:     result = fixed_fused_linear_cross_entropy(
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 39, in fixed_fused_linear_cross_entropy
+[rank0]:     result = F.liger_fused_linear_cross_entropy(
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]: TypeError: liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'
+[1;34mwandb[0m: 
+[1;34mwandb[0m: You can sync this run to the cloud by running:
+[1;34mwandb[0m: [1mwandb sync /project/aip-wangcs/indrisch//LLaMA-Factory/wandb/wandb/offline-run-20260805_194024-vmcgarx9[0m
+[1;34mwandb[0m: Find logs at: [1;35mwandb/wandb/offline-run-20260805_194024-vmcgarx9/logs[0m
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank1]:     run_exp()
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 166, in run_exp
+[rank1]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 128, in _training_function
+[rank1]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 122, in run_sft
+[rank1]:     train_result = trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
+[rank1]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2325, in train
+[rank1]:     return inner_training_loop(
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2674, in _inner_training_loop
+[rank1]:     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+[rank1]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 404, in training_step
+[rank1]:     return super().training_step(model, inputs, num_items_in_batch)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4020, in training_step
+[rank1]:     loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 414, in compute_loss
+[rank1]:     return super().compute_loss(model, inputs, *args, **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4110, in compute_loss
+[rank1]:     outputs = model(**inputs)
+[rank1]:               ^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank1]:     return self._call_impl(*args, **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[rank1]:     return forward_call(*args, **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/utils/nvtx.py", line 18, in wrapped_fn
+[rank1]:     ret_val = func(*args, **kwargs)
+[rank1]:               ^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1987, in forward
+[rank1]:     loss = self.module(*inputs, **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank1]:     return self._call_impl(*args, **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank1]:     return inner()
+[rank1]:            ^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank1]:     result = forward_call(*args, **kwargs)
+[rank1]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/peft_model.py", line 1850, in forward
+[rank1]:     return self.base_model(
+[rank1]:            ^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank1]:     return self._call_impl(*args, **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank1]:     return inner()
+[rank1]:            ^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank1]:     result = forward_call(*args, **kwargs)
+[rank1]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 222, in forward
+[rank1]:     return self.model.forward(*args, **kwargs)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/generic.py", line 918, in wrapper
+[rank1]:     output = func(self, *args, **kwargs)
+[rank1]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/qwen2_5_vl.py", line 127, in lce_forward
+[rank1]:     result = LigerForCausalLMLoss(
+[rank1]:              ^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 85, in LigerForCausalLMLoss
+[rank1]:     result = fixed_fused_linear_cross_entropy(
+[rank1]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 39, in fixed_fused_linear_cross_entropy
+[rank1]:     result = F.liger_fused_linear_cross_entropy(
+[rank1]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]: TypeError: liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank2]:     run_exp()
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 166, in run_exp
+[rank2]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 128, in _training_function
+[rank2]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 122, in run_sft
+[rank2]:     train_result = trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
+[rank2]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2325, in train
+[rank2]:     return inner_training_loop(
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2674, in _inner_training_loop
+[rank2]:     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+[rank2]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 404, in training_step
+[rank2]:     return super().training_step(model, inputs, num_items_in_batch)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4020, in training_step
+[rank2]:     loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 414, in compute_loss
+[rank2]:     return super().compute_loss(model, inputs, *args, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4110, in compute_loss
+[rank2]:     outputs = model(**inputs)
+[rank2]:               ^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank2]:     return self._call_impl(*args, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[rank2]:     return forward_call(*args, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/utils/nvtx.py", line 18, in wrapped_fn
+[rank2]:     ret_val = func(*args, **kwargs)
+[rank2]:               ^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1987, in forward
+[rank2]:     loss = self.module(*inputs, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank2]:     return self._call_impl(*args, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank2]:     return inner()
+[rank2]:            ^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank2]:     result = forward_call(*args, **kwargs)
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/peft_model.py", line 1850, in forward
+[rank2]:     return self.base_model(
+[rank2]:            ^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank2]:     return self._call_impl(*args, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank2]:     return inner()
+[rank2]:            ^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank2]:     result = forward_call(*args, **kwargs)
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 222, in forward
+[rank2]:     return self.model.forward(*args, **kwargs)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/generic.py", line 918, in wrapper
+[rank2]:     output = func(self, *args, **kwargs)
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/qwen2_5_vl.py", line 127, in lce_forward
+[rank2]:     result = LigerForCausalLMLoss(
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 85, in LigerForCausalLMLoss
+[rank2]:     result = fixed_fused_linear_cross_entropy(
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 39, in fixed_fused_linear_cross_entropy
+[rank2]:     result = F.liger_fused_linear_cross_entropy(
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]: TypeError: liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'
+[rank7]: Traceback (most recent call last):
+[rank7]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank7]:     run_exp()
+[rank7]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 166, in run_exp
+[rank7]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank7]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 128, in _training_function
+[rank7]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank7]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 122, in run_sft
+[rank7]:     train_result = trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
+[rank7]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2325, in train
+[rank7]:     return inner_training_loop(
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2674, in _inner_training_loop
+[rank7]:     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+[rank7]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 404, in training_step
+[rank7]:     return super().training_step(model, inputs, num_items_in_batch)
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4020, in training_step
+[rank7]:     loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 414, in compute_loss
+[rank7]:     return super().compute_loss(model, inputs, *args, **kwargs)
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4110, in compute_loss
+[rank7]:     outputs = model(**inputs)
+[rank7]:               ^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank7]:     return self._call_impl(*args, **kwargs)
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[rank7]:     return forward_call(*args, **kwargs)
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/utils/nvtx.py", line 18, in wrapped_fn
+[rank7]:     ret_val = func(*args, **kwargs)
+[rank7]:               ^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1987, in forward
+[rank7]:     loss = self.module(*inputs, **kwargs)
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank7]:     return self._call_impl(*args, **kwargs)
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank7]:     return inner()
+[rank7]:            ^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank7]:     result = forward_call(*args, **kwargs)
+[rank7]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/peft_model.py", line 1850, in forward
+[rank7]:     return self.base_model(
+[rank7]:            ^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank7]:     return self._call_impl(*args, **kwargs)
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank7]:     return inner()
+[rank7]:            ^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank7]:     result = forward_call(*args, **kwargs)
+[rank7]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 222, in forward
+[rank7]:     return self.model.forward(*args, **kwargs)
+[rank7]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/generic.py", line 918, in wrapper
+[rank7]:     output = func(self, *args, **kwargs)
+[rank7]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/qwen2_5_vl.py", line 127, in lce_forward
+[rank7]:     result = LigerForCausalLMLoss(
+[rank7]:              ^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 85, in LigerForCausalLMLoss
+[rank7]:     result = fixed_fused_linear_cross_entropy(
+[rank7]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 39, in fixed_fused_linear_cross_entropy
+[rank7]:     result = F.liger_fused_linear_cross_entropy(
+[rank7]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank7]: TypeError: liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'
+[rank5]: Traceback (most recent call last):
+[rank5]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank5]:     run_exp()
+[rank5]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 166, in run_exp
+[rank5]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank5]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 128, in _training_function
+[rank5]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank5]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 122, in run_sft
+[rank5]:     train_result = trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
+[rank5]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2325, in train
+[rank5]:     return inner_training_loop(
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2674, in _inner_training_loop
+[rank5]:     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+[rank5]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 404, in training_step
+[rank5]:     return super().training_step(model, inputs, num_items_in_batch)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4020, in training_step
+[rank5]:     loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 414, in compute_loss
+[rank5]:     return super().compute_loss(model, inputs, *args, **kwargs)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4110, in compute_loss
+[rank5]:     outputs = model(**inputs)
+[rank5]:               ^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank5]:     return self._call_impl(*args, **kwargs)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[rank5]:     return forward_call(*args, **kwargs)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/utils/nvtx.py", line 18, in wrapped_fn
+[rank5]:     ret_val = func(*args, **kwargs)
+[rank5]:               ^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1987, in forward
+[rank5]:     loss = self.module(*inputs, **kwargs)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank5]:     return self._call_impl(*args, **kwargs)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank5]:     return inner()
+[rank5]:            ^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank5]:     result = forward_call(*args, **kwargs)
+[rank5]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/peft_model.py", line 1850, in forward
+[rank5]:     return self.base_model(
+[rank5]:            ^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank5]:     return self._call_impl(*args, **kwargs)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank5]:     return inner()
+[rank5]:            ^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank5]:     result = forward_call(*args, **kwargs)
+[rank5]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 222, in forward
+[rank5]:     return self.model.forward(*args, **kwargs)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/generic.py", line 918, in wrapper
+[rank5]:     output = func(self, *args, **kwargs)
+[rank5]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/qwen2_5_vl.py", line 127, in lce_forward
+[rank5]:     result = LigerForCausalLMLoss(
+[rank5]:              ^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 85, in LigerForCausalLMLoss
+[rank5]:     result = fixed_fused_linear_cross_entropy(
+[rank5]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 39, in fixed_fused_linear_cross_entropy
+[rank5]:     result = F.liger_fused_linear_cross_entropy(
+[rank5]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]: TypeError: liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'
+[rank4]: Traceback (most recent call last):
+[rank4]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank4]:     run_exp()
+[rank4]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 166, in run_exp
+[rank4]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank4]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 128, in _training_function
+[rank4]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank4]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 122, in run_sft
+[rank4]:     train_result = trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
+[rank4]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2325, in train
+[rank4]:     return inner_training_loop(
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2674, in _inner_training_loop
+[rank4]:     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+[rank4]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 404, in training_step
+[rank4]:     return super().training_step(model, inputs, num_items_in_batch)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4020, in training_step
+[rank4]:     loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 414, in compute_loss
+[rank4]:     return super().compute_loss(model, inputs, *args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4110, in compute_loss
+[rank4]:     outputs = model(**inputs)
+[rank4]:               ^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank4]:     return self._call_impl(*args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[rank4]:     return forward_call(*args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/utils/nvtx.py", line 18, in wrapped_fn
+[rank4]:     ret_val = func(*args, **kwargs)
+[rank4]:               ^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1987, in forward
+[rank4]:     loss = self.module(*inputs, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank4]:     return self._call_impl(*args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank4]:     return inner()
+[rank4]:            ^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank4]:     result = forward_call(*args, **kwargs)
+[rank4]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/peft_model.py", line 1850, in forward
+[rank4]:     return self.base_model(
+[rank4]:            ^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank4]:     return self._call_impl(*args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank4]:     return inner()
+[rank4]:            ^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank4]:     result = forward_call(*args, **kwargs)
+[rank4]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 222, in forward
+[rank4]:     return self.model.forward(*args, **kwargs)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/generic.py", line 918, in wrapper
+[rank4]:     output = func(self, *args, **kwargs)
+[rank4]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/qwen2_5_vl.py", line 127, in lce_forward
+[rank4]:     result = LigerForCausalLMLoss(
+[rank4]:              ^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 85, in LigerForCausalLMLoss
+[rank4]:     result = fixed_fused_linear_cross_entropy(
+[rank4]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 39, in fixed_fused_linear_cross_entropy
+[rank4]:     result = F.liger_fused_linear_cross_entropy(
+[rank4]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]: TypeError: liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'
+[rank0]:[W805 19:40:33.100051381 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+kn139:4076854:4082879 [0] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076854:4082879 [0] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076854:4082879 [0] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076854:4077450 [0] NCCL INFO misc/socket.cc:916 -> 3
+kn139:4076857:4082880 [3] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076854:4082879 [0] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076857:4082880 [3] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076854:4082879 [0] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076857:4082880 [3] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076854:4082879 [0] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076854:4082879 [0] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076854:4082879 [0] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076854:4082879 [0] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076857:4082880 [3] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076857:4082880 [3] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076857:4082880 [3] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076854:4082879 [0] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076854:4082879 [0] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076854:4082879 [0] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076854:4077450 [0] NCCL INFO misc/socket.cc:916 -> 3
+kn139:4076857:4082880 [3] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076857:4082880 [3] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076857:4082880 [3] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076857:4077453 [3] NCCL INFO misc/socket.cc:916 -> 3
+kn139:4076857:4077453 [3] NCCL INFO misc/socket.cc:916 -> 3
+[rank6]: Traceback (most recent call last):
+[rank6]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 184, in <module>
+[rank6]:     run_exp()
+[rank6]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 166, in run_exp
+[rank6]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank6]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 128, in _training_function
+[rank6]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank6]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/workflow.py", line 122, in run_sft
+[rank6]:     train_result = trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
+[rank6]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2325, in train
+[rank6]:     return inner_training_loop(
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 2674, in _inner_training_loop
+[rank6]:     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+[rank6]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 404, in training_step
+[rank6]:     return super().training_step(model, inputs, num_items_in_batch)
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4020, in training_step
+[rank6]:     loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/train/sft/trainer.py", line 414, in compute_loss
+[rank6]:     return super().compute_loss(model, inputs, *args, **kwargs)
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/trainer.py", line 4110, in compute_loss
+[rank6]:     outputs = model(**inputs)
+[rank6]:               ^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank6]:     return self._call_impl(*args, **kwargs)
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[rank6]:     return forward_call(*args, **kwargs)
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/utils/nvtx.py", line 18, in wrapped_fn
+[rank6]:     ret_val = func(*args, **kwargs)
+[rank6]:               ^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1987, in forward
+[rank6]:     loss = self.module(*inputs, **kwargs)
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank6]:     return self._call_impl(*args, **kwargs)
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank6]:     return inner()
+[rank6]:            ^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank6]:     result = forward_call(*args, **kwargs)
+[rank6]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/peft_model.py", line 1850, in forward
+[rank6]:     return self.base_model(
+[rank6]:            ^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[rank6]:     return self._call_impl(*args, **kwargs)
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1881, in _call_impl
+[rank6]:     return inner()
+[rank6]:            ^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1829, in inner
+[rank6]:     result = forward_call(*args, **kwargs)
+[rank6]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 222, in forward
+[rank6]:     return self.model.forward(*args, **kwargs)
+[rank6]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/transformers/utils/generic.py", line 918, in wrapper
+[rank6]:     output = func(self, *args, **kwargs)
+[rank6]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/qwen2_5_vl.py", line 127, in lce_forward
+[rank6]:     result = LigerForCausalLMLoss(
+[rank6]:              ^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 85, in LigerForCausalLMLoss
+[rank6]:     result = fixed_fused_linear_cross_entropy(
+[rank6]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]:   File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/liger_kernel/transformers/model/loss_utils.py", line 39, in fixed_fused_linear_cross_entropy
+[rank6]:     result = F.liger_fused_linear_cross_entropy(
+[rank6]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank6]: TypeError: liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'
+kn139:4076857:4082880 [3] NCCL INFO comm 0x10b15790 rank 3 nranks 8 cudaDev 3 busId e3000 - Abort COMPLETE
+kn139:4076854:4077450 [0] NCCL INFO misc/socket.cc:916 -> 3
+kn139:4076855:4082882 [1] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076855:4082882 [1] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076855:4082882 [1] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076855:4082882 [1] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076855:4082882 [1] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076855:4077451 [1] NCCL INFO misc/socket.cc:916 -> 3
+kn139:4076855:4082882 [1] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076855:4082882 [1] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076855:4082882 [1] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076855:4082882 [1] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076854:4082879 [0] NCCL INFO comm 0x11044f40 rank 0 nranks 8 cudaDev 0 busId 17000 - Abort COMPLETE
+kn139:4076856:4082884 [2] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076856:4082884 [2] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076856:4082884 [2] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076856:4082884 [2] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076856:4082884 [2] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076856:4082884 [2] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076856:4082884 [2] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076856:4082884 [2] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076856:4082884 [2] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076855:4077451 [1] NCCL INFO misc/socket.cc:916 -> 3
+kn139:4076856:4077452 [2] NCCL INFO misc/socket.cc:916 -> 3
+kn139:4076856:4082884 [2] NCCL INFO misc/socket.cc:64 -> 3
+kn139:4076856:4082884 [2] NCCL INFO misc/socket.cc:81 -> 3
+kn139:4076856:4082884 [2] NCCL INFO misc/socket.cc:864 -> 3
+kn149:3395407:3401460 [3] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395407:3401460 [3] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395407:3401460 [3] NCCL INFO misc/socket.cc:864 -> 3
+kn149:3395407:3401460 [3] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395407:3401460 [3] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395407:3401460 [3] NCCL INFO misc/socket.cc:864 -> 3
+kn149:3395407:3401460 [3] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395407:3401460 [3] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395407:3401460 [3] NCCL INFO misc/socket.cc:864 -> 3
+kn149:3395407:3395999 [3] NCCL INFO misc/socket.cc:916 -> 3
+[rank4]:[W805 19:40:34.351499968 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+kn149:3395404:3401462 [0] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395404:3401462 [0] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395404:3401462 [0] NCCL INFO misc/socket.cc:864 -> 3
+kn149:3395404:3396001 [0] NCCL INFO misc/socket.cc:916 -> 3
+kn149:3395404:3401462 [0] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395404:3401462 [0] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395404:3401462 [0] NCCL INFO misc/socket.cc:864 -> 3
+kn149:3395404:3401462 [0] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395404:3401462 [0] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395404:3401462 [0] NCCL INFO misc/socket.cc:864 -> 3
+kn149:3395404:3401462 [0] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395404:3401462 [0] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395404:3401462 [0] NCCL INFO misc/socket.cc:864 -> 3
+kn149:3395407:3395999 [3] NCCL INFO misc/socket.cc:916 -> 3
+kn149:3395407:3401460 [3] NCCL INFO comm 0x17b460d0 rank 7 nranks 8 cudaDev 3 busId e3000 - Abort COMPLETE
+[rank3]:[W805 19:40:34.949510382 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+kn149:3395404:3396001 [0] NCCL INFO misc/socket.cc:916 -> 3
+kn149:3395405:3401464 [1] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395405:3401464 [1] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395405:3401464 [1] NCCL INFO misc/socket.cc:864 -> 3
+kn149:3395405:3401464 [1] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395405:3401464 [1] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395405:3401464 [1] NCCL INFO misc/socket.cc:864 -> 3
+kn149:3395405:3396005 [1] NCCL INFO misc/socket.cc:916 -> 3
+kn149:3395405:3401464 [1] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395405:3401464 [1] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395405:3401464 [1] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076855:4082882 [1] NCCL INFO comm 0x10b16900 rank 1 nranks 8 cudaDev 1 busId 65000 - Abort COMPLETE
+[rank0]:[W805 19:40:34.010855820 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+kn149:3395406:3401466 [2] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395406:3401466 [2] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395406:3401466 [2] NCCL INFO misc/socket.cc:864 -> 3
+kn149:3395406:3401466 [2] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395406:3401466 [2] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395406:3401466 [2] NCCL INFO misc/socket.cc:864 -> 3
+kn149:3395405:3396005 [1] NCCL INFO misc/socket.cc:916 -> 3
+kn149:3395406:3401466 [2] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395406:3401466 [2] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395406:3401466 [2] NCCL INFO misc/socket.cc:864 -> 3
+kn149:3395406:3396000 [2] NCCL INFO misc/socket.cc:916 -> 3
+kn149:3395406:3401466 [2] NCCL INFO misc/socket.cc:64 -> 3
+kn149:3395406:3401466 [2] NCCL INFO misc/socket.cc:81 -> 3
+kn149:3395406:3401466 [2] NCCL INFO misc/socket.cc:864 -> 3
+kn139:4076856:4082884 [2] NCCL INFO comm 0x10b173e0 rank 2 nranks 8 cudaDev 2 busId ca000 - Abort COMPLETE
+kn139:4076856:4082185 [2] NCCL INFO [Service thread] Connection closed by localRank 3
+kn139:4076855:4082184 [1] NCCL INFO [Service thread] Connection closed by localRank 3
+kn139:4076855:4082184 [1] NCCL INFO [Service thread] Connection closed by localRank 0
+kn139:4076856:4082185 [2] NCCL INFO [Service thread] Connection closed by localRank 0
+kn149:3395404:3401462 [0] NCCL INFO comm 0x10b14f40 rank 4 nranks 8 cudaDev 0 busId 17000 - Abort COMPLETE
+kn149:3395405:3401464 [1] NCCL INFO comm 0x11044b10 rank 5 nranks 8 cudaDev 1 busId 65000 - Abort COMPLETE
+[rank7]:[W805 19:40:34.889080736 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+[rank1]:[W805 19:40:35.510952787 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+W0805 19:40:35.151000 4076724 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 4076855 closing signal SIGTERM
+W0805 19:40:35.161000 4076724 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 4076856 closing signal SIGTERM
+W0805 19:40:35.165000 4076724 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 4076857 closing signal SIGTERM
+kn149:3395406:3401466 [2] NCCL INFO comm 0x11044a20 rank 6 nranks 8 cudaDev 2 busId ca000 - Abort COMPLETE
+kn149:3395405:3400782 [1] NCCL INFO [Service thread] Connection closed by localRank 3
+kn149:3395406:3400779 [2] NCCL INFO [Service thread] Connection closed by localRank 3
+kn149:3395404:3400783 [0] NCCL INFO [Service thread] Connection closed by localRank 3
+[rank4]:[W805 19:40:35.436427543 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+[rank5]:[W805 19:40:35.440154958 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+W0805 19:40:35.628000 3395261 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 3395404 closing signal SIGTERM
+W0805 19:40:35.638000 3395261 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 3395405 closing signal SIGTERM
+W0805 19:40:35.642000 3395261 torch/distributed/elastic/multiprocessing/api.py:908] Sending process 3395406 closing signal SIGTERM
+E0805 19:40:35.934000 4076724 torch/distributed/elastic/multiprocessing/api.py:882] failed (exitcode: 1) local_rank: 0 (pid: 4076854) of binary: /project/6110552/indrisch/venv_llamafactory_cu126/bin/python
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/bin/torchrun", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 357, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 936, in main
+    run(args)
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 927, in run
+    elastic_launch(
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 156, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 293, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-08-05_19:40:35
+  host      : kn139.paice.vectorinstitute.ai
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 4076854)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+[W805 19:40:36.748679280 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/python/3.12.4/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '2', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', 'kn139', '--master_port', '29500', '/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_multinode_qwen2_5vl_lora_sft_CoT_traineval.yaml']' returned non-zero exit status 1.
+E0805 19:40:36.525000 3395261 torch/distributed/elastic/multiprocessing/api.py:882] failed (exitcode: 1) local_rank: 3 (pid: 3395407) of binary: /project/6110552/indrisch/venv_llamafactory_cu126/bin/python
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/bin/torchrun", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 357, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 936, in main
+    run(args)
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 927, in run
+    elastic_launch(
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 156, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 293, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-08-05_19:40:35
+  host      : kn149.paice.vectorinstitute.ai
+  rank      : 7 (local_rank: 3)
+  exitcode  : 1 (pid: 3395407)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+[W805 19:40:36.769111378 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+[W805 19:40:37.496131150 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+Traceback (most recent call last):
+  File "/project/6110552/indrisch/venv_llamafactory_cu126/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/python/3.12.4/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '2', '--node_rank', '1', '--nproc_per_node', '4', '--master_addr', 'kn139', '--master_port', '29500', '/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_multinode_qwen2_5vl_lora_sft_CoT_traineval.yaml']' returned non-zero exit status 1.
+srun: error: kn139: task 0: Exited with exit code 1
+srun: Terminating StepId=4620261.0
+srun: error: kn149: task 1: Terminated
+srun: Force Terminated StepId=4620261.0
