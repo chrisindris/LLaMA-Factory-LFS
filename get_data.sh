@@ -2,7 +2,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=2
-#SBATCH --time=0-00:15:00
+#SBATCH --time=0-00:03:00
 #SBATCH --mem=2G
 #SBATCH --output=out/%N-get_data-%j.out
 #SBATCH --mail-user=christopher.indris@torontomu.ca
@@ -14,31 +14,31 @@
 export HF_DEBUG=1
 export HF_TOKEN=$(cat /home/indrisch/TOKENS/cvis-tmu-organization-token.txt)
 
-# vLLM models typically come from the huggingface hub. 
+# vLLM models typically come from the huggingface hub.
 #module load python/3.12 git-lfs/3.4.0 && git-lfs install
-module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
 module load python/3.12 cuda/12.6 opencv/4.12.0
 module load arrow
-module load git-lfs/3.4.0 
+module load git-lfs/3.4.0
 git-lfs install
 
 # virtualenv --no-download temp_env && source temp_env/bin/activate
 # pip install --upgrade pip setuptools wheel
 # pip install packaging
 # pip install --no-index huggingface_hub
-# source /scratch/indrisch/venv_llamafactory_cu126_qwen35/bin/activate
+# source /scratch/indrisch/venv_llamafactory_cu126/bin/activate
 
 # --- default location: $HOME/.cache/huggingface/hub; modify with HF_HOME and HFHUB_CACHE. ---
 #huggingface-cli download moonshotai/Kimi-VL-A3B-Thinking-2506 # default location: $HOME/.cache/huggingface/hub
 #HF_HUB_DISABLE_XET=1 hf download --max-workers=4 moonshotai/Kimi-VL-A3B-Thinking-2506 # using --local-dir and --cache-dir; default location: $HOME/.cache/huggingface/hub
 
 if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then
-    PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
+	PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
 elif [[ "$PWD" == *LLaMA-Factory* ]]; then
-    PROJECT_DIR="${PWD%%LLaMA-Factory*}/LLaMA-Factory"
+	PROJECT_DIR="${PWD%%LLaMA-Factory*}/LLaMA-Factory"
 else
-    echo "Error: Could not find 'LLaMA-Factory' or 'LLaMA-Factory-LFS' in the current path."
-    exit 1
+	echo "Error: Could not find 'LLaMA-Factory' or 'LLaMA-Factory-LFS' in the current path."
+	exit 1
 fi
 SYSCONFIG_DIR_PATH="$PROJECT_DIR/scripts"
 export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
@@ -48,9 +48,9 @@ echo "SYSCONFIG_DIR_PATH: $SYSCONFIG_DIR_PATH"
 echo "PWD: $PWD"
 echo "PYTHONPATH: $PYTHONPATH"
 
-export HF_HOME="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HOME'))")" 
-export HF_HUB_CACHE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HUB_CACHE'))")" 
-export HF_HUB_DISABLE_XET="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HUB_DISABLE_XET'))")" 
+export HF_HOME="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HOME'))")"
+export HF_HUB_CACHE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HUB_CACHE'))")"
+export HF_HUB_DISABLE_XET="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HUB_DISABLE_XET'))")"
 export VENV_LLAMAFACTORY="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'VENV_LLAMAFACTORY'))")"
 unset PYTHONPATH
 
@@ -126,7 +126,7 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C1.0_F0.0_X0.0 --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C0.0_F0.0_X1.0 --repo-type=dataset
 
-# get the 1 epoch models 
+# get the 1 epoch models
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_R12C12F12X62_465steps
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_R1_465steps
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_C1_465steps
@@ -155,13 +155,14 @@ hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
 # SPAR-7M-RGBD (annotations) -> https://huggingface.co/datasets/jasonzhango/SPAR-7M-RGBD/blob/main/README.md
 # hf download --max-workers=8 jasonzhango/SPAR-7M-RGBD --repo-type dataset
 # hf download --max-workers=2 jasonzhango/SPAR-7M --repo-type dataset
-# hf download --max-workers=4 internlm/Spatial-SSRL-81k --repo-type=dataset # SSRL 
+# hf download --max-workers=4 internlm/Spatial-SSRL-81k --repo-type=dataset # SSRL
 # hf download --max-workers=4 MLL-Lab/MindCube --repo-type=dataset # Suggested by the 3DThinker authors
 # hf download --max-workers=4 jankin123/3DThinker-10K --repo-type=dataset # 3D Thinker 10k: suggested by Leihan (how is this different from the one above)?
 # hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type=dataset # Leihan's version of the one above, which is MCQs only.
 # hf download --max-workers=4 jankin123/3DThinker-Mindcube # the model weights used by 3D-Thinker; may or may not be used by us
 
-# huggingface-cli download --max-workers=8 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged --local-dir-use-symlinks False
+# hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs
+hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs
 
 # huggingface-cli download --max-workers=4 cvis-tmu/Scene30K --local-dir-use-symlinks False
 

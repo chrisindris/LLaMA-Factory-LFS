@@ -1,35 +1,69 @@
 #!/usr/bin/env bash
-# Install h5py into the LLaMA-Factory apptainer overlay (no numpy upgrade).
+# Install h5py (and a few helpers) into the LLaMA-Factory apptainer overlay
+# without upgrading the SIF's numpy (required by torch).
 # Safe for multimodal H5 training (ScanNet_h5 / Spatial-SSRL / 3DThinker).
+#
+# Usage (from repo root or scripts/):
+#   bash scripts/build_apptainer_overlay.sh
+#   OVERLAY=/path/to/overlay.img OVERLAY_SIZE_MB=2048 bash scripts/build_apptainer_overlay.sh
+#   FORCE_RECREATE=1 bash scripts/build_apptainer_overlay.sh   # delete and rebuild overlay
+#
+# Notes:
+# - Overlay size is fixed at create time. Changing OVERLAY_SIZE_MB has no effect
+#   unless the image is removed/recreated (FORCE_RECREATE=1).
+# - 1024 MiB is enough for h5py + wandb + pip upgrades. Use larger sizes only if
+#   you plan to install many extra packages into the overlay.
+# - export_merge_adapter_job.sh does NOT need packages from this overlay for
+#   LoRA merge; it only uses the overlay when present so the env matches training.
 set -euo pipefail
 
-. ./utils/env.sh
+. ./utils/env.sh 2>/dev/null || . "$(dirname "$0")/utils/env.sh"
 
 # --- setting environment ---
 
 EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval"
 
-if [[ "$CLUSTER" == "RORQUAL" ]]; then
+if [[ "${CLUSTER:-}" == "RORQUAL" ]]; then
 	SCANNET_H5_DIR="/project/def-wangcs/indrisch/scratch_saves/ScanNet_h5/scans"
 fi
 
 # --- build apptainer overlay ---
 
-SIF="${SIF:-$HF_HOME/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif}" && echo "SIF: $SIF"
-OVERLAY="${OVERLAY:-$PROJECT_DIR/apptainer/overlay_1.img}" && echo "OVERLAY: $OVERLAY"
-WHEELHOUSE="${WHEELHOUSE:-/scratch/indrisch/wheels/llamafactory_py311}" && echo "WHEELHOUSE: $WHEELHOUSE"
-H5PY_VERSION="${H5PY_VERSION:-3.16.0}" && echo "H5PY_VERSION: $H5PY_VERSION"
+SIF="${SIF:-$HF_HOME/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif}"
+OVERLAY="${OVERLAY:-$PROJECT_DIR/apptainer/overlay.img}"
+# Size in MiB for `apptainer overlay create --size`. Only used when creating.
+OVERLAY_SIZE_MB="${OVERLAY_SIZE_MB:-1024}"
+WHEELHOUSE="${WHEELHOUSE:-/scratch/indrisch/wheels/llamafactory_py311}"
+H5PY_VERSION="${H5PY_VERSION:-3.16.0}"
+FORCE_RECREATE="${FORCE_RECREATE:-0}"
 
 mkdir -p "${WHEELHOUSE}"
 module load apptainer 2>/dev/null || true
 
 echo "SIF: ${SIF}"
 echo "OVERLAY: ${OVERLAY}"
+echo "OVERLAY_SIZE_MB: ${OVERLAY_SIZE_MB}"
+echo "WHEELHOUSE: ${WHEELHOUSE}"
+echo "H5PY_VERSION: ${H5PY_VERSION}"
+
+if [[ ! -f "${SIF}" ]]; then
+	echo "ERROR: SIF not found: ${SIF}"
+	exit 1
+fi
+
+if [[ "${FORCE_RECREATE}" == "1" && -f "${OVERLAY}" ]]; then
+	bak="${OVERLAY}.bak.$(date +%Y%m%d%H%M%S)"
+	echo "FORCE_RECREATE=1: moving existing overlay to ${bak}"
+	mv "${OVERLAY}" "${bak}"
+fi
 
 if [[ ! -f "${OVERLAY}" ]]; then
-	echo "Creating overlay image..."
-	mkdir -p $(dirname "${OVERLAY}")
-	apptainer overlay create --fakeroot --size 1024 "${OVERLAY}"
+	echo "Creating overlay image (${OVERLAY_SIZE_MB} MiB)..."
+	mkdir -p "$(dirname "${OVERLAY}")"
+	apptainer overlay create --fakeroot --size "${OVERLAY_SIZE_MB}" "${OVERLAY}"
+else
+	echo "Overlay already exists ($(du -h "${OVERLAY}" | awk '{print $1}')). Reusing."
+	echo "  To resize/rebuild: FORCE_RECREATE=1 OVERLAY_SIZE_MB=${OVERLAY_SIZE_MB} $0"
 fi
 
 echo "Container Python:"
@@ -46,7 +80,15 @@ if [[ -z "${WHEEL}" || ! -f "${WHEEL}" ]]; then
 	echo "ERROR: h5py wheel not found in ${WHEELHOUSE}"
 	exit 1
 fi
-echo "Installing ${WHEEL} into overlay (no deps)..."
+
+echo "Upgrade pip/setuptools/wheel inside overlay..."
+apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
+	--bind /scratch/indrisch:/scratch/indrisch \
+	--env PYTHONNOUSERSITE=1 \
+	"${SIF}" \
+	python -m pip install --upgrade pip setuptools wheel
+
+echo "Installing ${WHEEL} into overlay (no deps) + wandb/sentry-sdk..."
 apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
 	--bind /scratch/indrisch:/scratch/indrisch \
 	--env PYTHONNOUSERSITE=1 \
@@ -59,4 +101,4 @@ apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
 	"${SIF}" \
 	python -c "import h5py, numpy, wandb, sentry_sdk; print('h5py', h5py.__version__, 'numpy', numpy.__version__, 'wandb', wandb.__version__, 'sentry_sdk', sentry_sdk.VERSION)"
 
-echo "Done."
+echo "Done. Overlay ready: ${OVERLAY}"

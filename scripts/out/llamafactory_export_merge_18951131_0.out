@@ -1,0 +1,36 @@
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+BEST_GPU: h100
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /scratch/indrisch/ScanNet_h5
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[WARNING|2026-08-01 22:05:37] llamafactory.extras.misc:154 >> Version checking has been disabled, may lead to unexpected behaviors.
+[2026-08-01 22:05:38,540] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[INFO|2026-08-01 22:05:44] llamafactory.model.model_utils.attention:143 >> Attention backend request: auto | FlashAttention-2 available: True | SDPA available: True
+[INFO|2026-08-01 22:05:44] llamafactory.model.model_utils.kv_cache:143 >> KV cache is enabled for faster generation.
+[INFO|2026-08-01 22:06:24] llamafactory.model.model_utils.attention:143 >> Resolved attention implementation in config: sdpa
+[INFO|2026-08-01 22:06:24] llamafactory.model.model_utils.attention:143 >> Using torch SDPA for faster training and inference.
+[INFO|2026-08-01 22:06:28] llamafactory.model.adapter:143 >> Merged 1 adapter(s).
+[INFO|2026-08-01 22:06:28] llamafactory.model.adapter:143 >> Loaded adapter(s): cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs
+[INFO|2026-08-01 22:06:28] llamafactory.model.loader:143 >> all params: 8,292,166,656
+[INFO|2026-08-01 22:06:28] llamafactory.train.tuner:143 >> Convert model dtype to: torch.bfloat16.
+[INFO|2026-08-01 22:07:05] llamafactory.train.tuner:143 >> Ollama modelfile saved in /scratch/indrisch//LLaMA-Factory/models/merged-model/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs/Modelfile
+Model exported successfully to /scratch/indrisch//LLaMA-Factory/models/merged-model/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs
