@@ -12,6 +12,28 @@ The [dataset_info.json](dataset_info.json) contains all available datasets. If y
 
 H5-backed datasets keep annotation path strings and decode images lazily through `src/llamafactory/data/data_packing/h5_image_store.py` (no need to unpack JPEG trees for Spatial-SSRL or 3DThinker-10k). Scene30k paths that point at another cluster’s ScanNet root are remapped via `SCANNET_H5_DIR`.
 
+### QUESTION_ID stamping (prediction dumps)
+
+For train/eval response logging (`save_train_predictions` / `save_eval_predictions`), each annotation row needs a stable `question_id` of the form `DATASET-NAME_NUMBER` (0-based order of appearance). Assign with:
+
+```bash
+python scripts/assign_question_ids.py \
+  --from-dataset-info data/dataset_info.json \
+  --datasets Scene30k,SpatialSSRL_coldstart,3DThinker10k
+# optional: --update-dataset-info  # rewrites file_name + columns.question_id
+# optional: --in-place            # overwrite original annotation files
+```
+
+Then map under each dataset’s `columns` in `dataset_info.json`:
+
+```json
+"question_id": "question_id"
+```
+
+Smoke job (1 GPU, `max_samples` truncation):  
+`models/qwen2_5vl_lora_sft_CoT/trillium_slurm_qwen2_5vl_lora_sft_CoT_prediction_dump_smoke.sh`  
+and `examples/train_lora/trillium_qwen2_5vl_lora_sft_CoT_prediction_dump_smoke.yaml`.
+
 **Single `media_dir` vs multi-root H5:** LLaMA-Factory CLI accepts only one `--media_dir`, which is a filesystem join prefix for relative image paths. That is **not** a problem for the CoT mix in this fork: `converter._find_medias` falls back to `can_resolve_h5_image`, and `h5_image_store.resolve_h5_image` routes by path pattern to the correct store (`SCANNET_H5_DIR` / `SPATIALSSRL_H5_DIR` / `THINKER10K_H5_DIR`). You do **not** need a unified CoT symlink tree or a custom CoT dataset for multi-source images. Specs: [`Spatial-SSRL/h5_dataloader_spec.md`](Spatial-SSRL/h5_dataloader_spec.md), [`3DThinker-10K/3dthinker10k_h5_dataloader_spec.md`](3DThinker-10K/3dthinker10k_h5_dataloader_spec.md). Smoke: `scripts/smoke_cot_h5_resolve.py`.
 
 The `dataset_info.json` file should be put in the `dataset_dir` directory. You can change `dataset_dir` to use another directory. The default value is `./data`.

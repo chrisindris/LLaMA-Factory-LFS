@@ -164,6 +164,10 @@ class SupervisedDatasetProcessor(DatasetProcessor):
             model_inputs["images"].append(examples["_images"][i])
             model_inputs["videos"].append(examples["_videos"][i])
             model_inputs["audios"].append(examples["_audios"][i])
+            qids = examples.get("_question_id")
+            if qids is not None:
+                qid = qids[i]
+                model_inputs["question_id"].append("" if qid is None else str(qid))
             if indices is not None:
                 model_inputs["sample_idx"].append(int(indices[i]))
                 model_inputs["sample_media"].append(
@@ -188,10 +192,11 @@ class PackedSupervisedDatasetProcessor(SupervisedDatasetProcessor):
         # and labels with format `<ignore> ... <ignore> Y1 <eos> <ignore> ... <ignore> Y2 <eos>`
         valid_num = 0
         batch_input_ids, batch_labels, batch_images, batch_videos, batch_audios = [], [], [], [], []
-        batch_indices, batch_media = [], []
+        batch_indices, batch_media, batch_question_ids = [], [], []
         lengths = []
         length2indexes = defaultdict(list)
         indices = examples.get("_indices")
+        question_ids = examples.get("_question_id")
         for i in range(len(examples["_prompt"])):
             if len(examples["_prompt"][i]) % 2 != 1 or len(examples["_response"][i]) != 1:
                 logger.warning_rank0(
@@ -219,6 +224,9 @@ class PackedSupervisedDatasetProcessor(SupervisedDatasetProcessor):
                 batch_images.append(examples["_images"][i] or [])
                 batch_videos.append(examples["_videos"][i] or [])
                 batch_audios.append(examples["_audios"][i] or [])
+                if question_ids is not None:
+                    qid = question_ids[i]
+                    batch_question_ids.append("" if qid is None else str(qid))
                 if indices is not None:
                     batch_indices.append(int(indices[i]))
                     batch_media.append(
@@ -233,7 +241,7 @@ class PackedSupervisedDatasetProcessor(SupervisedDatasetProcessor):
         for knapsack in knapsacks:
             packed_input_ids, packed_attention_masks, packed_position_ids, packed_labels = [], [], [], []
             packed_images, packed_videos, packed_audios = [], [], []
-            packed_indices, packed_media = [], []
+            packed_indices, packed_media, packed_question_ids = [], [], []
             for i, length in enumerate(knapsack):
                 index = length2indexes[length].pop()
                 packed_input_ids += batch_input_ids[index]
@@ -242,6 +250,8 @@ class PackedSupervisedDatasetProcessor(SupervisedDatasetProcessor):
                 packed_images += batch_images[index]
                 packed_videos += batch_videos[index]
                 packed_audios += batch_audios[index]
+                if batch_question_ids:
+                    packed_question_ids.append(batch_question_ids[index])
                 if indices is not None:
                     packed_indices.append(batch_indices[index])
                     packed_media.append(batch_media[index])
@@ -270,6 +280,8 @@ class PackedSupervisedDatasetProcessor(SupervisedDatasetProcessor):
             model_inputs["images"].append(packed_images or None)
             model_inputs["videos"].append(packed_videos or None)
             model_inputs["audios"].append(packed_audios or None)
+            if packed_question_ids:
+                model_inputs["question_id"].append(packed_question_ids)
             if indices is not None:
                 model_inputs["sample_idx"].append(packed_indices)
                 model_inputs["sample_media"].append(packed_media)

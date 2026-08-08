@@ -173,16 +173,21 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
             debug_samples = []
         batch_images, batch_videos, batch_audios = [], [], []
         batch_imglens, batch_vidlens, batch_audlens, batch_input_ids = [], [], [], []
+        batch_question_ids: list[Any] = []
         for feature in features:
             sample_idx = feature.pop("sample_idx", None)
             sample_media = feature.pop("sample_media", None)
+            question_id = feature.pop("question_id", None)
+            batch_question_ids.append(question_id)
             images = feature.pop("images", None) or []
             videos = feature.pop("videos", None) or []
             audios = feature.pop("audios", None) or []
             if debug_samples is not None:
                 if sample_media is None:
                     sample_media = self._build_media_summary(images, videos, audios)
-                debug_samples.append({"sample_idx": sample_idx, "media": sample_media})
+                debug_samples.append(
+                    {"sample_idx": sample_idx, "question_id": question_id, "media": sample_media}
+                )
             batch_images.extend(images)
             batch_videos.extend(videos)
             batch_audios.extend(audios)
@@ -269,6 +274,9 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
                     videos_summary["frame_total"] = int(sum(sample_frame_counts))
 
         features: dict[str, torch.Tensor] = super().__call__(features)
+        # Non-tensor side channels (pop before model forward in the trainer).
+        if any(qid is not None and qid != "" for qid in batch_question_ids):
+            features["question_ids"] = batch_question_ids
         if debug_samples is not None:
             if log_enabled:
                 payload = {

@@ -81,6 +81,10 @@ class UnsupervisedDatasetProcessor(DatasetProcessor):
             model_inputs["images"].append(examples["_images"][i])
             model_inputs["videos"].append(examples["_videos"][i])
             model_inputs["audios"].append(examples["_audios"][i])
+            qids = examples.get("_question_id")
+            if qids is not None:
+                qid = qids[i]
+                model_inputs["question_id"].append("" if qid is None else str(qid))
 
         return model_inputs
 

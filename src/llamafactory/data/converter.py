@@ -216,6 +216,11 @@ class AlpacaDatasetConverter(DatasetConverter):
             "_images": self._find_images(example[self.dataset_attr.images]) if self.dataset_attr.images else None,
             "_videos": self._find_medias(example[self.dataset_attr.videos]) if self.dataset_attr.videos else None,
             "_audios": self._find_medias(example[self.dataset_attr.audios]) if self.dataset_attr.audios else None,
+            "_question_id": (
+                str(example[self.dataset_attr.question_id])
+                if self.dataset_attr.question_id and example.get(self.dataset_attr.question_id) is not None
+                else None
+            ),
         }
         output["_prompt"] = self._subsample_image_placeholders(output["_prompt"])
         return output
@@ -313,6 +318,11 @@ class SharegptDatasetConverter(DatasetConverter):
             "_images": self._find_images(example[self.dataset_attr.images]) if self.dataset_attr.images else None,
             "_videos": self._find_medias(example[self.dataset_attr.videos]) if self.dataset_attr.videos else None,
             "_audios": self._find_medias(example[self.dataset_attr.audios]) if self.dataset_attr.audios else None,
+            "_question_id": (
+                str(example[self.dataset_attr.question_id])
+                if self.dataset_attr.question_id and example.get(self.dataset_attr.question_id) is not None
+                else None
+            ),
         }
         output["_prompt"] = self._subsample_image_placeholders(output["_prompt"])
         return output

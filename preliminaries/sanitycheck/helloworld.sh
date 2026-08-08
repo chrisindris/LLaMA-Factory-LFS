@@ -10,8 +10,12 @@
 
 module load apptainer
 
+if [ -z "${SLURM_TMPDIR}" ]; then
+  SLURM_TMPDIR="/tmp"
+fi
+
 # better to have triton cache on a non-nfs file system for speed
-apptainer run --nv --writable-tmpfs \
+apptainer run --nv --fakeroot --overlay /scratch/indrisch/LLaMA-Factory/apptainer/overlay.img \
     -B /scratch/indrisch/LLaMA-Factory \
     -B /home/indrisch \
     -B /dev/shm:/dev/shm \

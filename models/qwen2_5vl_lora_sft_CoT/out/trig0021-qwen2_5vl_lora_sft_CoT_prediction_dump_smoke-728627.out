@@ -1,0 +1,113 @@
+=== prediction dump smoke ===
+PROJECT_DIR=/scratch/indrisch//LLaMA-Factory-copy
+CLUSTER=TRILLIUM
+CONFIG=/scratch/indrisch//LLaMA-Factory-copy/examples/train_lora/trillium_qwen2_5vl_lora_sft_CoT_prediction_dump_smoke.yaml
+SCANNET_H5_DIR=/scratch/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR=/scratch/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR=/scratch/indrisch/3DThinker10K_images_h5
+=============================
+[INFO|2026-08-08 00:01:27] llamafactory.launcher:143 >> Initializing 1 distributed tasks at: 127.0.0.1:59965
+Traceback (most recent call last):
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 182, in <module>
+    from llamafactory.train.tuner import run_exp  # use absolute import
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/train/tuner.py", line 23, in <module>
+    from ..data import get_template_and_fix_tokenizer
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/data/__init__.py", line 21, in <module>
+    from .data_utils import Role, split_dataset
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/data/data_utils.py", line 20, in <module>
+    from datasets import DatasetDict, concatenate_datasets, interleave_datasets
+  File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/datasets/__init__.py", line 17, in <module>
+    from .arrow_dataset import Column, Dataset
+  File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 59, in <module>
+    import pyarrow as pa
+ModuleNotFoundError: No module named 'pyarrow'
+[W808 00:01:36.814915505 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+E0808 00:01:36.954000 3008456 torch/distributed/elastic/multiprocessing/api.py:882] failed (exitcode: 1) local_rank: 0 (pid: 3008459) of binary: /scratch/indrisch/venv_llamafactory_cu126/bin/python
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu126/bin/torchrun", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 357, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 936, in main
+    run(args)
+  File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/run.py", line 927, in run
+    elastic_launch(
+  File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 156, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 293, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-08-08_00:01:36
+  host      : trig0021.scinet.local
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 3008459)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+[W808 00:01:37.461012033 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_cu126/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.12.4/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '1', '--master_addr', '127.0.0.1', '--master_port', '59965', '/scratch/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/scratch/indrisch//LLaMA-Factory-copy/examples/train_lora/trillium_qwen2_5vl_lora_sft_CoT_prediction_dump_smoke.yaml']' returned non-zero exit status 1.
+[W808 00:01:37.986100075 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+
+scontrol show job 728627
+JobId=728627 JobName=trillium_slurm_qwen2_5vl_lora_sft_CoT_prediction_dump_smoke.sh
+   UserId=indrisch(3122343) GroupId=indrisch(3122343) MCS_label=N/A
+   Priority=539190 Nice=0 Account=def-wangcs QOS=normal
+   JobState=COMPLETING Reason=NonZeroExitCode Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=1:0
+   RunTime=00:00:36 TimeLimit=01:00:00 TimeMin=N/A
+   SubmitTime=2026-08-07T23:59:39 EligibleTime=2026-08-07T23:59:39
+   AccrueTime=2026-08-07T23:59:39
+   StartTime=2026-08-08T00:01:01 EndTime=2026-08-08T00:01:37 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-08-08T00:01:01 Scheduler=Backfill
+   Partition=compute AllocNode:Sid=trig-login01:268993
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=trig0021
+   BatchHost=trig0021
+   NumNodes=1 NumCPUs=24 NumTasks=1 CPUs/Task=24 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=24,mem=187.50G,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=24,mem=187.50G,node=1,billing=1,gres/gpu=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=24 MinMemoryNode=187.50G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null)
+   Command=/scratch/indrisch/LLaMA-Factory-copy/models/qwen2_5vl_lora_sft_CoT/trillium_slurm_qwen2_5vl_lora_sft_CoT_prediction_dump_smoke.sh
+   SubmitLine=SBATCH --comment /opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_CoT_prediction_dump_smoke.sh --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_CoT_prediction_dump_smoke.sh
+   WorkDir=/scratch/indrisch/LLaMA-Factory-copy/models/qwen2_5vl_lora_sft_CoT
+   Comment=/opt/slurm/bin/sbatch --export=NONE --get-user-env trillium_slurm_qwen2_5vl_lora_sft_CoT_prediction_dump_smoke.sh
+   StdErr=
+   StdIn=/dev/null
+   StdOut=/scratch/indrisch/LLaMA-Factory-copy/models/qwen2_5vl_lora_sft_CoT/out/trig0021-qwen2_5vl_lora_sft_CoT_prediction_dump_smoke-728627.out
+   TresPerNode=gres/gpu:h100:1
+   TresPerTask=cpu=24
+   MailUser=christopher.indris@torontomu.ca MailType=INVALID_DEPEND,BEGIN,END,FAIL,REQUEUE,STAGE_OUT
+
+sacct -j 728627
+JobID           JobName    Account    Elapsed  MaxVMSize     MaxRSS  SystemCPU    UserCPU ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- ---------- ---------- -------- 
+728627       trillium_+ def-wangcs   00:00:36                         00:00:00   00:00:00      0:0 
+728627.batch      batch def-wangcs   00:00:36                         00:00:00   00:00:00      0:0 
+728627.exte+     extern def-wangcs   00:00:36                         00:00:00   00:00:00      0:0 
+
