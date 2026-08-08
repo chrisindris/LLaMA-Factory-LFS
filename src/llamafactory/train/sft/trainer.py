@@ -576,6 +576,11 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         debug_samples = inputs.pop("debug_samples", None)
         question_ids_raw = inputs.pop("question_ids", None)
 
+        if os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV":
+            # HACK: to avoid "liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'"
+            # Defense in depth: never forward dataset index bookkeeping into the model
+            # (Liger fused CE rejects unexpected kwargs like _indices).
+            inputs.pop("_indices", None)
         if model.training and self._should_log_mm_debug():
             self._log_mm_debug(inputs, when="pre_forward", debug_samples=debug_samples)
             self._debug_mm_seen += 1

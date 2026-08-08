@@ -24,21 +24,21 @@ get_project_dir() {
 get_cluster_settings() {
 	# Detect cluster based on terminal prompt or hostname
 	if [[ "${PS1:-}" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "${PS1:-}" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]] || [[ "${PS1:-}" == *"rc"* ]] || [[ "$HOSTNAME" == *"rc"* ]]; then
-		export CLUSTER="RORQUAL"
-		export RUNNING_MODE="APPTAINER"
+		export CLUSTER="${CLUSTER:-RORQUAL}"
+		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"
 	elif [[ "${PS1:-}" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]] || [[ "${PS1:-}" == *"tri"* ]] || [[ "$HOSTNAME" == *"tri"* ]]; then
-		export CLUSTER="TRILLIUM"
-		export RUNNING_MODE="APPTAINER"
+		export CLUSTER="${CLUSTER:-TRILLIUM}"
+		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"
 	elif [[ "${PS1:-}" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "${PS1:-}" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
-		export CLUSTER="KILLARNEY"
-		export RUNNING_MODE="VENV"
+		export CLUSTER="${CLUSTER:-KILLARNEY}"
+		export RUNNING_MODE="${RUNNING_MODE:-VENV}"
 	elif [[ "$HOSTNAME" == *"nibi"* ]] || [[ "${PS1:-}" == *"nibi"* ]] || [[ "${PS1:-}" == *"g"* ]] || [[ "$HOSTNAME" == *"g"* ]] || [[ "${PS1:-}" == *"c"* ]] || [[ "$HOSTNAME" == *"c"* ]]; then
-		export CLUSTER="NIBI"
-		export RUNNING_MODE="APPTAINER"
+		export CLUSTER="${CLUSTER:-NIBI}"
+		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"
 	else
 		echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to NIBI."
-		export CLUSTER="NIBI"
-		export RUNNING_MODE="APPTAINER"
+		export CLUSTER="${CLUSTER:-NIBI}"
+		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"
 	fi
 
 	if [[ "$RUNNING_MODE" == "SHELL" ]]; then

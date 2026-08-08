@@ -1,0 +1,92 @@
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+PYTHONPATH: /cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+CLUSTER: KILLARNEY
+RUNNING_MODE: APPTAINER
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+VLLM_HOME: /scratch/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /scratch/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /scratch/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /scratch/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_DATASET_UPLOAD: /project/aip-wangcs/indrisch/venv_llamafactory_cu126/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+SLURM_JOB_NODELIST: kn[133,167]
+HEAD_NODE: kn133
+MASTER_ADDR: kn133
+MASTER_PORT: 29500
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+PYTHONPATH: /cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+CLUSTER: KILLARNEY
+RUNNING_MODE: APPTAINER
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+PYTHONPATH: /cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+CLUSTER: KILLARNEY
+RUNNING_MODE: APPTAINER
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+VLLM_HOME: /scratch/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /scratch/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /scratch/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /scratch/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_DATASET_UPLOAD: /project/aip-wangcs/indrisch/venv_llamafactory_cu126/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+SCANNET_H5_DIR: /scratch/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/indrisch/3DThinker10K_images_h5
+TORCH_CUDA_ARCH_LIST: 8.9
+CLUSTER: KILLARNEY
+YAML_FILE: /project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_multinode_qwen2_5vl_lora_sft_CoT_traineval.yaml
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_multinode_killarney_l40s
+RUNNING_MODE: APPTAINER
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+VLLM_HOME: /scratch/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /scratch/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /scratch/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /scratch/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_DATASET_UPLOAD: /project/aip-wangcs/indrisch/venv_llamafactory_cu126/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+SCANNET_H5_DIR: /scratch/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/indrisch/3DThinker10K_images_h5
+TORCH_CUDA_ARCH_LIST: 8.9
+CLUSTER: KILLARNEY
+YAML_FILE: /project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_multinode_qwen2_5vl_lora_sft_CoT_traineval.yaml
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_multinode_killarney_l40s
+RUNNING_MODE: APPTAINER
+WARNING: Overriding HOME environment variable with APPTAINERENV_HOME is not permitted
+WARNING: Overriding HOME environment variable with APPTAINERENV_HOME is not permitted
+WARNING: Skipping /dev/shm bind mount: already mounted
+FATAL:   while loading overlay images: failed to open overlay image /project/aip-wangcs/indrisch//LLaMA-Factory/apptainer/overlay.img: while locking ext3 partition from /project/6110552/indrisch/LLaMA-Factory/apptainer/overlay.img: can't open /project/6110552/indrisch/LLaMA-Factory/apptainer/overlay.img for writing, currently in use by another process
+srun: error: kn167: task 1: Exited with exit code 255
+srun: Terminating StepId=4632896.0
+[2026-08-06T17:55:17.262] error: *** STEP 4632896.0 ON kn133 CANCELLED AT 2026-08-06T17:55:17 DUE TO TASK FAILURE ***
+srun: error: kn133: task 0: Terminated
+srun: Force Terminated StepId=4632896.0
