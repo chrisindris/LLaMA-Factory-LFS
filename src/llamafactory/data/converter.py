@@ -519,8 +519,27 @@ def align_dataset(
         )
 
     dataset_converter = get_dataset_converter(dataset_attr.formatting, dataset_attr, data_args)
+    ds_name = dataset_attr.dataset_name
+
+    def _convert_with_question_id(example: dict[str, Any], idx: int) -> dict[str, Any]:
+        r"""Convert one example and ensure a stable QUESTION_ID.
+
+        Prefer an annotation column mapped via dataset_info columns.question_id
+        (see scripts/assign_question_ids.py). If missing, fall back to
+        ``{dataset_name}_{idx}`` using the row index after load (file order for
+        map-style datasets).
+        """
+        output = dataset_converter(example)
+        qid = output.get("_question_id")
+        if qid is None or qid == "":
+            output["_question_id"] = f"{ds_name}_{idx}"
+        else:
+            output["_question_id"] = str(qid)
+        return output
+
     return dataset.map(
-        dataset_converter,
+        _convert_with_question_id,
+        with_indices=True,
         batched=False,
         remove_columns=column_names,
         **kwargs,

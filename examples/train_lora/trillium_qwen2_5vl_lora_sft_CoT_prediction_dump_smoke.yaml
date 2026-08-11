@@ -3,14 +3,10 @@
 ### Do NOT use for full training runs.
 ###
 ### Prerequisites:
-###   1. Stamp question_ids on the CoT annotation files, e.g.:
-###        python scripts/assign_question_ids.py \
-###          --from-dataset-info data/dataset_info.json \
-###          --datasets Scene30k,SpatialSSRL_coldstart,3DThinker10k
-###      then point dataset_info file_name at the new paths and add
-###        "question_id": "question_id" under each dataset's columns
-###      (or re-run with --update-dataset-info).
-###   2. Prefer overwrite_cache: true once after stamping so the new column is aligned.
+###   question_ids are auto-assigned at convert time as {dataset_name}_{row_index}
+###   when annotations lack a stamped column. Optional: scripts/assign_question_ids.py
+###   + columns.question_id in dataset_info.json for offline-stamped IDs.
+###   Keep overwrite_cache: true after pipeline changes so convert re-runs.
 
 ### model
 # Local hub snapshot (offline compute nodes cannot reach huggingface.co).
@@ -35,7 +31,12 @@ mix_strategy: concat
 max_samples: 8
 media_dir: /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5
 template: qwen2_vl
-cutoff_len: 8192
+# MUST match production CoT (131072). A short cutoff (e.g. 8192) truncates <|image_pad|>
+# tokens while the collator still encodes all images →
+# "Image features and image tokens do not match: tokens: N, features M".
+cutoff_len: 131072
+# Optional: fewer frames/images per sample for a faster smoke (keeps token/feature alignment).
+# image_sample_count: 8
 overwrite_cache: true
 preprocessing_num_workers: 8
 dataloader_num_workers: 2

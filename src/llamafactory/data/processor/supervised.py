@@ -164,10 +164,16 @@ class SupervisedDatasetProcessor(DatasetProcessor):
             model_inputs["images"].append(examples["_images"][i])
             model_inputs["videos"].append(examples["_videos"][i])
             model_inputs["audios"].append(examples["_audios"][i])
+            # Always emit question_id when the aligned column exists (auto-filled in align_dataset).
             qids = examples.get("_question_id")
             if qids is not None:
                 qid = qids[i]
                 model_inputs["question_id"].append("" if qid is None else str(qid))
+            else:
+                # Fallback if alignment skipped the column (should be rare).
+                model_inputs["question_id"].append(
+                    f"sample_{int(indices[i])}" if indices is not None else f"sample_{i}"
+                )
             if indices is not None:
                 model_inputs["sample_idx"].append(int(indices[i]))
                 model_inputs["sample_media"].append(

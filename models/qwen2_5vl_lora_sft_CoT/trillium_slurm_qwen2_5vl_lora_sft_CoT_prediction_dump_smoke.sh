@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_prediction_dump_smoke-%j.out
 #SBATCH --cpus-per-task=24
-#SBATCH --time=0-01:00:00
+#SBATCH --time=0-00:10:00
 #SBATCH --gpus-per-node=h100:1
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 #SBATCH --mail-type=ALL
@@ -24,14 +24,14 @@ set -euo pipefail
 
 # Prefer the longest matching project root (copy / LFS / main).
 if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then
-    PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
+	PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
 elif [[ "$PWD" == *LLaMA-Factory-copy* ]]; then
-    PROJECT_DIR="${PWD%%LLaMA-Factory-copy*}/LLaMA-Factory-copy"
+	PROJECT_DIR="${PWD%%LLaMA-Factory-copy*}/LLaMA-Factory-copy"
 elif [[ "$PWD" == *LLaMA-Factory* ]]; then
-    PROJECT_DIR="${PWD%%LLaMA-Factory*}/LLaMA-Factory"
+	PROJECT_DIR="${PWD%%LLaMA-Factory*}/LLaMA-Factory"
 else
-    echo "Error: Could not find 'LLaMA-Factory' (or -copy / -LFS) in the current path."
-    exit 1
+	echo "Error: Could not find 'LLaMA-Factory' (or -copy / -LFS) in the current path."
+	exit 1
 fi
 
 # Normalize (avoid double slashes like /scratch/indrisch//LLaMA-Factory-copy)
@@ -48,14 +48,16 @@ mkdir -p "${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_prediction_dump_smoke"
 
 # Cluster / H5 roots (same env pattern as full CoT jobs)
 if [[ "${HOSTNAME:-}" == *"trig"* ]] || [[ "${PS1:-}" == *"trig"* ]]; then
-    CLUSTER="TRILLIUM"
+	CLUSTER="TRILLIUM"
 elif [[ "${HOSTNAME:-}" == *"nibi"* ]] || [[ "${PS1:-}" == *"nibi"* ]]; then
-    CLUSTER="NIBI"
+	CLUSTER="NIBI"
 elif [[ "${HOSTNAME:-}" == *"rg"* ]] || [[ "${HOSTNAME:-}" == *"rorqual"* ]]; then
-    CLUSTER="RORQUAL"
+	CLUSTER="RORQUAL"
 else
-    CLUSTER="TRILLIUM"
+	CLUSTER="TRILLIUM"
 fi
+
+export RUNNING_MODE="SMOKE"
 
 export SCANNET_H5_DIR="${SCANNET_H5_DIR:-/scratch/indrisch/ScanNet_h5/scans}"
 export SPATIALSSRL_H5_DIR="${SPATIALSSRL_H5_DIR:-/scratch/indrisch/Spatial-SSRL_images_h5}"
@@ -70,14 +72,14 @@ export HUGGINGFACE_HUB_CACHE="${HUGGINGFACE_HUB_CACHE:-${HF_HUB_CACHE}}"
 export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-${HF_HUB_CACHE}}"
 # Optional cluster-specific overrides from sysconfig (only when import works).
 if command -v python3 >/dev/null 2>&1 && python3 -c "import sysconfigtool" 2>/dev/null; then
-    _hf_home="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'HF_HOME'))" 2>/dev/null || true)"
-    _hf_cache="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'HF_HUB_CACHE'))" 2>/dev/null || true)"
-    _triton="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'TRITON_CACHE_DIR'))" 2>/dev/null || true)"
-    [[ -n "${_hf_home}" && "${_hf_home}" != "None" ]] && export HF_HOME="${_hf_home}"
-    [[ -n "${_hf_cache}" && "${_hf_cache}" != "None" ]] && export HF_HUB_CACHE="${_hf_cache}"
-    [[ -n "${_triton}" && "${_triton}" != "None" ]] && export TRITON_CACHE_DIR="${_triton}"
-    export TRANSFORMERS_CACHE="${HF_HUB_CACHE}"
-    export HUGGINGFACE_HUB_CACHE="${HF_HUB_CACHE}"
+	_hf_home="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'HF_HOME'))" 2>/dev/null || true)"
+	_hf_cache="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'HF_HUB_CACHE'))" 2>/dev/null || true)"
+	_triton="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'TRITON_CACHE_DIR'))" 2>/dev/null || true)"
+	[[ -n "${_hf_home}" && "${_hf_home}" != "None" ]] && export HF_HOME="${_hf_home}"
+	[[ -n "${_hf_cache}" && "${_hf_cache}" != "None" ]] && export HF_HUB_CACHE="${_hf_cache}"
+	[[ -n "${_triton}" && "${_triton}" != "None" ]] && export TRITON_CACHE_DIR="${_triton}"
+	export TRANSFORMERS_CACHE="${HF_HUB_CACHE}"
+	export HUGGINGFACE_HUB_CACHE="${HF_HUB_CACHE}"
 fi
 export TRITON_CACHE_DIR="${TRITON_CACHE_DIR:-/scratch/indrisch/.triton_cache}"
 # Force pure local reads — no HEAD/GET to huggingface.co
@@ -90,14 +92,14 @@ export WANDB_DISABLED="${WANDB_DISABLED:-true}"
 
 cd "$PROJECT_DIR"
 
-module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
 module load python/3.12 cuda/12.6 opencv/4.12.0
 module load arrow
 
 # Prefer project venv if present
 if [[ -f /scratch/indrisch/venv_llamafactory_cu126/bin/activate ]]; then
-    # shellcheck disable=SC1091
-    source /scratch/indrisch/venv_llamafactory_cu126/bin/activate
+	# shellcheck disable=SC1091
+	source /scratch/indrisch/venv_llamafactory_cu126/bin/activate
 fi
 
 # Re-assert PYTHONPATH after module/venv (they often prepend site-packages).
@@ -148,6 +150,6 @@ llamafactory-cli train "$CONFIG" "$@"
 
 OUT_DIR="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_prediction_dump_smoke"
 echo "=== dump artifacts ==="
-ls -la "${OUT_DIR}/train_predictions.json" "${OUT_DIR}/eval_predictions.json" 2>/dev/null || \
-    echo "Prediction JSON not found yet (check logs / question_id column)."
+ls -la "${OUT_DIR}/train_predictions.json" "${OUT_DIR}/eval_predictions.json" 2>/dev/null ||
+	echo "Prediction JSON not found yet (check logs / question_id column)."
 echo "======================"

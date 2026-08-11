@@ -277,7 +277,7 @@ def _get_preprocessed_dataset(
         )
     else:
         def _preprocess_with_indices(examples: dict[str, list[Any]], indices: list[int]) -> dict[str, list[Any]]:
-            if os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV":
+            if (os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV") or os.getenv("RUNNING_MODE") == "SMOKE":
                 # HACK: to avoid "liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'"
                 # Copy first: HuggingFace datasets 4.x map *merges* mutated input keys into
                 # the output ({**inputs, **processed}). Mutating examples in-place with

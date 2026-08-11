@@ -14,7 +14,12 @@ H5-backed datasets keep annotation path strings and decode images lazily through
 
 ### QUESTION_ID stamping (prediction dumps)
 
-For train/eval response logging (`save_train_predictions` / `save_eval_predictions`), each annotation row needs a stable `question_id` of the form `DATASET-NAME_NUMBER` (0-based order of appearance). Assign with:
+Train/eval response logging (`save_train_predictions` / `save_eval_predictions`) keys dumps by `QUESTION_ID`.
+
+**Default (no annotation changes):** at convert time, if no `question_id` column is mapped, LLaMA-Factory assigns  
+`{dataset_name}_{row_index}` using the row index after load (file order for map-style datasets). This is enough for smoke jobs and most debugging.
+
+**Optional stable offline stamps** (recommended for long-lived experiments / sharing dumps):
 
 ```bash
 python scripts/assign_question_ids.py \

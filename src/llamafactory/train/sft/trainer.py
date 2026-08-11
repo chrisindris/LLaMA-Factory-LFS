@@ -446,35 +446,83 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if not self._pred_dump_warned_missing_qid:
             logger.warning_rank0(
                 "save_*_predictions is enabled but batch has no question_ids. "
-                "Stamp annotations with scripts/assign_question_ids.py and map "
-                'columns.question_id in dataset_info.json. Skipping dump for this batch.'
+                "IDs are normally auto-assigned at convert time as {dataset}_{row_index}; "
+                "if you still see this, ensure overwrite_cache=true so convert re-runs, "
+                "or stamp annotations via scripts/assign_question_ids.py. Skipping dump."
             )
             self._pred_dump_warned_missing_qid = True
 
-    def _gather_prediction_pairs(self, local_pairs: list[tuple[str, str]]) -> list[tuple[str, str]]:
-        r"""Gather (question_id, text) pairs from all ranks onto every rank; rank0 uses them."""
-        if not hasattr(self, "accelerator") or self.accelerator is None:
-            return local_pairs
-        try:
-            gathered = self.accelerator.gather_object(local_pairs)
-        except Exception as err:  # pragma: no cover - defensive
-            logger.warning_rank0(f"gather_object failed for prediction dump: {err}; using local pairs only")
-            return local_pairs
-
-        # gather_object returns a list-of-lists (one list per process)
+    @staticmethod
+    def _flatten_gathered_pairs(gathered: Any) -> list[tuple[str, str]]:
+        r"""Normalize gather_object / all_gather_object results to a flat pair list."""
+        if gathered is None:
+            return []
         merged: list[tuple[str, str]] = []
-        if gathered and isinstance(gathered[0], list):
+        if isinstance(gathered, list) and gathered and isinstance(gathered[0], list):
             for chunk in gathered:
-                merged.extend(chunk)
-        elif gathered and isinstance(gathered[0], tuple):
+                if isinstance(chunk, list):
+                    merged.extend(chunk)
+        elif isinstance(gathered, list) and gathered and isinstance(gathered[0], tuple):
             merged = list(gathered)
         else:
             for chunk in gathered or []:
                 if isinstance(chunk, list):
                     merged.extend(chunk)
-                elif isinstance(chunk, tuple):
+                elif isinstance(chunk, tuple) and len(chunk) == 2:
                     merged.append(chunk)
         return merged
+
+    def _gather_prediction_pairs(self, local_pairs: list[tuple[str, str]]) -> list[tuple[str, str]]:
+        r"""Gather (question_id, text) pairs from all ranks.
+
+        Note: ``Accelerator.gather_object`` is **not** available on accelerate 1.x
+        (e.g. 1.11.0). Use ``accelerate.utils.gather_object`` or
+        ``torch.distributed.all_gather_object`` instead. No package upgrade required.
+        """
+        # Single-process fast path (also covers smoke 1-GPU torchrun).
+        world_size = 1
+        if hasattr(self, "accelerator") and self.accelerator is not None:
+            world_size = int(getattr(self.accelerator, "num_processes", 1) or 1)
+        try:
+            import torch.distributed as dist
+
+            if dist.is_available() and dist.is_initialized():
+                world_size = max(world_size, int(dist.get_world_size()))
+        except Exception:
+            pass
+
+        if world_size <= 1:
+            return list(local_pairs)
+
+        # 1) accelerate.utils.gather_object (correct API for accelerate>=0.20)
+        try:
+            from accelerate.utils import gather_object as accel_gather_object
+
+            gathered = accel_gather_object(local_pairs)
+            merged = self._flatten_gathered_pairs(gathered)
+            if merged or not local_pairs:
+                return merged
+        except Exception as err_accel:
+            logger.warning_rank0(
+                f"accelerate.utils.gather_object failed ({err_accel}); trying torch.distributed"
+            )
+
+        # 2) torch.distributed.all_gather_object
+        try:
+            import torch.distributed as dist
+
+            if dist.is_available() and dist.is_initialized():
+                obj_list: list[Any] = [None for _ in range(dist.get_world_size())]
+                dist.all_gather_object(obj_list, local_pairs)
+                return self._flatten_gathered_pairs(obj_list)
+        except Exception as err_dist:
+            logger.warning_rank0(
+                f"torch.distributed.all_gather_object failed ({err_dist}); "
+                "using local-rank pairs only (incomplete under multi-GPU)"
+            )
+
+        # 3) Last resort: local only (incomplete multi-GPU dump)
+        return list(local_pairs)
 
     def _record_train_pairs(self, pairs: list[tuple[str, str]]) -> None:
         if self.prediction_dump is None or not pairs:
@@ -482,8 +530,12 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         step = int(getattr(self.state, "global_step", 0))
         all_pairs = self._gather_prediction_pairs(pairs)
         if self.is_world_process_zero():
-            self.prediction_dump.add_train_records(step, all_pairs)
+            added = self.prediction_dump.add_train_records(step, all_pairs)
             self.prediction_dump.flush_train()
+            logger.info_rank0(
+                f"train prediction dump: step={step} local={len(pairs)} "
+                f"gathered={len(all_pairs)} added={added} total={self.prediction_dump.train_record_count}"
+            )
 
     def _record_eval_pairs(self, pairs: list[tuple[str, str]]) -> None:
         if not pairs:
@@ -494,17 +546,65 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if self.prediction_dump is None or not self.finetuning_args.save_eval_predictions:
             self._eval_pred_buffer = []
             return
+        local_n = len(self._eval_pred_buffer)
         all_pairs = self._gather_prediction_pairs(self._eval_pred_buffer)
         self._eval_pred_buffer = []
         if self.is_world_process_zero():
-            self.prediction_dump.add_eval_records(all_pairs)
+            added = self.prediction_dump.add_eval_records(all_pairs)
             self.prediction_dump.flush_eval()
+            logger.info_rank0(
+                f"eval prediction dump: local_buffer={local_n} gathered={len(all_pairs)} "
+                f"added={added} total={len(self.prediction_dump.eval_data)}"
+            )
+
+    def _forward_logits_for_dump(
+        self, model: "torch.nn.Module", inputs: dict[str, Any]
+    ) -> Optional["torch.Tensor"]:
+        r"""Run a no-grad forward that materializes logits for teacher-forced dumps.
+
+        Liger fused CE sets ``skip_logits=True`` whenever ``model.training and labels
+        is not None``, so the training forward often returns ``logits=None``. Dropping
+        labels for this diagnostic pass forces logits to be returned without affecting
+        the training loss path.
+        """
+        model_inputs = {
+            k: v
+            for k, v in inputs.items()
+            if k not in ("labels", "question_ids", "debug_samples", "_indices")
+        }
+        was_training = model.training
+        try:
+            # Keep train/eval mode as-is for correct dropout/BN, but no_grad for dump.
+            with torch.no_grad():
+                outputs = model(**model_inputs)
+            logits = getattr(outputs, "logits", None)
+            if logits is None and isinstance(outputs, (tuple, list)) and len(outputs) > 0:
+                logits = outputs[0] if torch.is_tensor(outputs[0]) else None
+            return logits
+        except Exception as err:
+            logger.warning_rank0(f"prediction dump logits forward failed: {err}")
+            return None
+        finally:
+            if was_training and not model.training:
+                model.train()
 
     def _texts_from_teacher_forced(
-        self, logits: "torch.Tensor", labels: "torch.Tensor"
+        self,
+        logits: Optional["torch.Tensor"],
+        labels: "torch.Tensor",
+        model: Optional["torch.nn.Module"] = None,
+        inputs: Optional[dict[str, Any]] = None,
     ) -> list[str]:
         tokenizer = self._get_tokenizer()
         if tokenizer is None:
+            return []
+        if logits is None and model is not None and inputs is not None:
+            logits = self._forward_logits_for_dump(model, inputs)
+        if logits is None:
+            logger.warning_rank0(
+                "teacher_forced prediction dump got no logits "
+                "(Liger may skip them when labels are present; dump forward also failed)."
+            )
             return []
         return decode_teacher_forced_batch(logits, labels, tokenizer, skip_special_tokens=True)
 
@@ -576,7 +676,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         debug_samples = inputs.pop("debug_samples", None)
         question_ids_raw = inputs.pop("question_ids", None)
 
-        if os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV":
+        if (os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV") or os.getenv("RUNNING_MODE") == "SMOKE":
             # HACK: to avoid "liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'"
             # Defense in depth: never forward dataset index bookkeeping into the model
             # (Liger fused CE rejects unexpected kwargs like _indices).
@@ -587,14 +687,13 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
 
         need_train_dump = model.training and self._should_record_train_prediction_now()
         train_mode = self.finetuning_args.train_prediction_mode
-        need_tf_outputs = need_train_dump and train_mode == "teacher_forced"
         labels_for_dump = inputs.get("labels")
 
         try:
             result = super().compute_loss(
                 model,
                 inputs,
-                return_outputs=return_outputs or need_tf_outputs,
+                return_outputs=return_outputs,
                 num_items_in_batch=num_items_in_batch,
             )
         except Exception as error:
@@ -612,12 +711,12 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             else:
                 texts: list[str] = []
                 if train_mode == "teacher_forced":
-                    loss_out, outputs = result if (return_outputs or need_tf_outputs) else (result, None)
-                    logits = getattr(outputs, "logits", None) if outputs is not None else None
-                    if logits is not None and labels_for_dump is not None:
-                        texts = self._texts_from_teacher_forced(logits, labels_for_dump)
-                    if not return_outputs and need_tf_outputs:
-                        result = loss_out
+                    # Do NOT rely on the loss forward: Liger fused CE sets skip_logits=True
+                    # whenever training and labels are present, so outputs.logits is None.
+                    if labels_for_dump is not None:
+                        texts = self._texts_from_teacher_forced(
+                            None, labels_for_dump, model=model, inputs=inputs
+                        )
                 elif train_mode == "generate":
                     try:
                         texts = self._texts_from_generate(model, inputs, labels_for_dump)
@@ -627,11 +726,12 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 if texts:
                     pairs = [(qid, text) for qid, text in zip(qids, texts) if qid]
                     self._record_train_pairs(pairs)
+                else:
+                    logger.warning_rank0(
+                        f"train prediction dump produced no texts "
+                        f"(mode={train_mode}, qids={len([q for q in qids if q])}, batch={batch_size})"
+                    )
 
-        # If we forced return_outputs only for dump, strip outputs unless caller wanted them.
-        if need_tf_outputs and not return_outputs:
-            if isinstance(result, tuple):
-                return result[0]
         return result
 
     @override
@@ -676,14 +776,13 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             else:
                 texts: list[str] = []
                 if self.finetuning_args.eval_prediction_mode == "teacher_forced":
-                    # logits may be the prediction tensor from HF; for causal LM with
-                    # preprocess_logits_for_metrics they may be reduced. Prefer full forward.
+                    # Prefer a dump forward without relying on HF prediction_step logits
+                    # (may be reduced/absent). Use labels for decoding mask only.
                     try:
-                        with torch.no_grad():
-                            outputs = model(**{k: v for k, v in inputs.items() if k != "labels"}, labels=labels_for_dump)
-                        full_logits = getattr(outputs, "logits", None)
-                        if full_logits is not None and labels_for_dump is not None:
-                            texts = self._texts_from_teacher_forced(full_logits, labels_for_dump)
+                        if labels_for_dump is not None:
+                            texts = self._texts_from_teacher_forced(
+                                None, labels_for_dump, model=model, inputs=inputs
+                            )
                     except Exception as err:
                         logger.warning_rank0(f"eval teacher_forced dump failed: {err}")
                 else:  # generate
@@ -696,6 +795,12 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                         logger.warning_rank0(f"eval generate dump failed: {err}")
                 if texts:
                     self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
+                else:
+                    logger.warning_rank0(
+                        f"eval prediction dump produced no texts "
+                        f"(mode={self.finetuning_args.eval_prediction_mode}, "
+                        f"qids={len([q for q in qids if q])}, batch={batch_size})"
+                    )
             return loss, logits, label_ids if label_ids is not None else labels
 
         loss, generated_tokens, _ = super().prediction_step(
