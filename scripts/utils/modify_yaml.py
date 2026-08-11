@@ -49,7 +49,9 @@ def correct_comment_after_tag(s):
 
 def infer_data_type(value: str):
     """Infer data type of the given string value."""
-    if value.lower() == "true":
+    if value.lower() in ['none', 'null']:
+        return None
+    elif value.lower() == "true":
         return True
     elif value.lower() == "false":
         return False
@@ -74,8 +76,19 @@ def parse_key_value_pairs(modifications):
     return extra_args     
 
 def modify_yaml(data, modifications):
+    """Apply CLI key/value overrides onto a loaded YAML mapping.
+
+    Special-case null handling for resume fields (fresh start / epoch 0):
+    - resume_from_checkpoint=None  -> keep key as YAML null
+    - adapter_name_or_path=None    -> omit key entirely (LoRA from scratch)
+    """
     for k, v in modifications.items():
-        data[k] = v
+        if v is None and k == "adapter_name_or_path":
+            data.pop(k, None)
+        elif v is None and k == "resume_from_checkpoint":
+            data[k] = None
+        else:
+            data[k] = v
     return data
 
 if __name__ == "__main__":
@@ -85,6 +98,11 @@ if __name__ == "__main__":
         yaml = ruamel.yaml.YAML()
         yaml.width = 4096
         yaml.preserve_quotes = True
+        # Emit explicit `null` (matches non-resume train YAMLs) instead of empty values.
+        yaml.representer.add_representer(
+            type(None),
+            lambda rep, _data: rep.represent_scalar("tag:yaml.org,2002:null", "null"),
+        )
         data = yaml.load(f)
     data = modify_yaml(data, modifications)
     with open(args.yaml_output_path, "w") as f:

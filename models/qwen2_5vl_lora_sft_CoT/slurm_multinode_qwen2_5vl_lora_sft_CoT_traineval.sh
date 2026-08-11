@@ -27,25 +27,27 @@
 #
 # SFT (LoRA) Qwen2.5-VL on the CoT mix:
 #   Scene30k + SpatialSSRL_coldstart + 3DThinker10k  (mix_strategy=concat)
-#	In this run, we attempt to use multiple nodes to speed up training.
-#
+# 	In this run, we attempt to use multiple nodes to speed up training.
+# 	We also incorporate the new ability to resume from checkpoints, as shown in slurm_qwen2_5vl_lora_sft_CoT_traineval_resume.sh:
+# 		Continuous resume of CoT LoRA SFT from checkpoint-SN (~epoch N) toward
+# 		epoch N+1, preserving the original 5-epoch cosine LR horizon + ZeRO-2 Adam.
+
+# 		Base: Qwen2.5-VL-7B-Instruct  (NOT the merged dense model)
+# 		Adapter/optim: saves/.../CoT_traineval/checkpoint-SN
+# 		Stops at global_step=S(N+1) via stop_at_global_step while num_train_epochs=5.
+
 # Images:
 #   Scene30k  -> SCANNET_H5_DIR (default /scratch/indrisch/ScanNet_h5/scans)
 #   Spatial   -> SPATIALSSRL_H5_DIR
 #   3DThinker -> THINKER10K_H5_DIR
 
-# ----- HEADER: ENV VARIABLES -----
+# --- for reading cluster-specific settings ---
+. $(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "env.sh")
 
-# Source env robustly (script lives under models/.../; utils is under scripts/).
-_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -f "${_SCRIPT_DIR}/../../scripts/utils/env.sh" ]]; then
-	. "${_SCRIPT_DIR}/../../scripts/utils/env.sh"
-elif [[ -f ./utils/env.sh ]]; then
-	. ./utils/env.sh
-else
-	echo "Error: could not find scripts/utils/env.sh"
-	exit 1
-fi
+# ----- DEFAULT ARGUMENTS -----
+export STARTING_EPOCH="${STARTING_EPOCH:-0}"
+export ENDING_EPOCH="${ENDING_EPOCH:-1}"
+export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-620}"
 
 EXPERIMENT_NAME="multinode_qwen2_5vl_lora_sft_CoT_traineval"
 
@@ -55,6 +57,19 @@ if [[ "$CLUSTER" == "RORQUAL" ]]; then
 	SCANNET_H5_DIR="/project/def-wangcs/indrisch/scratch_saves/ScanNet_h5/scans"
 fi
 
+# --- further cluster-specific settings ---
+
+export PYTHONUNBUFFERED=1
+
+if [[ "$RUNNING_MODE" == "SHELL" ]]; then
+    export SLURM_TMPDIR="/tmp"
+fi
+
+if [[ "$CLUSTER" == "RORQUAL" ]]; then
+    export SCANNET_H5_DIR="/project/def-wangcs/indrisch/scratch_saves/ScanNet_h5/scans"
+fi
+
+# H5 roots (override per-cluster if needed)
 export SCANNET_H5_DIR="${SCANNET_H5_DIR:-/scratch/indrisch/ScanNet_h5/scans}"
 export SPATIALSSRL_H5_DIR="${SPATIALSSRL_H5_DIR:-/scratch/indrisch/Spatial-SSRL_images_h5}"
 export THINKER10K_H5_DIR="${THINKER10K_H5_DIR:-/scratch/indrisch/3DThinker10K_images_h5}"
@@ -62,36 +77,32 @@ echo "SCANNET_H5_DIR: $SCANNET_H5_DIR"
 echo "SPATIALSSRL_H5_DIR: $SPATIALSSRL_H5_DIR"
 echo "THINKER10K_H5_DIR: $THINKER10K_H5_DIR"
 
-export WANDB_DIR="${PROJECT_DIR}/wandb/"
-# Arch list: L40S is Ada (8.9). Do not trust BEST_GPU=h100 on Killarney sysconfig for L40S jobs.
-if [[ "$CLUSTER" == "KILLARNEY" ]]; then
-	export TORCH_CUDA_ARCH_LIST="8.9"
-elif [[ "$BEST_GPU" == "h100" ]]; then
-	export TORCH_CUDA_ARCH_LIST="9.0"
-else
-	export TORCH_CUDA_ARCH_LIST="8.0"
-fi
-echo "TORCH_CUDA_ARCH_LIST: $TORCH_CUDA_ARCH_LIST"
-
-YAML_FILE="${PROJECT_DIR}/examples/train_lora/${CLUSTER,,}_${EXPERIMENT_NAME}.yaml"
-if [[ "$CLUSTER" == "KILLARNEY" ]]; then
-	OUTPUT_DIR="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_multinode_killarney_l40s"
-else
-	OUTPUT_DIR="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_multinode"
-fi
+YAML_FILE="${YAML_FILE:-${PROJECT_DIR}/examples/train_lora/${CLUSTER,,}_${EXPERIMENT_NAME}.yaml}"
+OUTPUT_DIR="${OUTPUT_DIR:-${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep2}"
+# Empty / null / None means fresh start (epoch 0). Do not fall back to a hard-coded checkpoint.
+RESUME_CKPT="${RESUME_CKPT:-}"
 echo "CLUSTER: $CLUSTER"
 echo "YAML_FILE: $YAML_FILE"
 echo "OUTPUT_DIR: $OUTPUT_DIR"
+echo "RESUME_CKPT: $RESUME_CKPT"
+if [[ -n "$RESUME_CKPT" && "$RESUME_CKPT" != "null" && "$RESUME_CKPT" != "None" ]]; then
+    if [[ ! -d "$RESUME_CKPT" ]]; then
+        echo "Error: resume checkpoint not found: $RESUME_CKPT"
+        exit 1
+    fi
+    if [[ ! -f "$RESUME_CKPT/trainer_state.json" || ! -f "$RESUME_CKPT/scheduler.pt" ]]; then
+        echo "Error: resume checkpoint incomplete (need trainer_state.json + scheduler.pt): $RESUME_CKPT"
+        exit 1
+    fi
+else
+    echo "No resume checkpoint (fresh start from epoch 0)."
+    RESUME_CKPT=""
+fi
 
 if [[ ! -f "$YAML_FILE" ]]; then
-	echo "Error: YAML config not found: $YAML_FILE"
-	exit 1
+    echo "Error: YAML config not found: $YAML_FILE"
+    exit 1
 fi
-
-if [[ -n "$1" ]]; then
-	RUNNING_MODE="$1"
-fi
-echo "RUNNING_MODE: $RUNNING_MODE"
 
 # Shared apptainer env flags for multimodal H5 training
 APPTAINER_H5_ENV=(
@@ -113,9 +124,6 @@ if [[ -d /scratch/indrisch/ScanNet_h5 ]]; then
 elif [[ -d /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5 ]]; then
 	APPTAINER_H5_BINDS+=(-B /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5)
 fi
-
-MPI_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcc12/openmpi/4.1.5/lib"
-HWLOC_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/hwloc/2.9.1/lib"
 
 # ----- EXPERIMENT -----
 
@@ -152,6 +160,8 @@ run_llamafactory_apptainer() {
 	export NCCL_ASYNC_ERROR_HANDLING=1 && echo "NCCL_ASYNC_ERROR_HANDLING: ${NCCL_ASYNC_ERROR_HANDLING}"
 	export TORCH_NCCL_ASYNC_ERROR_HANDLING=1 && echo "TORCH_NCCL_ASYNC_ERROR_HANDLING: ${TORCH_NCCL_ASYNC_ERROR_HANDLING}"
 	export NCCL_DEBUG=INFO && echo "NCCL_DEBUG: ${NCCL_DEBUG}"
+	export TORCH_DISTRIBUTED_DEBUG=DETAIL && echo "TORCH_DISTRIBUTED_DEBUG: ${TORCH_DISTRIBUTED_DEBUG}"
+	export TORCH_NCCL_TRACE_BUFFER_SIZE=20000 && echo "TORCH_NCCL_TRACE_BUFFER_SIZE: ${TORCH_NCCL_TRACE_BUFFER_SIZE}"
 	export NCCL_SOCKET_IFNAME=^docker0,lo && echo "NCCL_SOCKET_IFNAME: ${NCCL_SOCKET_IFNAME}"
 
 	# LLaMA-Factory's launcher reads these variables and then invokes
@@ -164,11 +174,15 @@ run_llamafactory_apptainer() {
 	export MASTER_PORT="${MASTER_PORT:-29500}" && echo "MASTER_PORT: ${MASTER_PORT}"
 	export NPROC_PER_NODE="4" && echo "NPROC_PER_NODE: ${NPROC_PER_NODE}"
 
-	if [[ "$NODE_RANK" == 0 ]]; then
-		OVERLAY="${PROJECT_DIR}/apptainer/overlay.img"
-	else
-		OVERLAY="${PROJECT_DIR}/apptainer/overlay_${NODE_RANK}.img"
+	if [ -z "${OVERLAY:-}" ]; then
+		if [[ "$NODE_RANK" == 0 ]]; then
+			OVERLAY="${PROJECT_DIR}/apptainer/overlay.img"
+		else
+			OVERLAY="${PROJECT_DIR}/apptainer/overlay_${NODE_RANK}.img"
+		fi
 	fi
+
+	export MAX_JOBS="${MAX_JOBS:-16}"
 
 	# Prefer host src so H5 image backends (ScanNet_h5 / Spatial-SSRL / 3DThinker)
 	# from this checkout override the older /app/src baked into the SIF.
@@ -206,6 +220,8 @@ run_llamafactory_apptainer() {
 		--env NCCL_DEBUG="${NCCL_DEBUG}" \
 		--env NCCL_ASYNC_ERROR_HANDLING="${NCCL_ASYNC_ERROR_HANDLING}" \
 		--env TORCH_NCCL_ASYNC_ERROR_HANDLING="${TORCH_NCCL_ASYNC_ERROR_HANDLING}" \
+		--env TORCH_DISTRIBUTED_DEBUG="${TORCH_DISTRIBUTED_DEBUG}" \
+		--env TORCH_NCCL_TRACE_BUFFER_SIZE="${TORCH_NCCL_TRACE_BUFFER_SIZE}" \
 		--env NCCL_SOCKET_IFNAME="${NCCL_SOCKET_IFNAME}" \
 		--env CUDA_HOME="${APPTAINERENV_CUDA_HOME}" \
 		--env NNODES="${NNODES}" \
@@ -213,6 +229,7 @@ run_llamafactory_apptainer() {
 		--env MASTER_ADDR="${MASTER_ADDR}" \
 		--env MASTER_PORT="${MASTER_PORT}" \
 		--env NPROC_PER_NODE="${NPROC_PER_NODE}" \
+		--env MAX_JOBS="${MAX_JOBS}" \
 		"${APPTAINER_H5_ENV[@]}" \
 		--pwd ${PROJECT_DIR} \
 		${SIF_FILE} \
@@ -421,71 +438,16 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
 		MPI_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcc12/openmpi/4.1.5/lib"
 		HWLOC_LIB_PATH="/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/hwloc/2.9.1/lib"
 
+		# APPTAINER_H5_BINDS: global array expanded automatically for run_llamafactory_apptainer
+		# - paths for libraries on Killarney
 		APPTAINER_H5_BINDS+=(-B "${MPI_LIB_PATH}:${MPI_LIB_PATH}:ro")
 		APPTAINER_H5_BINDS+=(-B "${HWLOC_LIB_PATH}:${HWLOC_LIB_PATH}:ro")
+		# - Killarney historcally needs ADAM cpu built to use offload; this may not matter for apptainer, but let's see...
+		APPTAINER_H5_BINDS+=(--env DS_BUILD_CPU_ADAM=1)
+		APPTAINER_H5_BINDS+=(--env BUILD_UTILS=1)
+		APPTAINER_H5_BINDS+=(--env DS_BUILD_OPS=1)
 
-		# APPTAINER_H5_BINDS is a global array already expanded inside
-		# run_llamafactory_apptainer; do not pass its name as $1 (that slot is
-		# optional NVIDIA bind args, e.g. "-B /usr/lib64/nvidia").
 		run_llamafactory_apptainer
-
-		# # Node-local datasets cache (replaces yaml cache_dir).
-		# export HF_DATASETS_CACHE="${SLURM_TMPDIR}/hf_datasets"
-		# mkdir -p "${HF_DATASETS_CACHE}"
-		# export HF_DATASETS_DISABLE_FILE_LOCKING=1
-		# export DATASETS_DISABLE_FILE_LOCKING=1
-
-		# export NNODES="${SLURM_NNODES:-1}"
-		# export NODE_RANK="${SLURM_NODEID:-0}"
-		# export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE}}"
-		# export MASTER_PORT="${MASTER_PORT:-29500}"
-		# export NPROC_PER_NODE="4"
-
-		# apptainer run --nv --overlay ${PROJECT_DIR}/apptainer/overlay.img \
-		# 	-C \
-		# 	-B ${PROJECT_DIR} \
-		# 	-B ${HF_HOME} \
-		# 	${APPTAINER_H5_BINDS[@]+"${APPTAINER_H5_BINDS[@]}"} \
-		# 	-B /home/indrisch \
-		# 	-B /dev/shm:/dev/shm \
-		# 	-B /etc/ssl/certs:/etc/ssl/certs:ro \
-		# 	-B /etc/pki:/etc/pki:ro \
-		# 	-B "${MPI_LIB_PATH}:${MPI_LIB_PATH}:ro" \
-		# 	-B "${HWLOC_LIB_PATH}:${HWLOC_LIB_PATH}:ro" \
-		# 	-W ${SLURM_TMPDIR} \
-		# 	--env LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:/usr/lib64:/lib/x86_64-linux-gnu:/lib64:${MPI_LIB_PATH}:${HWLOC_LIB_PATH}:${LD_LIBRARY_PATH}" \
-		# 	--env HF_HUB_OFFLINE=1 \
-		# 	--env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
-		# 	--env HF_HOME="${HF_HOME}" \
-		# 	--env HF_HUB_CACHE="${HF_HUB_CACHE}" \
-		# 	--env HF_DATASETS_CACHE="${HF_DATASETS_CACHE}" \
-		# 	--env HF_DATASETS_DISABLE_FILE_LOCKING=1 \
-		# 	--env DATASETS_DISABLE_FILE_LOCKING=1 \
-		# 	--env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
-		# 	--env FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE}" \
-		# 	--env TORCH_CUDA_ARCH_LIST="${TORCH_CUDA_ARCH_LIST}" \
-		# 	--env TORCH_EXTENSIONS_DIR="${SLURM_TMPDIR}/.cache/torch_extensions" \
-		# 	--env PYTORCH_KERNEL_CACHE_PATH="${SLURM_TMPDIR}/.cache/torch/kernels" \
-		# 	--env FORCE_TORCHRUN=1 \
-		# 	--env WANDB_MODE=offline \
-		# 	--env WANDB_DIR="${WANDB_DIR}" \
-		# 	--env WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb" \
-		# 	--env PYTHONNOUSERSITE=1 \
-		# 	--env HOME="${SLURM_TMPDIR}" \
-		# 	--env PYTHONPATH="${PROJECT_DIR}/src" \
-		# 	--env NCCL_IB_DISABLE=0 \
-		# 	--env NCCL_P2P_DISABLE=0 \
-		# 	--env NCCL_DEBUG=INFO \
-		# 	--env NCCL_SOCKET_IFNAME=^docker0,lo \
-		# 	--env NNODES="${NNODES}" \
-		# 	--env NODE_RANK="${NODE_RANK}" \
-		# 	--env MASTER_ADDR="${MASTER_ADDR}" \
-		# 	--env MASTER_PORT="${MASTER_PORT}" \
-		# 	--env NPROC_PER_NODE="${NPROC_PER_NODE}" \
-		# 	"${APPTAINER_H5_ENV[@]}" \
-		# 	--pwd ${PROJECT_DIR} \
-		# 	${SIF_FILE} \
-		# 	llamafactory-cli train ${YAML_FILE}
 
 	elif [[ "$RUNNING_MODE" == "VENV" ]]; then
 
@@ -497,27 +459,37 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
 		# Shared-filesystem venvs are slow (metadata); copy a known-good cu126
 		# env to node-local storage when available. Qwen2.5-VL does not need the
 		# Qwen3.5 cu132 stack. For z2_offload, rebuild with DS_BUILD_CPU_ADAM=1.
-		SRC_VENV="${VENV_LLAMAFACTORY_CU126:-/project/aip-wangcs/indrisch/venv_llamafactory_cu126}"
-		if [[ ! -f "${SRC_VENV}/bin/activate" ]]; then
-			# Fallback: scratch qwen35 cu126 env (also works for Qwen2.5-VL).
-			SRC_VENV="/scratch/indrisch/venv_llamafactory_cu126_qwen35"
-		fi
-		if [[ -f "${SRC_VENV}/bin/activate" ]]; then
-			LOCAL_VENV="${SLURM_TMPDIR}/$(basename "${SRC_VENV}")"
-			echo "Copying venv ${SRC_VENV} -> ${LOCAL_VENV} ..."
-			cp -a "${SRC_VENV}" "${LOCAL_VENV}"
-			# shellcheck disable=SC1091
-			source "${LOCAL_VENV}/bin/activate"
-		else
-			echo "WARNING: no prebuilt cu126 venv found; building via install_as_venv.sh"
-			export DS_BUILD_CPU_ADAM=1
-			export BUILD_UTILS=1
-			export DS_BUILD_OPS=1
-			export VENV_LLAMAFACTORY="${SLURM_TMPDIR}/venv_llamafactory_cu126_qwen35"
-			"${PROJECT_DIR}/install_as_venv.sh" KILLARNEY
-			# shellcheck disable=SC1091
-			source "${VENV_LLAMAFACTORY}/bin/activate"
-		fi
+
+		# SRC_VENV="${VENV_LLAMAFACTORY_CU126:-/project/aip-wangcs/indrisch/venv_llamafactory_cu126}"
+		# if [[ ! -f "${SRC_VENV}/bin/activate" ]]; then
+		# 	# Fallback: scratch qwen35 cu126 env (also works for Qwen2.5-VL).
+		# 	SRC_VENV="/scratch/indrisch/venv_llamafactory_cu126_qwen35"
+		# fi
+		# if [[ -f "${SRC_VENV}/bin/activate" ]]; then
+		# 	LOCAL_VENV="${SLURM_TMPDIR}/$(basename "${SRC_VENV}")"
+		# 	echo "Copying venv ${SRC_VENV} -> ${LOCAL_VENV} ..."
+		# 	cp -a "${SRC_VENV}" "${LOCAL_VENV}"
+		# 	# shellcheck disable=SC1091
+		# 	source "${LOCAL_VENV}/bin/activate"
+		# else
+		# 	echo "WARNING: no prebuilt cu126 venv found; building via install_as_venv.sh"
+		# 	export DS_BUILD_CPU_ADAM=1
+		# 	export BUILD_UTILS=1
+		# 	export DS_BUILD_OPS=1
+		# 	export VENV_LLAMAFACTORY="${SLURM_TMPDIR}/venv_llamafactory_cu126_qwen35"
+		# 	"${PROJECT_DIR}/install_as_venv.sh" KILLARNEY
+		# 	# shellcheck disable=SC1091
+		# 	source "${VENV_LLAMAFACTORY}/bin/activate"
+		# fi
+
+		export DS_BUILD_CPU_ADAM=1
+		export BUILD_UTILS=1
+		export DS_BUILD_OPS=1
+		export VENV_LLAMAFACTORY="${SLURM_TMPDIR}/venv_llamafactory_cu126_qwen35"
+		echo "Build venv from scratch at ${VENV_LLAMAFACTORY}"
+		"${PROJECT_DIR}/install_as_venv.sh" KILLARNEY
+		# shellcheck disable=SC1091
+		source "${VENV_LLAMAFACTORY}/bin/activate"
 
 		export PYTHONUNBUFFERED=1
 		export FORCE_TORCHRUN=1

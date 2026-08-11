@@ -15,10 +15,12 @@ get_project_dir() {
 	export UTILS_DIR_PATH="$PROJECT_DIR/scripts/utils"
 	export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
 	export PYTHONPATH="$PYTHONPATH:$UTILS_DIR_PATH"
+	export WANDB_DIR="${PROJECT_DIR}/wandb/"
 	echo "PROJECT_DIR: $PROJECT_DIR"
 	echo "SYSCONFIG_DIR_PATH: $SYSCONFIG_DIR_PATH"
 	echo "UTILS_DIR_PATH: $UTILS_DIR_PATH"
 	echo "PYTHONPATH: $PYTHONPATH"
+	echo "WANDB_DIR: $WANDB_DIR"
 }
 
 get_cluster_settings() {
@@ -31,7 +33,7 @@ get_cluster_settings() {
 		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"
 	elif [[ "${PS1:-}" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "${PS1:-}" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
 		export CLUSTER="${CLUSTER:-KILLARNEY}"
-		export RUNNING_MODE="${RUNNING_MODE:-VENV}"
+		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"
 	elif [[ "$HOSTNAME" == *"nibi"* ]] || [[ "${PS1:-}" == *"nibi"* ]] || [[ "${PS1:-}" == *"g"* ]] || [[ "$HOSTNAME" == *"g"* ]] || [[ "${PS1:-}" == *"c"* ]] || [[ "$HOSTNAME" == *"c"* ]]; then
 		export CLUSTER="${CLUSTER:-NIBI}"
 		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"
@@ -45,8 +47,18 @@ get_cluster_settings() {
 		export SLURM_TMPDIR="/tmp"
 	fi
 
+	# Arch list: L40S is Ada (8.9). Do not trust BEST_GPU=h100 on Killarney sysconfig for L40S jobs.
+	if [[ "$CLUSTER" == "KILLARNEY" ]]; then
+		export TORCH_CUDA_ARCH_LIST="8.9"
+	elif [[ "$BEST_GPU" == "h100" ]]; then
+		export TORCH_CUDA_ARCH_LIST="9.0"
+	else
+		export TORCH_CUDA_ARCH_LIST="8.0"
+	fi
+
 	echo "CLUSTER: $CLUSTER"
 	echo "RUNNING_MODE: $RUNNING_MODE"
+	echo "TORCH_CUDA_ARCH_LIST: $TORCH_CUDA_ARCH_LIST"
 }
 
 get_sysconfig_settings() {
