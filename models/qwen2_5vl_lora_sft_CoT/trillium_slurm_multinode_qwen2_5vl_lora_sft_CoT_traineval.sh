@@ -11,6 +11,9 @@
 # Trillium wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k).
 # Submit from models/qwen2_5vl_lora_sft_CoT/ so SLURM out/ lands next to this script:
 #   sbatch trillium_slurm_multinode_qwen2_5vl_lora_sft_CoT_traineval.sh
+#
+# Node-local dataset staging is ON by default in the shared multinode worker
+# (STAGE_DATASETS_LOCAL=1). Set STAGE_DATASETS_LOCAL=0 to read shared paths.
 
 . ../../scripts/utils/env.sh
 

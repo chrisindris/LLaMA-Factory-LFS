@@ -40,6 +40,12 @@
 #   Scene30k  -> SCANNET_H5_DIR (default /scratch/indrisch/ScanNet_h5/scans)
 #   Spatial   -> SPATIALSSRL_H5_DIR
 #   3DThinker -> THINKER10K_H5_DIR
+#
+# Node-local staging (default ON for multi-node):
+#   STAGE_DATASETS_LOCAL=1  copy annotations + H5 packs to $SLURM_TMPDIR/cot_stage
+#                           on each node (parallel CPU copy) before training.
+#   STAGE_DATASETS_LOCAL=0  keep reading shared /scratch (or cluster) paths.
+#   See scripts/utils/stage_node_local_datasets.sh for knobs (STAGE_COPY_JOBS, etc).
 
 # --- for reading cluster-specific settings ---
 . $(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "env.sh")
@@ -104,7 +110,37 @@ if [[ ! -f "$YAML_FILE" ]]; then
     exit 1
 fi
 
-# Shared apptainer env flags for multimodal H5 training
+# ----- Node-local dataset staging (once per node, before training) -----
+# Copies CoT annotations + H5 media to $SLURM_TMPDIR so multi-node workers do
+# not thrash shared NFS for the whole run. Disable with STAGE_DATASETS_LOCAL=0.
+export STAGE_DATASETS_LOCAL="${STAGE_DATASETS_LOCAL:-1}"
+if [[ "${STAGE_DATASETS_LOCAL}" == "1" ]]; then
+	# shellcheck source=/dev/null
+	source "${PROJECT_DIR}/scripts/utils/stage_node_local_datasets.sh"
+	if ! stage_cot_default_datasets; then
+		echo "ERROR: node-local dataset staging failed on $(hostname)"
+		exit 1
+	fi
+	# Point training at the local dataset_info + media_dir without racing other
+	# nodes on a shared YAML path (each node writes under its own SLURM_TMPDIR).
+	LOCAL_YAML="${NODE_LOCAL_DATA_ROOT}/train.yaml"
+	if ! stage_patch_yaml_paths "${YAML_FILE}" "${LOCAL_YAML}" "${LOCAL_DATASET_DIR}" "${LOCAL_MEDIA_DIR}"; then
+		echo "ERROR: failed to write node-local train YAML: ${LOCAL_YAML}"
+		exit 1
+	fi
+	YAML_FILE="${LOCAL_YAML}"
+	echo "YAML_FILE (node-local): ${YAML_FILE}"
+	echo "LOCAL_DATASET_DIR: ${LOCAL_DATASET_DIR}"
+	echo "LOCAL_MEDIA_DIR: ${LOCAL_MEDIA_DIR}"
+	echo "SCANNET_H5_DIR (local): ${SCANNET_H5_DIR}"
+	echo "SPATIALSSRL_H5_DIR (local): ${SPATIALSSRL_H5_DIR}"
+	echo "THINKER10K_H5_DIR (local): ${THINKER10K_H5_DIR}"
+else
+	echo "STAGE_DATASETS_LOCAL=0 — using shared annotation/H5 paths"
+fi
+
+# Shared apptainer env flags for multimodal H5 training (after staging so
+# SCANNET_H5_DIR / etc. already point at node-local trees when enabled).
 APPTAINER_H5_ENV=(
 	--env SCANNET_H5_DIR="${SCANNET_H5_DIR}"
 	--env SPATIALSSRL_H5_DIR="${SPATIALSSRL_H5_DIR}"
@@ -113,16 +149,18 @@ APPTAINER_H5_ENV=(
 
 # Bind H5 trees if they exist (avoid apptainer failure on missing paths)
 APPTAINER_H5_BINDS=()
-for _h5 in "${SCANNET_H5_DIR}" "${SPATIALSSRL_H5_DIR}" "${THINKER10K_H5_DIR}" "${MEDIA_DIR}"; do
+for _h5 in "${SCANNET_H5_DIR}" "${SPATIALSSRL_H5_DIR}" "${THINKER10K_H5_DIR}" "${MEDIA_DIR}" "${LOCAL_MEDIA_DIR:-}" "${NODE_LOCAL_DATA_ROOT:-}" "${SLURM_TMPDIR:-}"; do
 	if [[ -n "${_h5}" && "${_h5}" != "None" && -e "${_h5}" ]]; then
 		APPTAINER_H5_BINDS+=(-B "${_h5}")
 	fi
 done
-# Also bind ScanNet_h5 parent when MEDIA_DIR points there
-if [[ -d /scratch/indrisch/ScanNet_h5 ]]; then
-	APPTAINER_H5_BINDS+=(-B /scratch/indrisch/ScanNet_h5)
-elif [[ -d /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5 ]]; then
-	APPTAINER_H5_BINDS+=(-B /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5)
+# Also bind shared ScanNet_h5 parent when staging is off / MEDIA_DIR points there
+if [[ "${STAGE_DATASETS_LOCAL}" != "1" ]]; then
+	if [[ -d /scratch/indrisch/ScanNet_h5 ]]; then
+		APPTAINER_H5_BINDS+=(-B /scratch/indrisch/ScanNet_h5)
+	elif [[ -d /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5 ]]; then
+		APPTAINER_H5_BINDS+=(-B /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5)
+	fi
 fi
 
 # ----- EXPERIMENT -----

@@ -1,0 +1,111 @@
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+UTILS_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+WANDB_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/wandb/
+CLUSTER: KILLARNEY
+RUNNING_MODE: APPTAINER
+TORCH_CUDA_ARCH_LIST: 8.9
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+VLLM_HOME: /scratch/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /scratch/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /scratch/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /scratch/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_DATASET_UPLOAD: /project/aip-wangcs/indrisch/venv_llamafactory_cu126_qwen35/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+RUNNING_MODE: APPTAINER
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (26.2.1)
+Requirement already satisfied: setuptools in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (84.0.0)
+Requirement already satisfied: wheel in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (0.47.0)
+Requirement already satisfied: packaging>=24.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from wheel) (26.0+computecanada)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (26.0+computecanada)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: huggingface_hub in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (0.36.2+computecanada)
+Requirement already satisfied: ruamel.yaml in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (0.19.1+computecanada)
+Requirement already satisfied: filelock in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (3.32.2)
+Requirement already satisfied: fsspec>=2023.5.0 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (2025.3.0+computecanada)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (1.5.2+computecanada)
+Requirement already satisfied: packaging>=20.9 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from huggingface_hub) (26.0+computecanada)
+Requirement already satisfied: pyyaml>=5.1 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (6.0.3+computecanada)
+Requirement already satisfied: requests in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (2.34.2+computecanada)
+Requirement already satisfied: tqdm>=4.42.1 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (4.70.0+computecanada)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (4.16.0+computecanada)
+Requirement already satisfied: charset_normalizer<4,>=2 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (3.4.9+computecanada)
+Requirement already satisfied: idna<4,>=2.5 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (3.18+computecanada)
+Requirement already satisfied: urllib3<3,>=1.26 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (2.7.0+computecanada)
+Requirement already satisfied: certifi>=2023.5.7 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (2026.7.22)
+YAML_FILE: /project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR_SAVES: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+GPU TYPE: L40S
+SLURM_JOB_NODELIST: kn147
+HEAD_NODE: kn147
+HEAD_NODE: kn147
+MASTER_ADDR: kn147
+MASTER_PORT: 29500
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+UTILS_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts/utils:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+WANDB_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/wandb/
+CLUSTER: KILLARNEY
+RUNNING_MODE: APPTAINER
+TORCH_CUDA_ARCH_LIST: 8.9
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+VLLM_HOME: /scratch/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /scratch/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /scratch/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /scratch/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_DATASET_UPLOAD: /project/aip-wangcs/indrisch/venv_llamafactory_cu126_qwen35/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+SCANNET_H5_DIR: /scratch/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/indrisch/3DThinker10K_images_h5
+CLUSTER: KILLARNEY
+YAML_FILE: /project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+No resume checkpoint (fresh start from epoch 0).
+[stage kn147 node=0 2026-08-11T13:09:36-04:00] === Node-local CoT dataset staging ===
+[stage kn147 node=0 2026-08-11T13:09:36-04:00] HOST=kn147 SLURM_NODEID=0 SLURM_NNODES=1
+[stage kn147 node=0 2026-08-11T13:09:36-04:00] NODE_LOCAL_DATA_ROOT=/tmp/cot_stage
+[stage kn147 node=0 2026-08-11T13:09:36-04:00] STAGE_COPY_JOBS=32 STAGE_STAGGER_SEC=0
+[stage kn147 node=0 2026-08-11T13:09:36-04:00] Sources:
+[stage kn147 node=0 2026-08-11T13:09:36-04:00]   SCENE30K_ANN_SRC=/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.parquet
+[stage kn147 node=0 2026-08-11T13:09:36-04:00]   SPATIALSSRL_ANN_SRC=/scratch/indrisch/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json
+[stage kn147 node=0 2026-08-11T13:09:36-04:00]   THINKER10K_ANN_SRC=/project/aip-wangcs/indrisch//LLaMA-Factory/data/3DThinker-10K/out/3dthinker10k_cot.jsonl
+[stage kn147 node=0 2026-08-11T13:09:36-04:00]   SCANNET_H5_DIR(src)=/scratch/indrisch/ScanNet_h5/scans
+[stage kn147 node=0 2026-08-11T13:09:36-04:00]   SPATIALSSRL_H5_DIR(src)=/scratch/indrisch/Spatial-SSRL_images_h5
+[stage kn147 node=0 2026-08-11T13:09:36-04:00]   THINKER10K_H5_DIR(src)=/scratch/indrisch/3DThinker10K_images_h5
+[stage kn147 node=0 2026-08-11T13:09:36-04:00] Free space on /tmp/cot_stage: 325574021120 bytes (need ~128849018880)
+[stage kn147 node=0 2026-08-11T13:09:36-04:00] Copying annotations...
+[stage kn147 node=0 2026-08-11T13:09:36-04:00] Annotations done in -1786468176s
+[stage kn147 node=0 2026-08-11T13:09:36-04:00] Copying ScanNet H5 tree...
+[stage kn147 node=0 2026-08-11T13:09:36-04:00] Copying 700 entries from /scratch/indrisch/ScanNet_h5/scans -> /tmp/cot_stage/media/ScanNet_h5/scans (jobs=32)
+[stage kn147 node=0 2026-08-11T13:09:42-04:00] ScanNet done in -1786468176s
+[stage kn147 node=0 2026-08-11T13:09:42-04:00] Copying Spatial-SSRL H5 tree...
+[stage kn147 node=0 2026-08-11T13:09:42-04:00] Copying 13 entries from /scratch/indrisch/Spatial-SSRL_images_h5 -> /tmp/cot_stage/media/Spatial-SSRL_images_h5 (jobs=32)
+srun: Job step aborted: Waiting up to 62 seconds for job step to finish.
+[2026-08-11T13:10:07.176] error: *** JOB 4709937 ON kn147 CANCELLED AT 2026-08-11T13:10:07 DUE to SIGNAL Terminated ***
+[2026-08-11T13:10:07.177] error: *** STEP 4709937.0 ON kn147 CANCELLED AT 2026-08-11T13:10:07 DUE to SIGNAL Terminated ***

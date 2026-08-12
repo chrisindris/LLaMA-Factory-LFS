@@ -27,9 +27,9 @@ dataset: Scene30k,SpatialSSRL_coldstart,3DThinker10k
 mix_strategy: concat
 media_dir: /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5
 template: qwen2_vl
-cutoff_len: 131072 # max len of the model
+cutoff_len: 65536  # max len of the model
 overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
-preprocessing_num_workers: 16
+preprocessing_num_workers: 32
 dataloader_num_workers: 2
 dataloader_prefetch_factor: 1 # when dataloader_num_workers > 0, this argument specifies the number of batches loaded in advance by each worker. Setting it to 1 can help reduce memory usage when working with large multimodal data.
 dataloader_pin_memory: false
@@ -45,7 +45,7 @@ save_only_model: false # REQUIRED for optim/scheduler/RNG continuity on future r
 report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 
 ### train
-per_device_train_batch_size: 1
+per_device_train_batch_size: 2
 gradient_accumulation_steps: 16
 learning_rate: 1.0e-4
 # CRITICAL: keep the original 5-epoch cosine horizon (3085 steps). Do NOT set max_steps
@@ -54,7 +54,7 @@ num_train_epochs: 5.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
-ddp_timeout: 180000000
+ddp_timeout: 10800
 # Full continuity resume from epoch-1 checkpoint (ZeRO-2, 4 GPU).
 resume_from_checkpoint: null
 allow_warm_start_resume: true  # abort if resume bundle is incomplete rather than silently warm-starting
@@ -83,4 +83,4 @@ val_size: 0.1
 per_device_eval_batch_size: 1
 eval_strategy: steps
 eval_steps: 620 # evaluate after every ~1.00 CoT epoch
-image_sample_count: -1
+image_sample_count: 360

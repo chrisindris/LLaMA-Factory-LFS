@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --nodes=1
+#SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
 #SBATCH --cpus-per-task=64
-#SBATCH --time=1-00:00:00
+#SBATCH --time=0-05:00:00
 #SBATCH --mem=0
 #SBATCH --gpus-per-node=l40s:4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
@@ -16,6 +16,13 @@
 #
 # Uses killarney_multinode_qwen2_5vl_lora_sft_CoT_traineval.yaml via the shared
 # worker (CLUSTER-detected path).
+#
+# Per-node dataset staging (default ON in the shared multinode worker):
+#   Each srun task copies annotations + H5 packs to $SLURM_TMPDIR/cot_stage
+#   (parallel CPUs) so workers do not thrash shared /scratch during training.
+#   Disable:  STAGE_DATASETS_LOCAL=0 sbatch ...
+#   Tuning:   STAGE_COPY_JOBS, STAGE_STAGGER_SEC — see
+#             scripts/utils/stage_node_local_datasets.sh
 
 # --- for reading cluster-specific settings ---
 . $(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "env.sh")
@@ -127,33 +134,38 @@ fi
 GPU_TYPE=$(nvidia-smi --query-gpu=name --format=csv,noheader,nounits | head -n 1 | awk '{print $NF}')
 echo "GPU TYPE: $GPU_TYPE"
 
-CUTOFF_LEN=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_PER_DEVICE_TRAIN_BATCH_SIZE:-131072} || echo 131072) # shown to be possible
-IMAGE_SAMPLE_COUNT=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_IMAGE_SAMPLE_COUNT:-"-1"} || echo "-1") # shown to be possible
-PER_DEVICE_TRAIN_BATCH_SIZE=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_PER_DEVICE_TRAIN_BATCH_SIZE:-1} || echo 2)
+CUTOFF_LEN=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${CUTOFF_LEN:-65536} || echo 131072) # 131072 shown to work on l40s, though 65536 may help if batch_size=2
+IMAGE_SAMPLE_COUNT=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_IMAGE_SAMPLE_COUNT:-360} || echo "-1") # large values shown to work on l40s; 360 should prevent all but the most massive loads
+PER_DEVICE_TRAIN_BATCH_SIZE=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_PER_DEVICE_TRAIN_BATCH_SIZE:-2} || echo 2) # prevents GPU OOM on l40s
 GRADIENT_ACCUMULATION_STEPS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 16 || echo 8)
 DEEPSPEED=$([[ "$GPU_TYPE" == "L40S" ]] && echo "examples/deepspeed/ds_z2_offload_config.json" || echo "examples/deepspeed/ds_z2_config.json")
-PREPROCESSING_NUM_WORKERS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 16 || echo 32) # experiments 4667851_[N] showed that our loaders are running out of memory.
-DATALOADER_NUM_WORKERS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 2 || echo 4) # experiments 4667851_[N] showed that our loaders are running out of memory.
+PREPROCESSING_NUM_WORKERS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 64 || echo 32) # With large multimodal data on some systems (seen on Rorqual), 32 may deadlock with large multimodal data. However, if we have the data on each compute node, even 64 might be acceptable.
+DATALOADER_NUM_WORKERS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 2 || echo 4) # experiments 4667851_[N] showed that our loaders are running out of memory; additionally, Killarney's l40s nodes only have 512GB of memory.
 
 export TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC=10800
 
-# create the yaml
+# ----- create the yaml (i.e. set settings) -----
+
+# Define your command arguments in an array
+cmd_args=(
+    --yaml-template-path "${TEMPLATE_YAML}"
+    --yaml-output-path "${YAML_FILE}"
+    --output_dir "${OUTPUT_DIR_SAVES}"
+    --resume_from_checkpoint "${RESUME_CKPT}"
+    --adapter_name_or_path "${RESUME_CKPT}"
+    --stop_at_global_step $((ENDING_EPOCH * STEPS_PER_EPOCH))
+    --cutoff_len "${CUTOFF_LEN}"
+    --image_sample_count "${IMAGE_SAMPLE_COUNT}"
+    --per_device_train_batch_size "${PER_DEVICE_TRAIN_BATCH_SIZE}"
+    --gradient_accumulation_steps "${GRADIENT_ACCUMULATION_STEPS}"
+    --deepspeed "${DEEPSPEED}"
+    --preprocessing_num_workers "${PREPROCESSING_NUM_WORKERS}"
+    --dataloader_num_workers "${DATALOADER_NUM_WORKERS}"
+    --ddp_timeout "${TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC}" # avoid NCCL timeouts
+)
 
 python "${PROJECT_DIR}/scripts/utils/modify_yaml.py" \
-  --yaml-template-path "${TEMPLATE_YAML}" \
-  --yaml-output-path "${YAML_FILE}" \
-  --output_dir "${OUTPUT_DIR_SAVES}" \
-  --resume_from_checkpoint "${RESUME_CKPT}" \
-  --adapter_name_or_path "${RESUME_CKPT}" \
-  --stop_at_global_step $((ENDING_EPOCH * STEPS_PER_EPOCH)) \
-  --cutoff_len "${CUTOFF_LEN}" \
-  --image_sample_count "${IMAGE_SAMPLE_COUNT}" \
-  --per_device_train_batch_size "${PER_DEVICE_TRAIN_BATCH_SIZE}" \
-  --gradient_accumulation_steps "${GRADIENT_ACCUMULATION_STEPS}" \
-  --deepspeed "${DEEPSPEED}" \
-  --preprocessing_num_workers "${PREPROCESSING_NUM_WORKERS}" \
-  --dataloader_num_workers "${DATALOADER_NUM_WORKERS}" \
-  --ddp_timeout "${TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC}" \
+  "${cmd_args[@]}" \
   "${MODIFY_EXTRA[@]}"
 
 
