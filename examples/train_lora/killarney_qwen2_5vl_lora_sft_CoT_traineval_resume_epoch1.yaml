@@ -29,7 +29,7 @@ media_dir: /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5
 template: qwen2_vl
 cutoff_len: 65536  # max len of the model
 overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
-preprocessing_num_workers: 32
+preprocessing_num_workers: 64
 dataloader_num_workers: 2
 dataloader_prefetch_factor: 1 # when dataloader_num_workers > 0, this argument specifies the number of batches loaded in advance by each worker. Setting it to 1 can help reduce memory usage when working with large multimodal data.
 dataloader_pin_memory: false
