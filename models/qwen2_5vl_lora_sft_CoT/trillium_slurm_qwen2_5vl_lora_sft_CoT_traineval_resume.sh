@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_resume-%j.out
 #SBATCH --cpus-per-task=96
-#SBATCH --time=0-00:10:00
+#SBATCH --time=0-16:00:00
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 #SBATCH --mail-type=ALL
@@ -18,9 +18,9 @@
 # ----- DEFAULT ARGUMENTS -----
 # we can either set directly outside the script, or use the defaults.
 
-STARTING_EPOCH="${STARTING_EPOCH:-2}"
-ENDING_EPOCH="${ENDING_EPOCH:-3}"
-STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-620}"
+export STARTING_EPOCH="${STARTING_EPOCH:-3}"
+export ENDING_EPOCH="${ENDING_EPOCH:-4}"
+export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-620}"
 
 # ----- ARGUMENT PARSING -----
 # we can explicitly override the above by setting them with flags.
