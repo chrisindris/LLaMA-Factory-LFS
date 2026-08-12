@@ -3,11 +3,11 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_eval-%j.out
 #SBATCH --cpus-per-task=96
-#SBATCH --time=0-04:00:00
+#SBATCH --time=0-01:00:00
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 #SBATCH --mail-type=ALL
-#SBATCH --array=0-3
+#SBATCH --array=0-0
 
 # Trillium wrapper to launch array jobs for evaluating models on datasets.
 
