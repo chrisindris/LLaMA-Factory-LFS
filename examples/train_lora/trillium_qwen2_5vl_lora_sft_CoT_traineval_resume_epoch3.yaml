@@ -83,4 +83,4 @@ deepspeed: examples/deepspeed/ds_z2_config.json # as long as we aren't on Killar
 val_size: 0.1
 per_device_eval_batch_size: 1
 eval_strategy: steps
-eval_steps: 620 # evaluate after every ~1.00 CoT epoch
+eval_steps: 1
