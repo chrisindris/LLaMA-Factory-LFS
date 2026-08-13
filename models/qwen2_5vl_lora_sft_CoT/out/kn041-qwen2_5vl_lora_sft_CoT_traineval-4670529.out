@@ -1,0 +1,642 @@
+OVERLAY: /project/aip-wangcs/indrisch/LLaMA-Factory/apptainer/overlay_3.img
+YAML_FILE: /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/killarney_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1_arrayjob3.yaml
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+UTILS_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+WANDB_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/wandb/
+CLUSTER: KILLARNEY
+RUNNING_MODE: APPTAINER
+TORCH_CUDA_ARCH_LIST: 8.9
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+VLLM_HOME: /scratch/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /scratch/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /scratch/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /scratch/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_DATASET_UPLOAD: /project/aip-wangcs/indrisch/venv_llamafactory_cu126_qwen35/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+RUNNING_MODE: APPTAINER
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (26.2.1)
+Requirement already satisfied: setuptools in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (84.0.0)
+Requirement already satisfied: wheel in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (0.47.0)
+Requirement already satisfied: packaging>=24.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from wheel) (26.0+computecanada)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (26.0+computecanada)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: huggingface_hub in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (0.36.2+computecanada)
+Requirement already satisfied: ruamel.yaml in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (0.19.1+computecanada)
+Requirement already satisfied: filelock in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (3.32.2)
+Requirement already satisfied: fsspec>=2023.5.0 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (2025.3.0+computecanada)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (1.5.2+computecanada)
+Requirement already satisfied: packaging>=20.9 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from huggingface_hub) (26.0+computecanada)
+Requirement already satisfied: pyyaml>=5.1 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (6.0.3+computecanada)
+Requirement already satisfied: requests in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (2.34.2+computecanada)
+Requirement already satisfied: tqdm>=4.42.1 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (4.70.0+computecanada)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (4.16.0+computecanada)
+Requirement already satisfied: charset_normalizer<4,>=2 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (3.4.9+computecanada)
+Requirement already satisfied: idna<4,>=2.5 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (3.18+computecanada)
+Requirement already satisfied: urllib3<3,>=1.26 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (2.7.0+computecanada)
+Requirement already satisfied: certifi>=2023.5.7 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (2026.7.22)
+OUTPUT_DIR_SAVES: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+GPU TYPE: L40S
+SLURM_JOB_NODELIST: kn041
+HEAD_NODE: kn041
+HEAD_NODE: kn041
+MASTER_ADDR: kn041
+MASTER_PORT: 29500
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+UTILS_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts/utils:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+WANDB_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/wandb/
+CLUSTER: KILLARNEY
+RUNNING_MODE: APPTAINER
+TORCH_CUDA_ARCH_LIST: 8.9
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+VLLM_HOME: /scratch/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /scratch/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /scratch/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /scratch/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_DATASET_UPLOAD: /project/aip-wangcs/indrisch/venv_llamafactory_cu126_qwen35/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+SCANNET_H5_DIR: /scratch/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/indrisch/3DThinker10K_images_h5
+CLUSTER: KILLARNEY
+YAML_FILE: /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/killarney_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1_arrayjob3.yaml
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+No resume checkpoint (fresh start from epoch 0).
+NCCL_ASYNC_ERROR_HANDLING: 1
+TORCH_NCCL_ASYNC_ERROR_HANDLING: 1
+NCCL_DEBUG: INFO
+NCCL_SOCKET_IFNAME: ^docker0,lo
+NNODES: 1
+NODE_RANK: 0
+MASTER_ADDR: kn041
+MASTER_PORT: 29500
+NPROC_PER_NODE: 4
+INFO:    User not listed in /etc/subuid, trying root-mapped namespace
+INFO:    Using fakeroot command combined with root-mapped namespace
+WARNING: Environment variable TORCH_EXTENSIONS_DIR already has value [/tmp/.cache/torch_extensions], will not forward new value [/scratch/indrisch/.cache/torch_extensions] from parent process environment
+WARNING: Environment variable TRITON_CACHE_DIR already has value [/tmp/.triton_cache], will not forward new value [/scratch/indrisch/.triton_cache] from parent process environment
+WARNING: Environment variable PYTHONPATH already has value [/project/aip-wangcs/indrisch//LLaMA-Factory/src:/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts/utils:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts/utils], will not forward new value [/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts/utils:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts/utils] from parent process environment
+WARNING: Environment variable CUDA_HOME already has value [/usr/local/cuda], will not forward new value [/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Core/cudacore/12.6.2] from parent process environment
+INFO:    Warning: Mounting unchecked fs, running e2fsck is recommended.
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.4.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+[INFO|2026-08-09 04:31:58] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: kn041:29500
+W0809 04:32:01.016000 881902 site-packages/torch/distributed/run.py:792] 
+W0809 04:32:01.016000 881902 site-packages/torch/distributed/run.py:792] *****************************************
+W0809 04:32:01.016000 881902 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0809 04:32:01.016000 881902 site-packages/torch/distributed/run.py:792] *****************************************
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[WARNING|2026-08-09 04:32:17] llamafactory.extras.misc:154 >> Version checking has been disabled, may lead to unexpected behaviors.
+⚙️  Running in WANDB offline mode
+⚙️  Running in WANDB offline mode
+⚙️  Running in WANDB offline mode
+⚙️  Running in WANDB offline mode
+[2026-08-09 04:32:19,321] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-09 04:32:19,321] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-09 04:32:19,321] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-09 04:32:19,321] [INFO] [real_accelerator.py:254:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-09 04:32:36,586] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-08-09 04:32:36,586] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-08-09 04:32:36,587] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-08-09 04:32:36,587] [INFO] [comm.py:669:init_distributed] cdb=None
+[2026-08-09 04:32:36,588] [INFO] [comm.py:700:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[W809 04:32:36.825206657 Utils.hpp:136] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W809 04:32:36.826583171 Utils.hpp:136] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W809 04:32:36.826650283 Utils.hpp:136] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[W809 04:32:36.826708153 Utils.hpp:136] Warning: Environment variable NCCL_ASYNC_ERROR_HANDLING is deprecated; use TORCH_NCCL_ASYNC_ERROR_HANDLING instead (function operator())
+[INFO|2026-08-09 04:32:36] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2026-08-09 04:32:36] llamafactory.hparams.parser:672 >> Process rank: 0, world size: 4, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-09 04:32:36] llamafactory.train.tuner:143 >> SDPA backend flags: {'flash': True, 'mem_efficient': True, 'math': True, 'cudnn': True}
+[INFO|hub.py:421] 2026-08-09 04:32:36,917 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1949] 2026-08-09 04:32:37,087 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,101 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,102 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,102 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,102 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,102 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,102 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,102 >> loading file chat_template.jinja from cache at None
+[INFO|2026-08-09 04:32:37] llamafactory.hparams.parser:672 >> Process rank: 1, world size: 4, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-09 04:32:37] llamafactory.hparams.parser:672 >> Process rank: 3, world size: 4, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-09 04:32:37] llamafactory.hparams.parser:672 >> Process rank: 2, world size: 4, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[INFO|tokenization_utils_base.py:2364] 2026-08-09 04:32:37,643 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|hub.py:421] 2026-08-09 04:32:37,644 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:421] 2026-08-09 04:32:37,645 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:316] 2026-08-09 04:32:37,646 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2026-08-09 04:32:37,649 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:316] 2026-08-09 04:32:37,673 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:383] 2026-08-09 04:32:37,676 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:428] 2026-08-09 04:32:37,752 >> Image processor Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|tokenization_utils_base.py:1949] 2026-08-09 04:32:37,753 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,767 >> loading file vocab.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/vocab.json
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,767 >> loading file merges.txt from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/merges.txt
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,767 >> loading file tokenizer.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer.json
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,767 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,768 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,768 >> loading file tokenizer_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2095] 2026-08-09 04:32:37,768 >> loading file chat_template.jinja from cache at None
+[INFO|tokenization_utils_base.py:2364] 2026-08-09 04:32:38,094 >> Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+[INFO|video_processing_utils.py:660] 2026-08-09 04:32:38,099 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:726] 2026-08-09 04:32:38,103 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:770] 2026-08-09 04:32:38,117 >> Video processor Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+[INFO|processing_utils.py:928] 2026-08-09 04:32:38,117 >> Offline mode: forcing local_files_only=True
+[INFO|processing_utils.py:1116] 2026-08-09 04:32:38,123 >> loading configuration file processor_config.json from cache at None
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+[rank3]:[W809 04:32:38.844630874 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[INFO|processing_utils.py:1199] 2026-08-09 04:32:38,622 >> Processor Qwen2_5_VLProcessor:
+- image_processor: Qwen2VLImageProcessorFast {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "disable_grouping": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_pad": null,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessorFast",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_pixels": 3136,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_tensors": null,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2TokenizerFast(name_or_path='Qwen/Qwen2.5-VL-7B-Instruct', vocab_size=151643, model_max_length=131072, is_fast=True, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'additional_special_tokens': ['<|im_start|>', '<|im_end|>', '<|object_ref_start|>', '<|object_ref_end|>', '<|box_start|>', '<|box_end|>', '<|quad_start|>', '<|quad_end|>', '<|vision_start|>', '<|vision_end|>', '<|vision_pad|>', '<|image_pad|>', '<|video_pad|>']}, clean_up_tokenization_spaces=False, added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151647: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151648: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151649: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151650: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151651: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151652: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151653: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151654: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151655: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151656: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151657: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151658: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151659: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151660: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151661: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151662: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151663: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151664: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+}
+)
+- video_processor: Qwen2VLVideoProcessor {
+  "crop_size": null,
+  "data_format": "channels_first",
+  "default_to_square": true,
+  "device": null,
+  "do_center_crop": null,
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "fps": null,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "input_data_format": null,
+  "max_frames": 768,
+  "max_pixels": 12845056,
+  "merge_size": 2,
+  "min_frames": 4,
+  "min_pixels": 3136,
+  "num_frames": null,
+  "pad_size": null,
+  "patch_size": 14,
+  "processor_class": "Qwen2_5_VLProcessor",
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_metadata": null,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+
+{
+  "processor_class": "Qwen2_5_VLProcessor"
+}
+
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+[INFO|2026-08-09 04:32:38] llamafactory.data.loader:143 >> Loading dataset /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.parquet...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+[rank1]:[W809 04:32:38.915982946 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[rank2]:[W809 04:32:38.916948679 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+[INFO|2026-08-09 04:32:39] llamafactory.data.loader:143 >> Loading dataset /scratch/indrisch/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+[INFO|2026-08-09 04:32:39] llamafactory.data.loader:143 >> Loading dataset 3DThinker-10K/out/3dthinker10k_cot.jsonl...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+[rank0]:[W809 04:32:39.762490110 ProcessGroupNCCL.cpp:4561] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect. Specify device_ids in barrier() to force use of a particular device, or call init_process_group() with a device_id.
+kn041:882095:882095 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn041:882095:882095 [0] NCCL INFO Bootstrap : Using eth0:10.1.1.41<0>
+kn041:882095:882095 [0] NCCL INFO NET/Plugin: No plugin found (libnccl-net.so)
+kn041:882095:882095 [0] NCCL INFO NET/Plugin: Plugin load returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory : when loading libnccl-net.so
+kn041:882095:882095 [0] NCCL INFO NET/Plugin: Using internal network plugin.
+kn041:882095:882095 [0] NCCL INFO cudaDriverVersion 13000
+NCCL version 2.21.5+cuda12.4
+kn041:882095:882095 [0] NCCL INFO Comm config Blocking set to 1
+kn041:882096:882096 [1] NCCL INFO cudaDriverVersion 13000
+kn041:882097:882097 [2] NCCL INFO cudaDriverVersion 13000
+kn041:882098:882098 [3] NCCL INFO cudaDriverVersion 13000
+kn041:882096:882096 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn041:882097:882097 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn041:882096:882096 [1] NCCL INFO Bootstrap : Using eth0:10.1.1.41<0>
+kn041:882097:882097 [2] NCCL INFO Bootstrap : Using eth0:10.1.1.41<0>
+kn041:882098:882098 [3] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn041:882098:882098 [3] NCCL INFO Bootstrap : Using eth0:10.1.1.41<0>
+kn041:882096:882096 [1] NCCL INFO NET/Plugin: No plugin found (libnccl-net.so)
+kn041:882096:882096 [1] NCCL INFO NET/Plugin: Plugin load returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory : when loading libnccl-net.so
+kn041:882096:882096 [1] NCCL INFO NET/Plugin: Using internal network plugin.
+kn041:882097:882097 [2] NCCL INFO NET/Plugin: No plugin found (libnccl-net.so)
+kn041:882097:882097 [2] NCCL INFO NET/Plugin: Plugin load returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory : when loading libnccl-net.so
+kn041:882097:882097 [2] NCCL INFO NET/Plugin: Using internal network plugin.
+kn041:882098:882098 [3] NCCL INFO NET/Plugin: No plugin found (libnccl-net.so)
+kn041:882098:882098 [3] NCCL INFO NET/Plugin: Plugin load returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory : when loading libnccl-net.so
+kn041:882098:882098 [3] NCCL INFO NET/Plugin: Using internal network plugin.
+kn041:882096:882096 [1] NCCL INFO Comm config Blocking set to 1
+kn041:882098:882098 [3] NCCL INFO Comm config Blocking set to 1
+kn041:882097:882097 [2] NCCL INFO Comm config Blocking set to 1
+kn041:882096:882315 [1] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+kn041:882097:882317 [2] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+kn041:882095:882314 [0] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+kn041:882098:882316 [3] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+kn041:882095:882314 [0] NCCL INFO Failed to open libibverbs.so[.1]
+kn041:882097:882317 [2] NCCL INFO Failed to open libibverbs.so[.1]
+kn041:882098:882316 [3] NCCL INFO Failed to open libibverbs.so[.1]
+kn041:882096:882315 [1] NCCL INFO Failed to open libibverbs.so[.1]
+kn041:882095:882314 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn041:882097:882317 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn041:882098:882316 [3] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn041:882096:882315 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^docker0,lo
+kn041:882097:882317 [2] NCCL INFO NET/Socket : Using [0]eth0:10.1.1.41<0> [1]ib0:10.0.1.41<0>
+kn041:882095:882314 [0] NCCL INFO NET/Socket : Using [0]eth0:10.1.1.41<0> [1]ib0:10.0.1.41<0>
+kn041:882096:882315 [1] NCCL INFO NET/Socket : Using [0]eth0:10.1.1.41<0> [1]ib0:10.0.1.41<0>
+kn041:882095:882314 [0] NCCL INFO Using non-device net plugin version 0
+kn041:882095:882314 [0] NCCL INFO Using network Socket
+kn041:882097:882317 [2] NCCL INFO Using non-device net plugin version 0
+kn041:882098:882316 [3] NCCL INFO NET/Socket : Using [0]eth0:10.1.1.41<0> [1]ib0:10.0.1.41<0>
+kn041:882097:882317 [2] NCCL INFO Using network Socket
+kn041:882096:882315 [1] NCCL INFO Using non-device net plugin version 0
+kn041:882096:882315 [1] NCCL INFO Using network Socket
+kn041:882098:882316 [3] NCCL INFO Using non-device net plugin version 0
+kn041:882098:882316 [3] NCCL INFO Using network Socket
+kn041:882095:882314 [0] NCCL INFO ncclCommInitRank comm 0x55556b423880 rank 0 nranks 4 cudaDev 0 nvmlDev 0 busId 17000 commId 0x495c662ef151956 - Init START
+kn041:882097:882317 [2] NCCL INFO ncclCommInitRank comm 0x55556d800ca0 rank 2 nranks 4 cudaDev 2 nvmlDev 2 busId ca000 commId 0x495c662ef151956 - Init START
+kn041:882096:882315 [1] NCCL INFO ncclCommInitRank comm 0x555565ca25f0 rank 1 nranks 4 cudaDev 1 nvmlDev 1 busId 65000 commId 0x495c662ef151956 - Init START
+kn041:882098:882316 [3] NCCL INFO ncclCommInitRank comm 0x55556d8015f0 rank 3 nranks 4 cudaDev 3 nvmlDev 3 busId e3000 commId 0x495c662ef151956 - Init START
+kn041:882097:882317 [2] NCCL INFO Setting affinity for GPU 2 to ffff0000,00000000
+kn041:882095:882314 [0] NCCL INFO Setting affinity for GPU 0 to ffff
+kn041:882097:882317 [2] NCCL INFO NVLS multicast support is not available on dev 2
+kn041:882098:882316 [3] NCCL INFO Setting affinity for GPU 3 to ffff0000,00000000
+kn041:882098:882316 [3] NCCL INFO NVLS multicast support is not available on dev 3
+kn041:882096:882315 [1] NCCL INFO Setting affinity for GPU 1 to ffff0000
+kn041:882096:882315 [1] NCCL INFO NVLS multicast support is not available on dev 1
+kn041:882095:882314 [0] NCCL INFO NVLS multicast support is not available on dev 0
+kn041:882097:882317 [2] NCCL INFO comm 0x55556d800ca0 rank 2 nRanks 4 nNodes 1 localRanks 4 localRank 2 MNNVL 0
+kn041:882095:882314 [0] NCCL INFO comm 0x55556b423880 rank 0 nRanks 4 nNodes 1 localRanks 4 localRank 0 MNNVL 0
+kn041:882096:882315 [1] NCCL INFO comm 0x555565ca25f0 rank 1 nRanks 4 nNodes 1 localRanks 4 localRank 1 MNNVL 0
+kn041:882098:882316 [3] NCCL INFO comm 0x55556d8015f0 rank 3 nRanks 4 nNodes 1 localRanks 4 localRank 3 MNNVL 0
+kn041:882095:882314 [0] NCCL INFO Channel 00/04 :    0   1   2   3
+kn041:882095:882314 [0] NCCL INFO Channel 01/04 :    0   2   3   1
+kn041:882097:882317 [2] NCCL INFO Trees [0] 3/-1/-1->2->1 [1] 3/-1/-1->2->0 [2] 3/-1/-1->2->1 [3] 3/-1/-1->2->0
+kn041:882095:882314 [0] NCCL INFO Channel 02/04 :    0   1   2   3
+kn041:882095:882314 [0] NCCL INFO Channel 03/04 :    0   2   3   1
+kn041:882097:882317 [2] NCCL INFO P2P Chunksize set to 131072
+kn041:882095:882314 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] 2/-1/-1->0->-1 [2] 1/-1/-1->0->-1 [3] 2/-1/-1->0->-1
+kn041:882098:882316 [3] NCCL INFO Trees [0] -1/-1/-1->3->2 [1] 1/-1/-1->3->2 [2] -1/-1/-1->3->2 [3] 1/-1/-1->3->2
+kn041:882096:882315 [1] NCCL INFO Trees [0] 2/-1/-1->1->0 [1] -1/-1/-1->1->3 [2] 2/-1/-1->1->0 [3] -1/-1/-1->1->3
+kn041:882095:882314 [0] NCCL INFO P2P Chunksize set to 131072
+kn041:882098:882316 [3] NCCL INFO P2P Chunksize set to 131072
+kn041:882096:882315 [1] NCCL INFO P2P Chunksize set to 131072
+kn041:882097:882317 [2] NCCL INFO Channel 00 : 2[2] -> 3[3] via SHM/direct/direct
+kn041:882097:882317 [2] NCCL INFO Channel 01 : 2[2] -> 3[3] via SHM/direct/direct
+kn041:882097:882317 [2] NCCL INFO Channel 02 : 2[2] -> 3[3] via SHM/direct/direct
+kn041:882097:882317 [2] NCCL INFO Channel 03 : 2[2] -> 3[3] via SHM/direct/direct
+kn041:882095:882314 [0] NCCL INFO Channel 00 : 0[0] -> 1[1] via SHM/direct/direct
+kn041:882096:882315 [1] NCCL INFO Channel 00 : 1[1] -> 2[2] via SHM/direct/direct
+kn041:882095:882314 [0] NCCL INFO Channel 02 : 0[0] -> 1[1] via SHM/direct/direct
+kn041:882096:882315 [1] NCCL INFO Channel 02 : 1[1] -> 2[2] via SHM/direct/direct
+kn041:882098:882316 [3] NCCL INFO Channel 00 : 3[3] -> 0[0] via SHM/direct/direct
+kn041:882098:882316 [3] NCCL INFO Channel 02 : 3[3] -> 0[0] via SHM/direct/direct
+kn041:882095:882314 [0] NCCL INFO Channel 01 : 0[0] -> 2[2] via SHM/direct/direct
+kn041:882098:882316 [3] NCCL INFO Channel 01 : 3[3] -> 1[1] via SHM/direct/direct
+kn041:882098:882316 [3] NCCL INFO Channel 03 : 3[3] -> 1[1] via SHM/direct/direct
+kn041:882095:882314 [0] NCCL INFO Channel 03 : 0[0] -> 2[2] via SHM/direct/direct
+kn041:882096:882315 [1] NCCL INFO Channel 01 : 1[1] -> 0[0] via SHM/direct/direct
+kn041:882096:882315 [1] NCCL INFO Channel 03 : 1[1] -> 0[0] via SHM/direct/direct
+kn041:882097:882317 [2] NCCL INFO Connected all rings
+kn041:882098:882316 [3] NCCL INFO Connected all rings
+kn041:882095:882314 [0] NCCL INFO Connected all rings
+kn041:882096:882315 [1] NCCL INFO Connected all rings
+kn041:882097:882317 [2] NCCL INFO Channel 01 : 2[2] -> 0[0] via SHM/direct/direct
+kn041:882096:882315 [1] NCCL INFO Channel 01 : 1[1] -> 3[3] via SHM/direct/direct
+kn041:882097:882317 [2] NCCL INFO Channel 03 : 2[2] -> 0[0] via SHM/direct/direct
+kn041:882096:882315 [1] NCCL INFO Channel 03 : 1[1] -> 3[3] via SHM/direct/direct
+kn041:882098:882316 [3] NCCL INFO Channel 00 : 3[3] -> 2[2] via SHM/direct/direct
+kn041:882098:882316 [3] NCCL INFO Channel 01 : 3[3] -> 2[2] via SHM/direct/direct
+kn041:882098:882316 [3] NCCL INFO Channel 02 : 3[3] -> 2[2] via SHM/direct/direct
+kn041:882098:882316 [3] NCCL INFO Channel 03 : 3[3] -> 2[2] via SHM/direct/direct
+kn041:882096:882315 [1] NCCL INFO Channel 00 : 1[1] -> 0[0] via SHM/direct/direct
+kn041:882096:882315 [1] NCCL INFO Channel 02 : 1[1] -> 0[0] via SHM/direct/direct
+kn041:882097:882317 [2] NCCL INFO Channel 00 : 2[2] -> 1[1] via SHM/direct/direct
+kn041:882097:882317 [2] NCCL INFO Channel 02 : 2[2] -> 1[1] via SHM/direct/direct
+kn041:882096:882315 [1] NCCL INFO Connected all trees
+kn041:882095:882314 [0] NCCL INFO Connected all trees
+kn041:882096:882315 [1] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+kn041:882096:882315 [1] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 2 p2p channels per peer
+kn041:882098:882316 [3] NCCL INFO Connected all trees
+kn041:882098:882316 [3] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+kn041:882098:882316 [3] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 2 p2p channels per peer
+kn041:882095:882314 [0] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+kn041:882095:882314 [0] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 2 p2p channels per peer
+kn041:882097:882317 [2] NCCL INFO Connected all trees
+kn041:882097:882317 [2] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+kn041:882097:882317 [2] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 2 p2p channels per peer
+kn041:882095:882314 [0] NCCL INFO TUNER/Plugin: Plugin load returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory : when loading libnccl-tuner.so
+kn041:882095:882314 [0] NCCL INFO TUNER/Plugin: Using internal tuner plugin.
+kn041:882095:882314 [0] NCCL INFO ncclCommInitRank comm 0x55556b423880 rank 0 nranks 4 cudaDev 0 nvmlDev 0 busId 17000 commId 0x495c662ef151956 - Init COMPLETE
+kn041:882098:882316 [3] NCCL INFO TUNER/Plugin: Plugin load returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory : when loading libnccl-tuner.so
+kn041:882098:882316 [3] NCCL INFO TUNER/Plugin: Using internal tuner plugin.
+kn041:882098:882316 [3] NCCL INFO ncclCommInitRank comm 0x55556d8015f0 rank 3 nranks 4 cudaDev 3 nvmlDev 3 busId e3000 commId 0x495c662ef151956 - Init COMPLETE
+kn041:882096:882315 [1] NCCL INFO TUNER/Plugin: Plugin load returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory : when loading libnccl-tuner.so
+kn041:882096:882315 [1] NCCL INFO TUNER/Plugin: Using internal tuner plugin.
+kn041:882096:882315 [1] NCCL INFO ncclCommInitRank comm 0x555565ca25f0 rank 1 nranks 4 cudaDev 1 nvmlDev 1 busId 65000 commId 0x495c662ef151956 - Init COMPLETE
+kn041:882097:882317 [2] NCCL INFO TUNER/Plugin: Plugin load returned 2 : libnccl-net.so: cannot open shared object file: No such file or directory : when loading libnccl-tuner.so
+kn041:882097:882317 [2] NCCL INFO TUNER/Plugin: Using internal tuner plugin.
+kn041:882097:882317 [2] NCCL INFO ncclCommInitRank comm 0x55556d800ca0 rank 2 nranks 4 cudaDev 2 nvmlDev 2 busId ca000 commId 0x495c662ef151956 - Init COMPLETE
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+Running tokenizer on dataset (num_proc=32):   0%|          | 0/43835 [00:00<?, ? examples/s]`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+Running tokenizer on dataset (num_proc=32):   2%|▏         | 1000/43835 [00:40<28:54, 24.70 examples/s]Running tokenizer on dataset (num_proc=32):   5%|▍         | 2000/43835 [00:41<12:07, 57.49 examples/s]Running tokenizer on dataset (num_proc=32):   5%|▌         | 2370/43835 [00:53<14:35, 47.36 examples/s]Running tokenizer on dataset (num_proc=32):   6%|▋         | 2740/43835 [01:06<16:27, 41.59 examples/s]Running tokenizer on dataset (num_proc=32):   9%|▊         | 3740/43835 [01:09<09:25, 70.96 examples/s]Running tokenizer on dataset (num_proc=32):  11%|█         | 4740/43835 [01:10<05:25, 120.04 examples/s]Running tokenizer on dataset (num_proc=32):  13%|█▎        | 5740/43835 [01:10<03:21, 189.01 examples/s]Running tokenizer on dataset (num_proc=32):  15%|█▌        | 6740/43835 [01:10<02:09, 286.13 examples/s]Running tokenizer on dataset (num_proc=32):  18%|█▊        | 7740/43835 [01:10<01:25, 421.61 examples/s]Running tokenizer on dataset (num_proc=32):  20%|█▉        | 8740/43835 [01:10<01:00, 578.86 examples/s]Running tokenizer on dataset (num_proc=32):  22%|██▏       | 9740/43835 [01:11<00:43, 775.68 examples/s]Running tokenizer on dataset (num_proc=32):  22%|██▏       | 9740/43835 [01:27<00:43, 775.68 examples/s]Running tokenizer on dataset (num_proc=32):  23%|██▎       | 10110/43835 [01:34<05:34, 100.75 examples/s]Running tokenizer on dataset (num_proc=32):  24%|██▍       | 10479/43835 [01:34<04:37, 120.14 examples/s]Running tokenizer on dataset (num_proc=32):  26%|██▌       | 11218/43835 [01:34<03:08, 172.68 examples/s]Running tokenizer on dataset (num_proc=32):  26%|██▋       | 11587/43835 [01:34<02:33, 209.68 examples/s]Running tokenizer on dataset (num_proc=32):  27%|██▋       | 11956/43835 [01:35<02:18, 230.74 examples/s]Running tokenizer on dataset (num_proc=32):  28%|██▊       | 12325/43835 [01:36<01:54, 275.49 examples/s]Running tokenizer on dataset (num_proc=32):  28%|██▊       | 12325/43835 [01:47<01:54, 275.49 examples/s]Running tokenizer on dataset (num_proc=32):  30%|███       | 13325/43835 [06:13<1:07:51,  7.49 examples/s]Running tokenizer on dataset (num_proc=32):  31%|███       | 13695/43835 [06:27<57:24,  8.75 examples/s]  Running tokenizer on dataset (num_proc=32):  31%|███       | 13695/43835 [06:47<57:24,  8.75 examples/s]Running tokenizer on dataset (num_proc=32):  34%|███▎      | 14695/43835 [30:22<5:35:08,  1.45 examples/s]Running tokenizer on dataset (num_proc=32):  36%|███▌      | 15695/43835 [30:44<3:23:25,  2.31 examples/s]Running tokenizer on dataset (num_proc=32):  36%|███▌      | 15695/43835 [30:57<3:23:25,  2.31 examples/s]Running tokenizer on dataset (num_proc=32):  38%|███▊      | 16695/43835 [31:10<2:10:50,  3.46 examples/s]Running tokenizer on dataset (num_proc=32):  38%|███▊      | 16695/43835 [31:27<2:10:50,  3.46 examples/s]Running tokenizer on dataset (num_proc=32):  40%|████      | 17695/43835 [31:45<1:28:49,  4.90 examples/s]Running tokenizer on dataset (num_proc=32):  40%|████      | 17695/43835 [31:57<1:28:49,  4.90 examples/s]Running tokenizer on dataset (num_proc=32):  43%|████▎     | 18695/43835 [32:38<1:04:54,  6.46 examples/s]Running tokenizer on dataset (num_proc=32):  45%|████▍     | 19695/43835 [32:41<42:54,  9.38 examples/s]  Running tokenizer on dataset (num_proc=32):  47%|████▋     | 20695/43835 [32:52<29:40, 12.99 examples/s]Running tokenizer on dataset (num_proc=32):  49%|████▉     | 21695/43835 [32:59<20:27, 18.03 examples/s]Running tokenizer on dataset (num_proc=32):  52%|█████▏    | 22695/43835 [33:13<15:07, 23.28 examples/s]Running tokenizer on dataset (num_proc=32):  52%|█████▏    | 22695/43835 [33:27<15:07, 23.28 examples/s]Running tokenizer on dataset (num_proc=32):  54%|█████▍    | 23695/43835 [33:49<13:37, 24.64 examples/s]Running tokenizer on dataset (num_proc=32):  54%|█████▍    | 23695/43835 [34:07<13:37, 24.64 examples/s]Running tokenizer on dataset (num_proc=32):  56%|█████▋    | 24695/43835 [34:10<11:06, 28.73 examples/s]Running tokenizer on dataset (num_proc=32):  56%|█████▋    | 24695/43835 [34:27<11:06, 28.73 examples/s]Running tokenizer on dataset (num_proc=32):  59%|█████▊    | 25695/43835 [35:02<12:05, 25.02 examples/s]Running tokenizer on dataset (num_proc=32):  59%|█████▊    | 25695/43835 [35:17<12:05, 25.02 examples/s]Running tokenizer on dataset (num_proc=32):  61%|██████    | 26695/43835 [36:21<14:47, 19.32 examples/s]Running tokenizer on dataset (num_proc=32):  63%|██████▎   | 27695/43835 [36:26<10:08, 26.53 examples/s]Running tokenizer on dataset (num_proc=32):  63%|██████▎   | 27695/43835 [36:37<10:08, 26.53 examples/s]Running tokenizer on dataset (num_proc=32):  65%|██████▌   | 28695/43835 [39:38<21:13, 11.88 examples/s]Running tokenizer on dataset (num_proc=32):  68%|██████▊   | 29695/43835 [39:50<14:43, 16.01 examples/s]Running tokenizer on dataset (num_proc=32):  68%|██████▊   | 29695/43835 [40:07<14:43, 16.01 examples/s]Running tokenizer on dataset (num_proc=32):  70%|███████   | 30695/43835 [40:49<13:25, 16.30 examples/s]Running tokenizer on dataset (num_proc=32):  70%|███████   | 30695/43835 [41:07<13:25, 16.30 examples/s]Running tokenizer on dataset (num_proc=32):  72%|███████▏  | 31695/43835 [41:44<12:02, 16.80 examples/s]Running tokenizer on dataset (num_proc=32):  72%|███████▏  | 31695/43835 [41:57<12:02, 16.80 examples/s]Running tokenizer on dataset (num_proc=32):  73%|███████▎  | 32065/43835 [42:09<11:50, 16.56 examples/s]Running tokenizer on dataset (num_proc=32):  73%|███████▎  | 32065/43835 [42:27<11:50, 16.56 examples/s]Running tokenizer on dataset (num_proc=32):  75%|███████▌  | 33065/43835 [42:31<08:28, 21.18 examples/s]Running tokenizer on dataset (num_proc=32):  75%|███████▌  | 33065/43835 [42:47<08:28, 21.18 examples/s]Running tokenizer on dataset (num_proc=32):  76%|███████▋  | 33435/43835 [43:29<11:05, 15.64 examples/s]Running tokenizer on dataset (num_proc=32):  77%|███████▋  | 33805/43835 [43:35<09:16, 18.02 examples/s]Running tokenizer on dataset (num_proc=32):  77%|███████▋  | 33805/43835 [43:47<09:16, 18.02 examples/s]Running tokenizer on dataset (num_proc=32):  78%|███████▊  | 34175/43835 [43:50<08:25, 19.09 examples/s]Running tokenizer on dataset (num_proc=32):  78%|███████▊  | 34175/43835 [44:07<08:25, 19.09 examples/s]Running tokenizer on dataset (num_proc=32):  80%|████████  | 35175/43835 [44:58<08:35, 16.78 examples/s]Running tokenizer on dataset (num_proc=32):  81%|████████  | 35545/43835 [45:07<07:14, 19.06 examples/s]Running tokenizer on dataset (num_proc=32):  82%|████████▏ | 35915/43835 [45:09<05:39, 23.32 examples/s]Running tokenizer on dataset (num_proc=32):  83%|████████▎ | 36285/43835 [45:26<05:25, 23.18 examples/s]Running tokenizer on dataset (num_proc=32):  84%|████████▎ | 36655/43835 [45:26<03:54, 30.59 examples/s]Running tokenizer on dataset (num_proc=32):  84%|████████▎ | 36655/43835 [45:37<03:54, 30.59 examples/s]Running tokenizer on dataset (num_proc=32):  84%|████████▍ | 37025/43835 [46:51<09:32, 11.89 examples/s]Running tokenizer on dataset (num_proc=32):  85%|████████▌ | 37395/43835 [47:25<09:15, 11.59 examples/s]Running tokenizer on dataset (num_proc=32):  86%|████████▌ | 37765/43835 [47:35<07:04, 14.30 examples/s]Running tokenizer on dataset (num_proc=32):  86%|████████▌ | 37765/43835 [47:47<07:04, 14.30 examples/s]Running tokenizer on dataset (num_proc=32):  87%|████████▋ | 38135/43835 [49:34<13:31,  7.02 examples/s]Running tokenizer on dataset (num_proc=32):  88%|████████▊ | 38505/43835 [51:19<16:17,  5.45 examples/s]Running tokenizer on dataset (num_proc=32):  89%|████████▊ | 38875/43835 [52:10<14:01,  5.89 examples/s]Running tokenizer on dataset (num_proc=32):  91%|█████████ | 39875/43835 [52:17<05:30, 11.98 examples/s]Running tokenizer on dataset (num_proc=32):  91%|█████████ | 39875/43835 [52:27<05:30, 11.98 examples/s]Running tokenizer on dataset (num_proc=32):  92%|█████████▏| 40245/43835 [52:46<04:54, 12.18 examples/s]Running tokenizer on dataset (num_proc=32):  92%|█████████▏| 40245/43835 [52:57<04:54, 12.18 examples/s]Running tokenizer on dataset (num_proc=32):  93%|█████████▎| 40615/43835 [53:26<04:45, 11.30 examples/s]Running tokenizer on dataset (num_proc=32):  93%|█████████▎| 40985/43835 [54:09<04:31, 10.51 examples/s]Running tokenizer on dataset (num_proc=32):  96%|█████████▌| 41985/43835 [54:30<01:48, 17.06 examples/s]Running tokenizer on dataset (num_proc=32):  96%|█████████▌| 41985/43835 [54:47<01:48, 17.06 examples/s]Running tokenizer on dataset (num_proc=32):  97%|█████████▋| 42355/43835 [55:23<01:52, 13.16 examples/s]Running tokenizer on dataset (num_proc=32):  97%|█████████▋| 42725/43835 [57:32<02:33,  7.23 examples/s]Running tokenizer on dataset (num_proc=32):  98%|█████████▊| 43095/43835 [1:03:59<04:28,  2.76 examples/s]Running tokenizer on dataset (num_proc=32):  99%|█████████▉| 43465/43835 [1:04:16<01:43,  3.58 examples/s]Running tokenizer on dataset (num_proc=32):  99%|█████████▉| 43465/43835 [1:04:27<01:43,  3.58 examples/s]Running tokenizer on dataset (num_proc=32): 100%|██████████| 43835/43835 [1:10:34<00:00,  2.08 examples/s]Running tokenizer on dataset (num_proc=32): 100%|██████████| 43835/43835 [1:10:34<00:00, 10.35 examples/s]
+training example:
+W0809 05:43:15.842000 881902 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 882096 closing signal SIGTERM
+W0809 05:43:15.846000 881902 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 882097 closing signal SIGTERM
+W0809 05:43:15.847000 881902 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 882098 closing signal SIGTERM
+E0809 05:43:16.214000 881902 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: -7) local_rank: 0 (pid: 882095) of binary: /opt/conda/bin/python3.11
+Traceback (most recent call last):
+  File "/opt/conda/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-08-09_05:43:15
+  host      : kn041.paice.vectorinstitute.ai
+  rank      : 0 (local_rank: 0)
+  exitcode  : -7 (pid: 882095)
+  error_file: <N/A>
+  traceback : Signal 7 (SIGBUS) received by PID 882095
+============================================================
+Traceback (most recent call last):
+  File "/opt/conda/bin/llamafactory-cli", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py", line 114, in launch
+    process = subprocess.run(
+              ^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', 'kn041', '--master_port', '29500', '/project/aip-wangcs/indrisch/LLaMA-Factory/src/llamafactory/launcher.py', '/project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/killarney_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1_arrayjob3.yaml']' returned non-zero exit status 1.
+srun: error: kn041: task 0: Exited with exit code 1
+srun: Terminating StepId=4670529.0

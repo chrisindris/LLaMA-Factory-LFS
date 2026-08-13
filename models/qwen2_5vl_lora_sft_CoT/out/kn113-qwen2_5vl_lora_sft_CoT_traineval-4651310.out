@@ -1,0 +1,90 @@
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+UTILS_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+WANDB_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/wandb/
+CLUSTER: KILLARNEY
+RUNNING_MODE: APPTAINER
+TORCH_CUDA_ARCH_LIST: 8.9
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+VLLM_HOME: /scratch/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /scratch/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /scratch/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /scratch/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_DATASET_UPLOAD: /project/aip-wangcs/indrisch/venv_llamafactory_cu126_qwen35/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+RUNNING_MODE: APPTAINER
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (26.2.1)
+Requirement already satisfied: setuptools in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (83.0.0+computecanada)
+Requirement already satisfied: wheel in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (0.47.0)
+Requirement already satisfied: packaging>=24.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from wheel) (26.0+computecanada)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (26.0+computecanada)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: huggingface_hub in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (0.36.2+computecanada)
+Requirement already satisfied: ruamel.yaml in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (0.19.1+computecanada)
+Requirement already satisfied: filelock in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (3.32.2)
+Requirement already satisfied: fsspec>=2023.5.0 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (2025.3.0+computecanada)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (1.5.2+computecanada)
+Requirement already satisfied: packaging>=20.9 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from huggingface_hub) (26.0+computecanada)
+Requirement already satisfied: pyyaml>=5.1 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (6.0.3+computecanada)
+Requirement already satisfied: requests in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (2.34.2+computecanada)
+Requirement already satisfied: tqdm>=4.42.1 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (4.70.0+computecanada)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (4.16.0+computecanada)
+Requirement already satisfied: charset_normalizer<4,>=2 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (3.4.9+computecanada)
+Requirement already satisfied: idna<4,>=2.5 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (3.18+computecanada)
+Requirement already satisfied: urllib3<3,>=1.26 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (2.7.0+computecanada)
+Requirement already satisfied: certifi>=2023.5.7 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (2026.7.22)
+YAML_FILE: /project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR_SAVES: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+SLURM_JOB_NODELIST: kn113
+HEAD_NODE: kn113
+HEAD_NODE: kn113
+MASTER_ADDR: kn113
+MASTER_PORT: 29500
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+UTILS_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts/utils:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts/utils:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+WANDB_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/wandb/
+CLUSTER: KILLARNEY
+RUNNING_MODE: APPTAINER
+TORCH_CUDA_ARCH_LIST: 8.9
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+VLLM_HOME: /scratch/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /scratch/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /scratch/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /scratch/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_DATASET_UPLOAD: /project/aip-wangcs/indrisch/venv_llamafactory_cu126_qwen35/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+SCANNET_H5_DIR: /scratch/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/indrisch/3DThinker10K_images_h5
+CLUSTER: KILLARNEY
+YAML_FILE: /project/aip-wangcs/indrisch//LLaMA-Factory/examples/train_lora/killarney_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+Error: resume checkpoint not found: null
+srun: error: kn113: task 0: Exited with exit code 1
+srun: Terminating StepId=4651310.0

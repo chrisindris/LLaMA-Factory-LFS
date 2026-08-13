@@ -1,0 +1,1039 @@
+OVERLAY: /project/aip-wangcs/indrisch/LLaMA-Factory/apptainer/overlay.img
+YAML_FILE: /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/killarney_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1_arrayjob0.yaml
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+UTILS_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+WANDB_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/wandb/
+CLUSTER: KILLARNEY
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.9
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+VLLM_HOME: /scratch/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /scratch/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /scratch/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /scratch/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_DATASET_UPLOAD: /project/aip-wangcs/indrisch/venv_llamafactory_cu126_qwen35/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+RUNNING_MODE: VENV
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (26.2.1)
+Requirement already satisfied: setuptools in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (84.0.0)
+Requirement already satisfied: wheel in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (0.47.0)
+Requirement already satisfied: packaging>=24.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from wheel) (26.0+computecanada)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (26.0+computecanada)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: huggingface_hub in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (0.36.2+computecanada)
+Requirement already satisfied: ruamel.yaml in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (0.19.1+computecanada)
+Requirement already satisfied: filelock in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (3.32.2)
+Requirement already satisfied: fsspec>=2023.5.0 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (2025.3.0+computecanada)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (1.5.2+computecanada)
+Requirement already satisfied: packaging>=20.9 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from huggingface_hub) (26.0+computecanada)
+Requirement already satisfied: pyyaml>=5.1 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (6.0.3+computecanada)
+Requirement already satisfied: requests in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (2.34.2+computecanada)
+Requirement already satisfied: tqdm>=4.42.1 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (4.70.0+computecanada)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from huggingface_hub) (4.16.0+computecanada)
+Requirement already satisfied: charset_normalizer<4,>=2 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (3.4.9+computecanada)
+Requirement already satisfied: idna<4,>=2.5 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (3.18+computecanada)
+Requirement already satisfied: urllib3<3,>=1.26 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (2.7.0+computecanada)
+Requirement already satisfied: certifi>=2023.5.7 in /scratch/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages (from requests->huggingface_hub) (2026.7.22)
+OUTPUT_DIR_SAVES: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+GPU TYPE: L40S
+SLURM_JOB_NODELIST: kn103
+HEAD_NODE: kn103
+HEAD_NODE: kn103
+MASTER_ADDR: kn103
+MASTER_PORT: 29500
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts
+UTILS_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts:/project/aip-wangcs/indrisch/LLaMA-Factory/scripts/utils:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory/scripts/utils
+WANDB_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/wandb/
+CLUSTER: KILLARNEY
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.9
+HF_HOME: /scratch/indrisch/huggingface/hub
+HF_HUB_CACHE: /scratch/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /scratch/indrisch/.triton_cache
+TORCH_EXTENSIONS_DIR: /scratch/indrisch/.cache/torch_extensions
+VLLM_HOME: /scratch/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /scratch/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /scratch/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /scratch/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /scratch/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory
+SIF_FILE: /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a3b3e54a9fa9450c6c99dd83efaa2f0ca4a5a/llamafactory.sif
+MEDIA_DIR: /project/aip-wangcs/shared/data/
+VENV_DATASET_UPLOAD: /project/aip-wangcs/indrisch/venv_llamafactory_cu126_qwen35/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_cu126/
+SCANNET_H5_DIR: /scratch/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/indrisch/3DThinker10K_images_h5
+CLUSTER: KILLARNEY
+YAML_FILE: /project/aip-wangcs/indrisch/LLaMA-Factory/examples/train_lora/killarney_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1_arrayjob0.yaml
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+No resume checkpoint (fresh start from epoch 0).
+Build venv from scratch at /tmp/venv_llamafactory_cu126_qwen35
+VENV_LLAMAFACTORY: /tmp/venv_llamafactory_cu126_qwen35
+AVX-512 support detected — enabling AVX-512 compile flags for native extensions
+gcc (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+g++ (Gentoo 12.3.1_p20230526 p2) 12.3.1 20230526
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Setting up environment for CUDA 12.x
+created virtual environment CPython3.12.4.final.0-64 in 1004ms
+  creator CPython3Posix(dest=/tmp/venv_llamafactory_cu126_qwen35, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=/home/indrisch/.local/share/virtualenv)
+    added seed packages: pip==26.1.2
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages (26.1.2)
+Collecting pip
+  Using cached pip-26.2.1-py3-none-any.whl.metadata (4.6 kB)
+Collecting setuptools
+  Using cached setuptools-84.0.0-py3-none-any.whl.metadata (6.6 kB)
+Collecting wheel
+  Using cached wheel-0.47.0-py3-none-any.whl.metadata (2.3 kB)
+Requirement already satisfied: packaging>=24.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from wheel) (26.0+computecanada)
+Using cached pip-26.2.1-py3-none-any.whl (1.8 MB)
+Using cached setuptools-84.0.0-py3-none-any.whl (818 kB)
+Using cached wheel-0.47.0-py3-none-any.whl (32 kB)
+Installing collected packages: wheel, setuptools, pip
+  Attempting uninstall: pip
+    Found existing installation: pip 26.1.2
+    Uninstalling pip-26.1.2:
+      Successfully uninstalled pip-26.1.2
+
+Successfully installed pip-26.2.1 setuptools-84.0.0 wheel-0.47.0
+Installing transformers>=5.2.0 for Qwen3.5 compatibility
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Obtaining file:///project/6110552/indrisch/LLaMA-Factory
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (26.0+computecanada)
+Requirement already satisfied: psutil in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (7.2.2+computecanada)
+Requirement already satisfied: pandas in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (3.0.0+computecanada)
+Requirement already satisfied: pillow in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (12.1.0+computecanada)
+Requirement already satisfied: decorator in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (5.2.1+computecanada)
+Requirement already satisfied: scipy in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (1.17.0+computecanada)
+Requirement already satisfied: matplotlib in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (3.10.8+computecanada)
+Requirement already satisfied: platformdirs in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (4.5.1+computecanada)
+Requirement already satisfied: pyarrow in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/arrow/25.0.0/lib/python3.12/site-packages (25.0.0)
+Requirement already satisfied: sympy in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (1.14.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/wandb-0.27.2+computecanada-py3-none-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/ray-2.55.1+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/h5py-3.16.0+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.14.1+computecanada-py3-none-any.whl
+Collecting flash_linear_attention
+  Using cached flash_linear_attention-0.5.2-py3-none-any.whl.metadata (45 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/causal_conv1d-1.5.4+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/datasets-4.0.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/accelerate-1.11.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting peft>=0.14.0 (from llamafactory==0.9.4.dev0)
+  Using cached peft-0.20.0-py3-none-any.whl.metadata (14 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/trl-0.9.6+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting gradio<=5.45.0,>=4.38.0 (from llamafactory==0.9.4.dev0)
+  Using cached gradio-5.45.0-py3-none-any.whl.metadata (16 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/tyro-0.8.14+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/einops-0.8.2+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/numpy-1.26.4+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/sentencepiece-0.2.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/tiktoken-0.12.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Collecting modelscope>=1.14.0 (from llamafactory==0.9.4.dev0)
+  Using cached modelscope-1.39.1-py3-none-any.whl.metadata (43 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/hf_transfer-0.1.9+computecanada-cp38-abi3-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/safetensors-0.5.3+computecanada-cp38-abi3-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fire-0.7.1+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting omegaconf (from llamafactory==0.9.4.dev0)
+  Using cached omegaconf-2.3.1-py3-none-any.whl.metadata (4.5 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/protobuf-7.35.1+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pyyaml-6.0.3+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pydantic-2.10.6+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting uvicorn (from llamafactory==0.9.4.dev0)
+  Using cached uvicorn-0.52.1-py3-none-any.whl.metadata (6.6 kB)
+Collecting fastapi (from llamafactory==0.9.4.dev0)
+  Using cached fastapi-0.141.1-py3-none-any.whl.metadata (27 kB)
+Collecting sse-starlette (from llamafactory==0.9.4.dev0)
+  Using cached sse_starlette-3.4.8-py3-none-any.whl.metadata (15 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/av-16.1.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/librosa-0.11.0+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/propcache-0.5.2+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/torch-2.13.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/torchvision-0.28.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Collecting nltk (from llamafactory==0.9.4.dev0)
+  Using cached nltk-3.10.2-py3-none-any.whl.metadata (3.2 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jieba-0.42.1+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting rouge-chinese (from llamafactory==0.9.4.dev0)
+  Using cached rouge_chinese-1.0.3-py3-none-any.whl.metadata (7.6 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/deepspeed-0.16.4+computecanada-py3-none-any.whl (from llamafactory==0.9.4.dev0)
+Collecting liger-kernel>=0.5.5 (from llamafactory==0.9.4.dev0)
+  Using cached liger_kernel-0.8.1-py3-none-any.whl.metadata (29 kB)
+Collecting huggingface_hub>=0.21.0 (from accelerate<=1.11.0,>=1.3.0->llamafactory==0.9.4.dev0)
+  Downloading huggingface_hub-1.27.0-py3-none-any.whl.metadata (16 kB)
+Collecting filelock (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+  Using cached filelock-3.32.2-py3-none-any.whl.metadata (2.0 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/dill-0.3.8+computecanada-py3-none-any.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/requests-2.34.2+computecanada-py3-none-any.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/tqdm-4.70.0+computecanada-py3-none-any.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/xxhash-3.5.0+computecanada-cp312-cp312-linux_x86_64.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/multiprocess-0.70.16+computecanada-py3-none-any.whl (from datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fsspec-2025.3.0+computecanada-py3-none-any.whl (from fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/hjson-3.1.0+computecanada-py3-none-any.whl (from deepspeed<=0.16.9,>=0.10.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/msgpack-1.1.2+computecanada-cp312-cp312-linux_x86_64.whl (from deepspeed<=0.16.9,>=0.10.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/ninja-1.13.0+computecanada-py3-none-linux_x86_64.whl (from deepspeed<=0.16.9,>=0.10.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/py_cpuinfo-9.0.0+computecanada-py3-none-any.whl (from deepspeed<=0.16.9,>=0.10.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/aiohttp-3.13.3+computecanada-cp312-cp312-linux_x86_64.whl (from fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/aiofiles-24.1.0+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/anyio-4.14.2+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/brotli-1.2.0+computecanada-cp312-cp312-linux_x86_64.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Collecting ffmpy (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached ffmpy-1.0.0-py3-none-any.whl.metadata (3.0 kB)
+Collecting gradio-client==1.13.0 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached gradio_client-1.13.0-py3-none-any.whl.metadata (7.1 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/groovy-0.1.2+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/httpx-0.28.1+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/huggingface_hub-0.36.2+computecanada-py3-none-any.whl (from accelerate<=1.11.0,>=1.3.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jinja2-3.1.6+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/markupsafe-3.0.3+computecanada-cp312-cp312-linux_x86_64.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/orjson-3.11.7+computecanada-cp312-cp312-linux_x86_64.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/pandas-2.3.3+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/pillow-11.1.0+computecanada-cp312-cp312-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pydub-0.25.1+computecanada-py2.py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/python_multipart-0.0.32+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/ruff-0.11.0+computecanada-py3-none-linux_x86_64.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Collecting safehttpx<0.2.0,>=0.1.6 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached safehttpx-0.1.7-py3-none-any.whl.metadata (4.2 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/semantic_version-2.10.0+computecanada-py2.py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/starlette-0.52.1+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/tomlkit-0.13.3+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Collecting typer<1.0,>=0.12 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached typer-0.27.1-py3-none-any.whl.metadata (16 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/typing_extensions-4.16.0+computecanada-py3-none-any.whl (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/websockets-15.0.1+computecanada-cp312-cp312-linux_x86_64.whl (from gradio-client==1.13.0->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Requirement already satisfied: python-dateutil>=2.8.2 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from pandas) (2.9.0.post0+computecanada)
+Requirement already satisfied: pytz>=2020.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from pandas) (2025.2+computecanada)
+Requirement already satisfied: tzdata>=2022.7 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from pandas) (2025.3+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/idna-3.18+computecanada-py3-none-any.whl (from anyio<5.0,>=3.0->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/typing_inspection-0.4.2+computecanada-py3-none-any.whl (from fastapi->llamafactory==0.9.4.dev0)
+Collecting annotated-doc>=0.0.2 (from fastapi->llamafactory==0.9.4.dev0)
+  Using cached annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
+Collecting certifi (from httpx<1.0,>=0.24.1->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/httpcore-1.0.9+computecanada-py3-none-any.whl (from httpx<1.0,>=0.24.1->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/h11-0.16.0+computecanada-py3-none-any.whl (from httpcore==1.*->httpx<1.0,>=0.24.1->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/hf_xet-1.5.2+computecanada-cp38-abi3-linux_x86_64.whl (from huggingface_hub>=0.21.0->accelerate<=1.11.0,>=1.3.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/annotated_types-0.8.0+computecanada-py3-none-any.whl (from pydantic<=2.10.6->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/pydantic_core-2.27.2+computecanada-cp312-cp312-linux_x86_64.whl (from pydantic<=2.10.6->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/shellingham-1.5.4+computecanada-py2.py3-none-any.whl (from typer<1.0,>=0.12->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/rich-15.0.0+computecanada-py3-none-any.whl (from typer<1.0,>=0.12->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/docstring_parser-0.18.0+computecanada-py3-none-any.whl (from tyro<0.9.0->llamafactory==0.9.4.dev0)
+Collecting shtab>=1.5.6 (from tyro<0.9.0->llamafactory==0.9.4.dev0)
+  Using cached shtab-1.10.0-py3-none-any.whl.metadata (7.5 kB)
+Requirement already satisfied: contourpy>=1.0.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (1.3.3+computecanada)
+Requirement already satisfied: cycler>=0.10 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (0.12.1+computecanada)
+Requirement already satisfied: fonttools>=4.22.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (4.61.1+computecanada)
+Requirement already satisfied: kiwisolver>=1.3.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (1.4.9+computecanada)
+Requirement already satisfied: pyparsing>=3 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from matplotlib) (3.3.2+computecanada)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from sympy) (1.3.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/click-8.4.2+computecanada-py3-none-any.whl (from wandb)
+Collecting gitpython!=3.1.29,>=1.0.0 (from wandb)
+  Using cached gitpython-3.1.58-py3-none-any.whl.metadata (13 kB)
+Collecting sentry-sdk>=2.0.0 (from wandb)
+  Using cached sentry_sdk-2.66.1-py3-none-any.whl.metadata (11 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/charset_normalizer-3.4.9+computecanada-py3-none-any.whl (from requests>=2.32.2->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/urllib3-2.7.0+computecanada-py3-none-any.whl (from requests>=2.32.2->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jsonschema-4.26.0+computecanada-py3-none-any.whl (from ray)
+INFO: pip is looking at multiple versions of transformers to determine which version is compatible with other requirements. This could take a while.
+Collecting transformers>=5.2.0
+  Downloading transformers-5.14.1-py3-none-any.whl.metadata (32 kB)
+  Downloading transformers-5.14.0-py3-none-any.whl.metadata (32 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.13.1+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Downloading transformers-5.13.1-py3-none-any.whl.metadata (32 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.13.0+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Downloading transformers-5.13.0-py3-none-any.whl.metadata (32 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.12.1+computecanada-py3-none-any.whl
+INFO: pip is still looking at multiple versions of transformers to determine which version is compatible with other requirements. This could take a while.
+Collecting transformers>=5.2.0
+  Downloading transformers-5.12.1-py3-none-any.whl.metadata (33 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.12.0+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.12.0-py3-none-any.whl.metadata (33 kB)
+  Using cached transformers-5.11.0-py3-none-any.whl.metadata (33 kB)
+  Downloading transformers-5.10.4-py3-none-any.whl.metadata (33 kB)
+INFO: This is taking longer than usual. You might need to provide the dependency resolver with stricter constraints to reduce runtime. See https://pip.pypa.io/warnings/backtracking for guidance. If you want to abort this run, press Ctrl + C.
+  Using cached transformers-5.10.2-py3-none-any.whl.metadata (33 kB)
+  Using cached transformers-5.10.1-py3-none-any.whl.metadata (33 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.9.0+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.9.0-py3-none-any.whl.metadata (33 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.8.1+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.8.1-py3-none-any.whl.metadata (33 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.8.0+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.8.0-py3-none-any.whl.metadata (33 kB)
+  Using cached transformers-5.7.0-py3-none-any.whl.metadata (33 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.6.2+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.6.2-py3-none-any.whl.metadata (33 kB)
+  Using cached transformers-5.6.1-py3-none-any.whl.metadata (33 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.6.0+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.6.0-py3-none-any.whl.metadata (33 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.5.4+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.5.4-py3-none-any.whl.metadata (32 kB)
+  Using cached transformers-5.5.3-py3-none-any.whl.metadata (32 kB)
+  Using cached transformers-5.5.2-py3-none-any.whl.metadata (32 kB)
+  Using cached transformers-5.5.1-py3-none-any.whl.metadata (32 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.5.0+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.5.0-py3-none-any.whl.metadata (32 kB)
+  Using cached transformers-5.4.0-py3-none-any.whl.metadata (32 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.3.0+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.3.0-py3-none-any.whl.metadata (32 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-5.2.0+computecanada-py3-none-any.whl
+Collecting transformers>=5.2.0
+  Using cached transformers-5.2.0-py3-none-any.whl.metadata (32 kB)
+Collecting trl<=0.9.6,>=0.8.6 (from llamafactory==0.9.4.dev0)
+  Using cached trl-0.9.6-py3-none-any.whl.metadata (12 kB)
+Collecting gradio<=5.45.0,>=4.38.0 (from llamafactory==0.9.4.dev0)
+  Using cached gradio-5.44.1-py3-none-any.whl.metadata (16 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/regex-2026.1.15+computecanada-cp312-cp312-linux_x86_64.whl (from transformers>=5.2.0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/tokenizers-0.22.2+computecanada-cp39-abi3-linux_x86_64.whl (from transformers>=5.2.0)
+Collecting gradio-client==1.12.1 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached gradio_client-1.12.1-py3-none-any.whl.metadata (7.1 kB)
+INFO: pip is looking at multiple versions of gradio to determine which version is compatible with other requirements. This could take a while.
+Collecting gradio<=5.45.0,>=4.38.0 (from llamafactory==0.9.4.dev0)
+  Using cached gradio-5.44.0-py3-none-any.whl.metadata (16 kB)
+  Using cached gradio-5.43.1-py3-none-any.whl.metadata (16 kB)
+  Using cached gradio-5.43.0-py3-none-any.whl.metadata (16 kB)
+Collecting gradio-client==1.12.0 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached gradio_client-1.12.0-py3-none-any.whl.metadata (7.1 kB)
+Collecting gradio<=5.45.0,>=4.38.0 (from llamafactory==0.9.4.dev0)
+  Using cached gradio-5.42.0-py3-none-any.whl.metadata (16 kB)
+Collecting gradio-client==1.11.1 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached gradio_client-1.11.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting gradio<=5.45.0,>=4.38.0 (from llamafactory==0.9.4.dev0)
+  Using cached gradio-5.41.1-py3-none-any.whl.metadata (16 kB)
+Collecting gradio-client==1.11.0 (from gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+  Using cached gradio_client-1.11.0-py3-none-any.whl.metadata (7.1 kB)
+Collecting gradio<=5.45.0,>=4.38.0 (from llamafactory==0.9.4.dev0)
+  Using cached gradio-5.41.0-py3-none-any.whl.metadata (16 kB)
+  Using cached gradio-5.40.0-py3-none-any.whl.metadata (16 kB)
+INFO: pip is still looking at multiple versions of gradio to determine which version is compatible with other requirements. This could take a while.
+  Using cached gradio-5.39.0-py3-none-any.whl.metadata (16 kB)
+  Using cached gradio-5.38.2-py3-none-any.whl.metadata (16 kB)
+Collecting fla-core==0.5.2 (from flash_linear_attention)
+  Using cached fla_core-0.5.2-py3-none-any.whl.metadata (45 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/torch-2.9.1+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Requirement already satisfied: setuptools in /tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages (from torch>=2.0.0->llamafactory==0.9.4.dev0) (84.0.0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/networkx-3.6.1+computecanada-py3-none-any.whl (from torch>=2.0.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/aiohappyeyeballs-2.7.1+computecanada-py3-none-any.whl (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/aiosignal-1.4.0+computecanada-py3-none-any.whl (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/attrs-26.1.0+computecanada-py3-none-any.whl (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/frozenlist-1.8.0+computecanada-cp312-cp312-linux_x86_64.whl (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/multidict-6.7.1+computecanada-cp312-cp312-linux_x86_64.whl (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+Collecting yarl<2.0,>=1.17.0 (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets<=4.0.0,>=2.16.0->llamafactory==0.9.4.dev0)
+  Using cached yarl-1.24.5-py3-none-any.whl.metadata (103 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/gitdb-4.0.12+computecanada-py3-none-any.whl (from gitpython!=3.1.29,>=1.0.0->wandb)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/smmap-5.0.3+computecanada-py3-none-any.whl (from gitdb<5,>=4.0.1->gitpython!=3.1.29,>=1.0.0->wandb)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/triton-3.6.0+computecanada-cp312-cp312-linux_x86_64.whl (from liger-kernel>=0.5.5->llamafactory==0.9.4.dev0)
+Collecting modelscope-hub>=0.2.0 (from modelscope>=1.14.0->llamafactory==0.9.4.dev0)
+  Using cached modelscope_hub-0.2.0-py3-none-any.whl.metadata (32 kB)
+Requirement already satisfied: six>=1.5 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages (from python-dateutil>=2.8.2->pandas) (1.17.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/markdown_it_py-4.2.0+computecanada-py3-none-any.whl (from rich>=13.8.0->typer<1.0,>=0.12->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2026a/lib/python3.12/site-packages (from rich>=13.8.0->typer<1.0,>=0.12->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0) (2.19.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/mdurl-0.1.2+computecanada-py3-none-any.whl (from markdown-it-py>=2.2.0->rich>=13.8.0->typer<1.0,>=0.12->gradio<=5.45.0,>=4.38.0->llamafactory==0.9.4.dev0)
+INFO: pip is looking at multiple versions of torchvision to determine which version is compatible with other requirements. This could take a while.
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/torchvision-0.27.1+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/torchvision-0.27.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/torchvision-0.26.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/torchvision-0.25.0+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/torchvision-0.24.1+computecanada-cp312-cp312-linux_x86_64.whl (from llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/Pillow_SIMD-9.5.0.post2+computecanada-cp312-cp312-linux_x86_64.whl (from torchvision>=0.15.0->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/termcolor-3.3.0+computecanada-py3-none-any.whl (from fire->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jsonschema_specifications-2025.9.1+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/referencing-0.37.0+computecanada-py3-none-any.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/rpds_py-0.30.0+computecanada-cp312-cp312-linux_x86_64.whl (from jsonschema->ray)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/audioread-3.1.0+computecanada-py3-none-any.whl (from librosa->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/numba-0.65.1+computecanada-cp312-cp312-linux_x86_64.whl (from librosa->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/scikit_learn-1.8.0+computecanada-cp312-cp312-linux_x86_64.whl (from librosa->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/joblib-1.5.3+computecanada-py3-none-any.whl (from librosa->llamafactory==0.9.4.dev0)
+Collecting soundfile>=0.12.1 (from librosa->llamafactory==0.9.4.dev0)
+  Using cached soundfile-0.14.0-py2.py3-none-any.whl.metadata (18 kB)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pooch-1.9.0+computecanada-py3-none-any.whl (from librosa->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/soxr-0.5.0.post1+computecanada-cp312-abi3-linux_x86_64.whl (from librosa->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/lazy_loader-0.5+computecanada-py3-none-any.whl (from librosa->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/llvmlite-0.47.0+computecanada-cp312-cp312-linux_x86_64.whl (from numba>=0.51.0->librosa->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/threadpoolctl-3.6.0+computecanada-py3-none-any.whl (from scikit-learn>=1.1.0->librosa->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic/cffi-2.1.0+computecanada-cp312-cp312-linux_x86_64.whl (from soundfile>=0.12.1->librosa->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pycparser-3.0+computecanada-py3-none-any.whl (from cffi>=1.0->soundfile>=0.12.1->librosa->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/defusedxml-0.7.1+computecanada-py2.py3-none-any.whl (from nltk->llamafactory==0.9.4.dev0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/antlr4_python3_runtime-4.9.3+computecanada-py3-none-any.whl (from omegaconf->llamafactory==0.9.4.dev0)
+Downloading huggingface_hub-1.27.0-py3-none-any.whl (784 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 784.9/784.9 kB 25.2 MB/s  0:00:00
+Using cached gradio-5.38.2-py3-none-any.whl (59.5 MB)
+Using cached gradio_client-1.11.0-py3-none-any.whl (324 kB)
+Using cached fastapi-0.141.1-py3-none-any.whl (131 kB)
+Using cached safehttpx-0.1.7-py3-none-any.whl (9.0 kB)
+Using cached typer-0.27.1-py3-none-any.whl (122 kB)
+Using cached flash_linear_attention-0.5.2-py3-none-any.whl (399 kB)
+Using cached fla_core-0.5.2-py3-none-any.whl (819 kB)
+Using cached yarl-1.24.5-py3-none-any.whl (58 kB)
+Using cached annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+Using cached certifi-2026.7.22-py3-none-any.whl (136 kB)
+Using cached filelock-3.32.2-py3-none-any.whl (98 kB)
+Using cached gitpython-3.1.58-py3-none-any.whl (220 kB)
+Using cached liger_kernel-0.8.1-py3-none-any.whl (506 kB)
+Using cached modelscope-1.39.1-py3-none-any.whl (6.0 MB)
+Using cached modelscope_hub-0.2.0-py3-none-any.whl (156 kB)
+Using cached peft-0.20.0-py3-none-any.whl (775 kB)
+Using cached sentry_sdk-2.66.1-py3-none-any.whl (505 kB)
+Using cached shtab-1.10.0-py3-none-any.whl (16 kB)
+Using cached uvicorn-0.52.1-py3-none-any.whl (79 kB)
+Using cached ffmpy-1.0.0-py3-none-any.whl (5.6 kB)
+Using cached soundfile-0.14.0-py2.py3-none-any.whl (26 kB)
+Using cached nltk-3.10.2-py3-none-any.whl (1.7 MB)
+Using cached omegaconf-2.3.1-py3-none-any.whl (79 kB)
+Using cached rouge_chinese-1.0.3-py3-none-any.whl (21 kB)
+Using cached sse_starlette-3.4.8-py3-none-any.whl (16 kB)
+Building wheels for collected packages: llamafactory
+  Building editable for llamafactory (pyproject.toml): started
+  Building editable for llamafactory (pyproject.toml): finished with status 'done'
+  Created wheel for llamafactory: filename=llamafactory-0.9.4.dev0-0.editable-py3-none-any.whl size=28680 sha256=9e249df79708dbf0664fee76250b59bb1249a10d469eb9a78aa4a905f07d77d5
+  Stored in directory: /tmp/pip-ephem-wheel-cache-4j1uvudv/wheels/42/82/cc/28bf761b56302831208272e1b8976e2f780308121b11670205
+Successfully built llamafactory
+Installing collected packages: sentencepiece, pydub, py-cpuinfo, jieba, hjson, brotli, antlr4-python3-runtime, xxhash, websockets, urllib3, typing-extensions, triton, tqdm, tomlkit, threadpoolctl, termcolor, smmap, shtab, shellingham, semantic-version, safetensors, ruff, rpds-py, rouge-chinese, regex, pyyaml, python-multipart, pycparser, protobuf, propcache, pillow-simd, pillow, orjson, numpy, ninja, networkx, multidict, msgpack, mdurl, markupsafe, llvmlite, lazy_loader, joblib, idna, hf-xet, hf-transfer, h11, groovy, fsspec, frozenlist, filelock, ffmpy, einops, docstring-parser, dill, defusedxml, click, charset_normalizer, certifi, av, audioread, attrs, annotated-types, annotated-doc, aiohappyeyeballs, aiofiles, yarl, uvicorn, typing-inspection, soxr, sentry-sdk, requests, referencing, pydantic-core, pandas, omegaconf, numba, nltk, multiprocess, markdown-it-py, jinja2, httpcore, h5py, gitdb, fla-core, fire, cffi, anyio, aiosignal, torch, tiktoken, starlette, soundfile, scikit-learn, rich, pydantic, pooch, modelscope-hub, jsonschema-specifications, httpx, gitpython, aiohttp, wandb, tyro, typer, torchvision, sse-starlette, safehttpx, modelscope, liger-kernel, librosa, jsonschema, huggingface_hub, fastapi, deepspeed, causal_conv1d, tokenizers, ray, gradio-client, datasets, accelerate, transformers, gradio, trl, peft, flash_linear_attention, llamafactory
+  Attempting uninstall: pillow
+    Found existing installation: pillow 12.1.0+computecanada
+    Not uninstalling pillow at /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages, outside environment /tmp/venv_llamafactory_cu126_qwen35
+    Can't uninstall 'pillow'. No files were found to uninstall.
+  Attempting uninstall: numpy
+    Found existing installation: numpy 2.4.2+computecanada
+    Not uninstalling numpy at /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages, outside environment /tmp/venv_llamafactory_cu126_qwen35
+    Can't uninstall 'numpy'. No files were found to uninstall.
+  Attempting uninstall: pandas
+    Found existing installation: pandas 3.0.0+computecanada
+    Not uninstalling pandas at /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2026a/lib/python3.12/site-packages, outside environment /tmp/venv_llamafactory_cu126_qwen35
+    Can't uninstall 'pandas'. No files were found to uninstall.
+
+Successfully installed accelerate-1.11.0+computecanada aiofiles-24.1.0+computecanada aiohappyeyeballs-2.7.1+computecanada aiohttp-3.13.3+computecanada aiosignal-1.4.0+computecanada annotated-doc-0.0.5 annotated-types-0.8.0+computecanada antlr4-python3-runtime-4.9.3+computecanada anyio-4.14.2+computecanada attrs-26.1.0+computecanada audioread-3.1.0+computecanada av-16.1.0+computecanada brotli-1.2.0+computecanada causal_conv1d-1.5.4+computecanada certifi-2026.7.22 cffi-2.1.0+computecanada charset_normalizer-3.4.9+computecanada click-8.4.2+computecanada datasets-4.0.0+computecanada deepspeed-0.16.4+computecanada defusedxml-0.7.1+computecanada dill-0.3.8+computecanada docstring-parser-0.18.0+computecanada einops-0.8.2+computecanada fastapi-0.141.1 ffmpy-1.0.0 filelock-3.32.2 fire-0.7.1+computecanada fla-core-0.5.2 flash_linear_attention-0.5.2 frozenlist-1.8.0+computecanada fsspec-2025.3.0+computecanada gitdb-4.0.12+computecanada gitpython-3.1.58 gradio-5.38.2 gradio-client-1.11.0 groovy-0.1.2+computecanada h11-0.16.0+computecanada h5py-3.16.0+computecanada hf-transfer-0.1.9+computecanada hf-xet-1.5.2+computecanada hjson-3.1.0+computecanada httpcore-1.0.9+computecanada httpx-0.28.1+computecanada huggingface_hub-1.27.0 idna-3.18+computecanada jieba-0.42.1+computecanada jinja2-3.1.6+computecanada joblib-1.5.3+computecanada jsonschema-4.26.0+computecanada jsonschema-specifications-2025.9.1+computecanada lazy_loader-0.5+computecanada librosa-0.11.0+computecanada liger-kernel-0.8.1 llamafactory-0.9.4.dev0 llvmlite-0.47.0+computecanada markdown-it-py-4.2.0+computecanada markupsafe-3.0.3+computecanada mdurl-0.1.2+computecanada modelscope-1.39.1 modelscope-hub-0.2.0 msgpack-1.1.2+computecanada multidict-6.7.1+computecanada multiprocess-0.70.16+computecanada networkx-3.6.1+computecanada ninja-1.13.0+computecanada nltk-3.10.2 numba-0.65.1+computecanada numpy-1.26.4+computecanada omegaconf-2.3.1 orjson-3.11.7+computecanada pandas-2.3.3+computecanada peft-0.20.0 pillow-11.1.0+computecanada pillow-simd-9.5.0.post2+computecanada pooch-1.9.0+computecanada propcache-0.5.2+computecanada protobuf-7.35.1+computecanada py-cpuinfo-9.0.0+computecanada pycparser-3.0+computecanada pydantic-2.10.6+computecanada pydantic-core-2.27.2+computecanada pydub-0.25.1+computecanada python-multipart-0.0.32+computecanada pyyaml-6.0.3+computecanada ray-2.55.1+computecanada referencing-0.37.0+computecanada regex-2026.1.15+computecanada requests-2.34.2+computecanada rich-15.0.0+computecanada rouge-chinese-1.0.3 rpds-py-0.30.0+computecanada ruff-0.11.0+computecanada safehttpx-0.1.7 safetensors-0.5.3+computecanada scikit-learn-1.8.0+computecanada semantic-version-2.10.0+computecanada sentencepiece-0.2.0+computecanada sentry-sdk-2.66.1 shellingham-1.5.4+computecanada shtab-1.10.0 smmap-5.0.3+computecanada soundfile-0.14.0 soxr-0.5.0.post1+computecanada sse-starlette-3.4.8 starlette-0.52.1+computecanada termcolor-3.3.0+computecanada threadpoolctl-3.6.0+computecanada tiktoken-0.12.0+computecanada tokenizers-0.22.2+computecanada tomlkit-0.13.3+computecanada torch-2.9.1+computecanada torchvision-0.24.1+computecanada tqdm-4.70.0+computecanada transformers-5.12.1+computecanada triton-3.6.0+computecanada trl-0.9.6+computecanada typer-0.27.1 typing-extensions-4.16.0+computecanada typing-inspection-0.4.2+computecanada tyro-0.8.14+computecanada urllib3-2.7.0+computecanada uvicorn-0.52.1 wandb-0.27.2+computecanada websockets-15.0.1+computecanada xxhash-3.5.0+computecanada yarl-1.24.5
+Patched /tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/deepspeed/ops/op_builder/builder.py
+=== VENV DIAGNOSTICS (KILLARNEY) ===
+HOSTNAME: kn103
+CUDA_VISIBLE_DEVICES: 0,1,2,3
+SLURM_NNODES: 1
+SLURM_NODEID: 0
+HF_DATASETS_CACHE: /tmp/hf_datasets
+Sun Aug  9 02:57:08 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.03             Driver Version: 580.159.03     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    Off |   00000000:17:00.0 Off |                    0 |
+| N/A   32C    P8             35W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA L40S                    Off |   00000000:65:00.0 Off |                    0 |
+| N/A   32C    P8             34W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA L40S                    Off |   00000000:CA:00.0 Off |                    0 |
+| N/A   33C    P0             58W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA L40S                    Off |   00000000:E3:00.0 Off |                    0 |
+| N/A   33C    P0             55W /  350W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+CUDA available: True
+Device count: 4
+[W809 02:57:10.887775299 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+=== END VENV DIAGNOSTICS ===
+/project/aip-wangcs/indrisch/LLaMA-Factory /project/aip-wangcs/indrisch/LLaMA-Factory/models/qwen2_5vl_lora_sft_CoT
+[INFO|2026-08-09 02:57:20] llamafactory.launcher:143 >> Initializing 4 distributed tasks at: kn103:29500
+W0809 02:57:21.696000 2028085 torch/distributed/run.py:803] 
+W0809 02:57:21.696000 2028085 torch/distributed/run.py:803] *****************************************
+W0809 02:57:21.696000 2028085 torch/distributed/run.py:803] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0809 02:57:21.696000 2028085 torch/distributed/run.py:803] *****************************************
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 121
+[DEBUG template.py] videor1 template registered: True
+[DEBUG template.py] videor1 template details: Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='You are a helpful assistant.', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, mm_plugin=Videor1Plugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>'))
+[WARNING|2026-08-09 02:57:29] llamafactory.extras.misc:154 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[2026-08-09 02:57:30,460] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-09 02:57:30,460] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-09 02:57:30,460] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-09 02:57:30,460] [INFO] [real_accelerator.py:222:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+df: /tmp/.triton_cachedf: /tmp/.triton_cachedf: df: /tmp/.triton_cache/tmp/.triton_cache: No such file or directory
+: No such file or directory
+: No such file or directory
+: No such file or directory
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-08-09 02:57:33,127] [INFO] [comm.py:658:init_distributed] cdb=None
+[W809 02:57:33.106364593 ProcessGroupNCCL.cpp:924] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-08-09 02:57:33,154] [INFO] [comm.py:658:init_distributed] cdb=None
+[W809 02:57:33.133082302 ProcessGroupNCCL.cpp:924] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-08-09 02:57:33,171] [INFO] [comm.py:658:init_distributed] cdb=None
+[W809 02:57:33.150533639 ProcessGroupNCCL.cpp:924] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-08-09 02:57:33,179] [INFO] [comm.py:658:init_distributed] cdb=None
+[2026-08-09 02:57:33,179] [INFO] [comm.py:689:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[W809 02:57:33.157979766 ProcessGroupNCCL.cpp:924] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[INFO|2026-08-09 02:57:33] llamafactory.hparams.parser:672 >> Process rank: 3, world size: 4, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-09 02:57:33] llamafactory.hparams.parser:672 >> Process rank: 1, world size: 4, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-09 02:57:33] llamafactory.hparams.parser:143 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2026-08-09 02:57:33] llamafactory.hparams.parser:672 >> Process rank: 0, world size: 4, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-09 02:57:33] llamafactory.hparams.parser:672 >> Process rank: 2, world size: 4, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-09 02:57:33] llamafactory.train.tuner:143 >> SDPA backend flags: {'flash': True, 'mem_efficient': True, 'math': True, 'cudnn': True}
+[INFO|hub.py:379] 2026-08-09 02:57:33,489 >> Offline mode: forcing local_files_only=True
+[INFO|configuration_utils.py:785] 2026-08-09 02:57:33,496 >> loading configuration file config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/config.json
+[INFO|configuration_utils.py:861] 2026-08-09 02:57:33,518 >> Model config Qwen2_5_VLConfig {
+  "architectures": [
+    "Qwen2_5_VLForConditionalGeneration"
+  ],
+  "dtype": "bfloat16",
+  "image_token_id": 151655,
+  "model_type": "qwen2_5_vl",
+  "text_config": {
+    "attention_dropout": 0.0,
+    "bos_token_id": 151643,
+    "dtype": "bfloat16",
+    "eos_token_id": 151645,
+    "hidden_act": "silu",
+    "hidden_size": 3584,
+    "initializer_range": 0.02,
+    "intermediate_size": 18944,
+    "layer_types": [
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention"
+    ],
+    "max_position_embeddings": 128000,
+    "max_window_layers": 28,
+    "model_type": "qwen2_5_vl_text",
+    "num_attention_heads": 28,
+    "num_hidden_layers": 28,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_section": [
+        16,
+        24,
+        24
+      ],
+      "rope_theta": 1000000.0,
+      "rope_type": "default",
+      "type": "mrope"
+    },
+    "sliding_window": null,
+    "use_cache": true,
+    "use_sliding_window": false,
+    "vocab_size": 152064
+  },
+  "tie_word_embeddings": false,
+  "transformers_version": "5.12.1",
+  "video_token_id": 151656,
+  "vision_config": {
+    "depth": 32,
+    "fullatt_block_indexes": [
+      7,
+      15,
+      23,
+      31
+    ],
+    "hidden_act": "silu",
+    "hidden_size": 1280,
+    "in_channels": 3,
+    "in_chans": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 3420,
+    "model_type": "qwen2_5_vl_vision",
+    "num_heads": 16,
+    "out_hidden_size": 3584,
+    "patch_size": 14,
+    "spatial_merge_size": 2,
+    "spatial_patch_size": 14,
+    "temporal_patch_size": 2,
+    "tokens_per_second": 2,
+    "window_size": 112
+  },
+  "vision_end_token_id": 151653,
+  "vision_start_token_id": 151652,
+  "vision_token_id": 151654
+}
+
+[INFO|hub.py:379] 2026-08-09 02:57:33,518 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1596] 2026-08-09 02:57:33,526 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:379] 2026-08-09 02:57:33,948 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:379] 2026-08-09 02:57:33,949 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:268] 2026-08-09 02:57:33,950 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-08-09 02:57:33,953 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|processing_utils.py:1237] 2026-08-09 02:57:33,954 >> Offline mode: forcing local_files_only=True
+[INFO|processing_utils.py:1411] 2026-08-09 02:57:33,961 >> loading configuration file processor_config.json from cache at None
+[INFO|image_processing_base.py:268] 2026-08-09 02:57:33,962 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-08-09 02:57:33,965 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[WARNING|logging.py:340] 2026-08-09 02:57:33,965 >> The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|image_processing_base.py:268] 2026-08-09 02:57:33,977 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-08-09 02:57:33,979 >> loading configuration file preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:385] 2026-08-09 02:57:33,980 >> Image processor Qwen2VLImageProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "merge_size": 2,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|hub.py:379] 2026-08-09 02:57:33,980 >> Offline mode: forcing local_files_only=True
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|configuration_utils.py:785] 2026-08-09 02:57:33,981 >> loading configuration file config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/config.json
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|configuration_utils.py:861] 2026-08-09 02:57:33,995 >> Model config Qwen2_5_VLConfig {
+  "architectures": [
+    "Qwen2_5_VLForConditionalGeneration"
+  ],
+  "dtype": "bfloat16",
+  "image_token_id": 151655,
+  "model_type": "qwen2_5_vl",
+  "text_config": {
+    "attention_dropout": 0.0,
+    "bos_token_id": 151643,
+    "dtype": "bfloat16",
+    "eos_token_id": 151645,
+    "hidden_act": "silu",
+    "hidden_size": 3584,
+    "initializer_range": 0.02,
+    "intermediate_size": 18944,
+    "layer_types": [
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention"
+    ],
+    "max_position_embeddings": 128000,
+    "max_window_layers": 28,
+    "model_type": "qwen2_5_vl_text",
+    "num_attention_heads": 28,
+    "num_hidden_layers": 28,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_section": [
+        16,
+        24,
+        24
+      ],
+      "rope_theta": 1000000.0,
+      "rope_type": "default",
+      "type": "mrope"
+    },
+    "sliding_window": null,
+    "use_cache": true,
+    "use_sliding_window": false,
+    "vocab_size": 152064
+  },
+  "tie_word_embeddings": false,
+  "transformers_version": "5.12.1",
+  "video_token_id": 151656,
+  "vision_config": {
+    "depth": 32,
+    "fullatt_block_indexes": [
+      7,
+      15,
+      23,
+      31
+    ],
+    "hidden_act": "silu",
+    "hidden_size": 1280,
+    "in_channels": 3,
+    "in_chans": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 3420,
+    "model_type": "qwen2_5_vl_vision",
+    "num_heads": 16,
+    "out_hidden_size": 3584,
+    "patch_size": 14,
+    "spatial_merge_size": 2,
+    "spatial_patch_size": 14,
+    "temporal_patch_size": 2,
+    "tokens_per_second": 2,
+    "window_size": 112
+  },
+  "vision_end_token_id": 151653,
+  "vision_start_token_id": 151652,
+  "vision_token_id": 151654
+}
+
+[INFO|hub.py:379] 2026-08-09 02:57:33,995 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1596] 2026-08-09 02:57:33,996 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:600] 2026-08-09 02:57:34,344 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:686] 2026-08-09 02:57:34,348 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:600] 2026-08-09 02:57:34,349 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:686] 2026-08-09 02:57:34,352 >> loading configuration file video_preprocessor_config.json from cache at /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:727] 2026-08-09 02:57:34,353 >> Video processor Qwen2VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+[INFO|processing_utils.py:1486] 2026-08-09 02:57:34,354 >> Processor Qwen2_5_VLProcessor:
+- image_processor: Qwen2VLImageProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "merge_size": 2,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2Tokenizer(name_or_path='Qwen/Qwen2.5-VL-7B-Instruct', vocab_size=151643, model_max_length=131072, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>'}, added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151647: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151648: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151649: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151650: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151651: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151652: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151653: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151654: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151655: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151656: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151657: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151658: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151659: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151660: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151661: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151662: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151663: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151664: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+})
+- video_processor: Qwen2VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+
+{
+  "image_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "image_mean": [
+      0.48145466,
+      0.4578275,
+      0.40821073
+    ],
+    "image_processor_type": "Qwen2VLImageProcessor",
+    "image_std": [
+      0.26862954,
+      0.26130258,
+      0.27577711
+    ],
+    "merge_size": 2,
+    "patch_size": 14,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "size": {
+      "longest_edge": 12845056,
+      "shortest_edge": 3136
+    },
+    "temporal_patch_size": 2
+  },
+  "processor_class": "Qwen2_5_VLProcessor",
+  "video_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "do_sample_frames": false,
+    "image_mean": [
+      0.48145466,
+      0.4578275,
+      0.40821073
+    ],
+    "image_std": [
+      0.26862954,
+      0.26130258,
+      0.27577711
+    ],
+    "max_frames": 768,
+    "merge_size": 2,
+    "min_frames": 4,
+    "patch_size": 14,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "return_metadata": false,
+    "size": {
+      "longest_edge": 12845056,
+      "shortest_edge": 3136
+    },
+    "temporal_patch_size": 2,
+    "video_processor_type": "Qwen2VLVideoProcessor"
+  }
+}
+
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+[INFO|2026-08-09 02:57:34] llamafactory.data.loader:143 >> Loading dataset /scratch/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.parquet...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['alpaca', 'aquila', 'atom', 'baichuan', 'baichuan2', 'bailing', 'bailing_v2', 'belle', 'bluelm', 'breeze', 'chatglm2', 'chatglm3', 'chatml', 'chatml_de', 'codegeex2', 'codegeex4', 'cohere', 'cpm', 'cpm3', 'cpm4']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 121
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+[INFO|2026-08-09 02:57:34] llamafactory.data.loader:143 >> Loading dataset /scratch/indrisch/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+[INFO|2026-08-09 02:57:35] llamafactory.data.loader:143 >> Loading dataset 3DThinker-10K/out/3dthinker10k_cot.jsonl...
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+/tmp/venv_llamafactory_cu126_qwen35/lib/python3.12/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+[rank0]:[W809 02:57:35.474284789 ProcessGroupNCCL.cpp:5072] Guessing device ID based on global rank. This can cause a hang if rank to GPU mapping is heterogeneous. You can specify device_id in init_process_group()
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'parquet' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+`trust_remote_code` is not supported anymore.
+Please check that the Hugging Face dataset 'json' isn't based on a loading script and remove `trust_remote_code`.
+If the dataset is based on a loading script, please ask the dataset author to remove it and convert it to a standard format like Parquet.
+srun: Job step aborted: Waiting up to 62 seconds for job step to finish.
+Running tokenizer on dataset (num_proc=32):   0%|          | 0/43835 [00:00<?, ? examples/s][2026-08-09T02:57:52.920] error: *** STEP 4670067.0 ON kn103 CANCELLED AT 2026-08-09T02:57:52 DUE to SIGNAL Terminated ***
+[2026-08-09T02:57:52.921] error: *** JOB 4670067 ON kn103 CANCELLED AT 2026-08-09T02:57:52 DUE to SIGNAL Terminated ***

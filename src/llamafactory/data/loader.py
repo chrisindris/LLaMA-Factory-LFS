@@ -277,8 +277,18 @@ def _get_preprocessed_dataset(
         )
     else:
         def _preprocess_with_indices(examples: dict[str, list[Any]], indices: list[int]) -> dict[str, list[Any]]:
-            examples["_indices"] = indices
-            return dataset_processor.preprocess_dataset(examples)
+            if os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV":
+                # HACK: to avoid "liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'"
+                # Copy first: HuggingFace datasets 4.x map *merges* mutated input keys into
+                # the output ({**inputs, **processed}). Mutating examples in-place with
+                # "_indices" therefore leaks that column into the dataset and later into
+                # model(**inputs), which breaks Liger fused CE (unexpected kwarg _indices).
+                batch = dict(examples)
+                batch["_indices"] = indices
+                return dataset_processor.preprocess_dataset(batch)
+            else:
+                examples["_indices"] = indices
+                return dataset_processor.preprocess_dataset(examples)
 
         dataset = dataset.map(
             _preprocess_with_indices,
