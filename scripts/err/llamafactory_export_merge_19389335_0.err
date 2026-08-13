@@ -1,0 +1,3 @@
+INFO:    User not listed in /etc/subuid, trying root-mapped namespace
+INFO:    Using fakeroot command combined with root-mapped namespace
+FATAL:   while loading overlay images: failed to open overlay image /scratch/indrisch/LLaMA-Factory/apptainer/overlay.img: while locking ext3 partition from /scratch/indrisch/LLaMA-Factory/apptainer/overlay.img: can't open /scratch/indrisch/LLaMA-Factory/apptainer/overlay.img for writing, currently in use by another process

@@ -40,7 +40,7 @@ BASE_MODEL_PATH_TEMPLATES=(
 )
 
 ADAPTER_PATHS=(
-	cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs
+	cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_3epochs
 	# "cvis-tmu/videor1-lora-sft-SQA3Devery24_800steps"   # 2 epochs of VideoR1 on SQA3D
 	# "cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_R12C12F12X62_865steps" # 2 epochs of Qwen2.5VL on X62
 	# "cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep2"   # 2 epochs of Qwen2.5VL on SQA3D
@@ -59,6 +59,9 @@ ADAPTER_PATHS=(
 # Get the index from SLURM_ARRAY_TASK_ID, default to 0
 IDX=${SLURM_ARRAY_TASK_ID:-0}
 ADAPTER_PATH=${ADAPTER_PATHS[$IDX]}
+# Keep the original Hub id (e.g. cvis-tmu/foo) for upload REPO_ID even if we
+# later rewrite ADAPTER_PATH to a local snapshot for offline export.
+ADAPTER_HUB_ID="${ADAPTER_PATH}"
 ADAPTER_NAME=$(basename "$ADAPTER_PATH")
 # if ADAPTER_NAME contains 'videor1', use BASE_MODEL_PATHS[0], else use BASE_MODEL_PATHS[1]
 if [[ "$ADAPTER_NAME" == *"videor1"* ]]; then
@@ -86,36 +89,54 @@ SYSCONFIG_DIR_PATH="$PROJECT_DIR/scripts"
 export PYTHONPATH="${PYTHONPATH:-}:$SYSCONFIG_DIR_PATH"
 
 # --- setting environment ---
+# Batch jobs often have empty PS1; short node names like "m1" also miss naive substring checks.
+# Prefer FQDN / domain (e.g. m1.nibi.sharcnet) and SLURM_CLUSTER_NAME when present.
+HOST_SHORT="${HOSTNAME:-$(hostname 2>/dev/null || true)}"
+HOST_FQDN="$(hostname -f 2>/dev/null || true)"
+HOST_HINT="${HOST_SHORT} ${HOST_FQDN} ${SLURM_CLUSTER_NAME:-} ${SLURM_SUBMIT_HOST:-} ${PS1:-}"
 
 CLUSTER="${1:-}"
 if [[ -z "${CLUSTER}" ]]; then
-	# Detect cluster based on terminal prompt or hostname
-	if [[ "${PS1:-}" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "${PS1:-}" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]]; then
+	# Detect cluster based on hostname / FQDN / SLURM / prompt
+	if [[ "${HOST_HINT}" == *"rorqual"* ]] || [[ "${HOST_HINT}" == *"rg"* ]]; then
 		CLUSTER="RORQUAL"
-		RUNNING_MODE="APPTAINER" # running mode for RORQUAL
+		RUNNING_MODE="APPTAINER"
 		OFFLINE=1
-	elif [[ "${PS1:-}" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
+	elif [[ "${HOST_HINT}" == *"trillium"* ]] || [[ "${HOST_HINT}" == *"trig"* ]]; then
 		CLUSTER="TRILLIUM"
-		RUNNING_MODE="APPTAINER" # running mode for TRILLIUM
+		RUNNING_MODE="APPTAINER"
 		OFFLINE=1
-	elif [[ "${PS1:-}" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "${PS1:-}" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
+	elif [[ "${HOST_HINT}" == *"killarney"* ]] || [[ "${HOST_HINT}" == *"klogin"* ]] || [[ "${HOST_HINT}" == *"kn"* ]]; then
 		CLUSTER="KILLARNEY"
-		RUNNING_MODE="VENV" # running mode for KILLARNEY
+		RUNNING_MODE="VENV"
 		OFFLINE=1
-	elif [[ "${PS1:-}" == *"nibi"* ]] || [[ "$HOSTNAME" == *"nibi"* ]] || [[ "${PS1:-}" == *"g"* ]] || [[ "$HOSTNAME" == *"g"* ]]; then
+	elif [[ "${HOST_HINT}" == *"nibi"* ]]; then
+		# NIBI GPU nodes (g##) and CPU/login nodes (m##, l##.nibi.sharcnet)
 		CLUSTER="NIBI"
-		RUNNING_MODE="APPTAINER" # running mode for NIBI
+		RUNNING_MODE="APPTAINER"
+		# Prefer local HF cache; compute nodes may lack egress.
+		OFFLINE=1
+	elif [[ "${HOST_SHORT}" == g* ]] || [[ "${HOST_SHORT}" == m* ]]; then
+		# Bare short names on NIBI when FQDN is unavailable inside the job
+		CLUSTER="NIBI"
+		RUNNING_MODE="APPTAINER"
+		OFFLINE=1
 	else
-		echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to RORQUAL."
-		CLUSTER="RORQUAL"
-		RUNNING_MODE="APPTAINER" # running mode for unknown cluster
+		echo "Warning: Could not detect cluster from HOST_HINT='${HOST_HINT}'. Defaulting to NIBI."
+		CLUSTER="NIBI"
+		RUNNING_MODE="APPTAINER"
 		OFFLINE=1
 	fi
 fi
 
 OFFLINE=${OFFLINE:-0} # by default, run in online mode
-TRANSFORMERS_OFFLINE=$OFFLINE
-HUGGINGFACE_HUB_OFFLINE=$OFFLINE
+# Keep both legacy and current hub offline flags in sync (PEFT uses HF_HUB_OFFLINE).
+export TRANSFORMERS_OFFLINE=$OFFLINE
+export HUGGINGFACE_HUB_OFFLINE=$OFFLINE
+# export HF_HUB_OFFLINE=$OFFLINE
+unset HF_HUB_OFFLINE
+
+echo "CLUSTER: $CLUSTER  HOST_SHORT: $HOST_SHORT  HOST_FQDN: $HOST_FQDN  OFFLINE: $OFFLINE"
 
 # --- read per-cluster settings from sysconfig.json ---
 export HF_HOME="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'HF_HOME'))")" && echo "HF_HOME: $HF_HOME"
@@ -128,6 +149,50 @@ export SIF_FILE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$
 export MEDIA_DIR="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'media_dir'))")" && echo "MEDIA_DIR: $MEDIA_DIR"
 export VENV_LLAMAFACTORY="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'VENV_LLAMAFACTORY'))")" && echo "VENV_LLAMAFACTORY: $VENV_LLAMAFACTORY"
 export VENV_DATASET_UPLOAD="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'VENV_DATASET_UPLOAD'))")" && echo "VENV_DATASET_UPLOAD: $VENV_DATASET_UPLOAD"
+
+# Resolve Hub repo ids to a local snapshot when present so PEFT does not require network
+# even if cache layout / offline flags are wrong. Models live under HF_HUB_CACHE/models--org--name.
+resolve_hf_snapshot() {
+	local repo_id="$1"
+	local cache_root="${HF_HUB_CACHE:-${HF_HOME:-}}"
+	# Already a filesystem path
+	if [[ -d "${repo_id}" ]]; then
+		echo "${repo_id}"
+		return 0
+	fi
+	# Hub id: org/name
+	if [[ "${repo_id}" != */* ]]; then
+		echo "${repo_id}"
+		return 0
+	fi
+	local org name dir snap
+	org="${repo_id%%/*}"
+	name="${repo_id#*/}"
+	dir="${cache_root}/models--${org}--${name}"
+	if [[ -f "${dir}/refs/main" ]]; then
+		snap="$(tr -d '[:space:]' <"${dir}/refs/main")"
+		if [[ -n "${snap}" && -f "${dir}/snapshots/${snap}/adapter_config.json" ]]; then
+			echo "${dir}/snapshots/${snap}"
+			return 0
+		fi
+		if [[ -n "${snap}" && -d "${dir}/snapshots/${snap}" ]]; then
+			echo "${dir}/snapshots/${snap}"
+			return 0
+		fi
+	fi
+	echo "${repo_id}"
+}
+
+ADAPTER_PATH_RESOLVED="$(resolve_hf_snapshot "${ADAPTER_PATH}")"
+BASE_MODEL_PATH_RESOLVED="$(resolve_hf_snapshot "${BASE_MODEL_PATH}")"
+if [[ "${ADAPTER_PATH_RESOLVED}" != "${ADAPTER_PATH}" ]]; then
+	echo "Resolved adapter to local snapshot: ${ADAPTER_PATH_RESOLVED}"
+	ADAPTER_PATH="${ADAPTER_PATH_RESOLVED}"
+fi
+if [[ "${BASE_MODEL_PATH_RESOLVED}" != "${BASE_MODEL_PATH}" ]]; then
+	echo "Resolved base model to local snapshot: ${BASE_MODEL_PATH_RESOLVED}"
+	BASE_MODEL_PATH="${BASE_MODEL_PATH_RESOLVED}"
+fi
 
 # ----------
 
@@ -170,6 +235,8 @@ else
 	echo "WARNING: overlay not found at ${OVERLAY}; using --writable-tmpfs"
 fi
 
+unset HF_HUB_OFFLINE
+
 apptainer run --nv "${APPTAINER_EXTRA_ARGS[@]}" \
 	-C \
 	-B /scratch/indrisch/ \
@@ -180,6 +247,7 @@ apptainer run --nv "${APPTAINER_EXTRA_ARGS[@]}" \
 	-W "${SLURM_TMPDIR:-/tmp}" \
 	--env HUGGINGFACE_HUB_TOKEN="${HF_TOKEN}" \
 	--env HF_HOME="${HF_HOME}" \
+	--env HF_HUB_CACHE="${HF_HUB_CACHE}" \
 	--env HF_TOKEN="${HF_TOKEN}" \
 	--env TRANSFORMERS_CACHE="${HF_HOME}" \
 	--env TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE}" \
@@ -188,7 +256,7 @@ apptainer run --nv "${APPTAINER_EXTRA_ARGS[@]}" \
 	--env DISABLE_VERSION_CHECK="${DISABLE_VERSION_CHECK}" \
 	--env PYTHONPATH="${PROJECT_DIR}/src" \
 	--pwd "${WORKDIR}" \
-	"${CONTAINER}" bash -lc "set -euo pipefail; \
+	"${CONTAINER}" bash -lc "set -euo pipefail; unset HF_HUB_OFFLINE; \
         llamafactory-cli export \
         --model_name_or_path \"${BASE_MODEL_PATH}\" \
         --adapter_name_or_path \"${ADAPTER_PATH}\" \
@@ -220,13 +288,26 @@ if [[ "${UPLOAD_TO_HF}" == "1" ]]; then
 		exit 1
 	fi
 
+	# Export/merge runs offline (local cache), but Hub upload needs network.
+	# Job 19409391 failed here with OfflineModeIsEnabled on create_repo.
+	unset HF_HUB_OFFLINE HUGGINGFACE_HUB_OFFLINE TRANSFORMERS_OFFLINE HF_HUB_DISABLE_TELEMETRY || true
+	export HF_HUB_OFFLINE=0
+	export HUGGINGFACE_HUB_OFFLINE=0
+	export TRANSFORMERS_OFFLINE=0
+
 	# shellcheck disable=SC1091
 	source "${VENV_DATASET_UPLOAD}/bin/activate"
 	# Do not run `python -m pip install` against the system/user site; venv already has hub.
 	python -c "import huggingface_hub; print('huggingface_hub', huggingface_hub.__version__)"
 
-	REPO_ID="${ADAPTER_PATH}_merged"
-	echo "Uploading ${EXPORT_DIR} -> ${REPO_ID}"
+	# Always derive Hub repo from the original adapter id, not a local snapshot path.
+	# e.g. cvis-tmu/foo -> cvis-tmu/foo_merged
+	if [[ "${ADAPTER_HUB_ID}" == */* && "${ADAPTER_HUB_ID}" != /* ]]; then
+		REPO_ID="${ADAPTER_HUB_ID}_merged"
+	else
+		REPO_ID="cvis-tmu/${ADAPTER_NAME}_merged"
+	fi
+	echo "Uploading ${EXPORT_DIR} -> ${REPO_ID} (online; HF_HUB_OFFLINE=${HF_HUB_OFFLINE})"
 	hf upload "${REPO_ID}" "${EXPORT_DIR}" \
 		--repo-type model \
 		--token "${HF_TOKEN}" \
