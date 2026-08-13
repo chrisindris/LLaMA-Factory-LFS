@@ -32,6 +32,12 @@ from ...extras.misc import get_current_memory
 from ...extras.packages import is_transformers_version_greater_than
 from ..callbacks import SaveProcessorCallback
 from ..fp8_utils import configure_fp8_environment, verify_fp8_status
+from ..prediction_dump import (
+    PredictionDumpStore,
+    decode_teacher_forced_batch,
+    normalize_question_ids,
+    prompt_lengths_from_labels,
+)
 from ..trainer_utils import create_custom_optimizer, create_custom_scheduler
 
 
@@ -79,6 +85,27 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if gen_kwargs is not None:
             # https://github.com/huggingface/transformers/blob/v4.45.0/src/transformers/trainer_seq2seq.py#L287
             self._gen_kwargs = gen_kwargs
+
+        # Prediction JSON dumps (QUESTION_ID keyed); optional debug feature.
+        self._pred_dump_warned_missing_qid = False
+        self._eval_pred_buffer: list[tuple[str, str]] = []
+        train_path = None
+        eval_path = None
+        if finetuning_args.save_train_predictions:
+            train_path = finetuning_args.train_predictions_file or os.path.join(
+                self.args.output_dir, "train_predictions.json"
+            )
+        if finetuning_args.save_eval_predictions:
+            eval_path = finetuning_args.eval_predictions_file or os.path.join(
+                self.args.output_dir, "eval_predictions.json"
+            )
+        self.prediction_dump: Optional[PredictionDumpStore] = None
+        if train_path or eval_path:
+            self.prediction_dump = PredictionDumpStore(
+                train_path=train_path,
+                eval_path=eval_path,
+                max_train_samples=finetuning_args.train_prediction_max_samples,
+            )
 
         if processor is not None:
             self.add_callback(SaveProcessorCallback(processor))
@@ -403,10 +430,253 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
 
         return super().training_step(model, inputs, num_items_in_batch)
 
+    def _get_tokenizer(self):
+        return getattr(self, "processing_class", None) or getattr(self, "tokenizer", None)
+
+    def _should_record_train_prediction_now(self) -> bool:
+        if not self.finetuning_args.save_train_predictions or self.prediction_dump is None:
+            return False
+        if self.prediction_dump.train_full():
+            return False
+        step = int(getattr(self.state, "global_step", 0))
+        interval = max(int(self.finetuning_args.train_prediction_interval), 1)
+        return step > 0 and step % interval == 0
+
+    def _warn_missing_question_ids_once(self) -> None:
+        if not self._pred_dump_warned_missing_qid:
+            logger.warning_rank0(
+                "save_*_predictions is enabled but batch has no question_ids. "
+                "IDs are normally auto-assigned at convert time as {dataset}_{row_index}; "
+                "if you still see this, ensure overwrite_cache=true so convert re-runs, "
+                "or stamp annotations via scripts/assign_question_ids.py. Skipping dump."
+            )
+            self._pred_dump_warned_missing_qid = True
+
+    @staticmethod
+    def _flatten_gathered_pairs(gathered: Any) -> list[tuple[str, str]]:
+        r"""Normalize gather_object / all_gather_object results to a flat pair list."""
+        if gathered is None:
+            return []
+        merged: list[tuple[str, str]] = []
+        if isinstance(gathered, list) and gathered and isinstance(gathered[0], list):
+            for chunk in gathered:
+                if isinstance(chunk, list):
+                    merged.extend(chunk)
+        elif isinstance(gathered, list) and gathered and isinstance(gathered[0], tuple):
+            merged = list(gathered)
+        else:
+            for chunk in gathered or []:
+                if isinstance(chunk, list):
+                    merged.extend(chunk)
+                elif isinstance(chunk, tuple) and len(chunk) == 2:
+                    merged.append(chunk)
+        return merged
+
+    def _gather_prediction_pairs(self, local_pairs: list[tuple[str, str]]) -> list[tuple[str, str]]:
+        r"""Gather (question_id, text) pairs from all ranks.
+
+        Note: ``Accelerator.gather_object`` is **not** available on accelerate 1.x
+        (e.g. 1.11.0). Use ``accelerate.utils.gather_object`` or
+        ``torch.distributed.all_gather_object`` instead. No package upgrade required.
+        """
+        # Single-process fast path (also covers smoke 1-GPU torchrun).
+        world_size = 1
+        if hasattr(self, "accelerator") and self.accelerator is not None:
+            world_size = int(getattr(self.accelerator, "num_processes", 1) or 1)
+        try:
+            import torch.distributed as dist
+
+            if dist.is_available() and dist.is_initialized():
+                world_size = max(world_size, int(dist.get_world_size()))
+        except Exception:
+            pass
+
+        if world_size <= 1:
+            return list(local_pairs)
+
+        # 1) accelerate.utils.gather_object (correct API for accelerate>=0.20)
+        try:
+            from accelerate.utils import gather_object as accel_gather_object
+
+            gathered = accel_gather_object(local_pairs)
+            merged = self._flatten_gathered_pairs(gathered)
+            if merged or not local_pairs:
+                return merged
+        except Exception as err_accel:
+            logger.warning_rank0(
+                f"accelerate.utils.gather_object failed ({err_accel}); trying torch.distributed"
+            )
+
+        # 2) torch.distributed.all_gather_object
+        try:
+            import torch.distributed as dist
+
+            if dist.is_available() and dist.is_initialized():
+                obj_list: list[Any] = [None for _ in range(dist.get_world_size())]
+                dist.all_gather_object(obj_list, local_pairs)
+                return self._flatten_gathered_pairs(obj_list)
+        except Exception as err_dist:
+            logger.warning_rank0(
+                f"torch.distributed.all_gather_object failed ({err_dist}); "
+                "using local-rank pairs only (incomplete under multi-GPU)"
+            )
+
+        # 3) Last resort: local only (incomplete multi-GPU dump)
+        return list(local_pairs)
+
+    def _record_train_pairs(self, pairs: list[tuple[str, str]]) -> None:
+        if self.prediction_dump is None or not pairs:
+            return
+        step = int(getattr(self.state, "global_step", 0))
+        all_pairs = self._gather_prediction_pairs(pairs)
+        if self.is_world_process_zero():
+            added = self.prediction_dump.add_train_records(step, all_pairs)
+            self.prediction_dump.flush_train()
+            logger.info_rank0(
+                f"train prediction dump: step={step} local={len(pairs)} "
+                f"gathered={len(all_pairs)} added={added} total={self.prediction_dump.train_record_count}"
+            )
+
+    def _record_eval_pairs(self, pairs: list[tuple[str, str]]) -> None:
+        if not pairs:
+            return
+        self._eval_pred_buffer.extend(pairs)
+
+    def _flush_eval_predictions(self) -> None:
+        if self.prediction_dump is None or not self.finetuning_args.save_eval_predictions:
+            self._eval_pred_buffer = []
+            return
+        local_n = len(self._eval_pred_buffer)
+        all_pairs = self._gather_prediction_pairs(self._eval_pred_buffer)
+        self._eval_pred_buffer = []
+        if self.is_world_process_zero():
+            added = self.prediction_dump.add_eval_records(all_pairs)
+            self.prediction_dump.flush_eval()
+            logger.info_rank0(
+                f"eval prediction dump: local_buffer={local_n} gathered={len(all_pairs)} "
+                f"added={added} total={len(self.prediction_dump.eval_data)}"
+            )
+
+    def _forward_logits_for_dump(
+        self, model: "torch.nn.Module", inputs: dict[str, Any]
+    ) -> Optional["torch.Tensor"]:
+        r"""Run a no-grad forward that materializes logits for teacher-forced dumps.
+
+        Liger fused CE sets ``skip_logits=True`` whenever ``model.training and labels
+        is not None``, so the training forward often returns ``logits=None``. Dropping
+        labels for this diagnostic pass forces logits to be returned without affecting
+        the training loss path.
+        """
+        model_inputs = {
+            k: v
+            for k, v in inputs.items()
+            if k not in ("labels", "question_ids", "debug_samples", "_indices")
+        }
+        was_training = model.training
+        try:
+            # Keep train/eval mode as-is for correct dropout/BN, but no_grad for dump.
+            with torch.no_grad():
+                outputs = model(**model_inputs)
+            logits = getattr(outputs, "logits", None)
+            if logits is None and isinstance(outputs, (tuple, list)) and len(outputs) > 0:
+                logits = outputs[0] if torch.is_tensor(outputs[0]) else None
+            return logits
+        except Exception as err:
+            logger.warning_rank0(f"prediction dump logits forward failed: {err}")
+            return None
+        finally:
+            if was_training and not model.training:
+                model.train()
+
+    def _texts_from_teacher_forced(
+        self,
+        logits: Optional["torch.Tensor"],
+        labels: "torch.Tensor",
+        model: Optional["torch.nn.Module"] = None,
+        inputs: Optional[dict[str, Any]] = None,
+    ) -> list[str]:
+        tokenizer = self._get_tokenizer()
+        if tokenizer is None:
+            return []
+        if logits is None and model is not None and inputs is not None:
+            logits = self._forward_logits_for_dump(model, inputs)
+        if logits is None:
+            logger.warning_rank0(
+                "teacher_forced prediction dump got no logits "
+                "(Liger may skip them when labels are present; dump forward also failed)."
+            )
+            return []
+        return decode_teacher_forced_batch(logits, labels, tokenizer, skip_special_tokens=True)
+
+    def _texts_from_generate(
+        self,
+        model: "torch.nn.Module",
+        inputs: dict[str, Union["torch.Tensor", Any]],
+        labels: Optional["torch.Tensor"],
+    ) -> list[str]:
+        r"""Free-form generation on prompt-only slices. Expensive; for debug dumps only."""
+        tokenizer = self._get_tokenizer()
+        if tokenizer is None or labels is None or "input_ids" not in inputs:
+            return []
+
+        gen_kwargs = dict(getattr(self, "_gen_kwargs", {}) or {})
+        # Ensure generation does not require labels
+        prompt_lens = prompt_lengths_from_labels(labels)
+        input_ids = inputs["input_ids"]
+        attention_mask = inputs.get("attention_mask")
+        batch_size = input_ids.size(0)
+        pad_id = tokenizer.pad_token_id if tokenizer.pad_token_id is not None else 0
+
+        # Build left-aligned prompt batch (pad to max prompt length in batch)
+        max_prompt = max(prompt_lens) if prompt_lens else 0
+        if max_prompt <= 0:
+            return [""] * batch_size
+
+        prompt_ids = input_ids.new_full((batch_size, max_prompt), pad_id)
+        prompt_mask = input_ids.new_zeros((batch_size, max_prompt))
+        for i, plen in enumerate(prompt_lens):
+            plen = min(int(plen), int(input_ids.size(1)))
+            if plen <= 0:
+                continue
+            prompt_ids[i, :plen] = input_ids[i, :plen]
+            if attention_mask is not None:
+                prompt_mask[i, :plen] = attention_mask[i, :plen]
+            else:
+                prompt_mask[i, :plen] = 1
+
+        gen_inputs: dict[str, Any] = {
+            "input_ids": prompt_ids,
+            "attention_mask": prompt_mask,
+        }
+        # Pass through multimodal tensors when present (full batch; models usually index by token layout)
+        for key, value in inputs.items():
+            if key in ("input_ids", "attention_mask", "labels", "question_ids", "debug_samples"):
+                continue
+            if torch.is_tensor(value) or value is not None:
+                gen_inputs[key] = value
+
+        was_training = model.training
+        model.eval()
+        try:
+            with torch.no_grad():
+                generated = model.generate(**gen_inputs, **gen_kwargs)
+        finally:
+            if was_training:
+                model.train()
+
+        texts: list[str] = []
+        for i in range(batch_size):
+            plen = min(int(prompt_lens[i]), int(generated.size(1)))
+            new_tokens = generated[i, plen:]
+            texts.append(tokenizer.decode(new_tokens, skip_special_tokens=True))
+        return texts
+
     @override
-    def compute_loss(self, model, inputs, *args, **kwargs):
+    def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
         debug_samples = inputs.pop("debug_samples", None)
-        if os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV":
+        question_ids_raw = inputs.pop("question_ids", None)
+
+        if (os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV") or os.getenv("RUNNING_MODE") == "SMOKE":
             # HACK: to avoid "liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'"
             # Defense in depth: never forward dataset index bookkeeping into the model
             # (Liger fused CE rejects unexpected kwargs like _indices).
@@ -415,14 +685,54 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             self._log_mm_debug(inputs, when="pre_forward", debug_samples=debug_samples)
             self._debug_mm_seen += 1
 
+        need_train_dump = model.training and self._should_record_train_prediction_now()
+        train_mode = self.finetuning_args.train_prediction_mode
+        labels_for_dump = inputs.get("labels")
+
         try:
-            return super().compute_loss(model, inputs, *args, **kwargs)
+            result = super().compute_loss(
+                model,
+                inputs,
+                return_outputs=return_outputs,
+                num_items_in_batch=num_items_in_batch,
+            )
         except Exception as error:
             if self.finetuning_args.debug_mm_training:
                 message = str(error)
                 if "CUDA out of memory" in message or "Image features and image tokens do not match" in message:
                     self._log_mm_debug(inputs, when="exception", error=error, debug_samples=debug_samples)
             raise
+
+        if need_train_dump:
+            batch_size = int(inputs["input_ids"].size(0)) if "input_ids" in inputs else 0
+            qids = normalize_question_ids(question_ids_raw, batch_size)
+            if not any(qids):
+                self._warn_missing_question_ids_once()
+            else:
+                texts: list[str] = []
+                if train_mode == "teacher_forced":
+                    # Do NOT rely on the loss forward: Liger fused CE sets skip_logits=True
+                    # whenever training and labels are present, so outputs.logits is None.
+                    if labels_for_dump is not None:
+                        texts = self._texts_from_teacher_forced(
+                            None, labels_for_dump, model=model, inputs=inputs
+                        )
+                elif train_mode == "generate":
+                    try:
+                        texts = self._texts_from_generate(model, inputs, labels_for_dump)
+                    except Exception as gen_err:
+                        logger.warning_rank0(f"train generate prediction dump failed: {gen_err}")
+                        texts = []
+                if texts:
+                    pairs = [(qid, text) for qid, text in zip(qids, texts) if qid]
+                    self._record_train_pairs(pairs)
+                else:
+                    logger.warning_rank0(
+                        f"train prediction dump produced no texts "
+                        f"(mode={train_mode}, qids={len([q for q in qids if q])}, batch={batch_size})"
+                    )
+
+        return result
 
     @override
     def prediction_step(
@@ -437,10 +747,61 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
 
         Subclass and override to inject custom behavior.
         """
+        question_ids_raw = inputs.pop("question_ids", None)
+        inputs.pop("debug_samples", None)
+
+        labels_for_dump = inputs.get("labels")
+        dump_eval = self.finetuning_args.save_eval_predictions and self.prediction_dump is not None
+
         if self.args.predict_with_generate:  # do not pass labels to model when generate
             labels = inputs.pop("labels", None)
         else:
             labels = inputs.get("labels")
+
+        # When dumping eval predictions without stock predict_with_generate, still compute loss.
+        if dump_eval and not self.args.predict_with_generate:
+            # Force non-loss-only so we can obtain logits for teacher_forced if needed.
+            want_logits = self.finetuning_args.eval_prediction_mode == "teacher_forced"
+            loss, logits, label_ids = super().prediction_step(
+                model,
+                inputs,
+                prediction_loss_only=prediction_loss_only and not want_logits,
+                ignore_keys=ignore_keys,
+                **gen_kwargs,
+            )
+            batch_size = int(inputs["input_ids"].size(0)) if "input_ids" in inputs else 0
+            qids = normalize_question_ids(question_ids_raw, batch_size)
+            if not any(qids):
+                self._warn_missing_question_ids_once()
+            else:
+                texts: list[str] = []
+                if self.finetuning_args.eval_prediction_mode == "teacher_forced":
+                    # Prefer a dump forward without relying on HF prediction_step logits
+                    # (may be reduced/absent). Use labels for decoding mask only.
+                    try:
+                        if labels_for_dump is not None:
+                            texts = self._texts_from_teacher_forced(
+                                None, labels_for_dump, model=model, inputs=inputs
+                            )
+                    except Exception as err:
+                        logger.warning_rank0(f"eval teacher_forced dump failed: {err}")
+                else:  # generate
+                    try:
+                        # restore labels for prompt length if popped
+                        if labels_for_dump is None:
+                            labels_for_dump = labels
+                        texts = self._texts_from_generate(model, inputs, labels_for_dump)
+                    except Exception as err:
+                        logger.warning_rank0(f"eval generate dump failed: {err}")
+                if texts:
+                    self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
+                else:
+                    logger.warning_rank0(
+                        f"eval prediction dump produced no texts "
+                        f"(mode={self.finetuning_args.eval_prediction_mode}, "
+                        f"qids={len([q for q in qids if q])}, batch={batch_size})"
+                    )
+            return loss, logits, label_ids if label_ids is not None else labels
 
         loss, generated_tokens, _ = super().prediction_step(
             model, inputs, prediction_loss_only=prediction_loss_only, ignore_keys=ignore_keys, **gen_kwargs
@@ -448,8 +809,23 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if generated_tokens is not None and self.args.predict_with_generate:
             generated_tokens[:, : inputs["input_ids"].size(-1)] = self.processing_class.pad_token_id
             generated_tokens = generated_tokens.contiguous()
+            if dump_eval:
+                tokenizer = self._get_tokenizer()
+                batch_size = int(generated_tokens.size(0))
+                qids = normalize_question_ids(question_ids_raw, batch_size)
+                if tokenizer is not None and any(qids):
+                    texts = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
+                    self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
 
         return loss, generated_tokens, labels
+
+    @override
+    def evaluate(self, *args, **kwargs):
+        self._eval_pred_buffer = []
+        metrics = super().evaluate(*args, **kwargs)
+        if self.finetuning_args.save_eval_predictions:
+            self._flush_eval_predictions()
+        return metrics
 
     def save_predictions(
         self, dataset: "Dataset", predict_results: "PredictionOutput", skip_special_tokens: bool = True

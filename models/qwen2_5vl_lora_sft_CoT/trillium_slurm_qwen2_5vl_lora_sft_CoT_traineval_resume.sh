@@ -18,37 +18,37 @@
 # ----- DEFAULT ARGUMENTS -----
 # we can either set directly outside the script, or use the defaults.
 
-export STARTING_EPOCH="${STARTING_EPOCH:-3}"
-export ENDING_EPOCH="${ENDING_EPOCH:-4}"
-export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-620}"
+STARTING_EPOCH="${STARTING_EPOCH:-4}"
+ENDING_EPOCH="${ENDING_EPOCH:-5}"
+STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-620}"
 
 # ----- ARGUMENT PARSING -----
 # we can explicitly override the above by setting them with flags.
 
 while [[ $# -gt 0 ]]; do
-  case "$1" in
-    --starting-epoch)
-      export STARTING_EPOCH="${2}"
-      shift 2
-      ;;
-    --ending-epoch)
-      export ENDING_EPOCH="${2}"
-      shift 2
-      ;;
-    --steps-per-epoch)
-      export STEPS_PER_EPOCH="${2}"
-      shift 2
-      ;;
-    -h|--help)
-      echo "Usage:"
-      echo "<set other vars here as desired> $0 --running-mode <RUNNING_MODE> --starting-epoch <STARTING_EPOCH> --ending-epoch <ENDING_EPOCH> --steps-per-epoch <STEPS_PER_EPOCH>"
-      exit 0
-      ;;
-    *)
-      echo "Error: Unknown argument: $1" >&2
-      exit 1
-      ;;
-  esac
+	case "$1" in
+	--starting-epoch)
+		export STARTING_EPOCH="${2}"
+		shift 2
+		;;
+	--ending-epoch)
+		export ENDING_EPOCH="${2}"
+		shift 2
+		;;
+	--steps-per-epoch)
+		export STEPS_PER_EPOCH="${2}"
+		shift 2
+		;;
+	-h | --help)
+		echo "Usage:"
+		echo "<set other vars here as desired> $0 --running-mode <RUNNING_MODE> --starting-epoch <STARTING_EPOCH> --ending-epoch <ENDING_EPOCH> --steps-per-epoch <STEPS_PER_EPOCH>"
+		exit 0
+		;;
+	*)
+		echo "Error: Unknown argument: $1" >&2
+		exit 1
+		;;
+	esac
 done
 
 # --- further cluster-specific settings ---
@@ -56,18 +56,19 @@ done
 export PYTHONUNBUFFERED=1
 
 if [[ "$RUNNING_MODE" == "SHELL" ]]; then
-    export SLURM_TMPDIR="/tmp"
+	export SLURM_TMPDIR="/tmp"
 fi
+echo "SLURM_TMPDIR: ${SLURM_TMPDIR}"
 
 if [[ "$CLUSTER" == "RORQUAL" ]]; then
-    export SCANNET_H5_DIR="/project/def-wangcs/indrisch/scratch_saves/ScanNet_h5/scans"
+	export SCANNET_H5_DIR="/project/def-wangcs/indrisch/scratch_saves/ScanNet_h5/scans"
 fi
 
 echo "RUNNING_MODE: $RUNNING_MODE"
 
 # --- setting python environment ---
 
-module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
+module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
 module load python/3.12 cuda/12.6 opencv/4.12.0
 module load arrow
 module load apptainer
@@ -98,12 +99,12 @@ export OUTPUT_DIR="${PROJECT_DIR}/${OUTPUT_DIR_SAVES}"
 export RESUME_CKPT="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))"
 
 python "${PROJECT_DIR}/scripts/utils/modify_yaml.py" \
-  --yaml-template-path "${TEMPLATE_YAML}" \
-  --yaml-output-path "${TEMPLATE_YAML/epoch2/epoch${ENDING_EPOCH}}" \
-  --output_dir "${OUTPUT_DIR_SAVES}" \
-  --resume_from_checkpoint "${RESUME_CKPT}" \
-  --adapter_name_or_path "${RESUME_CKPT}" \
-  --stop_at_global_step $((ENDING_EPOCH * STEPS_PER_EPOCH))
+	--yaml-template-path "${TEMPLATE_YAML}" \
+	--yaml-output-path "${TEMPLATE_YAML/epoch2/epoch${ENDING_EPOCH}}" \
+	--output_dir "${OUTPUT_DIR_SAVES}" \
+	--resume_from_checkpoint "${RESUME_CKPT}" \
+	--adapter_name_or_path "${RESUME_CKPT}" \
+	--stop_at_global_step $((ENDING_EPOCH * STEPS_PER_EPOCH))
 
 deactivate
 

@@ -216,6 +216,11 @@ class AlpacaDatasetConverter(DatasetConverter):
             "_images": self._find_images(example[self.dataset_attr.images]) if self.dataset_attr.images else None,
             "_videos": self._find_medias(example[self.dataset_attr.videos]) if self.dataset_attr.videos else None,
             "_audios": self._find_medias(example[self.dataset_attr.audios]) if self.dataset_attr.audios else None,
+            "_question_id": (
+                str(example[self.dataset_attr.question_id])
+                if self.dataset_attr.question_id and example.get(self.dataset_attr.question_id) is not None
+                else None
+            ),
         }
         output["_prompt"] = self._subsample_image_placeholders(output["_prompt"])
         return output
@@ -313,6 +318,11 @@ class SharegptDatasetConverter(DatasetConverter):
             "_images": self._find_images(example[self.dataset_attr.images]) if self.dataset_attr.images else None,
             "_videos": self._find_medias(example[self.dataset_attr.videos]) if self.dataset_attr.videos else None,
             "_audios": self._find_medias(example[self.dataset_attr.audios]) if self.dataset_attr.audios else None,
+            "_question_id": (
+                str(example[self.dataset_attr.question_id])
+                if self.dataset_attr.question_id and example.get(self.dataset_attr.question_id) is not None
+                else None
+            ),
         }
         output["_prompt"] = self._subsample_image_placeholders(output["_prompt"])
         return output
@@ -509,8 +519,27 @@ def align_dataset(
         )
 
     dataset_converter = get_dataset_converter(dataset_attr.formatting, dataset_attr, data_args)
+    ds_name = dataset_attr.dataset_name
+
+    def _convert_with_question_id(example: dict[str, Any], idx: int) -> dict[str, Any]:
+        r"""Convert one example and ensure a stable QUESTION_ID.
+
+        Prefer an annotation column mapped via dataset_info columns.question_id
+        (see scripts/assign_question_ids.py). If missing, fall back to
+        ``{dataset_name}_{idx}`` using the row index after load (file order for
+        map-style datasets).
+        """
+        output = dataset_converter(example)
+        qid = output.get("_question_id")
+        if qid is None or qid == "":
+            output["_question_id"] = f"{ds_name}_{idx}"
+        else:
+            output["_question_id"] = str(qid)
+        return output
+
     return dataset.map(
-        dataset_converter,
+        _convert_with_question_id,
+        with_indices=True,
         batched=False,
         remove_columns=column_names,
         **kwargs,

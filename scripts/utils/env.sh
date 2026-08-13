@@ -24,6 +24,11 @@ get_project_dir() {
 }
 
 get_cluster_settings() {
+
+	# if the variables are set already, make sure they are in upper case!
+	export CLUSTER="${CLUSTER^^}"
+	export RUNNING_MODE="${RUNNING_MODE^^}"
+
 	# Detect cluster based on terminal prompt or hostname
 	if [[ "${PS1:-}" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "${PS1:-}" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]] || [[ "${PS1:-}" == *"rc"* ]] || [[ "$HOSTNAME" == *"rc"* ]]; then
 		export CLUSTER="${CLUSTER:-RORQUAL}"

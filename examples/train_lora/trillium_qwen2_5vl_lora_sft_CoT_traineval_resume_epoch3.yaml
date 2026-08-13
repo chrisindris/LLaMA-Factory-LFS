@@ -56,8 +56,8 @@ warmup_ratio: 0.1
 bf16: true
 ddp_timeout: 180000000
 # Full continuity resume from epoch-1 checkpoint (ZeRO-2, 4 GPU).
-resume_from_checkpoint: /scratch/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep2/checkpoint-1240
-adapter_name_or_path: /scratch/indrisch//LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep2/checkpoint-1240
+resume_from_checkpoint: /scratch/indrisch//LLaMA-Factory-copy/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep0/checkpoint-0
+adapter_name_or_path: /scratch/indrisch//LLaMA-Factory-copy/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep0/checkpoint-0
 allow_warm_start_resume: false # abort if resume bundle is incomplete rather than silently warm-starting
 require_resume_bundle: true # fail the job if a save is missing Adam/LoRA/sched artifacts
 # Stop after ~2 epochs of the original schedule without shrinking the cosine horizon.
@@ -83,4 +83,4 @@ deepspeed: examples/deepspeed/ds_z2_config.json # as long as we aren't on Killar
 val_size: 0.1
 per_device_eval_batch_size: 1
 eval_strategy: steps
-eval_steps: 620 # evaluate after every ~1.00 CoT epoch
+eval_steps: 1

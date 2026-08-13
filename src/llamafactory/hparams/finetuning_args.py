@@ -530,6 +530,71 @@ class FinetuningArguments(
             )
         },
     )
+    save_train_predictions: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "If True, dump model text outputs during training to JSON as "
+                "D[QUESTION_ID][optimizer_step] = MODEL_OUTPUT. Requires a question_id "
+                "column on the dataset (see scripts/assign_question_ids.py)."
+            )
+        },
+    )
+    train_prediction_mode: Literal["teacher_forced", "generate"] = field(
+        default="teacher_forced",
+        metadata={
+            "help": (
+                "How to obtain MODEL_OUTPUT for train dumps: "
+                "teacher_forced (argmax next-token on response positions from the loss forward) "
+                "or generate (free-form model.generate on the prompt; expensive for VL)."
+            )
+        },
+    )
+    train_prediction_interval: int = field(
+        default=1,
+        metadata={
+            "help": (
+                "Record train predictions when global_step > 0 and global_step % interval == 0. "
+                "Microbatches that share an optimizer step share the same STEP key."
+            )
+        },
+    )
+    train_prediction_max_samples: int = field(
+        default=0,
+        metadata={
+            "help": (
+                "Maximum number of (QUESTION_ID, step) train prediction records to write this run. "
+                "0 means no cap."
+            )
+        },
+    )
+    train_predictions_file: Optional[str] = field(
+        default=None,
+        metadata={"help": "Path for train prediction JSON. Default: {output_dir}/train_predictions.json."},
+    )
+    save_eval_predictions: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "If True, dump model text outputs during evaluation to JSON as "
+                "D[QUESTION_ID] = MODEL_OUTPUT. Works with val_size splits (does not require "
+                "predict_with_generate). Requires question_id on the dataset."
+            )
+        },
+    )
+    eval_prediction_mode: Literal["teacher_forced", "generate"] = field(
+        default="generate",
+        metadata={
+            "help": (
+                "How to obtain MODEL_OUTPUT for eval dumps: teacher_forced or generate. "
+                "Uses GeneratingArguments when mode is generate."
+            )
+        },
+    )
+    eval_predictions_file: Optional[str] = field(
+        default=None,
+        metadata={"help": "Path for eval prediction JSON. Default: {output_dir}/eval_predictions.json."},
+    )
     allow_warm_start_resume: bool = field(
         default=True,
         metadata={
@@ -611,6 +676,15 @@ class FinetuningArguments(
 
         if self.pissa_init and (self.stage in ["ppo", "kto"] or self.use_ref_model):
             raise ValueError("Cannot use PiSSA for current training stage.")
+
+        if self.train_prediction_mode not in ("teacher_forced", "generate"):
+            raise ValueError("`train_prediction_mode` must be 'teacher_forced' or 'generate'.")
+
+        if self.eval_prediction_mode not in ("teacher_forced", "generate"):
+            raise ValueError("`eval_prediction_mode` must be 'teacher_forced' or 'generate'.")
+
+        if self.train_prediction_interval < 1:
+            raise ValueError("`train_prediction_interval` must be >= 1.")
 
         if self.finetuning_type != "lora":
             if self.loraplus_lr_ratio is not None:

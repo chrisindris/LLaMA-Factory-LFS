@@ -150,7 +150,7 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # scene30k
-hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
+# hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
 
 # SPAR-7M-RGBD (annotations) -> https://huggingface.co/datasets/jasonzhango/SPAR-7M-RGBD/blob/main/README.md
 # hf download --max-workers=8 jasonzhango/SPAR-7M-RGBD --repo-type dataset
@@ -164,6 +164,9 @@ hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs
 hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_3epochs
+hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged
+hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs_merged
+hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_3epochs_merged
 
 # huggingface-cli download --max-workers=4 cvis-tmu/Scene30K --local-dir-use-symlinks False
 
