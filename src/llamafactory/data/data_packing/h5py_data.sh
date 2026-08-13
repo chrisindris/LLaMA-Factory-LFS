@@ -24,6 +24,8 @@ elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
     CLUSTER="TRILLIUM"
 elif [[ "$PS1" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "$PS1" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
     CLUSTER="KILLARNEY"
+elif [[ "$PS1" == *"tamia"* ]] || [[ "$HOSTNAME" == *"tamia"* ]] || [[ "$PS1" == *"tc"* ]] || [[ "$HOSTNAME" == *"tc"* ]]; then
+    CLUSTER="TAMIA"
 else
     echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to RORQUAL."
     CLUSTER="RORQUAL"
@@ -73,6 +75,19 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
     chmod -R 777 /project/aip-wangcs/shared/data_h5py/ScanNet/scans/
 
     python h5py_data.py --input_dir /project/aip-wangcs/shared/data/ScanNet/scans/ --output_dir /project/aip-wangcs/shared/data_h5py/ScanNet/scans/ --verbose --num_workers 32
+
+    # to get an image and save it to a file:
+    # python h5py_data.py --get --output_dir /project/aip-wangcs/shared/data_h5py/ScanNet/scans/ --scene_name scene0000_00 --image_name 0.jpg --output_path ./scene0000_00_0.jpg --verbose
+
+elif [[ "$CLUSTER" == "TAMIA" ]]; then
+
+    source /scratch/i/indrisch/venv_llamafactory_cu126/bin/activate
+
+    export OMP_NUM_THREADS=1
+    mkdir -p /scratch/i/indrisch/data/ScanNet/scans/
+    chmod -R 777 /project/aip-wangcs/shared/data_h5py/ScanNet/scans/
+
+    python h5py_data.py --input_dir /scratch/i/indrisch/data/ScanNet/scans/ --output_dir /scratch/i/indrisch/data/ScanNet/scans/ --verbose --num_workers 32 --scene_pattern scene0000_00
 
     # to get an image and save it to a file:
     # python h5py_data.py --get --output_dir /project/aip-wangcs/shared/data_h5py/ScanNet/scans/ --scene_name scene0000_00 --image_name 0.jpg --output_path ./scene0000_00_0.jpg --verbose
