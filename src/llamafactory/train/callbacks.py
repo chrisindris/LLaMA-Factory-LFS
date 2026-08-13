@@ -33,6 +33,7 @@ from ..extras import logging
 from ..extras.constants import TRAINER_LOG, V_HEAD_SAFE_WEIGHTS_NAME, V_HEAD_WEIGHTS_NAME
 from ..extras.misc import get_current_memory, get_peak_memory, is_env_enabled, use_ray
 from ..extras.packages import is_safetensors_available
+from .resume_bundle import ResumeClass, write_resume_manifest
 
 
 if is_safetensors_available():
@@ -395,6 +396,119 @@ class DebugMultimodalCallback(TrainerCallback):
             )
 
         logger.info(message)
+
+
+class ResumeBundleCallback(TrainerCallback):
+    r"""Validate and write resume_manifest.json after each checkpoint save."""
+
+    def __init__(
+        self,
+        model_args: "ModelArguments",
+        finetuning_args: "FinetuningArguments",
+    ) -> None:
+        self.model_args = model_args
+        self.finetuning_args = finetuning_args
+
+    def _deepspeed_stage(self, args: "TrainingArguments") -> Optional[int]:
+        ds = getattr(args, "deepspeed", None)
+        if not ds:
+            return None
+        if isinstance(ds, dict):
+            return int(ds.get("zero_optimization", {}).get("stage", 0) or 0) or None
+        # Path to a JSON config — stage is not always available here; leave None.
+        return None
+
+    def _write_for_dir(self, checkpoint_dir: str, args: "TrainingArguments", state: "TrainerState") -> None:
+        if not state.is_world_process_zero:
+            return
+        if not os.path.isdir(checkpoint_dir):
+            return
+
+        world_size = getattr(args, "world_size", None)
+        inventory, manifest_path = write_resume_manifest(
+            checkpoint_dir,
+            expected_world_size=world_size,
+            base_model_name_or_path=getattr(self.model_args, "model_name_or_path", None),
+            deepspeed_stage=self._deepspeed_stage(args),
+            finetuning_type=getattr(self.finetuning_args, "finetuning_type", None),
+            lora_rank=getattr(self.finetuning_args, "lora_rank", None),
+            learning_rate=getattr(args, "learning_rate", None),
+            lr_scheduler_type=str(getattr(args, "lr_scheduler_type", None)),
+            warmup_ratio=getattr(args, "warmup_ratio", None),
+            merged_weights=False,
+            resume_mode_if_incomplete="warm_start"
+            if getattr(self.finetuning_args, "allow_warm_start_resume", True)
+            else "error",
+            extra={
+                "save_only_model": bool(getattr(args, "save_only_model", False)),
+                "global_step_from_trainer": state.global_step,
+                "epoch_from_trainer": state.epoch,
+            },
+        )
+
+        if getattr(args, "save_only_model", False):
+            logger.warning_rank0(
+                f"Resume bundle at {checkpoint_dir}: save_only_model=True — optim/scheduler/RNG not saved; "
+                f"resume_capable=False (manifest: {manifest_path})."
+            )
+            return
+
+        if inventory.classification == ResumeClass.FULL:
+            logger.info_rank0(
+                f"Resume bundle COMPLETE at {checkpoint_dir} "
+                f"(step={inventory.global_step}, world_size={inventory.world_size_inferred}; "
+                f"full continuity available). Manifest: {manifest_path}"
+            )
+        else:
+            missing = ", ".join(inventory.missing_required) or "unknown"
+            logger.warning_rank0(
+                f"Resume bundle INCOMPLETE at {checkpoint_dir} "
+                f"(class={inventory.classification.value}; missing: {missing}). "
+                f"Only warm-start resume will be possible. Manifest: {manifest_path}"
+            )
+            if getattr(self.finetuning_args, "require_resume_bundle", False):
+                raise RuntimeError(
+                    f"require_resume_bundle=True but checkpoint is incomplete: {checkpoint_dir}. "
+                    f"Missing: {missing}"
+                )
+
+    @override
+    def on_save(self, args: "TrainingArguments", state: "TrainerState", control: "TrainerControl", **kwargs):
+        if not args.should_save:
+            return
+        checkpoint_dir = os.path.join(args.output_dir, f"{PREFIX_CHECKPOINT_DIR}-{state.global_step}")
+        self._write_for_dir(checkpoint_dir, args, state)
+
+    @override
+    def on_train_end(self, args: "TrainingArguments", state: "TrainerState", control: "TrainerControl", **kwargs):
+        # Final trainer.save_model()/save_state() may land artifacts in output_dir itself.
+        if args.should_save and os.path.isdir(args.output_dir):
+            # Prefer step checkpoint if it exists; also inventory output_dir when it looks like a ckpt.
+            step_dir = os.path.join(args.output_dir, f"{PREFIX_CHECKPOINT_DIR}-{state.global_step}")
+            if os.path.isdir(step_dir):
+                self._write_for_dir(step_dir, args, state)
+            elif os.path.isfile(os.path.join(args.output_dir, "trainer_state.json")) or os.path.isfile(
+                os.path.join(args.output_dir, "adapter_config.json")
+            ):
+                self._write_for_dir(args.output_dir, args, state)
+
+
+class StopAtGlobalStepCallback(TrainerCallback):
+    r"""Stop training once global_step reaches a target (keeps LR horizon from num_train_epochs)."""
+
+    def __init__(self, stop_at_global_step: int) -> None:
+        self.stop_at_global_step = int(stop_at_global_step)
+
+    @override
+    def on_step_end(self, args: "TrainingArguments", state: "TrainerState", control: "TrainerControl", **kwargs):
+        if state.global_step >= self.stop_at_global_step:
+            logger.info_rank0(
+                f"stop_at_global_step={self.stop_at_global_step} reached (global_step={state.global_step}); "
+                "requesting training stop."
+            )
+            control.should_training_stop = True
+            control.should_save = True
+        return control
 
 
 class ReporterCallback(TrainerCallback):

@@ -1,0 +1,86 @@
+### model
+# Path A continuous resume: original base + LoRA checkpoint (NOT the merged dense model).
+model_name_or_path: Qwen/Qwen2.5-VL-7B-Instruct
+cache_dir: /scratch/indrisch/huggingface/hub
+image_max_pixels: 65536
+video_max_pixels: 16384
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_rank: 8
+lora_target: all
+
+### dataset; https://llamafactory.readthedocs.io/en/latest/advanced/arguments.html#id4
+# CoT mix: Scene30k + SpatialSSRL_coldstart + 3DThinker10k (full concat each epoch).
+# LLaMA-Factory has a single --media_dir (filesystem join for relative paths only).
+# Multi-root H5 images do NOT need a shared media tree; this fork dispatches by path
+# shape in h5_image_store and uses env roots (set by the CoT job script):
+#   SCANNET_H5_DIR     default /scratch/indrisch/ScanNet_h5/scans
+#   SPATIALSSRL_H5_DIR default /scratch/indrisch/Spatial-SSRL_images_h5
+#   THINKER10K_H5_DIR  default /scratch/indrisch/3DThinker10K_images_h5
+# media_dir below is only a non-authoritative filesystem join prefix (Scene30k-style
+# paths); Spatial/Thinker annotations resolve via the env roots above, not media_dir.
+dataset: Scene30k,SpatialSSRL_coldstart,3DThinker10k
+mix_strategy: concat
+media_dir: /project/def-wangcs/indrisch/scratch_saves/ScanNet_h5
+template: qwen2_vl
+cutoff_len: 131072 # max len of the model
+overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
+preprocessing_num_workers: 32
+dataloader_num_workers: 4
+dataloader_prefetch_factor: 1 # when dataloader_num_workers > 0, this argument specifies the number of batches loaded in advance by each worker. Setting it to 1 can help reduce memory usage when working with large multimodal data.
+dataloader_pin_memory: false
+low_cpu_mem_usage: true
+
+### output
+output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep2
+logging_steps: 10
+save_steps: 620 # ~1.00 CoT epoch (4xH100, bs=2, ga=8, val_size=0.1; ~43.9k samples)
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false # REQUIRED for optim/scheduler/RNG continuity on future resumes
+report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
+
+### train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 1.0e-4
+# CRITICAL: keep the original 5-epoch cosine horizon (3085 steps). Do NOT set max_steps
+# or num_train_epochs=2 — that rebuilds the scheduler with a shorter total and breaks LR identity.
+num_train_epochs: 5.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+# Full continuity resume from epoch-1 checkpoint (ZeRO-2, 4 GPU).
+resume_from_checkpoint: /scratch/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval/checkpoint-620
+adapter_name_or_path: /scratch/indrisch/LLaMA-Factory/saves/qwen2_5vl-7b/lora/sft/CoT_traineval/checkpoint-620
+allow_warm_start_resume: false # abort if resume bundle is incomplete rather than silently warm-starting
+require_resume_bundle: true # fail the job if a save is missing Adam/LoRA/sched artifacts
+# Stop after ~2 epochs of the original schedule without shrinking the cosine horizon.
+# 2 * ~617 steps/epoch ≈ 1234; next save_steps boundary from 620 is 1240.
+stop_at_global_step: 1240
+
+# debugging level
+debug: underflow_overflow # debug: none # to turn off debugging, we must simply comment out this line.
+log_level: debug
+log_level_replica: debug
+print_param_status: true
+debug_mm_training: true # this is really for fine-grained debugging of memory usage; for runs, output is much cleaner if we turn this off.
+debug_mm_steps: 1
+
+# acceleration
+flash_attn: fa2
+enable_liger_kernel: true
+
+# distribution — MUST stay ZeRO-2 (matches checkpoint-620; avoids ZeRO-3 LoRA resume tracing bugs)
+deepspeed: examples/deepspeed/ds_z2_config.json # as long as we aren't on Killarney, we can use offload.
+
+## eval
+val_size: 0.1
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 620 # evaluate after every ~1.00 CoT epoch

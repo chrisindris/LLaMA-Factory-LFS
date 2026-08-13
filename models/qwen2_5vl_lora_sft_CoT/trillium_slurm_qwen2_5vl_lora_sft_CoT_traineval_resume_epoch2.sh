@@ -1,16 +1,16 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
+#SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_resume_epoch2-%j.out
 #SBATCH --cpus-per-task=96
-#SBATCH --time=1-00:00:00
+#SBATCH --time=0-16:00:00
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 #SBATCH --mail-type=ALL
 
-# Trillium wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k).
+# Trillium wrapper: continuous resume CoT SFT from checkpoint-620 (~epoch 1 -> 2).
 # Submit from models/qwen2_5vl_lora_sft_CoT/ so SLURM out/ lands next to this script:
-#   sbatch trillium_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh
+#   sbatch trillium_slurm_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch2.sh
 
 if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then
     PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
@@ -26,4 +26,4 @@ export PYTHONUNBUFFERED=1
 
 mkdir -p "${PROJECT_DIR}/models/qwen2_5vl_lora_sft_CoT/out"
 
-${PROJECT_DIR}/models/qwen2_5vl_lora_sft_CoT/slurm_qwen2_5vl_lora_sft_CoT_traineval.sh "$@"
+${PROJECT_DIR}/models/qwen2_5vl_lora_sft_CoT/slurm_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch2.sh "$@"
