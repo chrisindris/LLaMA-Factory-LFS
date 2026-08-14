@@ -1,0 +1,4 @@
+module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+virtualenv --no-download ../venv_llamafactory_py313
+pip install -e . && pip install -r requirements/metrics.txt -r requirements/deepspeed.txt && pip install --no-index h5py wandb ray
+# feel free to cross-reference with ./requirements_venv_llamafactory_py313.txt

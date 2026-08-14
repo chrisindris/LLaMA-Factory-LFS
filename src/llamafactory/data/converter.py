@@ -16,7 +16,7 @@ import os
 import re
 from abc import abstractmethod
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Union
+from typing import TYPE_CHECKING, Any, Union, Optional
 
 from ..extras import logging
 from ..extras.constants import IMAGE_PLACEHOLDER

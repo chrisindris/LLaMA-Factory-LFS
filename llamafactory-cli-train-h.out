@@ -1,0 +1,64 @@
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/jieba/_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/venv_llamafactory_py313/bin/llamafactory-cli", line 6, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+    ~~~~~~~~~~~~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 157, in launch
+    run_exp()
+    ~~~~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 212, in run_exp
+    get_train_args(args)
+    ~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 642, in get_train_args
+    model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+                                                                             ~~~~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 320, in _parse_train_args
+    return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 164, in _parse_args
+    (*parsed_args, unknown_args) = parser.parse_args_into_dataclasses(args=args, return_remaining_strings=True)
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/hf_argparser.py", line 338, in parse_args_into_dataclasses
+    namespace, remaining_args = self.parse_known_args(args=args)
+                                ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/argparse.py", line 1899, in parse_known_args
+    return self._parse_known_args2(args, namespace, intermixed=False)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/argparse.py", line 1928, in _parse_known_args2
+    namespace, args = self._parse_known_args(args, namespace, intermixed)
+                      ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/argparse.py", line 2179, in _parse_known_args
+    start_index = consume_optional(start_index)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/argparse.py", line 2103, in consume_optional
+    take_action(action, args, option_string)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/argparse.py", line 2004, in take_action
+    action(self, namespace, argument_values, option_string)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/argparse.py", line 1121, in __call__
+    parser.print_help()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/argparse.py", line 2616, in print_help
+    self._print_message(self.format_help(), file)
+                        ~~~~~~~~~~~~~~~~^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/argparse.py", line 2600, in format_help
+    return formatter.format_help()
+           ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/argparse.py", line 284, in format_help
+    help = self._root_section.format_help()
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/argparse.py", line 215, in format_help
+    item_help = join([func(*args) for func, args in self.items])
+                      ~~~~^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/argparse.py", line 215, in format_help
+    item_help = join([func(*args) for func, args in self.items])
+                      ~~~~^^^^^^^
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/argparse.py", line 509, in _format_action
+    help_text = self._expand_help(action)
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/argparse.py", line 599, in _expand_help
+    return self._get_help_string(action) % params
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+TypeError: %i format: a real number is required, not dict
