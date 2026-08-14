@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from dataclasses import asdict, dataclass, field
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 
 
 @dataclass
@@ -627,7 +627,7 @@ class FinetuningArguments(
             )
         },
     )
-    train_predictions_file: Optional[str] = field(
+    train_predictions_file: str | None = field(
         default=None,
         metadata={"help": "Path for train prediction JSON. Default: {output_dir}/train_predictions.json."},
     )
@@ -650,7 +650,7 @@ class FinetuningArguments(
             )
         },
     )
-    eval_predictions_file: Optional[str] = field(
+    eval_predictions_file: str | None = field(
         default=None,
         metadata={"help": "Path for eval prediction JSON. Default: {output_dir}/eval_predictions.json."},
     )
@@ -672,7 +672,7 @@ class FinetuningArguments(
             )
         },
     )
-    resume_bundle_dir: Optional[str] = field(
+    resume_bundle_dir: str | None = field(
         default=None,
         metadata={
             "help": (
@@ -681,7 +681,7 @@ class FinetuningArguments(
             )
         },
     )
-    stop_at_global_step: Optional[int] = field(
+    stop_at_global_step: int | None = field(
         default=None,
         metadata={
             "help": (

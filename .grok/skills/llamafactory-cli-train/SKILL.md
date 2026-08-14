@@ -12,8 +12,9 @@ description: >
 Help Grok build correct **`llamafactory-cli train`** invocations and training configs for this repo.
 
 Full CLI dump (source of truth for flags/defaults):  
-`references/llamafactory-cli_train_-h.txt`  
-(or re-run `llamafactory-cli train -h` with the project venv).
+`references/llamafactory-cli_train_-h_new.txt`  
+(or re-run `llamafactory-cli train -h` with the project venv).  
+`references/llamafactory-cli_train_-h.txt` is the pre-logging snapshot of this fork.
 
 For cluster env, DeepSpeed SLURM, and multi-node launch, also use **`alliancecan`**,
 **`alliancecan-deepspeed`**, and **`alliancecan-distributed`** when those skills are available.
@@ -153,9 +154,19 @@ Prefer matching an existing example under `examples/train_lora/`, `examples/trai
   `--save_total_limit`, `--save_only_model`, `--save_on_each_node`
 - Best model: `--load_best_model_at_end`, `--metric_for_best_model`, `--greater_is_better`,
   `--early_stopping_steps`
-- Resume: `--resume_from_checkpoint PATH`  
+- Resume (HF): `--resume_from_checkpoint PATH`  
   Related: `--ignore_data_skip`, `--restore_callback_states_from_checkpoint`,
   `--enable_jit_checkpoint` (SIGTERM graceful save)
+- Resume (this fork, extra epochs with the original LR horizon):
+  `--resume_bundle_dir`, `--allow_warm_start_resume` / `--no_allow_warm_start_resume`,
+  `--require_resume_bundle`, `--stop_at_global_step`
+  Keep the original `--num_train_epochs`; stop early with `--stop_at_global_step`
+  instead of shrinking the scheduler. Set `--save_only_model false` so Adam/scheduler
+  are stored. Incomplete bundles warm-start unless `--no_allow_warm_start_resume`.
+- Train/eval text dumps (this fork; needs `question_id` / `scripts/assign_question_ids.py`):
+  `--save_train_predictions`, `--train_prediction_mode {teacher_forced,generate}`,
+  `--train_prediction_interval`, `--train_prediction_max_samples`, `--train_predictions_file`,
+  `--save_eval_predictions`, `--eval_prediction_mode`, `--eval_predictions_file`
 - Modes: `--do_train`, `--do_eval`, `--do_predict`
 - Curves: `--plot_loss`
 
@@ -224,9 +235,10 @@ When `--predict_with_generate` or generative metrics:
 5. **Large models**: add `--deepspeed` JSON from `examples/deepspeed/` or FSDP config; align with
    cluster skills.
 6. **Multimodal**: set `media_dir`, pixel/fps caps, freeze flags, and a VL-capable `template`.
-7. **Resume**: `--resume_from_checkpoint` to a valid checkpoint dir (not only adapter path unless
-   that is how the job is structured).
-8. **Validate flags** against `references/llamafactory-cli_train_-h.txt` or `train -h` if unsure
+7. **Resume**: `--resume_from_checkpoint` or a complete `resume_bundle` (adapter +
+   trainer_state + optimizer + scheduler). For epoch N+1 of a multi-epoch cosine run,
+   keep the original `num_train_epochs` and set `stop_at_global_step`.
+8. **Validate flags** against `references/llamafactory-cli_train_-h_new.txt` or `train -h` if unsure
    of a default/enum.
 9. **Do not run GPU training on login nodes** (AllianceCan); put the CLI in a SLURM script.
 
@@ -240,6 +252,6 @@ When `--predict_with_generate` or generative metrics:
 | Wrong chat format | Fix `--template` for the base model |
 | Dataset not found | `--dataset_dir` + `dataset_info.json` registration |
 | Multi-GPU idle | `FORCE_TORCHRUN=1`, GPU count, DeepSpeed/FSDP config |
-| Resume restarts data | `--ignore_data_skip` behavior; checkpoint completeness |
+| Resume restarts data | `--ignore_data_skip`; incomplete bundle (missing Adam/scheduler) warm-starts unless `--no_allow_warm_start_resume` |
 
 When in doubt, prefer YAML + documented example over long one-off CLI lines.
