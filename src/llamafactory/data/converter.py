@@ -17,7 +17,7 @@ import re
 from abc import abstractmethod
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Union
 
 from ..extras import logging
 from ..extras.constants import IMAGE_PLACEHOLDER
@@ -116,7 +116,7 @@ class DatasetConverter:
 
         return new_messages
 
-    def _find_medias(self, medias: Union["MediaType", list["MediaType"], None]) -> Optional[list["MediaType"]]:
+    def _find_medias(self, medias: Union["MediaType", list["MediaType"], None]) -> list["MediaType"] | None:
         r"""Optionally concatenate media path to media dir when loading from local disk."""
         if medias is None:
             return None
@@ -362,8 +362,8 @@ class OpenAIDatasetConverter(DatasetConverter):
             content = message[self.dataset_attr.content_tag]
 
             if role in [self.dataset_attr.assistant_tag, self.dataset_attr.function_tag]:
-                if "tool_calls" in message and len(message["tool_calls"]) > 0:
-                    tool_calls_list = [tool["function"] for tool in message["tool_calls"]]
+                if tool_calls := message.get("tool_calls"):
+                    tool_calls_list = [tool["function"] for tool in tool_calls]
                     content = json.dumps(tool_calls_list, ensure_ascii=False)
                     role = self.dataset_attr.function_tag
 
