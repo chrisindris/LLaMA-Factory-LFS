@@ -21,6 +21,7 @@ from llamafactory.extras.constants import IMAGE_PLACEHOLDER
 from llamafactory.hparams import DataArguments
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
 def test_alpaca_converter():
     dataset_attr = DatasetAttr("hf_hub", "llamafactory/tiny-supervised-dataset")
     data_args = DataArguments()
@@ -41,6 +42,7 @@ def test_alpaca_converter():
     }
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
 def test_sharegpt_converter():
     dataset_attr = DatasetAttr("hf_hub", "llamafactory/tiny-supervised-dataset")
     data_args = DataArguments()

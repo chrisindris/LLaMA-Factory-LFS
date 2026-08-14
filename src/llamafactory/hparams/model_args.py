@@ -1,4 +1,4 @@
-# Copyright 2025 HuggingFace Inc. and the LlamaFactory team.
+# Copyright 2025 HuggingFace Inc., the KVCache.AI team, Approaching AI, and the LlamaFactory team.
 #
 # This code is inspired by the HuggingFace's transformers library.
 # https://github.com/huggingface/transformers/blob/v4.40.0/examples/pytorch/language-modeling/run_clm.py
@@ -16,13 +16,13 @@
 # limitations under the License.
 
 import json
+import os
 from dataclasses import asdict, dataclass, field, fields
-from typing import Any, Literal, Optional, Union
+from typing import Any, Literal, Self
 
 import torch
 from omegaconf import OmegaConf
 from transformers.training_args import _convert_str_dict
-from typing_extensions import Self
 
 from ..extras.constants import AttentionFunction, EngineName, QuantizationMethod, RopeScaling
 from ..extras.logging import get_logger
@@ -35,13 +35,13 @@ logger = get_logger(__name__)
 class BaseModelArguments:
     r"""Arguments pertaining to the model."""
 
-    model_name_or_path: Optional[str] = field(
+    model_name_or_path: str | None = field(
         default=None,
         metadata={
             "help": "Path to the model weight or identifier from huggingface.co/models or modelscope.cn/models."
         },
     )
-    adapter_name_or_path: Optional[str] = field(
+    adapter_name_or_path: str | None = field(
         default=None,
         metadata={
             "help": (
@@ -50,11 +50,11 @@ class BaseModelArguments:
             )
         },
     )
-    adapter_folder: Optional[str] = field(
+    adapter_folder: str | None = field(
         default=None,
         metadata={"help": "The folder containing the adapter weights to load."},
     )
-    cache_dir: Optional[str] = field(
+    cache_dir: str | None = field(
         default=None,
         metadata={"help": "Where to store the pre-trained models downloaded from huggingface.co or modelscope.cn."},
     )
@@ -70,17 +70,17 @@ class BaseModelArguments:
         default=False,
         metadata={"help": "Whether or not the special tokens should be split during the tokenization process."},
     )
-    add_tokens: Optional[str] = field(
+    add_tokens: str | None = field(
         default=None,
         metadata={
             "help": "Non-special tokens to be added into the tokenizer. Use commas to separate multiple tokens."
         },
     )
-    add_special_tokens: Optional[str] = field(
+    add_special_tokens: str | None = field(
         default=None,
         metadata={"help": "Special tokens to be added into the tokenizer. Use commas to separate multiple tokens."},
     )
-    new_special_tokens_config: Optional[str] = field(
+    new_special_tokens_config: str | None = field(
         default=None,
         metadata={
             "help": (
@@ -110,7 +110,7 @@ class BaseModelArguments:
         default=True,
         metadata={"help": "Whether or not to use memory-efficient model loading."},
     )
-    rope_scaling: Optional[RopeScaling] = field(
+    rope_scaling: RopeScaling | None = field(
         default=None,
         metadata={"help": "Which scaling strategy should be adopted for the RoPE embeddings."},
     )
@@ -126,7 +126,7 @@ class BaseModelArguments:
         default=False,
         metadata={"help": "Enable shift short attention (S^2-Attn) proposed by LongLoRA."},
     )
-    mixture_of_depths: Optional[Literal["convert", "load"]] = field(
+    mixture_of_depths: Literal["convert", "load"] | None = field(
         default=None,
         metadata={"help": "Convert the model to mixture-of-depths (MoD) or load the MoD model."},
     )
@@ -142,7 +142,7 @@ class BaseModelArguments:
         default=False,
         metadata={"help": "Whether or not to enable liger kernel for faster training."},
     )
-    moe_aux_loss_coef: Optional[float] = field(
+    moe_aux_loss_coef: float | None = field(
         default=None,
         metadata={"help": "Coefficient of the auxiliary router loss in mixture-of-experts model."},
     )
@@ -178,19 +178,23 @@ class BaseModelArguments:
         default=True,
         metadata={"help": "Whether or not to use KV cache in generation."},
     )
+    use_v1_kernels: bool | None = field(
+        default=False,
+        metadata={"help": "Whether or not to use high-performance kernels in training."},
+    )
     infer_dtype: Literal["auto", "float16", "bfloat16", "float32"] = field(
         default="auto",
         metadata={"help": "Data type for model weights and activations at inference."},
     )
-    hf_hub_token: Optional[str] = field(
+    hf_hub_token: str | None = field(
         default=None,
         metadata={"help": "Auth token to log in with Hugging Face Hub."},
     )
-    ms_hub_token: Optional[str] = field(
+    ms_hub_token: str | None = field(
         default=None,
         metadata={"help": "Auth token to log in with ModelScope Hub."},
     )
-    om_hub_token: Optional[str] = field(
+    om_hub_token: str | None = field(
         default=None,
         metadata={"help": "Auth token to log in with Modelers Hub."},
     )
@@ -206,9 +210,6 @@ class BaseModelArguments:
     def __post_init__(self):
         if self.model_name_or_path is None:
             raise ValueError("Please provide `model_name_or_path`.")
-
-        if self.split_special_tokens and self.use_fast_tokenizer:
-            raise ValueError("`split_special_tokens` is only supported for slow tokenizers.")
 
         if self.adapter_name_or_path is not None:  # support merging multiple lora weights
             self.adapter_name_or_path = [path.strip() for path in self.adapter_name_or_path.split(",")]
@@ -283,7 +284,7 @@ class QuantizationArguments:
         default=QuantizationMethod.BNB,
         metadata={"help": "Quantization method to use for on-the-fly quantization."},
     )
-    quantization_bit: Optional[int] = field(
+    quantization_bit: int | None = field(
         default=None,
         metadata={"help": "The number of bits to quantize the model using on-the-fly quantization."},
     )
@@ -295,26 +296,9 @@ class QuantizationArguments:
         default=True,
         metadata={"help": "Whether or not to use double quantization in bitsandbytes int4 training."},
     )
-    quantization_device_map: Optional[Literal["auto"]] = field(
+    quantization_device_map: Literal["auto"] | None = field(
         default=None,
         metadata={"help": "Device map used to infer the 4-bit quantized model, needs bitsandbytes>=0.43.0."},
-    )
-    fp8: bool = field(
-        default=False,
-        metadata={
-            "help": "Enable FP8 mixed precision training via HuggingFace Accelerate. "
-            "Requires PyTorch 2.7+ and Hopper architecture GPUs."
-        },
-    )
-    fp8_backend: str = field(
-        default="auto",
-        metadata={
-            "help": "FP8 backend to use ('auto', 'torchao', 'te', 'msamp'). 'auto' selects best available backend."
-        },
-    )
-    fp8_enable_fsdp_float8_all_gather: bool = field(
-        default=False,
-        metadata={"help": "Enable FP8 optimizations for FSDP2 all-gather operations."},
     )
 
 
@@ -375,7 +359,7 @@ class ProcessorArguments:
 class ExportArguments:
     r"""Arguments pertaining to the model export."""
 
-    export_dir: Optional[str] = field(
+    export_dir: str | None = field(
         default=None,
         metadata={"help": "Path to the directory to save the exported model."},
     )
@@ -387,11 +371,11 @@ class ExportArguments:
         default="cpu",
         metadata={"help": "The device used in model export, use `auto` to accelerate exporting."},
     )
-    export_quantization_bit: Optional[int] = field(
+    export_quantization_bit: int | None = field(
         default=None,
         metadata={"help": "The number of bits to quantize the exported model."},
     )
-    export_quantization_dataset: Optional[str] = field(
+    export_quantization_dataset: str | None = field(
         default=None,
         metadata={"help": "Path to the dataset or dataset name to use in quantizing the exported model."},
     )
@@ -407,7 +391,7 @@ class ExportArguments:
         default=False,
         metadata={"help": "Whether or not to save the `.bin` files instead of `.safetensors`."},
     )
-    export_hub_model_id: Optional[str] = field(
+    export_hub_model_id: str | None = field(
         default=None,
         metadata={"help": "The name of the repository if push the model to the Hugging Face hub."},
     )
@@ -437,7 +421,7 @@ class VllmArguments:
         default=32,
         metadata={"help": "Maximum rank of all LoRAs in the vLLM engine."},
     )
-    vllm_config: Optional[Union[dict, str]] = field(
+    vllm_config: dict | str | None = field(
         default=None,
         metadata={"help": "Config to initialize the vllm engine. Please use JSON strings."},
     )
@@ -463,7 +447,7 @@ class SGLangArguments:
         default=-1,
         metadata={"help": "Tensor parallel size for the SGLang engine."},
     )
-    sglang_config: Optional[Union[dict, str]] = field(
+    sglang_config: dict | str | None = field(
         default=None,
         metadata={"help": "Config to initialize the SGLang engine. Please use JSON strings."},
     )
@@ -480,25 +464,273 @@ class SGLangArguments:
 
 
 @dataclass
+class KTransformersArguments:
+    r"""Arguments pertaining to KTransformers AMX MoE SFT training.
+
+    These fields are normalized into the transformers/accelerate KT config before training starts.
+    """
+
+    use_kt: bool = field(
+        default=False,
+        metadata={"help": "Whether to use KTransformers AMX MoE backend for SFT training."},
+    )
+    kt_cpu_activation: Literal["retain", "recompute"] | None = field(
+        default=None,
+        metadata={
+            "help": (
+                "Whether KTransformers retains CPU expert activations. Defaults to recompute while GPU "
+                "gradient checkpointing is enabled and retain otherwise."
+            )
+        },
+    )
+    kt_weight_path: str | None = field(
+        default=None,
+        metadata={"help": "Path to pre-quantized INT8 expert weights (.kt files)."},
+    )
+    kt_non_expert_weight_path: str | None = field(
+        default=None,
+        metadata={"help": "Path to the KT BF16 non-expert weight cache used with routed INT8 experts."},
+    )
+    kt_expert_checkpoint_path: str | None = field(
+        default=None,
+        metadata={"help": "Path to expert checkpoint (safetensors) for online conversion."},
+    )
+    kt_use_lora_experts: bool | None = field(
+        default=None,
+        metadata={"help": "Whether to use GPU-side LoRA Experts."},
+    )
+    kt_lora_expert_num: int | None = field(
+        default=None,
+        metadata={"help": "Number of GPU-side LoRA Experts."},
+    )
+    kt_lora_expert_intermediate_size: int | None = field(
+        default=None,
+        metadata={"help": "Intermediate size for GPU-side LoRA Experts."},
+    )
+    _kt_inference_config: dict[str, Any] | None = field(default=None, init=False, repr=False)
+    _kt_config_handle: Any = field(default=None, init=False, repr=False)
+    _kt_adapter_artifact_path: str | None = field(default=None, init=False, repr=False)
+
+    _KT_DERIVED_KEYS = frozenset(
+        {
+            "enabled",
+            "kt_activation_policy",
+            "kt_expert_checkpoint_path",
+            "kt_full_weight_grad",
+            "kt_lora_alpha",
+            "kt_lora_dropout",
+            "kt_lora_expert_intermediate_size",
+            "kt_lora_expert_num",
+            "kt_lora_rank",
+            "kt_non_expert_weight_path",
+            "kt_skip_expert_loading",
+            "kt_train_mode",
+            "kt_use_lora_experts",
+            "kt_weight_path",
+        }
+    )
+
+    def __post_init__(self) -> None:
+        if self.kt_cpu_activation not in {None, "retain", "recompute"}:
+            raise ValueError("`kt_cpu_activation` must be `retain` or `recompute`.")
+        if not self.use_kt and self.kt_cpu_activation is not None:
+            raise ValueError("`kt_cpu_activation` is only valid when `use_kt: true`.")
+
+    def get_kt_activation_policy(self) -> dict[str, str]:
+        r"""Resolve LF's GPU checkpoint switch and KT's CPU activation setting."""
+        gpu_activation = "retain" if self.disable_gradient_checkpointing else "recompute"
+        cpu_activation = self.kt_cpu_activation or gpu_activation
+        if cpu_activation == "recompute" and gpu_activation == "retain":
+            raise ValueError(
+                "`kt_cpu_activation: recompute` requires GPU gradient checkpointing. "
+                "Set `disable_gradient_checkpointing: false` or use `kt_cpu_activation: retain`."
+            )
+
+        return {"cpu": cpu_activation, "gpu": gpu_activation}
+
+    @staticmethod
+    def _get_accelerator_kt_config(training_args: Any) -> Any:
+        accelerator_config = getattr(training_args, "accelerator_config", None)
+        if isinstance(accelerator_config, dict):
+            return accelerator_config.get("kt_config")
+        return getattr(accelerator_config, "kt_config", None)
+
+    def _normalize_advanced_kt_config(self, raw_config: Any) -> dict[str, Any]:
+        if raw_config is None:
+            return {}
+        if not isinstance(raw_config, dict):
+            raise TypeError("LLaMA-Factory `kt_config` must be a flat mapping.")
+
+        config = dict(raw_config)
+        conflicts = sorted(set(config) & self._KT_DERIVED_KEYS)
+        if conflicts:
+            raise ValueError(f"These `kt_config` values are derived from LLaMA-Factory arguments: {conflicts}.")
+        return config
+
+    def _get_advanced_kt_config(self, training_args: Any) -> dict[str, Any]:
+        raw_config = getattr(training_args, "kt_config", None)
+        accelerator_config = self._get_accelerator_kt_config(training_args)
+        if raw_config is None:
+            if accelerator_config is not None:
+                raise ValueError(
+                    "Put KTransformers settings in the LLaMA-Factory training YAML `kt_config`; "
+                    "remove `kt_config` from the Accelerate config."
+                )
+            return {}
+        if accelerator_config is not None and accelerator_config != raw_config:
+            raise ValueError("LLaMA-Factory YAML and Accelerate config cannot define different KT settings.")
+        return self._normalize_advanced_kt_config(raw_config)
+
+    def configure_kt_checkpointing(self, training_args: Any) -> None:
+        r"""Keep LLaMA-Factory as the single gradient-checkpointing entry point."""
+        if self.use_unsloth or self.use_unsloth_gc:
+            raise ValueError("KTransformers cannot be combined with Unsloth checkpoint wrapping.")
+        if getattr(training_args, "gradient_checkpointing", False):
+            raise ValueError(
+                "KTransformers uses LLaMA-Factory's `disable_gradient_checkpointing`; "
+                "remove `gradient_checkpointing: true`."
+            )
+        if getattr(training_args, "gradient_checkpointing_kwargs", None) is not None:
+            raise ValueError("KTransformers supplies its checkpoint context; remove `gradient_checkpointing_kwargs`.")
+
+        fsdp_config = getattr(training_args, "fsdp_config", None)
+        if isinstance(fsdp_config, dict) and fsdp_config.get("activation_checkpointing"):
+            raise ValueError("Disable FSDP activation checkpointing when using KTransformers.")
+        if os.environ.get("FSDP_ACTIVATION_CHECKPOINTING", "false").lower() in {"1", "true", "yes"}:
+            raise ValueError("Disable FSDP activation checkpointing when using KTransformers.")
+
+        self.get_kt_activation_policy()
+        if not self.disable_gradient_checkpointing:
+            self.use_reentrant_gc = False
+        training_args.gradient_checkpointing = False
+        training_args.gradient_checkpointing_kwargs = None
+
+    def get_kt_config_dict(
+        self,
+        finetuning_args: Any,
+        model_max_length: int | None,
+        advanced_config: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        r"""Map LLaMA-Factory-owned training values to the public KT configuration."""
+        if getattr(finetuning_args, "finetuning_type", None) != "lora":
+            raise ValueError("KTransformers thin integration currently supports LoRA finetuning only.")
+
+        kt_config = dict(advanced_config or {})
+        configured_capacity = kt_config.pop("kt_model_max_length", None)
+        if configured_capacity is not None:
+            try:
+                configured_capacity = int(configured_capacity)
+            except (TypeError, ValueError) as exc:
+                raise ValueError("`kt_model_max_length` must be a positive integer.") from exc
+            if configured_capacity <= 0:
+                raise ValueError("`kt_model_max_length` must be a positive integer.")
+
+        kt_config.update(
+            {
+                "kt_lora_rank": getattr(finetuning_args, "lora_rank", None),
+                "kt_lora_alpha": getattr(finetuning_args, "lora_alpha", None),
+                "kt_lora_dropout": getattr(finetuning_args, "lora_dropout", None),
+                "kt_weight_path": self.kt_weight_path,
+                "kt_non_expert_weight_path": self.kt_non_expert_weight_path,
+                "kt_expert_checkpoint_path": self.kt_expert_checkpoint_path,
+                "kt_model_max_length": max(model_max_length or 0, configured_capacity or 0) or None,
+                "kt_use_lora_experts": self.kt_use_lora_experts,
+                "kt_lora_expert_num": self.kt_lora_expert_num,
+                "kt_lora_expert_intermediate_size": self.kt_lora_expert_intermediate_size,
+                "kt_activation_policy": self.get_kt_activation_policy(),
+                "kt_train_mode": "lora",
+                "kt_full_weight_grad": False,
+            }
+        )
+        return {key: value for key, value in kt_config.items() if value is not None}
+
+    def _resolve_kt_adapter_artifact_dir(self, operation: str) -> str | None:
+        if not self.adapter_name_or_path:
+            return None
+        if len(self.adapter_name_or_path) != 1:
+            raise ValueError("KTransformers accepts a single `adapter_name_or_path`.")
+
+        adapter_root = os.path.realpath(os.path.expanduser(self.adapter_name_or_path[0]))
+        adapter_dir = adapter_root
+        if self.adapter_folder:
+            adapter_dir = os.path.realpath(os.path.join(adapter_root, self.adapter_folder))
+            if os.path.commonpath((adapter_root, adapter_dir)) != adapter_root:
+                raise ValueError("`adapter_folder` must stay inside the KT adapter directory.")
+        if not os.path.isdir(adapter_dir):
+            raise ValueError(f"KTransformers {operation} requires a local adapter directory.")
+        return adapter_dir
+
+    def apply_kt_config(self, finetuning_args: Any, training_args: Any, model_max_length: int | None) -> None:
+        r"""Apply LLaMA-Factory KT args to transformers/accelerate KT integration points."""
+        if not self.use_kt:
+            return
+
+        self.configure_kt_checkpointing(training_args)
+        kt_config = self.get_kt_config_dict(
+            finetuning_args,
+            model_max_length,
+            self._get_advanced_kt_config(training_args),
+        )
+        update_kt_config = getattr(training_args, "update_kt_config", None)
+        if not callable(update_kt_config):
+            raise RuntimeError(
+                "The installed Transformers-KT does not provide `TrainingArguments.update_kt_config()`."
+            )
+
+        adapter_dir = self._resolve_kt_adapter_artifact_dir("training")
+        update_kt_config(kt_config, adapter_name_or_path=adapter_dir)
+
+    def configure_kt_loading(self, finetuning_args: Any, model_max_length: int | None) -> None:
+        r"""Configure KT model loading for inference and evaluation."""
+        if not self.use_kt:
+            if self._kt_inference_config is not None:
+                raise ValueError("`kt_config` requires `use_kt: true`.")
+            return
+        if self.infer_backend != EngineName.HF:
+            raise ValueError("KTransformers inference requires `infer_backend: huggingface`.")
+
+        adapter_dir = self._resolve_kt_adapter_artifact_dir("inference")
+
+        try:
+            from transformers.integrations.kt import configure_kt
+        except (ImportError, ModuleNotFoundError) as exc:
+            raise RuntimeError("The installed Transformers-KT does not provide `configure_kt()`.") from exc
+
+        kt_config = self.get_kt_config_dict(
+            finetuning_args,
+            model_max_length,
+            self._normalize_advanced_kt_config(self._kt_inference_config),
+        )
+        self._kt_adapter_artifact_path = adapter_dir
+        self._kt_config_handle = configure_kt(kt_config)
+
+
+@dataclass
 class ModelArguments(
-    SGLangArguments, VllmArguments, ExportArguments, ProcessorArguments, QuantizationArguments, BaseModelArguments
+    SGLangArguments,
+    VllmArguments,
+    KTransformersArguments,
+    ExportArguments,
+    ProcessorArguments,
+    QuantizationArguments,
+    BaseModelArguments,
 ):
     r"""Arguments pertaining to which model/config/tokenizer we are going to fine-tune or infer.
 
     The class on the most right will be displayed first.
     """
 
-    compute_dtype: Optional[torch.dtype] = field(
+    compute_dtype: torch.dtype | None = field(
         default=None,
         init=False,
         metadata={"help": "Torch data type for computing model outputs, derived from `fp/bf16`. Do not specify it."},
     )
-    device_map: Optional[Union[str, dict[str, Any]]] = field(
+    device_map: str | dict[str, Any] | None = field(
         default=None,
         init=False,
         metadata={"help": "Device map for model placement, derived from training stage. Do not specify it."},
     )
-    model_max_length: Optional[int] = field(
+    model_max_length: int | None = field(
         default=None,
         init=False,
         metadata={"help": "The maximum input length for model, derived from `cutoff_len`. Do not specify it."},
@@ -515,6 +747,7 @@ class ModelArguments(
         ExportArguments.__post_init__(self)
         VllmArguments.__post_init__(self)
         SGLangArguments.__post_init__(self)
+        KTransformersArguments.__post_init__(self)
 
     @classmethod
     def copyfrom(cls, source: "Self", **kwargs) -> "Self":

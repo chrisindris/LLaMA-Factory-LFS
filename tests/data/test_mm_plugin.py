@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+from types import SimpleNamespace
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -21,7 +22,7 @@ import torch
 from PIL import Image
 
 from llamafactory.data.mm_plugin import get_mm_plugin
-from llamafactory.extras.packages import is_transformers_version_greater_than
+from llamafactory.extras.packages import is_pyav_available, is_transformers_version_greater_than
 from llamafactory.hparams import get_infer_args
 from llamafactory.model import load_tokenizer
 
@@ -57,7 +58,7 @@ TEXT_MESSAGES = [
 ]
 
 VIDEO_MESSAGES = [
-    {"role": "user", "content": "<video>What is in this viode?"},
+    {"role": "user", "content": "<video>What is in this video?"},
     {"role": "assistant", "content": "A cat."},
 ]
 
@@ -179,6 +180,7 @@ def _check_plugin(
     )
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
 def test_base_plugin():
     tokenizer_module = _load_tokenizer_module(model_name_or_path=TINY_LLAMA3)
     base_plugin = get_mm_plugin(name="base")
@@ -186,6 +188,7 @@ def test_base_plugin():
     _check_plugin(**check_inputs)
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
 @pytest.mark.skipif(not HF_TOKEN, reason="Gated model.")
 @pytest.mark.skipif(not is_transformers_version_greater_than("4.50.0"), reason="Requires transformers>=4.50.0")
 def test_gemma3_plugin():
@@ -208,6 +211,40 @@ def test_gemma3_plugin():
     _check_plugin(**check_inputs)
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
+@pytest.mark.skipif(not is_transformers_version_greater_than("5.6.0"), reason="Requires transformers>=5.6.0")
+def test_gemma4_plugin():
+    tokenizer_module = _load_tokenizer_module(model_name_or_path="google/gemma-4-31B-it")
+    processor = tokenizer_module["processor"]
+    gemma4_plugin = get_mm_plugin(name="gemma4", image_token="<|image|>", video_token="<|video|>")
+    check_inputs = {"plugin": gemma4_plugin, **tokenizer_module}
+    # validate
+    mm_inputs = gemma4_plugin._get_mm_inputs(IMAGES, NO_VIDEOS, NO_AUDIOS, processor)
+    num_image_soft_tokens = 256  # when we use default max_soft_tokens=280
+    image_token = getattr(processor, "image_token")
+    boi_token = getattr(processor, "boi_token")
+    eoi_token = getattr(processor, "eoi_token")
+
+    expected_mm_type_ids = [
+        [int(token_id == getattr(processor, "image_token_id")) for token_id in token_ids] for token_ids in BATCH_IDS
+    ]
+    check_inputs["expected_mm_messages"] = [
+        {
+            "role": "user",
+            "content": f"{boi_token}{image_token * num_image_soft_tokens}{eoi_token}What is in this image?",
+        },
+        {"role": "assistant", "content": "A cat."},
+    ]
+    for key in ("num_soft_tokens_per_image",):
+        mm_inputs.pop(key, None)
+
+    mm_inputs["mm_token_type_ids"] = expected_mm_type_ids
+    check_inputs["expected_mm_inputs"] = mm_inputs
+    check_inputs["expected_no_mm_inputs"] = {"mm_token_type_ids": expected_mm_type_ids}
+    _check_plugin(**check_inputs)
+
+
+@pytest.mark.runs_on(["cpu", "mps"])
 @pytest.mark.skipif(not is_transformers_version_greater_than("4.52.0"), reason="Requires transformers>=4.52.0")
 def test_internvl_plugin():
     image_seqlen = 256
@@ -226,6 +263,7 @@ def test_internvl_plugin():
     _check_plugin(**check_inputs)
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
 @pytest.mark.skipif(not is_transformers_version_greater_than("4.51.0"), reason="Requires transformers>=4.51.0")
 def test_llama4_plugin():
     tokenizer_module = _load_tokenizer_module(model_name_or_path=TINY_LLAMA4)
@@ -247,6 +285,7 @@ def test_llama4_plugin():
     _check_plugin(**check_inputs)
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
 def test_llava_plugin():
     image_seqlen = 576
     tokenizer_module = _load_tokenizer_module(model_name_or_path="llava-hf/llava-1.5-7b-hf")
@@ -260,6 +299,7 @@ def test_llava_plugin():
     _check_plugin(**check_inputs)
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
 def test_llava_next_plugin():
     image_seqlen = 1176
     tokenizer_module = _load_tokenizer_module(model_name_or_path="llava-hf/llava-v1.6-vicuna-7b-hf")
@@ -273,6 +313,7 @@ def test_llava_next_plugin():
     _check_plugin(**check_inputs)
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
 def test_llava_next_video_plugin():
     image_seqlen = 1176
     tokenizer_module = _load_tokenizer_module(model_name_or_path="llava-hf/LLaVA-NeXT-Video-7B-hf")
@@ -286,6 +327,7 @@ def test_llava_next_video_plugin():
     _check_plugin(**check_inputs)
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
 @pytest.mark.skipif(not HF_TOKEN, reason="Gated model.")
 def test_paligemma_plugin():
     image_seqlen = 256
@@ -305,6 +347,7 @@ def test_paligemma_plugin():
     _check_plugin(**check_inputs)
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
 @pytest.mark.skipif(not is_transformers_version_greater_than("4.50.0"), reason="Requires transformers>=4.50.0")
 def test_pixtral_plugin():
     image_slice_height, image_slice_width = 2, 2
@@ -327,6 +370,7 @@ def test_pixtral_plugin():
     _check_plugin(**check_inputs)
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
 @pytest.mark.skipif(not is_transformers_version_greater_than("4.52.0"), reason="Requires transformers>=4.52.0")
 def test_qwen2_omni_plugin():
     image_seqlen, audio_seqlen = 4, 2
@@ -357,6 +401,7 @@ def test_qwen2_omni_plugin():
     _check_plugin(**check_inputs)
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
 def test_qwen2_vl_plugin():
     image_seqlen = 4
     tokenizer_module = _load_tokenizer_module(model_name_or_path="Qwen/Qwen2-VL-7B-Instruct")
@@ -373,27 +418,93 @@ def test_qwen2_vl_plugin():
     _check_plugin(**check_inputs)
 
 
+def test_moss_vl_plugin():
+    messages = [
+        {"role": "user", "content": "First <image>, finally <image>."},
+        {"role": "assistant", "content": "Done."},
+    ]
+    expected_messages = [
+        {"role": "user", "content": "First <|image_pad|>, finally <|image_pad|>."},
+        {"role": "assistant", "content": "Done."},
+    ]
+    processor = SimpleNamespace(image_processor=object(), video_processor=object())
+    plugin = get_mm_plugin(name="moss_vl", image_token="<|image_pad|>", video_token="<|video_pad|>")
+
+    processed_messages = plugin.process_messages(messages, [object(), object()], [], [], processor)
+
+    assert processed_messages == expected_messages
+    assert messages[0]["content"] == "First <image>, finally <image>."
+
+
+@pytest.mark.runs_on(["cpu", "mps"])
 @pytest.mark.skipif(not is_transformers_version_greater_than("4.57.0"), reason="Requires transformers>=4.57.0")
 def test_qwen3_vl_plugin():
     frame_seqlen = 1
     tokenizer_module = _load_tokenizer_module(model_name_or_path="Qwen/Qwen3-VL-30B-A3B-Instruct")
     qwen3_vl_plugin = get_mm_plugin(name="qwen3_vl", video_token="<|video_pad|>")
     check_inputs = {"plugin": qwen3_vl_plugin, **tokenizer_module}
+    video_token = "<|video_pad|>" * frame_seqlen
+    first_video = (
+        f"<0.2 seconds><|vision_start|>{video_token}<|vision_end|>"
+        f"<1.2 seconds><|vision_start|>{video_token}<|vision_end|>"
+    )
+    second_video = first_video + f"<2.2 seconds><|vision_start|>{video_token}<|vision_end|>"
+    videos = [
+        [Image.new("RGB", (32, 32), (255, 255, 255))] * 4,
+        [Image.new("RGB", (32, 32), (255, 255, 255))] * 6,
+    ]
+    messages = [
+        {"role": "user", "content": "Compare these videos: <video> and <video>."},
+        {"role": "assistant", "content": "They are different."},
+    ]
     check_inputs["expected_mm_messages"] = [
-        {
-            key: value.replace(
-                "<video>",  # little different with original processor for default `fps=2` in our repo
-                "<0.2 seconds><|vision_start|>{}<|vision_end|><1.2 seconds><|vision_start|>{}<|vision_end|>".format(
-                    "<|video_pad|>" * frame_seqlen, "<|video_pad|>" * frame_seqlen
-                ),
-            )
-            for key, value in message.items()
-        }
-        for message in VIDEO_MESSAGES
+        {key: value.replace("<video>", first_video) for key, value in message.items()} for message in VIDEO_MESSAGES
     ]
     _check_plugin(**check_inputs)
+    assert qwen3_vl_plugin.process_messages(messages, NO_IMAGES, videos, NO_AUDIOS, tokenizer_module["processor"]) == [
+        {
+            "role": "user",
+            "content": f"Compare these videos: {first_video} and {second_video}.",
+        },
+        {"role": "assistant", "content": "They are different."},
+    ]
 
 
+@pytest.mark.runs_on(["cpu", "mps"])
+@pytest.mark.skipif(not is_transformers_version_greater_than("4.57.0"), reason="Requires transformers>=4.57.0")
+@pytest.mark.skipif(not is_pyav_available(), reason="Requires pyav")
+def test_qwen3_vl_plugin_video_path():
+    video_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "..", "data", "mllm_demo_data", "1.mp4")
+    video_path = os.path.abspath(video_path)
+    if not os.path.exists(video_path):
+        pytest.skip(f"Video file not found: {video_path}")
+
+    tokenizer_module = _load_tokenizer_module(model_name_or_path="Qwen/Qwen3-VL-30B-A3B-Instruct")
+    processor = tokenizer_module["processor"]
+    qwen3_vl_plugin = get_mm_plugin(name="qwen3_vl", video_token="<|video_pad|>")
+
+    videos = [video_path]
+
+    # fast path: metadata-only, no frame decoding
+    fast_mm_inputs = qwen3_vl_plugin._get_mm_token_metadata([], videos, [], processor)
+    assert fast_mm_inputs is not None, "_get_mm_token_metadata should succeed for a real video file"
+
+    full_mm_inputs = qwen3_vl_plugin._get_mm_inputs([], videos, [], processor)
+
+    # video_grid_thw must be identical between the two paths
+    assert torch.equal(fast_mm_inputs["video_grid_thw"], full_mm_inputs["video_grid_thw"]), (
+        f"video_grid_thw mismatch between fast path and full path: "
+        f"fast={fast_mm_inputs['video_grid_thw']}, full={full_mm_inputs['video_grid_thw']}"
+    )
+    result = qwen3_vl_plugin.process_messages(VIDEO_MESSAGES, [], videos, [], processor)
+    # This demo video duration is 9.72s, with video_fps=2, we extract 19 frames
+    # 19 + 1 => temperoal compress => 10 video_sequence
+    assert result[0]["content"].count("<|vision_start|>") == 10, (
+        f"Expected 10 video tokens, got {result[0]['content'].count('<|vision_start|>')}"
+    )
+
+
+@pytest.mark.runs_on(["cpu", "mps"])
 @pytest.mark.skipif(not is_transformers_version_greater_than("4.47.0"), reason="Requires transformers>=4.47.0")
 def test_video_llava_plugin():
     image_seqlen = 256
@@ -406,3 +517,15 @@ def test_video_llava_plugin():
     ]
     check_inputs["expected_mm_inputs"] = _get_mm_inputs(tokenizer_module["processor"])
     _check_plugin(**check_inputs)
+
+
+@pytest.mark.runs_on(["cpu", "mps"])
+def test_lfm2_vl_plugin():
+    """Test LFM2.5-VL plugin instantiation."""
+    # Test plugin can be instantiated with correct tokens
+    lfm2_vl_plugin = get_mm_plugin(name="lfm2_vl", image_token="<image>")
+    assert lfm2_vl_plugin is not None
+    assert lfm2_vl_plugin.image_token == "<image>"
+    assert lfm2_vl_plugin.video_token is None
+    assert lfm2_vl_plugin.audio_token is None
+    assert lfm2_vl_plugin.__class__.__name__ == "LFMVLPlugin"

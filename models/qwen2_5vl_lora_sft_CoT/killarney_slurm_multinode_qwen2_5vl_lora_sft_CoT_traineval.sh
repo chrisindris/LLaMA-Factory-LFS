@@ -134,8 +134,8 @@ fi
 GPU_TYPE=$(nvidia-smi --query-gpu=name --format=csv,noheader,nounits | head -n 1 | awk '{print $NF}')
 echo "GPU TYPE: $GPU_TYPE"
 
-CUTOFF_LEN=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${CUTOFF_LEN:-65536} || echo 131072) # 131072 shown to work on l40s, though 65536 may help if batch_size=2
-IMAGE_SAMPLE_COUNT=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_IMAGE_SAMPLE_COUNT:-360} || echo "-1") # large values shown to work on l40s; 360 should prevent all but the most massive loads
+CUTOFF_LEN=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${CUTOFF_LEN:-32768} || echo 131072) # 65536 is too high if batch_size=2.
+IMAGE_SAMPLE_COUNT=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_IMAGE_SAMPLE_COUNT:-300} || echo "-1") # large values shown to work on l40s; 360 should prevent all but the most massive loads
 PER_DEVICE_TRAIN_BATCH_SIZE=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_PER_DEVICE_TRAIN_BATCH_SIZE:-2} || echo 2) # prevents GPU OOM on l40s
 GRADIENT_ACCUMULATION_STEPS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 16 || echo 8)
 DEEPSPEED=$([[ "$GPU_TYPE" == "L40S" ]] && echo "examples/deepspeed/ds_z2_offload_config.json" || echo "examples/deepspeed/ds_z2_config.json")
