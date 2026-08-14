@@ -17,7 +17,7 @@ import re
 from abc import abstractmethod
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any, Union
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 from ..extras import logging
 from ..extras.constants import IMAGE_PLACEHOLDER

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from dataclasses import asdict, dataclass, field
-from typing import Any, Literal
+from typing import Any, Literal, Optional
 
 
 @dataclass
@@ -612,7 +612,8 @@ class FinetuningArguments(
         default=1,
         metadata={
             "help": (
-                "Record train predictions when global_step > 0 and global_step % interval == 0. "
+                "Record train predictions every N optimizer steps, when global_step is a "
+                "positive multiple of this interval. "
                 "Microbatches that share an optimizer step share the same STEP key."
             )
         },

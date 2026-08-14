@@ -2226,24 +2226,6 @@ register_template(
 )
 
 
-# copied from qwen template
-register_template(
-    name="qwen3_5",
-    format_user=StringFormatter(slots=["<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n"]),
-    format_assistant=StringFormatter(slots=["{{content}}<|im_end|>\n"]),
-    format_system=StringFormatter(slots=["<|im_start|>system\n{{content}}<|im_end|>\n"]),
-    format_function=FunctionFormatter(slots=["{{content}}<|im_end|>\n"], tool_format="qwen"),
-    format_observation=StringFormatter(
-        slots=["<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n"]
-    ),
-    format_tools=ToolFormatter(tool_format="qwen"),
-    stop_words=["<|im_end|>"],
-    replace_eos=True,
-    mm_plugin=get_mm_plugin(name="qwen3_5", image_token="<|image_pad|>", video_token="<|video_pad|>"),
-    template_class=ReasoningTemplate,
-)
-
-
 register_template(
     name="qwen3_5",
     format_user=StringFormatter(slots=["<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n"]),
@@ -2571,6 +2553,6 @@ register_template(
 # DEBUG: Confirm module loaded completely
 import sys
 print(f"[DEBUG template.py] Module template.py loaded completely. Total templates registered: {len(TEMPLATES)}", file=sys.stderr, flush=True)
-print(f"[DEBUG template.py] videor1 template registered: {'videor1' in TEMPLATES}", file=sys.stderr, flush=True)
-if 'videor1' in TEMPLATES:
-    print(f"[DEBUG template.py] videor1 template details: {TEMPLATES['videor1']}", file=sys.stderr, flush=True)
+# print(f"[DEBUG template.py] videor1 template registered: {'videor1' in TEMPLATES}", file=sys.stderr, flush=True)
+# if 'videor1' in TEMPLATES:
+#     print(f"[DEBUG template.py] videor1 template details: {TEMPLATES['videor1']}", file=sys.stderr, flush=True)

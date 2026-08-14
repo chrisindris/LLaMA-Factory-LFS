@@ -520,6 +520,21 @@ huggingface-cli login
 > [!IMPORTANT]
 > Installation is mandatory.
 
+#### Using a venv on AllianceCan
+
+```bash
+module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+virtualenv --no-download ../venv_llamafactory_py313
+source ../venv_llamafactory_py313/bin/activate
+pip install -e .
+pip install -r requirements/metrics.txt -r requirements/deepspeed.txt -r requirements/liger-kernel.txt
+pip install --no-index h5py wandb ray pytest
+```
+Feel free to cross-reference with ./requirements_venv_llamafactory_py313.txt.
+Qwen2x and Qwen3x supported since transformers>=5.2.0
+
+
+
 #### Install from Source
 
 ```bash
