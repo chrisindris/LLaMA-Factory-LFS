@@ -12,14 +12,17 @@
 # RUN AS: ./get_data.sh <cluster_name>
 
 export HF_DEBUG=1
-export HF_TOKEN=$(cat /home/indrisch/TOKENS/cvis-tmu-organization-token.txt)
+export HF_TOKEN=$(cat ${HOME}/TOKENS/cvis-tmu-organization-token.txt)
 
 # vLLM models typically come from the huggingface hub.
 #module load python/3.12 git-lfs/3.4.0 && git-lfs install
-module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
-module load python/3.12 cuda/12.6 opencv/4.12.0
-module load arrow
-module load git-lfs/3.4.0
+# module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
+# module load python/3.12 cuda/12.6 opencv/4.12.0
+# module load arrow
+# module load git-lfs/3.4.0
+# git-lfs install
+
+module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1 git-lfs
 git-lfs install
 
 # virtualenv --no-download temp_env && source temp_env/bin/activate
@@ -65,8 +68,8 @@ echo "HF_HUB_CACHE: $HF_HUB_CACHE"
 echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 
 # hf download --max-workers=7 moonshotai/Kimi-VL-A3B-Thinking-2506 # model for generating traces (the "teacher")
-# huggingface-cli download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct --local-dir-use-symlinks False # model we will use as a student (in addition to LLaVa-3D)
-# hf download --max-workers=4 Qwen/Qwen2.5-7B-Instruct-1M # text-only long-context model used to assess the traces
+hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct --revision cc594898137f460bfe9f0759e9844b3ce807cfb5 # model we will use as a student (in addition to LLaVa-3D)
+# hf download --max-workers=4 Qwen/Qwen2.5-7B-Instruct-1M  # text-only long-context model used to assess the traces
 #hf download --max-workers=4 Qwen/Qwen2.5-7B-Instruct # text-only model used to assess the traces; the 1M version doesn't seem to load
 #hf download --max-workers=4 Qwen/Qwen2.5-0.5B-Instruct # text-only model used to assess the traces; the 1M version doesn't seem to load
 #hf download --max-workers=5 Qwen/Qwen3-Reranker-8B # could be useful for reranking the traces
@@ -150,7 +153,7 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-SQA3Devery24_ep1
 
 # scene30k
-# hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset
+# hf download --max-workers=4 cvis-tmu/Scene30K --repo-type=dataset --force-download
 
 # SPAR-7M-RGBD (annotations) -> https://huggingface.co/datasets/jasonzhango/SPAR-7M-RGBD/blob/main/README.md
 # hf download --max-workers=8 jasonzhango/SPAR-7M-RGBD --repo-type dataset
@@ -163,10 +166,10 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs
 # hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs
-hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_3epochs
-hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged
-hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs_merged
-hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_3epochs_merged
+# hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_3epochs
+# hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged
+# hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs_merged
+# hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_3epochs_merged
 
 # huggingface-cli download --max-workers=4 cvis-tmu/Scene30K --local-dir-use-symlinks False
 

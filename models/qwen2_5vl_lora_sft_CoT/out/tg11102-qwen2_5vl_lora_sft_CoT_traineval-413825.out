@@ -1,0 +1,1106 @@
+PROJECT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: TAMIA
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: None
+SIF_FILE: None
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/i/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/i/indrisch/venv_llamafactory_py313/
+RUNNING_MODE: VENV
+
+Lmod is automatically replacing "gcc/12.3" with "go/1.26.5".
+
+
+Lmod is automatically replacing "go/1.26.5" with "gcc/12.3".
+
+
+Activating Modules:
+  1) cuda/12.6           3) gcccore/.12.3        5) opencv/4.14.0     7) pmix/4.2.4
+  2) flexiblas/3.3.1     4) libfabric/1.18.0     6) openmpi/4.1.5
+
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.2.1)
+Requirement already satisfied: setuptools in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (84.0.0+computecanada)
+Requirement already satisfied: wheel in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (0.48.0)
+Requirement already satisfied: packaging>=24.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from wheel) (26.3)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: packaging in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.3)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: huggingface_hub in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (1.27.0)
+Requirement already satisfied: ruamel.yaml in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (0.19.1+computecanada)
+Requirement already satisfied: click<9.0.0,>=8.4.2 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (8.4.2+computecanada)
+Requirement already satisfied: filelock>=3.10.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (3.32.3)
+Requirement already satisfied: fsspec>=2023.5.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (2025.3.0+computecanada)
+Requirement already satisfied: hf-xet<2.0.0,>=1.5.2 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (1.5.2+computecanada)
+Requirement already satisfied: httpx<1,>=0.23.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (0.28.1+computecanada)
+Requirement already satisfied: packaging>=20.9 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (26.3)
+Requirement already satisfied: pyyaml>=5.1 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (6.0.3+computecanada)
+Requirement already satisfied: tqdm>=4.42.1 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.70.0+computecanada)
+Requirement already satisfied: typing-extensions>=4.1.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.16.0+computecanada)
+Requirement already satisfied: anyio in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (4.14.2+computecanada)
+Requirement already satisfied: certifi in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (1.0.9+computecanada)
+Requirement already satisfied: idna in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (3.18+computecanada)
+Requirement already satisfied: h11>=0.16 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpcore==1.*->httpx<1,>=0.23.0->huggingface_hub) (0.16.0+computecanada)
+YAML_FILE: /scratch/i/indrisch//LLaMA-Factory-LFS/examples/train_lora/tamia_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR_SAVES: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+OUTPUT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+GPU TYPE: HBM3
+SLURM_JOB_NODELIST: tg11102
+HEAD_NODE: tg11102
+HEAD_NODE: tg11102
+MASTER_ADDR: tg11102
+MASTER_PORT: 29500
+PROJECT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/i/indrisch/LLaMA-Factory-LFS/scripts:/scratch/i/indrisch/LLaMA-Factory-LFS/scripts/utils:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: TAMIA
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 9.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: None
+SIF_FILE: None
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/i/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/i/indrisch/venv_llamafactory_py313/
+SCANNET_H5_DIR: /scratch/i/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/i/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/i/indrisch/3DThinker10K_images_h5/
+CLUSTER: TAMIA
+YAML_FILE: /scratch/i/indrisch//LLaMA-Factory-LFS/examples/train_lora/tamia_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+No resume checkpoint (fresh start from epoch 0).
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00] === Node-local CoT dataset staging ===
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00] HOST=tg11102.tamia.ecpia.ca SLURM_NODEID=0 SLURM_NNODES=1
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00] NODE_LOCAL_DATA_ROOT=/tmp/cot_stage
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00] STAGE_COPY_JOBS=24 STAGE_STAGGER_SEC=0
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00] Sources:
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00]   SCENE30K_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.parquet
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00]   SPATIALSSRL_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00]   THINKER10K_ANN_SRC=/scratch/i/indrisch//LLaMA-Factory-LFS/data/3DThinker-10K/out/3dthinker10k_cot.jsonl
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00]   SCANNET_H5_DIR(src)=/scratch/i/indrisch/ScanNet_h5/scans
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00]   SPATIALSSRL_H5_DIR(src)=/scratch/i/indrisch/Spatial-SSRL_images_h5
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00]   THINKER10K_H5_DIR(src)=/scratch/i/indrisch/3DThinker10K_images_h5/
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00] Free space on /tmp/cot_stage: 7235681542144 bytes (need ~128849018880)
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00] Copying annotations...
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00] Annotations done in -1786779258s
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00] Copying ScanNet H5 tree...
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:18-04:00] Copying 700 entries from /scratch/i/indrisch/ScanNet_h5/scans -> /tmp/cot_stage/media/ScanNet_h5/scans (jobs=24)
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:22-04:00] ScanNet done in -1786779258s
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:22-04:00] Copying Spatial-SSRL H5 tree...
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:34:22-04:00] Copying 13 entries from /scratch/i/indrisch/Spatial-SSRL_images_h5 -> /tmp/cot_stage/media/Spatial-SSRL_images_h5 (jobs=24)
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:35:22-04:00] Spatial-SSRL done in -1786779262s
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:35:22-04:00] Copying 3DThinker H5 tree...
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:35:22-04:00] Copying 2 entries from /scratch/i/indrisch/3DThinker10K_images_h5/ -> /tmp/cot_stage/media/3DThinker10K_images_h5 (jobs=24)
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:35:25-04:00] 3DThinker done in -1786779322s
+Wrote local dataset_info (3 entries) -> /tmp/cot_stage/dataset_dir/dataset_info.json
+  Scene30k: /tmp/cot_stage/annotations/Scene30k.parquet
+  SpatialSSRL_coldstart: /tmp/cot_stage/annotations/SpatialSSRL_coldstart.json
+  3DThinker10k: /tmp/cot_stage/annotations/3dthinker10k_cot.jsonl
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:35:25-04:00] VERIFY OK under /tmp/cot_stage
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:35:25-04:00] === Staging complete in 67s ===
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:35:25-04:00] LOCAL_DATASET_DIR=/tmp/cot_stage/dataset_dir
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:35:25-04:00] LOCAL_MEDIA_DIR=/tmp/cot_stage/media/ScanNet_h5
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:35:25-04:00] SCANNET_H5_DIR=/tmp/cot_stage/media/ScanNet_h5/scans
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:35:25-04:00] SPATIALSSRL_H5_DIR=/tmp/cot_stage/media/Spatial-SSRL_images_h5
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:35:25-04:00] THINKER10K_H5_DIR=/tmp/cot_stage/media/3DThinker10K_images_h5
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme1n1    7.0T  105G  6.5T   2% /tmp
+Patched YAML -> /tmp/cot_stage/train.yaml
+  dataset_dir: /tmp/cot_stage/dataset_dir
+  media_dir: /tmp/cot_stage/media/ScanNet_h5
+YAML_FILE (node-local): /tmp/cot_stage/train.yaml
+LOCAL_DATASET_DIR: /tmp/cot_stage/dataset_dir
+LOCAL_MEDIA_DIR: /tmp/cot_stage/media/ScanNet_h5
+SCANNET_H5_DIR (local): /tmp/cot_stage/media/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR (local): /tmp/cot_stage/media/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR (local): /tmp/cot_stage/media/3DThinker10K_images_h5
+Copying venv to local storage...
+/scratch/i/indrisch/LLaMA-Factory-LFS /scratch/i/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT
+[INFO|2026-08-15 03:36:28] llamafactory.launcher:144 >> Initializing 4 distributed tasks at: tg11102:29500
+W0815 03:36:29.562000 1316008 torch/distributed/run.py:851] 
+W0815 03:36:29.562000 1316008 torch/distributed/run.py:851] *****************************************
+W0815 03:36:29.562000 1316008 torch/distributed/run.py:851] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0815 03:36:29.562000 1316008 torch/distributed/run.py:851] *****************************************
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[WARNING|2026-08-15 03:36:39] llamafactory.extras.misc:155 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+df: /tmp/.triton_cachedf: /tmp/.triton_cachedf: /tmp/.triton_cache: No such file or directory
+: No such file or directory
+: No such file or directory
+[W815 03:36:43.438511066 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[W815 03:36:43.438521711 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[W815 03:36:43.438529465 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[W815 03:36:43.449705065 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+tg11102:1316013:1316013 [0] NCCL INFO Bootstrap: Using ibp77s0:10.225.0.29<0>
+tg11102:1316013:1316013 [0] NCCL INFO cudaDriverVersion 13000
+tg11102:1316013:1316013 [0] NCCL INFO NCCL version 2.27.7+cuda12.9
+tg11102:1316013:1316013 [0] NCCL INFO Comm config Blocking set to 1
+tg11102:1316014:1316014 [1] NCCL INFO cudaDriverVersion 13000
+tg11102:1316014:1316014 [1] NCCL INFO Bootstrap: Using ibp77s0:10.225.0.29<0>
+tg11102:1316014:1316014 [1] NCCL INFO NCCL version 2.27.7+cuda12.9
+tg11102:1316016:1316016 [3] NCCL INFO cudaDriverVersion 13000
+tg11102:1316016:1316016 [3] NCCL INFO Bootstrap: Using ibp77s0:10.225.0.29<0>
+tg11102:1316016:1316016 [3] NCCL INFO NCCL version 2.27.7+cuda12.9
+tg11102:1316014:1316014 [1] NCCL INFO Comm config Blocking set to 1
+tg11102:1316015:1316015 [2] NCCL INFO cudaDriverVersion 13000
+tg11102:1316016:1316016 [3] NCCL INFO Comm config Blocking set to 1
+tg11102:1316015:1316015 [2] NCCL INFO Bootstrap: Using ibp77s0:10.225.0.29<0>
+tg11102:1316015:1316015 [2] NCCL INFO NCCL version 2.27.7+cuda12.9
+tg11102:1316015:1316015 [2] NCCL INFO Comm config Blocking set to 1
+tg11102:1316013:1316442 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+tg11102:1316013:1316442 [0] NCCL INFO NET/IB : Using [0]mlx5_2:1/IB [1]mlx5_0:1/IB [2]mlx5_3:1/IB [3]mlx5_1:1/IB [RO]; OOB ibp77s0:10.225.0.29<0>
+tg11102:1316013:1316442 [0] NCCL INFO Initialized NET plugin IB
+tg11102:1316013:1316442 [0] NCCL INFO Assigned NET plugin IB to comm
+tg11102:1316013:1316442 [0] NCCL INFO Using network IB
+tg11102:1316014:1316443 [1] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+tg11102:1316016:1316444 [3] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+tg11102:1316015:1316445 [2] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+tg11102:1316014:1316443 [1] NCCL INFO NET/IB : Using [0]mlx5_2:1/IB [1]mlx5_0:1/IB [2]mlx5_3:1/IB [3]mlx5_1:1/IB [RO]; OOB ibp77s0:10.225.0.29<0>
+tg11102:1316014:1316443 [1] NCCL INFO Initialized NET plugin IB
+tg11102:1316016:1316444 [3] NCCL INFO NET/IB : Using [0]mlx5_2:1/IB [1]mlx5_0:1/IB [2]mlx5_3:1/IB [3]mlx5_1:1/IB [RO]; OOB ibp77s0:10.225.0.29<0>
+tg11102:1316016:1316444 [3] NCCL INFO Initialized NET plugin IB
+tg11102:1316014:1316443 [1] NCCL INFO Assigned NET plugin IB to comm
+tg11102:1316014:1316443 [1] NCCL INFO Using network IB
+tg11102:1316016:1316444 [3] NCCL INFO Assigned NET plugin IB to comm
+tg11102:1316016:1316444 [3] NCCL INFO Using network IB
+tg11102:1316015:1316445 [2] NCCL INFO NET/IB : Using [0]mlx5_2:1/IB [1]mlx5_0:1/IB [2]mlx5_3:1/IB [3]mlx5_1:1/IB [RO]; OOB ibp77s0:10.225.0.29<0>
+tg11102:1316015:1316445 [2] NCCL INFO Initialized NET plugin IB
+tg11102:1316015:1316445 [2] NCCL INFO Assigned NET plugin IB to comm
+tg11102:1316015:1316445 [2] NCCL INFO Using network IB
+tg11102:1316013:1316442 [0] NCCL INFO ncclCommInitRankConfig comm 0x4c393c80 rank 0 nranks 4 cudaDev 0 nvmlDev 0 busId 4e000 commId 0xb99df248723d5749 - Init START
+tg11102:1316015:1316445 [2] NCCL INFO ncclCommInitRankConfig comm 0x4e4e8310 rank 2 nranks 4 cudaDev 2 nvmlDev 2 busId cb000 commId 0xb99df248723d5749 - Init START
+tg11102:1316014:1316443 [1] NCCL INFO ncclCommInitRankConfig comm 0x172a7800 rank 1 nranks 4 cudaDev 1 nvmlDev 1 busId 5f000 commId 0xb99df248723d5749 - Init START
+tg11102:1316016:1316444 [3] NCCL INFO ncclCommInitRankConfig comm 0x451d46a0 rank 3 nranks 4 cudaDev 3 nvmlDev 3 busId db000 commId 0xb99df248723d5749 - Init START
+tg11102:1316014:1316443 [1] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+tg11102:1316015:1316445 [2] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+tg11102:1316016:1316444 [3] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+tg11102:1316013:1316442 [0] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+tg11102:1316015:1316445 [2] NCCL INFO Bootstrap timings total 0.001564 (create 0.000069, send 0.000238, recv 0.000456, ring 0.000140, delay 0.000001)
+tg11102:1316013:1316442 [0] NCCL INFO Bootstrap timings total 0.017192 (create 0.000068, send 0.000261, recv 0.015798, ring 0.000124, delay 0.000002)
+tg11102:1316014:1316443 [1] NCCL INFO Bootstrap timings total 0.001568 (create 0.000070, send 0.000209, recv 0.000343, ring 0.000339, delay 0.000001)
+tg11102:1316016:1316444 [3] NCCL INFO Bootstrap timings total 0.001529 (create 0.000085, send 0.000198, recv 0.000571, ring 0.000097, delay 0.000001)
+tg11102:1316013:1316442 [0] NCCL INFO Setting affinity for GPU 0 to 0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46
+tg11102:1316013:1316442 [0] NCCL INFO NVLS multicast support is not available on dev 0 (NVLS_NCHANNELS 0)
+tg11102:1316016:1316444 [3] NCCL INFO Setting affinity for GPU 3 to 1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47
+tg11102:1316016:1316444 [3] NCCL INFO NVLS multicast support is not available on dev 3 (NVLS_NCHANNELS 0)
+tg11102:1316015:1316445 [2] NCCL INFO Setting affinity for GPU 2 to 1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47
+tg11102:1316015:1316445 [2] NCCL INFO NVLS multicast support is not available on dev 2 (NVLS_NCHANNELS 0)
+tg11102:1316014:1316443 [1] NCCL INFO Setting affinity for GPU 1 to 0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46
+tg11102:1316014:1316443 [1] NCCL INFO NVLS multicast support is not available on dev 1 (NVLS_NCHANNELS 0)
+tg11102:1316015:1316445 [2] NCCL INFO comm 0x4e4e8310 rank 2 nRanks 4 nNodes 1 localRanks 4 localRank 2 MNNVL 0
+tg11102:1316016:1316444 [3] NCCL INFO comm 0x451d46a0 rank 3 nRanks 4 nNodes 1 localRanks 4 localRank 3 MNNVL 0
+tg11102:1316014:1316443 [1] NCCL INFO comm 0x172a7800 rank 1 nRanks 4 nNodes 1 localRanks 4 localRank 1 MNNVL 0
+tg11102:1316013:1316442 [0] NCCL INFO comm 0x4c393c80 rank 0 nRanks 4 nNodes 1 localRanks 4 localRank 0 MNNVL 0
+tg11102:1316015:1316445 [2] NCCL INFO Trees [0] 3/-1/-1->2->1 [1] 3/-1/-1->2->1 [2] 3/-1/-1->2->1 [3] 3/-1/-1->2->1 [4] 1/-1/-1->2->0 [5] 1/-1/-1->2->0 [6] 1/-1/-1->2->0 [7] 1/-1/-1->2->0 [8] -1/-1/-1->2->3 [9] -1/-1/-1->2->3 [10] -1/-1/-1->2->3 [11] -1/-1/-1->2->3 [12] 3/-1/-1->2->1 [13] 3/-1/-1->2->1 [14] 3/-1/-1->2->1 [15] 3/-1/-1->2->1 [16] 1/-1/-1->2->0 [17] 1/-1/-1->2->0 [18] 1/-1/-1->2->0 [19] 1/-1/-1->2->0 [20] -1/-1/-1->2->3 [21] -1/-1/-1->2->3 [22] -1/-1/-1->2->3 [23] -1/-1/-1->2->3
+tg11102:1316016:1316444 [3] NCCL INFO Trees [0] -1/-1/-1->3->2 [1] -1/-1/-1->3->2 [2] -1/-1/-1->3->2 [3] -1/-1/-1->3->2 [4] -1/-1/-1->3->1 [5] -1/-1/-1->3->1 [6] -1/-1/-1->3->1 [7] -1/-1/-1->3->1 [8] 2/-1/-1->3->0 [9] 2/-1/-1->3->0 [10] 2/-1/-1->3->0 [11] 2/-1/-1->3->0 [12] -1/-1/-1->3->2 [13] -1/-1/-1->3->2 [14] -1/-1/-1->3->2 [15] -1/-1/-1->3->2 [16] -1/-1/-1->3->1 [17] -1/-1/-1->3->1 [18] -1/-1/-1->3->1 [19] -1/-1/-1->3->1 [20] 2/-1/-1->3->0 [21] 2/-1/-1->3->0 [22] 2/-1/-1->3->0 [23] 2/-1/-1->3->0
+tg11102:1316015:1316445 [2] NCCL INFO P2P Chunksize set to 524288
+tg11102:1316016:1316444 [3] NCCL INFO P2P Chunksize set to 524288
+tg11102:1316013:1316442 [0] NCCL INFO Channel 00/24 : 0 1 2 3
+tg11102:1316013:1316442 [0] NCCL INFO Channel 01/24 : 0 1 3 2
+tg11102:1316013:1316442 [0] NCCL INFO Channel 02/24 : 0 2 3 1
+tg11102:1316013:1316442 [0] NCCL INFO Channel 03/24 : 0 2 1 3
+tg11102:1316013:1316442 [0] NCCL INFO Channel 04/24 : 0 3 1 2
+tg11102:1316013:1316442 [0] NCCL INFO Channel 05/24 : 0 3 2 1
+tg11102:1316013:1316442 [0] NCCL INFO Channel 06/24 : 0 1 2 3
+tg11102:1316014:1316443 [1] NCCL INFO Trees [0] 2/-1/-1->1->0 [1] 2/-1/-1->1->0 [2] 2/-1/-1->1->0 [3] 2/-1/-1->1->0 [4] 3/-1/-1->1->2 [5] 3/-1/-1->1->2 [6] 3/-1/-1->1->2 [7] 3/-1/-1->1->2 [8] 0/-1/-1->1->-1 [9] 0/-1/-1->1->-1 [10] 0/-1/-1->1->-1 [11] 0/-1/-1->1->-1 [12] 2/-1/-1->1->0 [13] 2/-1/-1->1->0 [14] 2/-1/-1->1->0 [15] 2/-1/-1->1->0 [16] 3/-1/-1->1->2 [17] 3/-1/-1->1->2 [18] 3/-1/-1->1->2 [19] 3/-1/-1->1->2 [20] 0/-1/-1->1->-1 [21] 0/-1/-1->1->-1 [22] 0/-1/-1->1->-1 [23] 0/-1/-1->1->-1
+tg11102:1316013:1316442 [0] NCCL INFO Channel 07/24 : 0 1 3 2
+tg11102:1316014:1316443 [1] NCCL INFO P2P Chunksize set to 524288
+tg11102:1316013:1316442 [0] NCCL INFO Channel 08/24 : 0 2 3 1
+tg11102:1316013:1316442 [0] NCCL INFO Channel 09/24 : 0 2 1 3
+tg11102:1316013:1316442 [0] NCCL INFO Channel 10/24 : 0 3 1 2
+tg11102:1316013:1316442 [0] NCCL INFO Channel 11/24 : 0 3 2 1
+tg11102:1316013:1316442 [0] NCCL INFO Channel 12/24 : 0 1 2 3
+tg11102:1316013:1316442 [0] NCCL INFO Channel 13/24 : 0 1 3 2
+tg11102:1316013:1316442 [0] NCCL INFO Channel 14/24 : 0 2 3 1
+tg11102:1316013:1316442 [0] NCCL INFO Channel 15/24 : 0 2 1 3
+tg11102:1316013:1316442 [0] NCCL INFO Channel 16/24 : 0 3 1 2
+tg11102:1316013:1316442 [0] NCCL INFO Channel 17/24 : 0 3 2 1
+tg11102:1316013:1316442 [0] NCCL INFO Channel 18/24 : 0 1 2 3
+tg11102:1316013:1316442 [0] NCCL INFO Channel 19/24 : 0 1 3 2
+tg11102:1316013:1316442 [0] NCCL INFO Channel 20/24 : 0 2 3 1
+tg11102:1316013:1316442 [0] NCCL INFO Channel 21/24 : 0 2 1 3
+tg11102:1316013:1316442 [0] NCCL INFO Channel 22/24 : 0 3 1 2
+tg11102:1316013:1316442 [0] NCCL INFO Channel 23/24 : 0 3 2 1
+tg11102:1316013:1316442 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1 [2] 1/-1/-1->0->-1 [3] 1/-1/-1->0->-1 [4] 2/-1/-1->0->-1 [5] 2/-1/-1->0->-1 [6] 2/-1/-1->0->-1 [7] 2/-1/-1->0->-1 [8] 3/-1/-1->0->1 [9] 3/-1/-1->0->1 [10] 3/-1/-1->0->1 [11] 3/-1/-1->0->1 [12] 1/-1/-1->0->-1 [13] 1/-1/-1->0->-1 [14] 1/-1/-1->0->-1 [15] 1/-1/-1->0->-1 [16] 2/-1/-1->0->-1 [17] 2/-1/-1->0->-1 [18] 2/-1/-1->0->-1 [19] 2/-1/-1->0->-1 [20] 3/-1/-1->0->1 [21] 3/-1/-1->0->1 [22] 3/-1/-1->0->1 [23] 3/-1/-1->0->1
+tg11102:1316013:1316442 [0] NCCL INFO P2P Chunksize set to 524288
+tg11102:1316014:1316443 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+tg11102:1316013:1316442 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+tg11102:1316013:1316442 [0] NCCL INFO Check P2P Type isAllDirectP2p 1 directMode 0
+tg11102:1316016:1316444 [3] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+tg11102:1316015:1316445 [2] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+tg11102:1316015:1316468 [2] NCCL INFO [Proxy Service] Device 2 CPU core 11
+tg11102:1316016:1316469 [3] NCCL INFO [Proxy Service] Device 3 CPU core 17
+tg11102:1316014:1316470 [1] NCCL INFO [Proxy Service UDS] Device 1 CPU core 46
+tg11102:1316013:1316471 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 16
+tg11102:1316014:1316466 [1] NCCL INFO [Proxy Service] Device 1 CPU core 44
+tg11102:1316013:1316467 [0] NCCL INFO [Proxy Service] Device 0 CPU core 12
+tg11102:1316015:1316472 [2] NCCL INFO [Proxy Service UDS] Device 2 CPU core 27
+tg11102:1316016:1316473 [3] NCCL INFO [Proxy Service UDS] Device 3 CPU core 27
+tg11102:1316015:1316445 [2] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+tg11102:1316015:1316445 [2] NCCL INFO 24 coll channels, 24 collnet channels, 0 nvls channels, 32 p2p channels, 16 p2p channels per peer
+tg11102:1316016:1316444 [3] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+tg11102:1316016:1316444 [3] NCCL INFO 24 coll channels, 24 collnet channels, 0 nvls channels, 32 p2p channels, 16 p2p channels per peer
+tg11102:1316014:1316443 [1] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+tg11102:1316014:1316443 [1] NCCL INFO 24 coll channels, 24 collnet channels, 0 nvls channels, 32 p2p channels, 16 p2p channels per peer
+tg11102:1316013:1316442 [0] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+tg11102:1316013:1316442 [0] NCCL INFO 24 coll channels, 24 collnet channels, 0 nvls channels, 32 p2p channels, 16 p2p channels per peer
+tg11102:1316013:1316442 [0] NCCL INFO CC Off, workFifoBytes 1048576
+tg11102:1316013:1316442 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+tg11102:1316013:1316442 [0] NCCL INFO ncclCommInitRankConfig comm 0x4c393c80 rank 0 nranks 4 cudaDev 0 nvmlDev 0 busId 4e000 commId 0xb99df248723d5749 - Init COMPLETE
+tg11102:1316015:1316445 [2] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+tg11102:1316014:1316443 [1] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+tg11102:1316013:1316442 [0] NCCL INFO Init timings - ncclCommInitRankConfig: rank 0 nranks 4 total 2.10 (kernels 0.23, alloc 1.71, bootstrap 0.02, allgathers 0.00, topo 0.04, graphs 0.02, connections 0.04, rest 0.02)
+tg11102:1316015:1316445 [2] NCCL INFO ncclCommInitRankConfig comm 0x4e4e8310 rank 2 nranks 4 cudaDev 2 nvmlDev 2 busId cb000 commId 0xb99df248723d5749 - Init COMPLETE
+tg11102:1316016:1316444 [3] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+tg11102:1316014:1316443 [1] NCCL INFO ncclCommInitRankConfig comm 0x172a7800 rank 1 nranks 4 cudaDev 1 nvmlDev 1 busId 5f000 commId 0xb99df248723d5749 - Init COMPLETE
+tg11102:1316016:1316444 [3] NCCL INFO ncclCommInitRankConfig comm 0x451d46a0 rank 3 nranks 4 cudaDev 3 nvmlDev 3 busId db000 commId 0xb99df248723d5749 - Init COMPLETE
+tg11102:1316015:1316445 [2] NCCL INFO Init timings - ncclCommInitRankConfig: rank 2 nranks 4 total 2.08 (kernels 0.23, alloc 1.71, bootstrap 0.00, allgathers 0.01, topo 0.05, graphs 0.02, connections 0.04, rest 0.02)
+tg11102:1316014:1316443 [1] NCCL INFO Init timings - ncclCommInitRankConfig: rank 1 nranks 4 total 2.08 (kernels 0.23, alloc 1.71, bootstrap 0.00, allgathers 0.00, topo 0.05, graphs 0.02, connections 0.04, rest 0.02)
+tg11102:1316016:1316444 [3] NCCL INFO Init timings - ncclCommInitRankConfig: rank 3 nranks 4 total 2.08 (kernels 0.23, alloc 1.71, bootstrap 0.00, allgathers 0.01, topo 0.05, graphs 0.02, connections 0.04, rest 0.02)
+[INFO|2026-08-15 03:36:46] llamafactory.hparams.parser:887 >> Process rank: 3, world size: 4, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-15 03:36:46] llamafactory.hparams.parser:144 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2026-08-15 03:36:46] llamafactory.hparams.parser:887 >> Process rank: 0, world size: 4, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-15 03:36:46] llamafactory.hparams.parser:887 >> Process rank: 1, world size: 4, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-15 03:36:46] llamafactory.hparams.parser:887 >> Process rank: 2, world size: 4, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-15 03:36:46] llamafactory.train.tuner:144 >> SDPA backend flags: {'flash': True, 'mem_efficient': True, 'math': True, 'cudnn': True}
+[INFO|hub.py:364] 2026-08-15 03:36:46,076 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:364] 2026-08-15 03:36:46,080 >> Offline mode: forcing local_files_only=True
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 422, in cached_files
+[rank0]:     hf_hub_download(
+[rank0]:     ~~~~~~~~~~~~~~~^
+[rank0]:         path_or_repo_id,
+[rank0]:         ^^^^^^^^^^^^^^^^
+[rank0]:     ...<10 lines>...
+[rank0]:         tqdm_class=tqdm_class,
+[rank0]:         ^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:     )
+[rank0]:     ^
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+[rank0]:     return fn(*args, **kwargs)
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1019, in hf_hub_download
+[rank0]:     return _hf_hub_download_to_cache_dir(
+[rank0]:         # Destination
+[rank0]:     ...<15 lines>...
+[rank0]:         dry_run=dry_run,
+[rank0]:     )
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1166, in _hf_hub_download_to_cache_dir
+[rank0]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank0]:     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1895, in _raise_on_head_call_error
+[rank0]:     raise LocalEntryNotFoundError(
+[rank0]:     ...<2 lines>...
+[rank0]:     )
+[rank0]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank0]: The above exception was the direct cause of the following exception:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/models/auto/tokenization_auto.py", line 692, in from_pretrained
+[rank0]:     config = AutoConfig.from_pretrained(
+[rank0]:         pretrained_model_name_or_path, trust_remote_code=trust_remote_code, **kwargs
+[rank0]:     )
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/models/auto/configuration_auto.py", line 374, in from_pretrained
+[rank0]:     config_dict, unused_kwargs = PreTrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank0]:                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 682, in get_config_dict
+[rank0]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank0]:                           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 737, in _get_config_dict
+[rank0]:     resolved_config_file = cached_file(
+[rank0]:         pretrained_model_name_or_path,
+[rank0]:     ...<9 lines>...
+[rank0]:         _commit_hash=commit_hash,
+[rank0]:     )
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 278, in cached_file
+[rank0]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 498, in cached_files
+[rank0]:     raise OSError(
+[rank0]:     ...<3 lines>...
+[rank0]:     ) from e
+[rank0]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank0]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank0]: During handling of the above exception, another exception occurred:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 422, in cached_files
+[rank0]:     hf_hub_download(
+[rank0]:     ~~~~~~~~~~~~~~~^
+[rank0]:         path_or_repo_id,
+[rank0]:         ^^^^^^^^^^^^^^^^
+[rank0]:     ...<10 lines>...
+[rank0]:         tqdm_class=tqdm_class,
+[rank0]:         ^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:     )
+[rank0]:     ^
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+[rank0]:     return fn(*args, **kwargs)
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1019, in hf_hub_download
+[rank0]:     return _hf_hub_download_to_cache_dir(
+[rank0]:         # Destination
+[rank0]:     ...<15 lines>...
+[rank0]:         dry_run=dry_run,
+[rank0]:     )
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1166, in _hf_hub_download_to_cache_dir
+[rank0]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank0]:     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1895, in _raise_on_head_call_error
+[rank0]:     raise LocalEntryNotFoundError(
+[rank0]:     ...<2 lines>...
+[rank0]:     )
+[rank0]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank0]: The above exception was the direct cause of the following exception:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/model/loader.py", line 83, in load_tokenizer
+[rank0]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank0]:         model_args.model_name_or_path,
+[rank0]:     ...<3 lines>...
+[rank0]:         **init_kwargs,
+[rank0]:     )
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/models/auto/tokenization_auto.py", line 696, in from_pretrained
+[rank0]:     config = PreTrainedConfig.from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 641, in from_pretrained
+[rank0]:     config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank0]:                           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 682, in get_config_dict
+[rank0]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank0]:                           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 737, in _get_config_dict
+[rank0]:     resolved_config_file = cached_file(
+[rank0]:         pretrained_model_name_or_path,
+[rank0]:     ...<9 lines>...
+[rank0]:         _commit_hash=commit_hash,
+[rank0]:     )
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 278, in cached_file
+[rank0]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 498, in cached_files
+[rank0]:     raise OSError(
+[rank0]:     ...<3 lines>...
+[rank0]:     ) from e
+[rank0]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank0]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank0]: The above exception was the direct cause of the following exception:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+[rank0]:     run_exp()
+[rank0]:     ~~~~~~~^^
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+[rank0]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank0]:     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 187, in _training_function
+[rank0]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank0]:     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/sft/workflow.py", line 50, in run_sft
+[rank0]:     tokenizer_module = load_tokenizer(model_args)
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/model/loader.py", line 98, in load_tokenizer
+[rank0]:     raise OSError("Failed to load tokenizer.") from e
+[rank0]: OSError: Failed to load tokenizer.
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 422, in cached_files
+[rank3]:     hf_hub_download(
+[rank3]:     ~~~~~~~~~~~~~~~^
+[rank3]:         path_or_repo_id,
+[rank3]:         ^^^^^^^^^^^^^^^^
+[rank3]:     ...<10 lines>...
+[rank3]:         tqdm_class=tqdm_class,
+[rank3]:         ^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:     )
+[rank3]:     ^
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+[rank3]:     return fn(*args, **kwargs)
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1019, in hf_hub_download
+[rank3]:     return _hf_hub_download_to_cache_dir(
+[rank3]:         # Destination
+[rank3]:     ...<15 lines>...
+[rank3]:         dry_run=dry_run,
+[rank3]:     )
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1166, in _hf_hub_download_to_cache_dir
+[rank3]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank3]:     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1895, in _raise_on_head_call_error
+[rank3]:     raise LocalEntryNotFoundError(
+[rank3]:     ...<2 lines>...
+[rank3]:     )
+[rank3]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank3]: The above exception was the direct cause of the following exception:
+
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/models/auto/tokenization_auto.py", line 692, in from_pretrained
+[rank3]:     config = AutoConfig.from_pretrained(
+[rank3]:         pretrained_model_name_or_path, trust_remote_code=trust_remote_code, **kwargs
+[rank3]:     )
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/models/auto/configuration_auto.py", line 374, in from_pretrained
+[rank3]:     config_dict, unused_kwargs = PreTrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank3]:                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 682, in get_config_dict
+[rank3]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank3]:                           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 737, in _get_config_dict
+[rank3]:     resolved_config_file = cached_file(
+[rank3]:         pretrained_model_name_or_path,
+[rank3]:     ...<9 lines>...
+[rank3]:         _commit_hash=commit_hash,
+[rank3]:     )
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 278, in cached_file
+[rank3]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 498, in cached_files
+[rank3]:     raise OSError(
+[rank3]:     ...<3 lines>...
+[rank3]:     ) from e
+[rank3]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank3]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank3]: During handling of the above exception, another exception occurred:
+
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 422, in cached_files
+[rank3]:     hf_hub_download(
+[rank3]:     ~~~~~~~~~~~~~~~^
+[rank3]:         path_or_repo_id,
+[rank3]:         ^^^^^^^^^^^^^^^^
+[rank3]:     ...<10 lines>...
+[rank3]:         tqdm_class=tqdm_class,
+[rank3]:         ^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:     )
+[rank3]:     ^
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+[rank3]:     return fn(*args, **kwargs)
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1019, in hf_hub_download
+[rank3]:     return _hf_hub_download_to_cache_dir(
+[rank3]:         # Destination
+[rank3]:     ...<15 lines>...
+[rank3]:         dry_run=dry_run,
+[rank3]:     )
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1166, in _hf_hub_download_to_cache_dir
+[rank3]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank3]:     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1895, in _raise_on_head_call_error
+[rank3]:     raise LocalEntryNotFoundError(
+[rank3]:     ...<2 lines>...
+[rank3]:     )
+[rank3]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank3]: The above exception was the direct cause of the following exception:
+
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/model/loader.py", line 83, in load_tokenizer
+[rank3]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank3]:         model_args.model_name_or_path,
+[rank3]:     ...<3 lines>...
+[rank3]:         **init_kwargs,
+[rank3]:     )
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/models/auto/tokenization_auto.py", line 696, in from_pretrained
+[rank3]:     config = PreTrainedConfig.from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 641, in from_pretrained
+[rank3]:     config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank3]:                           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 682, in get_config_dict
+[rank3]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank3]:                           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 737, in _get_config_dict
+[rank3]:     resolved_config_file = cached_file(
+[rank3]:         pretrained_model_name_or_path,
+[rank3]:     ...<9 lines>...
+[rank3]:         _commit_hash=commit_hash,
+[rank3]:     )
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 278, in cached_file
+[rank3]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 498, in cached_files
+[rank3]:     raise OSError(
+[rank3]:     ...<3 lines>...
+[rank3]:     ) from e
+[rank3]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank3]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank3]: The above exception was the direct cause of the following exception:
+
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+[rank3]:     run_exp()
+[rank3]:     ~~~~~~~^^
+[rank3]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+[rank3]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank3]:     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 187, in _training_function
+[rank3]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank3]:     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/sft/workflow.py", line 50, in run_sft
+[rank3]:     tokenizer_module = load_tokenizer(model_args)
+[rank3]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/model/loader.py", line 98, in load_tokenizer
+[rank3]:     raise OSError("Failed to load tokenizer.") from e
+[rank3]: OSError: Failed to load tokenizer.
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 422, in cached_files
+[rank1]:     hf_hub_download(
+[rank1]:     ~~~~~~~~~~~~~~~^
+[rank1]:         path_or_repo_id,
+[rank1]:         ^^^^^^^^^^^^^^^^
+[rank1]:     ...<10 lines>...
+[rank1]:         tqdm_class=tqdm_class,
+[rank1]:         ^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:     )
+[rank1]:     ^
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+[rank1]:     return fn(*args, **kwargs)
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1019, in hf_hub_download
+[rank1]:     return _hf_hub_download_to_cache_dir(
+[rank1]:         # Destination
+[rank1]:     ...<15 lines>...
+[rank1]:         dry_run=dry_run,
+[rank1]:     )
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1166, in _hf_hub_download_to_cache_dir
+[rank1]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank1]:     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1895, in _raise_on_head_call_error
+[rank1]:     raise LocalEntryNotFoundError(
+[rank1]:     ...<2 lines>...
+[rank1]:     )
+[rank1]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank1]: The above exception was the direct cause of the following exception:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/models/auto/tokenization_auto.py", line 692, in from_pretrained
+[rank1]:     config = AutoConfig.from_pretrained(
+[rank1]:         pretrained_model_name_or_path, trust_remote_code=trust_remote_code, **kwargs
+[rank1]:     )
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/models/auto/configuration_auto.py", line 374, in from_pretrained
+[rank1]:     config_dict, unused_kwargs = PreTrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank1]:                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 682, in get_config_dict
+[rank1]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank1]:                           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 737, in _get_config_dict
+[rank1]:     resolved_config_file = cached_file(
+[rank1]:         pretrained_model_name_or_path,
+[rank1]:     ...<9 lines>...
+[rank1]:         _commit_hash=commit_hash,
+[rank1]:     )
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 278, in cached_file
+[rank1]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 498, in cached_files
+[rank1]:     raise OSError(
+[rank1]:     ...<3 lines>...
+[rank1]:     ) from e
+[rank1]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank1]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank1]: During handling of the above exception, another exception occurred:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 422, in cached_files
+[rank1]:     hf_hub_download(
+[rank1]:     ~~~~~~~~~~~~~~~^
+[rank1]:         path_or_repo_id,
+[rank1]:         ^^^^^^^^^^^^^^^^
+[rank1]:     ...<10 lines>...
+[rank1]:         tqdm_class=tqdm_class,
+[rank1]:         ^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:     )
+[rank1]:     ^
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+[rank1]:     return fn(*args, **kwargs)
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1019, in hf_hub_download
+[rank1]:     return _hf_hub_download_to_cache_dir(
+[rank1]:         # Destination
+[rank1]:     ...<15 lines>...
+[rank1]:         dry_run=dry_run,
+[rank1]:     )
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1166, in _hf_hub_download_to_cache_dir
+[rank1]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank1]:     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1895, in _raise_on_head_call_error
+[rank1]:     raise LocalEntryNotFoundError(
+[rank1]:     ...<2 lines>...
+[rank1]:     )
+[rank1]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank1]: The above exception was the direct cause of the following exception:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/model/loader.py", line 83, in load_tokenizer
+[rank1]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank1]:         model_args.model_name_or_path,
+[rank1]:     ...<3 lines>...
+[rank1]:         **init_kwargs,
+[rank1]:     )
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/models/auto/tokenization_auto.py", line 696, in from_pretrained
+[rank1]:     config = PreTrainedConfig.from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 641, in from_pretrained
+[rank1]:     config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank1]:                           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 682, in get_config_dict
+[rank1]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank1]:                           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 737, in _get_config_dict
+[rank1]:     resolved_config_file = cached_file(
+[rank1]:         pretrained_model_name_or_path,
+[rank1]:     ...<9 lines>...
+[rank1]:         _commit_hash=commit_hash,
+[rank1]:     )
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 278, in cached_file
+[rank1]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 498, in cached_files
+[rank1]:     raise OSError(
+[rank1]:     ...<3 lines>...
+[rank1]:     ) from e
+[rank1]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank1]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank1]: The above exception was the direct cause of the following exception:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+[rank1]:     run_exp()
+[rank1]:     ~~~~~~~^^
+[rank1]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+[rank1]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank1]:     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 187, in _training_function
+[rank1]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank1]:     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/sft/workflow.py", line 50, in run_sft
+[rank1]:     tokenizer_module = load_tokenizer(model_args)
+[rank1]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/model/loader.py", line 98, in load_tokenizer
+[rank1]:     raise OSError("Failed to load tokenizer.") from e
+[rank1]: OSError: Failed to load tokenizer.
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 422, in cached_files
+[rank2]:     hf_hub_download(
+[rank2]:     ~~~~~~~~~~~~~~~^
+[rank2]:         path_or_repo_id,
+[rank2]:         ^^^^^^^^^^^^^^^^
+[rank2]:     ...<10 lines>...
+[rank2]:         tqdm_class=tqdm_class,
+[rank2]:         ^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:     )
+[rank2]:     ^
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+[rank2]:     return fn(*args, **kwargs)
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1019, in hf_hub_download
+[rank2]:     return _hf_hub_download_to_cache_dir(
+[rank2]:         # Destination
+[rank2]:     ...<15 lines>...
+[rank2]:         dry_run=dry_run,
+[rank2]:     )
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1166, in _hf_hub_download_to_cache_dir
+[rank2]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank2]:     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1895, in _raise_on_head_call_error
+[rank2]:     raise LocalEntryNotFoundError(
+[rank2]:     ...<2 lines>...
+[rank2]:     )
+[rank2]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank2]: The above exception was the direct cause of the following exception:
+
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/models/auto/tokenization_auto.py", line 692, in from_pretrained
+[rank2]:     config = AutoConfig.from_pretrained(
+[rank2]:         pretrained_model_name_or_path, trust_remote_code=trust_remote_code, **kwargs
+[rank2]:     )
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/models/auto/configuration_auto.py", line 374, in from_pretrained
+[rank2]:     config_dict, unused_kwargs = PreTrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank2]:                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 682, in get_config_dict
+[rank2]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank2]:                           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 737, in _get_config_dict
+[rank2]:     resolved_config_file = cached_file(
+[rank2]:         pretrained_model_name_or_path,
+[rank2]:     ...<9 lines>...
+[rank2]:         _commit_hash=commit_hash,
+[rank2]:     )
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 278, in cached_file
+[rank2]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 498, in cached_files
+[rank2]:     raise OSError(
+[rank2]:     ...<3 lines>...
+[rank2]:     ) from e
+[rank2]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank2]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank2]: During handling of the above exception, another exception occurred:
+
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 422, in cached_files
+[rank2]:     hf_hub_download(
+[rank2]:     ~~~~~~~~~~~~~~~^
+[rank2]:         path_or_repo_id,
+[rank2]:         ^^^^^^^^^^^^^^^^
+[rank2]:     ...<10 lines>...
+[rank2]:         tqdm_class=tqdm_class,
+[rank2]:         ^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:     )
+[rank2]:     ^
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+[rank2]:     return fn(*args, **kwargs)
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1019, in hf_hub_download
+[rank2]:     return _hf_hub_download_to_cache_dir(
+[rank2]:         # Destination
+[rank2]:     ...<15 lines>...
+[rank2]:         dry_run=dry_run,
+[rank2]:     )
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1166, in _hf_hub_download_to_cache_dir
+[rank2]:     _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+[rank2]:     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/huggingface_hub/file_download.py", line 1895, in _raise_on_head_call_error
+[rank2]:     raise LocalEntryNotFoundError(
+[rank2]:     ...<2 lines>...
+[rank2]:     )
+[rank2]: huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'local_files_only' to False.
+
+[rank2]: The above exception was the direct cause of the following exception:
+
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/model/loader.py", line 83, in load_tokenizer
+[rank2]:     tokenizer = AutoTokenizer.from_pretrained(
+[rank2]:         model_args.model_name_or_path,
+[rank2]:     ...<3 lines>...
+[rank2]:         **init_kwargs,
+[rank2]:     )
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/models/auto/tokenization_auto.py", line 696, in from_pretrained
+[rank2]:     config = PreTrainedConfig.from_pretrained(pretrained_model_name_or_path, **kwargs)
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 641, in from_pretrained
+[rank2]:     config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank2]:                           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 682, in get_config_dict
+[rank2]:     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[rank2]:                           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/configuration_utils.py", line 737, in _get_config_dict
+[rank2]:     resolved_config_file = cached_file(
+[rank2]:         pretrained_model_name_or_path,
+[rank2]:     ...<9 lines>...
+[rank2]:         _commit_hash=commit_hash,
+[rank2]:     )
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 278, in cached_file
+[rank2]:     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/hub.py", line 498, in cached_files
+[rank2]:     raise OSError(
+[rank2]:     ...<3 lines>...
+[rank2]:     ) from e
+[rank2]: OSError: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+[rank2]: Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+
+[rank2]: The above exception was the direct cause of the following exception:
+
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+[rank2]:     run_exp()
+[rank2]:     ~~~~~~~^^
+[rank2]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+[rank2]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank2]:     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 187, in _training_function
+[rank2]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank2]:     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/sft/workflow.py", line 50, in run_sft
+[rank2]:     tokenizer_module = load_tokenizer(model_args)
+[rank2]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/model/loader.py", line 98, in load_tokenizer
+[rank2]:     raise OSError("Failed to load tokenizer.") from e
+[rank2]: OSError: Failed to load tokenizer.
+[rank0]:[W815 03:36:46.304550808 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+tg11102:1316015:1316503 [2] NCCL INFO comm 0x4e4e8310 rank 2 nranks 4 cudaDev 2 busId cb000 - Abort COMPLETE
+tg11102:1316016:1316501 [3] NCCL INFO comm 0x451d46a0 rank 3 nranks 4 cudaDev 3 busId db000 - Abort COMPLETE
+tg11102:1316013:1316505 [0] NCCL INFO comm 0x4c393c80 rank 0 nranks 4 cudaDev 0 busId 4e000 - Abort COMPLETE
+tg11102:1316014:1316499 [1] NCCL INFO comm 0x172a7800 rank 1 nranks 4 cudaDev 1 busId 5f000 - Abort COMPLETE
+W0815 03:36:48.539000 1316008 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 1316013 closing signal SIGTERM
+W0815 03:36:48.542000 1316008 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 1316015 closing signal SIGTERM
+W0815 03:36:48.542000 1316008 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 1316016 closing signal SIGTERM
+E0815 03:36:48.720000 1316008 torch/distributed/elastic/multiprocessing/api.py:986] failed (exitcode: 1) local_rank: 1 (pid: 1316014) of binary: /scratch/i/indrisch/venv_llamafactory_py313/bin/python
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/venv_llamafactory_py313/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 362, in wrapper
+    return f(*args, **kwargs)
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/run.py", line 990, in main
+    run(args)
+    ~~~^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/run.py", line 981, in run
+    elastic_launch(
+    ~~~~~~~~~~~~~~~
+        config=config,
+        ~~~~~~~~~~~~~~
+        entrypoint=cmd,
+        ~~~~~~~~~~~~~~~
+    )(*cmd_args)
+    ~^^^^^^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/launcher/api.py", line 170, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/launcher/api.py", line 317, in launch_agent
+    raise ChildFailedError(
+    ...<2 lines>...
+    )
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+[1]:
+  time      : 2026-08-15_03:36:48
+  host      : tg11102.tamia.ecpia.ca
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 1316013)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+[2]:
+  time      : 2026-08-15_03:36:48
+  host      : tg11102.tamia.ecpia.ca
+  rank      : 2 (local_rank: 2)
+  exitcode  : 1 (pid: 1316015)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+[3]:
+  time      : 2026-08-15_03:36:48
+  host      : tg11102.tamia.ecpia.ca
+  rank      : 3 (local_rank: 3)
+  exitcode  : 1 (pid: 1316016)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-08-15_03:36:48
+  host      : tg11102.tamia.ecpia.ca
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 1316014)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/venv_llamafactory_py313/bin/llamafactory-cli", line 6, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+    ~~~~~~~~~~~~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 115, in launch
+    process = subprocess.run(
+        (
+    ...<14 lines>...
+        check=True,
+    )
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/subprocess.py", line 579, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', 'tg11102', '--master_port', '29500', '/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py', '/tmp/cot_stage/train.yaml']' returned non-zero exit status 1.
+
+======== GPU REPORT ========
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Sat Aug 15 03:36:49 2026
+Driver Version                                         : 580.159.04
+CUDA Version                                           : 13.0
+
+Attached GPUs                                          : 4
+GPU 00000000:4E:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1316013
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 12302 ms
+            Is Running                                 : 0
+
+GPU 00000000:5F:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1316014
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 12110 ms
+            Is Running                                 : 0
+
+GPU 00000000:CB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1316015
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 12229 ms
+            Is Running                                 : 0
+
+GPU 00000000:DB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1316016
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 12110 ms
+            Is Running                                 : 0
+
+Sat Aug 15 03:36:50 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   30C    P0            100W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   30C    P0            119W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   31C    P0            121W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   31C    P0            120W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+srun: error: tg11102: task 0: Exited with exit code 1
+srun: Terminating StepId=413825.0
+
+======== GPU REPORT ========
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Sat Aug 15 03:36:50 2026
+Driver Version                                         : 580.159.04
+CUDA Version                                           : 13.0
+
+Attached GPUs                                          : 4
+GPU 00000000:4E:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1316013
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 12302 ms
+            Is Running                                 : 0
+
+GPU 00000000:5F:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1316014
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 12110 ms
+            Is Running                                 : 0
+
+GPU 00000000:CB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1316015
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 12229 ms
+            Is Running                                 : 0
+
+GPU 00000000:DB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1316016
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 12110 ms
+            Is Running                                 : 0
+
+Sat Aug 15 03:36:50 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   30C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   29C    P0             86W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   30C    P0            102W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   30C    P0             82W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
