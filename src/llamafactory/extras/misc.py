@@ -208,7 +208,15 @@ def get_peak_memory() -> tuple[int, int]:
 
 def has_tokenized_data(path: "os.PathLike") -> bool:
     r"""Check if the path has a tokenized dataset."""
-    return os.path.isdir(path) and len(os.listdir(path)) > 0
+    if not os.path.isdir(path):
+        return False
+    names = os.listdir(path)
+    if not names:
+        return False
+    # A crashed save_to_disk can leave only dataset_dict.json; that is not loadable.
+    if "dataset_dict.json" in names:
+        return any(os.path.isdir(os.path.join(path, name)) for name in names if name != "dataset_dict.json")
+    return "state.json" in names or any(name.endswith(".arrow") for name in names)
 
 
 def infer_optim_dtype(model_dtype: Optional["torch.dtype"]) -> "torch.dtype":

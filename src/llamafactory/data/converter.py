@@ -515,6 +515,7 @@ def align_dataset(
         kwargs = dict(
             num_proc=data_args.preprocessing_num_workers,
             load_from_cache_file=(not data_args.overwrite_cache) or (training_args.local_process_index != 0),
+            writer_batch_size=data_args.preprocessing_batch_size,
             desc="Converting format of dataset",
         )
 

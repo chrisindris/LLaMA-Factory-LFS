@@ -17,6 +17,7 @@ from enum import Enum, unique
 from typing import TYPE_CHECKING, Any, Optional, TypedDict, Union
 
 import fsspec
+import numpy as np
 from datasets import DatasetDict, concatenate_datasets, interleave_datasets
 
 from ..extras import logging
@@ -100,9 +101,18 @@ def split_dataset(
                 dataset_dict["train"] = dataset.skip(int(data_args.val_size))
             else:
                 val_size = int(data_args.val_size) if data_args.val_size > 1 else data_args.val_size
-                dataset_dict = dataset.train_test_split(test_size=val_size, seed=seed)
-                dataset = dataset.train_test_split(test_size=val_size, seed=seed)
-                dataset_dict = {"train": dataset["train"], "validation": dataset["test"]}
+                n_examples = len(dataset)
+                n_val = int(val_size) if val_size >= 1 else max(1, int(n_examples * float(val_size)))
+                n_val = min(n_val, n_examples - 1) if n_examples > 1 else n_examples
+                # Do not use Dataset.train_test_split here: it materializes a full
+                # Arrow copy (and this function previously called it twice). After a
+                # 32k-token VL map that second copy fills node-local tmp and SIGBUS's
+                # the mmap (Killarney job 4769254). select() only stores index maps.
+                perm = np.random.RandomState(seed).permutation(n_examples).tolist()
+                dataset_dict = {
+                    "train": dataset.select(perm[n_val:]),
+                    "validation": dataset.select(perm[:n_val]),
+                }
         else:
             dataset_dict["train"] = dataset
 

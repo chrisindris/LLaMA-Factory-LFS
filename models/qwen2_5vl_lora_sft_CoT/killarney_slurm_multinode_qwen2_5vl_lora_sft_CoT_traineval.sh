@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
 #SBATCH --cpus-per-task=64
-#SBATCH --time=0-05:00:00
+#SBATCH --time=1-00:00:00
 #SBATCH --mem=0
 #SBATCH --gpus-per-node=l40s:4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
@@ -30,7 +30,7 @@
 # ----- DEFAULT ARGUMENTS -----
 export STARTING_EPOCH="${STARTING_EPOCH:-0}"
 export ENDING_EPOCH="${ENDING_EPOCH:-1}"
-export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-310}" # IMPORTANT NOTE: the default value of this should be equal to 4 / num_of_gpus_used * 620
+export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-310}" # IMPORTANT NOTE: the default value of this should be equal to (1 / num_of_nodes) * (4 / num_of_gpus_used) * (2 / batch_size) * 620
 
 # ----- ARGUMENT PARSING -----
 # we can explicitly override the above by setting them with flags.
@@ -134,13 +134,29 @@ fi
 GPU_TYPE=$(nvidia-smi --query-gpu=name --format=csv,noheader,nounits | head -n 1 | awk '{print $NF}')
 echo "GPU TYPE: $GPU_TYPE"
 
-CUTOFF_LEN=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${CUTOFF_LEN:-65536} || echo 131072) # 131072 shown to work on l40s, though 65536 may help if batch_size=2
-IMAGE_SAMPLE_COUNT=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_IMAGE_SAMPLE_COUNT:-360} || echo "-1") # large values shown to work on l40s; 360 should prevent all but the most massive loads
-PER_DEVICE_TRAIN_BATCH_SIZE=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_PER_DEVICE_TRAIN_BATCH_SIZE:-2} || echo 2) # prevents GPU OOM on l40s
+CUTOFF_LEN=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${CUTOFF_LEN:-32768} || echo 131072) # 32768 is a reasonable, manageable size.
+IMAGE_SAMPLE_COUNT=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_IMAGE_SAMPLE_COUNT:-300} || echo "-1") # large values shown to work on l40s; 360 should prevent all but the most massive loads
+PER_DEVICE_TRAIN_BATCH_SIZE=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_PER_DEVICE_TRAIN_BATCH_SIZE:-1} || echo 2) # prevents GPU OOM on l40s
 GRADIENT_ACCUMULATION_STEPS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 16 || echo 8)
 DEEPSPEED=$([[ "$GPU_TYPE" == "L40S" ]] && echo "examples/deepspeed/ds_z2_offload_config.json" || echo "examples/deepspeed/ds_z2_config.json")
-PREPROCESSING_NUM_WORKERS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 64 || echo 32) # With large multimodal data on some systems (seen on Rorqual), 32 may deadlock with large multimodal data. However, if we have the data on each compute node, even 64 might be acceptable.
+# Job 4765622: rank0 SIGBUS (signal 7) when HuggingFace datasets forked 64 tokenizer
+# workers after the Scene30k format convert. Qwen2-VL tokenization loads images to
+# expand vision tokens; 64 procs * batch 1000 * ~300 frames OOMs /dev/shm and /tmp (it seems like killarney uses /tmp as a SLURM_TMPDIR)
+# 16 workers was enough once data is node-local (staging). Do not raise back to 64.
+
+if [[ "${CLUSTER}" == "KILLARNEY" ]]; then
+  export L40S_PREPROCESSING_NUM_WORKERS="16"
+fi
+
+PREPROCESSING_NUM_WORKERS=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_PREPROCESSING_NUM_WORKERS:-32} || echo 32)
+PREPROCESSING_BATCH_SIZE=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_PREPROCESSING_BATCH_SIZE:-16} || echo 1000)
 DATALOADER_NUM_WORKERS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 2 || echo 4) # experiments 4667851_[N] showed that our loaders are running out of memory; additionally, Killarney's l40s nodes only have 512GB of memory.
+# Persist tokenized mix on the bound project tree so a later job can skip the
+# 40+ min convert+tokenize. Fingerprinted by cutoff / frame cap.
+TOKENIZED_PATH="${TOKENIZED_PATH:-${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/tokenized_cot_cut${CUTOFF_LEN}_nimg${IMAGE_SAMPLE_COUNT}}"
+echo "PREPROCESSING_NUM_WORKERS: ${PREPROCESSING_NUM_WORKERS}"
+echo "PREPROCESSING_BATCH_SIZE: ${PREPROCESSING_BATCH_SIZE}"
+echo "TOKENIZED_PATH: ${TOKENIZED_PATH}"
 
 export TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC=10800
 
@@ -160,6 +176,8 @@ cmd_args=(
     --gradient_accumulation_steps "${GRADIENT_ACCUMULATION_STEPS}"
     --deepspeed "${DEEPSPEED}"
     --preprocessing_num_workers "${PREPROCESSING_NUM_WORKERS}"
+    --preprocessing_batch_size "${PREPROCESSING_BATCH_SIZE}"
+    --tokenized_path "${TOKENIZED_PATH}"
     --dataloader_num_workers "${DATALOADER_NUM_WORKERS}"
     --ddp_timeout "${TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC}" # avoid NCCL timeouts
 )

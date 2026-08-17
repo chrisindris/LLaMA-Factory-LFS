@@ -183,11 +183,15 @@ class SupervisedDatasetProcessor(DatasetProcessor):
         return model_inputs
 
     def print_data_example(self, example: dict[str, list[int]]) -> None:
-        valid_labels = list(filter(lambda x: x != IGNORE_INDEX, example["labels"]))
-        print("input_ids:\n{}".format(example["input_ids"]))
-        print("inputs:\n{}".format(self.tokenizer.decode(example["input_ids"], skip_special_tokens=False)))
-        print("label_ids:\n{}".format(example["labels"]))
-        print(f"labels:\n{self.tokenizer.decode(valid_labels, skip_special_tokens=False)}")
+        preview = 256
+        input_ids = example["input_ids"]
+        labels = example["labels"]
+        valid_labels = list(filter(lambda x: x != IGNORE_INDEX, labels))
+        print(f"num_tokens: {len(input_ids)}")
+        print("input_ids (head):\n{}".format(input_ids[:preview]))
+        print("inputs (head):\n{}".format(self.tokenizer.decode(input_ids[:preview], skip_special_tokens=False)))
+        print("label_ids (head):\n{}".format(labels[:preview]))
+        print("labels (head):\n{}".format(self.tokenizer.decode(valid_labels[:preview], skip_special_tokens=False)))
 
 
 @dataclass

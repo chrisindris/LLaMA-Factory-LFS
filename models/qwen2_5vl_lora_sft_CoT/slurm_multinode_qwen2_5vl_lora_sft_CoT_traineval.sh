@@ -53,7 +53,7 @@
 # ----- DEFAULT ARGUMENTS -----
 export STARTING_EPOCH="${STARTING_EPOCH:-0}"
 export ENDING_EPOCH="${ENDING_EPOCH:-1}"
-export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-620}"
+export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-310}"
 
 EXPERIMENT_NAME="multinode_qwen2_5vl_lora_sft_CoT_traineval"
 
@@ -188,12 +188,22 @@ run_llamafactory_apptainer() {
 		PROGRAM="llamafactory-cli train ${YAML_FILE}"
 	fi
 
-	# Use node-local cache to avoid NFS contention for datasets; this replaces the cache_dir from the yaml.
-	export HF_DATASETS_CACHE="${SLURM_TMPDIR}/hf_datasets"
+	# Do not share $SLURM_TMPDIR with staged H5 (~120GB). Tokenized 32k-token
+	# Arrow tables plus a split copy will SIGBUS when /tmp fills (job 4769254).
+	# Keep the cache under HF_HOME so Apptainer already has the bind.
+	export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-${HF_HOME}/datasets_cot/${SLURM_JOB_ID:-manual}/node${SLURM_NODEID:-0}}"
 	mkdir -p "${HF_DATASETS_CACHE}"
+	# Arrow/HF datasets temp + tokenizer scratch must not land in the 1GB
+	# apptainer overlay (SIGBUS when the overlay fills). Keep them on $SLURM_TMPDIR.
+	export TMPDIR="${SLURM_TMPDIR}"
+	export TMP="${SLURM_TMPDIR}"
+	export TEMP="${SLURM_TMPDIR}"
+	export TOKENIZERS_PARALLELISM=false
 	# Avoid NFS lock exhaustion when datasets cache is shared across ranks.
 	export HF_DATASETS_DISABLE_FILE_LOCKING=1
 	export DATASETS_DISABLE_FILE_LOCKING=1
+	echo "HF_DATASETS_CACHE: ${HF_DATASETS_CACHE}"
+	echo "TMPDIR: ${TMPDIR}"
 
 	export NCCL_ASYNC_ERROR_HANDLING=1 && echo "NCCL_ASYNC_ERROR_HANDLING: ${NCCL_ASYNC_ERROR_HANDLING}"
 	export TORCH_NCCL_ASYNC_ERROR_HANDLING=1 && echo "TORCH_NCCL_ASYNC_ERROR_HANDLING: ${TORCH_NCCL_ASYNC_ERROR_HANDLING}"
@@ -237,8 +247,13 @@ run_llamafactory_apptainer() {
 		--env HF_HUB_OFFLINE=1 \
 		--env HF_HOME="${HF_HOME}" \
 		--env HF_HUB_CACHE="${HF_HUB_CACHE}" \
+		--env HF_DATASETS_CACHE="${HF_DATASETS_CACHE}" \
 		--env HF_DATASETS_DISABLE_FILE_LOCKING="${HF_DATASETS_DISABLE_FILE_LOCKING}" \
 		--env DATASETS_DISABLE_FILE_LOCKING="${DATASETS_DISABLE_FILE_LOCKING}" \
+		--env TMPDIR="${TMPDIR}" \
+		--env TMP="${TMP}" \
+		--env TEMP="${TEMP}" \
+		--env TOKENIZERS_PARALLELISM="${TOKENIZERS_PARALLELISM}" \
 		--env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
 		--env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
 		--env DISABLE_VERSION_CHECK=1 \
@@ -544,9 +559,12 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
 		export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
 		export PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}"
 
-		# Use node-local cache to avoid NFS contention for datasets; replaces yaml cache_dir.
-		export HF_DATASETS_CACHE="${SLURM_TMPDIR}/hf_datasets"
+		export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-${HF_HOME}/datasets_cot/${SLURM_JOB_ID:-manual}/node${SLURM_NODEID:-0}}"
 		mkdir -p "${HF_DATASETS_CACHE}"
+		export TMPDIR="${SLURM_TMPDIR}"
+		export TMP="${SLURM_TMPDIR}"
+		export TEMP="${SLURM_TMPDIR}"
+		export TOKENIZERS_PARALLELISM=false
 		export HF_DATASETS_DISABLE_FILE_LOCKING=1
 		export DATASETS_DISABLE_FILE_LOCKING=1
 
