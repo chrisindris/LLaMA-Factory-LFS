@@ -1,0 +1,103 @@
+PROJECT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: TAMIA
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: None
+SIF_FILE: None
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/i/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/i/indrisch/venv_llamafactory_py313/
+RUNNING_MODE: VENV
+
+Lmod is automatically replacing "gcc/12.3" with "go/1.26.5".
+
+
+Lmod is automatically replacing "go/1.26.5" with "gcc/12.3".
+
+
+Activating Modules:
+  1) cuda/12.6           3) gcccore/.12.3        5) opencv/4.14.0     7) pmix/4.2.4
+  2) flexiblas/3.3.1     4) libfabric/1.18.0     6) openmpi/4.1.5
+
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.2.1)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPSConnection(host='pypi.org', port=443) at 0x78df6244cc20>, 'Connection to pypi.org timed out. (connect timeout=15)')': /simple/pip/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPSConnection(host='pypi.org', port=443) at 0x78df620f9450>, 'Connection to pypi.org timed out. (connect timeout=15)')': /simple/pip/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPSConnection(host='pypi.org', port=443) at 0x78df620f9590>, 'Connection to pypi.org timed out. (connect timeout=15)')': /simple/pip/
+[2026-08-15T06:57:42.371] error: *** JOB 413770 ON tg11102 CANCELLED AT 2026-08-15T06:57:42 DUE to SIGNAL Terminated ***
+
+======== GPU REPORT ========
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Sat Aug 15 02:57:42 2026
+Driver Version                                         : 580.159.04
+CUDA Version                                           : 13.0
+
+Attached GPUs                                          : 4
+GPU 00000000:4E:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:5F:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:CB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:DB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+Sat Aug 15 02:57:42 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   29C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   28C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   29C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   29C    P0             72W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+

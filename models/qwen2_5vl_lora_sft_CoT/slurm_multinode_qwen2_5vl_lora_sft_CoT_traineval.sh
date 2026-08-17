@@ -421,6 +421,49 @@ elif [[ "$CLUSTER" == "RORQUAL" ]]; then
 		pushd ${PROJECT_DIR}
 		llamafactory-cli train ${YAML_FILE}
 
+  else
+		echo "Invalid running mode: $RUNNING_MODE"
+		exit 1
+	fi
+
+elif [[ "$CLUSTER" == "TAMIA" ]]; then
+
+	if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
+
+		module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+
+		echo "=== HOST DIAGNOSTICS ==="
+		echo "HOSTNAME: $(hostname)"
+		echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
+		nvidia-smi
+		echo "=== END HOST DIAGNOSTICS ==="
+
+		run_llamafactory_apptainer
+
+	elif [[ "$RUNNING_MODE" == "VENV" ]]; then
+
+		module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+
+		echo "Copying venv to local storage..."
+		cp -a /scratch/i/indrisch/venv_llamafactory_py313/ ${SLURM_TMPDIR}/venv_llamafactory_py313
+		source ${SLURM_TMPDIR}/venv_llamafactory_py313/bin/activate
+
+		export PYTHONUNBUFFERED=1
+		export NCCL_DEBUG=INFO
+		export TORCH_CUDA_ARCH_LIST="9.0"
+		export FORCE_TORCHRUN=1
+		export HF_HUB_OFFLINE=1
+		export WANDB_MODE=offline
+		export WANDB_DIR="${WANDB_DIR}"
+		export WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb"
+		export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
+		export DISABLE_VERSION_CHECK=1
+		export SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR
+
+		pushd ${PROJECT_DIR}
+		llamafactory-cli train ${YAML_FILE}
+
+
 	elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
 
 		module load StdEnv/2023 gcc/12.3 openmpi/4.1.5

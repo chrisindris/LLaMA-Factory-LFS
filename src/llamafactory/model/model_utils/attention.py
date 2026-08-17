@@ -29,10 +29,10 @@ logger = logging.get_logger(__name__)
 
 
 def configure_attn_implementation(config: "PretrainedConfig", model_args: "ModelArguments") -> None:
-    from transformers.utils import is_flash_attn_2_available, is_torch_sdpa_available
+    from transformers.utils import is_flash_attn_2_available
 
     flash_attn_2_available = is_flash_attn_2_available()
-    sdpa_available = is_torch_sdpa_available()
+    sdpa_available = True # true when Pytorch version is at least 2.1.1
     logger.info_rank0(
         "Attention backend request: %s | FlashAttention-2 available: %s | SDPA available: %s",
         model_args.flash_attn,

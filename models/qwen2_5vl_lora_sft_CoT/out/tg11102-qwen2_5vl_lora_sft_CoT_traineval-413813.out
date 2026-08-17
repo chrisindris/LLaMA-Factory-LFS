@@ -1,0 +1,272 @@
+PROJECT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: TAMIA
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: None
+SIF_FILE: None
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/i/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/i/indrisch/venv_llamafactory_py313/
+RUNNING_MODE: VENV
+
+Lmod is automatically replacing "gcc/12.3" with "go/1.26.5".
+
+
+Lmod is automatically replacing "go/1.26.5" with "gcc/12.3".
+
+
+Activating Modules:
+  1) cuda/12.6           3) gcccore/.12.3        5) opencv/4.14.0     7) pmix/4.2.4
+  2) flexiblas/3.3.1     4) libfabric/1.18.0     6) openmpi/4.1.5
+
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.2.1)
+Requirement already satisfied: setuptools in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (84.0.0+computecanada)
+Requirement already satisfied: wheel in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (0.48.0)
+Requirement already satisfied: packaging>=24.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from wheel) (26.3)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: packaging in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.3)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: huggingface_hub in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (1.27.0)
+Requirement already satisfied: ruamel.yaml in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (0.19.1+computecanada)
+Requirement already satisfied: click<9.0.0,>=8.4.2 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (8.4.2+computecanada)
+Requirement already satisfied: filelock>=3.10.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (3.32.3)
+Requirement already satisfied: fsspec>=2023.5.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (2025.3.0+computecanada)
+Requirement already satisfied: hf-xet<2.0.0,>=1.5.2 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (1.5.2+computecanada)
+Requirement already satisfied: httpx<1,>=0.23.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (0.28.1+computecanada)
+Requirement already satisfied: packaging>=20.9 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (26.3)
+Requirement already satisfied: pyyaml>=5.1 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (6.0.3+computecanada)
+Requirement already satisfied: tqdm>=4.42.1 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.70.0+computecanada)
+Requirement already satisfied: typing-extensions>=4.1.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.16.0+computecanada)
+Requirement already satisfied: anyio in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (4.14.2+computecanada)
+Requirement already satisfied: certifi in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (1.0.9+computecanada)
+Requirement already satisfied: idna in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (3.18+computecanada)
+Requirement already satisfied: h11>=0.16 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpcore==1.*->httpx<1,>=0.23.0->huggingface_hub) (0.16.0+computecanada)
+YAML_FILE: /scratch/i/indrisch//LLaMA-Factory-LFS/examples/train_lora/tamia_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR_SAVES: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+OUTPUT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+GPU TYPE: HBM3
+SLURM_JOB_NODELIST: tg11102
+HEAD_NODE: tg11102
+HEAD_NODE: tg11102
+MASTER_ADDR: tg11102
+MASTER_PORT: 29500
+PROJECT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/i/indrisch/LLaMA-Factory-LFS/scripts:/scratch/i/indrisch/LLaMA-Factory-LFS/scripts/utils:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: TAMIA
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 9.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: None
+SIF_FILE: None
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/i/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/i/indrisch/venv_llamafactory_py313/
+SCANNET_H5_DIR: /scratch/i/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/i/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/i/indrisch/3DThinker10K_images_h5/
+CLUSTER: TAMIA
+YAML_FILE: /scratch/i/indrisch//LLaMA-Factory-LFS/examples/train_lora/tamia_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+No resume checkpoint (fresh start from epoch 0).
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00] === Node-local CoT dataset staging ===
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00] HOST=tg11102.tamia.ecpia.ca SLURM_NODEID=0 SLURM_NNODES=1
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00] NODE_LOCAL_DATA_ROOT=/tmp/cot_stage
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00] STAGE_COPY_JOBS=24 STAGE_STAGGER_SEC=0
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00] Sources:
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00]   SCENE30K_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.parquet
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00]   SPATIALSSRL_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00]   THINKER10K_ANN_SRC=/scratch/i/indrisch//LLaMA-Factory-LFS/data/3DThinker-10K/out/3dthinker10k_cot.jsonl
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00]   SCANNET_H5_DIR(src)=/scratch/i/indrisch/ScanNet_h5/scans
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00]   SPATIALSSRL_H5_DIR(src)=/scratch/i/indrisch/Spatial-SSRL_images_h5
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00]   THINKER10K_H5_DIR(src)=/scratch/i/indrisch/3DThinker10K_images_h5/
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00] Free space on /tmp/cot_stage: 7235681542144 bytes (need ~128849018880)
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00] Copying annotations...
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00] Annotations done in -1786778769s
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00] Copying ScanNet H5 tree...
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:09-04:00] Copying 700 entries from /scratch/i/indrisch/ScanNet_h5/scans -> /tmp/cot_stage/media/ScanNet_h5/scans (jobs=24)
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:14-04:00] ScanNet done in -1786778769s
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:14-04:00] Copying Spatial-SSRL H5 tree...
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:26:14-04:00] Copying 13 entries from /scratch/i/indrisch/Spatial-SSRL_images_h5 -> /tmp/cot_stage/media/Spatial-SSRL_images_h5 (jobs=24)
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:27:15-04:00] Spatial-SSRL done in -1786778774s
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:27:15-04:00] Copying 3DThinker H5 tree...
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:27:15-04:00] Copying 2 entries from /scratch/i/indrisch/3DThinker10K_images_h5/ -> /tmp/cot_stage/media/3DThinker10K_images_h5 (jobs=24)
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:27:18-04:00] 3DThinker done in -1786778835s
+Wrote local dataset_info (3 entries) -> /tmp/cot_stage/dataset_dir/dataset_info.json
+  Scene30k: /tmp/cot_stage/annotations/Scene30k.parquet
+  SpatialSSRL_coldstart: /tmp/cot_stage/annotations/SpatialSSRL_coldstart.json
+  3DThinker10k: /tmp/cot_stage/annotations/3dthinker10k_cot.jsonl
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:27:18-04:00] VERIFY OK under /tmp/cot_stage
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:27:18-04:00] === Staging complete in 69s ===
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:27:18-04:00] LOCAL_DATASET_DIR=/tmp/cot_stage/dataset_dir
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:27:18-04:00] LOCAL_MEDIA_DIR=/tmp/cot_stage/media/ScanNet_h5
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:27:18-04:00] SCANNET_H5_DIR=/tmp/cot_stage/media/ScanNet_h5/scans
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:27:18-04:00] SPATIALSSRL_H5_DIR=/tmp/cot_stage/media/Spatial-SSRL_images_h5
+[stage tg11102.tamia.ecpia.ca node=0 2026-08-15T03:27:18-04:00] THINKER10K_H5_DIR=/tmp/cot_stage/media/3DThinker10K_images_h5
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme1n1    7.0T  105G  6.5T   2% /tmp
+Patched YAML -> /tmp/cot_stage/train.yaml
+  dataset_dir: /tmp/cot_stage/dataset_dir
+  media_dir: /tmp/cot_stage/media/ScanNet_h5
+YAML_FILE (node-local): /tmp/cot_stage/train.yaml
+LOCAL_DATASET_DIR: /tmp/cot_stage/dataset_dir
+LOCAL_MEDIA_DIR: /tmp/cot_stage/media/ScanNet_h5
+SCANNET_H5_DIR (local): /tmp/cot_stage/media/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR (local): /tmp/cot_stage/media/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR (local): /tmp/cot_stage/media/3DThinker10K_images_h5
+/scratch/i/indrisch//LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT/slurm_multinode_qwen2_5vl_lora_sft_CoT_traineval.sh: line 639: syntax error: unexpected end of file
+
+======== GPU REPORT ========
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Sat Aug 15 03:27:18 2026
+Driver Version                                         : 580.159.04
+CUDA Version                                           : 13.0
+
+Attached GPUs                                          : 4
+GPU 00000000:4E:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:5F:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:CB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:DB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+Sat Aug 15 03:27:19 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   29C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   29C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   29C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   29C    P0             72W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+srun: error: tg11102: task 0: Exited with exit code 2
+srun: Terminating StepId=413813.0
+
+======== GPU REPORT ========
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Sat Aug 15 03:27:19 2026
+Driver Version                                         : 580.159.04
+CUDA Version                                           : 13.0
+
+Attached GPUs                                          : 4
+GPU 00000000:4E:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:5F:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:CB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:DB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+Sat Aug 15 03:27:19 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   29C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   29C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   29C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   30C    P0             72W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+

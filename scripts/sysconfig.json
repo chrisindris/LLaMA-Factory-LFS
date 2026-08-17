@@ -112,7 +112,7 @@
         "LLAMAFACTORY_HOME": "None",
         "SIF_FILE": "None",
         "media_dir": "None",
-        "VENV_DATASET_UPLOAD": "/project/aip-wangcs/indrisch/venv_llamafactory_cu126/",
-        "VENV_LLAMAFACTORY": "/project/aip-wangcs/indrisch/venv_llamafactory_cu126/"
+        "VENV_DATASET_UPLOAD": "/scratch/i/indrisch/venv_llamafactory_py313/",
+        "VENV_LLAMAFACTORY": "/scratch/i/indrisch/venv_llamafactory_py313/"
     }
 }
