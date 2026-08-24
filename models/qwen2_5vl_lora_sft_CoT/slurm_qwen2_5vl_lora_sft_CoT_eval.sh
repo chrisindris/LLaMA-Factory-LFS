@@ -200,9 +200,47 @@ run_llamafactory_apptainer() {
 		PROGRAM="llamafactory-cli train ${YAML_FILE}"
 	fi
 
+	# Use node-local cache to avoid NFS contention for datasets; this replaces the cache_dir from the yaml.
+	export HF_DATASETS_CACHE="${SLURM_TMPDIR}/hf_datasets"
+	mkdir -p "${HF_DATASETS_CACHE}"
+	# Avoid NFS lock exhaustion when datasets cache is shared across ranks.
+	export HF_DATASETS_DISABLE_FILE_LOCKING=1
+	export DATASETS_DISABLE_FILE_LOCKING=1
+
+	export NCCL_ASYNC_ERROR_HANDLING=1 && echo "NCCL_ASYNC_ERROR_HANDLING: ${NCCL_ASYNC_ERROR_HANDLING}"
+	export TORCH_NCCL_ASYNC_ERROR_HANDLING=1 && echo "TORCH_NCCL_ASYNC_ERROR_HANDLING: ${TORCH_NCCL_ASYNC_ERROR_HANDLING}"
+	export NCCL_DEBUG=INFO && echo "NCCL_DEBUG: ${NCCL_DEBUG}"
+	export TORCH_DISTRIBUTED_DEBUG=DETAIL && echo "TORCH_DISTRIBUTED_DEBUG: ${TORCH_DISTRIBUTED_DEBUG}"
+	export TORCH_NCCL_TRACE_BUFFER_SIZE=20000 && echo "TORCH_NCCL_TRACE_BUFFER_SIZE: ${TORCH_NCCL_TRACE_BUFFER_SIZE}"
+	export NCCL_SOCKET_IFNAME=^docker0,lo && echo "NCCL_SOCKET_IFNAME: ${NCCL_SOCKET_IFNAME}"
+
+	# LLaMA-Factory's launcher reads these variables and then invokes
+	# torchrun once per node with the correct --node_rank. The outer
+	# 2-node SLURM wrapper must start this script through srun so that
+	# one parent process exists on every allocated node.
+	export NNODES="${SLURM_NNODES}" && echo "NNODES: ${NNODES}"
+	export NODE_RANK="${SLURM_NODEID}" && echo "NODE_RANK: ${NODE_RANK}"
+	export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE}}" && echo "MASTER_ADDR: ${MASTER_ADDR}"
+	export MASTER_PORT="${MASTER_PORT:-29500}" && echo "MASTER_PORT: ${MASTER_PORT}"
+	export NPROC_PER_NODE="4" && echo "NPROC_PER_NODE: ${NPROC_PER_NODE}"
+
+	if [ -z "${OVERLAY:-}" ]; then
+		if [[ "$NODE_RANK" == 0 ]]; then
+			if [ -f "${PROJECT_DIR}/apptainer/overlay_${NODE_RANK}.img" ]; then
+				OVERLAY="${PROJECT_DIR}/apptainer/overlay_${NODE_RANK}.img"
+			else
+				OVERLAY="${PROJECT_DIR}/apptainer/overlay.img"
+			fi
+		else
+			OVERLAY="${PROJECT_DIR}/apptainer/overlay_${NODE_RANK}.img"
+		fi
+	fi
+
+	export MAX_JOBS="${MAX_JOBS:-16}"
+
 	# Prefer host src so H5 image backends and prediction-dump trainer code
 	# from this checkout override the older /app/src baked into the SIF.
-	apptainer run --nv --fakeroot --overlay /scratch/indrisch/LLaMA-Factory/apptainer/overlay.img \
+	apptainer run --nv --fakeroot --overlay "${OVERLAY}" \
 		${extra_nv_bind} \
 		-B ${PROJECT_DIR} \
 		-B ${HF_HOME} \
@@ -215,6 +253,8 @@ run_llamafactory_apptainer() {
 		--env HF_HUB_OFFLINE=1 \
 		--env HF_HOME="${HF_HOME}" \
 		--env HF_HUB_CACHE="${HF_HUB_CACHE}" \
+		--env HF_DATASETS_DISABLE_FILE_LOCKING="${HF_DATASETS_DISABLE_FILE_LOCKING}" \
+		--env DATASETS_DISABLE_FILE_LOCKING="${DATASETS_DISABLE_FILE_LOCKING}" \
 		--env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
 		--env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
 		--env DISABLE_VERSION_CHECK=1 \
@@ -231,13 +271,49 @@ run_llamafactory_apptainer() {
 		--env PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}" \
 		--env NCCL_IB_DISABLE=0 \
 		--env NCCL_P2P_DISABLE=0 \
-		--env NCCL_DEBUG=INFO \
-		--env NCCL_SOCKET_IFNAME=^docker0,lo \
+		--env NCCL_DEBUG="${NCCL_DEBUG}" \
+		--env NCCL_ASYNC_ERROR_HANDLING="${NCCL_ASYNC_ERROR_HANDLING}" \
+		--env TORCH_NCCL_ASYNC_ERROR_HANDLING="${TORCH_NCCL_ASYNC_ERROR_HANDLING}" \
+		--env TORCH_DISTRIBUTED_DEBUG="${TORCH_DISTRIBUTED_DEBUG}" \
+		--env TORCH_NCCL_TRACE_BUFFER_SIZE="${TORCH_NCCL_TRACE_BUFFER_SIZE}" \
+		--env NCCL_SOCKET_IFNAME="${NCCL_SOCKET_IFNAME}" \
 		--env CUDA_HOME="${APPTAINERENV_CUDA_HOME}" \
+		--env NNODES="${NNODES}" \
+		--env NODE_RANK="${NODE_RANK}" \
+		--env MASTER_ADDR="${MASTER_ADDR}" \
+		--env MASTER_PORT="${MASTER_PORT}" \
+		--env NPROC_PER_NODE="${NPROC_PER_NODE}" \
+		--env MAX_JOBS="${MAX_JOBS}" \
 		"${APPTAINER_H5_ENV[@]}" \
 		--pwd ${PROJECT_DIR} \
 		${SIF_FILE} \
 		${PROGRAM}
+}
+
+lmod_preflight() {
+	# useful for VENV.
+	local lmod_init="/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/init/bash"
+	local lmod_exec="/cvmfs/soft.computecanada.ca/custom/software/lmod/lmod/libexec/lmod"
+	local resolved_init
+	local resolved_exec
+
+	if [[ ! -e "$lmod_init" || ! -e "$lmod_exec" ]]; then
+		echo "ERROR: Lmod bootstrap path is unavailable on this node."
+		echo "  lmod init: $lmod_init"
+		echo "  lmod exec: $lmod_exec"
+		ls -l "$lmod_init" "$lmod_exec" 2>/dev/null || true
+		exit 1
+	fi
+
+	resolved_init=$(readlink -f "$lmod_init" 2>/dev/null || true)
+	resolved_exec=$(readlink -f "$lmod_exec" 2>/dev/null || true)
+	if [[ -z "$resolved_init" || -z "$resolved_exec" ]]; then
+		echo "ERROR: Lmod symlink resolution failed before module initialization."
+		echo "  lmod init: $lmod_init"
+		echo "  lmod exec: $lmod_exec"
+		ls -l "$lmod_init" "$lmod_exec" 2>/dev/null || true
+		exit 1
+	fi
 }
 
 if [[ "$CLUSTER" == "NIBI" ]]; then

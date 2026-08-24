@@ -10,7 +10,7 @@
 ### model
 # Local hub snapshot (offline compute nodes cannot reach huggingface.co).
 # Equivalent hub id: Qwen/Qwen2.5-VL-7B-Instruct  (also works with HF_HUB_OFFLINE=1 + cache_dir)
-model_name_or_path: /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5
+model_name_or_path: /scratch/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_3epochs_merged/snapshots/bbaf0e0aa9cda72fe972fded11bd32732a4f82ba
 cache_dir: /scratch/indrisch/huggingface/hub
 image_max_pixels: 65536
 video_max_pixels: 16384
@@ -43,7 +43,7 @@ dataloader_pin_memory: false
 low_cpu_mem_usage: true
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_prediction_dump_smoke
+output_dir: /scratch/indrisch//LLaMA-Factory-copy/models/qwen2_5vl-7b-lora-sft-CoT_traineval_3epochs_merged/lora/eval/
 logging_steps: 1
 save_steps: 50
 plot_loss: false
@@ -85,7 +85,7 @@ flash_attn: fa2
 enable_liger_kernel: true
 
 ### distribution
-deepspeed: examples/deepspeed/ds_z3_config.json
+deepspeed: examples/deepspeed/ds_z2_config.json
 
 ### eval
 do_eval: true

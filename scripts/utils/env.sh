@@ -25,20 +25,25 @@ get_project_dir() {
 
 get_cluster_settings() {
 
-	# if the variables are set already, make sure they are in upper case!
+	# Uppercase if already set. "${VAR^^}" errors under `set -u` when unset.
+	export CLUSTER="${CLUSTER-}"
 	export CLUSTER="${CLUSTER^^}"
+	export RUNNING_MODE="${RUNNING_MODE-}"
 	export RUNNING_MODE="${RUNNING_MODE^^}"
 
 	# Detect cluster based on terminal prompt or hostname
 	if [[ "${PS1:-}" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "${PS1:-}" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]] || [[ "${PS1:-}" == *"rc"* ]] || [[ "$HOSTNAME" == *"rc"* ]]; then
 		export CLUSTER="${CLUSTER:-RORQUAL}"
 		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"
-	elif [[ "${PS1:-}" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]] || [[ "${PS1:-}" == *"tri"* ]] || [[ "$HOSTNAME" == *"tri"* ]]; then
+	elif [[ "${PS1:-}" == *"trillium"* ]] || [[ "$HOSTNAME" == *"trillium"* ]] || [[ "${PS1:-}" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]] || [[ "${PS1:-}" == *"tri"* ]] || [[ "$HOSTNAME" == *"tri"* ]]; then
 		export CLUSTER="${CLUSTER:-TRILLIUM}"
 		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"
 	elif [[ "${PS1:-}" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "${PS1:-}" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
 		export CLUSTER="${CLUSTER:-KILLARNEY}"
 		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"
+	elif [[ "${PS1:-}" == *"tamia"* ]] || [[ "$HOSTNAME" == *"tamia"* ]] || [[ "${PS1:-}" == *"tg"* ]] || [[ "$HOSTNAME" == *"tg"* ]]; then
+		export CLUSTER="${CLUSTER:-TAMIA}"
+		export RUNNING_MODE="${RUNNING_MODE:-VENV}"
 	elif [[ "$HOSTNAME" == *"nibi"* ]] || [[ "${PS1:-}" == *"nibi"* ]] || [[ "${PS1:-}" == *"g"* ]] || [[ "$HOSTNAME" == *"g"* ]] || [[ "${PS1:-}" == *"c"* ]] || [[ "$HOSTNAME" == *"c"* ]]; then
 		export CLUSTER="${CLUSTER:-NIBI}"
 		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"
@@ -55,7 +60,7 @@ get_cluster_settings() {
 	# Arch list: L40S is Ada (8.9). Do not trust BEST_GPU=h100 on Killarney sysconfig for L40S jobs.
 	if [[ "$CLUSTER" == "KILLARNEY" ]]; then
 		export TORCH_CUDA_ARCH_LIST="8.9"
-	elif [[ "$BEST_GPU" == "h100" ]]; then
+	elif [[ "${BEST_GPU:-}" == "h100" ]]; then
 		export TORCH_CUDA_ARCH_LIST="9.0"
 	else
 		export TORCH_CUDA_ARCH_LIST="8.0"

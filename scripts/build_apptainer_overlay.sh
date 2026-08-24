@@ -88,12 +88,21 @@ apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
 	"${SIF}" \
 	python -m pip install --upgrade pip setuptools wheel
 
-echo "Installing ${WHEEL} into overlay (no deps) + wandb/sentry-sdk..."
+# --no-deps is global for the whole pip invocation. Only h5py must skip deps
+# (otherwise pip pulls numpy 2.x over the SIF's torch-compatible numpy).
+echo "Installing ${WHEEL} into overlay (no deps)..."
 apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
 	--bind /scratch/indrisch:/scratch/indrisch \
 	--env PYTHONNOUSERSITE=1 \
 	"${SIF}" \
-	python -m pip install --no-deps "${WHEEL}" wandb sentry-sdk
+	python -m pip install --no-deps "${WHEEL}"
+
+echo "Installing wandb/sentry-sdk into overlay (with deps)..."
+apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
+	--bind /scratch/indrisch:/scratch/indrisch \
+	--env PYTHONNOUSERSITE=1 \
+	"${SIF}" \
+	python -m pip install --upgrade-strategy only-if-needed wandb sentry-sdk
 
 echo "Verify:"
 apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
