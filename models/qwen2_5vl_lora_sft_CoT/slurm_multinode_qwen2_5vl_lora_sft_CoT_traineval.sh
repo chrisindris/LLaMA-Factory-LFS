@@ -458,6 +458,7 @@ elif [[ "$CLUSTER" == "TAMIA" ]]; then
 		export WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb"
 		export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
 		export DISABLE_VERSION_CHECK=1
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 		export SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR
 
 		pushd ${PROJECT_DIR}

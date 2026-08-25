@@ -1,0 +1,710 @@
+PROJECT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: TAMIA
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: None
+SIF_FILE: None
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/i/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/i/indrisch/venv_llamafactory_py313/
+RUNNING_MODE: VENV
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (24.3.1)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/pip-26.1.2+computecanada-py3-none-any.whl
+Requirement already satisfied: setuptools in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (84.0.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/wheel-0.46.3+computecanada-py3-none-any.whl
+Requirement already satisfied: packaging>=24.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.13/site-packages (from wheel) (26.0+computecanada)
+Installing collected packages: wheel, pip
+  Attempting uninstall: pip
+    Found existing installation: pip 24.3.1
+    Uninstalling pip-24.3.1:
+      Successfully uninstalled pip-24.3.1
+Successfully installed pip-26.1.2+computecanada wheel-0.46.3+computecanada
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: packaging in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.13/site-packages (26.0+computecanada)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: huggingface_hub in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (1.28.0)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/ruamel_yaml-0.19.1+computecanada-py3-none-any.whl
+Requirement already satisfied: click<9.0.0,>=8.4.2 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (8.4.2+computecanada)
+Requirement already satisfied: filelock>=3.10.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (3.32.4)
+Requirement already satisfied: fsspec>=2023.5.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (2025.3.0+computecanada)
+Requirement already satisfied: hf-xet<2.0.0,>=1.5.2 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (1.5.2+computecanada)
+Requirement already satisfied: httpx<1,>=0.23.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (0.28.1+computecanada)
+Requirement already satisfied: packaging>=20.9 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/scipy-stack/2026a/lib/python3.13/site-packages (from huggingface_hub) (26.0+computecanada)
+Requirement already satisfied: pyyaml>=5.1 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (6.0.3+computecanada)
+Requirement already satisfied: tqdm>=4.42.1 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.70.0+computecanada)
+Requirement already satisfied: typing-extensions>=4.1.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.16.0+computecanada)
+Requirement already satisfied: anyio in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (4.14.2+computecanada)
+Requirement already satisfied: certifi in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (1.0.9+computecanada)
+Requirement already satisfied: idna in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (3.19)
+Requirement already satisfied: h11>=0.16 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpcore==1.*->httpx<1,>=0.23.0->huggingface_hub) (0.16.0+computecanada)
+Installing collected packages: ruamel.yaml
+Successfully installed ruamel.yaml-0.19.1+computecanada
+YAML_FILE: /scratch/i/indrisch//LLaMA-Factory-LFS/examples/train_lora/tamia_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR_SAVES: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+OUTPUT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+CACHE_DIR: /project/aip-wangcs/indrisch/huggingface/hub
+RESUME_CKPT: null
+GPU TYPE: HBM3
+SLURM_JOB_NODELIST: tg11306
+HEAD_NODE: tg11306
+HEAD_NODE: tg11306
+MASTER_ADDR: tg11306
+MASTER_PORT: 29500
+PROJECT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/i/indrisch/LLaMA-Factory-LFS/scripts:/scratch/i/indrisch/LLaMA-Factory-LFS/scripts/utils:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: TAMIA
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 9.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: None
+SIF_FILE: None
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/i/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/i/indrisch/venv_llamafactory_py313/
+SCANNET_H5_DIR: /scratch/i/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/i/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/i/indrisch/3DThinker10K_images_h5/
+CLUSTER: TAMIA
+YAML_FILE: /scratch/i/indrisch//LLaMA-Factory-LFS/examples/train_lora/tamia_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+No resume checkpoint (fresh start from epoch 0).
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00] === Node-local CoT dataset staging ===
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00] HOST=tg11306.tamia.ecpia.ca SLURM_NODEID=0 SLURM_NNODES=1
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00] NODE_LOCAL_DATA_ROOT=/tmp/cot_stage
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00] STAGE_COPY_JOBS=24 STAGE_STAGGER_SEC=0
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00] Sources:
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00]   SCENE30K_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.parquet
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00]   SPATIALSSRL_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00]   THINKER10K_ANN_SRC=/scratch/i/indrisch//LLaMA-Factory-LFS/data/3DThinker-10K/out/3dthinker10k_cot.jsonl
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00]   SCANNET_H5_DIR(src)=/scratch/i/indrisch/ScanNet_h5/scans
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00]   SPATIALSSRL_H5_DIR(src)=/scratch/i/indrisch/Spatial-SSRL_images_h5
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00]   THINKER10K_H5_DIR(src)=/scratch/i/indrisch/3DThinker10K_images_h5/
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00] Free space on /tmp/cot_stage: 7235681542144 bytes (need ~128849018880)
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00] Copying annotations...
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00] Annotations done in -1787606594s
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00] Copying ScanNet H5 tree...
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:14-04:00] Copying 700 entries from /scratch/i/indrisch/ScanNet_h5/scans -> /tmp/cot_stage/media/ScanNet_h5/scans (jobs=24)
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:19-04:00] ScanNet done in -1787606594s
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:19-04:00] Copying Spatial-SSRL H5 tree...
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:23:19-04:00] Copying 13 entries from /scratch/i/indrisch/Spatial-SSRL_images_h5 -> /tmp/cot_stage/media/Spatial-SSRL_images_h5 (jobs=24)
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:24:21-04:00] Spatial-SSRL done in -1787606599s
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:24:21-04:00] Copying 3DThinker H5 tree...
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:24:21-04:00] Copying 2 entries from /scratch/i/indrisch/3DThinker10K_images_h5/ -> /tmp/cot_stage/media/3DThinker10K_images_h5 (jobs=24)
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:24:25-04:00] 3DThinker done in -1787606661s
+Wrote local dataset_info (3 entries) -> /tmp/cot_stage/dataset_dir/dataset_info.json
+  Scene30k: /tmp/cot_stage/annotations/Scene30k.parquet
+  SpatialSSRL_coldstart: /tmp/cot_stage/annotations/SpatialSSRL_coldstart.json
+  3DThinker10k: /tmp/cot_stage/annotations/3dthinker10k_cot.jsonl
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:24:25-04:00] VERIFY OK under /tmp/cot_stage
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:24:25-04:00] === Staging complete in 71s ===
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:24:25-04:00] LOCAL_DATASET_DIR=/tmp/cot_stage/dataset_dir
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:24:25-04:00] LOCAL_MEDIA_DIR=/tmp/cot_stage/media/ScanNet_h5
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:24:25-04:00] SCANNET_H5_DIR=/tmp/cot_stage/media/ScanNet_h5/scans
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:24:25-04:00] SPATIALSSRL_H5_DIR=/tmp/cot_stage/media/Spatial-SSRL_images_h5
+[stage tg11306.tamia.ecpia.ca node=0 2026-08-24T17:24:25-04:00] THINKER10K_H5_DIR=/tmp/cot_stage/media/3DThinker10K_images_h5
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme1n1    7.0T  105G  6.5T   2% /tmp
+Patched YAML -> /tmp/cot_stage/train.yaml
+  dataset_dir: /tmp/cot_stage/dataset_dir
+  media_dir: /tmp/cot_stage/media/ScanNet_h5
+YAML_FILE (node-local): /tmp/cot_stage/train.yaml
+LOCAL_DATASET_DIR: /tmp/cot_stage/dataset_dir
+LOCAL_MEDIA_DIR: /tmp/cot_stage/media/ScanNet_h5
+SCANNET_H5_DIR (local): /tmp/cot_stage/media/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR (local): /tmp/cot_stage/media/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR (local): /tmp/cot_stage/media/3DThinker10K_images_h5
+Copying venv to local storage...
+/scratch/i/indrisch/LLaMA-Factory-LFS /scratch/i/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT
+[INFO|2026-08-24 17:27:49] llamafactory.launcher:144 >> Initializing 4 distributed tasks at: tg11306:29500
+W0824 17:27:51.160000 135317 torch/distributed/run.py:766] 
+W0824 17:27:51.160000 135317 torch/distributed/run.py:766] *****************************************
+W0824 17:27:51.160000 135317 torch/distributed/run.py:766] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0824 17:27:51.160000 135317 torch/distributed/run.py:766] *****************************************
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[INFO] Running in WANDB offline mode
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[WARNING|2026-08-24 17:28:00] llamafactory.extras.misc:155 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+tg11306:135329:135329 [0] NCCL INFO Bootstrap: Using ibp77s0:10.225.0.77<0>
+tg11306:135329:135329 [0] NCCL INFO cudaDriverVersion 13000
+tg11306:135329:135329 [0] NCCL INFO NCCL version 2.26.2+cuda12.6
+tg11306:135329:135329 [0] NCCL INFO Comm config Blocking set to 1
+tg11306:135332:135332 [3] NCCL INFO cudaDriverVersion 13000
+tg11306:135332:135332 [3] NCCL INFO Bootstrap: Using ibp77s0:10.225.0.77<0>
+tg11306:135332:135332 [3] NCCL INFO NCCL version 2.26.2+cuda12.6
+tg11306:135332:135332 [3] NCCL INFO Comm config Blocking set to 1
+tg11306:135330:135330 [1] NCCL INFO cudaDriverVersion 13000
+tg11306:135330:135330 [1] NCCL INFO Bootstrap: Using ibp77s0:10.225.0.77<0>
+tg11306:135330:135330 [1] NCCL INFO NCCL version 2.26.2+cuda12.6
+tg11306:135331:135331 [2] NCCL INFO cudaDriverVersion 13000
+tg11306:135330:135330 [1] NCCL INFO Comm config Blocking set to 1
+tg11306:135331:135331 [2] NCCL INFO Bootstrap: Using ibp77s0:10.225.0.77<0>
+tg11306:135331:135331 [2] NCCL INFO NCCL version 2.26.2+cuda12.6
+tg11306:135331:135331 [2] NCCL INFO Comm config Blocking set to 1
+tg11306:135329:135754 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal net plugin.
+tg11306:135332:135755 [3] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal net plugin.
+tg11306:135330:135756 [1] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal net plugin.
+tg11306:135331:135757 [2] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal net plugin.
+tg11306:135329:135754 [0] NCCL INFO NET/IB : Using [0]mlx5_2:1/IB [1]mlx5_0:1/IB [2]mlx5_3:1/IB [3]mlx5_1:1/IB [RO]; OOB ibp77s0:10.225.0.77<0>
+tg11306:135329:135754 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+tg11306:135329:135754 [0] NCCL INFO Using network IB
+tg11306:135330:135756 [1] NCCL INFO NET/IB : Using [0]mlx5_2:1/IB [1]mlx5_0:1/IB [2]mlx5_3:1/IB [3]mlx5_1:1/IB [RO]; OOB ibp77s0:10.225.0.77<0>
+tg11306:135332:135755 [3] NCCL INFO NET/IB : Using [0]mlx5_2:1/IB [1]mlx5_0:1/IB [2]mlx5_3:1/IB [3]mlx5_1:1/IB [RO]; OOB ibp77s0:10.225.0.77<0>
+tg11306:135330:135756 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+tg11306:135330:135756 [1] NCCL INFO Using network IB
+tg11306:135332:135755 [3] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+tg11306:135332:135755 [3] NCCL INFO Using network IB
+tg11306:135331:135757 [2] NCCL INFO NET/IB : Using [0]mlx5_2:1/IB [1]mlx5_0:1/IB [2]mlx5_3:1/IB [3]mlx5_1:1/IB [RO]; OOB ibp77s0:10.225.0.77<0>
+tg11306:135331:135757 [2] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+tg11306:135331:135757 [2] NCCL INFO Using network IB
+tg11306:135329:135754 [0] NCCL INFO ncclCommInitRankConfig comm 0x245ebc70 rank 0 nranks 4 cudaDev 0 nvmlDev 0 busId 4e000 commId 0xbce5d3ad12a30cc8 - Init START
+tg11306:135330:135756 [1] NCCL INFO ncclCommInitRankConfig comm 0x417881b0 rank 1 nranks 4 cudaDev 1 nvmlDev 1 busId 5f000 commId 0xbce5d3ad12a30cc8 - Init START
+tg11306:135331:135757 [2] NCCL INFO ncclCommInitRankConfig comm 0x1e0f5bb0 rank 2 nranks 4 cudaDev 2 nvmlDev 2 busId cb000 commId 0xbce5d3ad12a30cc8 - Init START
+tg11306:135332:135755 [3] NCCL INFO ncclCommInitRankConfig comm 0x1bcf12b0 rank 3 nranks 4 cudaDev 3 nvmlDev 3 busId db000 commId 0xbce5d3ad12a30cc8 - Init START
+tg11306:135330:135756 [1] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+tg11306:135331:135757 [2] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+tg11306:135329:135754 [0] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+tg11306:135332:135755 [3] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+tg11306:135330:135756 [1] NCCL INFO Bootstrap timings total 0.001491 (create 0.000064, send 0.000214, recv 0.000146, ring 0.000341, delay 0.000001)
+tg11306:135331:135757 [2] NCCL INFO Bootstrap timings total 0.001495 (create 0.000053, send 0.000203, recv 0.000265, ring 0.000324, delay 0.000001)
+tg11306:135329:135754 [0] NCCL INFO Bootstrap timings total 0.001509 (create 0.000068, send 0.000221, recv 0.000188, ring 0.000240, delay 0.000001)
+tg11306:135332:135755 [3] NCCL INFO Bootstrap timings total 0.001394 (create 0.000073, send 0.000217, recv 0.000157, ring 0.000115, delay 0.000001)
+tg11306:135331:135757 [2] NCCL INFO Setting affinity for GPU 2 to aaaa,aaaaaaaa
+tg11306:135331:135757 [2] NCCL INFO NVLS multicast support is not available on dev 2
+tg11306:135332:135755 [3] NCCL INFO Setting affinity for GPU 3 to aaaa,aaaaaaaa
+tg11306:135330:135756 [1] NCCL INFO Setting affinity for GPU 1 to 5555,55555555
+tg11306:135332:135755 [3] NCCL INFO NVLS multicast support is not available on dev 3
+tg11306:135330:135756 [1] NCCL INFO NVLS multicast support is not available on dev 1
+tg11306:135329:135754 [0] NCCL INFO Setting affinity for GPU 0 to 5555,55555555
+tg11306:135329:135754 [0] NCCL INFO NVLS multicast support is not available on dev 0
+tg11306:135330:135756 [1] NCCL INFO comm 0x417881b0 rank 1 nRanks 4 nNodes 1 localRanks 4 localRank 1 MNNVL 0
+tg11306:135329:135754 [0] NCCL INFO comm 0x245ebc70 rank 0 nRanks 4 nNodes 1 localRanks 4 localRank 0 MNNVL 0
+tg11306:135331:135757 [2] NCCL INFO comm 0x1e0f5bb0 rank 2 nRanks 4 nNodes 1 localRanks 4 localRank 2 MNNVL 0
+tg11306:135332:135755 [3] NCCL INFO comm 0x1bcf12b0 rank 3 nRanks 4 nNodes 1 localRanks 4 localRank 3 MNNVL 0
+tg11306:135329:135754 [0] NCCL INFO Channel 00/24 : 0 1 2 3
+tg11306:135329:135754 [0] NCCL INFO Channel 01/24 : 0 1 3 2
+tg11306:135329:135754 [0] NCCL INFO Channel 02/24 : 0 2 3 1
+tg11306:135329:135754 [0] NCCL INFO Channel 03/24 : 0 2 1 3
+tg11306:135329:135754 [0] NCCL INFO Channel 04/24 : 0 3 1 2
+tg11306:135329:135754 [0] NCCL INFO Channel 05/24 : 0 3 2 1
+tg11306:135329:135754 [0] NCCL INFO Channel 06/24 : 0 1 2 3
+tg11306:135329:135754 [0] NCCL INFO Channel 07/24 : 0 1 3 2
+tg11306:135329:135754 [0] NCCL INFO Channel 08/24 : 0 2 3 1
+tg11306:135329:135754 [0] NCCL INFO Channel 09/24 : 0 2 1 3
+tg11306:135329:135754 [0] NCCL INFO Channel 10/24 : 0 3 1 2
+tg11306:135329:135754 [0] NCCL INFO Channel 11/24 : 0 3 2 1
+tg11306:135329:135754 [0] NCCL INFO Channel 12/24 : 0 1 2 3
+tg11306:135329:135754 [0] NCCL INFO Channel 13/24 : 0 1 3 2
+tg11306:135329:135754 [0] NCCL INFO Channel 14/24 : 0 2 3 1
+tg11306:135329:135754 [0] NCCL INFO Channel 15/24 : 0 2 1 3
+tg11306:135330:135756 [1] NCCL INFO Trees [0] 2/-1/-1->1->0 [1] 2/-1/-1->1->0 [2] 2/-1/-1->1->0 [3] 2/-1/-1->1->0 [4] 3/-1/-1->1->2 [5] 3/-1/-1->1->2 [6] 3/-1/-1->1->2 [7] 3/-1/-1->1->2 [8] 0/-1/-1->1->-1 [9] 0/-1/-1->1->-1 [10] 0/-1/-1->1->-1 [11] 0/-1/-1->1->-1 [12] 2/-1/-1->1->0 [13] 2/-1/-1->1->0 [14] 2/-1/-1->1->0 [15] 2/-1/-1->1->0 [16] 3/-1/-1->1->2 [17] 3/-1/-1->1->2 [18] 3/-1/-1->1->2 [19] 3/-1/-1->1->2 [20] 0/-1/-1->1->-1 [21] 0/-1/-1->1->-1 [22] 0/-1/-1->1->-1 [23] 0/-1/-1->1->-1
+tg11306:135329:135754 [0] NCCL INFO Channel 16/24 : 0 3 1 2
+tg11306:135331:135757 [2] NCCL INFO Trees [0] 3/-1/-1->2->1 [1] 3/-1/-1->2->1 [2] 3/-1/-1->2->1 [3] 3/-1/-1->2->1 [4] 1/-1/-1->2->0 [5] 1/-1/-1->2->0 [6] 1/-1/-1->2->0 [7] 1/-1/-1->2->0 [8] -1/-1/-1->2->3 [9] -1/-1/-1->2->3 [10] -1/-1/-1->2->3 [11] -1/-1/-1->2->3 [12] 3/-1/-1->2->1 [13] 3/-1/-1->2->1 [14] 3/-1/-1->2->1 [15] 3/-1/-1->2->1 [16] 1/-1/-1->2->0 [17] 1/-1/-1->2->0 [18] 1/-1/-1->2->0 [19] 1/-1/-1->2->0 [20] -1/-1/-1->2->3 [21] -1/-1/-1->2->3 [22] -1/-1/-1->2->3 [23] -1/-1/-1->2->3
+tg11306:135329:135754 [0] NCCL INFO Channel 17/24 : 0 3 2 1
+tg11306:135330:135756 [1] NCCL INFO P2P Chunksize set to 524288
+tg11306:135329:135754 [0] NCCL INFO Channel 18/24 : 0 1 2 3
+tg11306:135332:135755 [3] NCCL INFO Trees [0] -1/-1/-1->3->2 [1] -1/-1/-1->3->2 [2] -1/-1/-1->3->2 [3] -1/-1/-1->3->2 [4] -1/-1/-1->3->1 [5] -1/-1/-1->3->1 [6] -1/-1/-1->3->1 [7] -1/-1/-1->3->1 [8] 2/-1/-1->3->0 [9] 2/-1/-1->3->0 [10] 2/-1/-1->3->0 [11] 2/-1/-1->3->0 [12] -1/-1/-1->3->2 [13] -1/-1/-1->3->2 [14] -1/-1/-1->3->2 [15] -1/-1/-1->3->2 [16] -1/-1/-1->3->1 [17] -1/-1/-1->3->1 [18] -1/-1/-1->3->1 [19] -1/-1/-1->3->1 [20] 2/-1/-1->3->0 [21] 2/-1/-1->3->0 [22] 2/-1/-1->3->0 [23] 2/-1/-1->3->0
+tg11306:135331:135757 [2] NCCL INFO P2P Chunksize set to 524288
+tg11306:135329:135754 [0] NCCL INFO Channel 19/24 : 0 1 3 2
+tg11306:135329:135754 [0] NCCL INFO Channel 20/24 : 0 2 3 1
+tg11306:135332:135755 [3] NCCL INFO P2P Chunksize set to 524288
+tg11306:135329:135754 [0] NCCL INFO Channel 21/24 : 0 2 1 3
+tg11306:135329:135754 [0] NCCL INFO Channel 22/24 : 0 3 1 2
+tg11306:135329:135754 [0] NCCL INFO Channel 23/24 : 0 3 2 1
+tg11306:135329:135754 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1 [2] 1/-1/-1->0->-1 [3] 1/-1/-1->0->-1 [4] 2/-1/-1->0->-1 [5] 2/-1/-1->0->-1 [6] 2/-1/-1->0->-1 [7] 2/-1/-1->0->-1 [8] 3/-1/-1->0->1 [9] 3/-1/-1->0->1 [10] 3/-1/-1->0->1 [11] 3/-1/-1->0->1 [12] 1/-1/-1->0->-1 [13] 1/-1/-1->0->-1 [14] 1/-1/-1->0->-1 [15] 1/-1/-1->0->-1 [16] 2/-1/-1->0->-1 [17] 2/-1/-1->0->-1 [18] 2/-1/-1->0->-1 [19] 2/-1/-1->0->-1 [20] 3/-1/-1->0->1 [21] 3/-1/-1->0->1 [22] 3/-1/-1->0->1 [23] 3/-1/-1->0->1
+tg11306:135329:135754 [0] NCCL INFO P2P Chunksize set to 524288
+tg11306:135329:135754 [0] NCCL INFO Check P2P Type intraNodeP2pSupport 1 directMode 0
+tg11306:135329:135778 [0] NCCL INFO [Proxy Service] Device 0 CPU core 14
+tg11306:135329:135779 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 16
+tg11306:135332:135780 [3] NCCL INFO [Proxy Service] Device 3 CPU core 11
+tg11306:135332:135781 [3] NCCL INFO [Proxy Service UDS] Device 3 CPU core 13
+tg11306:135330:135782 [1] NCCL INFO [Proxy Service] Device 1 CPU core 20
+tg11306:135330:135783 [1] NCCL INFO [Proxy Service UDS] Device 1 CPU core 22
+tg11306:135331:135784 [2] NCCL INFO [Proxy Service] Device 2 CPU core 45
+tg11306:135331:135785 [2] NCCL INFO [Proxy Service UDS] Device 2 CPU core 47
+tg11306:135330:135756 [1] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+tg11306:135330:135756 [1] NCCL INFO 24 coll channels, 24 collnet channels, 0 nvls channels, 32 p2p channels, 16 p2p channels per peer
+tg11306:135332:135755 [3] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+tg11306:135332:135755 [3] NCCL INFO 24 coll channels, 24 collnet channels, 0 nvls channels, 32 p2p channels, 16 p2p channels per peer
+tg11306:135331:135757 [2] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+tg11306:135331:135757 [2] NCCL INFO 24 coll channels, 24 collnet channels, 0 nvls channels, 32 p2p channels, 16 p2p channels per peer
+tg11306:135329:135754 [0] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+tg11306:135329:135754 [0] NCCL INFO 24 coll channels, 24 collnet channels, 0 nvls channels, 32 p2p channels, 16 p2p channels per peer
+tg11306:135329:135754 [0] NCCL INFO CC Off, workFifoBytes 1048576
+tg11306:135332:135755 [3] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+tg11306:135329:135754 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+tg11306:135331:135757 [2] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+tg11306:135330:135756 [1] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+tg11306:135329:135754 [0] NCCL INFO ncclCommInitRankConfig comm 0x245ebc70 rank 0 nranks 4 cudaDev 0 nvmlDev 0 busId 4e000 commId 0xbce5d3ad12a30cc8 - Init COMPLETE
+tg11306:135332:135755 [3] NCCL INFO ncclCommInitRankConfig comm 0x1bcf12b0 rank 3 nranks 4 cudaDev 3 nvmlDev 3 busId db000 commId 0xbce5d3ad12a30cc8 - Init COMPLETE
+tg11306:135329:135754 [0] NCCL INFO Init timings - ncclCommInitRankConfig: rank 0 nranks 4 total 2.10 (kernels 0.25, alloc 1.74, bootstrap 0.00, allgathers 0.01, topo 0.05, graphs 0.01, connections 0.04, rest 0.01)
+tg11306:135330:135756 [1] NCCL INFO ncclCommInitRankConfig comm 0x417881b0 rank 1 nranks 4 cudaDev 1 nvmlDev 1 busId 5f000 commId 0xbce5d3ad12a30cc8 - Init COMPLETE
+tg11306:135331:135757 [2] NCCL INFO ncclCommInitRankConfig comm 0x1e0f5bb0 rank 2 nranks 4 cudaDev 2 nvmlDev 2 busId cb000 commId 0xbce5d3ad12a30cc8 - Init COMPLETE
+tg11306:135332:135755 [3] NCCL INFO Init timings - ncclCommInitRankConfig: rank 3 nranks 4 total 2.10 (kernels 0.25, alloc 1.73, bootstrap 0.00, allgathers 0.00, topo 0.04, graphs 0.02, connections 0.03, rest 0.01)
+tg11306:135330:135756 [1] NCCL INFO Init timings - ncclCommInitRankConfig: rank 1 nranks 4 total 2.08 (kernels 0.24, alloc 1.73, bootstrap 0.00, allgathers 0.00, topo 0.04, graphs 0.02, connections 0.03, rest 0.01)
+tg11306:135331:135757 [2] NCCL INFO Init timings - ncclCommInitRankConfig: rank 2 nranks 4 total 2.08 (kernels 0.24, alloc 1.72, bootstrap 0.00, allgathers 0.00, topo 0.04, graphs 0.02, connections 0.03, rest 0.02)
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 407, in from_name
+[rank2]:     return next(iter(cls.discover(name=name)))
+[rank2]: StopIteration
+
+[rank2]: During handling of the above exception, another exception occurred:
+
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/versions.py", line 101, in require_version
+[rank2]:     got_ver = importlib.metadata.version(pkg)
+[rank2]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 987, in version
+[rank2]:     return distribution(distribution_name).version
+[rank2]:            ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 960, in distribution
+[rank2]:     return Distribution.from_name(distribution_name)
+[rank2]:            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 409, in from_name
+[rank2]:     raise PackageNotFoundError(name)
+[rank2]: importlib.metadata.PackageNotFoundError: No package metadata was found for liger-kernel
+
+[rank2]: During handling of the above exception, another exception occurred:
+
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+[rank2]:     run_exp()
+[rank2]:     ~~~~~~~^^
+[rank2]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+[rank2]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank2]:     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 112, in _training_function
+[rank2]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank2]:                                                                              ~~~~~~~~~~~~~~^^^^^^
+[rank2]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 773, in get_train_args
+[rank2]:     _check_extra_dependencies(model_args, finetuning_args, training_args)
+[rank2]:     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 274, in _check_extra_dependencies
+[rank2]:     check_version("liger-kernel", mandatory=True)
+[rank2]:     ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/extras/misc.py", line 92, in check_version
+[rank2]:     require_version(requirement, hint)
+[rank2]:     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/versions.py", line 103, in require_version
+[rank2]:     raise importlib.metadata.PackageNotFoundError(
+[rank2]:         f"The '{requirement}' distribution was not found and is required by this application. {hint}"
+[rank2]:     )
+[rank2]: importlib.metadata.PackageNotFoundError: No package metadata was found for The 'liger-kernel' distribution was not found and is required by this application. 
+[rank2]: To fix: run `pip install liger-kernel`.
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 407, in from_name
+[rank1]:     return next(iter(cls.discover(name=name)))
+[rank1]: StopIteration
+
+[rank1]: During handling of the above exception, another exception occurred:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/versions.py", line 101, in require_version
+[rank1]:     got_ver = importlib.metadata.version(pkg)
+[rank1]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 987, in version
+[rank1]:     return distribution(distribution_name).version
+[rank1]:            ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 960, in distribution
+[rank1]:     return Distribution.from_name(distribution_name)
+[rank1]:            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 409, in from_name
+[rank1]:     raise PackageNotFoundError(name)
+[rank1]: importlib.metadata.PackageNotFoundError: No package metadata was found for liger-kernel
+
+[rank1]: During handling of the above exception, another exception occurred:
+
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+[rank1]:     run_exp()
+[rank1]:     ~~~~~~~^^
+[rank1]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+[rank1]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank1]:     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 112, in _training_function
+[rank1]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank1]:                                                                              ~~~~~~~~~~~~~~^^^^^^
+[rank1]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 773, in get_train_args
+[rank1]:     _check_extra_dependencies(model_args, finetuning_args, training_args)
+[rank1]:     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 274, in _check_extra_dependencies
+[rank1]:     check_version("liger-kernel", mandatory=True)
+[rank1]:     ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/extras/misc.py", line 92, in check_version
+[rank1]:     require_version(requirement, hint)
+[rank1]:     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/versions.py", line 103, in require_version
+[rank1]:     raise importlib.metadata.PackageNotFoundError(
+[rank1]:         f"The '{requirement}' distribution was not found and is required by this application. {hint}"
+[rank1]:     )
+[rank1]: importlib.metadata.PackageNotFoundError: No package metadata was found for The 'liger-kernel' distribution was not found and is required by this application. 
+[rank1]: To fix: run `pip install liger-kernel`.
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 407, in from_name
+[rank3]:     return next(iter(cls.discover(name=name)))
+[rank3]: StopIteration
+
+[rank3]: During handling of the above exception, another exception occurred:
+
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/versions.py", line 101, in require_version
+[rank3]:     got_ver = importlib.metadata.version(pkg)
+[rank3]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 987, in version
+[rank3]:     return distribution(distribution_name).version
+[rank3]:            ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 960, in distribution
+[rank3]:     return Distribution.from_name(distribution_name)
+[rank3]:            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 409, in from_name
+[rank3]:     raise PackageNotFoundError(name)
+[rank3]: importlib.metadata.PackageNotFoundError: No package metadata was found for liger-kernel
+
+[rank3]: During handling of the above exception, another exception occurred:
+
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+[rank3]:     run_exp()
+[rank3]:     ~~~~~~~^^
+[rank3]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+[rank3]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank3]:     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 112, in _training_function
+[rank3]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank3]:                                                                              ~~~~~~~~~~~~~~^^^^^^
+[rank3]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 773, in get_train_args
+[rank3]:     _check_extra_dependencies(model_args, finetuning_args, training_args)
+[rank3]:     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 274, in _check_extra_dependencies
+[rank3]:     check_version("liger-kernel", mandatory=True)
+[rank3]:     ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/extras/misc.py", line 92, in check_version
+[rank3]:     require_version(requirement, hint)
+[rank3]:     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/versions.py", line 103, in require_version
+[rank3]:     raise importlib.metadata.PackageNotFoundError(
+[rank3]:         f"The '{requirement}' distribution was not found and is required by this application. {hint}"
+[rank3]:     )
+[rank3]: importlib.metadata.PackageNotFoundError: No package metadata was found for The 'liger-kernel' distribution was not found and is required by this application. 
+[rank3]: To fix: run `pip install liger-kernel`.
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 407, in from_name
+[rank0]:     return next(iter(cls.discover(name=name)))
+[rank0]: StopIteration
+
+[rank0]: During handling of the above exception, another exception occurred:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/versions.py", line 101, in require_version
+[rank0]:     got_ver = importlib.metadata.version(pkg)
+[rank0]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 987, in version
+[rank0]:     return distribution(distribution_name).version
+[rank0]:            ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 960, in distribution
+[rank0]:     return Distribution.from_name(distribution_name)
+[rank0]:            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/importlib/metadata/__init__.py", line 409, in from_name
+[rank0]:     raise PackageNotFoundError(name)
+[rank0]: importlib.metadata.PackageNotFoundError: No package metadata was found for liger-kernel
+
+[rank0]: During handling of the above exception, another exception occurred:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+[rank0]:     run_exp()
+[rank0]:     ~~~~~~~^^
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+[rank0]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank0]:     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 112, in _training_function
+[rank0]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank0]:                                                                              ~~~~~~~~~~~~~~^^^^^^
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 773, in get_train_args
+[rank0]:     _check_extra_dependencies(model_args, finetuning_args, training_args)
+[rank0]:     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 274, in _check_extra_dependencies
+[rank0]:     check_version("liger-kernel", mandatory=True)
+[rank0]:     ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/extras/misc.py", line 92, in check_version
+[rank0]:     require_version(requirement, hint)
+[rank0]:     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/versions.py", line 103, in require_version
+[rank0]:     raise importlib.metadata.PackageNotFoundError(
+[rank0]:         f"The '{requirement}' distribution was not found and is required by this application. {hint}"
+[rank0]:     )
+[rank0]: importlib.metadata.PackageNotFoundError: No package metadata was found for The 'liger-kernel' distribution was not found and is required by this application. 
+[rank0]: To fix: run `pip install liger-kernel`.
+[rank0]:[W824 17:28:09.101395326 ProcessGroupNCCL.cpp:1479] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+tg11306:135329:135801 [0] NCCL INFO comm 0x245ebc70 rank 0 nranks 4 cudaDev 0 busId 4e000 - Abort COMPLETE
+tg11306:135330:135799 [1] NCCL INFO comm 0x417881b0 rank 1 nranks 4 cudaDev 1 busId 5f000 - Abort COMPLETE
+tg11306:135332:135795 [3] NCCL INFO comm 0x1bcf12b0 rank 3 nranks 4 cudaDev 3 busId db000 - Abort COMPLETE
+tg11306:135331:135797 [2] NCCL INFO comm 0x1e0f5bb0 rank 2 nranks 4 cudaDev 2 busId cb000 - Abort COMPLETE
+W0824 17:28:11.098000 135317 torch/distributed/elastic/multiprocessing/api.py:900] Sending process 135329 closing signal SIGTERM
+W0824 17:28:11.101000 135317 torch/distributed/elastic/multiprocessing/api.py:900] Sending process 135330 closing signal SIGTERM
+W0824 17:28:11.103000 135317 torch/distributed/elastic/multiprocessing/api.py:900] Sending process 135331 closing signal SIGTERM
+E0824 17:28:11.370000 135317 torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 3 (pid: 135332) of binary: /scratch/i/indrisch/venv_llamafactory_py313/bin/python
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/venv_llamafactory_py313/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/run.py", line 892, in main
+    run(args)
+    ~~~^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/run.py", line 883, in run
+    elastic_launch(
+    ~~~~~~~~~~~~~~~
+        config=config,
+        ~~~~~~~~~~~~~~
+        entrypoint=cmd,
+        ~~~~~~~~~~~~~~~
+    )(*cmd_args)
+    ~^^^^^^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/launcher/api.py", line 139, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/launcher/api.py", line 270, in launch_agent
+    raise ChildFailedError(
+    ...<2 lines>...
+    )
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-08-24_17:28:11
+  host      : tg11306.tamia.ecpia.ca
+  rank      : 3 (local_rank: 3)
+  exitcode  : 1 (pid: 135332)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/venv_llamafactory_py313/bin/llamafactory-cli", line 8, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+    ~~~~~~~~~~~~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 115, in launch
+    process = subprocess.run(
+        (
+    ...<14 lines>...
+        check=True,
+    )
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/subprocess.py", line 579, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', 'tg11306', '--master_port', '29500', '/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py', '/tmp/cot_stage/train.yaml']' returned non-zero exit status 1.
+
+======== GPU REPORT ========
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Mon Aug 24 17:28:12 2026
+Driver Version                                         : 580.159.04
+CUDA Version                                           : 13.0
+
+Attached GPUs                                          : 4
+GPU 00000000:4E:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 135329
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 15545 ms
+            Is Running                                 : 0
+
+GPU 00000000:5F:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 135330
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 15454 ms
+            Is Running                                 : 0
+
+GPU 00000000:CB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 135331
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 15381 ms
+            Is Running                                 : 0
+
+GPU 00000000:DB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 135332
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 14661 ms
+            Is Running                                 : 0
+
+Mon Aug 24 17:28:12 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   36C    P0            127W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   35C    P0            124W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   35C    P0            121W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   34C    P0            107W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+srun: error: tg11306: task 0: Exited with exit code 1
+srun: Terminating StepId=426353.0
+
+======== GPU REPORT ========
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Mon Aug 24 17:28:13 2026
+Driver Version                                         : 580.159.04
+CUDA Version                                           : 13.0
+
+Attached GPUs                                          : 4
+GPU 00000000:4E:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 135329
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 15545 ms
+            Is Running                                 : 0
+
+GPU 00000000:5F:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 135330
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 15454 ms
+            Is Running                                 : 0
+
+GPU 00000000:CB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 135331
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 15381 ms
+            Is Running                                 : 0
+
+GPU 00000000:DB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 135332
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 984 MiB
+            Time                                       : 14661 ms
+            Is Running                                 : 0
+
+Mon Aug 24 17:28:13 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   34C    P0             95W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   34C    P0            122W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   34C    P0             99W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   34C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+

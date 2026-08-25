@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
 #SBATCH --cpus-per-task=48
-#SBATCH --time=0-00:10:00
+#SBATCH --time=0-00:30:00
 #SBATCH --mem=0
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
@@ -180,6 +180,8 @@ cmd_args=(
     --dataloader_num_workers "${DATALOADER_NUM_WORKERS}"
     --ddp_timeout "${TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC}" # avoid NCCL timeouts
     --max_samples 100 # for debugging
+    --num_train_epochs 2 # for debugging
+    --train_prediction_interval 1 # for debugging
 )
 
 python "${PROJECT_DIR}/scripts/utils/modify_yaml.py" \
