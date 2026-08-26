@@ -6,10 +6,10 @@
 |------|-------------|
 | `SpatialSSRL_coldstart` | Coldstart SFT JSON (3597 rows) from the Spatial-SSRL-81k HF snapshot |
 
-Annotations (absolute path in `dataset_info.json`):
+Annotations (`file_name` in `dataset_info.json`; `${HF_HUB_CACHE}` is expanded at load time):
 
 ```text
-/scratch/indrisch/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json
+${HF_HUB_CACHE}/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.with_question_id.json
 ```
 
 ## Packed images (H5)

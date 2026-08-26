@@ -41,7 +41,7 @@ and `examples/train_lora/trillium_qwen2_5vl_lora_sft_CoT_prediction_dump_smoke.y
 
 **Single `media_dir` vs multi-root H5:** LLaMA-Factory CLI accepts only one `--media_dir`, which is a filesystem join prefix for relative image paths. That is **not** a problem for the CoT mix in this fork: `converter._find_medias` falls back to `can_resolve_h5_image`, and `h5_image_store.resolve_h5_image` routes by path pattern to the correct store (`SCANNET_H5_DIR` / `SPATIALSSRL_H5_DIR` / `THINKER10K_H5_DIR`). You do **not** need a unified CoT symlink tree or a custom CoT dataset for multi-source images. Specs: [`Spatial-SSRL/h5_dataloader_spec.md`](Spatial-SSRL/h5_dataloader_spec.md), [`3DThinker-10K/3dthinker10k_h5_dataloader_spec.md`](3DThinker-10K/3dthinker10k_h5_dataloader_spec.md). Smoke: `scripts/smoke_cot_h5_resolve.py`.
 
-The `dataset_info.json` file should be put in the `dataset_dir` directory. You can change `dataset_dir` to use another directory. The default value is `./data`.
+The `dataset_info.json` file should be put in the `dataset_dir` directory. You can change `dataset_dir` to use another directory. The default value is `./data`. Hub-cache `file_name` values may start with `${HF_HUB_CACHE}` or `${HF_HOME}` and are expanded at load time; those variables are set per cluster by `scripts/utils/env.sh`.
 
 Currently we support datasets in **alpaca** and **sharegpt** format. Allowed file types include json, jsonl, csv, parquet, arrow.
 

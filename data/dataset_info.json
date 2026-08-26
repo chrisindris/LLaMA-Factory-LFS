@@ -747,7 +747,7 @@
     "folder": "python"
   },
   "SQA3D": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_8",
@@ -763,7 +763,7 @@
     }
   },
   "SQA3Devery16": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_16",
@@ -779,7 +779,7 @@
     }
   },
   "SQA3Devery24": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_24",
@@ -795,7 +795,7 @@
     }
   },
   "SQA3Devery24_R12C12F12X62": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62/snapshots/4aacd59535c1a6d4927311648bd440ff54f09d6d/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62/snapshots/4aacd59535c1a6d4927311648bd440ff54f09d6d/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_24",
@@ -811,7 +811,7 @@
     }
   },
   "SQA3Devery24_R1C0F0X0": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R1.0_C0.0_F0.0_X0.0/snapshots/f5169156040efd5f186d4d7b5ecd7ae3b8411a3d/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R1.0_C0.0_F0.0_X0.0/snapshots/f5169156040efd5f186d4d7b5ecd7ae3b8411a3d/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_24",
@@ -827,7 +827,7 @@
     }
   },
   "SQA3Devery24_R0C1F0X0": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C1.0_F0.0_X0.0/snapshots/cd6673598d0ac0c9d3e27e56ca6e6cc39b5b4c8a/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C1.0_F0.0_X0.0/snapshots/cd6673598d0ac0c9d3e27e56ca6e6cc39b5b4c8a/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_24",
@@ -843,7 +843,7 @@
     }
   },
   "SQA3Devery24_R0C0F0X1": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C0.0_F0.0_X1.0/snapshots/5ddae9b0014107ad9be6f45639c74c14641c2d63/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C0.0_F0.0_X1.0/snapshots/5ddae9b0014107ad9be6f45639c74c14641c2d63/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_24",
@@ -859,7 +859,7 @@
     }
   },
   "Scene30k": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.parquet",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--Scene30K/snapshots/4be0f2eadaf440b9fe9392fdeca790c4edfd68fd/data/train-00000-of-00001.with_question_id.parquet",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags",
@@ -874,7 +874,7 @@
     }
   },
   "SpatialSSRL_coldstart": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/c6bce21bad8cb7d751a47f7bb91dca7875115c96/SFT-coldstart.with_question_id.json",
     "formatting": "alpaca",
     "columns": {
       "prompt": "instruction",
@@ -884,7 +884,7 @@
     }
   },
   "3DThinker10k": {
-    "file_name": "3DThinker-10K/out/3dthinker10k_cot.jsonl",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/c0392e4172ddf9c106b7066c584724dd7ae04144/3dthinker10k_cot.with_question_id.jsonl",
     "formatting": "alpaca",
     "columns": {
       "system": "system",

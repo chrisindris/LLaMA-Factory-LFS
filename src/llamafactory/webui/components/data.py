@@ -16,6 +16,7 @@ import json
 import os
 from typing import TYPE_CHECKING, Any
 
+from ...data.parser import expand_dataset_path
 from ...extras.constants import DATA_CONFIG
 from ...extras.packages import is_gradio_available
 
@@ -50,11 +51,14 @@ def can_preview(dataset_dir: str, dataset: list) -> "gr.Button":
     if len(dataset) == 0 or "file_name" not in dataset_info[dataset[0]]:
         return gr.Button(interactive=False)
 
-    data_path = os.path.join(dataset_dir, dataset_info[dataset[0]]["file_name"])
-    if os.path.isfile(data_path) or (os.path.isdir(data_path) and os.listdir(data_path)):
-        return gr.Button(interactive=True)
-    else:
+    try:
+        data_path = os.path.join(dataset_dir, expand_dataset_path(dataset_info[dataset[0]]["file_name"]))
+        if os.path.isfile(data_path) or (os.path.isdir(data_path) and os.listdir(data_path)):
+            return gr.Button(interactive=True)
+    except (OSError, ValueError):
         return gr.Button(interactive=False)
+
+    return gr.Button(interactive=False)
 
 
 def _load_data_file(file_path: str) -> list[Any]:
@@ -72,7 +76,7 @@ def get_preview(dataset_dir: str, dataset: list, page_index: int) -> tuple[int, 
     with open(os.path.join(dataset_dir, DATA_CONFIG), encoding="utf-8") as f:
         dataset_info = json.load(f)
 
-    data_path = os.path.join(dataset_dir, dataset_info[dataset[0]]["file_name"])
+    data_path = os.path.join(dataset_dir, expand_dataset_path(dataset_info[dataset[0]]["file_name"]))
     if os.path.isfile(data_path):
         data = _load_data_file(data_path)
     else:

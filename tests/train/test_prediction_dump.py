@@ -16,7 +16,14 @@ import json
 from pathlib import Path
 
 from llamafactory.hparams.finetuning_args import FinetuningArguments
-from llamafactory.train.prediction_dump import PredictionDumpStore, normalize_question_ids
+from llamafactory.train.prediction_dump import (
+    IGNORE_INDEX,
+    PredictionDumpStore,
+    decode_teacher_forced_batch,
+    flatten_gathered_pairs,
+    normalize_question_ids,
+    should_record_train_prediction,
+)
 
 
 def test_train_records_keyed_by_question_id_and_step(tmp_path: Path):
@@ -61,6 +68,43 @@ def test_normalize_question_ids_flattens_packed_and_pads():
     assert normalize_question_ids(None, 2) == ["", ""]
     assert normalize_question_ids(["a", ["b", "c"]], 3) == ["a", "b", ""]
     assert normalize_question_ids("only", 2) == ["only", "only"]
+
+
+def test_should_record_train_prediction_once_per_step_and_synced_cap():
+    kwargs = dict(interval=1, last_dumped_step=-1)
+    assert should_record_train_prediction(dump_full=False, global_step=1, **kwargs)
+    # second microbatch of the same optimizer step
+    assert not should_record_train_prediction(dump_full=False, global_step=1, interval=1, last_dumped_step=1)
+    # cap is a synced flag; local store.train_full() must not be used instead
+    assert not should_record_train_prediction(dump_full=True, global_step=2, interval=1, last_dumped_step=1)
+    assert should_record_train_prediction(dump_full=False, global_step=2, interval=1, last_dumped_step=1)
+    assert not should_record_train_prediction(dump_full=False, global_step=0, interval=1, last_dumped_step=-1)
+    assert not should_record_train_prediction(dump_full=False, global_step=3, interval=2, last_dumped_step=-1)
+    assert should_record_train_prediction(dump_full=False, global_step=4, interval=2, last_dumped_step=2)
+
+
+class _IdTokenizer:
+    def decode(self, ids, skip_special_tokens=True):
+        return ",".join(str(int(i)) for i in ids)
+
+
+def test_decode_teacher_forced_batch_greedy_on_response_positions():
+    import torch
+
+    # logits[:, t] predicts labels[:, t+1]. Prompt positions stay IGNORE_INDEX.
+    logits = torch.zeros(1, 5, 4)
+    logits[0, 1, 1] = 10.0
+    logits[0, 2, 2] = 10.0
+    logits[0, 3, 3] = 10.0
+    labels = torch.tensor([[IGNORE_INDEX, IGNORE_INDEX, 1, 2, 3]])
+    assert decode_teacher_forced_batch(logits, labels, _IdTokenizer()) == ["1,2,3"]
+
+
+def test_flatten_gathered_pairs_keeps_empty_rank_chunks():
+    assert flatten_gathered_pairs(None) == []
+    assert flatten_gathered_pairs([[], [], []]) == []
+    assert flatten_gathered_pairs([[], [("q1", "a")], [], [("q2", "b")]]) == [("q1", "a"), ("q2", "b")]
+    assert flatten_gathered_pairs([("q1", "a"), ("q2", "b")]) == [("q1", "a"), ("q2", "b")]
 
 
 def test_finetuning_args_accept_logging_and_resume_fields():

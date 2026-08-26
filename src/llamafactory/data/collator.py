@@ -216,18 +216,6 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
             "audios": self._summarize_media_list(audios),
         }
 
-    def __call__(self, features: list[dict[str, Any]]) -> dict[str, "torch.Tensor"]:
-        debug_samples = None
-        collect_enabled = (
-            self.debug_mm_training and self.model is not None and getattr(self.model, "training", False)
-        )
-        log_enabled = collect_enabled and self._debug_mm_seen < max(int(self.debug_mm_steps), 0)
-        if collect_enabled:
-            debug_samples = []
-        batch_images, batch_videos, batch_audios = [], [], []
-        batch_imglens, batch_vidlens, batch_audlens, batch_input_ids = [], [], [], []
-        batch_question_ids: list[Any] = []
-
     def _compute_rope_position_ids(self, features: dict[str, "torch.Tensor"], mm_inputs: dict[str, Any]) -> None:
         r"""Compute position_ids and rope_deltas via get_rope_func for VLMs."""
         rope_index_kwargs = {
@@ -399,6 +387,17 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
         batch_imglens, batch_vidlens, batch_audlens, batch_input_ids = [], [], [], []
         packing_params_list: list[dict[str, Any] | None] = []
 
+        debug_samples = None
+        collect_enabled = (
+            self.debug_mm_training and self.model is not None and getattr(self.model, "training", False)
+        )
+        log_enabled = collect_enabled and self._debug_mm_seen < max(int(self.debug_mm_steps), 0)
+        if collect_enabled:
+            debug_samples = []
+        batch_images, batch_videos, batch_audios = [], [], []
+        batch_imglens, batch_vidlens, batch_audlens, batch_input_ids = [], [], [], []
+        batch_question_ids: list[Any] = []
+
         for feature in features:
             if (os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV") or os.getenv("RUNNING_MODE") == "SMOKE":
                 # HACK: to avoid "liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'"
@@ -407,16 +406,22 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
             sample_idx = feature.pop("sample_idx", None)
             sample_media = feature.pop("sample_media", None)
             question_id = feature.pop("question_id", None)
-            batch_question_ids.append(question_id)
+            try:
+                batch_question_ids.append(question_id)
+            except NameError:
+                pass # when question ids are not present, we won't collect them.
             images = feature.pop("images", None) or []
             videos = feature.pop("videos", None) or []
             audios = feature.pop("audios", None) or []
-            if debug_samples is not None:
-                if sample_media is None:
-                    sample_media = self._build_media_summary(images, videos, audios)
-                debug_samples.append(
-                    {"sample_idx": sample_idx, "question_id": question_id, "media": sample_media}
-                )
+            try:
+                if debug_samples is not None:
+                    if sample_media is None:
+                        sample_media = self._build_media_summary(images, videos, audios)
+                    debug_samples.append(
+                        {"sample_idx": sample_idx, "question_id": question_id, "media": sample_media}
+                    )
+            except NameError:
+                pass # if debug_samples aren't intended to be collected, we won't collect. 
             batch_images.extend(images)
             batch_videos.extend(videos)
             batch_audios.extend(audios)
@@ -523,19 +528,26 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
 
         features: dict[str, torch.Tensor] = super().__call__(features)
         # Non-tensor side channels (pop before model forward in the trainer).
-        if any(qid is not None and qid != "" for qid in batch_question_ids):
-            features["question_ids"] = batch_question_ids
-        if debug_samples is not None:
-            if log_enabled:
-                payload = {
-                    "rank": self._get_rank(),
-                    "batch_index": self._debug_mm_seen,
-                    "samples": debug_samples,
-                }
-                logger.info(f"[rank{payload['rank']}] mm_debug batch_samples: {json.dumps(payload, default=str)}")
-            features["debug_samples"] = debug_samples
-            if log_enabled:
-                self._debug_mm_seen += 1
+        try:
+            if any(qid is not None and qid != "" for qid in batch_question_ids):
+                features["question_ids"] = batch_question_ids
+        except NameError:
+            pass # batch_question_ids may be unavailable; if so, we can ignore.
+
+        try:
+            if debug_samples is not None:
+                if log_enabled:
+                    payload = {
+                        "rank": self._get_rank(),
+                        "batch_index": self._debug_mm_seen,
+                        "samples": debug_samples,
+                    }
+                    logger.info(f"[rank{payload['rank']}] mm_debug batch_samples: {json.dumps(payload, default=str)}")
+                features["debug_samples"] = debug_samples
+                if log_enabled:
+                    self._debug_mm_seen += 1
+        except NameError:
+            pass # if debug_samples not defined, we won't use them.
 
         bsz, seq_len = features["input_ids"].shape[:2]
         is_omni = model_type in [

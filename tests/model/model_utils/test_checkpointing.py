@@ -13,11 +13,13 @@
 # limitations under the License.
 
 import os
+from functools import partial
 
 import pytest
 import torch
 
 from llamafactory.extras.misc import get_current_device
+from llamafactory.model.model_utils.checkpointing import get_custom_gradient_checkpointing_func
 from llamafactory.train.test_utils import load_train_model
 
 
@@ -37,6 +39,75 @@ TRAIN_ARGS = {
     "overwrite_output_dir": True,
     "fp16": True,
 }
+
+
+class _TinyBlock(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.linear = torch.nn.Linear(4, 4, bias=False)
+
+    def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        return self.linear(hidden_states)
+
+
+def _wrap_with_probe():
+    called = {"checkpoint": False}
+
+    def fake_checkpoint(func, *args, **kwargs):
+        called["checkpoint"] = True
+        return func(*args, **kwargs)
+
+    return get_custom_gradient_checkpointing_func(fake_checkpoint), called
+
+
+def test_custom_gc_checkpoints_frozen_module_when_input_requires_grad():
+    block = _TinyBlock()
+    for param in block.parameters():
+        param.requires_grad_(False)
+
+    wrapped, called = _wrap_with_probe()
+    hidden_states = torch.randn(2, 4, requires_grad=True)
+    output = wrapped(block.forward, hidden_states)
+
+    assert called["checkpoint"] is True
+    assert output.shape == hidden_states.shape
+
+
+def test_custom_gc_skips_frozen_module_when_input_has_no_grad():
+    block = _TinyBlock()
+    for param in block.parameters():
+        param.requires_grad_(False)
+
+    wrapped, called = _wrap_with_probe()
+    hidden_states = torch.randn(2, 4, requires_grad=False)
+    output = wrapped(block.forward, hidden_states)
+
+    assert called["checkpoint"] is False
+    assert output.shape == hidden_states.shape
+
+
+def test_custom_gc_checkpoints_trainable_module():
+    block = _TinyBlock()
+    wrapped, called = _wrap_with_probe()
+    hidden_states = torch.randn(2, 4, requires_grad=False)
+    output = wrapped(block.forward, hidden_states)
+
+    assert called["checkpoint"] is True
+    assert hidden_states.requires_grad is True
+    assert output.shape == (2, 4)
+
+
+def test_custom_gc_checkpoints_frozen_module_via_partial_call():
+    block = _TinyBlock()
+    for param in block.parameters():
+        param.requires_grad_(False)
+
+    wrapped, called = _wrap_with_probe()
+    hidden_states = torch.randn(2, 4, requires_grad=True)
+    output = wrapped(partial(block.__call__), hidden_states)
+
+    assert called["checkpoint"] is True
+    assert output.shape == hidden_states.shape
 
 
 @pytest.mark.parametrize("disable_gradient_checkpointing", [False, True])

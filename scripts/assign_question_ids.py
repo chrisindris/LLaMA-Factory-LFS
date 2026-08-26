@@ -181,7 +181,9 @@ def process_file(
 
 
 def resolve_dataset_info_path(file_name: str, dataset_dir: Path) -> Path:
-    p = Path(file_name)
+    from llamafactory.data.parser import expand_dataset_path
+
+    p = Path(expand_dataset_path(file_name))
     if p.is_absolute():
         return p
     return dataset_dir / p
@@ -201,13 +203,13 @@ def process_from_dataset_info(
     results = []
     for name in dataset_names:
         if name not in info:
-            raise KeyError(f"Dataset {name!r} not found in {info_path}")
+            raise KeyError(f'Dataset {name!r} not found in {info_path}')
         entry = info[name]
         if "file_name" not in entry:
-            raise KeyError(f"Dataset {name!r} has no file_name; only file-backed datasets are supported")
+            raise KeyError(f'Dataset {name!r} has no file_name; only file-backed datasets are supported')
         input_path = resolve_dataset_info_path(entry["file_name"], dataset_dir)
         if not input_path.exists():
-            raise FileNotFoundError(f"{name}: file not found: {input_path}")
+            raise FileNotFoundError(f'{name}: file not found: {input_path}')
 
         if in_place:
             output_path = input_path
@@ -220,11 +222,14 @@ def process_from_dataset_info(
         columns = entry.setdefault("columns", {})
         columns[column] = column
         if update_dataset_info and not in_place:
-            # store path relative to dataset_dir when possible
+            # store path relative to dataset_dir when possible; otherwise
+            # keep a portable ${HF_HUB_CACHE}/... prefix if under the cache.
             try:
                 entry["file_name"] = str(output_path.relative_to(dataset_dir))
             except ValueError:
-                entry["file_name"] = str(output_path)
+                from llamafactory.data.parser import cache_relative_file_name
+
+                entry["file_name"] = cache_relative_file_name(str(output_path)) or str(output_path)
 
     if update_dataset_info:
         _atomic_write_text(info_path, json.dumps(info, ensure_ascii=False, indent=2) + "\n")

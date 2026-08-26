@@ -36,7 +36,7 @@ dataloader_pin_memory: false
 low_cpu_mem_usage: true
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep2/
 logging_steps: 10
 save_steps: 5   # ~1.00 CoT epoch (4xH100, bs=2, ga=8, val_size=0.1; ~43.9k samples)
 plot_loss: true
@@ -61,7 +61,7 @@ allow_warm_start_resume: true  # abort if resume bundle is incomplete rather tha
 require_resume_bundle: false # fail the job if a save is missing Adam/LoRA/sched artifacts
 # Stop after ~2 epochs of the original schedule without shrinking the cosine horizon.
 # 2 * ~617 steps/epoch ≈ 1234; next save_steps boundary from 620 is 1240.
-stop_at_global_step: 5
+stop_at_global_step: 10
 
 # debugging level
 debug: underflow_overflow # debug: none # to turn off debugging, we must simply comment out this line.
@@ -76,7 +76,7 @@ debug_mm_steps: 1
 save_train_predictions: true
 train_prediction_mode: teacher_forced   # use generate only if you accept much slower smoke
 train_prediction_interval: 1
-train_prediction_max_samples: 1028
+train_prediction_max_samples: 1024
 # train_predictions_file: null  # default: {output_dir}/train_predictions.json
 
 save_eval_predictions: true

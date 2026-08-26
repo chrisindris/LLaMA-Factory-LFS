@@ -19,8 +19,10 @@
 # ---------------------------------------------------------------------------
 
 # Shared annotation sources (match data/dataset_info.json defaults).
-: "${SCENE30K_ANN_SRC:=/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.parquet}"
-: "${SPATIALSSRL_ANN_SRC:=/scratch/indrisch/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json}"
+# HF_HUB_CACHE / HF_HOME come from scripts/utils/env.sh (per-cluster sysconfig).
+_hf_cache="${HF_HUB_CACHE:-${HF_HOME:-}}"
+: "${SCENE30K_ANN_SRC:=${_hf_cache}/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.with_question_id.parquet}"
+: "${SPATIALSSRL_ANN_SRC:=${_hf_cache}/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.with_question_id.json}"
 
 # 3DThinker annotation is relative under data/ in the repo; resolve via PROJECT_DIR when set.
 if [[ -z "${THINKER10K_ANN_SRC:-}" ]]; then

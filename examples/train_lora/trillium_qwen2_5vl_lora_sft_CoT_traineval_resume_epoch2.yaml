@@ -69,8 +69,23 @@ debug: underflow_overflow # debug: none # to turn off debugging, we must simply 
 log_level: debug
 log_level_replica: debug
 print_param_status: true
+### optional mm memory debug (independent of prediction dumps)
 debug_mm_training: true # this is really for fine-grained debugging of memory usage; for runs, output is much cleaner if we turn this off.
 debug_mm_steps: 1
+
+# prediction logging
+save_train_predictions: true
+train_prediction_mode: teacher_forced   # use generate only if you accept much slower smoke
+train_prediction_interval: 62
+train_prediction_max_samples: 1024
+# train_predictions_file: null  # default: {output_dir}/train_predictions.json
+
+save_eval_predictions: true
+eval_prediction_mode: teacher_forced    # generate is slower; switch when validating free-form dumps
+# eval_predictions_file: null           # default: {output_dir}/eval_predictions.json
+
+# generation knobs (used when *prediction_mode: generate)
+max_new_tokens: 2048
 
 # acceleration
 flash_attn: fa2
@@ -80,6 +95,7 @@ enable_liger_kernel: true
 deepspeed: examples/deepspeed/ds_z2_config.json # as long as we aren't on Killarney, we can use offload.
 
 ## eval
+do_eval: true
 val_size: 0.1
 per_device_eval_batch_size: 1
 eval_strategy: steps

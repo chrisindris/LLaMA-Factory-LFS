@@ -35,6 +35,50 @@ except Exception:  # pragma: no cover - allow lightweight unit import
 logger = logging.getLogger(__name__)
 
 
+def should_record_train_prediction(
+    *,
+    dump_full: bool,
+    global_step: int,
+    interval: int,
+    last_dumped_step: int,
+) -> bool:
+    r"""Whether this microbatch should run a train prediction dump.
+
+    Cap must be a **synced** flag (broadcast after gather), not a rank-0-only
+    ``store.train_full()``. Using a local cap to skip gather deadlocks NCCL.
+    ``last_dumped_step`` limits dumps to once per optimizer step.
+    """
+    if dump_full:
+        return False
+    interval = max(int(interval), 1)
+    step = int(global_step)
+    if step <= 0 or step % interval != 0:
+        return False
+    if step == int(last_dumped_step):
+        return False
+    return True
+
+
+def flatten_gathered_pairs(gathered: Any) -> list[tuple[str, str]]:
+    r"""Normalize gather_object / all_gather_object results to a flat pair list."""
+    if gathered is None:
+        return []
+    merged: list[tuple[str, str]] = []
+    if isinstance(gathered, list) and gathered and isinstance(gathered[0], list):
+        for chunk in gathered:
+            if isinstance(chunk, list):
+                merged.extend(chunk)
+    elif isinstance(gathered, list) and gathered and isinstance(gathered[0], tuple):
+        merged = list(gathered)
+    else:
+        for chunk in gathered or []:
+            if isinstance(chunk, list):
+                merged.extend(chunk)
+            elif isinstance(chunk, tuple) and len(chunk) == 2:
+                merged.append(chunk)
+    return merged
+
+
 def atomic_write_json(path: str, data: dict[str, Any]) -> None:
     r"""Write JSON atomically (temp file + replace)."""
     parent = os.path.dirname(path) or "."
@@ -137,14 +181,14 @@ def decode_teacher_forced_batch(
     if logits is None or labels is None:
         return []
 
-    # Align next-token prediction: pred at position t predicts token t+1
-    shift_logits = logits[:, :-1, :].detach()
-    shift_labels = labels[:, 1:]
-    pred_ids = shift_logits.argmax(dim=-1)
+    # Align next-token prediction: pred at position t predicts token t+1.
+    # Argmax in-place on a view; do not keep a shifted logits copy (VL vocab is huge).
+    pred_ids = logits[:, :-1, :].argmax(dim=-1)
+    labels_cpu = labels[:, 1:].detach().cpu()
+    pred_ids_cpu = pred_ids.cpu()
+    del pred_ids
 
     batch_texts: list[str] = []
-    pred_ids_cpu = pred_ids.cpu()
-    labels_cpu = shift_labels.cpu()
     for i in range(pred_ids_cpu.size(0)):
         mask = labels_cpu[i] != IGNORE_INDEX
         token_ids = pred_ids_cpu[i][mask].tolist()

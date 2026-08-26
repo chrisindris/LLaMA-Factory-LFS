@@ -32,7 +32,7 @@ def configure_attn_implementation(config: "PretrainedConfig", model_args: "Model
     from transformers.utils import is_flash_attn_2_available
 
     flash_attn_2_available = is_flash_attn_2_available()
-    sdpa_available = True # true when Pytorch version is at least 2.1.1
+    sdpa_available = True # HACK: true when Pytorch version is at least 2.1.1
     logger.info_rank0(
         "Attention backend request: %s | FlashAttention-2 available: %s | SDPA available: %s",
         model_args.flash_attn,
