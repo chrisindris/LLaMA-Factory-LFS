@@ -37,7 +37,7 @@ classifiers = [
 ]
 dependencies = [
     # core deps
-    "torch==2.7.1+computecanada",
+    "torch==2.7.1",
     "torchvision>=0.19.0",
     "torchaudio>=2.4.0",
     "transformers>=4.55.0,<=5.8.0,!=4.57.0,!=5.6.0",

@@ -21,47 +21,100 @@ from llamafactory.train.prediction_dump import (
     PredictionDumpStore,
     decode_teacher_forced_batch,
     flatten_gathered_pairs,
+    format_epoch_name,
     normalize_question_ids,
+    resolve_prediction_dump_path,
     should_record_train_prediction,
 )
 
 
-def test_train_records_keyed_by_question_id_and_step(tmp_path: Path):
-    store = PredictionDumpStore(train_path=str(tmp_path / "train_predictions.json"))
-    added = store.add_train_records(10, [("q1", "hello"), ("q2", "world"), ("", "skip")])
+def test_format_epoch_name():
+    assert format_epoch_name(1.0) == "1"
+    assert format_epoch_name(2.0) == "2"
+    assert format_epoch_name(1) == "1"
+    assert format_epoch_name("2.0") == "2"
+    assert format_epoch_name("3") == "3"
+    assert format_epoch_name(0.0) == "0"
+    assert format_epoch_name(None, is_training=True) == "1"
+    assert format_epoch_name(None, is_training=False) == "0"
+    # During training steps:
+    assert format_epoch_name(0.2, is_training=True) == "1"
+    assert format_epoch_name(1.0, is_training=True) == "1"
+    assert format_epoch_name(1.2, is_training=True) == "2"
+    assert format_epoch_name(2.0, is_training=True) == "2"
 
-    assert added == 2
-    assert store.train_data["q1"]["10"] == "hello"
-    assert store.train_data["q2"]["10"] == "world"
-    assert "" not in store.train_data
-    assert store.train_record_count == 2
 
-    store.flush_train()
-    dumped = json.loads((tmp_path / "train_predictions.json").read_text(encoding="utf-8"))
-    assert dumped == {"q1": {"10": "hello"}, "q2": {"10": "world"}}
+def test_resolve_prediction_dump_path():
+    assert resolve_prediction_dump_path(None, "1", "train_predictions", "/tmp/out") == "/tmp/out/train_predictions_ep1.json"
+    assert resolve_prediction_dump_path(None, "2", "eval_predictions", "/tmp/out") == "/tmp/out/eval_predictions_ep2.json"
+    assert resolve_prediction_dump_path("/custom/train_{epoch}.json", "1", "train_predictions") == "/custom/train_1.json"
+    assert resolve_prediction_dump_path("/custom/train_predictions.json", "2", "train_predictions") == "/custom/train_predictions_ep2.json"
+    assert resolve_prediction_dump_path("/custom/train_predictions_ep1.json", "1", "train_predictions") == "/custom/train_predictions_ep1.json"
 
 
-def test_train_overwrite_same_qid_step_does_not_inflate_cap():
+def test_train_records_per_epoch_and_flush(tmp_path: Path):
+    store = PredictionDumpStore(
+        train_path_template=str(tmp_path / "train_predictions_ep{epoch}.json"),
+        output_dir=str(tmp_path),
+    )
+    # Epoch 1
+    added_ep1 = store.add_train_records(1, [("q1", "ep1_s1"), ("q2", "ep1_s1")], epoch=1.0)
+    assert added_ep1 == 2
+    assert store.get_train_record_count("1") == 2
+
+    # Epoch 2
+    added_ep2 = store.add_train_records(6, [("q1", "ep2_s6"), ("q3", "ep2_s6")], epoch=2.0)
+    assert added_ep2 == 2
+    assert store.get_train_record_count("2") == 2
+
+    store.flush_train(epoch="1")
+    store.flush_train(epoch="2")
+
+    dumped_ep1 = json.loads((tmp_path / "train_predictions_ep1.json").read_text(encoding="utf-8"))
+    dumped_ep2 = json.loads((tmp_path / "train_predictions_ep2.json").read_text(encoding="utf-8"))
+
+    assert dumped_ep1 == {"q1": {"1": "ep1_s1"}, "q2": {"1": "ep1_s1"}}
+    assert dumped_ep2 == {"q1": {"6": "ep2_s6"}, "q3": {"6": "ep2_s6"}}
+
+
+def test_train_capping_is_per_epoch():
+    # max_train_samples = 2 applies per epoch
     store = PredictionDumpStore(max_train_samples=2)
-    assert store.add_train_records(1, [("q1", "first")]) == 1
-    assert store.add_train_records(1, [("q1", "second")]) == 0
-    assert store.train_data["q1"]["1"] == "second"
-    assert store.train_record_count == 1
 
-    assert store.add_train_records(2, [("q2", "other")]) == 1
-    assert store.train_full()
-    assert store.add_train_records(3, [("q3", "rejected")]) == 0
-    assert "q3" not in store.train_data
+    # Epoch 1: fill to cap
+    assert store.add_train_records(1, [("q1", "a")], epoch="1") == 1
+    assert store.add_train_records(2, [("q2", "b")], epoch="1") == 1
+    assert store.train_full(epoch="1")
+    assert store.add_train_records(3, [("q3", "c")], epoch="1") == 0
+    assert store.get_train_record_count("1") == 2
+
+    # Epoch 2: cap starts fresh
+    assert not store.train_full(epoch="2")
+    assert store.add_train_records(6, [("q1", "d")], epoch="2") == 1
+    assert store.add_train_records(7, [("q2", "e")], epoch="2") == 1
+    assert store.train_full(epoch="2")
+    assert store.add_train_records(8, [("q3", "f")], epoch="2") == 0
+    assert store.get_train_record_count("2") == 2
 
 
-def test_eval_records_keyed_by_question_id(tmp_path: Path):
-    store = PredictionDumpStore(eval_path=str(tmp_path / "eval_predictions.json"))
-    assert store.add_eval_records([("q1", "a"), ("q1", "b"), ("", "skip")]) == 2
-    assert store.eval_data == {"q1": "b"}
+def test_eval_records_per_epoch_and_flush(tmp_path: Path):
+    store = PredictionDumpStore(
+        eval_path_template=str(tmp_path / "eval_predictions_ep{epoch}.json"),
+        output_dir=str(tmp_path),
+    )
+    # Eval after epoch 1
+    assert store.add_eval_records([("q1", "eval1_q1"), ("q2", "eval1_q2")], epoch=1.0) == 2
+    store.flush_eval(epoch=1.0)
 
-    store.flush_eval()
-    dumped = json.loads((tmp_path / "eval_predictions.json").read_text(encoding="utf-8"))
-    assert dumped == {"q1": "b"}
+    # Eval after epoch 2
+    assert store.add_eval_records([("q1", "eval2_q1"), ("q2", "eval2_q2")], epoch=2.0) == 2
+    store.flush_eval(epoch=2.0)
+
+    dumped_ep1 = json.loads((tmp_path / "eval_predictions_ep1.json").read_text(encoding="utf-8"))
+    dumped_ep2 = json.loads((tmp_path / "eval_predictions_ep2.json").read_text(encoding="utf-8"))
+
+    assert dumped_ep1 == {"q1": "eval1_q1", "q2": "eval1_q2"}
+    assert dumped_ep2 == {"q1": "eval2_q1", "q2": "eval2_q2"}
 
 
 def test_normalize_question_ids_flattens_packed_and_pads():
@@ -124,3 +177,4 @@ def test_finetuning_args_accept_logging_and_resume_fields():
     assert args.require_resume_bundle
     assert args.resume_bundle_dir == "/tmp/resume_bundle"
     assert args.stop_at_global_step == 1240
+

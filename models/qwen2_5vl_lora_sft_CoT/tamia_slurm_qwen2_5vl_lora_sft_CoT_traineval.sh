@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
 #SBATCH --cpus-per-task=48
-#SBATCH --time=0-01:00:00
+#SBATCH --time=0-19:00:00
 #SBATCH --mem=0
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
@@ -29,9 +29,9 @@
 
 # ----- DEFAULT ARGUMENTS -----
 export STARTING_EPOCH="${STARTING_EPOCH:-0}"
-export ENDING_EPOCH="${ENDING_EPOCH:-2}"
-export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-5}" # for debugging; this should be 620 (or 617, but 620 has more divisors) # IMPORTANT NOTE: the default value of this should be equal to 4 / num_of_gpus_used * 620
-export TOTAL_EPOCHS="${TOTAL_EPOCHS:-2}" # for debugging; this should be 5
+export ENDING_EPOCH="${ENDING_EPOCH:-1}"
+export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-620}" # for debugging; this should be 620 (or 617, but 620 has more divisors) # IMPORTANT NOTE: the default value of this should be equal to 4 / num_of_gpus_used * 620
+export TOTAL_EPOCHS="${TOTAL_EPOCHS:-5}" # for debugging; this should be 5
 
 # ----- ARGUMENT PARSING -----
 # we can explicitly override the above by setting them with flags.
@@ -180,11 +180,7 @@ cmd_args=(
     --preprocessing_num_workers "${PREPROCESSING_NUM_WORKERS}"
     --dataloader_num_workers "${DATALOADER_NUM_WORKERS}"
     --ddp_timeout "${TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC}" # avoid NCCL timeouts
-    --max_samples 100 # for debugging
-    --num_train_epochs 2 # for debugging
-    --train_prediction_interval 1 # for debugging
-    --save_steps 5 # for debugging 
-    --eval_steps 5 # for debugging
+    --train_prediction_interval 10 # for debugging
 )
 
 python "${PROJECT_DIR}/scripts/utils/modify_yaml.py" \

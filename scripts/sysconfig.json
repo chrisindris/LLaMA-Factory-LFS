@@ -109,9 +109,9 @@
         "VLLM_CACHE_ROOT": "/project/aip-wangcs/indrisch/.cache/vllm",
         "BEST_GPU": "h100",
         "FLASHINFER_WORKSPACE_BASE": "/project/aip-wangcs/indrisch/",
-        "LLAMAFACTORY_HOME": "None",
-        "SIF_FILE": "None",
-        "media_dir": "None",
+        "LLAMAFACTORY_HOME": "/scratch/i/indrisch/LLaMA-Factory-LFS/",
+        "SIF_FILE": "/scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory_latest-910b-ubuntu.sif",
+        "media_dir": "/scratch/i/indrisch/",
         "VENV_DATASET_UPLOAD": "/scratch/i/indrisch/venv_llamafactory_py313/",
         "VENV_LLAMAFACTORY": "/scratch/i/indrisch/venv_llamafactory_py313/"
     }

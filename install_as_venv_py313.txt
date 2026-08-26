@@ -7,5 +7,5 @@ pushd wheels
 wget https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3.post1/flash_attn-2.8.3.post1+cu12torch2.7cxx11abiFALSE-cp313-cp313-linux_x86_64.whl
 wget https://github.com/Dao-AILab/causal-conv1d/releases/download/v1.6.2/causal_conv1d-1.6.1+cu12torch2.6cxx11abiFALSE-cp313-cp313-linux_x86_64.whl
 popd
-pip install -e . -r requirements/metrics.txt -r requirements/deepspeed.txt -r requirements/dev.txt h5py wandb ray sentry-sdk liger-kernel flash_linear_attention wheels/causal_conv1d-1.6.1+cu12torch2.6cxx11abiFALSE-cp313-cp313-linux_x86_64.whl wheels/flash_attn-2.8.3.post1+cu12torch2.7cxx11abiFALSE-cp313-cp313-linux_x86_64.whl
+pip install -e . -r requirements/metrics.txt -r requirements/deepspeed.txt -r requirements/dev.txt -r requirements/logging_analysis.txt h5py wandb ray sentry-sdk liger-kernel flash_linear_attention wheels/causal_conv1d-1.6.1+cu12torch2.6cxx11abiFALSE-cp313-cp313-linux_x86_64.whl wheels/flash_attn-2.8.3.post1+cu12torch2.7cxx11abiFALSE-cp313-cp313-linux_x86_64.whl
 # feel free to cross-reference with ./requirements_venv_llamafactory_py313.txt

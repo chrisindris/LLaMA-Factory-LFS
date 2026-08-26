@@ -33,7 +33,7 @@ SIF="${SIF:-$HF_HOME/datasets--cvis-tmu--compute_canada_sif_files/snapshots/382a
 OVERLAY="${OVERLAY:-$PROJECT_DIR/apptainer/overlay.img}"
 # Size in MiB for `apptainer overlay create --size`. Only used when creating.
 OVERLAY_SIZE_MB="${OVERLAY_SIZE_MB:-1024}"
-WHEELHOUSE="${WHEELHOUSE:-/scratch/indrisch/wheels/llamafactory_py311}"
+WHEELHOUSE="${WHEELHOUSE:-/scratch/i/indrisch/wheels/llamafactory_py311}"
 H5PY_VERSION="${H5PY_VERSION:-3.16.0}"
 FORCE_RECREATE="${FORCE_RECREATE:-0}"
 
@@ -72,7 +72,7 @@ apptainer exec --cleanenv --env PYTHONNOUSERSITE=1 "${SIF}" python -c "import sy
 # Download wheel (+ deps metadata) but install h5py with --no-deps so the SIF's
 # existing numpy (e.g. 1.26.x for torch) is not replaced by a newer pip pin.
 echo "Downloading h5py==${H5PY_VERSION} wheel..."
-apptainer exec --cleanenv --env PYTHONNOUSERSITE=1 --bind /scratch/indrisch:/scratch/indrisch "${SIF}" \
+apptainer exec --cleanenv --env PYTHONNOUSERSITE=1 --bind /scratch/i/indrisch:/scratch/i/indrisch "${SIF}" \
 	python -m pip download --only-binary=:all: --dest "${WHEELHOUSE}" "h5py==${H5PY_VERSION}"
 
 WHEEL=$(ls -1 "${WHEELHOUSE}"/h5py-"${H5PY_VERSION}"-*.whl | head -1)
@@ -81,24 +81,34 @@ if [[ -z "${WHEEL}" || ! -f "${WHEEL}" ]]; then
 	exit 1
 fi
 
+# get flash_attn and causal_conv1d in the wheelhouse; we are using Py 3.12, torch 2.10, cuda 12.6
+# This seems promising: https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.1/flash_attn-2.8.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl
+# This seems promising: https://github.com/Dao-AILab/causal-conv1d/releases/download/v1.7.0/causal_conv1d-1.7.0+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl
+
+pushd "${WHEELHOUSE}"
+wget https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.1/flash_attn-2.8.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl
+wget https://github.com/Dao-AILab/causal-conv1d/releases/download/v1.7.0/causal_conv1d-1.7.0+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl
+popd
+
+
 echo "Upgrade pip/setuptools/wheel inside overlay..."
 apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
-	--bind /scratch/indrisch:/scratch/indrisch \
+	--bind /scratch/i/indrisch:/scratch/i/indrisch \
 	--env PYTHONNOUSERSITE=1 \
 	"${SIF}" \
 	python -m pip install --upgrade pip setuptools wheel
 
 echo "Installing ${WHEEL} into overlay (no deps) + wandb/sentry-sdk..."
 apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
-	--bind /scratch/indrisch:/scratch/indrisch \
+	--bind /scratch/i/indrisch:/scratch/i/indrisch \
 	--env PYTHONNOUSERSITE=1 \
 	"${SIF}" \
-	python -m pip install --no-deps "${WHEEL}" wandb sentry-sdk
+	python -m pip install --no-deps "${WHEEL}" wandb ray sentry-sdk build pre_commit rapidfuzz language_tool_python flash_linear_attention
 
 echo "Verify:"
 apptainer exec --fakeroot --cleanenv --overlay "${OVERLAY}" \
 	--env PYTHONNOUSERSITE=1 \
 	"${SIF}" \
-	python -c "import h5py, numpy, wandb, sentry_sdk; print('h5py', h5py.__version__, 'numpy', numpy.__version__, 'wandb', wandb.__version__, 'sentry_sdk', sentry_sdk.VERSION)"
+  pre-commit --version && language_tool_python --version && python -c "import h5py, numpy, wandb, ray, sentry_sdk, build, rapidfuzz, flash_linear_attention, flash_attn, causal_conv1d; print('h5py', h5py.__version__, 'numpy', numpy.__version__, 'wandb', wandb.__version__, 'ray', ray.__version__, 'sentry_sdk', sentry_sdk.VERSION, 'build', build.__version__, 'rapidfuzz', rapidfuzz.__version__, 'flash_linear_attention', flash_linear_attention.__version__, 'flash_attn', flash_attn.__version__, 'causal_conv1d', causal_conv1d.__version__)"
 
 echo "Done. Overlay ready: ${OVERLAY}"

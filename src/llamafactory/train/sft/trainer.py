@@ -37,6 +37,7 @@ from ..prediction_dump import (
     PredictionDumpStore,
     decode_teacher_forced_batch,
     flatten_gathered_pairs,
+    format_epoch_name,
     normalize_question_ids,
     prompt_lengths_from_labels,
     should_record_train_prediction,
@@ -96,22 +97,24 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         # Synced across ranks after gather; never use rank-0-only store.train_full() to skip.
         self._train_dump_full = False
         self._last_dumped_train_step = -1
+        self._last_dumped_epoch: Optional[str] = None
         train_path = None
         eval_path = None
         if finetuning_args.save_train_predictions:
             train_path = finetuning_args.train_predictions_file or os.path.join(
-                self.args.output_dir, "train_predictions.json"
+                self.args.output_dir, "train_predictions_ep{epoch}.json"
             )
         if finetuning_args.save_eval_predictions:
             eval_path = finetuning_args.eval_predictions_file or os.path.join(
-                self.args.output_dir, "eval_predictions.json"
+                self.args.output_dir, "eval_predictions_ep{epoch}.json"
             )
         self.prediction_dump: Optional[PredictionDumpStore] = None
         if train_path or eval_path:
             self.prediction_dump = PredictionDumpStore(
-                train_path=train_path,
-                eval_path=eval_path,
+                train_path_template=train_path,
+                eval_path_template=eval_path,
                 max_train_samples=finetuning_args.train_prediction_max_samples,
+                output_dir=self.args.output_dir,
             )
 
         if processor is not None:
@@ -474,9 +477,18 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
     def _get_tokenizer(self):
         return getattr(self, "processing_class", None) or getattr(self, "tokenizer", None)
 
+    def _get_current_epoch_str(self, is_training: bool = True) -> str:
+        epoch = getattr(self.state, "epoch", None)
+        if epoch is not None:
+            return format_epoch_name(epoch, is_training=is_training)
+        return "1" if is_training else "0"
+
     def _should_record_train_prediction_now(self) -> bool:
         if not self.finetuning_args.save_train_predictions or self.prediction_dump is None:
             return False
+        epoch_str = self._get_current_epoch_str(is_training=True)
+        if self._last_dumped_epoch is not None and self._last_dumped_epoch != epoch_str:
+            self._train_dump_full = False
         return should_record_train_prediction(
             dump_full=self._train_dump_full,
             global_step=int(getattr(self.state, "global_step", 0)),
@@ -553,15 +565,18 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         # 3) Last resort: local only (incomplete multi-GPU dump)
         return list(local_pairs)
 
-    def _sync_train_dump_full(self) -> None:
-        r"""Broadcast rank-0 store.train_full() so every rank skips (or dumps) together.
+    def _sync_train_dump_full(self, epoch: Optional[str] = None) -> None:
+        r"""Broadcast rank-0 store.train_full(epoch) so every rank skips (or dumps) together.
 
         If the collective fails, leave ``_train_dump_full`` unchanged (False) so all
         ranks keep dumping and gathering — extra work, but not a deadlock.
         """
+        if epoch is None:
+            epoch = self._get_current_epoch_str(is_training=True)
+
         full_int = 0
         if self.prediction_dump is not None and self.is_world_process_zero():
-            full_int = int(self.prediction_dump.train_full())
+            full_int = int(self.prediction_dump.train_full(epoch))
 
         world_size = self._distributed_world_size()
         if world_size <= 1:
@@ -593,17 +608,20 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if self.prediction_dump is None:
             return
         step = int(getattr(self.state, "global_step", 0))
+        epoch_str = self._get_current_epoch_str(is_training=True)
         all_pairs = self._gather_prediction_pairs(list(pairs or []))
         if self.is_world_process_zero():
-            added = self.prediction_dump.add_train_records(step, all_pairs)
+            added = self.prediction_dump.add_train_records(step, all_pairs, epoch=epoch_str)
             if added or all_pairs:
-                self.prediction_dump.flush_train()
+                self.prediction_dump.flush_train(epoch=epoch_str)
             logger.info_rank0(
-                f"train prediction dump: step={step} local={len(pairs)} "
-                f"gathered={len(all_pairs)} added={added} total={self.prediction_dump.train_record_count}"
+                f"train prediction dump: epoch={epoch_str} step={step} local={len(pairs)} "
+                f"gathered={len(all_pairs)} added={added} "
+                f"total_epoch={self.prediction_dump.get_train_record_count(epoch_str)}"
             )
         self._last_dumped_train_step = step
-        self._sync_train_dump_full()
+        self._last_dumped_epoch = epoch_str
+        self._sync_train_dump_full(epoch=epoch_str)
 
     def _record_eval_pairs(self, pairs: list[tuple[str, str]]) -> None:
         if not pairs:
@@ -614,15 +632,16 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if self.prediction_dump is None or not self.finetuning_args.save_eval_predictions:
             self._eval_pred_buffer = []
             return
+        epoch_str = self._get_current_epoch_str(is_training=False)
         local_n = len(self._eval_pred_buffer)
         all_pairs = self._gather_prediction_pairs(self._eval_pred_buffer)
         self._eval_pred_buffer = []
         if self.is_world_process_zero():
-            added = self.prediction_dump.add_eval_records(all_pairs)
-            self.prediction_dump.flush_eval()
+            added = self.prediction_dump.add_eval_records(all_pairs, epoch=epoch_str)
+            self.prediction_dump.flush_eval(epoch=epoch_str)
             logger.info_rank0(
-                f"eval prediction dump: local_buffer={local_n} gathered={len(all_pairs)} "
-                f"added={added} total={len(self.prediction_dump.eval_data)}"
+                f"eval prediction dump: epoch={epoch_str} local_buffer={local_n} gathered={len(all_pairs)} "
+                f"added={added} total={len(self.prediction_dump.eval_data_by_epoch.get(epoch_str, {}))}"
             )
 
     def _forward_logits_for_dump(self, model: "torch.nn.Module", inputs: dict[str, Any]) -> Optional["torch.Tensor"]:
