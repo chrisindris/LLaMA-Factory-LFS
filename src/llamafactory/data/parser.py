@@ -14,6 +14,7 @@
 
 import json
 import os
+import re
 from dataclasses import dataclass
 from typing import Any, Literal
 
@@ -21,6 +22,69 @@ from huggingface_hub import hf_hub_download
 
 from ..extras.constants import DATA_CONFIG
 from ..extras.misc import use_modelscope, use_openmind
+
+
+# Match ${HF_HUB_CACHE} / $HF_HUB_CACHE and ${HF_HOME} / $HF_HOME only.
+# Do not use huggingface_hub's default `$HF_HOME/hub`: this repo's sysconfig
+# points HF_HOME at the hub cache directory itself.
+_HF_CACHE_VAR_RE = re.compile(r"\$\{(HF_HUB_CACHE|HF_HOME)\}|\$(HF_HUB_CACHE|HF_HOME)(?![A-Za-z0-9_])")
+
+_MISSING_HF_CACHE_MSG = (
+    "file_name uses $HF_HOME or $HF_HUB_CACHE but neither environment variable is set. "
+    "Source scripts/utils/env.sh or export HF_HUB_CACHE (or HF_HOME) to the Hugging Face hub cache."
+)
+
+
+def resolve_hf_cache_root() -> str | None:
+    r"""Return HF_HUB_CACHE, falling back to HF_HOME. Does not append ``/hub``."""
+    return os.environ.get("HF_HUB_CACHE") or os.environ.get("HF_HOME") or None
+
+
+def expand_dataset_path(path: str) -> str:
+    r"""Expand ``$HF_HOME`` / ``$HF_HUB_CACHE`` in a dataset_info ``file_name``.
+
+    If only one of the two env vars is set, the other is filled from it. Other
+    ``$VARS`` and ordinary relative or absolute paths are left unchanged.
+    """
+    if not path:
+        return path
+
+    path = os.path.expanduser(path)
+    if _HF_CACHE_VAR_RE.search(path) is None:
+        return path
+
+    cache_root = resolve_hf_cache_root()
+    if not cache_root:
+        raise ValueError(_MISSING_HF_CACHE_MSG)
+
+    hf_hub_cache = os.environ.get("HF_HUB_CACHE") or cache_root
+    hf_home = os.environ.get("HF_HOME") or cache_root
+
+    def _repl(match: re.Match[str]) -> str:
+        name = match.group(1) or match.group(2)
+        return hf_hub_cache if name == "HF_HUB_CACHE" else hf_home
+
+    return _HF_CACHE_VAR_RE.sub(_repl, path)
+
+
+def cache_relative_file_name(path: str) -> str | None:
+    r"""Rewrite an absolute path under the HF cache as ``${HF_HUB_CACHE}/...``.
+
+    Returns None if the path is not under the current cache root.
+    """
+    root = resolve_hf_cache_root()
+    if not root:
+        return None
+
+    abs_path = os.path.abspath(path)
+    abs_root = os.path.abspath(root)
+    prefix = abs_root if abs_root.endswith(os.sep) else abs_root + os.sep
+    if abs_path == abs_root:
+        return "${HF_HUB_CACHE}"
+    if abs_path.startswith(prefix):
+        rel = abs_path[len(prefix) :].replace(os.sep, "/")
+        return "${HF_HUB_CACHE}/" + rel
+    return None
 
 
 @dataclass
@@ -139,9 +203,11 @@ def get_dataset_list(dataset_names: list[str] | None, dataset_dir: str | dict) -
         elif "script_url" in dataset_info[name]:
             dataset_attr = DatasetAttr("script", dataset_name=dataset_info[name]["script_url"])
         elif "cloud_file_name" in dataset_info[name]:
-            dataset_attr = DatasetAttr("cloud_file", dataset_name=dataset_info[name]["cloud_file_name"])
+            cloud_path = expand_dataset_path(dataset_info[name]["cloud_file_name"])
+            dataset_attr = DatasetAttr("cloud_file", dataset_name=cloud_path)
         else:
-            dataset_attr = DatasetAttr("file", dataset_name=dataset_info[name]["file_name"])
+            file_path = expand_dataset_path(dataset_info[name]["file_name"])
+            dataset_attr = DatasetAttr("file", dataset_name=file_path)
 
         dataset_attr.join(dataset_info[name])
         dataset_list.append(dataset_attr)

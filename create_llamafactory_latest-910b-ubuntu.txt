@@ -1,0 +1,5 @@
+# on a machine with ample storage space (I did it on ENG211-11 WSL), but it can be used on my mac using a special tool installed by brew permitting me to run apptainer
+
+apptainer pull ./llamafactory_latest-910b-ubuntu.sif docker://hiyouga/llamafactory:latest-910b-ubuntu
+
+apptainer shell ./llamafactory_latest-910b-ubuntu.sif

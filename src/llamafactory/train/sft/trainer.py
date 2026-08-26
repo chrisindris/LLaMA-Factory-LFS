@@ -36,8 +36,10 @@ from ..fp8_utils import configure_fp8_environment, patch_accelerator_for_fp8, ve
 from ..prediction_dump import (
     PredictionDumpStore,
     decode_teacher_forced_batch,
+    flatten_gathered_pairs,
     normalize_question_ids,
     prompt_lengths_from_labels,
+    should_record_train_prediction,
 )
 from ..trainer_utils import create_custom_optimizer, create_custom_scheduler
 
@@ -91,6 +93,9 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         # Prediction JSON dumps (QUESTION_ID keyed); optional debug feature.
         self._pred_dump_warned_missing_qid = False
         self._eval_pred_buffer: list[tuple[str, str]] = []
+        # Synced across ranks after gather; never use rank-0-only store.train_full() to skip.
+        self._train_dump_full = False
+        self._last_dumped_train_step = -1
         train_path = None
         eval_path = None
         if finetuning_args.save_train_predictions:
@@ -472,11 +477,12 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
     def _should_record_train_prediction_now(self) -> bool:
         if not self.finetuning_args.save_train_predictions or self.prediction_dump is None:
             return False
-        if self.prediction_dump.train_full():
-            return False
-        step = int(getattr(self.state, "global_step", 0))
-        interval = max(int(self.finetuning_args.train_prediction_interval), 1)
-        return step > 0 and step % interval == 0
+        return should_record_train_prediction(
+            dump_full=self._train_dump_full,
+            global_step=int(getattr(self.state, "global_step", 0)),
+            interval=int(self.finetuning_args.train_prediction_interval),
+            last_dumped_step=self._last_dumped_train_step,
+        )
 
     def _warn_missing_question_ids_once(self) -> None:
         if not self._pred_dump_warned_missing_qid:
@@ -484,38 +490,17 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 "save_*_predictions is enabled but batch has no question_ids. "
                 "IDs are normally auto-assigned at convert time as {dataset}_{row_index}; "
                 "if you still see this, ensure overwrite_cache=true so convert re-runs, "
-                "or stamp annotations via scripts/assign_question_ids.py. Skipping dump."
+                "or stamp annotations via scripts/assign_question_ids.py. "
+                "Gathering empty pairs so ranks stay aligned."
             )
             self._pred_dump_warned_missing_qid = True
 
     @staticmethod
     def _flatten_gathered_pairs(gathered: Any) -> list[tuple[str, str]]:
         r"""Normalize gather_object / all_gather_object results to a flat pair list."""
-        if gathered is None:
-            return []
-        merged: list[tuple[str, str]] = []
-        if isinstance(gathered, list) and gathered and isinstance(gathered[0], list):
-            for chunk in gathered:
-                if isinstance(chunk, list):
-                    merged.extend(chunk)
-        elif isinstance(gathered, list) and gathered and isinstance(gathered[0], tuple):
-            merged = list(gathered)
-        else:
-            for chunk in gathered or []:
-                if isinstance(chunk, list):
-                    merged.extend(chunk)
-                elif isinstance(chunk, tuple) and len(chunk) == 2:
-                    merged.append(chunk)
-        return merged
+        return flatten_gathered_pairs(gathered)
 
-    def _gather_prediction_pairs(self, local_pairs: list[tuple[str, str]]) -> list[tuple[str, str]]:
-        r"""Gather (question_id, text) pairs from all ranks.
-
-        Note: ``Accelerator.gather_object`` is **not** available on accelerate 1.x
-        (e.g. 1.11.0). Use ``accelerate.utils.gather_object`` or
-        ``torch.distributed.all_gather_object`` instead. No package upgrade required.
-        """
-        # Single-process fast path (also covers smoke 1-GPU torchrun).
+    def _distributed_world_size(self) -> int:
         world_size = 1
         if hasattr(self, "accelerator") and self.accelerator is not None:
             world_size = int(getattr(self.accelerator, "num_processes", 1) or 1)
@@ -526,7 +511,17 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 world_size = max(world_size, int(dist.get_world_size()))
         except Exception:
             pass
+        return world_size
 
+    def _gather_prediction_pairs(self, local_pairs: list[tuple[str, str]]) -> list[tuple[str, str]]:
+        r"""Gather (question_id, text) pairs from all ranks.
+
+        Note: ``Accelerator.gather_object`` is **not** available on accelerate 1.x
+        (e.g. 1.11.0). Use ``accelerate.utils.gather_object`` or
+        ``torch.distributed.all_gather_object`` instead. No package upgrade required.
+        """
+        # Single-process fast path (also covers smoke 1-GPU torchrun).
+        world_size = self._distributed_world_size()
         if world_size <= 1:
             return list(local_pairs)
 
@@ -539,9 +534,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             if merged or not local_pairs:
                 return merged
         except Exception as err_accel:
-            logger.warning_rank0(
-                f"accelerate.utils.gather_object failed ({err_accel}); trying torch.distributed"
-            )
+            logger.warning_rank0(f"accelerate.utils.gather_object failed ({err_accel}); trying torch.distributed")
 
         # 2) torch.distributed.all_gather_object
         try:
@@ -560,18 +553,57 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         # 3) Last resort: local only (incomplete multi-GPU dump)
         return list(local_pairs)
 
+    def _sync_train_dump_full(self) -> None:
+        r"""Broadcast rank-0 store.train_full() so every rank skips (or dumps) together.
+
+        If the collective fails, leave ``_train_dump_full`` unchanged (False) so all
+        ranks keep dumping and gathering — extra work, but not a deadlock.
+        """
+        full_int = 0
+        if self.prediction_dump is not None and self.is_world_process_zero():
+            full_int = int(self.prediction_dump.train_full())
+
+        world_size = self._distributed_world_size()
+        if world_size <= 1:
+            self._train_dump_full = bool(full_int)
+            return
+
+        try:
+            import torch.distributed as dist
+
+            if not (dist.is_available() and dist.is_initialized()):
+                self._train_dump_full = bool(full_int)
+                return
+
+            device = torch.device("cpu")
+            if dist.get_backend() == "nccl" and torch.cuda.is_available():
+                device = torch.device("cuda", torch.cuda.current_device())
+            flag = torch.tensor([full_int], device=device, dtype=torch.int32)
+            dist.broadcast(flag, src=0)
+            self._train_dump_full = bool(int(flag.item()))
+        except Exception as err:
+            logger.warning_rank0(f"train dump full-flag broadcast failed ({err}); keeping dump enabled")
+
     def _record_train_pairs(self, pairs: list[tuple[str, str]]) -> None:
-        if self.prediction_dump is None or not pairs:
+        r"""Gather local pairs from every rank, then rank-0 writes.
+
+        Always gather, including when ``pairs`` is empty. Skipping the collective
+        on some ranks (empty texts or a local train_full() cap) deadlocks NCCL.
+        """
+        if self.prediction_dump is None:
             return
         step = int(getattr(self.state, "global_step", 0))
-        all_pairs = self._gather_prediction_pairs(pairs)
+        all_pairs = self._gather_prediction_pairs(list(pairs or []))
         if self.is_world_process_zero():
             added = self.prediction_dump.add_train_records(step, all_pairs)
-            self.prediction_dump.flush_train()
+            if added or all_pairs:
+                self.prediction_dump.flush_train()
             logger.info_rank0(
                 f"train prediction dump: step={step} local={len(pairs)} "
                 f"gathered={len(all_pairs)} added={added} total={self.prediction_dump.train_record_count}"
             )
+        self._last_dumped_train_step = step
+        self._sync_train_dump_full()
 
     def _record_eval_pairs(self, pairs: list[tuple[str, str]]) -> None:
         if not pairs:
@@ -593,9 +625,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 f"added={added} total={len(self.prediction_dump.eval_data)}"
             )
 
-    def _forward_logits_for_dump(
-        self, model: "torch.nn.Module", inputs: dict[str, Any]
-    ) -> Optional["torch.Tensor"]:
+    def _forward_logits_for_dump(self, model: "torch.nn.Module", inputs: dict[str, Any]) -> Optional["torch.Tensor"]:
         r"""Run a no-grad forward that materializes logits for teacher-forced dumps.
 
         Liger fused CE sets ``skip_logits=True`` whenever ``model.training and labels
@@ -604,9 +634,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         the training loss path.
         """
         model_inputs = {
-            k: v
-            for k, v in inputs.items()
-            if k not in ("labels", "question_ids", "debug_samples", "_indices")
+            k: v for k, v in inputs.items() if k not in ("labels", "question_ids", "debug_samples", "_indices")
         }
         was_training = model.training
         try:
@@ -616,6 +644,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             logits = getattr(outputs, "logits", None)
             if logits is None and isinstance(outputs, (tuple, list)) and len(outputs) > 0:
                 logits = outputs[0] if torch.is_tensor(outputs[0]) else None
+            del outputs
             return logits
         except Exception as err:
             logger.warning_rank0(f"prediction dump logits forward failed: {err}")
@@ -623,6 +652,10 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         finally:
             if was_training and not model.training:
                 model.train()
+
+    def _release_cuda_cache(self) -> None:
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
     def _texts_from_teacher_forced(
         self,
@@ -634,15 +667,22 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         tokenizer = self._get_tokenizer()
         if tokenizer is None:
             return []
-        if logits is None and model is not None and inputs is not None:
-            logits = self._forward_logits_for_dump(model, inputs)
-        if logits is None:
-            logger.warning_rank0(
-                "teacher_forced prediction dump got no logits "
-                "(Liger may skip them when labels are present; dump forward also failed)."
-            )
-            return []
-        return decode_teacher_forced_batch(logits, labels, tokenizer, skip_special_tokens=True)
+        owned_logits = False
+        try:
+            if logits is None and model is not None and inputs is not None:
+                logits = self._forward_logits_for_dump(model, inputs)
+                owned_logits = logits is not None
+            if logits is None:
+                logger.warning_rank0(
+                    "teacher_forced prediction dump got no logits "
+                    "(Liger may skip them when labels are present; dump forward also failed)."
+                )
+                return []
+            return decode_teacher_forced_batch(logits, labels, tokenizer, skip_special_tokens=True)
+        finally:
+            if owned_logits:
+                del logits
+                self._release_cuda_cache()
 
     def _texts_from_generate(
         self,
@@ -712,7 +752,9 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         debug_samples = inputs.pop("debug_samples", None)
         question_ids_raw = inputs.pop("question_ids", None)
 
-        if (os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV") or os.getenv("RUNNING_MODE") == "SMOKE":
+        if (os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV") or os.getenv(
+            "RUNNING_MODE"
+        ) == "SMOKE":
             # HACK: to avoid "liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'"
             # Defense in depth: never forward dataset index bookkeeping into the model
             # (Liger fused CE rejects unexpected kwargs like _indices).
@@ -742,6 +784,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if need_train_dump:
             batch_size = int(inputs["input_ids"].size(0)) if "input_ids" in inputs else 0
             qids = normalize_question_ids(question_ids_raw, batch_size)
+            pairs: list[tuple[str, str]] = []
             if not any(qids):
                 self._warn_missing_question_ids_once()
             else:
@@ -750,9 +793,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                     # Do NOT rely on the loss forward: Liger fused CE sets skip_logits=True
                     # whenever training and labels are present, so outputs.logits is None.
                     if labels_for_dump is not None:
-                        texts = self._texts_from_teacher_forced(
-                            None, labels_for_dump, model=model, inputs=inputs
-                        )
+                        texts = self._texts_from_teacher_forced(None, labels_for_dump, model=model, inputs=inputs)
                 elif train_mode == "generate":
                     try:
                         texts = self._texts_from_generate(model, inputs, labels_for_dump)
@@ -761,12 +802,13 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                         texts = []
                 if texts:
                     pairs = [(qid, text) for qid, text in zip(qids, texts) if qid]
-                    self._record_train_pairs(pairs)
                 else:
                     logger.warning_rank0(
                         f"train prediction dump produced no texts "
                         f"(mode={train_mode}, qids={len([q for q in qids if q])}, batch={batch_size})"
                     )
+            # All ranks must gather, even with empty local pairs.
+            self._record_train_pairs(pairs)
 
         return result
 
@@ -808,13 +850,13 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             labels = inputs.get("labels")
 
         # When dumping eval predictions without stock predict_with_generate, still compute loss.
+        # Stay loss-only for HuggingFace: returning [B, S, vocab] logits makes evaluation_loop
+        # concat them on GPU (Qwen2.5-VL vocab is 152064 → tens of GiB per long CoT row).
         if dump_eval and not self.args.predict_with_generate:
-            # Force non-loss-only so we can obtain logits for teacher_forced if needed.
-            want_logits = self.finetuning_args.eval_prediction_mode == "teacher_forced"
-            loss, logits, label_ids = super().prediction_step(
+            loss, _, label_ids = super().prediction_step(
                 model,
                 inputs,
-                prediction_loss_only=prediction_loss_only and not want_logits,
+                prediction_loss_only=True,
                 ignore_keys=ignore_keys,
                 **gen_kwargs,
             )
@@ -825,13 +867,9 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             else:
                 texts: list[str] = []
                 if self.finetuning_args.eval_prediction_mode == "teacher_forced":
-                    # Prefer a dump forward without relying on HF prediction_step logits
-                    # (may be reduced/absent). Use labels for decoding mask only.
                     try:
                         if labels_for_dump is not None:
-                            texts = self._texts_from_teacher_forced(
-                                None, labels_for_dump, model=model, inputs=inputs
-                            )
+                            texts = self._texts_from_teacher_forced(None, labels_for_dump, model=model, inputs=inputs)
                     except Exception as err:
                         logger.warning_rank0(f"eval teacher_forced dump failed: {err}")
                 else:  # generate
@@ -850,7 +888,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                         f"(mode={self.finetuning_args.eval_prediction_mode}, "
                         f"qids={len([q for q in qids if q])}, batch={batch_size})"
                     )
-            return loss, logits, label_ids if label_ids is not None else labels
+            return loss, None, label_ids if label_ids is not None else labels
 
         loss, generated_tokens, _ = super().prediction_step(
             model, inputs, prediction_loss_only=prediction_loss_only, ignore_keys=ignore_keys, **gen_kwargs

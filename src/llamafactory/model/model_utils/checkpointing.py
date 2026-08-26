@@ -95,7 +95,12 @@ def get_unsloth_gradient_checkpointing_func() -> Callable:
 
 
 def get_custom_gradient_checkpointing_func(gradient_checkpointing_func: Callable) -> Callable:
-    r"""Only applies gradient checkpointing to trainable layers."""
+    r"""Apply gradient checkpointing to trainable layers and frozen layers on the autograd graph.
+
+    Frozen modules (for example a VLM vision tower) can still receive tensors that require grad when
+    ``enable_input_require_grads()`` hooks embeddings or patch_embed. Skipping checkpointing in that
+    case stores every layer's activations and can OOM on long multimodal sequences.
+    """
 
     @wraps(gradient_checkpointing_func, assigned=WRAPPER_ASSIGNMENTS + ("__self__",))
     def custom_gradient_checkpointing_func(func: Callable, *args: Union["torch.Tensor", Any], **kwargs):
@@ -104,18 +109,19 @@ def get_custom_gradient_checkpointing_func(gradient_checkpointing_func: Callable
         else:
             module: torch.nn.Module = func.__self__
 
-        has_grad = False
-        if any(param.requires_grad for param in module.parameters()):
-            has_grad = True
+        module_has_grad = any(param.requires_grad for param in module.parameters())
+        if module_has_grad:
             for arg in args:
                 if torch.is_tensor(arg) and torch.is_floating_point(arg):
                     arg.requires_grad_(True)
                     break  # assume the first tensor is always the hidden states
 
-        if has_grad:
+        # Frozen ViT blocks still sit in the graph when patch_embed outputs require grad.
+        input_requires_grad = any(torch.is_tensor(arg) and arg.requires_grad for arg in args)
+        if module_has_grad or input_requires_grad:
             return gradient_checkpointing_func(func, *args, **kwargs)
-        else:
-            return func(*args, **kwargs)
+
+        return func(*args, **kwargs)
 
     return custom_gradient_checkpointing_func
 
@@ -193,6 +199,10 @@ def prepare_model_for_training(model: "PreTrainedModel", model_args: "ModelArgum
             )
             setattr(model.config, "use_cache", False)  # turn off when gradient checkpointing is enabled
             logger.info_rank0("Gradient checkpointing enabled.")
+            logger.info_rank0(
+                "Frozen layers that still receive tensors requiring grad (e.g. VLM vision towers) "
+                "are checkpointed to avoid storing full activations."
+            )
 
     if model_args.upcast_lmhead_output:
         output_layer = model.get_output_embeddings()
