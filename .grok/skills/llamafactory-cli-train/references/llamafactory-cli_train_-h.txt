@@ -1,4 +1,4 @@
-[WARNING|2026-08-14 04:05:55] llamafactory.extras.misc:155 >> Version checking has been disabled, may lead to unexpected behaviors.
+[WARNING|2026-08-26 16:50:52] llamafactory.extras.misc:155 >> Version checking has been disabled, may lead to unexpected behaviors.
 usage: llamafactory-cli [-h] [--model_name_or_path MODEL_NAME_OR_PATH]
                         [--adapter_name_or_path ADAPTER_NAME_OR_PATH]
                         [--adapter_folder ADAPTER_FOLDER]
@@ -743,7 +743,7 @@ options:
                         float in [0, 1) (ratio of total steps). (default: 0)
   --optim {adamw_torch,adamw_torch_fused,adamw_torch_xla,adamw_torch_npu_fused,adafactor,adamw_anyprecision,adamw_torch_4bit,adamw_torch_8bit,ademamix,sgd,adagrad,adamw_bnb_8bit,adamw_8bit,ademamix_8bit,lion_8bit,lion_32bit,paged_adamw_32bit,paged_adamw_8bit,paged_ademamix_32bit,paged_ademamix_8bit,paged_lion_32bit,paged_lion_8bit,rmsprop,rmsprop_bnb,rmsprop_bnb_8bit,rmsprop_bnb_32bit,galore_adamw,galore_adamw_8bit,galore_adafactor,galore_adamw_layerwise,galore_adamw_8bit_layerwise,galore_adafactor_layerwise,lomo,adalomo,grokadamw,schedule_free_radam,schedule_free_adamw,schedule_free_sgd,apollo_adamw,apollo_adamw_layerwise,stable_adamw}
                         The optimizer to use. See `OptimizerNames` for the
-                        complete list. (default: adamw_torch_fused)
+                        complete list. (default: adamw_torch)
   --optim_args, --optim-args OPTIM_ARGS
                         Optional arguments supplied to optimizers such as
                         AnyPrecisionAdamW, AdEMAMix, and GaLore. (default:
@@ -1590,24 +1590,26 @@ options:
                         same STEP key. (default: 1)
   --train_prediction_max_samples, --train-prediction-max-samples TRAIN_PREDICTION_MAX_SAMPLES
                         Maximum number of (QUESTION_ID, step) train prediction
-                        records to write this run. 0 means no cap. (default:
+                        records to write per epoch. 0 means no cap. (default:
                         0)
   --train_predictions_file, --train-predictions-file TRAIN_PREDICTIONS_FILE
-                        Path for train prediction JSON. Default:
-                        {output_dir}/train_predictions.json. (default: None)
+                        Path pattern for train prediction JSON. Default:
+                        {output_dir}/train_predictions_ep{epoch}.json.
+                        (default: None)
   --save_eval_predictions, --save-eval-predictions [SAVE_EVAL_PREDICTIONS]
                         If True, dump model text outputs during evaluation to
-                        JSON as D[QUESTION_ID] = MODEL_OUTPUT. Works with
-                        val_size splits (does not require
-                        predict_with_generate). Requires question_id on the
-                        dataset. (default: False)
+                        JSON as D[QUESTION_ID] = MODEL_OUTPUT per epoch
+                        (eval_predictions_ep{epoch}.json). Works with val_size
+                        splits (does not require predict_with_generate).
+                        Requires question_id on the dataset. (default: False)
   --eval_prediction_mode, --eval-prediction-mode {teacher_forced,generate}
                         How to obtain MODEL_OUTPUT for eval dumps:
                         teacher_forced or generate. Uses GeneratingArguments
                         when mode is generate. (default: generate)
   --eval_predictions_file, --eval-predictions-file EVAL_PREDICTIONS_FILE
-                        Path for eval prediction JSON. Default:
-                        {output_dir}/eval_predictions.json. (default: None)
+                        Path pattern for eval prediction JSON. Default:
+                        {output_dir}/eval_predictions_ep{epoch}.json.
+                        (default: None)
   --allow_warm_start_resume, --allow-warm-start-resume [ALLOW_WARM_START_RESUME]
                         If True, missing optimizer/scheduler/LoRA resume
                         artifacts fall back to warm-start (fresh optim/sched)

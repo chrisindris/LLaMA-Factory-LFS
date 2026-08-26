@@ -622,22 +622,22 @@ class FinetuningArguments(
         default=0,
         metadata={
             "help": (
-                "Maximum number of (QUESTION_ID, step) train prediction records to write this run. "
+                "Maximum number of (QUESTION_ID, step) train prediction records to write per epoch. "
                 "0 means no cap."
             )
         },
     )
     train_predictions_file: str | None = field(
         default=None,
-        metadata={"help": "Path for train prediction JSON. Default: {output_dir}/train_predictions.json."},
+        metadata={"help": "Path pattern for train prediction JSON. Default: {output_dir}/train_predictions_ep{epoch}.json."},
     )
     save_eval_predictions: bool = field(
         default=False,
         metadata={
             "help": (
                 "If True, dump model text outputs during evaluation to JSON as "
-                "D[QUESTION_ID] = MODEL_OUTPUT. Works with val_size splits (does not require "
-                "predict_with_generate). Requires question_id on the dataset."
+                "D[QUESTION_ID] = MODEL_OUTPUT per epoch (eval_predictions_ep{epoch}.json). "
+                "Works with val_size splits (does not require predict_with_generate). Requires question_id on the dataset."
             )
         },
     )
@@ -652,7 +652,7 @@ class FinetuningArguments(
     )
     eval_predictions_file: str | None = field(
         default=None,
-        metadata={"help": "Path for eval prediction JSON. Default: {output_dir}/eval_predictions.json."},
+        metadata={"help": "Path pattern for eval prediction JSON. Default: {output_dir}/eval_predictions_ep{epoch}.json."},
     )
     allow_warm_start_resume: bool = field(
         default=True,

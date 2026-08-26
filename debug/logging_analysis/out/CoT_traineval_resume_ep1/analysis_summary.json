@@ -1,0 +1,112 @@
+{
+  "input_logs": [
+    "saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/train_predictions_ep1.json"
+  ],
+  "dataset_info": "data/dataset_info.json",
+  "output_dir": "debug/logging_analysis/out/CoT_traineval_resume_ep1",
+  "cli": {
+    "logs": [
+      "saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/train_predictions_ep1.json"
+    ],
+    "dataset_info": "data/dataset_info.json",
+    "dataset_dir": "/scratch/i/indrisch/LLaMA-Factory-LFS/data",
+    "hf_hub_cache": "/project/aip-wangcs/indrisch/huggingface/hub",
+    "annotation_file": null,
+    "gt_field": null,
+    "output_dir": "debug/logging_analysis/out/CoT_traineval_resume_ep1",
+    "tokenizer": null,
+    "grammar": false,
+    "language": "en-US",
+    "matched_questions": false,
+    "plots": true,
+    "rolling_window": 1,
+    "compute_loss": false,
+    "checkpoint_root": null,
+    "llamafactory_root": "/scratch/i/indrisch/LLaMA-Factory-LFS",
+    "training_config": null,
+    "model_name_or_path": null,
+    "loss_batch_size": 1,
+    "loss_max_samples_per_dataset": 16,
+    "nearest_checkpoint": false,
+    "seed": 0,
+    "verbose": false,
+    "self_test": false,
+    "short_think_tokens": 8,
+    "long_think_tokens": 4000,
+    "high_repetition": 0.35,
+    "high_ngram_repetition": 0.5,
+    "canonical_drop": 0.2,
+    "think_growth": 3.0
+  },
+  "seed": 0,
+  "dependency_versions": {
+    "pandas": "2.3.3",
+    "numpy": "2.4.2",
+    "matplotlib": "3.10.8",
+    "scipy": "1.17.0",
+    "pyarrow": "25.0.0",
+    "torch": "2.7.1",
+    "transformers": "5.8.0",
+    "llamafactory": "0.9.6.dev0",
+    "language_tool_python": null,
+    "rapidfuzz": null,
+    "tqdm": "4.70.0+computecanada"
+  },
+  "integrity": {
+    "n_outer_records": 408,
+    "n_prediction_observations": 408,
+    "datasets_recognized": [
+      "3DThinker10k",
+      "Scene30k",
+      "SpatialSSRL_coldstart"
+    ],
+    "datasets_unrecognized": [],
+    "step_min": 10,
+    "step_max": 510,
+    "n_distinct_steps": 51,
+    "n_unique_questions": 408,
+    "duplicate_question_step_rows": 0,
+    "warning_counts": {
+      "step_flag": 15
+    }
+  },
+  "annotation_lookup": {
+    "success": 408,
+    "failure": 0,
+    "rate": 1.0,
+    "files": {
+      "3DThinker10k": "/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/c0392e4172ddf9c106b7066c584724dd7ae04144/3dthinker10k_cot.with_question_id.jsonl",
+      "Scene30k": "/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/4be0f2eadaf440b9fe9392fdeca790c4edfd68fd/data/train-00000-of-00001.with_question_id.parquet",
+      "SpatialSSRL_coldstart": "/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/c6bce21bad8cb7d751a47f7bb91dca7875115c96/SFT-coldstart.with_question_id.json"
+    }
+  },
+  "matched_strategy": "unmatched_all_observations",
+  "n_matched_questions": 0,
+  "thresholds": {
+    "short_think_tokens": 8,
+    "long_think_tokens": 4000,
+    "high_repetition": 0.35,
+    "high_ngram_repetition": 0.5,
+    "canonical_drop": 0.2,
+    "think_growth": 3.0,
+    "repetition_score": "0.4*adjacent_identical_fraction + 0.3*(1-distinct_3) + 0.2*(1-compression_ratio) + 0.1*most_common_token_fraction"
+  },
+  "plots": [
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/tag_canonical_format.png",
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/tag_pair_score.png",
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/think_length.png",
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/answer_length.png",
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/total_length.png",
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/repetition_score.png",
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/repetition_trigram.png",
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/repetition_adjacent.png",
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/surface_match.png",
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/samples_per_step.png",
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/question_overlap.png",
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/dataset_comparison.png",
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/probe_loss.png",
+    "debug/logging_analysis/out/CoT_traineval_resume_ep1/plots/loss_vs_generation.png"
+  ],
+  "teacher_forced_note": true,
+  "timestamp_utc": "2026-08-26T20:19:42.079970+00:00"
+}
