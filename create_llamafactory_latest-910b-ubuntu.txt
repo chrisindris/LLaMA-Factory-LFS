@@ -1,5 +1,25 @@
-# on a machine with ample storage space (I did it on ENG211-11 WSL), but it can be used on my mac using a special tool installed by brew permitting me to run apptainer
+# on a machine with ample storage space (I did it on rorqual login node from the /scratch/indrisch/ directory), but it can be used on my mac using a special tool installed by brew permitting me to run apptainer
 
-apptainer pull ./llamafactory_latest-910b-ubuntu.sif docker://hiyouga/llamafactory:latest-910b-ubuntu
+APPTAINER_CACHEDIR="/scratch/indrisch/.cache/apptainer/" apptainer pull ./llamafactory-latest.sif docker://hiyouga/llamafactory
 
-apptainer shell ./llamafactory_latest-910b-ubuntu.sif
+# We can copy that sif wherever we want and/or build the overlay.
+
+FLASH_ATTN_WHEEL_URL="" CAUSAL_CONV1D_WHEEL_URL="https://github.com/Dao-AILab/causal-conv1d/releases/download/v1.7.0/causal_conv1d-1.7.0+cu12torch2.6cxx11abiFALSE-cp311-cp311-linux_x86_64.whl" SIF="../apptainer/llamafactory-latest.sif" FORCE_RECREATE=1 WHEELHOUSE="../wh
+eels/" OVERLAY="../apptainer/overlay.img" ./build_apptainer_overlay.sh
+
+# We then get the desired result:
+
+indrisch@tamia4:/scratch/i/indrisch/LLaMA-Factory-LFS/scripts$ apptainer exec --overlay /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/overlay.img ../apptainer/llamafactory-latest.sif llamafactory-cli
+----------------------------------------------------------------------
+| Usage:                                                             |
+|   llamafactory-cli api -h: launch an OpenAI-style API server       |
+|   llamafactory-cli chat -h: launch a chat interface in CLI         |
+|   llamafactory-cli export -h: merge LoRA adapters and export model |
+|   llamafactory-cli train -h: train models                          |
+|   llamafactory-cli webchat -h: launch a chat interface in Web UI   |
+|   llamafactory-cli webui: launch LlamaBoard                        |
+|   llamafactory-cli env: show environment info                      |
+|   llamafactory-cli version: show version info                      |
+| Hint: You can use `lmf` as a shortcut for `llamafactory-cli`.      |
+----------------------------------------------------------------------
+
