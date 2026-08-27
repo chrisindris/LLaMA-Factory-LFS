@@ -478,7 +478,7 @@ elif [[ "$CLUSTER" == "TAMIA" ]]; then
 		nvidia-smi
 		echo "=== END HOST DIAGNOSTICS ==="
 
-		run_llamafactory_apptainer
+		apptainer exec --overlay /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/overlay_0.img --env TORCH_DEVICE_BACKEND_AUTOLOAD=0 --env PYTHONNOUSERSITE=1 /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory_latest-910b-ubuntu.sif bash 
 
 	else
 		echo "Invalid running mode: $RUNNING_MODE"

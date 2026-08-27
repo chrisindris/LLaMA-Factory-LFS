@@ -227,7 +227,8 @@ echo "UPLOAD_TO_HF: $UPLOAD_TO_HF"
 
 APPTAINER_EXTRA_ARGS=()
 if [[ -f "${OVERLAY}" ]]; then
-	APPTAINER_EXTRA_ARGS+=(--fakeroot --overlay "${OVERLAY}")
+	# Overlay is built without --fakeroot (Tamia has no subuid / blocked uid maps).
+	APPTAINER_EXTRA_ARGS+=(--overlay "${OVERLAY}")
 	echo "Using overlay: ${OVERLAY}"
 else
 	# Fall back when overlay was not built yet

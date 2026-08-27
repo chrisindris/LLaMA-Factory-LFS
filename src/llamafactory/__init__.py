@@ -25,6 +25,14 @@ Use modelscope: USE_MODELSCOPE_HUB=1
 Use openmind: USE_OPENMIND_HUB=1
 """
 
+from .extras.backend_compat import apply_optional_backend_compat
+from .extras.env import VERSION
+from .extras.hf_hub_compat import apply_huggingface_hub_compat
+
+
+apply_huggingface_hub_compat()
+apply_optional_backend_compat()
+
 try:
     import transformers
 
@@ -50,8 +58,6 @@ try:
             _modeling_auto.MODEL_FOR_VISION_2_SEQ_MAPPING_NAMES = {}
 except Exception:
     pass
-
-from .extras.env import VERSION
 
 
 __version__ = VERSION
