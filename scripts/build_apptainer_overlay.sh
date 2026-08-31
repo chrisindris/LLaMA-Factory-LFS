@@ -156,7 +156,7 @@ fi
 echo "Installing wandb/ray/helpers into overlay..."
 # flash-linear-attention imports as `fla`; --no-deps keeps the SIF torch.
 run_in_overlay python -m pip install \
-	wandb ray sentry-sdk build pre_commit rapidfuzz language_tool_python 
+	wandb ray sentry-sdk build pre_commit rapidfuzz language_tool_python liger-kernel 
 run_in_overlay python -m pip install --no-deps flash-linear-attention
 
 echo "Verify:"
@@ -186,6 +186,7 @@ print("language_tool_python", ver("language_tool_python"), "import", "ok" if imp
 print("flash-linear-attention", ver("flash-linear-attention", "fla-core"), "import", "ok" if importlib.util.find_spec("fla") else "MISSING")
 print("flash_attn", ver("flash-attn", "flash_attn"))
 print("causal_conv1d", ver("causal-conv1d", "causal_conv1d"))
+print("liger_kernel", ver("liger-kernel", "liger_kernel"))
 PY
 '
 

@@ -4,8 +4,9 @@ APPTAINER_CACHEDIR="/scratch/indrisch/.cache/apptainer/" apptainer pull ./llamaf
 
 # We can copy that sif wherever we want and/or build the overlay.
 
-FLASH_ATTN_WHEEL_URL="" CAUSAL_CONV1D_WHEEL_URL="https://github.com/Dao-AILab/causal-conv1d/releases/download/v1.7.0/causal_conv1d-1.7.0+cu12torch2.6cxx11abiFALSE-cp311-cp311-linux_x86_64.whl" SIF="../apptainer/llamafactory-latest.sif" FORCE_RECREATE=1 WHEELHOUSE="../wh
-eels/" OVERLAY="../apptainer/overlay.img" ./build_apptainer_overlay.sh
+module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+
+FLASH_ATTN_WHEEL_URL="" CAUSAL_CONV1D_WHEEL_URL="https://github.com/Dao-AILab/causal-conv1d/releases/download/v1.7.0/causal_conv1d-1.7.0+cu12torch2.6cxx11abiFALSE-cp311-cp311-linux_x86_64.whl" SIF="../apptainer/llamafactory-latest.sif" FORCE_RECREATE=1 WHEELHOUSE="../wheels/" OVERLAY="../apptainer/overlay.img" ./build_apptainer_overlay.sh
 
 # We then get the desired result:
 

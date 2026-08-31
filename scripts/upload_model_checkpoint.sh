@@ -6,6 +6,9 @@
 # --out <OUT_FILE> --commit-message <COMMIT MESSAGE>
 # note that if <COMMIT MESSAGE> is not provided, set it equal either to "<ID> CHECKPOINT> <WANDB_LOG" or "<OUT_FILE>", depending on which flags are provided.
 
+# --- for reading cluster-specific settings ---
+. $(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "env.sh")
+
 # --- parse run flags ---
 
 while [[ $# -gt 0 ]]; do
@@ -127,41 +130,41 @@ if [[ -n "$OUT_FILE" ]]; then
     fi
 fi
 
-# --- for reading cluster-specific settings ---
-
-if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then
-    PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
-elif [[ "$PWD" == *LLaMA-Factory* ]]; then
-    PROJECT_DIR="${PWD%%LLaMA-Factory*}/LLaMA-Factory"
-else
-    echo "Error: Could not find 'LLaMA-Factory' or 'LLaMA-Factory-LFS' in the current path."
-    exit 1
-fi
-SYSCONFIG_DIR_PATH="$PROJECT_DIR/scripts"
-export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
-
-# --- setting environment ---
-
-# Detect cluster based on terminal prompt or hostname
-if [[ "$PS1" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "$PS1" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]]; then
-    CLUSTER="RORQUAL"
-elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
-    CLUSTER="TRILLIUM"
-elif [[ "$PS1" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "$PS1" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
-    CLUSTER="KILLARNEY"
-else
-    echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to RORQUAL."
-    CLUSTER="RORQUAL"
-fi
-
-export VENV_DATASET_UPLOAD="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'VENV_DATASET_UPLOAD'))")" && echo "VENV_DATASET_UPLOAD: $VENV_DATASET_UPLOAD"
+# # --- for reading cluster-specific settings ---
+#
+# if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then
+#     PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
+# elif [[ "$PWD" == *LLaMA-Factory* ]]; then
+#     PROJECT_DIR="${PWD%%LLaMA-Factory*}/LLaMA-Factory"
+# else
+#     echo "Error: Could not find 'LLaMA-Factory' or 'LLaMA-Factory-LFS' in the current path."
+#     exit 1
+# fi
+# SYSCONFIG_DIR_PATH="$PROJECT_DIR/scripts"
+# export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
+#
+# # --- setting environment ---
+#
+# # Detect cluster based on terminal prompt or hostname
+# if [[ "$PS1" == *"rorqual"* ]] || [[ "$HOSTNAME" == *"rorqual"* ]] || [[ "$PS1" == *"rg"* ]] || [[ "$HOSTNAME" == *"rg"* ]]; then
+#     CLUSTER="RORQUAL"
+# elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
+#     CLUSTER="TRILLIUM"
+# elif [[ "$PS1" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "$PS1" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
+#     CLUSTER="KILLARNEY"
+# else
+#     echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to RORQUAL."
+#     CLUSTER="RORQUAL"
+# fi
+#
+# export VENV_DATASET_UPLOAD="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'VENV_DATASET_UPLOAD'))")" && echo "VENV_DATASET_UPLOAD: $VENV_DATASET_UPLOAD"
 
 module load StdEnv/2023  gcc/12.3  openmpi/4.1.5
 module load python/3.12 cuda/12.6 opencv/4.12.0
 module load arrow
 
 source $VENV_DATASET_UPLOAD/bin/activate
-export HF_TOKEN=$(cat /home/indrisch/TOKENS/cvis-tmu-organization-token.txt)
+export HF_TOKEN=$(cat /home/i/indrisch/TOKENS/cvis-tmu-organization-token.txt)
 
 # --- run commands ---
 
