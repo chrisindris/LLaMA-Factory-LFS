@@ -532,7 +532,7 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
             # one parent process exists on every allocated node.
             export NNODES="${SLURM_NNODES}"
             export NODE_RANK="${SLURM_NODEID}"
-            export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE}}"
+            export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE:-$(hostname)}}"
             export MASTER_PORT="${MASTER_PORT:-29500}"
             export NPROC_PER_NODE="4"
 

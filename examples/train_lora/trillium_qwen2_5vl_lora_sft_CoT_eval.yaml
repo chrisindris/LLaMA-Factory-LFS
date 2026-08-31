@@ -5,7 +5,8 @@
 ###   question_ids are auto-assigned at convert time as {dataset_name}_{row_index}
 ###   when annotations lack a stamped column. Optional: scripts/assign_question_ids.py
 ###   + columns.question_id in dataset_info.json for offline-stamped IDs.
-###   Keep overwrite_cache: true after pipeline changes so convert re-runs.
+###   Keep overwrite_cache: false for array jobs (shared HF map cache).
+###   Set true only on a single job after converter/pipeline changes.
 
 ### model
 # Local hub snapshot (offline compute nodes cannot reach huggingface.co).
@@ -35,7 +36,8 @@ template: qwen2_vl
 cutoff_len: 131072
 # Optional: fewer frames/images per sample for a faster smoke (keeps token/feature alignment).
 # image_sample_count: 8
-overwrite_cache: true
+overwrite_cache: false # prevents multiple co-running programs from colliding on the HuggingFace cache (which can lead to memory errors)
+preprocessing_batch_size: 32 # VL map decodes images; default 1000 OOMs num_proc workers
 preprocessing_num_workers: 8
 dataloader_num_workers: 2
 dataloader_prefetch_factor: 1

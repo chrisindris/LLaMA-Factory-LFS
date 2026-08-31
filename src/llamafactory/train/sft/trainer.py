@@ -907,6 +907,8 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                         f"(mode={self.finetuning_args.eval_prediction_mode}, "
                         f"qids={len([q for q in qids if q])}, batch={batch_size})"
                     )
+            if prediction_loss_only:
+                return loss, None, None
             return loss, None, label_ids if label_ids is not None else labels
 
         loss, generated_tokens, _ = super().prediction_step(

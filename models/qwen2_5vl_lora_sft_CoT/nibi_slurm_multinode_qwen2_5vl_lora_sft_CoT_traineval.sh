@@ -19,7 +19,7 @@
 mkdir -p "${PROJECT_DIR}/models/qwen2_5vl_lora_sft_CoT/out"
 
 export HEAD_NODE=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n 1) # store head node's address
-export MASTER_ADDR="${HEAD_NODE}"
+export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE:-$(hostname)}}"
 export MASTER_PORT="${MASTER_PORT:-29500}"
 
 echo "SLURM_JOB_NODELIST: ${SLURM_JOB_NODELIST}"

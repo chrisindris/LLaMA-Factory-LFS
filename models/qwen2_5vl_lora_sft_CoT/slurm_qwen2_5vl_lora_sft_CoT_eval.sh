@@ -153,6 +153,11 @@ setup_venv_runtime_env() {
 	export HF_HUB_OFFLINE=1
 	export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
 	export HF_DATASETS_OFFLINE="${HF_DATASETS_OFFLINE:-1}"
+	export TOKENIZERS_PARALLELISM=false
+	export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-${SLURM_TMPDIR}/hf_datasets}"
+	mkdir -p "${HF_DATASETS_CACHE}"
+	export HF_DATASETS_DISABLE_FILE_LOCKING=1
+	export DATASETS_DISABLE_FILE_LOCKING=1
 	export WANDB_MODE=offline
 	export WANDB_DIR="${WANDB_DIR}"
 	export WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb"
@@ -206,6 +211,7 @@ run_llamafactory_apptainer() {
 	# Avoid NFS lock exhaustion when datasets cache is shared across ranks.
 	export HF_DATASETS_DISABLE_FILE_LOCKING=1
 	export DATASETS_DISABLE_FILE_LOCKING=1
+	export TOKENIZERS_PARALLELISM=false
 
 	export NCCL_ASYNC_ERROR_HANDLING=1 && echo "NCCL_ASYNC_ERROR_HANDLING: ${NCCL_ASYNC_ERROR_HANDLING}"
 	export TORCH_NCCL_ASYNC_ERROR_HANDLING=1 && echo "TORCH_NCCL_ASYNC_ERROR_HANDLING: ${TORCH_NCCL_ASYNC_ERROR_HANDLING}"
@@ -220,19 +226,19 @@ run_llamafactory_apptainer() {
 	# one parent process exists on every allocated node.
 	export NNODES="${SLURM_NNODES}" && echo "NNODES: ${NNODES}"
 	export NODE_RANK="${SLURM_NODEID}" && echo "NODE_RANK: ${NODE_RANK}"
-	export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE}}" && echo "MASTER_ADDR: ${MASTER_ADDR}"
+	export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE:-$(hostname)}}" && echo "MASTER_ADDR: ${MASTER_ADDR}"
 	export MASTER_PORT="${MASTER_PORT:-29500}" && echo "MASTER_PORT: ${MASTER_PORT}"
 	export NPROC_PER_NODE="4" && echo "NPROC_PER_NODE: ${NPROC_PER_NODE}"
 
 	if [ -z "${OVERLAY:-}" ]; then
-		if [[ "$NODE_RANK" == 0 ]]; then
-			if [ -f "${PROJECT_DIR}/apptainer/overlay_${NODE_RANK}.img" ]; then
-				OVERLAY="${PROJECT_DIR}/apptainer/overlay_${NODE_RANK}.img"
+		if [[ "$SLURM_ARRAY_TASK_ID" == 0 ]]; then
+			if [ -f "${PROJECT_DIR}/apptainer/overlay_${SLURM_ARRAY_TASK_ID}.img" ]; then
+				OVERLAY="${PROJECT_DIR}/apptainer/overlay_${SLURM_ARRAY_TASK_ID}.img"
 			else
 				OVERLAY="${PROJECT_DIR}/apptainer/overlay.img"
 			fi
 		else
-			OVERLAY="${PROJECT_DIR}/apptainer/overlay_${NODE_RANK}.img"
+			OVERLAY="${PROJECT_DIR}/apptainer/overlay_${SLURM_ARRAY_TASK_ID}.img"
 		fi
 	fi
 
@@ -253,8 +259,10 @@ run_llamafactory_apptainer() {
 		--env HF_HUB_OFFLINE=1 \
 		--env HF_HOME="${HF_HOME}" \
 		--env HF_HUB_CACHE="${HF_HUB_CACHE}" \
+		--env HF_DATASETS_CACHE="${HF_DATASETS_CACHE}" \
 		--env HF_DATASETS_DISABLE_FILE_LOCKING="${HF_DATASETS_DISABLE_FILE_LOCKING}" \
 		--env DATASETS_DISABLE_FILE_LOCKING="${DATASETS_DISABLE_FILE_LOCKING}" \
+		--env TOKENIZERS_PARALLELISM="${TOKENIZERS_PARALLELISM}" \
 		--env MPLCONFIGDIR="${SLURM_TMPDIR}/.config/matplotlib" \
 		--env TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache" \
 		--env DISABLE_VERSION_CHECK=1 \
