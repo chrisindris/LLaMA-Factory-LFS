@@ -760,12 +760,13 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
 
         # When dumping eval predictions without stock predict_with_generate, still compute loss.
         if dump_eval and not self.args.predict_with_generate:
-            # Force non-loss-only so we can obtain logits for teacher_forced if needed.
-            want_logits = self.finetuning_args.eval_prediction_mode == "teacher_forced"
+            # Honor prediction_loss_only. Forcing logits makes HuggingFace concat
+            # [B, S, V] on GPU across the eval set (OOM on long VL sequences).
+            # Dump texts independently; drop vocab logits when the loop only needs loss.
             loss, logits, label_ids = super().prediction_step(
                 model,
                 inputs,
-                prediction_loss_only=prediction_loss_only and not want_logits,
+                prediction_loss_only=prediction_loss_only,
                 ignore_keys=ignore_keys,
                 **gen_kwargs,
             )
@@ -801,6 +802,8 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                         f"(mode={self.finetuning_args.eval_prediction_mode}, "
                         f"qids={len([q for q in qids if q])}, batch={batch_size})"
                     )
+            if prediction_loss_only:
+                return loss, None, None
             return loss, logits, label_ids if label_ids is not None else labels
 
         loss, generated_tokens, _ = super().prediction_step(
