@@ -193,15 +193,20 @@ deactivate
 # ----- multi-node setup -----
 
 echo "SLURM_JOB_NODELIST: ${SLURM_JOB_NODELIST}"
-export HEAD_NODE=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n 1) && echo "HEAD_NODE: ${HEAD_NODE}" # store head node's address
+export NNODES="${SLURM_NNODES:-1}" && echo "SLURM_NNODES: ${SLURM_NNODES}"
+export HEAD_NODE=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n 1) && export HEAD_NODE="${HEAD_NODE:-$(hostname)}" && echo "HEAD_NODE: ${HEAD_NODE}" # store head node's address
 export MASTER_ADDR="${HEAD_NODE}" && echo "HEAD_NODE: ${HEAD_NODE}" && echo "MASTER_ADDR: ${MASTER_ADDR}"
 export MASTER_PORT="${MASTER_PORT:-29500}" && echo "MASTER_PORT: ${MASTER_PORT}"
 
 # Launch one parent task per node. Each parent task then lets LLaMA-Factory
 # start one torchrun worker per visible GPU on that node.
-srun \
-	--nodes "${SLURM_NNODES}" \
-	--ntasks "${SLURM_NNODES}" \
-	--ntasks-per-node 1 \
-	--kill-on-bad-exit=1 \
-	bash ${PROJECT_DIR}/models/qwen2_5vl_lora_sft_CoT/slurm_multinode_qwen2_5vl_lora_sft_CoT_traineval.sh "$@"
+if [[ ! "${RUNNING_MODE}" == "SHELL" ]]; then
+  srun \
+    --nodes "${NNODES}" \
+    --ntasks "${NNODES}" \
+    --ntasks-per-node 1 \
+    --kill-on-bad-exit=1 \
+    bash ${PROJECT_DIR}/models/qwen2_5vl_lora_sft_CoT/slurm_multinode_qwen2_5vl_lora_sft_CoT_traineval.sh "$@"
+else
+  bash ${PROJECT_DIR}/models/qwen2_5vl_lora_sft_CoT/slurm_multinode_qwen2_5vl_lora_sft_CoT_traineval.sh "$@"
+fi

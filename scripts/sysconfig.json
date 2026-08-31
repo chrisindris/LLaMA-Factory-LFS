@@ -110,8 +110,8 @@
         "BEST_GPU": "h100",
         "FLASHINFER_WORKSPACE_BASE": "/project/aip-wangcs/indrisch/",
         "LLAMAFACTORY_HOME": "/scratch/i/indrisch/LLaMA-Factory-LFS/",
-        "SIF_FILE": "/scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory_latest-910b-ubuntu.sif",
-        "media_dir": "/scratch/i/indrisch/",
+        "SIF_FILE": "/scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif",
+        "media_dir": "None",
         "VENV_DATASET_UPLOAD": "/scratch/i/indrisch/venv_llamafactory_py313/",
         "VENV_LLAMAFACTORY": "/scratch/i/indrisch/venv_llamafactory_py313/"
     }

@@ -206,9 +206,9 @@ run_llamafactory_apptainer() {
 	# torchrun once per node with the correct --node_rank. The outer
 	# 2-node SLURM wrapper must start this script through srun so that
 	# one parent process exists on every allocated node.
-	export NNODES="${SLURM_NNODES}" && echo "NNODES: ${NNODES}"
-	export NODE_RANK="${SLURM_NODEID}" && echo "NODE_RANK: ${NODE_RANK}"
-	export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE}}" && echo "MASTER_ADDR: ${MASTER_ADDR}"
+	export NNODES="${SLURM_NNODES:-1}" && echo "NNODES: ${NNODES}"
+	export NODE_RANK="${SLURM_NODEID:-0}" && echo "NODE_RANK: ${NODE_RANK}"
+  export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE:-$(hostname)}}" && echo "MASTER_ADDR: ${MASTER_ADDR}"
 	export MASTER_PORT="${MASTER_PORT:-29500}" && echo "MASTER_PORT: ${MASTER_PORT}"
 	export NPROC_PER_NODE="4" && echo "NPROC_PER_NODE: ${NPROC_PER_NODE}"
 
@@ -478,7 +478,9 @@ elif [[ "$CLUSTER" == "TAMIA" ]]; then
 		nvidia-smi
 		echo "=== END HOST DIAGNOSTICS ==="
 
-		apptainer exec --overlay /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/overlay_0.img --env TORCH_DEVICE_BACKEND_AUTOLOAD=0 --env PYTHONNOUSERSITE=1 /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory_latest-910b-ubuntu.sif bash 
+		#apptainer exec --overlay /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/overlay_0.img --env TORCH_DEVICE_BACKEND_AUTOLOAD=0 --env PYTHONNOUSERSITE=1 /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory_latest-910b-ubuntu.sif bash -> the original; this container is incomplete 
+    #apptainer exec --overlay /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/overlay.img /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif bash -> better, but not generalized
+    run_llamafactory_apptainer
 
 	else
 		echo "Invalid running mode: $RUNNING_MODE"
