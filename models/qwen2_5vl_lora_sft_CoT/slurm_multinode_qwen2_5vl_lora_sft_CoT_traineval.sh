@@ -68,11 +68,11 @@ fi
 export PYTHONUNBUFFERED=1
 
 if [[ "$RUNNING_MODE" == "SHELL" ]]; then
-    export SLURM_TMPDIR="/tmp"
+	export SLURM_TMPDIR="/tmp"
 fi
 
 if [[ "$CLUSTER" == "RORQUAL" ]]; then
-    export SCANNET_H5_DIR="/project/def-wangcs/indrisch/scratch_saves/ScanNet_h5/scans"
+	export SCANNET_H5_DIR="/project/def-wangcs/indrisch/scratch_saves/ScanNet_h5/scans"
 fi
 
 # H5 roots (override per-cluster if needed)
@@ -92,22 +92,22 @@ echo "YAML_FILE: $YAML_FILE"
 echo "OUTPUT_DIR: $OUTPUT_DIR"
 echo "RESUME_CKPT: $RESUME_CKPT"
 if [[ -n "$RESUME_CKPT" && "$RESUME_CKPT" != "null" && "$RESUME_CKPT" != "None" ]]; then
-    if [[ ! -d "$RESUME_CKPT" ]]; then
-        echo "Error: resume checkpoint not found: $RESUME_CKPT"
-        exit 1
-    fi
-    if [[ ! -f "$RESUME_CKPT/trainer_state.json" || ! -f "$RESUME_CKPT/scheduler.pt" ]]; then
-        echo "Error: resume checkpoint incomplete (need trainer_state.json + scheduler.pt): $RESUME_CKPT"
-        exit 1
-    fi
+	if [[ ! -d "$RESUME_CKPT" ]]; then
+		echo "Error: resume checkpoint not found: $RESUME_CKPT"
+		exit 1
+	fi
+	if [[ ! -f "$RESUME_CKPT/trainer_state.json" || ! -f "$RESUME_CKPT/scheduler.pt" ]]; then
+		echo "Error: resume checkpoint incomplete (need trainer_state.json + scheduler.pt): $RESUME_CKPT"
+		exit 1
+	fi
 else
-    echo "No resume checkpoint (fresh start from epoch 0)."
-    RESUME_CKPT=""
+	echo "No resume checkpoint (fresh start from epoch 0)."
+	RESUME_CKPT=""
 fi
 
 if [[ ! -f "$YAML_FILE" ]]; then
-    echo "Error: YAML config not found: $YAML_FILE"
-    exit 1
+	echo "Error: YAML config not found: $YAML_FILE"
+	exit 1
 fi
 
 # ----- Node-local dataset staging (once per node, before training) -----
@@ -622,7 +622,7 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
 			# LLaMA-Factory launcher reads these and invokes torchrun once per node.
 			export NNODES="${SLURM_NNODES}"
 			export NODE_RANK="${SLURM_NODEID}"
-			export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE}}"
+			export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE:-$(hostname)}}"
 			export MASTER_PORT="${MASTER_PORT:-29500}"
 			export NPROC_PER_NODE="4"
 

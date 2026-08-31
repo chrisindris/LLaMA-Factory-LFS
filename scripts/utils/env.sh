@@ -41,7 +41,7 @@ get_cluster_settings() {
 	elif [[ "${PS1:-}" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "${PS1:-}" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
 		export CLUSTER="${CLUSTER:-KILLARNEY}"
 		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"
-  elif [[ "${PS1:-}" == *"tamia"* ]] || [[ "$HOSTNAME" == *"tamia"* ]] || [[ "${PS1:-}" == *"tg"* ]] || [[ "$HOSTNAME" == *"tg"* ]]; then
+	elif [[ "${PS1:-}" == *"tamia"* ]] || [[ "$HOSTNAME" == *"tamia"* ]] || [[ "${PS1:-}" == *"tg"* ]] || [[ "$HOSTNAME" == *"tg"* ]]; then
 		export CLUSTER="${CLUSTER:-TAMIA}"
 		export RUNNING_MODE="${RUNNING_MODE:-VENV}"
 	elif [[ "$HOSTNAME" == *"nibi"* ]] || [[ "${PS1:-}" == *"nibi"* ]] || [[ "${PS1:-}" == *"g"* ]] || [[ "$HOSTNAME" == *"g"* ]] || [[ "${PS1:-}" == *"c"* ]] || [[ "$HOSTNAME" == *"c"* ]]; then

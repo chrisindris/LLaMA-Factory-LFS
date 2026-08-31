@@ -872,10 +872,13 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         # Stay loss-only for HuggingFace: returning [B, S, vocab] logits makes evaluation_loop
         # concat them on GPU (Qwen2.5-VL vocab is 152064 → tens of GiB per long CoT row).
         if dump_eval and not self.args.predict_with_generate:
-            loss, _, label_ids = super().prediction_step(
+            # Honor prediction_loss_only. Forcing logits makes HuggingFace concat
+            # [B, S, V] on GPU across the eval set (OOM on long VL sequences).
+            # Dump texts independently; drop vocab logits when the loop only needs loss.
+            loss, logits, label_ids = super().prediction_step(
                 model,
                 inputs,
-                prediction_loss_only=True,
+                prediction_loss_only=prediction_loss_only,
                 ignore_keys=ignore_keys,
                 **gen_kwargs,
             )
@@ -907,7 +910,9 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                         f"(mode={self.finetuning_args.eval_prediction_mode}, "
                         f"qids={len([q for q in qids if q])}, batch={batch_size})"
                     )
-            return loss, None, label_ids if label_ids is not None else labels
+            if prediction_loss_only:
+                return loss, None, None
+            return loss, logits, label_ids if label_ids is not None else labels
 
         loss, generated_tokens, _ = super().prediction_step(
             model, inputs, prediction_loss_only=prediction_loss_only, ignore_keys=ignore_keys, **gen_kwargs

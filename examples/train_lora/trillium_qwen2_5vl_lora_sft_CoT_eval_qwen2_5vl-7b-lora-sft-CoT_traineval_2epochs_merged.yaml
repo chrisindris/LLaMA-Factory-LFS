@@ -11,7 +11,7 @@
 ### model
 # Local hub snapshot (offline compute nodes cannot reach huggingface.co).
 # Equivalent hub id: Qwen/Qwen2.5-VL-7B-Instruct  (also works with HF_HUB_OFFLINE=1 + cache_dir)
-model_name_or_path: /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5
+model_name_or_path: /scratch/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs_merged/snapshots/d252e00ff162ba92e9e687644543d4fdd9ccc027
 cache_dir: /scratch/indrisch/huggingface/hub
 image_max_pixels: 65536
 video_max_pixels: 16384
@@ -45,7 +45,7 @@ dataloader_pin_memory: false
 low_cpu_mem_usage: true
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_prediction_dump_smoke
+output_dir: /scratch/indrisch//LLaMA-Factory-copy/models/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs_merged/lora/eval/
 logging_steps: 1
 save_steps: 50
 plot_loss: false
@@ -78,15 +78,9 @@ eval_prediction_mode: teacher_forced    # generate is slower; switch when valida
 # generation knobs (used when *prediction_mode: generate)
 max_new_tokens: 2048
 
-
-# debugging level
-debug: underflow_overflow # debug: none # to turn off debugging, we must simply comment out this line.
-log_level: debug
-log_level_replica: debug
-print_param_status: true
 ### optional mm memory debug (independent of prediction dumps)
-debug_mm_training: true # this is really for fine-grained debugging of memory usage; for runs, output is much cleaner if we turn this off.
-debug_mm_steps: 1
+# debug_mm_training: true
+# debug_mm_steps: 1
 
 ### acceleration
 flash_attn: fa2

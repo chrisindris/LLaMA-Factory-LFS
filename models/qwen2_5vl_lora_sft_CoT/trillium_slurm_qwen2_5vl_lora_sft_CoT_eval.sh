@@ -3,11 +3,11 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_eval-%j.out
 #SBATCH --cpus-per-task=96
-#SBATCH --time=0-01:00:00
+#SBATCH --time=0-12:00:00
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 #SBATCH --mail-type=ALL
-#SBATCH --array=0-0
+#SBATCH --array=0-3
 
 # Trillium wrapper to launch array jobs for evaluating models on datasets.
 
@@ -162,6 +162,7 @@ MODIFY_YAML_ARGS=(
 	--model_name_or_path "${MODEL_NAME_OR_PATH}"
 	--template "${BASE_MODEL_PATH_TEMPLATE}"
 	--output_dir "${OUTPUT_DIR}"
+	--deepspeed "examples/deepspeed/ds_z3_config.json" # this is necessary to use
 )
 # Only set adapter/resume when evaluating a LoRA adapter path (not base/merged).
 if [[ -n "${ADAPTER_PATH:-}" ]]; then
