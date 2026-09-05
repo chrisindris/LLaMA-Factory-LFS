@@ -408,3 +408,46 @@ portable_preflight() {
 
 	return "${_PORTABLE_PF_RC}"
 }
+
+# Create one repo-relative symlink, skipping when the target is unset and
+# refusing to clobber a real directory.
+_portable_link() {
+	local link="$1" target="$2"
+
+	[[ -z "${target}" ]] && return 0
+
+	if [[ ! -e "${target}" ]]; then
+		echo "portable_env: stage target missing, skipping: ${target}" >&2
+		return 0
+	fi
+
+	if [[ -L "${link}" ]]; then
+		[[ "$(readlink -f "${link}")" == "$(readlink -f "${target}")" ]] && return 0
+		rm -f "${link}"
+	elif [[ -e "${link}" ]]; then
+		echo "portable_env: refusing to replace existing path: ${link}" >&2
+		return 0
+	fi
+
+	mkdir -p "$(dirname "${link}")"
+	ln -s "${target}" "${link}"
+	echo "portable_env: linked ${link} -> ${target}" >&2
+}
+
+# Create the repo-relative staging tree and regenerate the portable registry.
+# Idempotent. Run explicitly with PORTABLE_STAGE=1; never called during training.
+portable_stage_assets() {
+	mkdir -p "${PROJECT_DIR}/data/h5" "${PROJECT_DIR}/data/annotations" \
+		"${PROJECT_DIR}/containers" "${PROJECT_DIR}/.cache"
+
+	_portable_link "${PROJECT_DIR}/.cache/huggingface" "${PORTABLE_SRC_HF_CACHE:-}"
+	_portable_link "${PROJECT_DIR}/containers/llamafactory.sif" "${PORTABLE_SRC_SIF:-}"
+	_portable_link "${PROJECT_DIR}/data/h5/ScanNet_h5" "${PORTABLE_SRC_SCANNET_H5:-}"
+	_portable_link "${PROJECT_DIR}/data/h5/Spatial-SSRL_images_h5" "${PORTABLE_SRC_SPATIALSSRL_H5:-}"
+	_portable_link "${PROJECT_DIR}/data/h5/3DThinker10K_images_h5" "${PORTABLE_SRC_THINKER10K_H5:-}"
+
+	echo "portable_env: generating data/annotations/dataset_info.json" >&2
+	python3 "${PROJECT_DIR}/scripts/make_portable_dataset_info.py" \
+		--source "${PROJECT_DIR}/data/dataset_info.json" \
+		--dest "${PROJECT_DIR}/data/annotations/dataset_info.json"
+}
