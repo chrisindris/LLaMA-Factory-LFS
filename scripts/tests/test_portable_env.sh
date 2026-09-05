@@ -249,5 +249,67 @@ rc=0
 assert_rc "1" "${rc}" "an unexpanded optional token fails preflight"
 rm -rf "$(dirname "${TOKEN_TMP}")"
 
+# --- _portable_link / portable_stage_assets ---------------------------------
+
+# Earlier assertions source the resolver only inside subshells. Load it in this
+# harness process before exercising its private staging helpers directly.
+source "${RESOLVER}" || exit 1
+
+stage_root="$(mktemp -d)"
+mkdir -p "${stage_root}/src"
+echo payload >"${stage_root}/src/file.bin"
+
+rc=0
+_portable_link "${stage_root}/link_a" "${stage_root}/src/file.bin" 2>/dev/null || rc=$?
+assert_rc 0 "${rc}" "a fresh link succeeds"
+assert_eq "payload" "$(cat "${stage_root}/link_a")" "the link resolves to the target"
+
+rc=0
+_portable_link "${stage_root}/link_a" "${stage_root}/src/file.bin" 2>/dev/null || rc=$?
+assert_rc 0 "${rc}" "relinking the same target is idempotent"
+
+echo other >"${stage_root}/src/other.bin"
+rc=0
+_portable_link "${stage_root}/link_a" "${stage_root}/src/other.bin" 2>/dev/null || rc=$?
+assert_rc 0 "${rc}" "a stale link is repointed"
+assert_eq "other" "$(cat "${stage_root}/link_a")" "the repointed link resolves to the new target"
+
+# An unset or absent target is a deliberate skip: every PORTABLE_SRC_* is optional.
+rc=0
+_portable_link "${stage_root}/link_unset" "" 2>/dev/null || rc=$?
+assert_rc 0 "${rc}" "an empty target is skipped, not failed"
+assert_eq "absent" "$([[ -e "${stage_root}/link_unset" ]] && echo present || echo absent)" \
+	"no link is made for an empty target"
+
+rc=0
+_portable_link "${stage_root}/link_missing" "${stage_root}/nope" 2>/dev/null || rc=$?
+assert_rc 0 "${rc}" "an absent target is skipped, not failed"
+
+# Real data in the link's place is never destroyed.
+mkdir -p "${stage_root}/occupied"
+echo precious >"${stage_root}/occupied/keep.txt"
+rc=0
+_portable_link "${stage_root}/occupied" "${stage_root}/src/file.bin" 2>/dev/null || rc=$?
+assert_rc 1 "${rc}" "a real directory in the way is a failure, not a skip"
+assert_eq "precious" "$(cat "${stage_root}/occupied/keep.txt")" "the real directory survives"
+
+# A failing link must make staging report failure rather than a false success.
+rc=0
+(
+	PROJECT_DIR="${stage_root}/proj"
+	mkdir -p "${PROJECT_DIR}/scripts" "${PROJECT_DIR}/data"
+	echo '{}' >"${PROJECT_DIR}/data/dataset_info.json"
+	# A no-op stand-in so this assertion isolates the shell's rc accumulation from
+	# the generator. Valid Python, since it is run as `python3 <file>`.
+	echo 'pass' >"${PROJECT_DIR}/scripts/make_portable_dataset_info.py"
+	# Occupy the SIF link path with a real directory so exactly one link fails.
+	mkdir -p "${PROJECT_DIR}/containers/llamafactory.sif"
+	PORTABLE_SRC_SIF="${stage_root}/src/file.bin"
+	portable_stage_assets >/dev/null 2>&1
+) || rc=$?
+assert_rc 1 "${rc}" "one failing link makes portable_stage_assets return non-zero"
+
+rm -rf "${stage_root}"
+
 echo "=== ${PASS_COUNT} passed, failed=${FAILED} ==="
 exit "${FAILED}"

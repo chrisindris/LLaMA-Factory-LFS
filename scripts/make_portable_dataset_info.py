@@ -41,7 +41,7 @@ from typing import Any
 
 
 def rewrite_registry(
-    registry: dict[str, Any], source_dir: str, dest_dir: str
+    registry: dict[str, Any], source_dir: str, dest_dir: str, overrides: dict[str, str] | None = None
 ) -> tuple[dict[str, Any], list[tuple[str, str]]]:
     """Rewrite every ``file_name`` so it resolves against ``dest_dir``.
 
@@ -49,6 +49,10 @@ def rewrite_registry(
         registry: Parsed contents of a dataset_info.json file.
         source_dir: Directory the original relative file names resolve against.
         dest_dir: Directory the rewritten file names must resolve against.
+        overrides: Optional ``{dataset_name: absolute_path}`` replacing the
+            recorded source before the link target is derived. This is how a
+            second user redirects an entry whose registry path belongs to
+            someone else, without editing the registry.
 
     Returns:
         A tuple of the new registry and a list of ``(link_relpath, target)``
@@ -56,16 +60,22 @@ def rewrite_registry(
         ``link_relpath`` is slash-free even when the rewritten ``file_name``
         keeps its trailing slash.
     """
+    overrides = overrides or {}
     new_registry: dict[str, Any] = {}
     links: list[tuple[str, str]] = []
 
     for name, attrs in registry.items():
         if not isinstance(attrs, dict) or "file_name" not in attrs:
-            new_registry[name] = attrs
+            # Copy so the returned registry never shares mutable state with the caller's.
+            new_registry[name] = dict(attrs) if isinstance(attrs, dict) else attrs
             continue
 
         new_attrs = dict(attrs)
-        file_name = attrs["file_name"]
+        file_name = overrides.get(name, attrs["file_name"])
+
+        if not isinstance(file_name, str):
+            new_registry[name] = new_attrs
+            continue
 
         if os.path.isabs(file_name):
             # A trailing slash marks a directory entry. basename() would return
@@ -112,35 +122,103 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--source", default=os.path.join(repo_root, "data", "dataset_info.json"))
     parser.add_argument("--dest", default=os.path.join(repo_root, "data", "annotations", "dataset_info.json"))
     parser.add_argument("--no-symlinks", action="store_true", help="rewrite paths without creating symlinks")
+    parser.add_argument(
+        "--override",
+        action="append",
+        default=[],
+        metavar="NAME=PATH",
+        help="replace one dataset's recorded source path; repeatable",
+    )
+    parser.add_argument(
+        "--require",
+        default="",
+        metavar="NAME[,NAME...]",
+        help="datasets whose sources must exist; a missing source elsewhere only warns",
+    )
     args = parser.parse_args(argv)
+
+    overrides: dict[str, str] = {}
+    for item in args.override:
+        name, sep, path = item.partition("=")
+        if not sep or not name or not path:
+            parser.error(f"--override needs NAME=PATH, got: {item}")
+
+        overrides[name] = path
+
+    required = {n for n in args.require.split(",") if n}
 
     with open(args.source, encoding="utf-8") as f:
         registry = json.load(f)
 
+    # A typo in --require would otherwise silently downgrade a required dataset
+    # to "warn only", which is the failure mode this flag exists to prevent.
+    unknown = sorted(required - set(registry))
+    if unknown:
+        parser.error(f"--require names datasets absent from {args.source}: {', '.join(unknown)}")
+
     source_dir = os.path.dirname(os.path.abspath(args.source))
     dest_dir = os.path.dirname(os.path.abspath(args.dest))
-    new_registry, links = rewrite_registry(registry, source_dir, dest_dir)
+    new_registry, links = rewrite_registry(registry, source_dir, dest_dir, overrides)
 
     exit_code = 0
+    in_place = 0
+    missing_required: list[str] = []
+    skipped = 0
     for link_relpath, target in links:
+        dataset = link_relpath.split("/", 1)[0]
+        # Every entry is rewritten, but only the datasets this job actually loads may
+        # fail the run. Seven of the nine absolute entries belong to unrelated ablations;
+        # failing on those would make the exit code useless as a gate.
+        is_required = dataset in required
+
         if not os.path.exists(target):
-            print(f"missing annotation source for {link_relpath}: {target}")
-            exit_code = 1
+            if is_required:
+                missing_required.append(dataset)
+                print(f"missing source for {link_relpath}: {target}")
+                exit_code = 1
+            else:
+                # Summarised below rather than printed per entry: on a machine that
+                # only has this job's data, seven such lines every run would bury the
+                # two that matter.
+                skipped += 1
+
             continue
 
-        if not args.no_symlinks:
-            try:
-                _create_symlink(os.path.join(dest_dir, link_relpath), target)
-            except (OSError, RuntimeError) as err:
-                print(f"cannot link {link_relpath}: {err}")
+        if args.no_symlinks:
+            continue
+
+        try:
+            # Counts a link that was already correct too, so the number describes the
+            # resulting tree rather than how much churn this particular run caused.
+            _create_symlink(os.path.join(dest_dir, link_relpath), target)
+            in_place += 1
+        except (OSError, RuntimeError) as err:
+            print(f"cannot link {link_relpath}: {err}")
+            if is_required:
                 exit_code = 1
 
     os.makedirs(dest_dir, exist_ok=True)
-    with open(args.dest, "w", encoding="utf-8") as f:
-        json.dump(new_registry, f, indent=2)
-        f.write("\n")
+    # Publish atomically and only on success: a registry whose links are dangling
+    # would otherwise satisfy preflight's existence check and the job would die
+    # after the allocation starts, on a node that cannot fetch the missing data.
+    if skipped:
+        print(f"skipped {skipped} entries that are absent and not required")
 
-    print(f"wrote {args.dest} ({len(new_registry)} entries, {len(links)} symlinked)")
+    if exit_code == 0:
+        tmp_dest = f"{args.dest}.tmp"
+        with open(tmp_dest, "w", encoding="utf-8") as f:
+            json.dump(new_registry, f, indent=2)
+            f.write("\n")
+
+        os.replace(tmp_dest, args.dest)
+        print(f"wrote {args.dest} ({len(new_registry)} entries, {in_place} links in place)")
+    else:
+        print(
+            f"not writing {args.dest}: required datasets unavailable "
+            f"({', '.join(sorted(set(missing_required)))}). "
+            f"Set the matching PORTABLE_SRC_*_ANNOTATION in scripts/site.env."
+        )
+
     return exit_code
 
 
