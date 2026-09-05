@@ -18,7 +18,11 @@
 - Ruff config (`pyproject.toml`): `line-length = 119`, `quote-style = "double"`, `target-version = "py39"`, isort `known-first-party = ["llamafactory"]`, `lines-after-imports = 2`, pydocstyle `convention = "google"`.
 - Python floor is 3.9: no `match`, no `X | Y` runtime unions, no `dict[str, str]` in runtime-evaluated annotations without `from __future__ import annotations`.
 - `shellcheck` is NOT installed in this environment. Shell verification uses `bash -n` only.
-- `make license` is already failing on the pre-existing `scripts/assign_question_ids.py`. Do not fix it; do not add new failures.
+- `tests/check_license.py` asserts on the FIRST file it finds without a header and aborts, so
+  it cannot be used as a pass/fail gate here. Two pre-existing offenders exist:
+  `scripts/assign_question_ids.py` and `tests/hparams/test_resume_from_adapter.py`. Do not fix
+  either. Verify new files individually instead, e.g.
+  `head -1 <file> | grep -q Copyright && head -1 <file> | grep -q 2025 && head -1 <file> | grep -q LlamaFactory`.
 - Never run GPU training on a login node. GPU work goes through `sbatch`.
 - Offline env vars must be set exactly: `HF_HUB_OFFLINE=1`, `TRANSFORMERS_OFFLINE=1`, `HF_DATASETS_OFFLINE=1`, `WANDB_MODE=offline`, `DISABLE_VERSION_CHECK=1`, `FORCE_TORCHRUN=1`.
 - Repo root sentinel: a directory is the repo root if it contains BOTH `setup.py` and `src/llamafactory`.
@@ -278,7 +282,6 @@ Create `tests/scripts/test_sysconfigtool.py`:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import sys
 from pathlib import Path
 
@@ -503,7 +506,15 @@ Expected: `JSON_OK`
 Run: `ruff check scripts/sysconfigtool.py tests/scripts/test_sysconfigtool.py && ruff format --check scripts/sysconfigtool.py tests/scripts/test_sysconfigtool.py`
 Expected: `All checks passed!` and `2 files already formatted`.
 
-Run: `python3 tests/check_license.py tests` — Expected: exit 0, no assertion error.
+Verify the license header on the new file directly (`check_license.py` aborts on a
+pre-existing offender before it reaches ours):
+
+```bash
+for kw in Copyright 2025 LlamaFactory; do
+  head -1 tests/scripts/test_sysconfigtool.py | grep -q "$kw" || echo "MISSING $kw"
+done; echo LICENSE_HEADER_OK
+```
+Expected: `LICENSE_HEADER_OK` with no `MISSING` lines.
 
 - [ ] **Step 6: Commit**
 
@@ -1220,8 +1231,17 @@ Expected: PASS — 9 passed.
 Run: `ruff check scripts/make_portable_dataset_info.py tests/scripts/test_make_portable_dataset_info.py && ruff format --check scripts/make_portable_dataset_info.py tests/scripts/test_make_portable_dataset_info.py`
 Expected: `All checks passed!` and `2 files already formatted`.
 
-Run: `python3 tests/check_license.py tests` and `python3 tests/check_license.py scripts 2>&1 | grep -c make_portable_dataset_info`
-Expected: the `tests` check exits 0; the grep returns `1` (the file is checked) with no assertion naming it.
+Verify the license header on both new files directly (`check_license.py` aborts on a
+pre-existing offender before it reaches ours):
+
+```bash
+for f in scripts/make_portable_dataset_info.py tests/scripts/test_make_portable_dataset_info.py; do
+  for kw in Copyright 2025 LlamaFactory; do
+    head -1 "$f" | grep -q "$kw" || echo "MISSING $kw in $f"
+  done
+done; echo LICENSE_HEADERS_OK
+```
+Expected: `LICENSE_HEADERS_OK` with no `MISSING` lines.
 
 - [ ] **Step 5: Append `portable_stage_assets` to `scripts/utils/portable_env.sh`**
 
@@ -1722,10 +1742,9 @@ Trillium run.
 bash scripts/tests/test_portable_env.sh
 make style && make quality
 CUDA_VISIBLE_DEVICES= WANDB_DISABLED=true python -m pytest tests/scripts -v
-python3 tests/check_license.py tests
 git diff --stat
 ```
-Expected: bash suite `23 passed, failed=0`; ruff reports all checks passed; `tests/scripts` shows 20 passed; the license check on `tests` exits 0. Confirm `git diff --stat` lists no `trillium_*`, `killarney_*`, `nibi_*`, `rorqual_*`, or unprefixed `slurm_*` file, and no change to `data/dataset_info.json`.
+Expected: bash suite `23 passed, failed=0`; ruff reports all checks passed; `tests/scripts` shows 20 passed. Confirm `git diff --stat` lists no `trillium_*`, `killarney_*`, `nibi_*`, `rorqual_*`, or unprefixed `slurm_*` file, and no change to `data/dataset_info.json`.
 
 - [ ] **Step 7: Commit**
 
