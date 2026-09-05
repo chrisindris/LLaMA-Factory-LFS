@@ -90,7 +90,7 @@ assert_eq "9.0" "${arch}" "TORCH_CUDA_ARCH_LIST is 9.0 for h100"
 
 # Pre-set environment wins over defaults.
 actual="$(cd /tmp && SCANNET_H5_DIR=/custom/scannet CLUSTER=PORTABLE RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
-	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; echo "$SCANNET_H5_DIR"' _ "${RESOLVER}")"
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$SCANNET_H5_DIR"' _ "${RESOLVER}" 2>/dev/null)"
 assert_eq "/custom/scannet" "${actual}" "pre-set env overrides default"
 
 # site.env is honoured, but loses to pre-set env.
@@ -122,8 +122,52 @@ assert_eq "11111 offline" "${actual}" "offline flags set"
 
 # No resolved path contains an unexpanded token or a hardcoded username.
 actual="$(cd /tmp && CLUSTER=PORTABLE RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
-	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; echo "$HF_HOME $SIF_FILE $VENV_LLAMAFACTORY $MEDIA_DIR $APPTAINER_OVERLAY"' _ "${RESOLVER}" | grep -cE '\$\{|indrisch')"
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$HF_HOME $SIF_FILE $VENV_LLAMAFACTORY $MEDIA_DIR $APPTAINER_OVERLAY"' _ "${RESOLVER}" 2>/dev/null | grep -cE '\$\{|indrisch')"
 assert_eq "0" "${actual}" "no unexpanded tokens and no hardcoded username"
+
+# portable_init succeeds. Without this, an assertion that merely echoes a
+# variable can pass while portable_init is missing entirely.
+rc=0
+(cd /tmp && CLUSTER=PORTABLE RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1' _ "${RESOLVER}") || rc=$?
+assert_rc "0" "${rc}" "portable_init returns 0"
+
+# The sysconfig tier is really consulted, and it reads the PORTABLE section.
+actual="$(cd /tmp && CLUSTER=PORTABLE PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_resolve_project_dir >/dev/null 2>&1; _portable_setting SIF_FILE' _ "${RESOLVER}")"
+assert_eq "${REPO}/containers/llamafactory.sif" "${actual}" "_portable_setting reads expanded PORTABLE value"
+
+# An unknown key is a miss, not an empty string, so _portable_default can fall
+# through to its repo-relative default.
+rc=0
+(cd /tmp && CLUSTER=PORTABLE PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_resolve_project_dir >/dev/null 2>&1; _portable_setting NO_SUCH_KEY_XYZ' _ "${RESOLVER}" >/dev/null) || rc=$?
+assert_rc "1" "${rc}" "_portable_setting returns nonzero for an unknown key"
+
+# THE CENTRAL PORTABILITY GUARANTEE: on a legacy cluster whose sysconfig section
+# is full of another user's absolute paths, none of them may leak in. Only the
+# PORTABLE section is consulted for paths.
+actual="$(cd /tmp && CLUSTER=TRILLIUM RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$HF_HOME $HF_HUB_CACHE $SIF_FILE $VENV_LLAMAFACTORY $MEDIA_DIR $SCANNET_H5_DIR $TRITON_CACHE_DIR"' _ "${RESOLVER}" 2>/dev/null | grep -cE 'indrisch|def-wangcs')"
+assert_eq "0" "${actual}" "legacy cluster sections never supply paths"
+
+# site.env can pin CLUSTER, which requires it to load BEFORE detection.
+CL_TMP="$(mktemp -d)"
+printf 'export CLUSTER=KILLARNEY\n' >"${CL_TMP}/site.env"
+actual="$(cd /tmp && env -u CLUSTER PORTABLE_SITE_ENV="${CL_TMP}/site.env" RUNNING_MODE=SHELL \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$CLUSTER $TORCH_CUDA_ARCH_LIST"' _ "${RESOLVER}" 2>/dev/null)"
+assert_eq "KILLARNEY 8.9" "${actual}" "site.env can pin CLUSTER before detection"
+rm -rf "${CL_TMP}"
+
+# A typo'd CLUSTER falls back to PORTABLE instead of running an unknown profile.
+actual="$(cd /tmp && CLUSTER=TRILIUM RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init 2>/dev/null || exit 1; echo "$CLUSTER"' _ "${RESOLVER}")"
+assert_eq "PORTABLE" "${actual}" "unknown CLUSTER normalizes to PORTABLE"
+
+# The Python hygiene vars are part of the managed set and get exported.
+actual="$(cd /tmp && CLUSTER=PORTABLE RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$PYTHONUNBUFFERED$PYTHONNOUSERSITE"' _ "${RESOLVER}" 2>/dev/null)"
+assert_eq "11" "${actual}" "PYTHONUNBUFFERED and PYTHONNOUSERSITE are exported"
 
 echo "=== ${PASS_COUNT} passed, failed=${FAILED} ==="
 exit "${FAILED}"

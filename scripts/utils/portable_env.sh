@@ -67,12 +67,32 @@ portable_resolve_project_dir() {
 	return 1
 }
 
+# Clusters this library knows how to configure.
+PORTABLE_KNOWN_CLUSTERS=(RORQUAL TRILLIUM KILLARNEY TAMIA NIBI PORTABLE)
+
+_portable_is_known_cluster() {
+	local candidate="$1" known
+	for known in "${PORTABLE_KNOWN_CLUSTERS[@]}"; do
+		[[ "${candidate}" == "${known}" ]] && return 0
+	done
+	return 1
+}
+
 # Detect the cluster and default running mode. Never overwrites a value the
-# caller already set, so CLUSTER=X in the environment always wins.
+# caller already set, so CLUSTER=X in the environment (or in site.env, which is
+# loaded before this runs) always wins.
 portable_detect_cluster() {
 	local host="${HOSTNAME:-$(hostname 2>/dev/null || echo unknown)}"
 
-	if [[ -z "${CLUSTER:-}" ]]; then
+	if [[ -n "${CLUSTER:-}" ]]; then
+		CLUSTER="${CLUSTER^^}"
+		# Reject a typo rather than silently running with an unknown profile.
+		if ! _portable_is_known_cluster "${CLUSTER}"; then
+			echo "portable_env: unknown CLUSTER '${CLUSTER}' (expected one of:" \
+				"${PORTABLE_KNOWN_CLUSTERS[*]}); using PORTABLE" >&2
+			CLUSTER="PORTABLE"
+		fi
+	else
 		case "${host}" in
 		*rorqual* | rg* | rc*) CLUSTER="RORQUAL" ;;
 		*trillium* | trig* | tri*) CLUSTER="TRILLIUM" ;;
@@ -86,7 +106,6 @@ portable_detect_cluster() {
 		esac
 	fi
 
-	CLUSTER="${CLUSTER^^}"
 	export CLUSTER
 
 	if [[ -z "${RUNNING_MODE:-}" ]]; then
@@ -111,7 +130,7 @@ PORTABLE_MANAGED_VARS=(
 	TRITON_CACHE_DIR TORCH_EXTENSIONS_DIR PYTORCH_KERNEL_CACHE_PATH MPLCONFIGDIR
 	FLASHINFER_WORKSPACE_BASE WANDB_DIR WANDB_CACHE_DIR TORCH_CUDA_ARCH_LIST
 	HF_HUB_OFFLINE TRANSFORMERS_OFFLINE HF_DATASETS_OFFLINE WANDB_MODE
-	DISABLE_VERSION_CHECK FORCE_TORCHRUN
+	DISABLE_VERSION_CHECK FORCE_TORCHRUN PYTHONUNBUFFERED PYTHONNOUSERSITE
 )
 
 # Source scripts/site.env if present, so operators can pin site paths without
@@ -133,8 +152,10 @@ portable_load_site_env() {
 	local -a preset_names=() preset_values=()
 	local name
 	for name in "${PORTABLE_MANAGED_VARS[@]}"; do
-		# ${!name+x} tests "is set", so an intentionally empty value counts.
-		if [[ -n "${!name+x}" ]]; then
+		# Non-empty, matching _portable_default: an empty value counts as unset
+		# everywhere in this library. Using "is set" semantics here instead would
+		# preserve an empty value that _portable_default then overwrites anyway.
+		if [[ -n "${!name:-}" ]]; then
 			preset_names+=("${name}")
 			preset_values+=("${!name}")
 		fi
@@ -154,31 +175,61 @@ portable_load_site_env() {
 	fi
 }
 
-# Pull cluster values from sysconfig.json when available. Values equal to "None"
-# or containing an unexpanded token are ignored.
-_portable_sysconfig() {
+# Read a setting from the PORTABLE section of sysconfig.json.
+#
+# ONLY the PORTABLE section is consulted, never the legacy per-cluster sections.
+# Those hold another user's absolute paths (/scratch/indrisch/...), which is
+# precisely what this library exists to remove — inheriting them would recreate
+# the non-portability on the very clusters we most need to run on. The detected
+# CLUSTER still drives module loads and the CUDA arch list; it never supplies a
+# path.
+#
+# A value is rejected when empty, literally "None", or still containing "${":
+# an unexpanded token means the variable was unset, and using it would silently
+# produce a path rooted at the filesystem root.
+_portable_setting() {
 	local key="$1" value=""
 
 	command -v python3 >/dev/null 2>&1 || return 1
 
 	value="$(PROJECT_DIR="${PROJECT_DIR}" PYTHONPATH="${PROJECT_DIR}/scripts${PYTHONPATH:+:${PYTHONPATH}}" \
-		python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', '${key}') or '')" 2>/dev/null)" || return 1
+		python3 -c "import sysconfigtool; print(sysconfigtool.read('PORTABLE', '${key}') or '')" 2>/dev/null)" || return 1
 
 	[[ -z "${value}" || "${value}" == "None" || "${value}" == *'${'* ]] && return 1
 	printf '%s' "${value}"
 }
 
-# Assign a variable from, in order: existing env, sysconfig, repo-relative default.
+# BEST_GPU is a hardware fact about the detected cluster rather than a path, so
+# this is the one lookup that reads a per-cluster section.
+_portable_cluster_best_gpu() {
+	local value=""
+
+	command -v python3 >/dev/null 2>&1 || return 1
+
+	value="$(PROJECT_DIR="${PROJECT_DIR}" PYTHONPATH="${PROJECT_DIR}/scripts${PYTHONPATH:+:${PYTHONPATH}}" \
+		python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'BEST_GPU') or '')" 2>/dev/null)" || return 1
+
+	[[ -z "${value}" || "${value}" == "None" ]] && return 1
+	printf '%s' "${value}"
+}
+
+# Assign a variable from, in order: existing environment, the PORTABLE section of
+# sysconfig.json, then the repo-relative default.
+#
+# An empty value counts as UNSET everywhere in this library. None of these
+# variables has a meaningful empty value, and treating "" as set would strand a
+# path at the filesystem root. Keep this consistent with the snapshot in
+# portable_load_site_env.
 _portable_default() {
-	local name="$1" default="$2" from_sysconfig=""
+	local name="$1" default="$2" from_config=""
 
 	if [[ -n "${!name:-}" ]]; then
 		export "${name}"
 		return 0
 	fi
 
-	if from_sysconfig="$(_portable_sysconfig "${name}")"; then
-		printf -v "${name}" '%s' "${from_sysconfig}"
+	if from_config="$(_portable_setting "${name}")"; then
+		printf -v "${name}" '%s' "${from_config}"
 	else
 		printf -v "${name}" '%s' "${default}"
 	fi
@@ -186,38 +237,45 @@ _portable_default() {
 	export "${name}"
 }
 
+# Resolve every managed path. Uniformly via _portable_default, so the documented
+# precedence (environment > site.env > PORTABLE sysconfig > repo-relative
+# default) holds for every variable rather than only for some of them.
 portable_set_paths() {
 	local cache_base="${SLURM_TMPDIR:-${PROJECT_DIR}/.cache}"
 
 	_portable_default HF_HOME "${PROJECT_DIR}/.cache/huggingface"
 	_portable_default HF_HUB_CACHE "${HF_HOME}"
-	export TRANSFORMERS_CACHE="${TRANSFORMERS_CACHE:-${HF_HUB_CACHE}}"
-	export HUGGINGFACE_HUB_CACHE="${HUGGINGFACE_HUB_CACHE:-${HF_HUB_CACHE}}"
-	export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-${HF_HUB_CACHE}}"
-	export HF_HUB_DISABLE_XET="${HF_HUB_DISABLE_XET:-1}"
+	_portable_default TRANSFORMERS_CACHE "${HF_HUB_CACHE}"
+	_portable_default HUGGINGFACE_HUB_CACHE "${HF_HUB_CACHE}"
+	_portable_default HF_DATASETS_CACHE "${HF_HUB_CACHE}"
+	_portable_default HF_HUB_DISABLE_XET "1"
 
 	_portable_default SIF_FILE "${PROJECT_DIR}/containers/llamafactory.sif"
 	_portable_default VENV_LLAMAFACTORY "${PROJECT_DIR}/.venv"
-	export APPTAINER_OVERLAY="${APPTAINER_OVERLAY:-${PROJECT_DIR}/apptainer/overlay.img}"
+	_portable_default APPTAINER_OVERLAY "${PROJECT_DIR}/apptainer/overlay.img"
 
 	_portable_default SCANNET_H5_DIR "${PROJECT_DIR}/data/h5/ScanNet_h5/scans"
 	_portable_default SPATIALSSRL_H5_DIR "${PROJECT_DIR}/data/h5/Spatial-SSRL_images_h5"
 	_portable_default THINKER10K_H5_DIR "${PROJECT_DIR}/data/h5/3DThinker10K_images_h5"
 	_portable_default MEDIA_DIR "${PROJECT_DIR}/data/h5/ScanNet_h5"
 
-	export TRITON_CACHE_DIR="${TRITON_CACHE_DIR:-${cache_base}/.triton_cache}"
-	export TORCH_EXTENSIONS_DIR="${TORCH_EXTENSIONS_DIR:-${cache_base}/torch_extensions}"
-	export PYTORCH_KERNEL_CACHE_PATH="${PYTORCH_KERNEL_CACHE_PATH:-${cache_base}/torch/kernels}"
-	export MPLCONFIGDIR="${MPLCONFIGDIR:-${cache_base}/matplotlib}"
-	export FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE:-${cache_base}/flashinfer}"
-	export WANDB_DIR="${WANDB_DIR:-${PROJECT_DIR}/wandb}"
-	export WANDB_CACHE_DIR="${WANDB_CACHE_DIR:-${cache_base}/.cache/wandb}"
+	# Caches prefer $SLURM_TMPDIR: node-local scratch is much faster than shared
+	# storage and the scheduler reaps it. They are deliberately absent from
+	# sysconfig.json, because the right value is only known at runtime — but they
+	# still route through _portable_default so an operator CAN pin them.
+	_portable_default TRITON_CACHE_DIR "${cache_base}/.triton_cache"
+	_portable_default TORCH_EXTENSIONS_DIR "${cache_base}/torch_extensions"
+	_portable_default PYTORCH_KERNEL_CACHE_PATH "${cache_base}/torch/kernels"
+	_portable_default MPLCONFIGDIR "${cache_base}/matplotlib"
+	_portable_default FLASHINFER_WORKSPACE_BASE "${cache_base}/flashinfer"
+	_portable_default WANDB_DIR "${PROJECT_DIR}/wandb"
+	_portable_default WANDB_CACHE_DIR "${cache_base}/.cache/wandb"
 
-	# L40S on Killarney is Ada (8.9); do not trust BEST_GPU=h100 there.
 	if [[ -z "${TORCH_CUDA_ARCH_LIST:-}" ]]; then
+		# L40S on Killarney is Ada (8.9); its sysconfig section wrongly says h100.
 		if [[ "${CLUSTER}" == "KILLARNEY" ]]; then
 			TORCH_CUDA_ARCH_LIST="8.9"
-		elif [[ "$(_portable_sysconfig BEST_GPU || echo h100)" == "h100" ]]; then
+		elif [[ "$(_portable_cluster_best_gpu || echo h100)" == "h100" ]]; then
 			TORCH_CUDA_ARCH_LIST="9.0"
 		else
 			TORCH_CUDA_ARCH_LIST="8.0"
@@ -226,6 +284,8 @@ portable_set_paths() {
 	export TORCH_CUDA_ARCH_LIST
 }
 
+# Compute nodes have no network, so every hub client must be told up front.
+# Keep this list in sync with PORTABLE_MANAGED_VARS.
 portable_set_offline() {
 	export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"
 	export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
@@ -233,14 +293,17 @@ portable_set_offline() {
 	export WANDB_MODE="${WANDB_MODE:-offline}"
 	export DISABLE_VERSION_CHECK="${DISABLE_VERSION_CHECK:-1}"
 	export FORCE_TORCHRUN="${FORCE_TORCHRUN:-1}"
-	export PYTHONUNBUFFERED=1
-	export PYTHONNOUSERSITE=1
+	export PYTHONUNBUFFERED="${PYTHONUNBUFFERED:-1}"
+	export PYTHONNOUSERSITE="${PYTHONNOUSERSITE:-1}"
 }
 
 portable_init() {
 	portable_resolve_project_dir || return 1
-	portable_detect_cluster
+	# site.env loads BEFORE detection so it can pin CLUSTER and RUNNING_MODE.
+	# Detection would otherwise have already set them, and the loader's snapshot
+	# would see them as pre-set and restore them over the operator's choice.
 	portable_load_site_env
+	portable_detect_cluster
 	portable_set_paths
 	portable_set_offline
 
