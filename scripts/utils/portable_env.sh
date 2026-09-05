@@ -318,17 +318,27 @@ portable_init() {
 	export PYTHONPATH="${PROJECT_DIR}/src:${PROJECT_DIR}/scripts${PYTHONPATH:+:${PYTHONPATH}}"
 }
 
-_PORTABLE_PF_RC=0
-
 _portable_pf_row() {
 	local status="$1" label="$2" path="$3"
 	printf '%-4s %-24s %s\n' "${status}" "${label}" "${path}"
 }
 
-# Required artifact: absence fails the job.
+# A path still holding a ${...} token was built from an unset variable. Treating
+# it as a real path would resolve it somewhere under the filesystem root, so it is
+# never "present" — and never merely "missing" either, since the fix is to define
+# the variable rather than to stage a file.
+_portable_pf_unresolved() {
+	[[ "$1" == *'${'* ]]
+}
+
+# Required artifact: absence, or an unresolved token, fails the job.
 _portable_pf_require() {
 	local label="$1" path="$2"
-	if [[ -n "${path}" && -e "${path}" ]]; then
+	if _portable_pf_unresolved "${path}"; then
+		# Show the offending value: the operator needs it to find the culprit.
+		_portable_pf_row "BAD" "${label}" "unexpanded token in ${path}"
+		_PORTABLE_PF_RC=1
+	elif [[ -n "${path}" && -e "${path}" ]]; then
 		_portable_pf_row "OK" "${label}" "${path}"
 	else
 		_portable_pf_row "MISS" "${label}" "${path:-<unset>}"
@@ -336,10 +346,14 @@ _portable_pf_require() {
 	fi
 }
 
-# Optional artifact: absence is reported but does not fail the job.
+# Optional artifact: absence only warns. An unresolved token still fails, because
+# it is a configuration error rather than an absent file.
 _portable_pf_optional() {
 	local label="$1" path="$2"
-	if [[ -n "${path}" && -e "${path}" ]]; then
+	if _portable_pf_unresolved "${path}"; then
+		_portable_pf_row "BAD" "${label}" "unexpanded token in ${path}"
+		_PORTABLE_PF_RC=1
+	elif [[ -n "${path}" && -e "${path}" ]]; then
 		_portable_pf_row "OK" "${label}" "${path}"
 	else
 		_portable_pf_row "WARN" "${label}" "${path:-<unset>}"
@@ -349,7 +363,7 @@ _portable_pf_optional() {
 # Validate every resolved path before the job consumes GPU time. Compute nodes
 # have no network, so a missing artifact can never be fetched at runtime.
 portable_preflight() {
-	_PORTABLE_PF_RC=0
+	local _PORTABLE_PF_RC=0
 
 	echo "=== portable preflight ==="
 	echo "PROJECT_DIR:  ${PROJECT_DIR}"
@@ -386,7 +400,8 @@ portable_preflight() {
 	if [[ "${_PORTABLE_PF_RC}" -eq 0 ]]; then
 		echo "preflight: PASS"
 	else
-		echo "preflight: FAIL — stage the MISS entries above, or set overrides in scripts/site.env"
+		echo "preflight: FAIL — stage the MISS entries above (or set overrides in scripts/site.env);"
+		echo "           a BAD entry means an unset variable, not a missing file"
 		echo "           see docs/superpowers/specs/2026-09-05-portable-slurm-wrapper-design.md"
 	fi
 	echo "=========================="

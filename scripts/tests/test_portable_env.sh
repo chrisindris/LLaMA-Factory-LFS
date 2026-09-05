@@ -209,9 +209,45 @@ out="$(cd /tmp && CLUSTER=PORTABLE RUNNING_MODE=VENV PORTABLE_SKIP_SITE_ENV=1 \
 	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; portable_preflight 2>&1' _ "${RESOLVER}")"
 assert_eq "yes" "$(grep -qE '^OK +deepspeed_config' <<<"${out}" && echo yes || echo no)" "preflight finds deepspeed config"
 
-# Preflight output never leaks an unexpanded token.
+# Require the table to have rendered. Without this, the token assertion below
+# passes even when portable_preflight does not exist, because `out` is then just
+# "command not found" and grep -c reports 0 on it.
+assert_eq "yes" "$(grep -q '=== portable preflight ===' <<<"${out}" && echo yes || echo no)" "preflight renders its table"
+
+# A correctly resolved environment leaks no token into the output.
 assert_eq "0" "$(grep -cE '\$\{' <<<"${out}")" "preflight output has no unexpanded tokens"
 rm -rf "$(dirname "${PF_TMP}")"
+
+# A path carrying a literal ${...} must be refused, not reported OK because some
+# ancestor happens to exist. _portable_default screens tokens out of sysconfig
+# values only, so an environment or site.env value can still carry one.
+TOKEN_TMP="$(mktemp -d)/token-root"
+mkdir -p "${TOKEN_TMP}/scripts/utils" "${TOKEN_TMP}/src/llamafactory" \
+	"${TOKEN_TMP}/examples/deepspeed" "${TOKEN_TMP}/data/annotations" \
+	"${TOKEN_TMP}/.venv/bin" "${TOKEN_TMP}/\${NOT_SET_ANYWHERE}" \
+	"${TOKEN_TMP}/\${OPTIONAL_NOT_SET}"
+cp "${RESOLVER}" "${TOKEN_TMP}/scripts/utils/portable_env.sh"
+touch "${TOKEN_TMP}/setup.py" "${TOKEN_TMP}/examples/deepspeed/ds_z2_config.json" \
+	"${TOKEN_TMP}/data/annotations/dataset_info.json" "${TOKEN_TMP}/.venv/bin/activate"
+rc=0
+out="$(cd "${TOKEN_TMP}" && env -u PORTABLE_YAML_FILE HF_HUB_CACHE='${NOT_SET_ANYWHERE}' \
+	SCANNET_H5_DIR="${TOKEN_TMP}" SPATIALSSRL_H5_DIR="${TOKEN_TMP}" THINKER10K_H5_DIR="${TOKEN_TMP}" \
+	MEDIA_DIR="${TOKEN_TMP}" VENV_LLAMAFACTORY="${TOKEN_TMP}/.venv" \
+	CLUSTER=PORTABLE RUNNING_MODE=VENV PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; portable_preflight 2>&1' _ \
+	"${TOKEN_TMP}/scripts/utils/portable_env.sh")" || rc=$?
+assert_rc "1" "${rc}" "an unexpanded token fails preflight"
+assert_eq "yes" "$(grep -qE '^BAD +hf_cache' <<<"${out}" && echo yes || echo no)" "an unexpanded token is reported as BAD"
+
+rc=0
+(cd "${TOKEN_TMP}" && env -u PORTABLE_YAML_FILE HF_HUB_CACHE="${TOKEN_TMP}" \
+	SCANNET_H5_DIR="${TOKEN_TMP}" SPATIALSSRL_H5_DIR="${TOKEN_TMP}" THINKER10K_H5_DIR="${TOKEN_TMP}" \
+	MEDIA_DIR='${OPTIONAL_NOT_SET}' VENV_LLAMAFACTORY="${TOKEN_TMP}/.venv" \
+	CLUSTER=PORTABLE RUNNING_MODE=VENV PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; portable_preflight >/dev/null 2>&1' _ \
+	"${TOKEN_TMP}/scripts/utils/portable_env.sh") || rc=$?
+assert_rc "1" "${rc}" "an unexpanded optional token fails preflight"
+rm -rf "$(dirname "${TOKEN_TMP}")"
 
 echo "=== ${PASS_COUNT} passed, failed=${FAILED} ==="
 exit "${FAILED}"
