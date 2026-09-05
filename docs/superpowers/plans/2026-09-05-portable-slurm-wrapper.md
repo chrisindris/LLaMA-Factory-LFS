@@ -539,7 +539,16 @@ git commit -m "feat(scripts): expand \${VAR} in sysconfig reads and add PORTABLE
   - `portable_set_paths()` — exports `HF_HOME`, `HF_HUB_CACHE`, `TRANSFORMERS_CACHE`, `HUGGINGFACE_HUB_CACHE`, `HF_DATASETS_CACHE`, `SIF_FILE`, `APPTAINER_OVERLAY`, `VENV_LLAMAFACTORY`, `SCANNET_H5_DIR`, `SPATIALSSRL_H5_DIR`, `THINKER10K_H5_DIR`, `TRITON_CACHE_DIR`, `TORCH_EXTENSIONS_DIR`, `PYTORCH_KERNEL_CACHE_PATH`, `FLASHINFER_WORKSPACE_BASE`, `WANDB_DIR`, `TORCH_CUDA_ARCH_LIST`.
   - `portable_set_offline()` — exports the six offline vars from Global Constraints.
   - `portable_init()` — convenience: resolve dir, detect cluster, load `site.env`, set paths, set offline.
-- Precedence, highest first: pre-set environment, `scripts/site.env`, `sysconfig.json` for the detected `CLUSTER`, repo-relative defaults.
+- Precedence for **location settings** (everything `portable_set_paths` resolves, plus
+  `TORCH_CUDA_ARCH_LIST`), highest first: pre-set environment, `scripts/site.env`, the `PORTABLE`
+  section of `sysconfig.json`, repo-relative default. Uniform — every such variable goes through
+  `_portable_default`.
+- **Offline policy flags** (`HF_HUB_OFFLINE`, `TRANSFORMERS_OFFLINE`, `HF_DATASETS_OFFLINE`,
+  `WANDB_MODE`, `DISABLE_VERSION_CHECK`, `FORCE_TORCHRUN`, `PYTHONUNBUFFERED`, `PYTHONNOUSERSITE`)
+  are deliberately NOT part of that tier: they are environment-overridable only. A compute node has
+  no network, so these must be forced on, and allowing a checked-in JSON file to switch offline mode
+  off would be a footgun rather than a feature. They are still in `PORTABLE_MANAGED_VARS`, because
+  the `site.env` snapshot must protect them.
 
 - [ ] **Step 1: Write the failing test**
 
@@ -571,7 +580,7 @@ export THINKER10K_H5_DIR=/from/site/env/thinker
 SITEEOF
 actual="$(cd /tmp && PORTABLE_SITE_ENV="${SITE_TMP}/site.env" THINKER10K_H5_DIR=/from/real/env \
 	CLUSTER=PORTABLE RUNNING_MODE=SHELL \
-	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; echo "$SPATIALSSRL_H5_DIR|$THINKER10K_H5_DIR"' _ "${RESOLVER}")"
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$SPATIALSSRL_H5_DIR|$THINKER10K_H5_DIR"' _ "${RESOLVER}" 2>/dev/null)"
 assert_eq "/from/site/env|/from/real/env" "${actual}" "site.env applies; pre-set env still wins"
 rm -rf "${SITE_TMP}"
 
@@ -638,12 +647,33 @@ assert_eq "PORTABLE" "${actual}" "unknown CLUSTER normalizes to PORTABLE"
 actual="$(cd /tmp && CLUSTER=PORTABLE RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
 	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$PYTHONUNBUFFERED$PYTHONNOUSERSITE"' _ "${RESOLVER}" 2>/dev/null)"
 assert_eq "11" "${actual}" "PYTHONUNBUFFERED and PYTHONNOUSERSITE are exported"
+
+# TORCH_CUDA_ARCH_LIST is a pinnable location-style setting, not a hardcoded
+# constant: site.env must be able to override the computed default.
+ARCH_TMP="$(mktemp -d)"
+printf 'export TORCH_CUDA_ARCH_LIST=8.6\n' >"${ARCH_TMP}/site.env"
+actual="$(cd /tmp && env -u TORCH_CUDA_ARCH_LIST PORTABLE_SITE_ENV="${ARCH_TMP}/site.env" \
+	CLUSTER=PORTABLE RUNNING_MODE=SHELL \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$TORCH_CUDA_ARCH_LIST"' _ "${RESOLVER}" 2>/dev/null)"
+assert_eq "8.6" "${actual}" "site.env can pin TORCH_CUDA_ARCH_LIST"
+rm -rf "${ARCH_TMP}"
+
+# A site.env that errors must abort the job, not leave it half-configured. Its
+# exports before the failure have already applied; continuing would burn GPU time
+# on a partially configured run.
+BAD_TMP="$(mktemp -d)"
+printf 'export SPATIALSSRL_H5_DIR=/from/bad/site\nfalse\n' >"${BAD_TMP}/site.env"
+rc=0
+(cd /tmp && PORTABLE_SITE_ENV="${BAD_TMP}/site.env" CLUSTER=PORTABLE RUNNING_MODE=SHELL \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1' _ "${RESOLVER}") || rc=$?
+assert_rc "1" "${rc}" "a failing site.env aborts portable_init"
+rm -rf "${BAD_TMP}"
 ```
 
 - [ ] **Step 2: Run the test to verify the new assertions fail**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: the 7 Task 1 assertions still PASS; the 16 new assertions FAIL because `portable_init` is undefined. Exit code 1.
+Expected: the 7 Task 1 assertions still PASS; the 20 new assertions FAIL because `portable_init` is undefined. Exit code 1.
 
 - [ ] **Step 3: Write the minimal implementation**
 
@@ -745,8 +775,9 @@ portable_load_site_env() {
 	done
 
 	echo "portable_env: loading ${site_env}" >&2
+	local source_rc=0
 	# shellcheck disable=SC1090
-	source "${site_env}"
+	source "${site_env}" || source_rc=$?
 
 	# Guard the expansion: bash 4.2/4.3 error on an empty array under `set -u`.
 	if ((${#preset_names[@]} > 0)); then
@@ -755,6 +786,15 @@ portable_load_site_env() {
 			printf -v "${preset_names[i]}" '%s' "${preset_values[i]}"
 			export "${preset_names[i]}"
 		done
+	fi
+
+	# Restore first, then fail. A site.env that errors partway has applied some of
+	# its exports and not others; continuing from that state would burn GPU time
+	# on a half-configured job, which is the exact failure this library prevents.
+	if ((source_rc != 0)); then
+		echo "portable_env: ${site_env} failed with status ${source_rc};" \
+			"refusing to continue with a partially applied site config" >&2
+		return "${source_rc}"
 	fi
 }
 
@@ -854,17 +894,14 @@ portable_set_paths() {
 	_portable_default WANDB_DIR "${PROJECT_DIR}/wandb"
 	_portable_default WANDB_CACHE_DIR "${cache_base}/.cache/wandb"
 
-	if [[ -z "${TORCH_CUDA_ARCH_LIST:-}" ]]; then
-		# L40S on Killarney is Ada (8.9); its sysconfig section wrongly says h100.
-		if [[ "${CLUSTER}" == "KILLARNEY" ]]; then
-			TORCH_CUDA_ARCH_LIST="8.9"
-		elif [[ "$(_portable_cluster_best_gpu || echo h100)" == "h100" ]]; then
-			TORCH_CUDA_ARCH_LIST="9.0"
-		else
-			TORCH_CUDA_ARCH_LIST="8.0"
-		fi
+	# L40S on Killarney is Ada (8.9); its sysconfig section wrongly says h100.
+	local arch_default="9.0"
+	if [[ "${CLUSTER}" == "KILLARNEY" ]]; then
+		arch_default="8.9"
+	elif [[ "$(_portable_cluster_best_gpu || echo h100)" != "h100" ]]; then
+		arch_default="8.0"
 	fi
-	export TORCH_CUDA_ARCH_LIST
+	_portable_default TORCH_CUDA_ARCH_LIST "${arch_default}"
 }
 
 # Compute nodes have no network, so every hub client must be told up front.
@@ -885,7 +922,7 @@ portable_init() {
 	# site.env loads BEFORE detection so it can pin CLUSTER and RUNNING_MODE.
 	# Detection would otherwise have already set them, and the loader's snapshot
 	# would see them as pre-set and restore them over the operator's choice.
-	portable_load_site_env
+	portable_load_site_env || return 1
 	portable_detect_cluster
 	portable_set_paths
 	portable_set_offline
@@ -926,6 +963,10 @@ parses: `python -c "import json; json.load(open('scripts/sysconfig.json'))" && e
 # in via `sbatch --export` or on the submit line still wins. You do not need the
 # defensive ${X:-value} form.
 #
+# This file must exit with status 0. It is sourced with its status checked, and a
+# nonzero status aborts the job rather than running half-configured -- so avoid a
+# bare trailing test like `[[ -d /some/path ]]` as the last line.
+#
 # Everything here is OPTIONAL. With no site.env, all paths default to
 # repo-relative locations and you stage them with symlinks:
 #   PORTABLE_STAGE=1 models/qwen2_5vl_lora_sft_CoT/portable_body_qwen2_5vl_lora_sft_CoT_traineval.sh
@@ -955,7 +996,7 @@ parses: `python -c "import json; json.load(open('scripts/sysconfig.json'))" && e
 - [ ] **Step 6: Run the tests to verify they pass**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: PASS — `23 passed, failed=0`, exit code 0. (The count is bookkeeping; if your actual
+Expected: PASS — `27 passed, failed=0`, exit code 0. (The count is bookkeeping; if your actual
 count differs, report it rather than padding or trimming assertions to match.)
 
 Run: `bash -n scripts/utils/portable_env.sh && bash -n scripts/site.env.example && echo SYNTAX_OK`
@@ -1012,7 +1053,7 @@ rm -rf "$(dirname "${PF_TMP}")"
 - [ ] **Step 2: Run the test to verify the new assertions fail**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: the 23 earlier assertions PASS; the 4 new ones FAIL with `portable_preflight: command not found`. Exit code 1.
+Expected: the 27 earlier assertions PASS; the 4 new ones FAIL with `portable_preflight: command not found`. Exit code 1.
 
 - [ ] **Step 3: Write the minimal implementation**
 
@@ -1100,7 +1141,7 @@ portable_preflight() {
 
 Run: `bash scripts/tests/test_portable_env.sh`
 
-Expected: the `deepspeed_config` row passes; the whole suite reports `27 passed, failed=0`, exit code 0. Note the two assertions that exercise the real repo tolerate a `MISS` on `dataset_registry` because Task 5 has not generated it yet — they only assert on the `deepspeed_config` row and token absence.
+Expected: the `deepspeed_config` row passes; the whole suite reports `31 passed, failed=0`, exit code 0. Note the two assertions that exercise the real repo tolerate a `MISS` on `dataset_registry` because Task 5 has not generated it yet — they only assert on the `deepspeed_config` row and token absence.
 
 Run: `bash -n scripts/utils/portable_env.sh && echo SYNTAX_OK`
 Expected: `SYNTAX_OK`
@@ -1844,7 +1885,7 @@ rm -rf "${E2E_BASE}"
 - [ ] **Step 2: Run the test to verify the new assertions fail if anything is non-portable**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: all assertions PASS — `30 passed, failed=0`, exit 0. A failure here means a path is still tied to the original tree; fix the offending default in `portable_env.sh` rather than the test.
+Expected: all assertions PASS — `34 passed, failed=0`, exit 0. A failure here means a path is still tied to the original tree; fix the offending default in `portable_env.sh` rather than the test.
 
 - [ ] **Step 3: Add ignore rules**
 
@@ -1913,7 +1954,7 @@ make style && make quality
 CUDA_VISIBLE_DEVICES= WANDB_DISABLED=true python -m pytest tests/scripts -v
 git diff --stat
 ```
-Expected: bash suite `30 passed, failed=0`; ruff reports all checks passed; `tests/scripts` shows 20 passed. Confirm `git diff --stat` lists no `trillium_*`, `killarney_*`, `nibi_*`, `rorqual_*`, or unprefixed `slurm_*` file, and no change to `data/dataset_info.json`.
+Expected: bash suite `34 passed, failed=0`; ruff reports all checks passed; `tests/scripts` shows 20 passed. Confirm `git diff --stat` lists no `trillium_*`, `killarney_*`, `nibi_*`, `rorqual_*`, or unprefixed `slurm_*` file, and no change to `data/dataset_info.json`.
 
 - [ ] **Step 7: Commit**
 
