@@ -49,11 +49,15 @@ line. The registry is published atomically and only when every required dataset
 resolves, so a failed staging run leaves no `data/annotations/dataset_info.json`
 behind and never hands preflight a registry full of dangling links.
 
-Submit once preflight passes:
+Submit once preflight passes (from the wrapper directory; create `out/` first —
+SLURM opens `--output` before the job script runs):
 
 ```bash
+mkdir -p out
 sbatch portable_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh
 sbatch -A <account> --mail-user=<you> --mail-type=ALL portable_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh
+# Defaults are Trillium-shaped (h100:4); override on other clusters, e.g. Killarney:
+sbatch --gpus-per-node=l40s:4 --mem=0 portable_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh
 sbatch portable_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh num_train_epochs=1.0   # CLI overrides
 ```
 
