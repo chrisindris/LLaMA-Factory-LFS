@@ -101,7 +101,7 @@ export THINKER10K_H5_DIR=/from/site/env/thinker
 SITEEOF
 actual="$(cd /tmp && PORTABLE_SITE_ENV="${SITE_TMP}/site.env" THINKER10K_H5_DIR=/from/real/env \
 	CLUSTER=PORTABLE RUNNING_MODE=SHELL \
-	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; echo "$SPATIALSSRL_H5_DIR|$THINKER10K_H5_DIR"' _ "${RESOLVER}")"
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$SPATIALSSRL_H5_DIR|$THINKER10K_H5_DIR"' _ "${RESOLVER}" 2>/dev/null)"
 assert_eq "/from/site/env|/from/real/env" "${actual}" "site.env applies; pre-set env still wins"
 rm -rf "${SITE_TMP}"
 
@@ -168,6 +168,27 @@ assert_eq "PORTABLE" "${actual}" "unknown CLUSTER normalizes to PORTABLE"
 actual="$(cd /tmp && CLUSTER=PORTABLE RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
 	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$PYTHONUNBUFFERED$PYTHONNOUSERSITE"' _ "${RESOLVER}" 2>/dev/null)"
 assert_eq "11" "${actual}" "PYTHONUNBUFFERED and PYTHONNOUSERSITE are exported"
+
+# TORCH_CUDA_ARCH_LIST is a pinnable location-style setting, not a hardcoded
+# constant: site.env must be able to override the computed default.
+ARCH_TMP="$(mktemp -d)"
+printf 'export TORCH_CUDA_ARCH_LIST=8.6\n' >"${ARCH_TMP}/site.env"
+actual="$(cd /tmp && env -u TORCH_CUDA_ARCH_LIST PORTABLE_SITE_ENV="${ARCH_TMP}/site.env" \
+	CLUSTER=PORTABLE RUNNING_MODE=SHELL \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$TORCH_CUDA_ARCH_LIST"' _ "${RESOLVER}" 2>/dev/null)"
+assert_eq "8.6" "${actual}" "site.env can pin TORCH_CUDA_ARCH_LIST"
+rm -rf "${ARCH_TMP}"
+
+# A site.env that errors must abort the job, not leave it half-configured. Its
+# exports before the failure have already applied; continuing would burn GPU time
+# on a partially configured run.
+BAD_TMP="$(mktemp -d)"
+printf 'export SPATIALSSRL_H5_DIR=/from/bad/site\nfalse\n' >"${BAD_TMP}/site.env"
+rc=0
+(cd /tmp && PORTABLE_SITE_ENV="${BAD_TMP}/site.env" CLUSTER=PORTABLE RUNNING_MODE=SHELL \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1' _ "${RESOLVER}") || rc=$?
+assert_rc "1" "${rc}" "a failing site.env aborts portable_init"
+rm -rf "${BAD_TMP}"
 
 echo "=== ${PASS_COUNT} passed, failed=${FAILED} ==="
 exit "${FAILED}"

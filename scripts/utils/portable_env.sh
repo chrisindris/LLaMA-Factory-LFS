@@ -162,8 +162,9 @@ portable_load_site_env() {
 	done
 
 	echo "portable_env: loading ${site_env}" >&2
+	local source_rc=0
 	# shellcheck disable=SC1090
-	source "${site_env}"
+	source "${site_env}" || source_rc=$?
 
 	# Guard the expansion: bash 4.2/4.3 error on an empty array under `set -u`.
 	if ((${#preset_names[@]} > 0)); then
@@ -172,6 +173,15 @@ portable_load_site_env() {
 			printf -v "${preset_names[i]}" '%s' "${preset_values[i]}"
 			export "${preset_names[i]}"
 		done
+	fi
+
+	# Restore first, then fail. A site.env that errors partway has applied some of
+	# its exports and not others; continuing from that state would burn GPU time
+	# on a half-configured job, which is the exact failure this library prevents.
+	if ((source_rc != 0)); then
+		echo "portable_env: ${site_env} failed with status ${source_rc};" \
+			"refusing to continue with a partially applied site config" >&2
+		return "${source_rc}"
 	fi
 }
 
@@ -271,17 +281,14 @@ portable_set_paths() {
 	_portable_default WANDB_DIR "${PROJECT_DIR}/wandb"
 	_portable_default WANDB_CACHE_DIR "${cache_base}/.cache/wandb"
 
-	if [[ -z "${TORCH_CUDA_ARCH_LIST:-}" ]]; then
-		# L40S on Killarney is Ada (8.9); its sysconfig section wrongly says h100.
-		if [[ "${CLUSTER}" == "KILLARNEY" ]]; then
-			TORCH_CUDA_ARCH_LIST="8.9"
-		elif [[ "$(_portable_cluster_best_gpu || echo h100)" == "h100" ]]; then
-			TORCH_CUDA_ARCH_LIST="9.0"
-		else
-			TORCH_CUDA_ARCH_LIST="8.0"
-		fi
+	# L40S on Killarney is Ada (8.9); its sysconfig section wrongly says h100.
+	local arch_default="9.0"
+	if [[ "${CLUSTER}" == "KILLARNEY" ]]; then
+		arch_default="8.9"
+	elif [[ "$(_portable_cluster_best_gpu || echo h100)" != "h100" ]]; then
+		arch_default="8.0"
 	fi
-	export TORCH_CUDA_ARCH_LIST
+	_portable_default TORCH_CUDA_ARCH_LIST "${arch_default}"
 }
 
 # Compute nodes have no network, so every hub client must be told up front.
@@ -302,7 +309,7 @@ portable_init() {
 	# site.env loads BEFORE detection so it can pin CLUSTER and RUNNING_MODE.
 	# Detection would otherwise have already set them, and the loader's snapshot
 	# would see them as pre-set and restore them over the operator's choice.
-	portable_load_site_env
+	portable_load_site_env || return 1
 	portable_detect_cluster
 	portable_set_paths
 	portable_set_offline
