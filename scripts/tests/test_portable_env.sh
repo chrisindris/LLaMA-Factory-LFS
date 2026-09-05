@@ -345,5 +345,60 @@ assert_eq "yes" "$(grep -qE '^OK +train_yaml' <<<"${out}" && echo yes || echo no
 	"relocated body finds its own YAML"
 rm -rf "${E2E_BASE}"
 
+# --- _portable_yaml_value / model_snapshot preflight row --------------------
+
+# shellcheck source=../utils/portable_env.sh
+source "${RESOLVER}" >/dev/null 2>&1
+
+yaml_root="$(mktemp -d)"
+cat >"${yaml_root}/t.yaml" <<'YAMLEOF'
+model_name_or_path: Qwen/Qwen2.5-VL-7B-Instruct
+report_to: wandb  # choices: [none, wandb]
+quoted: "a value"
+YAMLEOF
+
+assert_eq "Qwen/Qwen2.5-VL-7B-Instruct" "$(_portable_yaml_value "${yaml_root}/t.yaml" model_name_or_path)" \
+	"yaml reader returns a plain scalar"
+assert_eq "wandb" "$(_portable_yaml_value "${yaml_root}/t.yaml" report_to)" \
+	"yaml reader strips an inline comment"
+assert_eq "a value" "$(_portable_yaml_value "${yaml_root}/t.yaml" quoted)" \
+	"yaml reader strips surrounding quotes"
+assert_eq "" "$(_portable_yaml_value "${yaml_root}/t.yaml" absent_key)" \
+	"yaml reader is empty for an absent key"
+assert_eq "" "$(_portable_yaml_value "${yaml_root}/nope.yaml" model_name_or_path)" \
+	"yaml reader is empty for a missing file"
+
+# An existing but EMPTY hub cache must fail preflight: this is the likelier operator
+# error than a missing cache, and it cannot be recovered from on an offline node.
+rc=0
+out="$(
+	PROJECT_DIR="${REPO}" \
+		HF_HUB_CACHE="${yaml_root}/empty_cache" \
+		PORTABLE_YAML_FILE="${yaml_root}/t.yaml" \
+		RUNNING_MODE=SHELL \
+		bash -c 'mkdir -p "${HF_HUB_CACHE}"; source "$1"; portable_preflight' _ \
+		"${RESOLVER}" 2>&1
+)" || rc=$?
+assert_rc 1 "${rc}" "an empty hub cache fails preflight"
+assert_eq "1" "$(printf '%s\n' "${out}" | grep -c 'MISS model_snapshot')" \
+	"the missing model snapshot is reported by name"
+assert_eq "1" "$(printf '%s\n' "${out}" | grep -c 'models--Qwen--Qwen2.5-VL-7B-Instruct')" \
+	"the expected snapshot directory is shown so it can be staged"
+
+# With the snapshot present, that row passes.
+mkdir -p "${yaml_root}/empty_cache/models--Qwen--Qwen2.5-VL-7B-Instruct"
+out="$(
+	PROJECT_DIR="${REPO}" \
+		HF_HUB_CACHE="${yaml_root}/empty_cache" \
+		PORTABLE_YAML_FILE="${yaml_root}/t.yaml" \
+		RUNNING_MODE=SHELL \
+		bash -c 'source "$1"; portable_preflight' _ \
+		"${RESOLVER}" 2>&1 || true
+)"
+assert_eq "1" "$(printf '%s\n' "${out}" | grep -c 'OK   model_snapshot')" \
+	"a present model snapshot passes preflight"
+
+rm -rf "${yaml_root}"
+
 echo "=== ${PASS_COUNT} passed, failed=${FAILED} ==="
 exit "${FAILED}"

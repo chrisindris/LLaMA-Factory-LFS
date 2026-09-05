@@ -54,16 +54,52 @@ nvidia-smi || true
 echo "====================================="
 
 run_in_apptainer() {
-	local program="$1"
 	local binds=()
 	local nv_lib_dir=""
+	local -A bound=()
+
+	# Bind a host path once, skipping duplicates so a symlink and its target that
+	# resolve to the same place do not produce two identical -B flags.
+	_bind_once() {
+		local path="$1"
+
+		[[ -z "${path}" || "${path}" == "None" || "${path}" == "/" || ! -e "${path}" ]] && return 0
+		[[ -n "${bound[${path}]:-}" ]] && return 0
+
+		bound["${path}"]=1
+		binds+=(-B "${path}")
+	}
 
 	# Bind only paths that exist; Apptainer fails on a missing bind source.
 	local candidate
 	for candidate in "${PROJECT_DIR}" "${HF_HUB_CACHE}" "${SCANNET_H5_DIR}" \
 		"${SPATIALSSRL_H5_DIR}" "${THINKER10K_H5_DIR}" "${MEDIA_DIR}" "${HOME}"; do
-		[[ -n "${candidate}" && "${candidate}" != "None" && -e "${candidate}" ]] && binds+=(-B "${candidate}")
+		_bind_once "${candidate}"
 	done
+
+	# Staging fills the repo with symlinks pointing outside it (that is the whole
+	# point of PORTABLE_SRC_*), and a bind of the repo carries the links but not
+	# their targets. Without the resolved targets, a fully staged tree passes
+	# preflight on the host and then hits ENOENT inside the container, after the
+	# allocation has started, on a node that cannot fetch anything.
+	local link target
+	for link in "${PROJECT_DIR}/.cache/huggingface" "${PROJECT_DIR}/containers/llamafactory.sif" \
+		"${SCANNET_H5_DIR}" "${SPATIALSSRL_H5_DIR}" "${THINKER10K_H5_DIR}" "${MEDIA_DIR}"; do
+		[[ -L "${link}" ]] || continue
+		target="$(readlink -f "${link}" 2>/dev/null || true)"
+		[[ -d "${target}" ]] && _bind_once "${target}"
+		[[ -f "${target}" ]] && _bind_once "$(dirname "${target}")"
+	done
+
+	# The generated registry links each dataset to its own snapshot, which may sit
+	# anywhere the operator's site.env points -- not necessarily inside HF_HUB_CACHE.
+	if [[ -d "${PROJECT_DIR}/data/annotations" ]]; then
+		while IFS= read -r link; do
+			target="$(readlink -f "${link}" 2>/dev/null || true)"
+			[[ -d "${target}" ]] && _bind_once "${target}"
+			[[ -f "${target}" ]] && _bind_once "$(dirname "${target}")"
+		done < <(find "${PROJECT_DIR}/data/annotations" -maxdepth 2 -type l 2>/dev/null)
+	fi
 	[[ -d /dev/shm ]] && binds+=(-B /dev/shm:/dev/shm)
 	[[ -d /etc/ssl/certs ]] && binds+=(-B /etc/ssl/certs:/etc/ssl/certs:ro)
 	[[ -d /etc/pki ]] && binds+=(-B /etc/pki:/etc/pki:ro)
@@ -71,8 +107,13 @@ run_in_apptainer() {
 	# shellcheck disable=SC2206
 	[[ -n "${EXTRA_BINDS:-}" ]] && binds+=(${EXTRA_BINDS})
 
-	nv_lib_dir="$(dirname "$(ldconfig -p 2>/dev/null | awk '/libcuda\.so /{print $NF}' | head -1)" 2>/dev/null || true)"
-	[[ -n "${nv_lib_dir}" && -d "${nv_lib_dir}" ]] && binds+=(-B "${nv_lib_dir}")
+	local libcuda
+	libcuda="$(ldconfig -p 2>/dev/null | awk '/libcuda\.so /{print $NF}' | head -1)"
+	# Guard the empty case: dirname "" is ".", which would bind the cwd for no reason.
+	if [[ -n "${libcuda}" ]]; then
+		nv_lib_dir="$(dirname "${libcuda}")"
+		[[ -d "${nv_lib_dir}" ]] && _bind_once "${nv_lib_dir}"
+	fi
 
 	local overlay=()
 	[[ -f "${APPTAINER_OVERLAY}" ]] && overlay=(--overlay "${APPTAINER_OVERLAY}")
@@ -112,15 +153,17 @@ run_in_apptainer() {
 		--env CUDA_HOME="${APPTAINERENV_CUDA_HOME}" \
 		--pwd "${PROJECT_DIR}" \
 		"${SIF_FILE}" \
-		${program}
+		"$@"
 }
 
 case "${RUNNING_MODE}" in
 APPTAINER)
-	run_in_apptainer "llamafactory-cli train ${PORTABLE_YAML_FILE} $*"
+	# "$@" throughout: flattening into one string would let the shell re-split and
+	# glob-expand any override containing a space, and VENV mode below already quotes.
+	run_in_apptainer llamafactory-cli train "${PORTABLE_YAML_FILE}" "$@"
 	;;
 SHELL)
-	run_in_apptainer "bash"
+	run_in_apptainer bash
 	;;
 VENV)
 	# shellcheck disable=SC1091

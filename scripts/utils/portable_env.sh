@@ -360,6 +360,25 @@ _portable_pf_optional() {
 	fi
 }
 
+# Read one top-level scalar from a training YAML.
+#
+# Deliberately not a YAML parser: these configs are flat `key: value` files, and
+# depending on python+pyyaml here would make preflight fail for a reason unrelated
+# to the paths it is meant to check. Strips inline comments and surrounding quotes.
+_portable_yaml_value() {
+	local file="$1" key="$2" value=""
+
+	[[ -f "${file}" ]] || return 0
+
+	value="$(sed -n "s/^${key}:[[:space:]]*\(.*\)$/\1/p" "${file}" | head -1)"
+	value="${value%%#*}"
+	value="${value%"${value##*[![:space:]]}"}"
+	value="${value#[\"\']}"
+	value="${value%[\"\']}"
+
+	printf '%s' "${value}"
+}
+
 # Validate every resolved path before the job consumes GPU time. Compute nodes
 # have no network, so a missing artifact can never be fetched at runtime.
 portable_preflight() {
@@ -382,6 +401,18 @@ portable_preflight() {
 
 	if [[ -n "${PORTABLE_YAML_FILE:-}" ]]; then
 		_portable_pf_require "train_yaml" "${PORTABLE_YAML_FILE}"
+		# An existing but empty cache directory is the likelier mistake than a missing
+		# one: PORTABLE_SRC_HF_CACHE pointed one level too high still yields a directory,
+		# so requiring only the cache lets the job reach from_pretrained offline and die.
+		local model_id snapshot_dir
+		model_id="$(_portable_yaml_value "${PORTABLE_YAML_FILE}" model_name_or_path)"
+		if [[ -n "${model_id}" && "${model_id}" != /* ]]; then
+			snapshot_dir="models--${model_id//\//--}"
+			_portable_pf_require "model_snapshot" "${HF_HUB_CACHE}/${snapshot_dir}"
+		elif [[ -n "${model_id}" ]]; then
+			# An absolute model_name_or_path bypasses the hub cache entirely.
+			_portable_pf_require "model_snapshot" "${model_id}"
+		fi
 	fi
 
 	case "${RUNNING_MODE}" in
