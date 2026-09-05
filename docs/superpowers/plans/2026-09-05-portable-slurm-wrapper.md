@@ -560,7 +560,7 @@ assert_eq "9.0" "${arch}" "TORCH_CUDA_ARCH_LIST is 9.0 for h100"
 
 # Pre-set environment wins over defaults.
 actual="$(cd /tmp && SCANNET_H5_DIR=/custom/scannet CLUSTER=PORTABLE RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
-	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; echo "$SCANNET_H5_DIR"' _ "${RESOLVER}")"
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$SCANNET_H5_DIR"' _ "${RESOLVER}" 2>/dev/null)"
 assert_eq "/custom/scannet" "${actual}" "pre-set env overrides default"
 
 # site.env is honoured, but loses to pre-set env.
@@ -592,26 +592,90 @@ assert_eq "11111 offline" "${actual}" "offline flags set"
 
 # No resolved path contains an unexpanded token or a hardcoded username.
 actual="$(cd /tmp && CLUSTER=PORTABLE RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
-	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; echo "$HF_HOME $SIF_FILE $VENV_LLAMAFACTORY $MEDIA_DIR $APPTAINER_OVERLAY"' _ "${RESOLVER}" | grep -cE '\$\{|indrisch')"
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$HF_HOME $SIF_FILE $VENV_LLAMAFACTORY $MEDIA_DIR $APPTAINER_OVERLAY"' _ "${RESOLVER}" 2>/dev/null | grep -cE '\$\{|indrisch')"
 assert_eq "0" "${actual}" "no unexpanded tokens and no hardcoded username"
+
+# portable_init succeeds. Without this, an assertion that merely echoes a
+# variable can pass while portable_init is missing entirely.
+rc=0
+(cd /tmp && CLUSTER=PORTABLE RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1' _ "${RESOLVER}") || rc=$?
+assert_rc "0" "${rc}" "portable_init returns 0"
+
+# The sysconfig tier is really consulted, and it reads the PORTABLE section.
+actual="$(cd /tmp && CLUSTER=PORTABLE PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_resolve_project_dir >/dev/null 2>&1; _portable_setting SIF_FILE' _ "${RESOLVER}")"
+assert_eq "${REPO}/containers/llamafactory.sif" "${actual}" "_portable_setting reads expanded PORTABLE value"
+
+# An unknown key is a miss, not an empty string, so _portable_default can fall
+# through to its repo-relative default.
+rc=0
+(cd /tmp && CLUSTER=PORTABLE PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_resolve_project_dir >/dev/null 2>&1; _portable_setting NO_SUCH_KEY_XYZ' _ "${RESOLVER}" >/dev/null) || rc=$?
+assert_rc "1" "${rc}" "_portable_setting returns nonzero for an unknown key"
+
+# THE CENTRAL PORTABILITY GUARANTEE: on a legacy cluster whose sysconfig section
+# is full of another user's absolute paths, none of them may leak in. Only the
+# PORTABLE section is consulted for paths.
+actual="$(cd /tmp && CLUSTER=TRILLIUM RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$HF_HOME $HF_HUB_CACHE $SIF_FILE $VENV_LLAMAFACTORY $MEDIA_DIR $SCANNET_H5_DIR $TRITON_CACHE_DIR"' _ "${RESOLVER}" 2>/dev/null | grep -cE 'indrisch|def-wangcs')"
+assert_eq "0" "${actual}" "legacy cluster sections never supply paths"
+
+# site.env can pin CLUSTER, which requires it to load BEFORE detection.
+CL_TMP="$(mktemp -d)"
+printf 'export CLUSTER=KILLARNEY\n' >"${CL_TMP}/site.env"
+actual="$(cd /tmp && PORTABLE_SITE_ENV="${CL_TMP}/site.env" RUNNING_MODE=SHELL \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$CLUSTER $TORCH_CUDA_ARCH_LIST"' _ "${RESOLVER}" 2>/dev/null)"
+assert_eq "KILLARNEY 8.9" "${actual}" "site.env can pin CLUSTER before detection"
+rm -rf "${CL_TMP}"
+
+# A typo'd CLUSTER falls back to PORTABLE instead of running an unknown profile.
+actual="$(cd /tmp && CLUSTER=TRILIUM RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init 2>/dev/null || exit 1; echo "$CLUSTER"' _ "${RESOLVER}")"
+assert_eq "PORTABLE" "${actual}" "unknown CLUSTER normalizes to PORTABLE"
+
+# The Python hygiene vars are part of the managed set and get exported.
+actual="$(cd /tmp && CLUSTER=PORTABLE RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init || exit 1; echo "$PYTHONUNBUFFERED$PYTHONNOUSERSITE"' _ "${RESOLVER}" 2>/dev/null)"
+assert_eq "11" "${actual}" "PYTHONUNBUFFERED and PYTHONNOUSERSITE are exported"
 ```
 
 - [ ] **Step 2: Run the test to verify the new assertions fail**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: the 7 Task 1 assertions still PASS; the 10 new assertions FAIL because `portable_init` is undefined. Exit code 1.
+Expected: the 7 Task 1 assertions still PASS; the 16 new assertions FAIL because `portable_init` is undefined. Exit code 1.
 
 - [ ] **Step 3: Write the minimal implementation**
 
 Append to `scripts/utils/portable_env.sh`:
 
 ```bash
+# Clusters this library knows how to configure.
+PORTABLE_KNOWN_CLUSTERS=(RORQUAL TRILLIUM KILLARNEY TAMIA NIBI PORTABLE)
+
+_portable_is_known_cluster() {
+	local candidate="$1" known
+	for known in "${PORTABLE_KNOWN_CLUSTERS[@]}"; do
+		[[ "${candidate}" == "${known}" ]] && return 0
+	done
+	return 1
+}
+
 # Detect the cluster and default running mode. Never overwrites a value the
-# caller already set, so CLUSTER=X in the environment always wins.
+# caller already set, so CLUSTER=X in the environment (or in site.env, which is
+# loaded before this runs) always wins.
 portable_detect_cluster() {
 	local host="${HOSTNAME:-$(hostname 2>/dev/null || echo unknown)}"
 
-	if [[ -z "${CLUSTER:-}" ]]; then
+	if [[ -n "${CLUSTER:-}" ]]; then
+		CLUSTER="${CLUSTER^^}"
+		# Reject a typo rather than silently running with an unknown profile.
+		if ! _portable_is_known_cluster "${CLUSTER}"; then
+			echo "portable_env: unknown CLUSTER '${CLUSTER}' (expected one of:" \
+				"${PORTABLE_KNOWN_CLUSTERS[*]}); using PORTABLE" >&2
+			CLUSTER="PORTABLE"
+		fi
+	else
 		case "${host}" in
 		*rorqual* | rg* | rc*) CLUSTER="RORQUAL" ;;
 		*trillium* | trig* | tri*) CLUSTER="TRILLIUM" ;;
@@ -625,7 +689,6 @@ portable_detect_cluster() {
 		esac
 	fi
 
-	CLUSTER="${CLUSTER^^}"
 	export CLUSTER
 
 	if [[ -z "${RUNNING_MODE:-}" ]]; then
@@ -650,7 +713,7 @@ PORTABLE_MANAGED_VARS=(
 	TRITON_CACHE_DIR TORCH_EXTENSIONS_DIR PYTORCH_KERNEL_CACHE_PATH MPLCONFIGDIR
 	FLASHINFER_WORKSPACE_BASE WANDB_DIR WANDB_CACHE_DIR TORCH_CUDA_ARCH_LIST
 	HF_HUB_OFFLINE TRANSFORMERS_OFFLINE HF_DATASETS_OFFLINE WANDB_MODE
-	DISABLE_VERSION_CHECK FORCE_TORCHRUN
+	DISABLE_VERSION_CHECK FORCE_TORCHRUN PYTHONUNBUFFERED PYTHONNOUSERSITE
 )
 
 # Source scripts/site.env if present, so operators can pin site paths without
@@ -672,8 +735,10 @@ portable_load_site_env() {
 	local -a preset_names=() preset_values=()
 	local name
 	for name in "${PORTABLE_MANAGED_VARS[@]}"; do
-		# ${!name+x} tests "is set", so an intentionally empty value counts.
-		if [[ -n "${!name+x}" ]]; then
+		# Non-empty, matching _portable_default: an empty value counts as unset
+		# everywhere in this library. Using "is set" semantics here instead would
+		# preserve an empty value that _portable_default then overwrites anyway.
+		if [[ -n "${!name:-}" ]]; then
 			preset_names+=("${name}")
 			preset_values+=("${!name}")
 		fi
@@ -693,31 +758,61 @@ portable_load_site_env() {
 	fi
 }
 
-# Pull cluster values from sysconfig.json when available. Values equal to "None"
-# or containing an unexpanded token are ignored.
-_portable_sysconfig() {
+# Read a setting from the PORTABLE section of sysconfig.json.
+#
+# ONLY the PORTABLE section is consulted, never the legacy per-cluster sections.
+# Those hold another user's absolute paths (/scratch/indrisch/...), which is
+# precisely what this library exists to remove — inheriting them would recreate
+# the non-portability on the very clusters we most need to run on. The detected
+# CLUSTER still drives module loads and the CUDA arch list; it never supplies a
+# path.
+#
+# A value is rejected when empty, literally "None", or still containing "${":
+# an unexpanded token means the variable was unset, and using it would silently
+# produce a path rooted at the filesystem root.
+_portable_setting() {
 	local key="$1" value=""
 
 	command -v python3 >/dev/null 2>&1 || return 1
 
 	value="$(PROJECT_DIR="${PROJECT_DIR}" PYTHONPATH="${PROJECT_DIR}/scripts${PYTHONPATH:+:${PYTHONPATH}}" \
-		python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', '${key}') or '')" 2>/dev/null)" || return 1
+		python3 -c "import sysconfigtool; print(sysconfigtool.read('PORTABLE', '${key}') or '')" 2>/dev/null)" || return 1
 
 	[[ -z "${value}" || "${value}" == "None" || "${value}" == *'${'* ]] && return 1
 	printf '%s' "${value}"
 }
 
-# Assign a variable from, in order: existing env, sysconfig, repo-relative default.
+# BEST_GPU is a hardware fact about the detected cluster rather than a path, so
+# this is the one lookup that reads a per-cluster section.
+_portable_cluster_best_gpu() {
+	local value=""
+
+	command -v python3 >/dev/null 2>&1 || return 1
+
+	value="$(PROJECT_DIR="${PROJECT_DIR}" PYTHONPATH="${PROJECT_DIR}/scripts${PYTHONPATH:+:${PYTHONPATH}}" \
+		python3 -c "import sysconfigtool; print(sysconfigtool.read('${CLUSTER}', 'BEST_GPU') or '')" 2>/dev/null)" || return 1
+
+	[[ -z "${value}" || "${value}" == "None" ]] && return 1
+	printf '%s' "${value}"
+}
+
+# Assign a variable from, in order: existing environment, the PORTABLE section of
+# sysconfig.json, then the repo-relative default.
+#
+# An empty value counts as UNSET everywhere in this library. None of these
+# variables has a meaningful empty value, and treating "" as set would strand a
+# path at the filesystem root. Keep this consistent with the snapshot in
+# portable_load_site_env.
 _portable_default() {
-	local name="$1" default="$2" from_sysconfig=""
+	local name="$1" default="$2" from_config=""
 
 	if [[ -n "${!name:-}" ]]; then
 		export "${name}"
 		return 0
 	fi
 
-	if from_sysconfig="$(_portable_sysconfig "${name}")"; then
-		printf -v "${name}" '%s' "${from_sysconfig}"
+	if from_config="$(_portable_setting "${name}")"; then
+		printf -v "${name}" '%s' "${from_config}"
 	else
 		printf -v "${name}" '%s' "${default}"
 	fi
@@ -725,38 +820,45 @@ _portable_default() {
 	export "${name}"
 }
 
+# Resolve every managed path. Uniformly via _portable_default, so the documented
+# precedence (environment > site.env > PORTABLE sysconfig > repo-relative
+# default) holds for every variable rather than only for some of them.
 portable_set_paths() {
 	local cache_base="${SLURM_TMPDIR:-${PROJECT_DIR}/.cache}"
 
 	_portable_default HF_HOME "${PROJECT_DIR}/.cache/huggingface"
 	_portable_default HF_HUB_CACHE "${HF_HOME}"
-	export TRANSFORMERS_CACHE="${TRANSFORMERS_CACHE:-${HF_HUB_CACHE}}"
-	export HUGGINGFACE_HUB_CACHE="${HUGGINGFACE_HUB_CACHE:-${HF_HUB_CACHE}}"
-	export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-${HF_HUB_CACHE}}"
-	export HF_HUB_DISABLE_XET="${HF_HUB_DISABLE_XET:-1}"
+	_portable_default TRANSFORMERS_CACHE "${HF_HUB_CACHE}"
+	_portable_default HUGGINGFACE_HUB_CACHE "${HF_HUB_CACHE}"
+	_portable_default HF_DATASETS_CACHE "${HF_HUB_CACHE}"
+	_portable_default HF_HUB_DISABLE_XET "1"
 
 	_portable_default SIF_FILE "${PROJECT_DIR}/containers/llamafactory.sif"
 	_portable_default VENV_LLAMAFACTORY "${PROJECT_DIR}/.venv"
-	export APPTAINER_OVERLAY="${APPTAINER_OVERLAY:-${PROJECT_DIR}/apptainer/overlay.img}"
+	_portable_default APPTAINER_OVERLAY "${PROJECT_DIR}/apptainer/overlay.img"
 
 	_portable_default SCANNET_H5_DIR "${PROJECT_DIR}/data/h5/ScanNet_h5/scans"
 	_portable_default SPATIALSSRL_H5_DIR "${PROJECT_DIR}/data/h5/Spatial-SSRL_images_h5"
 	_portable_default THINKER10K_H5_DIR "${PROJECT_DIR}/data/h5/3DThinker10K_images_h5"
 	_portable_default MEDIA_DIR "${PROJECT_DIR}/data/h5/ScanNet_h5"
 
-	export TRITON_CACHE_DIR="${TRITON_CACHE_DIR:-${cache_base}/.triton_cache}"
-	export TORCH_EXTENSIONS_DIR="${TORCH_EXTENSIONS_DIR:-${cache_base}/torch_extensions}"
-	export PYTORCH_KERNEL_CACHE_PATH="${PYTORCH_KERNEL_CACHE_PATH:-${cache_base}/torch/kernels}"
-	export MPLCONFIGDIR="${MPLCONFIGDIR:-${cache_base}/matplotlib}"
-	export FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE:-${cache_base}/flashinfer}"
-	export WANDB_DIR="${WANDB_DIR:-${PROJECT_DIR}/wandb}"
-	export WANDB_CACHE_DIR="${WANDB_CACHE_DIR:-${cache_base}/.cache/wandb}"
+	# Caches prefer $SLURM_TMPDIR: node-local scratch is much faster than shared
+	# storage and the scheduler reaps it. They are deliberately absent from
+	# sysconfig.json, because the right value is only known at runtime — but they
+	# still route through _portable_default so an operator CAN pin them.
+	_portable_default TRITON_CACHE_DIR "${cache_base}/.triton_cache"
+	_portable_default TORCH_EXTENSIONS_DIR "${cache_base}/torch_extensions"
+	_portable_default PYTORCH_KERNEL_CACHE_PATH "${cache_base}/torch/kernels"
+	_portable_default MPLCONFIGDIR "${cache_base}/matplotlib"
+	_portable_default FLASHINFER_WORKSPACE_BASE "${cache_base}/flashinfer"
+	_portable_default WANDB_DIR "${PROJECT_DIR}/wandb"
+	_portable_default WANDB_CACHE_DIR "${cache_base}/.cache/wandb"
 
-	# L40S on Killarney is Ada (8.9); do not trust BEST_GPU=h100 there.
 	if [[ -z "${TORCH_CUDA_ARCH_LIST:-}" ]]; then
+		# L40S on Killarney is Ada (8.9); its sysconfig section wrongly says h100.
 		if [[ "${CLUSTER}" == "KILLARNEY" ]]; then
 			TORCH_CUDA_ARCH_LIST="8.9"
-		elif [[ "$(_portable_sysconfig BEST_GPU || echo h100)" == "h100" ]]; then
+		elif [[ "$(_portable_cluster_best_gpu || echo h100)" == "h100" ]]; then
 			TORCH_CUDA_ARCH_LIST="9.0"
 		else
 			TORCH_CUDA_ARCH_LIST="8.0"
@@ -765,6 +867,8 @@ portable_set_paths() {
 	export TORCH_CUDA_ARCH_LIST
 }
 
+# Compute nodes have no network, so every hub client must be told up front.
+# Keep this list in sync with PORTABLE_MANAGED_VARS.
 portable_set_offline() {
 	export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"
 	export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
@@ -772,14 +876,17 @@ portable_set_offline() {
 	export WANDB_MODE="${WANDB_MODE:-offline}"
 	export DISABLE_VERSION_CHECK="${DISABLE_VERSION_CHECK:-1}"
 	export FORCE_TORCHRUN="${FORCE_TORCHRUN:-1}"
-	export PYTHONUNBUFFERED=1
-	export PYTHONNOUSERSITE=1
+	export PYTHONUNBUFFERED="${PYTHONUNBUFFERED:-1}"
+	export PYTHONNOUSERSITE="${PYTHONNOUSERSITE:-1}"
 }
 
 portable_init() {
 	portable_resolve_project_dir || return 1
-	portable_detect_cluster
+	# site.env loads BEFORE detection so it can pin CLUSTER and RUNNING_MODE.
+	# Detection would otherwise have already set them, and the loader's snapshot
+	# would see them as pre-set and restore them over the operator's choice.
 	portable_load_site_env
+	portable_detect_cluster
 	portable_set_paths
 	portable_set_offline
 
@@ -788,7 +895,25 @@ portable_init() {
 }
 ```
 
-- [ ] **Step 4: Create `scripts/site.env.example`**
+- [ ] **Step 4: Remove the runtime-dependent cache keys from the PORTABLE sysconfig section**
+
+Task 2 added `TRITON_CACHE_DIR`, `TORCH_EXTENSIONS_DIR`, and `FLASHINFER_WORKSPACE_BASE` to the
+`PORTABLE` section of `scripts/sysconfig.json`. Now that every managed variable routes through
+`_portable_default` (which consults that section), those three static entries would win over the
+`$SLURM_TMPDIR` preference — the opposite of what we want, since node-local scratch is far faster
+and the scheduler reaps it. Their correct value is only knowable at runtime, so delete exactly
+these three lines from the `PORTABLE` section:
+
+```json
+        "TRITON_CACHE_DIR": "${PROJECT_DIR}/.cache/triton",
+        "TORCH_EXTENSIONS_DIR": "${PROJECT_DIR}/.cache/torch_extensions",
+        "FLASHINFER_WORKSPACE_BASE": "${PROJECT_DIR}/.cache/flashinfer",
+```
+
+Leave every other `PORTABLE` key and every legacy cluster section untouched. Verify the file still
+parses: `python -c "import json; json.load(open('scripts/sysconfig.json'))" && echo JSON_OK`
+
+- [ ] **Step 5: Create `scripts/site.env.example`**
 
 ```bash
 # Site overrides for portable LLaMA-Factory-LFS SLURM jobs.
@@ -827,18 +952,19 @@ portable_init() {
 # export EXTRA_BINDS="-B /project/def-someone/shared -B /scratch/$USER"
 ```
 
-- [ ] **Step 5: Run the tests to verify they pass**
+- [ ] **Step 6: Run the tests to verify they pass**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: PASS — `17 passed, failed=0`, exit code 0.
+Expected: PASS — `23 passed, failed=0`, exit code 0. (The count is bookkeeping; if your actual
+count differs, report it rather than padding or trimming assertions to match.)
 
 Run: `bash -n scripts/utils/portable_env.sh && bash -n scripts/site.env.example && echo SYNTAX_OK`
 Expected: `SYNTAX_OK`
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
-git add scripts/utils/portable_env.sh scripts/site.env.example scripts/tests/test_portable_env.sh
+git add scripts/utils/portable_env.sh scripts/site.env.example scripts/tests/test_portable_env.sh scripts/sysconfig.json
 git commit -m "feat(scripts): add repo-relative path defaults, site.env, cluster detection"
 ```
 
@@ -886,7 +1012,7 @@ rm -rf "$(dirname "${PF_TMP}")"
 - [ ] **Step 2: Run the test to verify the new assertions fail**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: the 17 earlier assertions PASS; the 4 new ones FAIL with `portable_preflight: command not found`. Exit code 1.
+Expected: the 23 earlier assertions PASS; the 4 new ones FAIL with `portable_preflight: command not found`. Exit code 1.
 
 - [ ] **Step 3: Write the minimal implementation**
 
@@ -974,7 +1100,7 @@ portable_preflight() {
 
 Run: `bash scripts/tests/test_portable_env.sh`
 
-Expected: the `deepspeed_config` row passes; the whole suite reports `21 passed, failed=0`, exit code 0. Note the two assertions that exercise the real repo tolerate a `MISS` on `dataset_registry` because Task 5 has not generated it yet — they only assert on the `deepspeed_config` row and token absence.
+Expected: the `deepspeed_config` row passes; the whole suite reports `27 passed, failed=0`, exit code 0. Note the two assertions that exercise the real repo tolerate a `MISS` on `dataset_registry` because Task 5 has not generated it yet — they only assert on the `deepspeed_config` row and token absence.
 
 Run: `bash -n scripts/utils/portable_env.sh && echo SYNTAX_OK`
 Expected: `SYNTAX_OK`
@@ -1718,7 +1844,7 @@ rm -rf "${E2E_BASE}"
 - [ ] **Step 2: Run the test to verify the new assertions fail if anything is non-portable**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: all assertions PASS — `24 passed, failed=0`, exit 0. A failure here means a path is still tied to the original tree; fix the offending default in `portable_env.sh` rather than the test.
+Expected: all assertions PASS — `30 passed, failed=0`, exit 0. A failure here means a path is still tied to the original tree; fix the offending default in `portable_env.sh` rather than the test.
 
 - [ ] **Step 3: Add ignore rules**
 
@@ -1787,7 +1913,7 @@ make style && make quality
 CUDA_VISIBLE_DEVICES= WANDB_DISABLED=true python -m pytest tests/scripts -v
 git diff --stat
 ```
-Expected: bash suite `24 passed, failed=0`; ruff reports all checks passed; `tests/scripts` shows 20 passed. Confirm `git diff --stat` lists no `trillium_*`, `killarney_*`, `nibi_*`, `rorqual_*`, or unprefixed `slurm_*` file, and no change to `data/dataset_info.json`.
+Expected: bash suite `30 passed, failed=0`; ruff reports all checks passed; `tests/scripts` shows 20 passed. Confirm `git diff --stat` lists no `trillium_*`, `killarney_*`, `nibi_*`, `rorqual_*`, or unprefixed `slurm_*` file, and no change to `data/dataset_info.json`.
 
 - [ ] **Step 7: Commit**
 
