@@ -20,6 +20,9 @@ from ``data/`` to ``data/annotations/`` therefore requires rewriting every
 
 * Absolute paths become ``<dataset_name>/<basename>`` and are reached through a
   symlink created next to the generated registry, so no large file is copied.
+  Entries may name a *directory* (the repo's registry records seven such, with a
+  trailing slash); the trailing slash is preserved in the rewritten value while
+  the symlink itself is created at the slash-free path.
 * Already-relative paths are re-anchored with ``..`` so they keep resolving.
 
 Usage:
@@ -27,16 +30,19 @@ Usage:
     python scripts/make_portable_dataset_info.py --source A --dest B --no-symlinks
 """
 
+from __future__ import annotations
+
 import argparse
 import json
 import os
 import sys
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from collections.abc import Sequence
+from typing import Any
 
 
 def rewrite_registry(
-    registry: Dict[str, Any], source_dir: str, dest_dir: str
-) -> Tuple[Dict[str, Any], List[Tuple[str, str]]]:
+    registry: dict[str, Any], source_dir: str, dest_dir: str
+) -> tuple[dict[str, Any], list[tuple[str, str]]]:
     """Rewrite every ``file_name`` so it resolves against ``dest_dir``.
 
     Args:
@@ -46,10 +52,12 @@ def rewrite_registry(
 
     Returns:
         A tuple of the new registry and a list of ``(link_relpath, target)``
-        pairs describing the symlinks needed for absolute entries.
+        pairs describing the symlinks needed for absolute entries. Each
+        ``link_relpath`` is slash-free even when the rewritten ``file_name``
+        keeps its trailing slash.
     """
-    new_registry: Dict[str, Any] = {}
-    links: List[Tuple[str, str]] = []
+    new_registry: dict[str, Any] = {}
+    links: list[tuple[str, str]] = []
 
     for name, attrs in registry.items():
         if not isinstance(attrs, dict) or "file_name" not in attrs:
@@ -60,9 +68,14 @@ def rewrite_registry(
         file_name = attrs["file_name"]
 
         if os.path.isabs(file_name):
-            link_relpath = "{}/{}".format(name, os.path.basename(file_name))
-            new_attrs["file_name"] = link_relpath
-            links.append((link_relpath, file_name))
+            # A trailing slash marks a directory entry. basename() would return
+            # "" for it, which would place the symlink at "<name>/" -- a path that
+            # cannot be created once "<name>" exists as the link's parent.
+            is_dir = file_name.endswith("/")
+            target = file_name.rstrip("/")
+            link_relpath = f"{name}/{os.path.basename(target)}"
+            new_attrs["file_name"] = f"{link_relpath}/" if is_dir else link_relpath
+            links.append((link_relpath, target))
         else:
             absolute = os.path.join(source_dir, file_name)
             new_attrs["file_name"] = os.path.relpath(absolute, dest_dir).replace(os.sep, "/")
@@ -73,7 +86,12 @@ def rewrite_registry(
 
 
 def _create_symlink(link_path: str, target: str) -> None:
-    """Create or refresh a single symlink, never clobbering a real file."""
+    """Create or refresh a single symlink, never clobbering a real file.
+
+    Raises:
+        RuntimeError: If ``link_path`` exists and is not a symlink, so that
+            staging can never destroy real data.
+    """
     os.makedirs(os.path.dirname(link_path), exist_ok=True)
 
     if os.path.islink(link_path):
@@ -82,12 +100,12 @@ def _create_symlink(link_path: str, target: str) -> None:
 
         os.unlink(link_path)
     elif os.path.exists(link_path):
-        raise RuntimeError("refusing to replace non-symlink: {}".format(link_path))
+        raise RuntimeError(f"refusing to replace non-symlink: {link_path}")
 
     os.symlink(target, link_path)
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:
     """Entry point. Returns a process exit code."""
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     parser = argparse.ArgumentParser(description=__doc__)
@@ -106,19 +124,23 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     exit_code = 0
     for link_relpath, target in links:
         if not os.path.exists(target):
-            print("missing annotation source for {}: {}".format(link_relpath, target))
+            print(f"missing annotation source for {link_relpath}: {target}")
             exit_code = 1
             continue
 
         if not args.no_symlinks:
-            _create_symlink(os.path.join(dest_dir, link_relpath), target)
+            try:
+                _create_symlink(os.path.join(dest_dir, link_relpath), target)
+            except (OSError, RuntimeError) as err:
+                print(f"cannot link {link_relpath}: {err}")
+                exit_code = 1
 
     os.makedirs(dest_dir, exist_ok=True)
     with open(args.dest, "w", encoding="utf-8") as f:
         json.dump(new_registry, f, indent=2)
         f.write("\n")
 
-    print("wrote {} ({} entries, {} symlinked)".format(args.dest, len(new_registry), len(links)))
+    print(f"wrote {args.dest} ({len(new_registry)} entries, {len(links)} symlinked)")
     return exit_code
 
 

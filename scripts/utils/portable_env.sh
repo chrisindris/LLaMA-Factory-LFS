@@ -409,8 +409,12 @@ portable_preflight() {
 	return "${_PORTABLE_PF_RC}"
 }
 
-# Create one repo-relative symlink, skipping when the target is unset and
-# refusing to clobber a real directory.
+# Create one repo-relative symlink.
+#
+# Returns 0 for success and for a deliberate skip (an unset or absent target --
+# PORTABLE_SRC_* are all optional). Returns 1 only for a genuine failure, so
+# portable_stage_assets can report that staging did not fully succeed instead of
+# claiming a link it never made.
 _portable_link() {
 	local link="$1" target="$2"
 
@@ -423,31 +427,53 @@ _portable_link() {
 
 	if [[ -L "${link}" ]]; then
 		[[ "$(readlink -f "${link}")" == "$(readlink -f "${target}")" ]] && return 0
-		rm -f "${link}"
+		rm -f "${link}" || {
+			echo "portable_env: cannot replace stale link: ${link}" >&2
+			return 1
+		}
 	elif [[ -e "${link}" ]]; then
+		# Never clobber real data with a link.
 		echo "portable_env: refusing to replace existing path: ${link}" >&2
-		return 0
+		return 1
 	fi
 
-	mkdir -p "$(dirname "${link}")"
-	ln -s "${target}" "${link}"
+	if ! mkdir -p "$(dirname "${link}")"; then
+		echo "portable_env: cannot create parent of ${link}" >&2
+		return 1
+	fi
+
+	if ! ln -s "${target}" "${link}"; then
+		echo "portable_env: cannot link ${link} -> ${target}" >&2
+		return 1
+	fi
+
 	echo "portable_env: linked ${link} -> ${target}" >&2
 }
 
 # Create the repo-relative staging tree and regenerate the portable registry.
 # Idempotent. Run explicitly with PORTABLE_STAGE=1; never called during training.
 portable_stage_assets() {
-	mkdir -p "${PROJECT_DIR}/data/h5" "${PROJECT_DIR}/data/annotations" \
-		"${PROJECT_DIR}/containers" "${PROJECT_DIR}/.cache"
+	local rc=0
 
-	_portable_link "${PROJECT_DIR}/.cache/huggingface" "${PORTABLE_SRC_HF_CACHE:-}"
-	_portable_link "${PROJECT_DIR}/containers/llamafactory.sif" "${PORTABLE_SRC_SIF:-}"
-	_portable_link "${PROJECT_DIR}/data/h5/ScanNet_h5" "${PORTABLE_SRC_SCANNET_H5:-}"
-	_portable_link "${PROJECT_DIR}/data/h5/Spatial-SSRL_images_h5" "${PORTABLE_SRC_SPATIALSSRL_H5:-}"
-	_portable_link "${PROJECT_DIR}/data/h5/3DThinker10K_images_h5" "${PORTABLE_SRC_THINKER10K_H5:-}"
+	if ! mkdir -p "${PROJECT_DIR}/data/h5" "${PROJECT_DIR}/data/annotations" \
+		"${PROJECT_DIR}/containers" "${PROJECT_DIR}/.cache"; then
+		echo "portable_env: cannot create the staging tree under ${PROJECT_DIR}" >&2
+		return 1
+	fi
+
+	# Keep going after a failure so one bad link does not hide the rest, but
+	# remember it: reporting success here would send a half-staged tree to a
+	# compute node that cannot fetch what is missing.
+	_portable_link "${PROJECT_DIR}/.cache/huggingface" "${PORTABLE_SRC_HF_CACHE:-}" || rc=1
+	_portable_link "${PROJECT_DIR}/containers/llamafactory.sif" "${PORTABLE_SRC_SIF:-}" || rc=1
+	_portable_link "${PROJECT_DIR}/data/h5/ScanNet_h5" "${PORTABLE_SRC_SCANNET_H5:-}" || rc=1
+	_portable_link "${PROJECT_DIR}/data/h5/Spatial-SSRL_images_h5" "${PORTABLE_SRC_SPATIALSSRL_H5:-}" || rc=1
+	_portable_link "${PROJECT_DIR}/data/h5/3DThinker10K_images_h5" "${PORTABLE_SRC_THINKER10K_H5:-}" || rc=1
 
 	echo "portable_env: generating data/annotations/dataset_info.json" >&2
 	python3 "${PROJECT_DIR}/scripts/make_portable_dataset_info.py" \
 		--source "${PROJECT_DIR}/data/dataset_info.json" \
-		--dest "${PROJECT_DIR}/data/annotations/dataset_info.json"
+		--dest "${PROJECT_DIR}/data/annotations/dataset_info.json" || rc=1
+
+	return "${rc}"
 }

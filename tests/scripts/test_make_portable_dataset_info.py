@@ -31,6 +31,48 @@ def test_absolute_file_name_becomes_dataset_scoped_relative_path():
     assert links == [("Scene30k/train-00000-of-00001.parquet", "/abs/hub/snap/data/train-00000-of-00001.parquet")]
 
 
+def test_absolute_directory_entry_keeps_trailing_slash_and_links_slash_free():
+    # Seven entries in the repo's registry name a directory this way. basename()
+    # returns "" for them, which would put the symlink at "SQA3D/" -- unbuildable
+    # once "SQA3D" exists as its own parent.
+    registry = {"SQA3D": {"file_name": "/abs/hub/snap/data/"}}
+    new_registry, links = mpdi.rewrite_registry(registry, "/repo/data", "/repo/data/annotations")
+
+    assert new_registry["SQA3D"]["file_name"] == "SQA3D/data/"
+    assert links == [("SQA3D/data", "/abs/hub/snap/data")]
+
+
+def test_main_links_a_directory_entry(tmp_path):
+    target = tmp_path / "real" / "data"
+    target.mkdir(parents=True)
+    (target / "shard.parquet").write_text("x", encoding="utf-8")
+    source = tmp_path / "dataset_info.json"
+    source.write_text(json.dumps({"D": {"file_name": f"{target}/"}}), encoding="utf-8")
+    dest = tmp_path / "annotations" / "dataset_info.json"
+
+    assert mpdi.main(["--source", str(source), "--dest", str(dest)]) == 0
+
+    link = tmp_path / "annotations" / "D" / "data"
+    assert link.is_symlink()
+    assert (link / "shard.parquet").read_text(encoding="utf-8") == "x"
+
+
+def test_main_reports_a_blocked_link_instead_of_raising(tmp_path):
+    target = tmp_path / "real" / "x.parquet"
+    target.parent.mkdir(parents=True)
+    target.write_text("data", encoding="utf-8")
+    source = tmp_path / "dataset_info.json"
+    source.write_text(json.dumps({"D": {"file_name": str(target)}}), encoding="utf-8")
+    dest = tmp_path / "annotations" / "dataset_info.json"
+    # A real directory sits exactly where the symlink must go.
+    (tmp_path / "annotations" / "D" / "x.parquet").mkdir(parents=True)
+
+    rc = mpdi.main(["--source", str(source), "--dest", str(dest)])
+
+    assert rc == 1
+    assert dest.exists()
+
+
 def test_relative_file_name_is_reanchored_to_new_dir():
     registry = {"3DThinker10k": {"file_name": "3DThinker-10K/out/3dthinker10k_cot.jsonl"}}
     new_registry, links = mpdi.rewrite_registry(registry, "/repo/data", "/repo/data/annotations")
