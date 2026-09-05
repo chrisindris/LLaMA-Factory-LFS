@@ -190,5 +190,28 @@ rc=0
 assert_rc "1" "${rc}" "a failing site.env aborts portable_init"
 rm -rf "${BAD_TMP}"
 
+# --- Task 4: preflight ---
+
+# Everything missing under a bogus root: nonzero exit, MISS lines present.
+PF_TMP="$(mktemp -d)/pfroot"
+mkdir -p "${PF_TMP}/scripts/utils" "${PF_TMP}/src/llamafactory"
+cp "${RESOLVER}" "${PF_TMP}/scripts/utils/portable_env.sh"
+touch "${PF_TMP}/setup.py"
+rc=0
+out="$(cd /tmp && CLUSTER=PORTABLE RUNNING_MODE=VENV PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; portable_preflight 2>&1' _ "${PF_TMP}/scripts/utils/portable_env.sh")" || rc=$?
+assert_rc "1" "${rc}" "preflight fails when artifacts are missing"
+assert_eq "yes" "$(grep -q 'MISS' <<<"${out}" && echo yes || echo no)" "preflight reports MISS lines"
+
+# The real repo has the YAML and DeepSpeed config, so those specific rows pass.
+out="$(cd /tmp && CLUSTER=PORTABLE RUNNING_MODE=VENV PORTABLE_SKIP_SITE_ENV=1 \
+	PORTABLE_YAML_FILE="${REPO}/examples/train_lora/portable_qwen2_5vl_lora_sft_CoT_traineval.yaml" \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; portable_preflight 2>&1' _ "${RESOLVER}")"
+assert_eq "yes" "$(grep -qE '^OK +deepspeed_config' <<<"${out}" && echo yes || echo no)" "preflight finds deepspeed config"
+
+# Preflight output never leaks an unexpanded token.
+assert_eq "0" "$(grep -cE '\$\{' <<<"${out}")" "preflight output has no unexpanded tokens"
+rm -rf "$(dirname "${PF_TMP}")"
+
 echo "=== ${PASS_COUNT} passed, failed=${FAILED} ==="
 exit "${FAILED}"

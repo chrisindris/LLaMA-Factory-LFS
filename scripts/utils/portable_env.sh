@@ -317,3 +317,79 @@ portable_init() {
 	# This tree's src must win over any editable install pointing elsewhere.
 	export PYTHONPATH="${PROJECT_DIR}/src:${PROJECT_DIR}/scripts${PYTHONPATH:+:${PYTHONPATH}}"
 }
+
+_PORTABLE_PF_RC=0
+
+_portable_pf_row() {
+	local status="$1" label="$2" path="$3"
+	printf '%-4s %-24s %s\n' "${status}" "${label}" "${path}"
+}
+
+# Required artifact: absence fails the job.
+_portable_pf_require() {
+	local label="$1" path="$2"
+	if [[ -n "${path}" && -e "${path}" ]]; then
+		_portable_pf_row "OK" "${label}" "${path}"
+	else
+		_portable_pf_row "MISS" "${label}" "${path:-<unset>}"
+		_PORTABLE_PF_RC=1
+	fi
+}
+
+# Optional artifact: absence is reported but does not fail the job.
+_portable_pf_optional() {
+	local label="$1" path="$2"
+	if [[ -n "${path}" && -e "${path}" ]]; then
+		_portable_pf_row "OK" "${label}" "${path}"
+	else
+		_portable_pf_row "WARN" "${label}" "${path:-<unset>}"
+	fi
+}
+
+# Validate every resolved path before the job consumes GPU time. Compute nodes
+# have no network, so a missing artifact can never be fetched at runtime.
+portable_preflight() {
+	_PORTABLE_PF_RC=0
+
+	echo "=== portable preflight ==="
+	echo "PROJECT_DIR:  ${PROJECT_DIR}"
+	echo "CLUSTER:      ${CLUSTER}"
+	echo "RUNNING_MODE: ${RUNNING_MODE}"
+	echo "---"
+
+	_portable_pf_require "project_root" "${PROJECT_DIR}/setup.py"
+	_portable_pf_require "llamafactory_src" "${PROJECT_DIR}/src/llamafactory"
+	_portable_pf_require "deepspeed_config" "${PROJECT_DIR}/examples/deepspeed/ds_z2_config.json"
+	_portable_pf_require "hf_cache" "${HF_HUB_CACHE}"
+	_portable_pf_require "scannet_h5" "${SCANNET_H5_DIR}"
+	_portable_pf_require "spatialssrl_h5" "${SPATIALSSRL_H5_DIR}"
+	_portable_pf_require "thinker10k_h5" "${THINKER10K_H5_DIR}"
+	_portable_pf_require "dataset_registry" "${PROJECT_DIR}/data/annotations/dataset_info.json"
+
+	if [[ -n "${PORTABLE_YAML_FILE:-}" ]]; then
+		_portable_pf_require "train_yaml" "${PORTABLE_YAML_FILE}"
+	fi
+
+	case "${RUNNING_MODE}" in
+	APPTAINER | SHELL)
+		_portable_pf_require "sif_image" "${SIF_FILE}"
+		_portable_pf_optional "apptainer_overlay" "${APPTAINER_OVERLAY}"
+		;;
+	VENV)
+		_portable_pf_require "venv_activate" "${VENV_LLAMAFACTORY}/bin/activate"
+		;;
+	esac
+
+	_portable_pf_optional "media_dir" "${MEDIA_DIR}"
+
+	echo "---"
+	if [[ "${_PORTABLE_PF_RC}" -eq 0 ]]; then
+		echo "preflight: PASS"
+	else
+		echo "preflight: FAIL — stage the MISS entries above, or set overrides in scripts/site.env"
+		echo "           see docs/superpowers/specs/2026-09-05-portable-slurm-wrapper-design.md"
+	fi
+	echo "=========================="
+
+	return "${_PORTABLE_PF_RC}"
+}
