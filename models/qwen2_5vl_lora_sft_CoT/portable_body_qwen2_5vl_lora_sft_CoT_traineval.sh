@@ -163,6 +163,12 @@ APPTAINER)
 	run_in_apptainer llamafactory-cli train "${PORTABLE_YAML_FILE}" "$@"
 	;;
 SHELL)
+	# Interactive debug (salloc / login). Under non-interactive sbatch, bare bash
+	# exits 0 immediately and the allocation looks successful without training.
+	if [[ -n "${SLURM_JOB_ID:-}" && ! -t 0 ]]; then
+		echo "RUNNING_MODE=SHELL is for interactive use only; refuse non-interactive sbatch." >&2
+		exit 1
+	fi
 	run_in_apptainer bash
 	;;
 VENV)
