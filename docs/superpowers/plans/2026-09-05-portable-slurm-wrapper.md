@@ -599,7 +599,7 @@ assert_eq "0" "${actual}" "no unexpanded tokens and no hardcoded username"
 - [ ] **Step 2: Run the test to verify the new assertions fail**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: the 7 Task 1 assertions still PASS; the 9 new assertions FAIL because `portable_init` is undefined. Exit code 1.
+Expected: the 7 Task 1 assertions still PASS; the 10 new assertions FAIL because `portable_init` is undefined. Exit code 1.
 
 - [ ] **Step 3: Write the minimal implementation**
 
@@ -830,7 +830,7 @@ portable_init() {
 - [ ] **Step 5: Run the tests to verify they pass**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: PASS — `16 passed, failed=0`, exit code 0.
+Expected: PASS — `17 passed, failed=0`, exit code 0.
 
 Run: `bash -n scripts/utils/portable_env.sh && bash -n scripts/site.env.example && echo SYNTAX_OK`
 Expected: `SYNTAX_OK`
@@ -886,7 +886,7 @@ rm -rf "$(dirname "${PF_TMP}")"
 - [ ] **Step 2: Run the test to verify the new assertions fail**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: the 16 earlier assertions PASS; the 4 new ones FAIL with `portable_preflight: command not found`. Exit code 1.
+Expected: the 17 earlier assertions PASS; the 4 new ones FAIL with `portable_preflight: command not found`. Exit code 1.
 
 - [ ] **Step 3: Write the minimal implementation**
 
@@ -974,7 +974,7 @@ portable_preflight() {
 
 Run: `bash scripts/tests/test_portable_env.sh`
 
-Expected: the `deepspeed_config` row passes; the whole suite reports `20 passed, failed=0`, exit code 0. Note the two assertions that exercise the real repo tolerate a `MISS` on `dataset_registry` because Task 5 has not generated it yet — they only assert on the `deepspeed_config` row and token absence.
+Expected: the `deepspeed_config` row passes; the whole suite reports `21 passed, failed=0`, exit code 0. Note the two assertions that exercise the real repo tolerate a `MISS` on `dataset_registry` because Task 5 has not generated it yet — they only assert on the `deepspeed_config` row and token absence.
 
 Run: `bash -n scripts/utils/portable_env.sh && echo SYNTAX_OK`
 Expected: `SYNTAX_OK`
@@ -1718,7 +1718,7 @@ rm -rf "${E2E_BASE}"
 - [ ] **Step 2: Run the test to verify the new assertions fail if anything is non-portable**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: all assertions PASS — `23 passed, failed=0`, exit 0. A failure here means a path is still tied to the original tree; fix the offending default in `portable_env.sh` rather than the test.
+Expected: all assertions PASS — `24 passed, failed=0`, exit 0. A failure here means a path is still tied to the original tree; fix the offending default in `portable_env.sh` rather than the test.
 
 - [ ] **Step 3: Add ignore rules**
 
@@ -1787,7 +1787,7 @@ make style && make quality
 CUDA_VISIBLE_DEVICES= WANDB_DISABLED=true python -m pytest tests/scripts -v
 git diff --stat
 ```
-Expected: bash suite `23 passed, failed=0`; ruff reports all checks passed; `tests/scripts` shows 20 passed. Confirm `git diff --stat` lists no `trillium_*`, `killarney_*`, `nibi_*`, `rorqual_*`, or unprefixed `slurm_*` file, and no change to `data/dataset_info.json`.
+Expected: bash suite `24 passed, failed=0`; ruff reports all checks passed; `tests/scripts` shows 20 passed. Confirm `git diff --stat` lists no `trillium_*`, `killarney_*`, `nibi_*`, `rorqual_*`, or unprefixed `slurm_*` file, and no change to `data/dataset_info.json`.
 
 - [ ] **Step 7: Commit**
 
