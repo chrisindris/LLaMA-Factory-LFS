@@ -1019,7 +1019,14 @@ git commit -m "feat(scripts): add repo-relative path defaults, site.env, cluster
 
 **Interfaces:**
 - Consumes: `portable_init()` from Task 3.
-- Produces: `portable_preflight()` — prints one line per checked artifact in the form `OK   <label>: <path>` or `MISS <label>: <path>` or `WARN <label>: <path>`, then a summary. Returns 0 when all required artifacts exist, 1 otherwise. Reads `PORTABLE_YAML_FILE` for the config to validate.
+- Produces: `portable_preflight()` — prints one aligned row per checked artifact,
+  `<STATUS> <label> <path>` where STATUS is `OK`, `MISS`, `WARN`, or `BAD`, then a summary. Returns 0
+  when every required artifact exists and resolved cleanly, 1 otherwise. Reads `PORTABLE_YAML_FILE`
+  for the config to validate.
+- `BAD` means the path still contains an unexpanded `${...}` token, i.e. it was built from an unset
+  variable. `_portable_default` only screens tokens out of *sysconfig* values, so an environment or
+  `site.env` value can still carry one; preflight must refuse such a path rather than let it resolve
+  to somewhere under the filesystem root.
 
 - [ ] **Step 1: Write the failing test**
 
@@ -1045,32 +1052,56 @@ out="$(cd /tmp && CLUSTER=PORTABLE RUNNING_MODE=VENV PORTABLE_SKIP_SITE_ENV=1 \
 	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; portable_preflight 2>&1' _ "${RESOLVER}")"
 assert_eq "yes" "$(grep -qE '^OK +deepspeed_config' <<<"${out}" && echo yes || echo no)" "preflight finds deepspeed config"
 
-# Preflight output never leaks an unexpanded token.
+# Require the table to have rendered. Without this, the token assertion below
+# passes even when portable_preflight does not exist, because `out` is then just
+# "command not found" and grep -c reports 0 on it.
+assert_eq "yes" "$(grep -q '=== portable preflight ===' <<<"${out}" && echo yes || echo no)" "preflight renders its table"
+
+# A correctly resolved environment leaks no token into the output.
 assert_eq "0" "$(grep -cE '\$\{' <<<"${out}")" "preflight output has no unexpanded tokens"
 rm -rf "$(dirname "${PF_TMP}")"
+
+# A path carrying a literal ${...} must be refused, not reported OK because some
+# ancestor happens to exist. _portable_default screens tokens out of sysconfig
+# values only, so an environment or site.env value can still carry one.
+rc=0
+out="$(cd /tmp && HF_HUB_CACHE='${NOT_SET_ANYWHERE}' CLUSTER=PORTABLE RUNNING_MODE=VENV PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; portable_preflight 2>&1' _ "${RESOLVER}")" || rc=$?
+assert_rc "1" "${rc}" "an unexpanded token fails preflight"
+assert_eq "yes" "$(grep -qE '^BAD +hf_cache' <<<"${out}" && echo yes || echo no)" "an unexpanded token is reported as BAD"
 ```
 
 - [ ] **Step 2: Run the test to verify the new assertions fail**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: all earlier assertions still PASS; the 4 new ones FAIL with `portable_preflight: command not found`. Exit code 1.
+Expected: all earlier assertions still PASS; every new one FAILS, since `portable_preflight` does not exist yet. Exit code 1.
 
 - [ ] **Step 3: Write the minimal implementation**
 
 Append to `scripts/utils/portable_env.sh`:
 
 ```bash
-_PORTABLE_PF_RC=0
-
 _portable_pf_row() {
 	local status="$1" label="$2" path="$3"
 	printf '%-4s %-24s %s\n' "${status}" "${label}" "${path}"
 }
 
-# Required artifact: absence fails the job.
+# A path still holding a ${...} token was built from an unset variable. Treating
+# it as a real path would resolve it somewhere under the filesystem root, so it is
+# never "present" — and never merely "missing" either, since the fix is to define
+# the variable rather than to stage a file.
+_portable_pf_unresolved() {
+	[[ "$1" == *'${'* ]]
+}
+
+# Required artifact: absence, or an unresolved token, fails the job.
 _portable_pf_require() {
 	local label="$1" path="$2"
-	if [[ -n "${path}" && -e "${path}" ]]; then
+	if _portable_pf_unresolved "${path}"; then
+		# Show the offending value: the operator needs it to find the culprit.
+		_portable_pf_row "BAD" "${label}" "unexpanded token in ${path}"
+		_PORTABLE_PF_RC=1
+	elif [[ -n "${path}" && -e "${path}" ]]; then
 		_portable_pf_row "OK" "${label}" "${path}"
 	else
 		_portable_pf_row "MISS" "${label}" "${path:-<unset>}"
@@ -1078,10 +1109,14 @@ _portable_pf_require() {
 	fi
 }
 
-# Optional artifact: absence is reported but does not fail the job.
+# Optional artifact: absence only warns. An unresolved token still fails, because
+# it is a configuration error rather than an absent file.
 _portable_pf_optional() {
 	local label="$1" path="$2"
-	if [[ -n "${path}" && -e "${path}" ]]; then
+	if _portable_pf_unresolved "${path}"; then
+		_portable_pf_row "BAD" "${label}" "unexpanded token in ${path}"
+		_PORTABLE_PF_RC=1
+	elif [[ -n "${path}" && -e "${path}" ]]; then
 		_portable_pf_row "OK" "${label}" "${path}"
 	else
 		_portable_pf_row "WARN" "${label}" "${path:-<unset>}"
@@ -1128,7 +1163,8 @@ portable_preflight() {
 	if [[ "${_PORTABLE_PF_RC}" -eq 0 ]]; then
 		echo "preflight: PASS"
 	else
-		echo "preflight: FAIL — stage the MISS entries above, or set overrides in scripts/site.env"
+		echo "preflight: FAIL — stage the MISS entries above (or set overrides in scripts/site.env);"
+		echo "           a BAD entry means an unset variable, not a missing file"
 		echo "           see docs/superpowers/specs/2026-09-05-portable-slurm-wrapper-design.md"
 	fi
 	echo "=========================="
