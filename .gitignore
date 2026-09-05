@@ -194,3 +194,9 @@ wandb/
 swanlog/
 generated_predictions.jsonl
 predictions_score.json
+
+# portable job staging (see docs/superpowers/specs/2026-09-05-portable-slurm-wrapper-design.md)
+scripts/site.env
+containers/
+data/h5/
+data/annotations/

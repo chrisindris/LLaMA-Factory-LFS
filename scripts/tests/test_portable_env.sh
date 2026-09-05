@@ -311,5 +311,39 @@ assert_rc 1 "${rc}" "one failing link makes portable_stage_assets return non-zer
 
 rm -rf "${stage_root}"
 
+# --- Task 7: end-to-end relocation acceptance ---
+# Copy the files the portable job needs into a differently-named tree and confirm
+# the body resolves entirely within that copy, with no reference to the original.
+
+E2E_BASE="$(mktemp -d)"
+E2E="${E2E_BASE}/some-other-name"
+mkdir -p "${E2E}/scripts/utils" "${E2E}/src/llamafactory" \
+	"${E2E}/models/qwen2_5vl_lora_sft_CoT" "${E2E}/examples/train_lora" \
+	"${E2E}/examples/deepspeed" "${E2E}/data"
+touch "${E2E}/setup.py"
+cp "${REPO}/scripts/utils/portable_env.sh" "${E2E}/scripts/utils/"
+cp "${REPO}/scripts/sysconfigtool.py" "${REPO}/scripts/sysconfig.json" \
+	"${REPO}/scripts/make_portable_dataset_info.py" "${E2E}/scripts/"
+cp "${REPO}/examples/deepspeed/ds_z2_config.json" "${E2E}/examples/deepspeed/"
+cp "${REPO}/examples/train_lora/portable_qwen2_5vl_lora_sft_CoT_traineval.yaml" "${E2E}/examples/train_lora/"
+cp "${REPO}/models/qwen2_5vl_lora_sft_CoT/portable_body_qwen2_5vl_lora_sft_CoT_traineval.sh" \
+	"${REPO}/models/qwen2_5vl_lora_sft_CoT/portable_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh" \
+	"${E2E}/models/qwen2_5vl_lora_sft_CoT/"
+echo '{}' >"${E2E}/data/dataset_info.json"
+
+# rc is expected to be 1: no data is staged in the copy, so preflight reports
+# MISS for the H5 roots and the generated registry. What is under test is where
+# the paths point, not whether the artifacts exist.
+out="$(cd /tmp && PREFLIGHT=1 CLUSTER=PORTABLE RUNNING_MODE=VENV PORTABLE_SKIP_SITE_ENV=1 \
+	"${E2E}/models/qwen2_5vl_lora_sft_CoT/portable_body_qwen2_5vl_lora_sft_CoT_traineval.sh" 2>&1)" || true
+
+assert_eq "yes" "$(grep -q "PROJECT_DIR:  ${E2E}" <<<"${out}" && echo yes || echo no)" \
+	"relocated body resolves PROJECT_DIR to the copy"
+assert_eq "0" "$(grep -c "${REPO}/" <<<"${out}")" \
+	"relocated body never references the original checkout"
+assert_eq "yes" "$(grep -qE '^OK +train_yaml' <<<"${out}" && echo yes || echo no)" \
+	"relocated body finds its own YAML"
+rm -rf "${E2E_BASE}"
+
 echo "=== ${PASS_COUNT} passed, failed=${FAILED} ==="
 exit "${FAILED}"

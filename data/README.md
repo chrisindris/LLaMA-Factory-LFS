@@ -12,6 +12,55 @@ The [dataset_info.json](dataset_info.json) contains all available datasets. If y
 
 H5-backed datasets keep annotation path strings and decode images lazily through `src/llamafactory/data/data_packing/h5_image_store.py` (no need to unpack JPEG trees for Spatial-SSRL or 3DThinker-10k). Scene30k paths that point at another cluster’s ScanNet root are remapped via `SCANNET_H5_DIR`.
 
+### Portable (repo-relative) CoT job
+
+`models/qwen2_5vl_lora_sft_CoT/portable_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh`
+runs the same CoT SFT mix as the cluster-specific wrappers, but derives every
+path from the repo root, so the checkout can be renamed or moved to another
+cluster. Large artifacts are reached through symlinks; nothing is copied.
+
+One-time setup on a **login** node (has network; compute nodes do not):
+
+```bash
+cp scripts/site.env.example scripts/site.env
+# edit scripts/site.env: point PORTABLE_SRC_* at the real HF cache, SIF, and H5 trees
+
+cd models/qwen2_5vl_lora_sft_CoT
+PORTABLE_STAGE=1 ./portable_body_qwen2_5vl_lora_sft_CoT_traineval.sh   # create symlinks + registry
+PREFLIGHT=1      ./portable_body_qwen2_5vl_lora_sft_CoT_traineval.sh   # verify, exits nonzero on gaps
+```
+
+Also set `PORTABLE_SRC_SCENE30K_ANNOTATION` and
+`PORTABLE_SRC_SPATIALSSRL_ANNOTATION` in `scripts/site.env`. The annotation
+paths recorded in `data/dataset_info.json` are absolute paths under the original
+author's account and are unreadable for anyone else; `data/dataset_info.json` is
+deliberately never modified, so these two variables are how you redirect those
+entries. `portable_stage_assets` forwards them to
+`scripts/make_portable_dataset_info.py` as `--override NAME=PATH`.
+
+Staging writes `data/annotations/dataset_info.json`, a generated registry whose
+`file_name` values are repo-relative. Only the datasets this job actually loads
+can fail staging: the generator's `--require`, which `portable_stage_assets`
+defaults from `PORTABLE_REQUIRED_DATASETS`
+(`Scene30k,SpatialSSRL_coldstart,3DThinker10k`). Every other entry, including
+the seven unrelated `SQA3D*` ablations, is still rewritten but only warns,
+condensed into a single `skipped N entries that are absent and not required`
+line. The registry is published atomically and only when every required dataset
+resolves, so a failed staging run leaves no `data/annotations/dataset_info.json`
+behind and never hands preflight a registry full of dangling links.
+
+Submit once preflight passes:
+
+```bash
+sbatch portable_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh
+sbatch -A <account> --mail-user=<you> --mail-type=ALL portable_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh
+sbatch portable_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh num_train_epochs=1.0   # CLI overrides
+```
+
+Outputs land in `saves/qwen2_5vl-7b/lora/sft/CoT_traineval_portable`, separate
+from the Trillium run. `scripts/site.env`, `containers/`, `data/h5/`, and
+`data/annotations/` are all gitignored, so staging never dirties the tree.
+
 ### QUESTION_ID stamping (prediction dumps)
 
 Train/eval response logging (`save_train_predictions` / `save_eval_predictions`) keys dumps by `QUESTION_ID`.
