@@ -29,6 +29,12 @@ portable_resolve_project_dir() {
 			echo "portable_env: LFS_PROJECT_DIR does not exist: ${LFS_PROJECT_DIR}" >&2
 			return 1
 		fi
+		# Validate even an explicit override: every path in this library is derived
+		# from PROJECT_DIR, so a wrong root yields a whole set of wrong paths.
+		if ! _portable_is_root "${candidate}"; then
+			echo "portable_env: LFS_PROJECT_DIR is not a repo root: ${candidate}" >&2
+			return 1
+		fi
 		PROJECT_DIR="${candidate}"
 		export PROJECT_DIR
 		return 0
@@ -47,12 +53,14 @@ portable_resolve_project_dir() {
 		return 0
 	fi
 
-	# Fallback for unusual layouts: ask git.
+	# Fallback for unusual layouts: ask git, then validate the same way.
 	local git_root
 	if git_root="$(git -C "${here}" rev-parse --show-toplevel 2>/dev/null)" && [[ -n "${git_root}" ]]; then
-		PROJECT_DIR="$(cd "${git_root}" && pwd -P)"
-		export PROJECT_DIR
-		return 0
+		if candidate="$(cd "${git_root}" 2>/dev/null && pwd -P)" && _portable_is_root "${candidate}"; then
+			PROJECT_DIR="${candidate}"
+			export PROJECT_DIR
+			return 0
+		fi
 	fi
 
 	echo "portable_env: could not find repo root (no ${PORTABLE_ROOT_SENTINEL_FILE} + ${PORTABLE_ROOT_SENTINEL_DIR})" >&2
