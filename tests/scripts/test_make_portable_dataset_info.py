@@ -257,3 +257,36 @@ def test_main_is_idempotent(tmp_path):
 
     assert mpdi.main(["--source", str(source), "--dest", str(dest)]) == 0
     assert mpdi.main(["--source", str(source), "--dest", str(dest)]) == 0
+
+
+def test_required_relative_entry_is_validated(tmp_path):
+    # A relative entry produces no symlink, so the link loop never sees it. --require
+    # must still guard it, or it claims a check it does not perform.
+    source = tmp_path / "dataset_info.json"
+    source.write_text(json.dumps({"R": {"file_name": "sub/missing.jsonl"}}), encoding="utf-8")
+    dest = tmp_path / "annotations" / "dataset_info.json"
+
+    rc = mpdi.main(["--source", str(source), "--dest", str(dest), "--require", "R"])
+
+    assert rc == 1
+    assert not dest.exists()
+
+
+def test_required_relative_entry_that_exists_passes(tmp_path):
+    (tmp_path / "sub").mkdir()
+    (tmp_path / "sub" / "present.jsonl").write_text("{}", encoding="utf-8")
+    source = tmp_path / "dataset_info.json"
+    source.write_text(json.dumps({"R": {"file_name": "sub/present.jsonl"}}), encoding="utf-8")
+    dest = tmp_path / "annotations" / "dataset_info.json"
+
+    assert mpdi.main(["--source", str(source), "--dest", str(dest), "--require", "R"]) == 0
+    assert dest.exists()
+
+
+def test_required_hub_only_entry_is_not_flagged(tmp_path):
+    # An hf_hub_url entry has no file_name to check; requiring it must not fail.
+    source = tmp_path / "dataset_info.json"
+    source.write_text(json.dumps({"H": {"hf_hub_url": "org/name"}}), encoding="utf-8")
+    dest = tmp_path / "annotations" / "dataset_info.json"
+
+    assert mpdi.main(["--source", str(source), "--dest", str(dest), "--require", "H"]) == 0

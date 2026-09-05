@@ -197,6 +197,25 @@ def main(argv: Sequence[str] | None = None) -> int:
             if is_required:
                 exit_code = 1
 
+    # Required datasets whose file_name is already relative produce no link record, so
+    # the loop above never checks them. Without this, --require silently validates
+    # nothing for such a dataset while claiming to guard it.
+    linked_datasets = {relpath.split("/", 1)[0] for relpath, _ in links}
+    for dataset in sorted(required - linked_datasets):
+        file_name = new_registry[dataset].get("file_name")
+        if file_name is None:
+            continue
+
+        # normpath collapses the leading ".." itself. Without it, the probe would run
+        # before dest_dir is created below, and os.path.exists() returns False for any
+        # path with a non-existent intermediate component -- so a present file would be
+        # reported missing on the first staging run.
+        resolved = os.path.normpath(os.path.join(dest_dir, file_name))
+        if not os.path.exists(resolved):
+            missing_required.append(dataset)
+            print(f"missing source for {dataset}: {resolved}")
+            exit_code = 1
+
     os.makedirs(dest_dir, exist_ok=True)
     # Publish atomically and only on success: a registry whose links are dangling
     # would otherwise satisfy preflight's existence check and the job would die
@@ -216,7 +235,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(
             f"not writing {args.dest}: required datasets unavailable "
             f"({', '.join(sorted(set(missing_required)))}). "
-            f"Set the matching PORTABLE_SRC_*_ANNOTATION in scripts/site.env."
+            f"For a hub snapshot, set the matching PORTABLE_SRC_*_ANNOTATION in scripts/site.env; "
+            f"for an in-repo path, check the file listed above is present."
         )
 
     return exit_code
