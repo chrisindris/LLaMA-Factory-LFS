@@ -640,18 +640,57 @@ portable_detect_cluster() {
 	export RUNNING_MODE
 }
 
+# Every variable this library resolves. Used to enforce precedence around
+# site.env; keep in sync with portable_set_paths and portable_set_offline.
+PORTABLE_MANAGED_VARS=(
+	CLUSTER RUNNING_MODE
+	HF_HOME HF_HUB_CACHE TRANSFORMERS_CACHE HUGGINGFACE_HUB_CACHE HF_DATASETS_CACHE
+	HF_HUB_DISABLE_XET SIF_FILE VENV_LLAMAFACTORY APPTAINER_OVERLAY
+	SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR MEDIA_DIR
+	TRITON_CACHE_DIR TORCH_EXTENSIONS_DIR PYTORCH_KERNEL_CACHE_PATH MPLCONFIGDIR
+	FLASHINFER_WORKSPACE_BASE WANDB_DIR WANDB_CACHE_DIR TORCH_CUDA_ARCH_LIST
+	HF_HUB_OFFLINE TRANSFORMERS_OFFLINE HF_DATASETS_OFFLINE WANDB_MODE
+	DISABLE_VERSION_CHECK FORCE_TORCHRUN
+)
+
 # Source scripts/site.env if present, so operators can pin site paths without
-# editing tracked files. Pre-set environment still wins: site.env is expected to
-# use the ${VAR:-default} form for anything overridable.
+# editing tracked files.
+#
+# Pre-set environment outranks site.env by contract. Enforce that here rather
+# than trusting site.env to be written defensively: an operator will naturally
+# write `export HF_HOME=/x`, and that plain form would otherwise clobber a value
+# passed in by `sbatch --export` or set on the submit line. So snapshot the
+# managed variables that were already set, source the file, then restore them.
+# Variables site.env owns outright (PORTABLE_SRC_*, EXTRA_BINDS) are not in the
+# managed list and pass through untouched.
 portable_load_site_env() {
 	[[ -n "${PORTABLE_SKIP_SITE_ENV:-}" ]] && return 0
 
 	local site_env="${PORTABLE_SITE_ENV:-${PROJECT_DIR}/scripts/site.env}"
 	[[ -f "${site_env}" ]] || return 0
 
+	local -a preset_names=() preset_values=()
+	local name
+	for name in "${PORTABLE_MANAGED_VARS[@]}"; do
+		# ${!name+x} tests "is set", so an intentionally empty value counts.
+		if [[ -n "${!name+x}" ]]; then
+			preset_names+=("${name}")
+			preset_values+=("${!name}")
+		fi
+	done
+
 	echo "portable_env: loading ${site_env}" >&2
 	# shellcheck disable=SC1090
 	source "${site_env}"
+
+	# Guard the expansion: bash 4.2/4.3 error on an empty array under `set -u`.
+	if ((${#preset_names[@]} > 0)); then
+		local i
+		for i in "${!preset_names[@]}"; do
+			printf -v "${preset_names[i]}" '%s' "${preset_values[i]}"
+			export "${preset_names[i]}"
+		done
+	fi
 }
 
 # Pull cluster values from sysconfig.json when available. Values equal to "None"
@@ -755,8 +794,12 @@ portable_init() {
 # Site overrides for portable LLaMA-Factory-LFS SLURM jobs.
 #
 # Copy to scripts/site.env (gitignored) and edit. Sourced by
-# scripts/utils/portable_env.sh. Use the ${VAR:-value} form so that anything
-# already exported (e.g. via `sbatch --export`) still wins.
+# scripts/utils/portable_env.sh.
+#
+# A plain `export X=value` is fine here: portable_load_site_env restores any
+# variable that was already set before this file was sourced, so anything passed
+# in via `sbatch --export` or on the submit line still wins. You do not need the
+# defensive ${X:-value} form.
 #
 # Everything here is OPTIONAL. With no site.env, all paths default to
 # repo-relative locations and you stage them with symlinks:
@@ -772,13 +815,13 @@ portable_init() {
 # export PORTABLE_SRC_SPATIALSSRL_ANNOTATION="/scratch/$USER/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json"
 
 # --- Or point directly at absolute paths and skip staging entirely ---
-# export HF_HOME="${HF_HOME:-/scratch/$USER/huggingface/hub}"
-# export SIF_FILE="${SIF_FILE:-/scratch/$USER/containers/llamafactory.sif}"
-# export SCANNET_H5_DIR="${SCANNET_H5_DIR:-/scratch/$USER/ScanNet_h5/scans}"
-# export SPATIALSSRL_H5_DIR="${SPATIALSSRL_H5_DIR:-/scratch/$USER/Spatial-SSRL_images_h5}"
-# export THINKER10K_H5_DIR="${THINKER10K_H5_DIR:-/scratch/$USER/3DThinker10K_images_h5}"
-# export VENV_LLAMAFACTORY="${VENV_LLAMAFACTORY:-/scratch/$USER/venv_llamafactory_cu126}"
-# export APPTAINER_OVERLAY="${APPTAINER_OVERLAY:-/scratch/$USER/apptainer/overlay.img}"
+# export HF_HOME="/scratch/$USER/huggingface/hub"
+# export SIF_FILE="/scratch/$USER/containers/llamafactory.sif"
+# export SCANNET_H5_DIR="/scratch/$USER/ScanNet_h5/scans"
+# export SPATIALSSRL_H5_DIR="/scratch/$USER/Spatial-SSRL_images_h5"
+# export THINKER10K_H5_DIR="/scratch/$USER/3DThinker10K_images_h5"
+# export VENV_LLAMAFACTORY="/scratch/$USER/venv_llamafactory_cu126"
+# export APPTAINER_OVERLAY="/scratch/$USER/apptainer/overlay.img"
 
 # --- Extra Apptainer binds, space separated ---
 # export EXTRA_BINDS="-B /project/def-someone/shared -B /scratch/$USER"
