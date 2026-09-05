@@ -1245,6 +1245,48 @@ def test_absolute_file_name_becomes_dataset_scoped_relative_path():
     assert links == [("Scene30k/train-00000-of-00001.parquet", "/abs/hub/snap/data/train-00000-of-00001.parquet")]
 
 
+def test_absolute_directory_entry_keeps_trailing_slash_and_links_slash_free():
+    # Seven entries in the repo's registry name a directory this way. basename()
+    # returns "" for them, which would put the symlink at "SQA3D/" -- unbuildable
+    # once "SQA3D" exists as its own parent.
+    registry = {"SQA3D": {"file_name": "/abs/hub/snap/data/"}}
+    new_registry, links = mpdi.rewrite_registry(registry, "/repo/data", "/repo/data/annotations")
+
+    assert new_registry["SQA3D"]["file_name"] == "SQA3D/data/"
+    assert links == [("SQA3D/data", "/abs/hub/snap/data")]
+
+
+def test_main_links_a_directory_entry(tmp_path):
+    target = tmp_path / "real" / "data"
+    target.mkdir(parents=True)
+    (target / "shard.parquet").write_text("x", encoding="utf-8")
+    source = tmp_path / "dataset_info.json"
+    source.write_text(json.dumps({"D": {"file_name": f"{target}/"}}), encoding="utf-8")
+    dest = tmp_path / "annotations" / "dataset_info.json"
+
+    assert mpdi.main(["--source", str(source), "--dest", str(dest)]) == 0
+
+    link = tmp_path / "annotations" / "D" / "data"
+    assert link.is_symlink()
+    assert (link / "shard.parquet").read_text(encoding="utf-8") == "x"
+
+
+def test_main_reports_a_blocked_link_instead_of_raising(tmp_path):
+    target = tmp_path / "real" / "x.parquet"
+    target.parent.mkdir(parents=True)
+    target.write_text("data", encoding="utf-8")
+    source = tmp_path / "dataset_info.json"
+    source.write_text(json.dumps({"D": {"file_name": str(target)}}), encoding="utf-8")
+    dest = tmp_path / "annotations" / "dataset_info.json"
+    # A real directory sits exactly where the symlink must go.
+    (tmp_path / "annotations" / "D" / "x.parquet").mkdir(parents=True)
+
+    rc = mpdi.main(["--source", str(source), "--dest", str(dest)])
+
+    assert rc == 1
+    assert dest.exists()
+
+
 def test_relative_file_name_is_reanchored_to_new_dir():
     registry = {"3DThinker10k": {"file_name": "3DThinker-10K/out/3dthinker10k_cot.jsonl"}}
     new_registry, links = mpdi.rewrite_registry(registry, "/repo/data", "/repo/data/annotations")
@@ -1363,6 +1405,9 @@ from ``data/`` to ``data/annotations/`` therefore requires rewriting every
 
 * Absolute paths become ``<dataset_name>/<basename>`` and are reached through a
   symlink created next to the generated registry, so no large file is copied.
+  Entries may name a *directory* (the repo's registry records seven such, with a
+  trailing slash); the trailing slash is preserved in the rewritten value while
+  the symlink itself is created at the slash-free path.
 * Already-relative paths are re-anchored with ``..`` so they keep resolving.
 
 Usage:
@@ -1370,16 +1415,18 @@ Usage:
     python scripts/make_portable_dataset_info.py --source A --dest B --no-symlinks
 """
 
+from __future__ import annotations
+
 import argparse
 import json
 import os
 import sys
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Sequence
 
 
 def rewrite_registry(
-    registry: Dict[str, Any], source_dir: str, dest_dir: str
-) -> Tuple[Dict[str, Any], List[Tuple[str, str]]]:
+    registry: dict[str, Any], source_dir: str, dest_dir: str
+) -> tuple[dict[str, Any], list[tuple[str, str]]]:
     """Rewrite every ``file_name`` so it resolves against ``dest_dir``.
 
     Args:
@@ -1389,10 +1436,12 @@ def rewrite_registry(
 
     Returns:
         A tuple of the new registry and a list of ``(link_relpath, target)``
-        pairs describing the symlinks needed for absolute entries.
+        pairs describing the symlinks needed for absolute entries. Each
+        ``link_relpath`` is slash-free even when the rewritten ``file_name``
+        keeps its trailing slash.
     """
-    new_registry: Dict[str, Any] = {}
-    links: List[Tuple[str, str]] = []
+    new_registry: dict[str, Any] = {}
+    links: list[tuple[str, str]] = []
 
     for name, attrs in registry.items():
         if not isinstance(attrs, dict) or "file_name" not in attrs:
@@ -1403,9 +1452,14 @@ def rewrite_registry(
         file_name = attrs["file_name"]
 
         if os.path.isabs(file_name):
-            link_relpath = "{}/{}".format(name, os.path.basename(file_name))
-            new_attrs["file_name"] = link_relpath
-            links.append((link_relpath, file_name))
+            # A trailing slash marks a directory entry. basename() would return
+            # "" for it, which would place the symlink at "<name>/" -- a path that
+            # cannot be created once "<name>" exists as the link's parent.
+            is_dir = file_name.endswith("/")
+            target = file_name.rstrip("/")
+            link_relpath = f"{name}/{os.path.basename(target)}"
+            new_attrs["file_name"] = f"{link_relpath}/" if is_dir else link_relpath
+            links.append((link_relpath, target))
         else:
             absolute = os.path.join(source_dir, file_name)
             new_attrs["file_name"] = os.path.relpath(absolute, dest_dir).replace(os.sep, "/")
@@ -1416,7 +1470,12 @@ def rewrite_registry(
 
 
 def _create_symlink(link_path: str, target: str) -> None:
-    """Create or refresh a single symlink, never clobbering a real file."""
+    """Create or refresh a single symlink, never clobbering a real file.
+
+    Raises:
+        RuntimeError: If ``link_path`` exists and is not a symlink, so that
+            staging can never destroy real data.
+    """
     os.makedirs(os.path.dirname(link_path), exist_ok=True)
 
     if os.path.islink(link_path):
@@ -1425,12 +1484,12 @@ def _create_symlink(link_path: str, target: str) -> None:
 
         os.unlink(link_path)
     elif os.path.exists(link_path):
-        raise RuntimeError("refusing to replace non-symlink: {}".format(link_path))
+        raise RuntimeError(f"refusing to replace non-symlink: {link_path}")
 
     os.symlink(target, link_path)
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:
     """Entry point. Returns a process exit code."""
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     parser = argparse.ArgumentParser(description=__doc__)
@@ -1449,19 +1508,23 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     exit_code = 0
     for link_relpath, target in links:
         if not os.path.exists(target):
-            print("missing annotation source for {}: {}".format(link_relpath, target))
+            print(f"missing annotation source for {link_relpath}: {target}")
             exit_code = 1
             continue
 
         if not args.no_symlinks:
-            _create_symlink(os.path.join(dest_dir, link_relpath), target)
+            try:
+                _create_symlink(os.path.join(dest_dir, link_relpath), target)
+            except (OSError, RuntimeError) as err:
+                print(f"cannot link {link_relpath}: {err}")
+                exit_code = 1
 
     os.makedirs(dest_dir, exist_ok=True)
     with open(args.dest, "w", encoding="utf-8") as f:
         json.dump(new_registry, f, indent=2)
         f.write("\n")
 
-    print("wrote {} ({} entries, {} symlinked)".format(args.dest, len(new_registry), len(links)))
+    print(f"wrote {args.dest} ({len(new_registry)} entries, {len(links)} symlinked)")
     return exit_code
 
 
@@ -1492,8 +1555,12 @@ Expected: `LICENSE_HEADERS_OK` with no `MISSING` lines.
 - [ ] **Step 5: Append `portable_stage_assets` to `scripts/utils/portable_env.sh`**
 
 ```bash
-# Create one repo-relative symlink, skipping when the target is unset and
-# refusing to clobber a real directory.
+# Create one repo-relative symlink.
+#
+# Returns 0 for success and for a deliberate skip (an unset or absent target --
+# PORTABLE_SRC_* are all optional). Returns 1 only for a genuine failure, so
+# portable_stage_assets can report that staging did not fully succeed instead of
+# claiming a link it never made.
 _portable_link() {
 	local link="$1" target="$2"
 
@@ -1506,33 +1573,55 @@ _portable_link() {
 
 	if [[ -L "${link}" ]]; then
 		[[ "$(readlink -f "${link}")" == "$(readlink -f "${target}")" ]] && return 0
-		rm -f "${link}"
+		rm -f "${link}" || {
+			echo "portable_env: cannot replace stale link: ${link}" >&2
+			return 1
+		}
 	elif [[ -e "${link}" ]]; then
+		# Never clobber real data with a link.
 		echo "portable_env: refusing to replace existing path: ${link}" >&2
-		return 0
+		return 1
 	fi
 
-	mkdir -p "$(dirname "${link}")"
-	ln -s "${target}" "${link}"
+	if ! mkdir -p "$(dirname "${link}")"; then
+		echo "portable_env: cannot create parent of ${link}" >&2
+		return 1
+	fi
+
+	if ! ln -s "${target}" "${link}"; then
+		echo "portable_env: cannot link ${link} -> ${target}" >&2
+		return 1
+	fi
+
 	echo "portable_env: linked ${link} -> ${target}" >&2
 }
 
 # Create the repo-relative staging tree and regenerate the portable registry.
 # Idempotent. Run explicitly with PORTABLE_STAGE=1; never called during training.
 portable_stage_assets() {
-	mkdir -p "${PROJECT_DIR}/data/h5" "${PROJECT_DIR}/data/annotations" \
-		"${PROJECT_DIR}/containers" "${PROJECT_DIR}/.cache"
+	local rc=0
 
-	_portable_link "${PROJECT_DIR}/.cache/huggingface" "${PORTABLE_SRC_HF_CACHE:-}"
-	_portable_link "${PROJECT_DIR}/containers/llamafactory.sif" "${PORTABLE_SRC_SIF:-}"
-	_portable_link "${PROJECT_DIR}/data/h5/ScanNet_h5" "${PORTABLE_SRC_SCANNET_H5:-}"
-	_portable_link "${PROJECT_DIR}/data/h5/Spatial-SSRL_images_h5" "${PORTABLE_SRC_SPATIALSSRL_H5:-}"
-	_portable_link "${PROJECT_DIR}/data/h5/3DThinker10K_images_h5" "${PORTABLE_SRC_THINKER10K_H5:-}"
+	if ! mkdir -p "${PROJECT_DIR}/data/h5" "${PROJECT_DIR}/data/annotations" \
+		"${PROJECT_DIR}/containers" "${PROJECT_DIR}/.cache"; then
+		echo "portable_env: cannot create the staging tree under ${PROJECT_DIR}" >&2
+		return 1
+	fi
+
+	# Keep going after a failure so one bad link does not hide the rest, but
+	# remember it: reporting success here would send a half-staged tree to a
+	# compute node that cannot fetch what is missing.
+	_portable_link "${PROJECT_DIR}/.cache/huggingface" "${PORTABLE_SRC_HF_CACHE:-}" || rc=1
+	_portable_link "${PROJECT_DIR}/containers/llamafactory.sif" "${PORTABLE_SRC_SIF:-}" || rc=1
+	_portable_link "${PROJECT_DIR}/data/h5/ScanNet_h5" "${PORTABLE_SRC_SCANNET_H5:-}" || rc=1
+	_portable_link "${PROJECT_DIR}/data/h5/Spatial-SSRL_images_h5" "${PORTABLE_SRC_SPATIALSSRL_H5:-}" || rc=1
+	_portable_link "${PROJECT_DIR}/data/h5/3DThinker10K_images_h5" "${PORTABLE_SRC_THINKER10K_H5:-}" || rc=1
 
 	echo "portable_env: generating data/annotations/dataset_info.json" >&2
 	python3 "${PROJECT_DIR}/scripts/make_portable_dataset_info.py" \
 		--source "${PROJECT_DIR}/data/dataset_info.json" \
-		--dest "${PROJECT_DIR}/data/annotations/dataset_info.json"
+		--dest "${PROJECT_DIR}/data/annotations/dataset_info.json" || rc=1
+
+	return "${rc}"
 }
 ```
 
@@ -1544,7 +1633,10 @@ bash -n scripts/utils/portable_env.sh
 cd /tmp && bash -c 'source "$1"; portable_init >/dev/null; portable_stage_assets' _ \
   "$(git -C "$OLDPWD" rev-parse --show-toplevel 2>/dev/null || echo .)/scripts/utils/portable_env.sh" 2>&1 | tail -3
 ```
-Expected: no syntax errors; `wrote .../data/annotations/dataset_info.json (N entries, 2 symlinked)`. Exit code may be 1 if the two hub annotation snapshots are absent on this machine — that is the correct "missing" report, not a bug.
+Expected: no syntax errors, and a final `wrote .../data/annotations/dataset_info.json (N entries, 9 symlinked)`.
+The repo's registry has 9 absolute entries — 7 name a directory (trailing slash) and 2 name a file — so
+expect 9 link records. Exit code 1 is correct on a machine where those hub snapshots are absent: each
+one prints a `missing annotation source for ...` line. That is the intended report, not a bug.
 
 Run twice in a row and confirm the second run prints no new `linked` lines (idempotence).
 
