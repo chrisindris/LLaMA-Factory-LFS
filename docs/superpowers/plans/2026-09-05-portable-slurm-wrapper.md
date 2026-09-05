@@ -114,11 +114,26 @@ actual="$(LFS_PROJECT_DIR="${REPO}/" bash -c 'source "$1" >/dev/null 2>&1; porta
 assert_eq "${REPO}" "${actual}" "trailing slash normalized"
 
 # A bogus override fails loudly instead of silently guessing.
-set +e
-LFS_PROJECT_DIR="/nonexistent/path/xyz" bash -c 'source "$1" >/dev/null 2>&1; portable_resolve_project_dir >/dev/null 2>&1' _ "${RESOLVER}"
-rc=$?
-set -e 2>/dev/null || true
+# NOTE: this harness never enables errexit, so capture the status with `|| rc=$?`
+# rather than a set +e / set -e dance. Turning errexit ON mid-script would abort
+# the run on the first intentionally-nonzero command (cp, grep -c, readlink).
+rc=0
+LFS_PROJECT_DIR="/nonexistent/path/xyz" bash -c 'source "$1" >/dev/null 2>&1; portable_resolve_project_dir >/dev/null 2>&1' _ "${RESOLVER}" || rc=$?
 assert_rc "1" "${rc}" "bogus LFS_PROJECT_DIR returns nonzero"
+
+# An override that exists but is NOT a repo root must also fail: every later
+# task derives its paths from PROJECT_DIR, so accepting a non-root would produce
+# a full set of plausible-looking wrong paths.
+NOT_ROOT="$(mktemp -d)"
+rc=0
+LFS_PROJECT_DIR="${NOT_ROOT}" bash -c 'source "$1" >/dev/null 2>&1; portable_resolve_project_dir >/dev/null 2>&1' _ "${RESOLVER}" || rc=$?
+assert_rc "1" "${rc}" "existing non-root LFS_PROJECT_DIR returns nonzero"
+rm -rf "${NOT_ROOT}"
+
+# PROJECT_DIR must be exported, not merely set: the job body hands it to child
+# processes and to `apptainer --env`. Read it back from a grandchild process.
+actual="$(cd /tmp && source "${RESOLVER}" >/dev/null 2>&1 && portable_resolve_project_dir >/dev/null 2>&1 && bash -c 'printf %s "${PROJECT_DIR}"')"
+assert_eq "${REPO}" "${actual}" "PROJECT_DIR is exported to child processes"
 
 # RELOCATION TEST: a copy under a different directory name must resolve to itself.
 RELOC="$(mktemp -d)/renamed-checkout"
@@ -175,6 +190,12 @@ portable_resolve_project_dir() {
 			echo "portable_env: LFS_PROJECT_DIR does not exist: ${LFS_PROJECT_DIR}" >&2
 			return 1
 		fi
+		# Validate even an explicit override: every path in this library is derived
+		# from PROJECT_DIR, so a wrong root yields a whole set of wrong paths.
+		if ! _portable_is_root "${candidate}"; then
+			echo "portable_env: LFS_PROJECT_DIR is not a repo root: ${candidate}" >&2
+			return 1
+		fi
 		PROJECT_DIR="${candidate}"
 		export PROJECT_DIR
 		return 0
@@ -193,12 +214,14 @@ portable_resolve_project_dir() {
 		return 0
 	fi
 
-	# Fallback for unusual layouts: ask git.
+	# Fallback for unusual layouts: ask git, then validate the same way.
 	local git_root
 	if git_root="$(git -C "${here}" rev-parse --show-toplevel 2>/dev/null)" && [[ -n "${git_root}" ]]; then
-		PROJECT_DIR="$(cd "${git_root}" && pwd -P)"
-		export PROJECT_DIR
-		return 0
+		if candidate="$(cd "${git_root}" 2>/dev/null && pwd -P)" && _portable_is_root "${candidate}"; then
+			PROJECT_DIR="${candidate}"
+			export PROJECT_DIR
+			return 0
+		fi
 	fi
 
 	echo "portable_env: could not find repo root (no ${PORTABLE_ROOT_SENTINEL_FILE} + ${PORTABLE_ROOT_SENTINEL_DIR})" >&2
@@ -210,7 +233,7 @@ portable_resolve_project_dir() {
 
 Run: `bash scripts/tests/test_portable_env.sh`
 
-Expected: PASS — `5 passed, failed=0`, exit code 0.
+Expected: PASS — `7 passed, failed=0`, exit code 0.
 
 Also run: `bash -n scripts/utils/portable_env.sh && bash -n scripts/tests/test_portable_env.sh`
 Expected: no output, exit code 0.
@@ -565,7 +588,7 @@ assert_eq "0" "${actual}" "no unexpanded tokens and no hardcoded username"
 - [ ] **Step 2: Run the test to verify the new assertions fail**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: the 5 Task 1 assertions still PASS; the 9 new assertions FAIL because `portable_init` is undefined. Exit code 1.
+Expected: the 7 Task 1 assertions still PASS; the 9 new assertions FAIL because `portable_init` is undefined. Exit code 1.
 
 - [ ] **Step 3: Write the minimal implementation**
 
@@ -753,7 +776,7 @@ portable_init() {
 - [ ] **Step 5: Run the tests to verify they pass**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: PASS — `14 passed, failed=0`, exit code 0.
+Expected: PASS — `16 passed, failed=0`, exit code 0.
 
 Run: `bash -n scripts/utils/portable_env.sh && bash -n scripts/site.env.example && echo SYNTAX_OK`
 Expected: `SYNTAX_OK`
@@ -789,11 +812,9 @@ PF_TMP="$(mktemp -d)/pfroot"
 mkdir -p "${PF_TMP}/scripts/utils" "${PF_TMP}/src/llamafactory"
 cp "${RESOLVER}" "${PF_TMP}/scripts/utils/portable_env.sh"
 touch "${PF_TMP}/setup.py"
-set +e
+rc=0
 out="$(cd /tmp && CLUSTER=PORTABLE RUNNING_MODE=VENV PORTABLE_SKIP_SITE_ENV=1 \
-	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; portable_preflight 2>&1' _ "${PF_TMP}/scripts/utils/portable_env.sh")"
-rc=$?
-set -e 2>/dev/null || true
+	bash -c 'source "$1" >/dev/null 2>&1; portable_init >/dev/null 2>&1; portable_preflight 2>&1' _ "${PF_TMP}/scripts/utils/portable_env.sh")" || rc=$?
 assert_rc "1" "${rc}" "preflight fails when artifacts are missing"
 assert_eq "yes" "$(grep -q 'MISS' <<<"${out}" && echo yes || echo no)" "preflight reports MISS lines"
 
@@ -811,7 +832,7 @@ rm -rf "$(dirname "${PF_TMP}")"
 - [ ] **Step 2: Run the test to verify the new assertions fail**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: the 14 earlier assertions PASS; the 4 new ones FAIL with `portable_preflight: command not found`. Exit code 1.
+Expected: the 16 earlier assertions PASS; the 4 new ones FAIL with `portable_preflight: command not found`. Exit code 1.
 
 - [ ] **Step 3: Write the minimal implementation**
 
@@ -899,7 +920,7 @@ portable_preflight() {
 
 Run: `bash scripts/tests/test_portable_env.sh`
 
-Expected: the `deepspeed_config` row passes; the whole suite reports `18 passed, failed=0`, exit code 0. Note the two assertions that exercise the real repo tolerate a `MISS` on `dataset_registry` because Task 5 has not generated it yet — they only assert on the `deepspeed_config` row and token absence.
+Expected: the `deepspeed_config` row passes; the whole suite reports `20 passed, failed=0`, exit code 0. Note the two assertions that exercise the real repo tolerate a `MISS` on `dataset_registry` because Task 5 has not generated it yet — they only assert on the `deepspeed_config` row and token absence.
 
 Run: `bash -n scripts/utils/portable_env.sh && echo SYNTAX_OK`
 Expected: `SYNTAX_OK`
@@ -1619,10 +1640,8 @@ cp "${REPO}/models/qwen2_5vl_lora_sft_CoT/portable_body_qwen2_5vl_lora_sft_CoT_t
 	"${E2E}/models/qwen2_5vl_lora_sft_CoT/"
 echo '{}' >"${E2E}/data/dataset_info.json"
 
-set +e
 out="$(cd /tmp && PREFLIGHT=1 CLUSTER=PORTABLE RUNNING_MODE=VENV PORTABLE_SKIP_SITE_ENV=1 \
-	"${E2E}/models/qwen2_5vl_lora_sft_CoT/portable_body_qwen2_5vl_lora_sft_CoT_traineval.sh" 2>&1)"
-set -e 2>/dev/null || true
+	"${E2E}/models/qwen2_5vl_lora_sft_CoT/portable_body_qwen2_5vl_lora_sft_CoT_traineval.sh" 2>&1)" || true
 
 assert_eq "yes" "$(grep -q "PROJECT_DIR:  ${E2E}" <<<"${out}" && echo yes || echo no)" \
 	"relocated body resolves PROJECT_DIR to the copy"
@@ -1636,7 +1655,7 @@ rm -rf "${E2E_BASE}"
 - [ ] **Step 2: Run the test to verify the new assertions fail if anything is non-portable**
 
 Run: `bash scripts/tests/test_portable_env.sh`
-Expected: all assertions PASS — `21 passed, failed=0`, exit 0. A failure here means a path is still tied to the original tree; fix the offending default in `portable_env.sh` rather than the test.
+Expected: all assertions PASS — `23 passed, failed=0`, exit 0. A failure here means a path is still tied to the original tree; fix the offending default in `portable_env.sh` rather than the test.
 
 - [ ] **Step 3: Add ignore rules**
 
@@ -1706,7 +1725,7 @@ CUDA_VISIBLE_DEVICES= WANDB_DISABLED=true python -m pytest tests/scripts -v
 python3 tests/check_license.py tests
 git diff --stat
 ```
-Expected: bash suite `21 passed, failed=0`; ruff reports all checks passed; `tests/scripts` shows 20 passed; the license check on `tests` exits 0. Confirm `git diff --stat` lists no `trillium_*`, `killarney_*`, `nibi_*`, `rorqual_*`, or unprefixed `slurm_*` file, and no change to `data/dataset_info.json`.
+Expected: bash suite `23 passed, failed=0`; ruff reports all checks passed; `tests/scripts` shows 20 passed; the license check on `tests` exits 0. Confirm `git diff --stat` lists no `trillium_*`, `killarney_*`, `nibi_*`, `rorqual_*`, or unprefixed `slurm_*` file, and no change to `data/dataset_info.json`.
 
 - [ ] **Step 7: Commit**
 
