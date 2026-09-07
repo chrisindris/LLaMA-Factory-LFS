@@ -277,10 +277,17 @@ def apply_matched_questions(
     return frame, "pairwise_consecutive_only_no_global_intersection", set()
 
 
+def _sort_question_timeline(frame: pd.DataFrame) -> list[str]:
+    cols = ["question_id", "step"]
+    if "run_name" in frame.columns:
+        cols.append("run_name")
+    return [col for col in cols if col in frame.columns]
+
+
 def add_previous_prediction_flags(frame: pd.DataFrame) -> pd.DataFrame:
     if frame.empty:
         return frame
-    ordered = frame.sort_values(["question_id", "step"], kind="mergesort").copy()
+    ordered = frame.sort_values(_sort_question_timeline(frame), kind="mergesort").copy()
     prev_pred = ordered.groupby("question_id")["prediction"].shift(1)
     prev_think = ordered.groupby("question_id")["think_text"].shift(1) if "think_text" in ordered.columns else None
     prev_answer = ordered.groupby("question_id")["answer_text"].shift(1) if "answer_text" in ordered.columns else None
@@ -305,7 +312,7 @@ def add_previous_prediction_flags(frame: pd.DataFrame) -> pd.DataFrame:
 def question_trajectories(frame: pd.DataFrame) -> pd.DataFrame:
     if frame.empty:
         return pd.DataFrame()
-    ordered = frame.sort_values(["question_id", "step"], kind="mergesort")
+    ordered = frame.sort_values(_sort_question_timeline(frame), kind="mergesort")
     rows = []
     metric_pairs = [
         ("tag_presence_score", "tag_score_delta"),
@@ -324,6 +331,7 @@ def question_trajectories(frame: pd.DataFrame) -> pd.DataFrame:
                 "question_id": question_id,
                 "dataset": row.get("dataset"),
                 "step": row.get("step"),
+                "run_name": row.get("run_name"),
                 "prediction": row.get("prediction"),
                 "think_text": row.get("think_text"),
                 "answer_text": row.get("answer_text"),
@@ -335,6 +343,7 @@ def question_trajectories(frame: pd.DataFrame) -> pd.DataFrame:
             }
             if prev is not None:
                 record["prev_step"] = prev.get("step")
+                record["prev_run_name"] = prev.get("run_name")
                 for src, dest in metric_pairs:
                     if src in row.index and src in prev.index:
                         record[dest] = _signed_delta(row[src], prev[src])
@@ -343,6 +352,7 @@ def question_trajectories(frame: pd.DataFrame) -> pd.DataFrame:
                 record["same_as_previous_prediction"] = row.get("prediction") == prev.get("prediction")
             else:
                 record["prev_step"] = pd.NA
+                record["prev_run_name"] = pd.NA
                 for _src, dest in metric_pairs:
                     record[dest] = math.nan
                 record["same_as_previous_prediction"] = pd.NA

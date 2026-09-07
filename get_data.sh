@@ -11,6 +11,8 @@
 # RUN ON: Login Node (or sbatch ./get_data.sh <cluster_name> on clusters with internet access on compute nodes)
 # RUN AS: ./get_data.sh <cluster_name>
 
+. $(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "env.sh")
+
 export HF_DEBUG=1
 export HF_TOKEN=$(cat ${HOME}/TOKENS/cvis-tmu-organization-token.txt)
 
@@ -35,27 +37,27 @@ git-lfs install
 #huggingface-cli download moonshotai/Kimi-VL-A3B-Thinking-2506 # default location: $HOME/.cache/huggingface/hub
 #HF_HUB_DISABLE_XET=1 hf download --max-workers=4 moonshotai/Kimi-VL-A3B-Thinking-2506 # using --local-dir and --cache-dir; default location: $HOME/.cache/huggingface/hub
 
-if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then
-	PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
-elif [[ "$PWD" == *LLaMA-Factory* ]]; then
-	PROJECT_DIR="${PWD%%LLaMA-Factory*}/LLaMA-Factory"
-else
-	echo "Error: Could not find 'LLaMA-Factory' or 'LLaMA-Factory-LFS' in the current path."
-	exit 1
-fi
-SYSCONFIG_DIR_PATH="$PROJECT_DIR/scripts"
-export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
-
-echo "PROJECT_DIR: $PROJECT_DIR"
-echo "SYSCONFIG_DIR_PATH: $SYSCONFIG_DIR_PATH"
-echo "PWD: $PWD"
-echo "PYTHONPATH: $PYTHONPATH"
-
-export HF_HOME="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HOME'))")"
-export HF_HUB_CACHE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HUB_CACHE'))")"
-export HF_HUB_DISABLE_XET="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HUB_DISABLE_XET'))")"
-export VENV_LLAMAFACTORY="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'VENV_LLAMAFACTORY'))")"
-unset PYTHONPATH
+# if [[ "$PWD" == *LLaMA-Factory-LFS* ]]; then
+# 	PROJECT_DIR="${PWD%%LLaMA-Factory-LFS*}/LLaMA-Factory-LFS"
+# elif [[ "$PWD" == *LLaMA-Factory* ]]; then
+# 	PROJECT_DIR="${PWD%%LLaMA-Factory*}/LLaMA-Factory"
+# else
+# 	echo "Error: Could not find 'LLaMA-Factory' or 'LLaMA-Factory-LFS' in the current path."
+# 	exit 1
+# fi
+# SYSCONFIG_DIR_PATH="$PROJECT_DIR/scripts"
+# export PYTHONPATH="$PYTHONPATH:$SYSCONFIG_DIR_PATH"
+#
+# echo "PROJECT_DIR: $PROJECT_DIR"
+# echo "SYSCONFIG_DIR_PATH: $SYSCONFIG_DIR_PATH"
+# echo "PWD: $PWD"
+# echo "PYTHONPATH: $PYTHONPATH"
+#
+# export HF_HOME="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HOME'))")"
+# export HF_HUB_CACHE="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HUB_CACHE'))")"
+# export HF_HUB_DISABLE_XET="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'HF_HUB_DISABLE_XET'))")"
+# export VENV_LLAMAFACTORY="$(python3 -c "import sysconfigtool; print(sysconfigtool.read('$1', 'VENV_LLAMAFACTORY'))")"
+# unset PYTHONPATH
 
 source $VENV_LLAMAFACTORY/bin/activate
 pip install --upgrade pip setuptools wheel
@@ -176,6 +178,10 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 hf download --max-workers=4 cvis-tmu/Scene30K --repo-type dataset
 hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type dataset
 hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset
+
+
+# New .sif optimized for the latest LLaMA-Factory (after latest-hiyouga-changes)
+# hf download --max-workers=4 cvis-tmu/compute_canada_sif_files llamafactory-latest.sif --repo-type dataset
 
 deactivate
 # rm -r temp_env

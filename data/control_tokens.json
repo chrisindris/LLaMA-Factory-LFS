@@ -1,0 +1,30 @@
+[
+  {
+    "content": "<think>",
+    "lstrip": false,
+    "rstrip": false,
+    "normalized": false,
+    "special": true
+  },
+  {
+    "content": "</think>",
+    "lstrip": false,
+    "rstrip": false,
+    "normalized": false,
+    "special": true
+  },
+  {
+    "content": "<answer>",
+    "lstrip": false,
+    "rstrip": false,
+    "normalized": false,
+    "special": true
+  },
+  {
+    "content": "</answer>",
+    "lstrip": false,
+    "rstrip": false,
+    "normalized": false,
+    "special": true
+  }
+]

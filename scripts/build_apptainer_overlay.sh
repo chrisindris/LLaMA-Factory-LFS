@@ -17,6 +17,9 @@
 #   Jobs should use: apptainer exec --overlay overlay.img ...
 # - export_merge_adapter_job.sh does NOT need packages from this overlay for
 #   LoRA merge; it only uses the overlay when present so the env matches training.
+#
+# For incorporating the latest hiyouga changes:
+# FLASH_ATTN_WHEEL_URL="" CAUSAL_CONV1D_WHEEL_URL="https://github.com/Dao-AILab/causal-conv1d/releases/download/v1.7.0/causal_conv1d-1.7.0+cu12torch2.6cxx11abiFALSE-cp311-cp311-linux_x86_64.whl" SIF="../apptainer/llamafactory-latest.sif" FORCE_RECREATE=1 WHEELHOUSE="../wheels/" OVERLAY="../apptainer/overlay_0.img" ./build_apptainer_overlay.sh
 set -euo pipefail
 
 . ./utils/env.sh 2>/dev/null || . "$(dirname "$0")/utils/env.sh"

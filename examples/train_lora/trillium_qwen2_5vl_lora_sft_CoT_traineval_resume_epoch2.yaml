@@ -72,6 +72,9 @@ print_param_status: true
 ### optional mm memory debug (independent of prediction dumps)
 debug_mm_training: true # this is really for fine-grained debugging of memory usage; for runs, output is much cleaner if we turn this off.
 debug_mm_steps: 1
+# --skip_memory_metrics: false
+# --enable_torch_profiler: true
+# --profiler_profile_memory: true
 
 # prediction logging
 save_train_predictions: true

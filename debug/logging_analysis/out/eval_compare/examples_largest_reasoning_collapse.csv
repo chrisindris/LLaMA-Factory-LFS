@@ -1,0 +1,173 @@
+question_id,dataset,step,run_name,prediction,think_text,answer_text,canonical_format,repetition_score,think_token_count,answer_token_count,normalized_exact_match,prev_step,prev_run_name,tag_score_delta,think_tokens_delta,answer_tokens_delta,repetition_delta,grammar_delta,surface_match_delta,same_as_previous_prediction
+Scene30k_5177,Scene30k,3,ep3,"<think>Okay, I I need to figure out what the little radiator is next to in this given scene3D scene.. Let me start by going reading through the the provided provided.
+
+First, looking scene is labeled scene scene0157_00, and there are three captions and it. The first mention a objects like a window office chair, a window, a, bed, and, bed, nightstand, and desk. The room here is to focus on the radiator and its position relative to other objects.
+
+Looking at the objects, the first one talks about a solitary office chair and a dim, which a functional and organizedistic space. The mentions't mention mention the radiator, but I'll move on the second caption. It, it mentions there's a radiator radiator, the left of the bed chair, and to the window. and the are radiator and dresser dresser chair are to the floor. This third chair is to the right of the radiator. So, this, I gather gather that the radiator is next to the dresser and the the floor.
+
+The third caption mentions more details: mentioning a radiator is on the left of the bed and the night chair is to the right of the radiator. The also notes the floorstand is to the radiator chair, So,, the radiator is on the the desk and the desk,Next, I'll at the list listed. There radiator is described as a small radiator next the floorboard, next to to the dresser. under the window. Another entry says it's a small radiator next to the wall, next under behind the wooden dresser. There's also a mention of a radiator radiator next to the brown brown,Wait, the question is about the ""little radiator."" In I need to find if there's a specific mention of a small radiator. In the objects list, I entry says, ""radiator: this radiator radiator next the radiator is next to the small drawer."" So that directly a direct mention.Putting, another entry entry says, radiator is next the brown dresser, So putting this together, the little radiator is next to a small drawer, behind the dresser dresser.
+
+I, but earlier the captions, the's mentioned to the dresser. under desk. So maybe the little radiator is the to both the dresser and the desk. Or the object list specifically it's next to the small drawer, behind the dresser.I think be overating different different radiators.. The captions might multiple radiators mentioned Or is it the same one described differently? Let, in back, the the captions, the's mentioned single radiator. but in objects list mentions multiple entries for theators. some white as white and white.
+
+ some to dress objects.
+
+So, the the scene, there's one radiator, and as different ways. The little is about about the ""little radiator,"" so I should focus on that object that mention it. little.From again, the object the radiator entries says, ""radiator: the little radiator. the radiator is next to the small drawer."" Another that's the little radiator is next to a small drawer. Another entry says, ""radiator: the radiator radiator. the baseboard. the next to the dresser and under the window."" So the's be a radiator, but the question one is next as being to a small drawer.
+
+Therefore wait, in object says, ""radiator: the is a white. it white and color and is located the wooden dresser."" So that's a radiator of a radiator being behind the dresser,So the little radiator the same as the one behind the dresser? Or are they two?ators? It captions mention a single radiator, but the objects list has be multiple information additional descriptions.
+
+Wait, perhaps I scene radiator is the one as as Let the's next the dresser, then it's also next to the small drawer. which the dresser might a large piece of furniture that and the small drawer might be part of it or a.
+
+Alternatively, perhaps the little radiator is a to the small drawer, which is part of the dresser. So the radiator is next to the small, which has a small drawer.
+
+I I question's asking specifically the the little radiator is next to. So objects mention is that it's next to the small drawer.So, another radiator radiator is next to the small drawer, as one object says the desk is next to the small desk. the window.
+
+Wait, but, the radiator list says, ""r: the window window. the window is next to the desk."" So the's about the window, not the radiator.
+
+Wait object says, ""radiator: the is a radiator radiator on the baseboards. located next to the dresser and under the window."" So that's the's next to the dresser and under the window.
+
+But the little is about the little radiator.. So back the objects list, theradiator: the little radiator. the radiator is next to the small drawer.""So putting little is that the little radiator is next to the small drawer,But, but in also see thatradiator: the is a radiator. its white in color and its behind a wooden dresser."" So that's another radiator of saying the,So the question mention for the little radiator says that to the small drawer. So I the's the key.
+
+Alternatively, the radiator radiator is next to the small, which the the entries. but the explicit mention is the little radiator is next to the small drawer.
+
+I think the most answer is that the little radiator is next to the small drawer,think><answer>The little radiator is next to the small drawer.</answer>
+",,The little radiator is next to the small drawer.,False,0.21741236127116148,0,9,True,2,ep2,-0.25,-900.0,0.0,0.0003130200593288446,,0.0,False
+Scene30k_3465,Scene30k,2,ep2,"<think>Okay, so I need to figure out what's on the left of the computer monitor on the conference table that's closest to the window. scene0056_00. Let me break by breaking down the information.
+
+First, I'll to identify the layout.. From the captions,, it roomCluster has several objects, chairs, monitors, keyboards, white other objects. The room here is the the specific monitor table closest the window and then monitor on that.
+
+Looking at the objects list, I are a mention of a "": a brown brown and and is it light. also exact might closed. The conference table closest described as being long, with possibly there are a monitor on it. the window.Now should that object description: ""monitor: this is a black monitor. it is on second-most on the two monitors setup on on on on the table in to the window wall the room."" Wait, that that's not be the the conference table. Another me check againAnother entry:: ""monitor: this is a rectangular monitor on the table table. it is a on the left."" a wall monitor to its right."" So, so this the conference table, the's a monitor with windows window to its left and That, that the might a because the the window is on to the window, the window would be on its left side as not the the's a the case.
+
+Wait, another me think this again. The monitor is the conference table has windows to its left. a double monitor to its right. So, the left is question is on the conference side of the conference, and to its left are a window, So the question is asking what left of of the monitor monitor.
+
+Looking, another the monitor is the conference table is to the window has the one with're focusing on. So, to's to its left? Maybe object is be on the left side, but maybe the's another object.
+
+Looking, looking object says:: ""monitor: this is a white keyboard keyboard. it keyboard is on the table in to the window wall."" the room."" is the front middle of the table."" with front of the monitors."" Hmm, the the table is on the of two monitors, the left wall,, maybe that's the the same as.
+
+Wait wait object says ""keyboard: this is a white keyboard keyboard. it keyboard is on the table closest to the left wall of the room and is in the center of the table, in front of two monitors."" So, that the the keyboard closest the left has a monitor, and to keyboard is in front of it.
+
+Wait, the question on the conference table closest to the window has windows window to its left. a double monitor to its right. So, the left is on the left side the monitor, and the question is about's on the left of the monitor itself not would be the window.
+
+ But the the's another object near the window and the window.
+
+Wait again the objects, I see a ""keyboard: this is a window. by a dark curtain. it is be a for let in light in the room.""."" So, the window is on the left side the monitor.
+
+ But the there anything object between between?
+
+Wait, another object: ""keyboard: it is a white computer keyboard. the keyboard is on the table closest to the left wall of the room and is in the center of the table, in front of two monitors."" So, the the table is to the left wall has two monitor in front of two monitors, but might be the different table.
+
+Wait, perhaps the monitor table closest the window has a monitor, a window to its left. and the window of the monitor is the window. But the the question is asking what's on the left of of the monitor,not a object), maybe it's a window orWait, perhaps the monitor is the conference table has to the window has a window to its left. Let me check the entry: ""keyboard: this is a white computer keyboard. the keyboard is on the table closest the center and the is a monitor to a to the right."" a window to its left.""So, that's a different table. So, this keyboard is a window to its left, a monitor to its right. So, if monitor is on a table side of the monitor, Therefore would mean the the monitor is a keyboard to its left and and the window is further to.
+
+ the keyboard.
+
+Wait, the the monitor is on the conference table, and to the window, and the its left of the monitor is the window, then the keyboard is on the left of the monitor.
+
+Therefore wait, the me make sure. The the monitor is on the table table, and the keyboard is to the table table, then the left of the monitor, then the window is further the left of the keyboard, then the, the keyboard of the monitor is the keyboard.
+
+Alternatively, the answer would be a there's a keyboard computer on the left of the monitor on the conference table closest to the window.
+
+think><answer>On the left of the computer monitor on the conference table closest to the window is a white keyboard.</answer>
+",,On the left of the computer monitor on the conference table closest to the window is a white keyboard.,False,0.2436204414246697,0,19,True,1,ep1,-0.25,-852.0,0.0,-0.001016381617376494,,1.0,False
+Scene30k_23907,Scene30k,2,ep2,"<think>Okay, I's try to figure out what's to the left of the curtains in this bedroom scene. I, the, I need to understand a clear picture of the room based on the descriptions provided There the captions, I see that's a cozy bedroom organized space with various objects like ThereLooking see seeing user has a bed, a nightshelf, astands, dresser, and a curtains. The curtains is a lot of objects with their descriptions, so I should go through that to pinpoint out the layout.Looking at the objects descriptions, there's a white door to, several middle, the room, The of the doors is described the book dresser, the right side a on the right. Another door is described the right side, next next the book shelf. So's also a door with from the bed and to a book bookshelf.
+
+Now curtains is central and in, with a night to its left and a nightstand to curtains to the right. The night are mentioned and w-length, covering the window window. There curtains mention the curtains being to the bed or to the of the window.
+
+I bookshelf is on and brown, and three shelves, and to the wall to It's to the doorstand and to bed. There's also desk hanging, the bedstand, the bed, but I might be be directly here.
+
+The night is dark brown, against the left of the bed. The nightstand is brown the right side of the bed, next to the window. The, the I curtains is on the right, the curtains are covering on too well.
+
+I, focusing question's asking what's to the left of the curtains. Since the curtains are covering the window side of the the window, the should to find what's on the left side of that area. The the descriptions's position, the left is to the left, and that the dresser is to the left of the curtains.
+
+ AlternativelyWait wait, the at, the's a a door on the curtains on the left. The that be to? Or possibility is the nightshelf, The's against as being the nightstand and the, so I mentions say it's on the door. 
+
+I, considering the curtains are on the bed, the's to their left? The bed is in the center, so to of the bed would be the area or the object of furniture. Alternatively, the the curtains are on the window, the room, the left to their left might the room could be the doorstand or the else.
+
+Wait, the's a mention can mentioned as the curtains of the bed, the right side but that's probably to. The dresserstand is on the right of the bed, so that the the left of the curtains is the night itself or the dresser. 
+
+ the the dresser is central, maybe the dresser is to the left side of the room.
+
+I think a bit confused because some descriptions say the curtainsshelf is behind the left of the door, which is near the desk. So the book of of the curtains is where, perhaps the bedshelf. Alternatively, the dresser is to the left of the bed, which is be it to the left of the curtains as the bed are on the bed.
+
+Wait, the again, the of the captions says the ""the bedshelf is to the night and and the the towel."" The towelstand is to front of the towel, the bookshelf."" The is also in the right of the towel."" The towel is behind the nightstand and the bed."" So, bookshelf is behind the towel, which is place to the curtains.
+
+ Therefore, the the left of the curtains would which are behind the bed, would be the bookshelf.
+
+But another caption says, ""The book supports the nightstand, the bookshelf. So the bookshelf is on the floor, which to a wall. If the curtains are on the bed, the is in the center, the left to the left of the curtains would be the bookshelf.
+
+ the dresser.
+
+Wait, the dresser is to the left of the bed, so if the bed is in, the curtains are behind it, the left would be to the left side of the curtains. Alternatively, the bookshelf is also on the bed, so perhaps the are to.
+
+I think getting a information. Let me check to visualize it the bed is in the center, with behind it, To the left of the curtains is the dresser, and to the right is the nightstand and So bookshelf is behind the bed, well, so on the left or right.Wait, if the curtains are behind front back, the bed, the the left would be the dresser. the bookshelf. But the the dresser is to to as being the left of the bed, which's likely that the left side of the curtains.
+
+Alternatively, but user's a list that the's the towel dressershelf. So might me because the of the captions mentions the bookshelf is brown the bed, So, putting all, the left should the brown bookshelf.
+
+think><answer>The brown to the left of the curtains is a brownbrown bookshelf**.</answer>
+",,The brown to the left of the curtains is a brownbrown bookshelf**.,False,0.21317436470360918,0,12,False,1,ep1,-0.25,-828.0,0.0,-0.0008901557827681872,,0.0,False
+Scene30k_1696,Scene30k,2,ep2,"<think>Okay, I's try to figure out what's next to the couch in scene scene room scene. I, so the, I need to understand the layout based on the descriptions provided. The scene has a couch living room with several objects like including a couch,-shaped couch couch, some chairs, music some music stands. 
+
+From at the captions, the couch is a against a wall, is into the corner right corner. It means it's positioned central, probably L an of a back of the room. Now, I question is asking what's next to the couch. 
+
+ the captions listed, there see there are chairs chairs mentioned music stands around.
+
+ 
+
+I the captions, it of that chairs and two that's likely that the of them chairs are placed near the couch. The music caption says the music stands, four that floor supporting as a foundation. but a sense of balance room's layout. The second caption adds about the chairs, company and which probably they the is a, the room, The also mentions the floor are positioned with which in the couch.
+
+ easy.
+
+ relaxation.
+
+Looking at the objects descriptions, there see several there chairs are placed as being next to the couch. For example, one chair is described as being next the music stand and the chair, and is be it near the couch. Another chair is mentioned as being next the right side of the couch, and to the wall. There, there chairs stands are positioned the couch, which others'm more sure if they're directly next to the couch.
+
+Wait couch's question is straightforward about what's next to the couch, so I should to focus on objects objects that that. The are multiple chairs on the walls, but they're to be above the or so directly to the couch. The piano objects next the couch are be the and possibly music music stand. 
+
+Wait of the music descriptions mentions a chair being the right of the couch, which is a to the chair. Another chair is described as being between to the music stand, another chair, which might be near the same side of the room. There, there music is described the wall, so maybe there the side, there's near to a door, and on the other end, perhaps a chair or a music stand.
+
+Wait, the the object, the of that floor is in in the right of a chair stand, So that the's a music stand to the left of the couch. That, another the right side of the couch, there's chairs. So, couch has a music stand on its side and chairs on the other. 
+
+, next to the couch, there one left side, there are chairs, and on its left side there music stand.
+
+But wait user's asking what is next to the couch, so I sides and the music stand are next. it. However, the the primary object is on the chairs since they question stand is more the left side. but the piano. SoWait, considering the couch is asking generally what specific-by-step thought process, I I should list each side. The from the can consolidate that the couch has chairs on to it on one side and a music stand on the other.Wait, no I should overcomplicating. The me check through the object descriptions again. There first is against as being L-shaped brown brown sectional, the wall, the front. To's mentioned the right of a chairs. and there chair is to the right of it. So, on the sides, the couch, there are chairs. Additionally, there's a music stand to the left of the couch, which is be near the couch, well.
+
+So, putting it together, the couch has against to two on both its and On the left side, there to the corner, there's chairs, and on the left side, there a chair or a music stand. Therefore the primary objects to objects are be chairs on possibly a music stand.
+
+Wait, in, the music stand is to the piano and a chairs, so maybe it piano stand is on directly next to the couch but near the. So, the main next next to the couch are chairs on So, the answer would be chairs there are chairs next to the couch on both sides.
+
+think><answer>TheNext to the couch, there are chairs on on both sides. Specifically, on is a chair to the right of the couch, the corner, and another chair to the left of which a cozy seating arrangement around the L.</answer>
+",,"TheNext to the couch, there are chairs on on both sides. Specifically, on is a chair to the right of the couch, the corner, and another chair to the left of which a cozy seating arrangement around the L.",False,0.1838560188114271,0,39,False,1,ep1,-0.25,-711.0,0.0,-0.002110450760620247,,0.0,False
+Scene30k_28909,Scene30k,3,ep3,"<think>Okay, so I need to figure out to which side of the window the desk is located in scene0351_00. Let me start by going through the information descriptions and the object details provided.
+
+First, the the captions, I's mentioned office scene with various desk, chairs, chairs, a plant, and other items items. The desk is central, and monitors and other items. The window is a window vibe, so it workspace workspace.
+
+Looking at the objects, there are a mention of a window under the window, a plant with. The desk is described as being in against the wall wall, is in two two and right walls. It, desk is in the far wall, which is be the the entrance.
+
+ the window is under the window.
+
+ the far wall.
+
+In the object list, the says the desk is under the far wall, the window. and the desk is pushed between the left and right walls. So the if desk is in the far wall, the window. Therefore, the desk is on the side opposite's opposite from the window, meaning next the side or right of it.
+
+I, but the user is position is described the side, and the desk is on the opposite wall. So the terms to the window, the desk is on across, not to the left. So the the desk is't to the left or right of the window; it's on itI let question is asking to what side of desk is located relative to the window. Since the desk is on the say, the north wall, and desk is on the south wall, which across. So, the terms case, the desk is to, the south opposite the window, not to the left or right.
+
+ ofI wait, the the of the captions, it says the desk is pushed the left of the radiator. Hmm, that'sicts the radiator information. Let me check that.
+
+ The captions says the ""the: this desk is to the right of the window."" So according would mean the desk is on on the right to the right side of the window.
+
+Wait earlier the object, the says described that the desk is centered against the far wall, centered between the and right walls. So if if the window is centered between it's in in the window, not to the side.Wait'm a bit confused. Let I desk is on the wall, and the desk is on the wall. but the. So, the the perspective of someone looking the window, the desk would directly the center of the room wall. not not left nor right.
+
+ directly across.
+
+ But, the question's question is about to which side of desk is located relative to the window,Wait, perhaps the the desk is on the wall, and desk is on the opposite wall but to the right side. So that seems't make sense because the desk is centered as being between left left and right walls, which it's in the far wall,Wait, perhaps the window is on the left wall, and the desk is on against the far wall, which is be the opposite wallfront) wall. So, desk is on the center of the front wall, not the window is on the back wall. Therefore the the front of someone facing the room, the desk is on them desk, so the desk is in on the front wall.
+
+ Therefore, the desk is not to the left or right of the window but directly in front of it.
+
+But the question's asking to the side relative to the window. So the window is centered the front wall, it the's to to the left or right but centered. But, in object is be ph that the desk is to the left or right side of the window.
+
+ the from a certain angle.
+
+Wait, perhaps the objects, one mentions says: desk is to the right of the window. So would conflicting. Let me check the objects again.
+
+In, in the first caption, ""the: the desk is to front center of the room. the is to the right of the window."" So according to this, the desk is to to the right of the window.
+
+But, this this information, the desk is on to the right of of the window. the room..think><answer>The desk is located to the right side of the window.</answer>
+",,The desk is located to the right side of the window.,False,0.23455717208396898,0,11,True,2,ep2,-0.25,-708.0,0.0,-0.0022987060056433584,,0.0,False

@@ -33,6 +33,29 @@ def _rolling(series: pd.Series, window: int) -> pd.Series:
     return series.rolling(window=window, min_periods=max(1, window // 2)).mean()
 
 
+def _has_named_runs(frame: pd.DataFrame | None) -> bool:
+    if frame is None or frame.empty or "run_name" not in frame.columns:
+        return False
+    return int(frame["run_name"].nunique(dropna=True)) > 1
+
+
+def _apply_run_xticks(ax, frame: pd.DataFrame | None) -> None:
+    """Use run names as tick labels when several eval folders are compared."""
+    if frame is None or frame.empty or "step" not in frame.columns:
+        ax.set_xlabel("global training step")
+        return
+    if not _has_named_runs(frame):
+        ax.set_xlabel("global training step")
+        return
+    mapping = frame.dropna(subset=["step"]).drop_duplicates(subset=["step"]).sort_values("step")
+    if mapping.empty:
+        ax.set_xlabel("global training step")
+        return
+    ax.set_xticks(list(mapping["step"]))
+    ax.set_xticklabels([str(value) for value in mapping["run_name"]], rotation=30, ha="right")
+    ax.set_xlabel("eval run")
+
+
 def _line_with_band(
     ax,
     frame: pd.DataFrame,
@@ -72,7 +95,7 @@ def plot_metric_by_step(
     if dataset_step is not None and not dataset_step.empty and y in dataset_step.columns:
         for dataset, sub in dataset_step.groupby("dataset"):
             _line_with_band(ax, sub, y, None, None, str(dataset), rolling_window)
-    ax.set_xlabel("global training step")
+    _apply_run_xticks(ax, step_summary if not step_summary.empty else dataset_step)
     ax.set_ylabel(ylabel)
     ax.set_title(title)
     if use_fraction:
@@ -97,7 +120,7 @@ def plot_length_with_iqr(
     plt = _try_pyplot()
     fig, ax = plt.subplots(figsize=(9, 5))
     _line_with_band(ax, step_summary, median_col, p25_col, p75_col, "median + IQR", rolling_window)
-    ax.set_xlabel("global training step")
+    _apply_run_xticks(ax, step_summary)
     ax.set_ylabel(ylabel)
     ax.set_title(title)
     ax.grid(True, alpha=0.3)
@@ -112,13 +135,26 @@ def plot_samples_per_step(dataset_step: pd.DataFrame, path: Path) -> None:
     plt = _try_pyplot()
     pivot = dataset_step.pivot_table(index="step", columns="dataset", values="n", aggfunc="sum").fillna(0)
     fig, ax = plt.subplots(figsize=(9, 5))
-    pivot.sort_index().plot(kind="bar", stacked=True, ax=ax, width=0.9)
-    ax.set_xlabel("global training step")
+    ordered = pivot.sort_index()
+    ordered.plot(kind="bar", stacked=True, ax=ax, width=0.9)
+    if _has_named_runs(dataset_step):
+        mapping = dataset_step.dropna(subset=["step"]).drop_duplicates(subset=["step"]).sort_values("step")
+        labels = [
+            str(mapping.loc[mapping["step"] == idx, "run_name"].iloc[0])
+            if (mapping["step"] == idx).any()
+            else str(idx)
+            for idx in ordered.index
+        ]
+        ax.set_xticklabels(labels, rotation=30, ha="right")
+        ax.set_xlabel("eval run")
+        ax.set_title("Predictions per eval run (dataset breakdown)")
+    else:
+        ax.set_xlabel("global training step")
+        ax.set_title("Predictions per training step (dataset breakdown)")
+        fig.autofmt_xdate(rotation=45)
     ax.set_ylabel("number of predictions")
-    ax.set_title("Predictions per training step (dataset breakdown)")
     ax.grid(True, axis="y", alpha=0.3)
     ax.legend(loc="best", fontsize=8)
-    fig.autofmt_xdate(rotation=45)
     _save(fig, path)
     plt.close(fig)
 
@@ -130,7 +166,7 @@ def plot_overlap(overlap: pd.DataFrame, path: Path) -> None:
     plt = _try_pyplot()
     fig, ax = plt.subplots(figsize=(9, 5))
     ax.plot(frame["step"], frame["jaccard"], marker="o")
-    ax.set_xlabel("global training step")
+    _apply_run_xticks(ax, frame)
     ax.set_ylabel("Jaccard overlap with previous step")
     ax.set_title("Question-set overlap across consecutive steps")
     ax.set_ylim(-0.05, 1.05)
@@ -160,6 +196,58 @@ def plot_dataset_comparison(dataset_summary: pd.DataFrame, path: Path) -> None:
         ax.tick_params(axis="x", rotation=30)
         ax.grid(True, axis="y", alpha=0.3)
     fig.suptitle("Dataset comparison (all steps pooled)")
+    _save(fig, path)
+    plt.close(fig)
+
+
+def plot_run_comparison(run_summary: pd.DataFrame, path: Path) -> None:
+    if run_summary.empty or "run_name" not in run_summary.columns:
+        return
+    plt = _try_pyplot()
+    metrics = [
+        ("canonical_format_fraction", "canonical format"),
+        ("usable_format_fraction", "usable format"),
+        ("normalized_exact_match_fraction", "normalized EM"),
+        ("repetition_score_median", "median repetition"),
+        ("think_token_count_median", "median think tokens"),
+        ("trainer_eval_loss", "trainer eval_loss"),
+    ]
+    present = [(col, label) for col, label in metrics if col in run_summary.columns]
+    if not present:
+        return
+    ordered = run_summary.sort_values("step" if "step" in run_summary.columns else "run_name")
+    fig, axes = plt.subplots(1, len(present), figsize=(4 * len(present), 4), squeeze=False)
+    labels = ordered["run_name"].astype(str)
+    for ax, (col, label) in zip(axes[0], present):
+        ax.bar(labels, ordered[col])
+        ax.set_title(label)
+        ax.tick_params(axis="x", rotation=30)
+        ax.grid(True, axis="y", alpha=0.3)
+    fig.suptitle("Eval-run comparison")
+    _save(fig, path)
+    plt.close(fig)
+
+
+def plot_eval_loss(run_summary: pd.DataFrame, path: Path) -> None:
+    if run_summary.empty:
+        return
+    y = "trainer_eval_loss" if "trainer_eval_loss" in run_summary.columns else "eval_loss"
+    if y not in run_summary.columns or run_summary[y].dropna().empty:
+        return
+    plt = _try_pyplot()
+    ordered = run_summary.sort_values("step" if "step" in run_summary.columns else "run_name")
+    fig, ax = plt.subplots(figsize=(9, 5))
+    if "run_name" in ordered.columns:
+        ax.plot(range(len(ordered)), ordered[y], marker="o")
+        ax.set_xticks(range(len(ordered)))
+        ax.set_xticklabels(ordered["run_name"].astype(str), rotation=30, ha="right")
+        ax.set_xlabel("eval run")
+    else:
+        ax.plot(ordered.get("step", range(len(ordered))), ordered[y], marker="o")
+        ax.set_xlabel("step")
+    ax.set_ylabel("eval_loss")
+    ax.set_title("Trainer eval_loss by run (not checkpoint probe CE)")
+    ax.grid(True, alpha=0.3)
     _save(fig, path)
     plt.close(fig)
 
@@ -204,6 +292,7 @@ def generate_plots(
     detailed: pd.DataFrame,
     grammar_enabled: bool,
     rolling_window: int,
+    run_summary: pd.DataFrame | None = None,
 ) -> list[str]:
     plots_dir = output_dir / "plots"
     plots_dir.mkdir(parents=True, exist_ok=True)
@@ -317,6 +406,9 @@ def generate_plots(
         plot_samples_per_step(dataset_step, _record("samples_per_step.png"))
         plot_overlap(overlap, _record("question_overlap.png"))
         plot_dataset_comparison(dataset_summary, _record("dataset_comparison.png"))
+        if run_summary is not None and not run_summary.empty:
+            plot_run_comparison(run_summary, _record("run_comparison.png"))
+            plot_eval_loss(run_summary, _record("eval_loss.png"))
         plot_loss(dataset_step, _record("probe_loss.png"))
         plot_loss_vs_generation(detailed, _record("loss_vs_generation.png"))
     except Exception:
