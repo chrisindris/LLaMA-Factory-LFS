@@ -14,6 +14,17 @@ from _annotations import (
     lookup_annotation,
     mapped_column,
 )
+from _evaldirs import (
+    AnalysisRun,
+    assign_run_steps,
+    collect_trainer_tables,
+    discover_eval_dir,
+    infer_run_name,
+    load_trainer_log,
+    parse_named_path,
+    resolve_analysis_runs,
+    summarize_trainer_log,
+)
 from _logparse import (
     UNKNOWN_DATASET,
     WarningRecord,
@@ -37,6 +48,10 @@ def run_self_tests() -> None:
     _test_multiple_steps()
     _test_unknown_dataset()
     _test_eval_dump()
+    _test_named_path_and_run_name()
+    _test_trainer_log_json_and_jsonl()
+    _test_multi_eval_dirs_distinct_steps()
+    _test_bare_eval_prediction_logs_do_not_collapse()
     _test_hf_hub_cache_expand()
     _test_gt_field_from_columns()
     _test_boxed_extraction()
@@ -199,3 +214,166 @@ def tmpfile_dir() -> str:
     import tempfile
 
     return tempfile.mkdtemp(prefix="log_analyzer_selftest_")
+
+
+def _write_eval_dir(root: Path, name: str, prediction: str, eval_loss: float, jsonl: bool = True) -> Path:
+    folder = root / name / "lora" / "eval"
+    folder.mkdir(parents=True, exist_ok=True)
+    payload = {"/tmp/cot_stage/annotations/Scene30k.parquet_19": prediction}
+    (folder / "eval_predictions.json").write_text(json.dumps(payload), encoding="utf-8")
+    (folder / "eval_results.json").write_text(
+        json.dumps({"eval_loss": eval_loss, "eval_runtime": 1.5}), encoding="utf-8"
+    )
+    progress = [
+        {"current_steps": 5, "total_steps": 10, "percentage": 50.0, "elapsed_time": "0:00:01"},
+        {
+            "current_steps": 0,
+            "total_steps": 10,
+            "eval_loss": eval_loss,
+            "percentage": 0.0,
+            "elapsed_time": "0:00:02",
+            "remaining_time": "0:00:00",
+        },
+    ]
+    if jsonl:
+        (folder / "trainer_log.jsonl").write_text(
+            "".join(json.dumps(row) + "\n" for row in progress), encoding="utf-8"
+        )
+    else:
+        (folder / "trainer_log.json").write_text(json.dumps(progress), encoding="utf-8")
+    return folder
+
+
+def _test_named_path_and_run_name() -> None:
+    name, path = parse_named_path("base=/tmp/foo/lora/eval")
+    assert name == "base"
+    assert path == Path("/tmp/foo/lora/eval")
+    name, path = parse_named_path("/tmp/foo/lora/eval")
+    assert name is None
+    assert path == Path("/tmp/foo/lora/eval")
+    assert infer_run_name("/tmp/models/Qwen2.5-VL-7B-Instruct/lora/eval") == "Qwen2.5-VL-7B-Instruct"
+    assert (
+        infer_run_name(
+            "/tmp/models/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged/lora/eval/eval_predictions.json"
+        )
+        == "qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged"
+    )
+
+
+def _test_trainer_log_json_and_jsonl() -> None:
+    root = Path(tmpfile_dir())
+    jsonl_dir = _write_eval_dir(root, "jsonl_run", "<think>a</think><answer>b</answer>", 0.9, jsonl=True)
+    json_dir = _write_eval_dir(root, "json_run", "<think>c</think><answer>d</answer>", 0.8, jsonl=False)
+    jsonl_rows = load_trainer_log(jsonl_dir / "trainer_log.jsonl")
+    json_rows = load_trainer_log(json_dir / "trainer_log.json")
+    assert len(jsonl_rows) == 2
+    assert len(json_rows) == 2
+    assert summarize_trainer_log(jsonl_rows)["eval_loss"] == 0.9
+    assert summarize_trainer_log(json_rows)["eval_loss"] == 0.8
+    files = discover_eval_dir(jsonl_dir)
+    assert files.predictions and files.predictions[0].name == "eval_predictions.json"
+    assert files.trainer_log is not None
+
+
+def _test_multi_eval_dirs_distinct_steps() -> None:
+    from _aggregate import question_trajectories
+
+    matchers, _info = _matchers()
+    root = Path(tmpfile_dir())
+    base = _write_eval_dir(root, "Qwen2.5-VL-7B-Instruct", "no tags yet", 1.67)
+    ep1 = _write_eval_dir(
+        root,
+        "qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged",
+        "<think>x</think><answer>y</answer>",
+        0.95,
+    )
+    warnings: list[WarningRecord] = []
+    runs = resolve_analysis_runs(
+        None,
+        [f"base={base}", f"ep1={ep1}"],
+        ["base=0", "ep1=620"],
+        warnings,
+    )
+    assert [run.run_name for run in runs] == ["base", "ep1"]
+    assert [run.step for run in runs] == [0, 620]
+    rows = []
+    for run in runs:
+        data = json.loads(run.prediction_path.read_text(encoding="utf-8"))
+        rows.extend(
+            flatten_prediction_log(
+                data,
+                run.prediction_path,
+                matchers,
+                warnings,
+                run_name=run.run_name,
+                step_override=run.step,
+            )
+        )
+    assert {row.run_name for row in rows} == {"base", "ep1"}
+    assert sorted(row.step for row in rows) == [0, 620]
+    assert len({(row.question_id, row.step) for row in rows}) == 2
+    summary_rows, history_rows = collect_trainer_tables(runs, warnings)
+    assert [row["eval_loss"] for row in summary_rows] == [1.67, 0.95]
+    assert len(history_rows) == 4
+    import pandas as pd
+
+    frame = pd.DataFrame(
+        {
+            "question_id": [row.question_id for row in rows],
+            "step": [row.step for row in rows],
+            "run_name": [row.run_name for row in rows],
+            "dataset": [row.dataset for row in rows],
+            "prediction": [row.prediction for row in rows],
+            "think_text": ["", "x"],
+            "answer_text": ["", "y"],
+            "canonical_format": [False, True],
+            "tag_presence_score": [0.0, 1.0],
+            "think_token_count": [0, 1],
+            "answer_token_count": [0, 1],
+            "repetition_score": [0.0, 0.0],
+            "normalized_exact_match": [False, False],
+        }
+    )
+    traj = question_trajectories(frame)
+    assert len(traj) == 2
+    assert set(traj["run_name"]) == {"base", "ep1"}
+
+
+def _test_bare_eval_prediction_logs_do_not_collapse() -> None:
+    matchers, _info = _matchers()
+    root = Path(tmpfile_dir())
+    a = _write_eval_dir(root, "run_a", "first", 1.1)
+    b = _write_eval_dir(root, "run_b", "second", 1.0)
+    warnings: list[WarningRecord] = []
+    runs = resolve_analysis_runs(
+        [str(a / "eval_predictions.json"), str(b / "eval_predictions.json")],
+        None,
+        None,
+        warnings,
+    )
+    assert len(runs) == 2
+    assert runs[0].run_name != runs[1].run_name
+    assert runs[0].step != runs[1].step
+    rows = []
+    for run in runs:
+        data = json.loads(run.prediction_path.read_text(encoding="utf-8"))
+        rows.extend(
+            flatten_prediction_log(
+                data,
+                run.prediction_path,
+                matchers,
+                warnings,
+                run_name=run.run_name,
+                step_override=run.step,
+            )
+        )
+    assert len(rows) == 2
+    assert rows[0].step != rows[1].step
+    assert {row.prediction for row in rows} == {"first", "second"}
+    # Default epoch-less eval dumps used to share step=0.
+    colliding = [
+        AnalysisRun(run_name="x", prediction_path=a / "eval_predictions.json", eval_dir=a),
+        AnalysisRun(run_name="y", prediction_path=b / "eval_predictions.json", eval_dir=b),
+    ]
+    assign_run_steps(colliding, None, warnings)
+    assert colliding[0].step != colliding[1].step

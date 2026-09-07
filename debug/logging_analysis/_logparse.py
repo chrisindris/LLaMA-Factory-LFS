@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 
 QUESTION_INDEX_RE = re.compile(r"_(\d+)$")
 EPOCH_IN_NAME_RE = re.compile(r"_ep(\d+)\.json$", re.IGNORECASE)
+DEFAULT_SKIP_RUN_NAME_PARTS = frozenset({"eval", "lora", "sft", "output", "outputs", "saves"})
 
 # Canonical names match data/dataset_info.json keys.
 BUILTIN_ALIASES: dict[str, list[str]] = {
@@ -70,11 +71,36 @@ class ParsedObservation:
     matched_alias: str | None = None
     ambiguous_datasets: list[str] = field(default_factory=list)
     parse_notes: str | None = None
+    run_name: str | None = None
 
 
 def epoch_from_log_path(path: str | Path) -> str | None:
     match = EPOCH_IN_NAME_RE.search(Path(path).name)
     return match.group(1) if match else None
+
+
+def infer_run_name_from_path(
+    path: str | Path,
+    skip_parts: Iterable[str] | None = None,
+) -> str:
+    """Label a run from a prediction file or eval folder.
+
+    ``.../Qwen2.5-VL-7B-Instruct/lora/eval`` → ``Qwen2.5-VL-7B-Instruct``.
+    ``.../CoT_traineval_resume_ep1/train_predictions_ep1.json`` → ``CoT_traineval_resume_ep1``.
+    """
+    raw = Path(path)
+    skip = {part.lower() for part in (skip_parts if skip_parts is not None else DEFAULT_SKIP_RUN_NAME_PARTS)}
+    parts = list(raw.parts)
+    looks_like_file = bool(raw.suffix) or raw.is_file()
+    if looks_like_file and parts:
+        parts = parts[:-1]
+    while parts and parts[-1].lower() in skip:
+        parts.pop()
+    if parts:
+        return parts[-1]
+    if raw.suffix:
+        return raw.stem
+    return raw.name or "run"
 
 
 def infer_source_kind(path: str | Path, payload: dict[str, Any]) -> str:
@@ -215,10 +241,13 @@ def flatten_prediction_log(
     warnings: list[WarningRecord],
     source_kind: str | None = None,
     epoch: str | None = None,
+    run_name: str | None = None,
+    step_override: int | None = None,
 ) -> list[ParsedObservation]:
     source_log_str = str(source_log)
     kind = source_kind or infer_source_kind(source_log_str, data)
     epoch_val = epoch if epoch is not None else epoch_from_log_path(source_log_str)
+    run_label = run_name or infer_run_name_from_path(source_log_str)
     rows: list[ParsedObservation] = []
 
     for log_key, inner in data.items():
@@ -284,11 +313,14 @@ def flatten_prediction_log(
                     )
                 )
             if kind == "eval" and step is None:
-                # Use epoch as a synthetic step so aggregations still have an axis.
-                try:
-                    step = int(epoch_val) if epoch_val is not None else 0
-                except ValueError:
-                    step = 0
+                # Prefer caller-assigned step (multi-folder compare), then `_epN`, else 0.
+                if step_override is not None:
+                    step = step_override
+                else:
+                    try:
+                        step = int(epoch_val) if epoch_val is not None else 0
+                    except ValueError:
+                        step = 0
             rows.append(
                 ParsedObservation(
                     log_key=key,
@@ -305,6 +337,7 @@ def flatten_prediction_log(
                     matched_alias=matched_alias,
                     ambiguous_datasets=ambiguous,
                     parse_notes=note,
+                    run_name=run_label,
                 )
             )
         if isinstance(inner, dict) and n_inner > 1:
@@ -322,9 +355,22 @@ def load_and_flatten_logs(
     log_paths: Iterable[str | Path],
     matchers: list[tuple[str, str]],
     warnings: list[WarningRecord],
+    *,
+    run_names: dict[str, str] | None = None,
+    step_overrides: dict[str, int] | None = None,
 ) -> list[ParsedObservation]:
     observations: list[ParsedObservation] = []
     for path in log_paths:
         data = load_prediction_log(path)
-        observations.extend(flatten_prediction_log(data, path, matchers, warnings))
+        key = str(path)
+        observations.extend(
+            flatten_prediction_log(
+                data,
+                path,
+                matchers,
+                warnings,
+                run_name=(run_names or {}).get(key),
+                step_override=(step_overrides or {}).get(key),
+            )
+        )
     return observations

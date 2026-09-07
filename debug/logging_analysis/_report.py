@@ -35,6 +35,48 @@ def _first_last_step(step_summary: pd.DataFrame) -> tuple[pd.Series | None, pd.S
     return ordered.iloc[0], ordered.iloc[-1]
 
 
+def _run_metric_table(run_summary: pd.DataFrame) -> list[str]:
+    if run_summary.empty or "run_name" not in run_summary.columns:
+        return []
+    cols = [
+        ("run_name", "run"),
+        ("step", "step"),
+        ("n", "n"),
+        ("canonical_format_fraction", "canonical"),
+        ("usable_format_fraction", "usable"),
+        ("normalized_exact_match_fraction", "norm EM"),
+        ("repetition_score_median", "repetition"),
+        ("think_token_count_median", "think tok"),
+        ("trainer_eval_loss", "eval_loss"),
+    ]
+    present = [(col, label) for col, label in cols if col in run_summary.columns]
+    if not present:
+        return []
+    ordered = run_summary.sort_values("step" if "step" in run_summary.columns else "run_name")
+    header = "| " + " | ".join(label for _col, label in present) + " |"
+    sep = "| " + " | ".join("---" for _ in present) + " |"
+    lines = ["", header, sep]
+    for _, row in ordered.iterrows():
+        cells = []
+        for col, _label in present:
+            value = row.get(col)
+            if col == "run_name":
+                cells.append(f"`{value}`")
+            elif col in {"canonical_format_fraction", "usable_format_fraction", "normalized_exact_match_fraction"}:
+                cells.append(_pct(value))
+            elif col in {"repetition_score_median", "trainer_eval_loss"}:
+                cells.append(_num(value, 3))
+            elif col == "think_token_count_median":
+                cells.append(_num(value, 1))
+            else:
+                cells.append(
+                    str(value) if value is not None and not (isinstance(value, float) and value != value) else "n/a"
+                )
+        lines.append("| " + " | ".join(cells) + " |")
+    lines.append("")
+    return lines
+
+
 def build_report(
     *,
     log_paths: list[str],
@@ -53,10 +95,20 @@ def build_report(
     loss_enabled: bool,
     flags_note: str,
     warnings_n: int,
+    run_records: list[dict[str, Any]] | None = None,
+    run_summary: pd.DataFrame | None = None,
+    eval_only: bool = False,
 ) -> str:
     first, last = _first_last_step(step_summary)
+    n_runs = len(run_records or [])
+    if eval_only and n_runs > 1:
+        title = "# Eval prediction comparison"
+    elif eval_only:
+        title = "# Eval prediction log analysis"
+    else:
+        title = "# Train prediction log analysis"
     lines = [
-        "# Train prediction log analysis",
+        title,
         "",
         "This report is a **deterministic statistical summary**. It is not a judge of",
         "reasoning quality, semantic correctness, or training success.",
@@ -64,8 +116,29 @@ def build_report(
         "## Inputs",
         "",
     ]
-    for path in log_paths:
-        lines.append(f"- `{path}`")
+    if run_records:
+        for rec in run_records:
+            name = rec.get("run_name") or rec.get("name")
+            step = rec.get("step")
+            pred = rec.get("eval_predictions") or rec.get("prediction_path")
+            trainer = rec.get("trainer_log")
+            loss = rec.get("eval_loss")
+            folder = rec.get("eval_dir")
+            bits = [f"**{name}**"]
+            if step is not None:
+                bits.append(f"step {step}")
+            if loss is not None:
+                bits.append(f"eval_loss={_num(loss, 4)}")
+            lines.append(f"- {' · '.join(bits)}")
+            if folder:
+                lines.append(f"  - dir: `{folder}`")
+            if pred:
+                lines.append(f"  - predictions: `{pred}`")
+            if trainer:
+                lines.append(f"  - trainer_log: `{trainer}`")
+    else:
+        for path in log_paths:
+            lines.append(f"- `{path}`")
     lines.extend(
         [
             "",
@@ -78,6 +151,15 @@ def build_report(
             "",
         ]
     )
+    if n_runs > 1:
+        lines.extend(
+            [
+                "Each eval save folder is a separate run. Assigned steps keep them from being",
+                "pooled. `--matched-questions` intersects IDs across those runs.",
+                "",
+            ]
+        )
+        lines.extend(_run_metric_table(run_summary if run_summary is not None else pd.DataFrame()))
     if teacher_forced_note:
         lines.extend(
             [

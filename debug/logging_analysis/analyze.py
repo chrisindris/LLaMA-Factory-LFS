@@ -55,6 +55,13 @@ Example:
         --log saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/train_predictions_ep1.json \\
         --dataset-info data/dataset_info.json \\
         --output-dir debug/logging_analysis/out/CoT_traineval_resume_ep1
+
+    python debug/logging_analysis/analyze.py \\
+        --eval-dir base=models/Qwen2.5-VL-7B-Instruct/lora/eval \\
+        --eval-dir ep1=models/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_merged/lora/eval \\
+        --eval-dir ep2=models/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs_merged/lora/eval \\
+        --eval-dir ep3=models/qwen2_5vl-7b-lora-sft-CoT_traineval_3epochs_merged/lora/eval \\
+        --output-dir debug/logging_analysis/out/eval_compare
 """
 
 from __future__ import annotations
@@ -92,11 +99,17 @@ from _annotations import (  # noqa: E402
     lookup_annotation,
     parse_kv_overrides,
 )
+from _evaldirs import (  # noqa: E402
+    collect_trainer_tables,
+    needs_synthetic_step,
+    resolve_analysis_runs,
+)
 from _logparse import (  # noqa: E402
     UNKNOWN_DATASET,
     WarningRecord,
     build_matchers,
-    load_and_flatten_logs,
+    flatten_prediction_log,
+    load_prediction_log,
 )
 from _metrics import per_prediction_metrics  # noqa: E402
 from _plots import generate_plots  # noqa: E402
@@ -151,7 +164,27 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="append",
         dest="logs",
         default=None,
-        help="Prediction JSON (repeatable). Train: D[qid][step]=text. Eval: D[qid]=text.",
+        help=(
+            "Prediction JSON or eval save folder (repeatable). "
+            "Train: D[qid][step]=text. Eval: D[qid]=text. Directories are treated as --eval-dir."
+        ),
+    )
+    parser.add_argument(
+        "--eval-dir",
+        action="append",
+        dest="eval_dirs",
+        default=None,
+        help=(
+            "Eval save folder (repeatable). Form [NAME=]PATH. Discovers eval_predictions.json "
+            "and trainer_log.jsonl / trainer_log.json."
+        ),
+    )
+    parser.add_argument(
+        "--eval-step",
+        action="append",
+        dest="eval_steps",
+        default=None,
+        help="Map a run onto the numeric step axis: NAME=INT (repeatable).",
     )
     parser.add_argument(
         "--dataset-info", type=Path, default=DEFAULT_DATASET_INFO if DEFAULT_DATASET_INFO.exists() else None
@@ -297,6 +330,7 @@ def observations_to_frame(
                 "question_id": obs.question_id,
                 "log_key": obs.log_key,
                 "step": obs.step,
+                "run_name": obs.run_name,
                 "epoch": obs.epoch,
                 "source_kind": obs.source_kind,
                 "source_log": obs.source_log,
@@ -313,7 +347,8 @@ def observations_to_frame(
     if not frame.empty:
         frame["step"] = pd.to_numeric(frame["step"], errors="coerce").astype("Int64")
         frame["question_index"] = pd.to_numeric(frame["question_index"], errors="coerce").astype("Int64")
-        frame = frame.sort_values(["step", "dataset", "question_id"], kind="mergesort").reset_index(drop=True)
+        sort_cols = [col for col in ("step", "run_name", "dataset", "question_id") if col in frame.columns]
+        frame = frame.sort_values(sort_cols, kind="mergesort").reset_index(drop=True)
     return frame, lookup_ok, lookup_fail
 
 
@@ -331,6 +366,10 @@ def save_detailed(frame, output_dir: Path) -> None:
     parquet_path = output_dir / "detailed_predictions.parquet"
     jsonl_path = output_dir / "detailed_predictions.jsonl"
     csv_path = output_dir / "detailed_predictions.csv"
+    if frame is None or frame.empty:
+        empty = frame if frame is not None else pd.DataFrame()
+        empty.to_csv(csv_path, index=False)
+        return
     try:
         frame.to_parquet(parquet_path, index=False)
     except Exception as exc:
@@ -350,7 +389,8 @@ def integrity_stats(observations, frame, warnings: list[WarningRecord]) -> dict[
     steps = sorted({obs.step for obs in observations if obs.step is not None})
     dup = 0
     if not frame.empty:
-        dup = int(frame.duplicated(["question_id", "step"], keep=False).sum())
+        dup_cols = [col for col in ("run_name", "question_id", "step") if col in frame.columns]
+        dup = int(frame.duplicated(dup_cols, keep=False).sum())
     codes = {}
     for rec in warnings:
         codes[rec.code] = codes.get(rec.code, 0) + 1
@@ -368,9 +408,28 @@ def integrity_stats(observations, frame, warnings: list[WarningRecord]) -> dict[
     }
 
 
+def _attach_trainer_eval_loss(summary, trainer_summary):
+    if summary is None or summary.empty or trainer_summary is None or trainer_summary.empty:
+        return summary
+    if "eval_loss" not in trainer_summary.columns:
+        return summary
+    if "run_name" in summary.columns and "run_name" in trainer_summary.columns:
+        on = ["run_name"]
+    elif "step" in summary.columns and "step" in trainer_summary.columns:
+        on = ["step"]
+    else:
+        return summary
+    right = (
+        trainer_summary[on + ["eval_loss"]]
+        .drop_duplicates(subset=on)
+        .rename(columns={"eval_loss": "trainer_eval_loss"})
+    )
+    return summary.merge(right, on=on, how="left")
+
+
 def run_analysis(args: argparse.Namespace) -> int:
-    if not args.logs:
-        raise SystemExit("Pass one or more --log files (or --self-test).")
+    if not args.logs and not args.eval_dirs:
+        raise SystemExit("Pass one or more --log files or --eval-dir folders (or --self-test).")
     warnings: list[WarningRecord] = []
     dataset_info: dict[str, Any] = {}
     if args.dataset_info and Path(args.dataset_info).exists():
@@ -382,10 +441,39 @@ def run_analysis(args: argparse.Namespace) -> int:
     annotation_overrides = parse_kv_overrides(args.annotation_file)
     gt_field_overrides = parse_kv_overrides(args.gt_field)
     matchers = build_matchers(dataset_info)
-    observations = load_and_flatten_logs(args.logs, matchers, warnings)
-    if not observations:
-        logger.error("No observations parsed from %s", args.logs)
+    runs = resolve_analysis_runs(args.logs, args.eval_dirs, args.eval_steps, warnings)
+    trainer_summary_rows, trainer_history_rows = collect_trainer_tables(runs, warnings)
+    observations = []
+    for run in runs:
+        if run.prediction_path is None:
+            continue
+        if not Path(run.prediction_path).is_file():
+            warnings.append(
+                WarningRecord(
+                    code="eval_predictions_missing",
+                    message=f"Prediction file not found: {run.prediction_path}",
+                    extra=str(run.prediction_path),
+                )
+            )
+            continue
+        data = load_prediction_log(run.prediction_path)
+        observations.extend(
+            flatten_prediction_log(
+                data,
+                run.prediction_path,
+                matchers,
+                warnings,
+                run_name=run.run_name,
+                step_override=run.step if needs_synthetic_step(run) else None,
+            )
+        )
+    if not observations and not trainer_summary_rows:
+        logger.error("No observations parsed from logs=%s eval_dirs=%s", args.logs, args.eval_dirs)
         return 2
+    if not observations:
+        logger.warning("No prediction observations; writing trainer_log tables only.")
+
+    import pandas as pd
 
     datasets = sorted({obs.dataset for obs in observations if obs.dataset != UNKNOWN_DATASET})
     indices = load_annotation_indices(
@@ -405,22 +493,57 @@ def run_analysis(args: argparse.Namespace) -> int:
 
         grammar = GrammarAnalyzer(language=args.language)
 
-    try:
-        frame, lookup_ok, lookup_fail = observations_to_frame(
-            observations, indices, gt_field_overrides, tokenizer, grammar, warnings, args
-        )
-    finally:
+    lookup_ok = 0
+    lookup_fail = 0
+    if observations:
+        try:
+            frame, lookup_ok, lookup_fail = observations_to_frame(
+                observations, indices, gt_field_overrides, tokenizer, grammar, warnings, args
+            )
+        finally:
+            if grammar is not None:
+                grammar.close()
+    else:
         if grammar is not None:
             grammar.close()
+        frame = pd.DataFrame()
 
-    frame = add_previous_prediction_flags(frame)
-    frame = add_row_flags(frame)
+    if not frame.empty:
+        frame = add_previous_prediction_flags(frame)
+        frame = add_row_flags(frame)
 
     trend_frame, matched_strategy, matched_ids = apply_matched_questions(frame, args.matched_questions)
-    step_summary = summarize_frame(trend_frame, ["step"])
-    dataset_step = summarize_frame(trend_frame, ["dataset", "step"])
+    step_group = ["step", "run_name"] if (not trend_frame.empty and "run_name" in trend_frame.columns) else ["step"]
+    dataset_step_group = (
+        ["dataset", "step", "run_name"]
+        if (not trend_frame.empty and "run_name" in trend_frame.columns)
+        else ["dataset", "step"]
+    )
+    step_summary = summarize_frame(trend_frame, step_group)
+    dataset_step = summarize_frame(trend_frame, dataset_step_group)
     dataset_summary = summarize_frame(frame, ["dataset"])
+    run_summary = (
+        summarize_frame(frame, ["run_name", "step"] if "step" in frame.columns else ["run_name"])
+        if (not frame.empty and "run_name" in frame.columns)
+        else pd.DataFrame()
+    )
+    dataset_run_summary = (
+        summarize_frame(frame, ["dataset", "run_name"])
+        if (not frame.empty and "run_name" in frame.columns)
+        else pd.DataFrame()
+    )
+    trainer_summary = pd.DataFrame(trainer_summary_rows)
+    trainer_history = pd.DataFrame(trainer_history_rows)
+    step_summary = _attach_trainer_eval_loss(step_summary, trainer_summary)
+    run_summary = _attach_trainer_eval_loss(run_summary, trainer_summary)
+    if run_summary.empty and not trainer_summary.empty:
+        run_summary = trainer_summary.copy()
+        if "eval_loss" in run_summary.columns and "trainer_eval_loss" not in run_summary.columns:
+            run_summary = run_summary.rename(columns={"eval_loss": "trainer_eval_loss"})
     overlap = overlap_table(question_ids_by_step(frame))
+    if not overlap.empty and not frame.empty and "run_name" in frame.columns:
+        run_by_step = frame.dropna(subset=["step"]).drop_duplicates(subset=["step"])[["step", "run_name"]]
+        overlap = overlap.merge(run_by_step, on="step", how="left")
     trajectories = question_trajectories(frame)
     examples = interesting_examples(trajectories)
     health = health_by_step(step_summary, dataset_step)
@@ -465,11 +588,23 @@ def run_analysis(args: argparse.Namespace) -> int:
                 "skip_reason",
             ]
             present = [col for col in merge_cols if col in loss_frame.columns]
-            frame = frame.merge(loss_frame[present], on=["question_id", "dataset", "step"], how="left")
+            on = ["question_id", "dataset", "step"]
+            if "run_name" in loss_frame.columns and "run_name" in frame.columns:
+                on.append("run_name")
+                if "run_name" not in present:
+                    present = ["run_name", *present]
+            frame = frame.merge(loss_frame[present], on=on, how="left")
             # Recompute dataset×step so probe_loss_* stats appear.
             trend_frame, matched_strategy, matched_ids = apply_matched_questions(frame, args.matched_questions)
-            step_summary = summarize_frame(trend_frame, ["step"])
-            dataset_step = summarize_frame(trend_frame, ["dataset", "step"])
+            step_summary = summarize_frame(trend_frame, step_group)
+            dataset_step = summarize_frame(trend_frame, dataset_step_group)
+            run_summary = (
+                summarize_frame(frame, ["run_name", "step"] if "step" in frame.columns else ["run_name"])
+                if (not frame.empty and "run_name" in frame.columns)
+                else run_summary
+            )
+            step_summary = _attach_trainer_eval_loss(step_summary, trainer_summary)
+            run_summary = _attach_trainer_eval_loss(run_summary, trainer_summary)
             health = health_by_step(step_summary, dataset_step)
         loss_summary = summarize_probe_loss(loss_frame)
         save_table(loss_frame, output_dir / "loss_by_example.csv")
@@ -479,6 +614,10 @@ def run_analysis(args: argparse.Namespace) -> int:
     save_table(step_summary, output_dir / "step_summary.csv")
     save_table(dataset_step, output_dir / "dataset_step_summary.csv")
     save_table(dataset_summary, output_dir / "dataset_summary.csv")
+    save_table(run_summary, output_dir / "run_summary.csv")
+    save_table(dataset_run_summary, output_dir / "dataset_run_summary.csv")
+    save_table(trainer_summary, output_dir / "trainer_log_summary.csv")
+    save_table(trainer_history, output_dir / "trainer_log_history.csv")
     save_table(overlap, output_dir / "question_overlap.csv")
     save_table(trajectories, output_dir / "question_trajectories.csv")
     save_table(health, output_dir / "health_by_step.csv")
@@ -504,6 +643,7 @@ def run_analysis(args: argparse.Namespace) -> int:
             detailed=frame,
             grammar_enabled=args.grammar,
             rolling_window=args.rolling_window,
+            run_summary=run_summary,
         )
 
     steps = sorted({obs.step for obs in observations if obs.step is not None})
@@ -514,7 +654,23 @@ def run_analysis(args: argparse.Namespace) -> int:
         "files": {name: (str(idx.path) if idx.path else None) for name, idx in indices.items()},
     }
     integrity = integrity_stats(observations, frame, warnings)
-    teacher_forced_note = any("train" in Path(path).name.lower() for path in args.logs)
+    pred_names = [str(run.prediction_path) for run in runs if run.prediction_path is not None]
+    teacher_forced_note = any("train" in Path(path).name.lower() for path in pred_names)
+    eval_only = (not observations) or ({obs.source_kind for obs in observations} <= {"eval"})
+    run_records = (
+        trainer_summary.to_dict(orient="records")
+        if not trainer_summary.empty
+        else [
+            {
+                "run_name": run.run_name,
+                "step": run.step,
+                "eval_dir": str(run.eval_dir) if run.eval_dir else None,
+                "eval_predictions": str(run.prediction_path) if run.prediction_path else None,
+                "trainer_log": str(run.trainer_log_path) if run.trainer_log_path else None,
+            }
+            for run in runs
+        ]
+    )
 
     flag_note = "None."
     if not step_flags.empty and "flags" in step_flags.columns:
@@ -523,7 +679,7 @@ def run_analysis(args: argparse.Namespace) -> int:
             flag_note = "; ".join(f"step {row.step}: {row.flags}" for row in nonempty.itertuples())
 
     report = build_report(
-        log_paths=[str(path) for path in args.logs],
+        log_paths=pred_names or [str(path) for path in (args.logs or [])],
         n_rows=len(frame),
         datasets=sorted({obs.dataset for obs in observations}),
         steps=steps,
@@ -539,12 +695,17 @@ def run_analysis(args: argparse.Namespace) -> int:
         loss_enabled=args.compute_loss,
         flags_note=flag_note,
         warnings_n=len(warnings),
+        run_records=run_records,
+        run_summary=run_summary,
+        eval_only=eval_only,
     )
     (output_dir / "report.md").write_text(report, encoding="utf-8")
 
     summary = build_analysis_summary(
         {
-            "input_logs": [str(path) for path in args.logs],
+            "input_logs": pred_names or [str(path) for path in (args.logs or [])],
+            "eval_dirs": list(args.eval_dirs or []),
+            "runs": run_records,
             "dataset_info": str(args.dataset_info) if args.dataset_info else None,
             "output_dir": str(output_dir),
             "cli": {key: (str(value) if isinstance(value, Path) else value) for key, value in vars(args).items()},

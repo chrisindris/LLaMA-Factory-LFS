@@ -859,9 +859,10 @@
     }
   },
   "Scene30k": {
-    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--Scene30K/snapshots/4be0f2eadaf440b9fe9392fdeca790c4edfd68fd/data/train-00000-of-00001.with_question_id.parquet",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--Scene30K/snapshots/84a202a417f455f197879495c81b1095f1cf8f53/train-00000-of-00001.with_question_id.formatted.parquet",
     "formatting": "alpaca",
     "columns": {
+      "system": "formatting_instruction",
       "prompt": "question_with_image_tags",
       "response": "cot",
       "images": "images_every_24"
@@ -874,23 +875,34 @@
     }
   },
   "SpatialSSRL_coldstart": {
-    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/c6bce21bad8cb7d751a47f7bb91dca7875115c96/SFT-coldstart.with_question_id.json",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/d8e2fabf27e68f41c997b4e7532c67758668c0bd/SFT-coldstart.with_question_id.formatted.json",
     "formatting": "alpaca",
     "columns": {
       "prompt": "instruction",
-      "query": "input",
       "response": "output",
       "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
     }
   },
   "3DThinker10k": {
-    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/c0392e4172ddf9c106b7066c584724dd7ae04144/3dthinker10k_cot.with_question_id.jsonl",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/4dd9eb7f24b03c4e9f1265c7e177325cadec9d2d/3dthinker10k_cot.with_question_id.formatted.jsonl",
     "formatting": "alpaca",
     "columns": {
       "system": "system",
       "prompt": "instruction",
       "response": "output",
       "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
     }
   }
 }

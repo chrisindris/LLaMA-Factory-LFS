@@ -1,0 +1,53 @@
+PROJECT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: TAMIA
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: /scratch/i/indrisch/LLaMA-Factory-LFS/
+SIF_FILE: /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/i/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/i/indrisch/venv_llamafactory_py313/
+Using base model: cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_3epochs_merged
+ADAPTER_PATH: 
+BASE_MODEL_PATH: cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_3epochs_merged
+BASE_MODEL_PATH_TEMPLATE: qwen2_vl
+MODEL_NAME: qwen2_5vl-7b-lora-sft-CoT_traineval_3epochs_merged
+SLURM_TMPDIR: /tmp
+RUNNING_MODE: VENV
+SCANNET_H5_DIR: /scratch/i/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/i/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/i/indrisch/3DThinker10K_images_h5
+
+Lmod is automatically replacing "gcc/12.3" with "go/1.26.5".
+
+
+Lmod is automatically replacing "go/1.26.5" with "gcc/12.3".
+
+
+Activating Modules:
+  1) cuda/12.6           3) gcccore/.12.3        5) opencv/4.14.0     7) pmix/4.2.4
+  2) flexiblas/3.3.1     4) libfabric/1.18.0     6) openmpi/4.1.5
+
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.2.1)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPSConnection(host='pypi.org', port=443) at 0x79adda450c20>, 'Connection to pypi.org timed out. (connect timeout=15)')': /simple/pip/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectTimeoutError(<HTTPSConnection(host='pypi.org', port=443) at 0x79add9f69450>, 'Connection to pypi.org timed out. (connect timeout=15)')': /simple/pip/
+[2026-08-31T22:44:49.676] error: *** JOB 433858 ON tg11208 CANCELLED AT 2026-08-31T22:44:49 DUE to SIGNAL Terminated ***
+/etc/slurm/slurmtask_epilog: line 26: ${OUT_FILE}: ambiguous redirect
+/etc/slurm/slurmtask_epilog: line 27: ${OUT_FILE}: ambiguous redirect
+/etc/slurm/slurmtask_epilog: line 28: ${OUT_FILE}: ambiguous redirect
+[2026-08-31T22:44:49.696] error: --task-epilog failed status=1

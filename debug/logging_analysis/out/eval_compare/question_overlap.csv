@@ -1,0 +1,6 @@
+step,n_questions,prev_step,intersection,union,jaccard,run_name
+0,4384,,,,,base
+1,4384,0,4384.0,4384.0,1.0,ep1
+2,4384,1,4384.0,4384.0,1.0,ep2
+3,4384,2,4384.0,4384.0,1.0,ep3
+ALL,4384,ALL_STEPS,4384.0,4384.0,1.0,

@@ -224,21 +224,33 @@ run_llamafactory_apptainer() {
 	# torchrun once per node with the correct --node_rank. The outer
 	# 2-node SLURM wrapper must start this script through srun so that
 	# one parent process exists on every allocated node.
-	export NNODES="${SLURM_NNODES}" && echo "NNODES: ${NNODES}"
-	export NODE_RANK="${SLURM_NODEID}" && echo "NODE_RANK: ${NODE_RANK}"
-	export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE:-$(hostname)}}" && echo "MASTER_ADDR: ${MASTER_ADDR}"
+	export NNODES="${SLURM_NNODES:-1}" && echo "NNODES: ${NNODES}"
+	export NODE_RANK="${SLURM_NODEID:-0}" && echo "NODE_RANK: ${NODE_RANK}"
+  export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE:-$(hostname)}}" && echo "MASTER_ADDR: ${MASTER_ADDR}"
 	export MASTER_PORT="${MASTER_PORT:-29500}" && echo "MASTER_PORT: ${MASTER_PORT}"
 	export NPROC_PER_NODE="4" && echo "NPROC_PER_NODE: ${NPROC_PER_NODE}"
 
+  # - OVERLAY SELECTION -
+  # if SLURM_NNODES > 1, we are doing multinode and we assign overlays accordingly.
+  # otherwise, we might be doing an array job.
 	if [ -z "${OVERLAY:-}" ]; then
-		if [[ "$SLURM_ARRAY_TASK_ID" == 0 ]]; then
-			if [ -f "${PROJECT_DIR}/apptainer/overlay_${SLURM_ARRAY_TASK_ID}.img" ]; then
-				OVERLAY="${PROJECT_DIR}/apptainer/overlay_${SLURM_ARRAY_TASK_ID}.img"
+
+    if [[ "$SLURM_NNODES" -gt 1 ]]; then
+      OVERLAY_INDEX="$NODE_RANK"
+    elif [[ -n "$SLURM_ARRAY_TASK_ID" ]]; then
+      OVERLAY_INDEX="$SLURM_ARRAY_TASK_ID"
+    else
+      OVERLAY_INDEX="0"
+    fi
+      
+		if [[ "$OVERLAY_INDEX" == 0 ]]; then
+			if [ -f "${PROJECT_DIR}/apptainer/overlay_${OVERLAY_INDEX}.img" ]; then
+				OVERLAY="${PROJECT_DIR}/apptainer/overlay_${OVERLAY_INDEX}.img"
 			else
 				OVERLAY="${PROJECT_DIR}/apptainer/overlay.img"
 			fi
 		else
-			OVERLAY="${PROJECT_DIR}/apptainer/overlay_${SLURM_ARRAY_TASK_ID}.img"
+			OVERLAY="${PROJECT_DIR}/apptainer/overlay_${OVERLAY_INDEX}.img"
 		fi
 	fi
 
@@ -441,6 +453,69 @@ elif [[ "$CLUSTER" == "RORQUAL" ]]; then
 		echo "=== END HOST DIAGNOSTICS ==="
 
 		run_llamafactory_apptainer
+
+	else
+		echo "Invalid running mode: $RUNNING_MODE"
+		exit 1
+	fi
+
+elif [[ "$CLUSTER" == "TAMIA" ]]; then
+
+	if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
+
+		module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+
+		echo "=== HOST DIAGNOSTICS ==="
+		echo "HOSTNAME: $(hostname)"
+		echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
+		nvidia-smi
+		echo "=== END HOST DIAGNOSTICS ==="
+
+		run_llamafactory_apptainer
+
+	elif [[ "$RUNNING_MODE" == "VENV" ]]; then
+
+		module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+
+		echo "Copying venv to local storage..."
+		cp -a /scratch/i/indrisch/venv_llamafactory_py313/ ${SLURM_TMPDIR}/venv_llamafactory_py313
+		source ${SLURM_TMPDIR}/venv_llamafactory_py313/bin/activate
+    setup_venv_runtime_env
+		check_prediction_dump_flags
+
+		export PYTHONUNBUFFERED=1
+		export NCCL_DEBUG=INFO
+		export TORCH_CUDA_ARCH_LIST="9.0"
+		export FORCE_TORCHRUN=1
+		export HF_HUB_OFFLINE=1
+		export WANDB_MODE=offline
+		export WANDB_DIR="${WANDB_DIR}"
+		export WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb"
+		export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
+		export DISABLE_VERSION_CHECK=1
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+		export SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR
+
+		pushd ${PROJECT_DIR}
+		llamafactory-cli train ${YAML_FILE}
+
+
+	elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
+
+		module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
+		module load python/3.12 cuda/12.6 opencv/4.12.0
+		module load arrow
+		module load apptainer
+
+		echo "=== HOST DIAGNOSTICS ==="
+		echo "HOSTNAME: $(hostname)"
+		echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
+		nvidia-smi
+		echo "=== END HOST DIAGNOSTICS ==="
+
+		#apptainer exec --overlay /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/overlay_0.img --env TORCH_DEVICE_BACKEND_AUTOLOAD=0 --env PYTHONNOUSERSITE=1 /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory_latest-910b-ubuntu.sif bash -> the original; this container is incomplete 
+    #apptainer exec --overlay /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/overlay.img /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif bash -> better, but not generalized
+    run_llamafactory_apptainer
 
 	else
 		echo "Invalid running mode: $RUNNING_MODE"
