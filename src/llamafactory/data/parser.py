@@ -111,6 +111,7 @@ class DatasetAttr:
     chosen: str | None = None
     rejected: str | None = None
     kto_tag: str | None = None
+    question_id: str | None = None
     # alpaca columns
     prompt: str | None = "instruction"
     query: str | None = "input"

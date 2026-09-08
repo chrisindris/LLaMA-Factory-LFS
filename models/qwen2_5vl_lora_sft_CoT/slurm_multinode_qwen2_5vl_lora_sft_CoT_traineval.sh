@@ -453,13 +453,24 @@ elif [[ "$CLUSTER" == "TAMIA" ]]; then
 		export TORCH_CUDA_ARCH_LIST="9.0"
 		export FORCE_TORCHRUN=1
 		export HF_HUB_OFFLINE=1
+		export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
+		export HF_DATASETS_OFFLINE="${HF_DATASETS_OFFLINE:-1}"
+		# YAML cache_dir stays on HF_HUB_CACHE for Qwen snapshots. Arrow cache
+		# must not: /project is often 100% full ("Not enough disk space").
+		export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-${SLURM_TMPDIR}/hf_datasets}"
+		mkdir -p "${HF_DATASETS_CACHE}"
+		export HF_DATASETS_DISABLE_FILE_LOCKING=1
+		export DATASETS_DISABLE_FILE_LOCKING=1
 		export WANDB_MODE=offline
 		export WANDB_DIR="${WANDB_DIR}"
 		export WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb"
 		export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
+		mkdir -p "${TRITON_CACHE_DIR}" "${WANDB_CACHE_DIR}"
 		export DISABLE_VERSION_CHECK=1
-    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+		export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 		export SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR
+		export PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}"
+		echo "HF_DATASETS_CACHE: ${HF_DATASETS_CACHE}"
 
 		pushd ${PROJECT_DIR}
 		llamafactory-cli train ${YAML_FILE}

@@ -226,8 +226,10 @@ class BaseModelArguments:
 
                 if not isinstance(token_descriptions, dict):
                     raise ValueError(
-                        f"YAML config must be a dictionary mapping tokens to descriptions. "
-                        f"Got: {type(token_descriptions)}"
+                        "new_special_tokens_config must be a YAML/JSON dictionary mapping "
+                        "tokens to descriptions, e.g. {'<think>': 'start of reasoning'}. "
+                        f"Got {type(token_descriptions).__name__} from {self.new_special_tokens_config}. "
+                        "A HuggingFace AddedToken list (data/control_tokens.json) is not valid here."
                     )
 
                 # Extract token list from config keys

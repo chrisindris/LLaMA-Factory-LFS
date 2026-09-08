@@ -18,20 +18,33 @@
 # Defaults (overridable via env before source/invoke)
 # ---------------------------------------------------------------------------
 
-# Shared annotation sources (match data/dataset_info.json defaults).
+# Shared annotation sources (match data/dataset_info.json formatted CoT mix).
 # HF_HUB_CACHE / HF_HOME come from scripts/utils/env.sh (per-cluster sysconfig).
 _hf_cache="${HF_HUB_CACHE:-${HF_HOME:-}}"
-: "${SCENE30K_ANN_SRC:=${_hf_cache}/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.with_question_id.parquet}"
-: "${SPATIALSSRL_ANN_SRC:=${_hf_cache}/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.with_question_id.json}"
+: "${SCENE30K_ANN_SRC:=${_hf_cache}/datasets--cvis-tmu--Scene30K/snapshots/84a202a417f455f197879495c81b1095f1cf8f53/train-00000-of-00001.with_question_id.formatted.parquet}"
+: "${SPATIALSSRL_ANN_SRC:=${_hf_cache}/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/d8e2fabf27e68f41c997b4e7532c67758668c0bd/SFT-coldstart.with_question_id.formatted.json}"
 
 # 3DThinker annotation is relative under data/ in the repo; resolve via PROJECT_DIR when set.
 if [[ -z "${THINKER10K_ANN_SRC:-}" ]]; then
-	if [[ -n "${PROJECT_DIR:-}" && -f "${PROJECT_DIR}/data/3DThinker-10K/out/3dthinker10k_cot.jsonl" ]]; then
-		THINKER10K_ANN_SRC="${PROJECT_DIR}/data/3DThinker-10K/out/3dthinker10k_cot.jsonl"
+	if [[ -n "${_hf_cache}" && -f "${_hf_cache}/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/4dd9eb7f24b03c4e9f1265c7e177325cadec9d2d/3dthinker10k_cot.with_question_id.formatted.jsonl" ]]; then
+		THINKER10K_ANN_SRC="${_hf_cache}/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/4dd9eb7f24b03c4e9f1265c7e177325cadec9d2d/3dthinker10k_cot.with_question_id.formatted.jsonl"
+	elif [[ -n "${PROJECT_DIR:-}" && -f "${PROJECT_DIR}/data/3dthinker10k_cot.with_question_id.formatted.jsonl" ]]; then
+		THINKER10K_ANN_SRC="${PROJECT_DIR}/data/3dthinker10k_cot.with_question_id.formatted.jsonl"
 	else
-		THINKER10K_ANN_SRC="data/3DThinker-10K/out/3dthinker10k_cot.jsonl"
+		THINKER10K_ANN_SRC="data/3dthinker10k_cot.with_question_id.formatted.jsonl"
 	fi
 fi
+
+if [[ -z "${COT_EVAL16_DIR:-}" ]]; then
+	if [[ -n "${PROJECT_DIR:-}" && -d "${PROJECT_DIR}/data/cot_eval16" ]]; then
+		COT_EVAL16_DIR="${PROJECT_DIR}/data/cot_eval16"
+	else
+		COT_EVAL16_DIR="data/cot_eval16"
+	fi
+fi
+: "${SCENE30K_EVAL16_SRC:=${COT_EVAL16_DIR}/Scene30k_eval16.json}"
+: "${SPATIALSSRL_EVAL16_SRC:=${COT_EVAL16_DIR}/SpatialSSRL_eval16.json}"
+: "${THINKER10K_EVAL16_SRC:=${COT_EVAL16_DIR}/3DThinker10k_eval16.jsonl}"
 
 # H5 source roots (workers usually export these before sourcing).
 : "${SCANNET_H5_DIR:=/scratch/indrisch/ScanNet_h5/scans}"
@@ -166,13 +179,24 @@ stage_write_dataset_info() {
 		_stage_log "ERROR: build_local_dataset_info.py not found"
 		return 1
 	fi
+	local datasets="Scene30k,SpatialSSRL_coldstart,3DThinker10k"
+	local extra_file_names=()
+	if [[ -n "${SCENE30K_EVAL16_ANN_LOCAL:-}" && -f "${SCENE30K_EVAL16_ANN_LOCAL}" ]]; then
+		datasets+=",Scene30k_eval16,SpatialSSRL_eval16,3DThinker10k_eval16"
+		extra_file_names+=(
+			--file-name "Scene30k_eval16=${SCENE30K_EVAL16_ANN_LOCAL}"
+			--file-name "SpatialSSRL_eval16=${SPATIALSSRL_EVAL16_ANN_LOCAL}"
+			--file-name "3DThinker10k_eval16=${THINKER10K_EVAL16_ANN_LOCAL}"
+		)
+	fi
 	python3 "$builder" \
 		--source-dataset-info "$SOURCE_DATASET_INFO" \
 		--output-dataset-info "$out_json" \
-		--datasets "Scene30k,SpatialSSRL_coldstart,3DThinker10k" \
+		--datasets "$datasets" \
 		--file-name "Scene30k=${scene_ann}" \
 		--file-name "SpatialSSRL_coldstart=${spatial_ann}" \
-		--file-name "3DThinker10k=${thinker_ann}"
+		--file-name "3DThinker10k=${thinker_ann}" \
+		"${extra_file_names[@]}"
 }
 
 # Pure-stdlib YAML patch for dataset_dir + media_dir (no ruamel required).
@@ -236,6 +260,19 @@ stage_verify_cot() {
 		fi
 	done
 
+	if [[ -f "${SCENE30K_EVAL16_SRC:-}" ]]; then
+		for f in \
+			"${ann_dir}/Scene30k_eval16.json" \
+			"${ann_dir}/SpatialSSRL_eval16.json" \
+			"${ann_dir}/3DThinker10k_eval16.jsonl"
+		do
+			if [[ ! -s "$f" ]]; then
+				_stage_log "VERIFY FAIL: missing/empty $f"
+				ok=0
+			fi
+		done
+	fi
+
 	if [[ ! -f "${scannet}/scene0000_00/images.hdf5" ]]; then
 		# scene0000_00 may not always exist; accept any scene pack.
 		if ! find "$scannet" -mindepth 2 -maxdepth 2 -name 'images.hdf5' 2>/dev/null | head -n 1 | grep -q .; then
@@ -291,6 +328,11 @@ stage_cot_default_datasets() {
 			export SCENE30K_ANN_LOCAL="${ann_dir}/Scene30k.parquet"
 			export SPATIALSSRL_ANN_LOCAL="${ann_dir}/SpatialSSRL_coldstart.json"
 			export THINKER10K_ANN_LOCAL="${ann_dir}/3dthinker10k_cot.jsonl"
+			if [[ -f "${ann_dir}/Scene30k_eval16.json" ]]; then
+				export SCENE30K_EVAL16_ANN_LOCAL="${ann_dir}/Scene30k_eval16.json"
+				export SPATIALSSRL_EVAL16_ANN_LOCAL="${ann_dir}/SpatialSSRL_eval16.json"
+				export THINKER10K_EVAL16_ANN_LOCAL="${ann_dir}/3DThinker10k_eval16.jsonl"
+			fi
 			export LOCAL_DATASET_DIR="$dataset_dir"
 			export LOCAL_MEDIA_DIR="${media_root}/ScanNet_h5"
 			export SCANNET_H5_DIR="$scannet_dst"
@@ -329,7 +371,19 @@ stage_cot_default_datasets() {
 	stage_copy_file "$SCENE30K_ANN_SRC" "${ann_dir}/Scene30k.parquet" || return 1
 	stage_copy_file "$SPATIALSSRL_ANN_SRC" "${ann_dir}/SpatialSSRL_coldstart.json" || return 1
 	stage_copy_file "$THINKER10K_ANN_SRC" "${ann_dir}/3dthinker10k_cot.jsonl" || return 1
-	_stage_log "Annotations done in $((_stage_seconds - t_comp))s"
+	if [[ -f "${SCENE30K_EVAL16_SRC}" ]]; then
+		stage_require_src "$SCENE30K_EVAL16_SRC" "Scene30k eval16" || return 1
+		stage_require_src "$SPATIALSSRL_EVAL16_SRC" "SpatialSSRL eval16" || return 1
+		stage_require_src "$THINKER10K_EVAL16_SRC" "3DThinker eval16" || return 1
+		stage_copy_file "$SCENE30K_EVAL16_SRC" "${ann_dir}/Scene30k_eval16.json" || return 1
+		stage_copy_file "$SPATIALSSRL_EVAL16_SRC" "${ann_dir}/SpatialSSRL_eval16.json" || return 1
+		stage_copy_file "$THINKER10K_EVAL16_SRC" "${ann_dir}/3DThinker10k_eval16.jsonl" || return 1
+		export SCENE30K_EVAL16_ANN_LOCAL="${ann_dir}/Scene30k_eval16.json"
+		export SPATIALSSRL_EVAL16_ANN_LOCAL="${ann_dir}/SpatialSSRL_eval16.json"
+		export THINKER10K_EVAL16_ANN_LOCAL="${ann_dir}/3DThinker10k_eval16.jsonl"
+	fi
+	t1="$(_stage_seconds)"
+	_stage_log "Annotations done in $((t1 - t_comp))s"
 
 	# --- H5 media (large; parallel) ---
 	# Snapshot source paths before we overwrite the H5 env exports.
@@ -340,22 +394,30 @@ stage_cot_default_datasets() {
 	t_comp="$(_stage_seconds)"
 	_stage_log "Copying ScanNet H5 tree..."
 	stage_copy_tree_parallel "$scannet_src" "$scannet_dst" "$STAGE_COPY_JOBS" || return 1
-	_stage_log "ScanNet done in $((_stage_seconds - t_comp))s"
+	t1="$(_stage_seconds)"
+	_stage_log "ScanNet done in $((t1 - t_comp))s"
 
 	t_comp="$(_stage_seconds)"
 	_stage_log "Copying Spatial-SSRL H5 tree..."
 	stage_copy_tree_parallel "$spatial_src" "$spatial_dst" "$STAGE_COPY_JOBS" || return 1
-	_stage_log "Spatial-SSRL done in $((_stage_seconds - t_comp))s"
+	t1="$(_stage_seconds)"
+	_stage_log "Spatial-SSRL done in $((t1 - t_comp))s"
 
 	t_comp="$(_stage_seconds)"
 	_stage_log "Copying 3DThinker H5 tree..."
 	stage_copy_tree_parallel "$thinker_src" "$thinker_dst" "$STAGE_COPY_JOBS" || return 1
-	_stage_log "3DThinker done in $((_stage_seconds - t_comp))s"
+	t1="$(_stage_seconds)"
+	_stage_log "3DThinker done in $((t1 - t_comp))s"
 
 	# --- local dataset_info ---
 	export SCENE30K_ANN_LOCAL="${ann_dir}/Scene30k.parquet"
 	export SPATIALSSRL_ANN_LOCAL="${ann_dir}/SpatialSSRL_coldstart.json"
 	export THINKER10K_ANN_LOCAL="${ann_dir}/3dthinker10k_cot.jsonl"
+	if [[ -f "${ann_dir}/Scene30k_eval16.json" ]]; then
+		export SCENE30K_EVAL16_ANN_LOCAL="${ann_dir}/Scene30k_eval16.json"
+		export SPATIALSSRL_EVAL16_ANN_LOCAL="${ann_dir}/SpatialSSRL_eval16.json"
+		export THINKER10K_EVAL16_ANN_LOCAL="${ann_dir}/3DThinker10k_eval16.jsonl"
+	fi
 	stage_write_dataset_info \
 		"${dataset_dir}/dataset_info.json" \
 		"$SCENE30K_ANN_LOCAL" \

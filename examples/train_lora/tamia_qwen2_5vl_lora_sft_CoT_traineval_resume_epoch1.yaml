@@ -36,7 +36,7 @@ dataloader_pin_memory: false
 low_cpu_mem_usage: true
 
 ### output
-output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10steps_ep1/
 logging_steps: 10
 save_steps: 620 # ~1.00 CoT epoch (4xH100, bs=2, ga=8, val_size=0.1; ~43.9k samples)
 plot_loss: true
@@ -52,7 +52,7 @@ learning_rate: 1.0e-4
 # or num_train_epochs=2 — that rebuilds the scheduler with a shorter total and breaks LR identity.
 num_train_epochs: 5.0
 lr_scheduler_type: cosine
-warmup_ratio: 0.1
+warmup_ratio: 0.02
 bf16: true
 ddp_timeout: 10800
 # Full continuity resume from epoch-1 checkpoint (ZeRO-2, 4 GPU).
@@ -71,16 +71,19 @@ print_param_status: true
 ### optional mm memory debug (independent of prediction dumps)
 debug_mm_training: true # this is really for fine-grained debugging of memory usage; for runs, output is much cleaner if we turn this off.
 debug_mm_steps: 1
+# --skip_memory_metrics: false
+# --enable_torch_profiler: true
+# --profiler_profile_memory: true
 
 # prediction logging
 save_train_predictions: true
 train_prediction_mode: teacher_forced   # use generate only if you accept much slower smoke
-train_prediction_interval: 10
+train_prediction_interval: 62
 train_prediction_max_samples: 1024
 # train_predictions_file: null  # default: {output_dir}/train_predictions.json
 
 save_eval_predictions: true
-eval_prediction_mode: teacher_forced    # generate is slower; switch when validating free-form dumps
+eval_prediction_mode: generate          # generate is slower; switch when validating free-form dumps
 # eval_predictions_file: null           # default: {output_dir}/eval_predictions.json
 
 # generation knobs (used when *prediction_mode: generate)
@@ -95,8 +98,19 @@ deepspeed: examples/deepspeed/ds_z2_config.json # as long as we aren't on Killar
 
 ## eval
 do_eval: true
-val_size: 0.1
+val_size: 0
 per_device_eval_batch_size: 1
 eval_strategy: steps
-eval_steps: 620 # evaluate after every ~1.00 CoT epoch
+eval_steps: 10  # evaluate after every ~1.00 CoT epoch
 image_sample_count: -1
+eval_on_start: true
+eval_dataset: Scene30k_eval16,SpatialSSRL_eval16,3DThinker10k_eval16
+lora_dropout: 0.05
+compute_accuracy: true
+repetition_penalty: 1.1
+new_special_tokens_config: /scratch/i/indrisch//LLaMA-Factory-LFS/data/control_tokens.yaml
+init_special_tokens: desc_init_w_noise
+skip_special_tokens: false
+additional_target: embed_tokens,lm_head
+lr_scheduler_kwargs:
+  num_cycles: 0.4

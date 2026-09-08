@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import os
-from typing import TYPE_CHECKING, Literal, Optional, Union, Any
+from typing import TYPE_CHECKING, Any, Literal, Optional, Union
 
 import numpy as np
 from datasets import Dataset, DatasetDict, load_dataset, load_from_disk
@@ -57,7 +57,7 @@ def _load_single_dataset(
     r"""Load a single dataset and aligns it to the standard format."""
     logger.info_rank0(f"Loading dataset {dataset_attr}...")
     data_path, data_name, data_dir, data_files = None, None, None, None
-    
+
     if dataset_attr.load_from in ["hf_hub", "ms_hub", "om_hub"]:
         data_path = dataset_attr.dataset_name
         data_name = dataset_attr.subset
@@ -142,13 +142,17 @@ def _load_single_dataset(
     elif dataset_attr.load_from == "cloud_file":
         dataset = Dataset.from_list(read_cloud_json(data_path), split=dataset_attr.split)
     else:
+        # model_args.cache_dir is the HF *model* hub root. Arrow writes must not
+        # go there when that filesystem is full (TamIA /project is often 100%).
+        # Cluster jobs set HF_DATASETS_CACHE to $SLURM_TMPDIR/hf_datasets.
+        datasets_cache_dir = os.environ.get("HF_DATASETS_CACHE") or model_args.cache_dir
         dataset = load_dataset(
             path=data_path,
             name=data_name,
             data_dir=data_dir,
             data_files=data_files,
             split=dataset_attr.split,
-            cache_dir=model_args.cache_dir,
+            cache_dir=datasets_cache_dir,
             token=model_args.hf_hub_token,
             num_proc=data_args.preprocessing_num_workers,
             streaming=data_args.streaming and dataset_attr.load_from != "file",
@@ -275,19 +279,15 @@ def _get_preprocessed_dataset(
             **kwargs,
         )
     else:
+
         def _preprocess_with_indices(examples: dict[str, list[Any]], indices: list[int]) -> dict[str, list[Any]]:
-            if (os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV") or os.getenv("RUNNING_MODE") == "SMOKE":
-                # HACK: to avoid "liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'"
-                # Copy first: HuggingFace datasets 4.x map *merges* mutated input keys into
-                # the output ({**inputs, **processed}). Mutating examples in-place with
-                # "_indices" therefore leaks that column into the dataset and later into
-                # model(**inputs), which breaks Liger fused CE (unexpected kwarg _indices).
-                batch = dict(examples)
-                batch["_indices"] = indices
-                return dataset_processor.preprocess_dataset(batch)
-            else:
-                examples["_indices"] = indices
-                return dataset_processor.preprocess_dataset(examples)
+            # Copy first: HuggingFace datasets 4.x map *merges* mutated input keys into
+            # the output ({**inputs, **processed}). Mutating examples in-place with
+            # "_indices" therefore leaks that column into the dataset and later into
+            # model.generate() / Liger fused CE (unused / unexpected kwarg _indices).
+            batch = dict(examples)
+            batch["_indices"] = indices
+            return dataset_processor.preprocess_dataset(batch)
 
         dataset = dataset.map(
             _preprocess_with_indices,

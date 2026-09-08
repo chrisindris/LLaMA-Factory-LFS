@@ -865,7 +865,8 @@
       "system": "formatting_instruction",
       "prompt": "question_with_image_tags",
       "response": "cot",
-      "images": "images_every_24"
+      "images": "images_every_24",
+      "question_id": "question_id"
     },
     "tags": {
       "role_tag": "role",
@@ -880,7 +881,8 @@
     "columns": {
       "prompt": "instruction",
       "response": "output",
-      "images": "images"
+      "images": "images",
+      "question_id": "question_id"
     },
     "tags": {
       "role_tag": "role",
@@ -896,7 +898,58 @@
       "system": "system",
       "prompt": "instruction",
       "response": "output",
-      "images": "images"
+      "images": "images",
+      "question_id": "question_id"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "Scene30k_eval16": {
+    "file_name": "cot_eval16/Scene30k_eval16.json",
+    "formatting": "alpaca",
+    "columns": {
+      "system": "formatting_instruction",
+      "prompt": "question_with_image_tags",
+      "response": "cot",
+      "images": "images_every_24",
+      "question_id": "question_id"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "SpatialSSRL_eval16": {
+    "file_name": "cot_eval16/SpatialSSRL_eval16.json",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "response": "output",
+      "images": "images",
+      "question_id": "question_id"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "3DThinker10k_eval16": {
+    "file_name": "cot_eval16/3DThinker10k_eval16.jsonl",
+    "formatting": "alpaca",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "response": "output",
+      "images": "images",
+      "question_id": "question_id"
     },
     "tags": {
       "role_tag": "role",

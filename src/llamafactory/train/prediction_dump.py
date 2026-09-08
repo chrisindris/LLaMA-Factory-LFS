@@ -149,7 +149,7 @@ class PredictionDumpStore:
         self.output_dir = output_dir
         self.train_data_by_epoch: dict[str, dict[str, dict[str, str]]] = {}
         self.train_record_counts: dict[str, int] = {}
-        self.eval_data_by_epoch: dict[str, dict[str, str]] = {}
+        self.eval_data_by_epoch: dict[str, dict[str, dict[str, str]]] = {}
         self.last_train_epoch: str = "1"
         self.last_eval_epoch: str = "0"
 
@@ -206,17 +206,26 @@ class PredictionDumpStore:
         self,
         pairs: list[tuple[str, str]],
         epoch: Optional[Union[str, int, float]] = None,
+        step: Optional[int] = None,
     ) -> int:
-        r"""Add eval records as D[QUESTION_ID] = text (overwrite on repeat) for given epoch."""
+        r"""Add eval records as D[QUESTION_ID][STEP] = text for given epoch.
+
+        Mid-epoch evals (e.g. every 10 steps) share an epoch bucket; the inner
+        step key keeps each probe generation instead of overwriting.
+        """
         epoch_key = format_epoch_name(epoch, is_training=False) if epoch is not None else self.last_eval_epoch
         self.last_eval_epoch = epoch_key
         epoch_data = self.eval_data_by_epoch.setdefault(epoch_key, {})
+        step_key = str(int(step)) if step is not None else "0"
         added = 0
         for question_id, text in pairs:
             if not question_id:
                 continue
-            epoch_data[question_id] = text
-            added += 1
+            bucket = epoch_data.setdefault(question_id, {})
+            is_new = step_key not in bucket
+            bucket[step_key] = text
+            if is_new:
+                added += 1
         return added
 
     def get_train_path(self, epoch: Optional[Union[str, int, float]] = None) -> Optional[str]:
@@ -244,7 +253,7 @@ class PredictionDumpStore:
         return self.train_data_by_epoch.get(self.last_train_epoch, {})
 
     @property
-    def eval_data(self) -> dict[str, str]:
+    def eval_data(self) -> dict[str, dict[str, str]]:
         return self.eval_data_by_epoch.get(self.last_eval_epoch, {})
 
     def flush_train(self, epoch: Optional[Union[str, int, float]] = None) -> Optional[str]:
