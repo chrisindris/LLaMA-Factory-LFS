@@ -9,7 +9,8 @@ index, for example::
 because ``dataset_info.json`` does not map ``columns.question_id`` and
 ``align_dataset`` falls back to ``{file_path}_{row_index}``.
 
-Eval dumps are ``D[QUESTION_ID] = text`` (no inner step dict).
+Eval dumps may be either ``D[QUESTION_ID] = text`` (legacy, one eval per
+file) or ``D[QUESTION_ID][global_step] = text`` (mid-training probes).
 """
 
 from __future__ import annotations
@@ -340,7 +341,7 @@ def flatten_prediction_log(
                     run_name=run_label,
                 )
             )
-        if isinstance(inner, dict) and n_inner > 1:
+        if isinstance(inner, dict) and n_inner > 1 and kind != "eval":
             warnings.append(
                 WarningRecord(
                     code="multiple_steps",

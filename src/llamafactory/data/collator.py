@@ -17,10 +17,9 @@
 
 import copy
 import inspect
-from dataclasses import dataclass
 import json
 import os
-import inspect
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Literal, Optional
 
 import numpy as np
@@ -29,8 +28,8 @@ import torch.nn.functional as F
 from peft import PeftModel
 from transformers import DataCollatorForSeq2Seq
 
-from ..extras.logging import get_logger
 from ..extras.constants import AUDIO_PLACEHOLDER, IGNORE_INDEX, IMAGE_PLACEHOLDER, MROPE_MODELS
+from ..extras.logging import get_logger
 from ..extras.packages import is_pillow_available
 
 
@@ -45,6 +44,7 @@ if TYPE_CHECKING:
 
 
 logger = get_logger(__name__)
+
 
 def _slice_mm_inputs_for_sample(
     mm_inputs: dict[str, Any],
@@ -388,9 +388,7 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
         packing_params_list: list[dict[str, Any] | None] = []
 
         debug_samples = None
-        collect_enabled = (
-            self.debug_mm_training and self.model is not None and getattr(self.model, "training", False)
-        )
+        collect_enabled = self.debug_mm_training and self.model is not None and getattr(self.model, "training", False)
         log_enabled = collect_enabled and self._debug_mm_seen < max(int(self.debug_mm_steps), 0)
         if collect_enabled:
             debug_samples = []
@@ -399,17 +397,16 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
         batch_question_ids: list[Any] = []
 
         for feature in features:
-            if (os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV") or os.getenv("RUNNING_MODE") == "SMOKE":
-                # HACK: to avoid "liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'"
-                # Non-model bookkeeping from preprocessing / mm debug; never pass to forward.
-                feature.pop("_indices", None)
+            # Non-model bookkeeping from preprocessing / mm debug; never pass to forward.
+            # Cached tokenized datasets may still carry "_indices" from datasets 4.x map merge.
+            feature.pop("_indices", None)
             sample_idx = feature.pop("sample_idx", None)
             sample_media = feature.pop("sample_media", None)
             question_id = feature.pop("question_id", None)
             try:
                 batch_question_ids.append(question_id)
             except NameError:
-                pass # when question ids are not present, we won't collect them.
+                pass  # when question ids are not present, we won't collect them.
             images = feature.pop("images", None) or []
             videos = feature.pop("videos", None) or []
             audios = feature.pop("audios", None) or []
@@ -417,11 +414,9 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
                 if debug_samples is not None:
                     if sample_media is None:
                         sample_media = self._build_media_summary(images, videos, audios)
-                    debug_samples.append(
-                        {"sample_idx": sample_idx, "question_id": question_id, "media": sample_media}
-                    )
+                    debug_samples.append({"sample_idx": sample_idx, "question_id": question_id, "media": sample_media})
             except NameError:
-                pass # if debug_samples aren't intended to be collected, we won't collect. 
+                pass  # if debug_samples aren't intended to be collected, we won't collect.
             batch_images.extend(images)
             batch_videos.extend(videos)
             batch_audios.extend(audios)
@@ -532,7 +527,7 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
             if any(qid is not None and qid != "" for qid in batch_question_ids):
                 features["question_ids"] = batch_question_ids
         except NameError:
-            pass # batch_question_ids may be unavailable; if so, we can ignore.
+            pass  # batch_question_ids may be unavailable; if so, we can ignore.
 
         try:
             if debug_samples is not None:
@@ -547,7 +542,7 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
                 if log_enabled:
                     self._debug_mm_seen += 1
         except NameError:
-            pass # if debug_samples not defined, we won't use them.
+            pass  # if debug_samples not defined, we won't use them.
 
         bsz, seq_len = features["input_ids"].shape[:2]
         is_omni = model_type in [

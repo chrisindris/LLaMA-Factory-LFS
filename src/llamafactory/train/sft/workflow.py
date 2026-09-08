@@ -120,6 +120,7 @@ def run_sft(
         data_collator=data_collator,
         callbacks=callbacks,
         gen_kwargs=gen_kwargs,
+        dump_skip_special_tokens=generating_args.skip_special_tokens,
         ref_model=ref_model,
         **dataset_module,
         **tokenizer_module,

@@ -1,0 +1,521 @@
+PROJECT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: TAMIA
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: /scratch/i/indrisch/LLaMA-Factory-LFS/
+SIF_FILE: /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/i/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/i/indrisch/venv_llamafactory_py313/
+RUNNING_MODE: VENV
+
+Lmod is automatically replacing "gcc/12.3" with "go/1.26.5".
+
+
+Lmod is automatically replacing "go/1.26.5" with "gcc/12.3".
+
+
+Activating Modules:
+  1) cuda/12.6           3) libfabric/1.18.0     5) openmpi/4.1.5
+  2) flexiblas/3.3.1     4) opencv/4.14.0        6) pmix/4.2.4
+
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.2.1)
+Requirement already satisfied: setuptools in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (84.0.0+computecanada)
+Requirement already satisfied: wheel in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (0.48.0)
+Requirement already satisfied: packaging>=24.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from wheel) (26.3)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: packaging in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.3)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: huggingface_hub in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (1.28.0)
+Requirement already satisfied: ruamel.yaml in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (0.19.1+computecanada)
+Requirement already satisfied: click<9.0.0,>=8.4.2 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (8.4.2+computecanada)
+Requirement already satisfied: filelock>=3.10.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (3.32.4)
+Requirement already satisfied: fsspec>=2023.5.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (2025.3.0+computecanada)
+Requirement already satisfied: hf-xet<2.0.0,>=1.5.2 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (1.5.2+computecanada)
+Requirement already satisfied: httpx<1,>=0.23.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (0.28.1+computecanada)
+Requirement already satisfied: packaging>=20.9 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (26.3)
+Requirement already satisfied: pyyaml>=5.1 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (6.0.3+computecanada)
+Requirement already satisfied: tqdm>=4.42.1 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.70.0+computecanada)
+Requirement already satisfied: typing-extensions>=4.1.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.16.0+computecanada)
+Requirement already satisfied: anyio in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (4.14.2+computecanada)
+Requirement already satisfied: certifi in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (1.0.9+computecanada)
+Requirement already satisfied: idna in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (3.19)
+Requirement already satisfied: h11>=0.16 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpcore==1.*->httpx<1,>=0.23.0->huggingface_hub) (0.16.0+computecanada)
+YAML_FILE: /scratch/i/indrisch//LLaMA-Factory-LFS/examples/train_lora/tamia_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR_SAVES: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10steps_ep1/
+OUTPUT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10steps_ep1/
+CACHE_DIR: /project/aip-wangcs/indrisch/huggingface/hub
+RESUME_CKPT: null
+GPU TYPE: HBM3
+Frozen 16-sample eval IDs (/scratch/i/indrisch//LLaMA-Factory-LFS/data/cot_eval16/question_ids.json):
+  Scene30k (8):
+    Scene30k_5
+    Scene30k_22
+    Scene30k_30
+    Scene30k_37
+    Scene30k_48
+    Scene30k_59
+    Scene30k_64
+    Scene30k_72
+  SpatialSSRL_coldstart (4):
+    SpatialSSRL_coldstart_18
+    SpatialSSRL_coldstart_24
+    SpatialSSRL_coldstart_25
+    SpatialSSRL_coldstart_39
+  3DThinker10k (4):
+    3DThinker10k_11
+    3DThinker10k_24
+    3DThinker10k_29
+    3DThinker10k_47
+SLURM_JOB_NODELIST: tg10706
+SLURM_NNODES: 1
+HEAD_NODE: tg10706
+HEAD_NODE: tg10706
+MASTER_ADDR: tg10706
+MASTER_PORT: 29500
+PROJECT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/i/indrisch/LLaMA-Factory-LFS/scripts:/scratch/i/indrisch/LLaMA-Factory-LFS/scripts/utils:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: TAMIA
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 9.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: /scratch/i/indrisch/LLaMA-Factory-LFS/
+SIF_FILE: /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/i/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/i/indrisch/venv_llamafactory_py313/
+SCANNET_H5_DIR: /scratch/i/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/i/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/i/indrisch/3DThinker10K_images_h5/
+CLUSTER: TAMIA
+YAML_FILE: /scratch/i/indrisch//LLaMA-Factory-LFS/examples/train_lora/tamia_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10steps_ep1/
+RESUME_CKPT: null
+No resume checkpoint (fresh start from epoch 0).
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:33-04:00] === Node-local CoT dataset staging ===
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:33-04:00] HOST=tg10706.tamia.ecpia.ca SLURM_NODEID=0 SLURM_NNODES=1
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:33-04:00] NODE_LOCAL_DATA_ROOT=/tmp/cot_stage
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:33-04:00] STAGE_COPY_JOBS=24 STAGE_STAGGER_SEC=0
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:33-04:00] Sources:
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:33-04:00]   SCENE30K_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.parquet
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:33-04:00]   SPATIALSSRL_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:33-04:00]   THINKER10K_ANN_SRC=/scratch/i/indrisch//LLaMA-Factory-LFS/data/3DThinker-10K/out/3dthinker10k_cot.jsonl
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:33-04:00]   SCANNET_H5_DIR(src)=/scratch/i/indrisch/ScanNet_h5/scans
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:33-04:00]   SPATIALSSRL_H5_DIR(src)=/scratch/i/indrisch/Spatial-SSRL_images_h5
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:33-04:00]   THINKER10K_H5_DIR(src)=/scratch/i/indrisch/3DThinker10K_images_h5/
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:33-04:00] Free space on /tmp/cot_stage: 7235681542144 bytes (need ~128849018880)
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:33-04:00] Copying annotations...
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:34-04:00] Annotations done in -1788818013s
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:34-04:00] Copying ScanNet H5 tree...
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:34-04:00] Copying 700 entries from /scratch/i/indrisch/ScanNet_h5/scans -> /tmp/cot_stage/media/ScanNet_h5/scans (jobs=24)
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:39-04:00] ScanNet done in -1788818014s
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:39-04:00] Copying Spatial-SSRL H5 tree...
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:53:39-04:00] Copying 13 entries from /scratch/i/indrisch/Spatial-SSRL_images_h5 -> /tmp/cot_stage/media/Spatial-SSRL_images_h5 (jobs=24)
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:54:39-04:00] Spatial-SSRL done in -1788818019s
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:54:39-04:00] Copying 3DThinker H5 tree...
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:54:39-04:00] Copying 2 entries from /scratch/i/indrisch/3DThinker10K_images_h5/ -> /tmp/cot_stage/media/3DThinker10K_images_h5 (jobs=24)
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:54:43-04:00] 3DThinker done in -1788818079s
+Wrote local dataset_info (6 entries) -> /tmp/cot_stage/dataset_dir/dataset_info.json
+  Scene30k: /tmp/cot_stage/annotations/Scene30k.parquet
+  SpatialSSRL_coldstart: /tmp/cot_stage/annotations/SpatialSSRL_coldstart.json
+  3DThinker10k: /tmp/cot_stage/annotations/3dthinker10k_cot.jsonl
+  Scene30k_eval16: /tmp/cot_stage/annotations/Scene30k_eval16.json
+  SpatialSSRL_eval16: /tmp/cot_stage/annotations/SpatialSSRL_eval16.json
+  3DThinker10k_eval16: /tmp/cot_stage/annotations/3DThinker10k_eval16.jsonl
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:54:43-04:00] VERIFY OK under /tmp/cot_stage
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:54:43-04:00] === Staging complete in 70s ===
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:54:43-04:00] LOCAL_DATASET_DIR=/tmp/cot_stage/dataset_dir
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:54:43-04:00] LOCAL_MEDIA_DIR=/tmp/cot_stage/media/ScanNet_h5
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:54:43-04:00] SCANNET_H5_DIR=/tmp/cot_stage/media/ScanNet_h5/scans
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:54:43-04:00] SPATIALSSRL_H5_DIR=/tmp/cot_stage/media/Spatial-SSRL_images_h5
+[stage tg10706.tamia.ecpia.ca node=0 2026-09-07T17:54:43-04:00] THINKER10K_H5_DIR=/tmp/cot_stage/media/3DThinker10K_images_h5
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme1n1    7.0T  105G  6.5T   2% /tmp
+Patched YAML -> /tmp/cot_stage/train.yaml
+  dataset_dir: /tmp/cot_stage/dataset_dir
+  media_dir: /tmp/cot_stage/media/ScanNet_h5
+YAML_FILE (node-local): /tmp/cot_stage/train.yaml
+LOCAL_DATASET_DIR: /tmp/cot_stage/dataset_dir
+LOCAL_MEDIA_DIR: /tmp/cot_stage/media/ScanNet_h5
+SCANNET_H5_DIR (local): /tmp/cot_stage/media/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR (local): /tmp/cot_stage/media/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR (local): /tmp/cot_stage/media/3DThinker10K_images_h5
+Copying venv to local storage...
+/scratch/i/indrisch/LLaMA-Factory-LFS /scratch/i/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT
+[INFO|2026-09-07 17:56:00] llamafactory.launcher:144 >> Initializing 4 distributed tasks at: tg10706:29500
+W0907 17:56:01.851000 743794 torch/distributed/run.py:766] 
+W0907 17:56:01.851000 743794 torch/distributed/run.py:766] *****************************************
+W0907 17:56:01.851000 743794 torch/distributed/run.py:766] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0907 17:56:01.851000 743794 torch/distributed/run.py:766] *****************************************
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[WARNING|2026-09-07 17:56:11] llamafactory.extras.misc:155 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO] Running in WANDB offline mode[INFO] Running in WANDB offline mode
+
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/model_args.py", line 228, in __post_init__
+    raise ValueError(
+    ...<2 lines>...
+    )
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/model_args.py", line 228, in __post_init__
+    raise ValueError(
+    ...<2 lines>...
+    )
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/model_args.py", line 228, in __post_init__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: YAML config must be a dictionary mapping tokens to descriptions. Got: <class 'list'>
+ValueError: YAML config must be a dictionary mapping tokens to descriptions. Got: <class 'list'>
+ValueError: YAML config must be a dictionary mapping tokens to descriptions. Got: <class 'list'>
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+    run_exp()
+    ~~~~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+    run_exp()
+    ~~~~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+    run_exp()
+    ~~~~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+    _training_function(config={"args": args, "callbacks": callbacks})
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+    _training_function(config={"args": args, "callbacks": callbacks})
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+    _training_function(config={"args": args, "callbacks": callbacks})
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 112, in _training_function
+    model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+                                                                             ~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 112, in _training_function
+    model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+                                                                             ~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 112, in _training_function
+    model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+                                                                             ~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 642, in get_train_args
+    model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+                                                                             ~~~~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 642, in get_train_args
+    model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+                                                                             ~~~~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 642, in get_train_args
+    model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+                                                                             ~~~~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 320, in _parse_train_args
+    return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 320, in _parse_train_args
+    return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 320, in _parse_train_args
+    return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 162, in _parse_args
+    return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 162, in _parse_args
+    return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 162, in _parse_args
+    return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/hf_argparser.py", line 380, in parse_dict
+    obj = dtype(**inputs)
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/hf_argparser.py", line 380, in parse_dict
+    obj = dtype(**inputs)
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/hf_argparser.py", line 380, in parse_dict
+    obj = dtype(**inputs)
+  File "<string>", line 82, in __init__
+  File "<string>", line 82, in __init__
+  File "<string>", line 82, in __init__
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/model_args.py", line 745, in __post_init__
+    BaseModelArguments.__post_init__(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/model_args.py", line 745, in __post_init__
+    BaseModelArguments.__post_init__(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/model_args.py", line 745, in __post_init__
+    BaseModelArguments.__post_init__(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/model_args.py", line 255, in __post_init__
+    logger.error_rank0(
+    ^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/model_args.py", line 255, in __post_init__
+    logger.error_rank0(
+    ^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/model_args.py", line 255, in __post_init__
+    logger.error_rank0(
+    ^^^^^^^^^^^^^^^^^^
+AttributeError: 'Logger' object has no attribute 'error_rank0'. Did you mean: 'info_rank0'?
+AttributeError: 'Logger' object has no attribute 'error_rank0'. Did you mean: 'info_rank0'?
+AttributeError: 'Logger' object has no attribute 'error_rank0'. Did you mean: 'info_rank0'?
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/model_args.py", line 228, in __post_init__
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: YAML config must be a dictionary mapping tokens to descriptions. Got: <class 'list'>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+    run_exp()
+    ~~~~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+    _training_function(config={"args": args, "callbacks": callbacks})
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 112, in _training_function
+    model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+                                                                             ~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 642, in get_train_args
+    model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+                                                                             ~~~~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 320, in _parse_train_args
+    return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 162, in _parse_args
+    return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/hf_argparser.py", line 380, in parse_dict
+    obj = dtype(**inputs)
+  File "<string>", line 82, in __init__
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/model_args.py", line 745, in __post_init__
+    BaseModelArguments.__post_init__(self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/model_args.py", line 255, in __post_init__
+    logger.error_rank0(
+    ^^^^^^^^^^^^^^^^^^
+AttributeError: 'Logger' object has no attribute 'error_rank0'. Did you mean: 'info_rank0'?
+W0907 17:56:15.281000 743794 torch/distributed/elastic/multiprocessing/api.py:900] Sending process 743798 closing signal SIGTERM
+W0907 17:56:15.283000 743794 torch/distributed/elastic/multiprocessing/api.py:900] Sending process 743799 closing signal SIGTERM
+W0907 17:56:15.286000 743794 torch/distributed/elastic/multiprocessing/api.py:900] Sending process 743800 closing signal SIGTERM
+E0907 17:56:15.452000 743794 torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 0 (pid: 743797) of binary: /scratch/i/indrisch/venv_llamafactory_py313/bin/python
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/venv_llamafactory_py313/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/run.py", line 892, in main
+    run(args)
+    ~~~^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/run.py", line 883, in run
+    elastic_launch(
+    ~~~~~~~~~~~~~~~
+        config=config,
+        ~~~~~~~~~~~~~~
+        entrypoint=cmd,
+        ~~~~~~~~~~~~~~~
+    )(*cmd_args)
+    ~^^^^^^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/launcher/api.py", line 139, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/launcher/api.py", line 270, in launch_agent
+    raise ChildFailedError(
+    ...<2 lines>...
+    )
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-09-07_17:56:15
+  host      : tg10706.tamia.ecpia.ca
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 743797)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/venv_llamafactory_py313/bin/llamafactory-cli", line 6, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/cli.py", line 29, in main
+    launcher.launch()
+    ~~~~~~~~~~~~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 115, in launch
+    process = subprocess.run(
+        (
+    ...<14 lines>...
+        check=True,
+    )
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/subprocess.py", line 579, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', 'tg10706', '--master_port', '29500', '/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py', '/tmp/cot_stage/train.yaml']' returned non-zero exit status 1.
+
+======== GPU REPORT ========
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Mon Sep  7 17:56:16 2026
+Driver Version                                         : 580.159.04
+CUDA Version                                           : 13.0
+
+Attached GPUs                                          : 4
+GPU 00000000:4E:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:5F:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:CB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:DB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+Mon Sep  7 17:56:16 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   36C    P0             71W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   36C    P0             71W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   37C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   37C    P0             69W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+srun: error: tg10706: task 0: Exited with exit code 1
+srun: Terminating StepId=445127.0
+
+======== GPU REPORT ========
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Mon Sep  7 17:56:17 2026
+Driver Version                                         : 580.159.04
+CUDA Version                                           : 13.0
+
+Attached GPUs                                          : 4
+GPU 00000000:4E:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:5F:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:CB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+GPU 00000000:DB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes                                : None
+
+Mon Sep  7 17:56:17 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   36C    P0             71W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   36C    P0             71W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   37C    P0             70W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   37C    P0             69W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+

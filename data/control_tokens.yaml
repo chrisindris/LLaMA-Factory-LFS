@@ -1,0 +1,7 @@
+# Token -> description map for LLaMA-Factory `new_special_tokens_config`.
+# Used by init_special_tokens=desc_init / desc_init_w_noise to seed embeddings.
+# This is NOT the HuggingFace AddedToken list in control_tokens.json.
+"<think>": "Marks the start of a chain-of-thought reasoning block."
+"</think>": "Marks the end of a chain-of-thought reasoning block."
+"<answer>": "Marks the start of the final answer."
+"</answer>": "Marks the end of the final answer."

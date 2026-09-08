@@ -42,6 +42,19 @@ class DatasetConverter:
     dataset_attr: "DatasetAttr"
     data_args: "DataArguments"
 
+    def _mapped_value(self, example: dict[str, Any], column: str | None, field: str, default: Any = "") -> Any:
+        if not column:
+            return default
+        if column not in example:
+            available = list(example.keys()) if hasattr(example, "keys") else []
+            raise KeyError(
+                f"Dataset {self.dataset_attr.dataset_name!r} is missing column {column!r} "
+                f"mapped as {field}. Available columns: {available}. "
+                "Stage the formatted annotation from data/dataset_info.json "
+                "(Scene30k needs formatting_instruction)."
+            )
+        return example[column]
+
     def _sample_image_indices(self, num_images: int) -> list[int]:
         r"""Select image indices according to the configured sampling mode."""
         if num_images <= 0:
@@ -211,11 +224,17 @@ class AlpacaDatasetConverter(DatasetConverter):
         output = {
             "_prompt": prompt,
             "_response": response,
-            "_system": example[self.dataset_attr.system] if self.dataset_attr.system else "",
-            "_tools": example[self.dataset_attr.tools] if self.dataset_attr.tools else "",
-            "_images": self._find_images(example[self.dataset_attr.images]) if self.dataset_attr.images else None,
-            "_videos": self._find_medias(example[self.dataset_attr.videos]) if self.dataset_attr.videos else None,
-            "_audios": self._find_medias(example[self.dataset_attr.audios]) if self.dataset_attr.audios else None,
+            "_system": self._mapped_value(example, self.dataset_attr.system, "system"),
+            "_tools": self._mapped_value(example, self.dataset_attr.tools, "tools"),
+            "_images": self._find_images(self._mapped_value(example, self.dataset_attr.images, "images", None))
+            if self.dataset_attr.images
+            else None,
+            "_videos": self._find_medias(self._mapped_value(example, self.dataset_attr.videos, "videos", None))
+            if self.dataset_attr.videos
+            else None,
+            "_audios": self._find_medias(self._mapped_value(example, self.dataset_attr.audios, "audios", None))
+            if self.dataset_attr.audios
+            else None,
             "_question_id": (
                 str(example[self.dataset_attr.question_id])
                 if self.dataset_attr.question_id and example.get(self.dataset_attr.question_id) is not None

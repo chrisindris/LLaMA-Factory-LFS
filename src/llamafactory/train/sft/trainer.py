@@ -30,7 +30,6 @@ from typing_extensions import override
 from ...extras import logging
 from ...extras.constants import IGNORE_INDEX
 from ...extras.misc import get_current_memory
-from ...extras.packages import is_transformers_version_greater_than
 from ..callbacks import SaveProcessorCallback
 from ..fp8_utils import configure_fp8_environment, patch_accelerator_for_fp8, verify_fp8_status
 from ..prediction_dump import (
@@ -55,6 +54,22 @@ if TYPE_CHECKING:
 
 logger = logging.get_logger(__name__)
 
+_QID_DATASET_PREFIXES = (
+    ("SpatialSSRL_coldstart_", "SpatialSSRL_coldstart"),
+    ("3DThinker10k_", "3DThinker10k"),
+    ("Scene30k_", "Scene30k"),
+)
+
+# Side channels that must never reach model.forward / model.generate.
+_DUMP_NON_MODEL_KEYS = ("labels", "question_ids", "debug_samples", "_indices")
+
+
+def _dataset_from_question_id(question_id: str) -> str:
+    for prefix, name in _QID_DATASET_PREFIXES:
+        if question_id.startswith(prefix):
+            return name
+    return "UNKNOWN"
+
 
 class CustomSeq2SeqTrainer(Seq2SeqTrainer):
     r"""Inherits Seq2SeqTrainer to compute generative metrics such as BLEU and ROUGE."""
@@ -66,6 +81,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         model_args: Optional["ModelArguments"] = None,
         gen_kwargs: Optional[dict[str, Any]] = None,
         ref_model: Optional["torch.nn.Module"] = None,
+        dump_skip_special_tokens: bool = True,
         **kwargs,
     ) -> None:
         kwargs["processing_class"] = kwargs.pop("tokenizer")
@@ -87,9 +103,12 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         self._debug_mm_seen = 0
         self._debug_mm_pre_step_seen = 0
         self._debug_mm_started_at = time.time()
+        self._dump_skip_special_tokens = bool(dump_skip_special_tokens)
         if gen_kwargs is not None:
             # https://github.com/huggingface/transformers/blob/v4.45.0/src/transformers/trainer_seq2seq.py#L287
-            self._gen_kwargs = gen_kwargs
+            self._gen_kwargs = dict(gen_kwargs)
+            if "skip_special_tokens" in self._gen_kwargs:
+                self._dump_skip_special_tokens = bool(self._gen_kwargs.pop("skip_special_tokens"))
 
         # Prediction JSON dumps (QUESTION_ID keyed); optional debug feature.
         self._pred_dump_warned_missing_qid = False
@@ -405,7 +424,9 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
 
         latest_log = {}
         for entry in reversed(getattr(self.state, "log_history", [])):
-            if isinstance(entry, dict) and any(key in entry for key in ("loss", "grad_norm", "learning_rate", "epoch")):
+            if isinstance(entry, dict) and any(
+                key in entry for key in ("loss", "grad_norm", "learning_rate", "epoch")
+            ):
                 latest_log = entry
                 break
 
@@ -425,14 +446,17 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         logger.info_rank0(message)
 
         if latest_log:
-            log_snapshot = {k: latest_log.get(k) for k in ("loss", "grad_norm", "learning_rate", "epoch") if latest_log.get(k) is not None}
+            log_snapshot = {
+                k: latest_log.get(k)
+                for k in ("loss", "grad_norm", "learning_rate", "epoch")
+                if latest_log.get(k) is not None
+            }
             if log_snapshot:
                 progress_line = (
                     f"[rank{payload['rank']}] mm_debug pre_step progress="
                     f"{current_steps}/{total_steps if total_steps > 0 else '?'} "
                     f"elapsed={elapsed_seconds:.0f}s remaining={remaining_seconds:.0f}s "
-                    f"s/it={seconds_per_it:.2f} "
-                    + json.dumps(log_snapshot, default=str)
+                    f"s/it={seconds_per_it:.2f} " + json.dumps(log_snapshot, default=str)
                 )
                 logger.info_rank0(progress_line)
 
@@ -633,16 +657,36 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             self._eval_pred_buffer = []
             return
         epoch_str = self._get_current_epoch_str(is_training=False)
+        step = int(getattr(self.state, "global_step", 0) or 0)
         local_n = len(self._eval_pred_buffer)
         all_pairs = self._gather_prediction_pairs(self._eval_pred_buffer)
         self._eval_pred_buffer = []
         if self.is_world_process_zero():
-            added = self.prediction_dump.add_eval_records(all_pairs, epoch=epoch_str)
+            added = self.prediction_dump.add_eval_records(all_pairs, epoch=epoch_str, step=step)
             self.prediction_dump.flush_eval(epoch=epoch_str)
+            self._log_eval_predictions_to_wandb(all_pairs, step=step)
             logger.info_rank0(
-                f"eval prediction dump: epoch={epoch_str} local_buffer={local_n} gathered={len(all_pairs)} "
-                f"added={added} total={len(self.prediction_dump.eval_data_by_epoch.get(epoch_str, {}))}"
+                f"eval prediction dump: epoch={epoch_str} step={step} local_buffer={local_n} "
+                f"gathered={len(all_pairs)} added={added} "
+                f"total={len(self.prediction_dump.eval_data_by_epoch.get(epoch_str, {}))}"
             )
+
+    def _log_eval_predictions_to_wandb(self, pairs: list[tuple[str, str]], step: int) -> None:
+        report_to = getattr(self.args, "report_to", None) or []
+        if isinstance(report_to, str):
+            report_to = [report_to]
+        if "wandb" not in report_to:
+            return
+        try:
+            import wandb
+        except ImportError:
+            return
+        if wandb.run is None:
+            return
+        columns = ["question_id", "dataset", "prediction"]
+        data = [[qid, _dataset_from_question_id(qid), text] for qid, text in pairs]
+        table = wandb.Table(columns=columns, data=data)
+        wandb.log({"eval_predictions": table}, step=step)
 
     def _forward_logits_for_dump(self, model: "torch.nn.Module", inputs: dict[str, Any]) -> Optional["torch.Tensor"]:
         r"""Run a no-grad forward that materializes logits for teacher-forced dumps.
@@ -652,9 +696,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         labels for this diagnostic pass forces logits to be returned without affecting
         the training loss path.
         """
-        model_inputs = {
-            k: v for k, v in inputs.items() if k not in ("labels", "question_ids", "debug_samples", "_indices")
-        }
+        model_inputs = {k: v for k, v in inputs.items() if k not in _DUMP_NON_MODEL_KEYS}
         was_training = model.training
         try:
             # Keep train/eval mode as-is for correct dropout/BN, but no_grad for dump.
@@ -697,7 +739,9 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                     "(Liger may skip them when labels are present; dump forward also failed)."
                 )
                 return []
-            return decode_teacher_forced_batch(logits, labels, tokenizer, skip_special_tokens=True)
+            return decode_teacher_forced_batch(
+                logits, labels, tokenizer, skip_special_tokens=self._dump_skip_special_tokens
+            )
         finally:
             if owned_logits:
                 del logits
@@ -715,6 +759,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             return []
 
         gen_kwargs = dict(getattr(self, "_gen_kwargs", {}) or {})
+        gen_kwargs.pop("skip_special_tokens", None)
         # Ensure generation does not require labels
         prompt_lens = prompt_lengths_from_labels(labels)
         input_ids = inputs["input_ids"]
@@ -744,8 +789,9 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             "attention_mask": prompt_mask,
         }
         # Pass through multimodal tensors when present (full batch; models usually index by token layout)
+        skip_keys = {"input_ids", "attention_mask", *_DUMP_NON_MODEL_KEYS}
         for key, value in inputs.items():
-            if key in ("input_ids", "attention_mask", "labels", "question_ids", "debug_samples"):
+            if key in skip_keys:
                 continue
             if torch.is_tensor(value) or value is not None:
                 gen_inputs[key] = value
@@ -763,21 +809,16 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         for i in range(batch_size):
             plen = min(int(prompt_lens[i]), int(generated.size(1)))
             new_tokens = generated[i, plen:]
-            texts.append(tokenizer.decode(new_tokens, skip_special_tokens=True))
+            texts.append(tokenizer.decode(new_tokens, skip_special_tokens=self._dump_skip_special_tokens))
         return texts
 
     @override
     def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
         debug_samples = inputs.pop("debug_samples", None)
         question_ids_raw = inputs.pop("question_ids", None)
-
-        if (os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV") or os.getenv(
-            "RUNNING_MODE"
-        ) == "SMOKE":
-            # HACK: to avoid "liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'"
-            # Defense in depth: never forward dataset index bookkeeping into the model
-            # (Liger fused CE rejects unexpected kwargs like _indices).
-            inputs.pop("_indices", None)
+        # Defense in depth: never forward dataset index bookkeeping into the model
+        # (generate() rejects unused kwargs; Liger fused CE rejects unexpected _indices).
+        inputs.pop("_indices", None)
         if model.training and self._should_log_mm_debug():
             self._log_mm_debug(inputs, when="pre_forward", debug_samples=debug_samples)
             self._debug_mm_seen += 1
@@ -859,6 +900,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         """
         question_ids_raw = inputs.pop("question_ids", None)
         inputs.pop("debug_samples", None)
+        inputs.pop("_indices", None)
 
         labels_for_dump = inputs.get("labels")
         dump_eval = self.finetuning_args.save_eval_predictions and self.prediction_dump is not None
@@ -925,7 +967,9 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 batch_size = int(generated_tokens.size(0))
                 qids = normalize_question_ids(question_ids_raw, batch_size)
                 if tokenizer is not None and any(qids):
-                    texts = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
+                    texts = tokenizer.batch_decode(
+                        generated_tokens, skip_special_tokens=self._dump_skip_special_tokens
+                    )
                     self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
 
         return loss, generated_tokens, labels

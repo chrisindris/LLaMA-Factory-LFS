@@ -48,6 +48,7 @@ def run_self_tests() -> None:
     _test_multiple_steps()
     _test_unknown_dataset()
     _test_eval_dump()
+    _test_step_keyed_eval_dump()
     _test_named_path_and_run_name()
     _test_trainer_log_json_and_jsonl()
     _test_multi_eval_dirs_distinct_steps()
@@ -170,6 +171,20 @@ def _test_eval_dump() -> None:
     assert rows[0].source_kind == "eval"
     assert rows[0].step == 2
     assert rows[0].dataset == "Scene30k"
+
+
+def _test_step_keyed_eval_dump() -> None:
+    matchers, _info = _matchers()
+    warnings: list[WarningRecord] = []
+    data = {
+        "Scene30k_1": {"0": "<think>a</think><answer>b</answer>", "10": "<think>c</think><answer>d</answer>"},
+        "SpatialSSRL_coldstart_2": {"0": "x", "10": "y"},
+    }
+    rows = flatten_prediction_log(data, "eval_predictions_ep0.json", matchers, warnings)
+    assert len(rows) == 4
+    assert {row.question_id for row in rows} == {"Scene30k_1", "SpatialSSRL_coldstart_2"}
+    assert sorted({row.step for row in rows}) == [0, 10]
+    assert not any(rec.code == "multiple_steps" for rec in warnings)
 
 
 def _test_hf_hub_cache_expand() -> None:

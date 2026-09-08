@@ -22,6 +22,26 @@ from llamafactory.hparams import DataArguments
 
 
 @pytest.mark.runs_on(["cpu", "mps"])
+def test_alpaca_converter_missing_system_column_names_available_keys():
+    dataset_attr = DatasetAttr(
+        "hf_hub",
+        "Scene30k",
+        system="formatting_instruction",
+        prompt="question_with_image_tags",
+        query=None,
+        response="cot",
+    )
+    data_args = DataArguments()
+    example = {
+        "question_with_image_tags": "What is in the scene?",
+        "cot": "<think>look</think><answer>a chair</answer>",
+    }
+    converter = get_dataset_converter("alpaca", dataset_attr, data_args)
+    with pytest.raises(KeyError, match="formatting_instruction"):
+        converter(example)
+
+
+@pytest.mark.runs_on(["cpu", "mps"])
 def test_alpaca_converter():
     dataset_attr = DatasetAttr("hf_hub", "llamafactory/tiny-supervised-dataset")
     data_args = DataArguments()
@@ -39,6 +59,7 @@ def test_alpaca_converter():
         "_images": None,
         "_videos": None,
         "_audios": None,
+        "_question_id": None,
     }
 
 
@@ -62,6 +83,7 @@ def test_sharegpt_converter():
         "_images": None,
         "_videos": None,
         "_audios": None,
+        "_question_id": None,
     }
 
 

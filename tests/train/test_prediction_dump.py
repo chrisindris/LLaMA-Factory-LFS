@@ -15,6 +15,8 @@
 import json
 from pathlib import Path
 
+import torch
+
 from llamafactory.hparams.finetuning_args import FinetuningArguments
 from llamafactory.train.prediction_dump import (
     IGNORE_INDEX,
@@ -45,11 +47,24 @@ def test_format_epoch_name():
 
 
 def test_resolve_prediction_dump_path():
-    assert resolve_prediction_dump_path(None, "1", "train_predictions", "/tmp/out") == "/tmp/out/train_predictions_ep1.json"
-    assert resolve_prediction_dump_path(None, "2", "eval_predictions", "/tmp/out") == "/tmp/out/eval_predictions_ep2.json"
-    assert resolve_prediction_dump_path("/custom/train_{epoch}.json", "1", "train_predictions") == "/custom/train_1.json"
-    assert resolve_prediction_dump_path("/custom/train_predictions.json", "2", "train_predictions") == "/custom/train_predictions_ep2.json"
-    assert resolve_prediction_dump_path("/custom/train_predictions_ep1.json", "1", "train_predictions") == "/custom/train_predictions_ep1.json"
+    assert (
+        resolve_prediction_dump_path(None, "1", "train_predictions", "/tmp/out")
+        == "/tmp/out/train_predictions_ep1.json"
+    )
+    assert (
+        resolve_prediction_dump_path(None, "2", "eval_predictions", "/tmp/out") == "/tmp/out/eval_predictions_ep2.json"
+    )
+    assert (
+        resolve_prediction_dump_path("/custom/train_{epoch}.json", "1", "train_predictions") == "/custom/train_1.json"
+    )
+    assert (
+        resolve_prediction_dump_path("/custom/train_predictions.json", "2", "train_predictions")
+        == "/custom/train_predictions_ep2.json"
+    )
+    assert (
+        resolve_prediction_dump_path("/custom/train_predictions_ep1.json", "1", "train_predictions")
+        == "/custom/train_predictions_ep1.json"
+    )
 
 
 def test_train_records_per_epoch_and_flush(tmp_path: Path):
@@ -103,18 +118,30 @@ def test_eval_records_per_epoch_and_flush(tmp_path: Path):
         output_dir=str(tmp_path),
     )
     # Eval after epoch 1
-    assert store.add_eval_records([("q1", "eval1_q1"), ("q2", "eval1_q2")], epoch=1.0) == 2
+    assert store.add_eval_records([("q1", "eval1_q1"), ("q2", "eval1_q2")], epoch=1.0, step=620) == 2
     store.flush_eval(epoch=1.0)
 
     # Eval after epoch 2
-    assert store.add_eval_records([("q1", "eval2_q1"), ("q2", "eval2_q2")], epoch=2.0) == 2
+    assert store.add_eval_records([("q1", "eval2_q1"), ("q2", "eval2_q2")], epoch=2.0, step=1240) == 2
     store.flush_eval(epoch=2.0)
 
     dumped_ep1 = json.loads((tmp_path / "eval_predictions_ep1.json").read_text(encoding="utf-8"))
     dumped_ep2 = json.loads((tmp_path / "eval_predictions_ep2.json").read_text(encoding="utf-8"))
 
-    assert dumped_ep1 == {"q1": "eval1_q1", "q2": "eval1_q2"}
-    assert dumped_ep2 == {"q1": "eval2_q1", "q2": "eval2_q2"}
+    assert dumped_ep1 == {"q1": {"620": "eval1_q1"}, "q2": {"620": "eval1_q2"}}
+    assert dumped_ep2 == {"q1": {"1240": "eval2_q1"}, "q2": {"1240": "eval2_q2"}}
+
+
+def test_eval_records_keep_multiple_steps_in_same_epoch(tmp_path: Path):
+    store = PredictionDumpStore(
+        eval_path_template=str(tmp_path / "eval_predictions_ep{epoch}.json"),
+        output_dir=str(tmp_path),
+    )
+    assert store.add_eval_records([("Scene30k_1", "t0")], epoch=0.0, step=0) == 1
+    assert store.add_eval_records([("Scene30k_1", "t10")], epoch=0.02, step=10) == 1
+    store.flush_eval(epoch="0")
+    dumped = json.loads((tmp_path / "eval_predictions_ep0.json").read_text(encoding="utf-8"))
+    assert dumped == {"Scene30k_1": {"0": "t0", "10": "t10"}}
 
 
 def test_normalize_question_ids_flattens_packed_and_pads():
@@ -137,13 +164,13 @@ def test_should_record_train_prediction_once_per_step_and_synced_cap():
 
 
 class _IdTokenizer:
+    pad_token_id = 0
+
     def decode(self, ids, skip_special_tokens=True):
         return ",".join(str(int(i)) for i in ids)
 
 
 def test_decode_teacher_forced_batch_greedy_on_response_positions():
-    import torch
-
     # logits[:, t] predicts labels[:, t+1]. Prompt positions stay IGNORE_INDEX.
     logits = torch.zeros(1, 5, 4)
     logits[0, 1, 1] = 10.0
@@ -158,6 +185,54 @@ def test_flatten_gathered_pairs_keeps_empty_rank_chunks():
     assert flatten_gathered_pairs([[], [], []]) == []
     assert flatten_gathered_pairs([[], [("q1", "a")], [], [("q2", "b")]]) == [("q1", "a"), ("q2", "b")]
     assert flatten_gathered_pairs([("q1", "a"), ("q2", "b")]) == [("q1", "a"), ("q2", "b")]
+
+
+class _CaptureGenerateModel:
+    def __init__(self):
+        self.training = False
+        self.generate_kwargs = None
+
+    def generate(self, **kwargs):
+        self.generate_kwargs = kwargs
+        input_ids = kwargs["input_ids"]
+        extra = input_ids.new_full((input_ids.size(0), 1), 9)
+        return torch.cat([input_ids, extra], dim=1)
+
+    def train(self):
+        self.training = True
+
+    def eval(self):
+        self.training = False
+
+
+def test_texts_from_generate_strips_indices():
+    from llamafactory.train.sft.trainer import CustomSeq2SeqTrainer
+
+    trainer = CustomSeq2SeqTrainer.__new__(CustomSeq2SeqTrainer)
+    trainer.processing_class = _IdTokenizer()
+    trainer._dump_skip_special_tokens = True
+    trainer._gen_kwargs = {}
+
+    model = _CaptureGenerateModel()
+    labels = torch.tensor([[IGNORE_INDEX, 1, 2]])
+    inputs = {
+        "input_ids": torch.tensor([[10, 1, 2]]),
+        "attention_mask": torch.tensor([[1, 1, 1]]),
+        "labels": labels,
+        "pixel_values": torch.ones(1, 2, 2),
+        "_indices": torch.tensor([42]),
+        "question_ids": ["q1"],
+        "debug_samples": [{"sample_idx": 0}],
+    }
+    texts = CustomSeq2SeqTrainer._texts_from_generate(trainer, model, inputs, labels)
+
+    assert model.generate_kwargs is not None
+    assert "_indices" not in model.generate_kwargs
+    assert "question_ids" not in model.generate_kwargs
+    assert "debug_samples" not in model.generate_kwargs
+    assert "labels" not in model.generate_kwargs
+    assert "pixel_values" in model.generate_kwargs
+    assert texts == ["9"]
 
 
 def test_finetuning_args_accept_logging_and_resume_fields():
@@ -177,6 +252,7 @@ def test_finetuning_args_accept_logging_and_resume_fields():
     assert args.require_resume_bundle
     assert args.resume_bundle_dir == "/tmp/resume_bundle"
     assert args.stop_at_global_step == 1240
+
 
 # --- tests from branch model-output-logging from when it was still using the old LlamaFactory code ---
 # from types import SimpleNamespace

@@ -63,6 +63,73 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def mapped_column_names(entry: dict[str, Any]) -> list[str]:
+    columns = entry.get("columns") or {}
+    return [str(v) for v in columns.values() if v]
+
+
+def parquet_footer_bytes(path: Path) -> bytes:
+    data = path.read_bytes()
+    if len(data) < 8 or data[-4:] != b"PAR1":
+        raise ValueError(f"not a parquet file: {path}")
+    footer_len = int.from_bytes(data[-8:-4], "little")
+    start = len(data) - 8 - footer_len
+    if start < 0:
+        raise ValueError(f"invalid parquet footer in {path}")
+    return data[start : len(data) - 8]
+
+
+def columns_present_in_file(path: Path, required: list[str]) -> list[str]:
+    """Return required column names that are missing from *path* (stdlib only)."""
+    suffix = path.suffix.lower()
+    if suffix == ".parquet":
+        footer = parquet_footer_bytes(path)
+        return [name for name in required if name.encode("utf-8") not in footer]
+    if suffix == ".json":
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        sample = payload[0] if isinstance(payload, list) else payload
+        keys = set(sample)
+        return [name for name in required if name not in keys]
+    if suffix == ".jsonl":
+        with path.open(encoding="utf-8") as handle:
+            first = handle.readline()
+        if not first.strip():
+            return list(required)
+        keys = set(json.loads(first))
+        return [name for name in required if name not in keys]
+    raise ValueError(f"unsupported annotation suffix for column check: {path}")
+
+
+def check_mapped_columns(dataset_info: dict[str, Any]) -> list[str]:
+    """Return human-readable errors if mapped columns are missing from files."""
+    errors: list[str] = []
+    for name, entry in dataset_info.items():
+        required = mapped_column_names(entry)
+        if not required:
+            continue
+        file_name = entry.get("file_name")
+        if not file_name:
+            errors.append(f"{name}: missing file_name")
+            continue
+        path = Path(file_name)
+        if not path.is_file():
+            errors.append(f"{name}: file not found: {path}")
+            continue
+        try:
+            missing = columns_present_in_file(path, required)
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            errors.append(f"{name}: failed to inspect {path}: {exc}")
+            continue
+        if missing:
+            errors.append(
+                f"{name}: {path} is missing columns {missing} required by "
+                f"dataset_info.json (mapped {entry.get('columns')}). "
+                "Stage the formatted annotation (*.formatted.parquet/json/jsonl), "
+                "not the raw internlm/Scene30K snapshot."
+            )
+    return errors
+
+
 def parse_file_name_overrides(pairs: list[str]) -> dict[str, str]:
     out: dict[str, str] = {}
     for item in pairs:
@@ -125,6 +192,12 @@ def main() -> int:
     print(f"Wrote local dataset_info ({len(result)} entries) -> {out_path}")
     for name in names:
         print(f"  {name}: {overrides[name]}")
+
+    column_errors = check_mapped_columns(result)
+    if column_errors:
+        for err in column_errors:
+            print(f"ERROR: {err}", file=sys.stderr)
+        return 1
     return 0
 
 

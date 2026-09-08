@@ -77,6 +77,38 @@ def test_base_collator():
 
 
 @pytest.mark.runs_on(["cpu", "mps"])
+def test_collator_drops_indices():
+    model_args, data_args, *_ = get_infer_args({"model_name_or_path": TINY_LLAMA3, "template": "default"})
+    tokenizer_module = load_tokenizer(model_args)
+    template = get_template_and_fix_tokenizer(tokenizer_module["tokenizer"], data_args)
+    data_collator = MultiModalDataCollatorForSeq2Seq(
+        template=template,
+        pad_to_multiple_of=8,
+        label_pad_token_id=IGNORE_INDEX,
+        **tokenizer_module,
+    )
+    q = IGNORE_INDEX
+    features = [
+        {
+            "input_ids": [0, 1, 2, 3, 4, 5],
+            "attention_mask": [1, 1, 1, 1, 1, 1],
+            "labels": [q, q, 2, 3, 4, 5],
+            "_indices": 7,
+        },
+        {
+            "input_ids": [6, 7],
+            "attention_mask": [1, 1],
+            "labels": [q, 7],
+            "_indices": 8,
+        },
+    ]
+    batch_input = data_collator(features)
+    assert "_indices" not in batch_input
+    assert "input_ids" in batch_input
+    assert batch_input["input_ids"].shape[0] == 2
+
+
+@pytest.mark.runs_on(["cpu", "mps"])
 def test_multimodal_collator():
     model_args, data_args, *_ = get_infer_args(
         {"model_name_or_path": "Qwen/Qwen2-VL-2B-Instruct", "template": "qwen2_vl"}

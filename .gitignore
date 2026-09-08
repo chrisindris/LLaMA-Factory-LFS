@@ -13,6 +13,7 @@ apptainer/
 merged-model/
 ENV/
 *merged/
+data/cot_eval16/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
