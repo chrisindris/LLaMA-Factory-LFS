@@ -622,14 +622,15 @@ class FinetuningArguments(
         default=0,
         metadata={
             "help": (
-                "Maximum number of (QUESTION_ID, step) train prediction records to write per epoch. "
-                "0 means no cap."
+                "Maximum number of (QUESTION_ID, step) train prediction records to write per epoch. 0 means no cap."
             )
         },
     )
     train_predictions_file: str | None = field(
         default=None,
-        metadata={"help": "Path pattern for train prediction JSON. Default: {output_dir}/train_predictions_ep{epoch}.json."},
+        metadata={
+            "help": "Path pattern for train prediction JSON. Default: {output_dir}/train_predictions_ep{epoch}.json."
+        },
     )
     save_eval_predictions: bool = field(
         default=False,
@@ -646,13 +647,27 @@ class FinetuningArguments(
         metadata={
             "help": (
                 "How to obtain MODEL_OUTPUT for eval dumps: teacher_forced or generate. "
-                "Uses GeneratingArguments when mode is generate."
+                "Uses GeneratingArguments when mode is generate. Dump generate is greedy, "
+                "capped by eval_dump_max_new_tokens, and runs after the loss eval loop so it "
+                "cannot desynchronize HuggingFace's per-batch NCCL gather."
+            )
+        },
+    )
+    eval_dump_max_new_tokens: int = field(
+        default=256,
+        metadata={
+            "help": (
+                "Hard cap on new tokens for dump-mode model.generate() (eval and train dumps). "
+                "Does not change GeneratingArguments.max_new_tokens used by predict_with_generate. "
+                "0 disables the extra cap and keeps the configured max_new_tokens."
             )
         },
     )
     eval_predictions_file: str | None = field(
         default=None,
-        metadata={"help": "Path pattern for eval prediction JSON. Default: {output_dir}/eval_predictions_ep{epoch}.json."},
+        metadata={
+            "help": "Path pattern for eval prediction JSON. Default: {output_dir}/eval_predictions_ep{epoch}.json."
+        },
     )
     allow_warm_start_resume: bool = field(
         default=True,
@@ -745,6 +760,9 @@ class FinetuningArguments(
 
         if self.train_prediction_interval < 1:
             raise ValueError("`train_prediction_interval` must be >= 1.")
+
+        if self.eval_dump_max_new_tokens < 0:
+            raise ValueError("`eval_dump_max_new_tokens` must be >= 0.")
 
         if self.finetuning_type != "lora":
             if self.loraplus_lr_ratio is not None:
