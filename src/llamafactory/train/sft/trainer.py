@@ -62,6 +62,20 @@ _QID_DATASET_PREFIXES = (
 
 # Side channels that must never reach model.forward / model.generate.
 _DUMP_NON_MODEL_KEYS = ("labels", "question_ids", "debug_samples", "_indices")
+# Full-sequence collator tensors. generate() must recompute prompt-only mRoPE.
+_GENERATE_DROP_KEYS = (
+    "position_ids",
+    "rope_deltas",
+    "cache_position",
+    "past_key_values",
+    "mm_token_type_ids",
+)
+_GENERATE_VISION_GROUPS = (
+    ("pixel_values", "image_grid_thw"),
+    ("pixel_values_videos", "video_grid_thw", "second_per_grid_ts", "video_second_per_grid"),
+)
+# Degenerate Qwen chat-start loops observed in CoT eval dumps (NCCL timeout).
+_DUMP_GENERATE_SUPPRESS_TOKENS = ("<|im_start|>",)
 
 
 def _dataset_from_question_id(question_id: str) -> str:
@@ -747,19 +761,142 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 del logits
                 self._release_cuda_cache()
 
+    def _unwrap_model_for_dump_generate(self, model: "torch.nn.Module") -> "torch.nn.Module":
+        accelerator = getattr(self, "accelerator", None)
+        if accelerator is None:
+            return model
+        try:
+            return accelerator.unwrap_model(model)
+        except Exception:
+            return model
+
+    @staticmethod
+    def _iter_rope_delta_holders(model: "torch.nn.Module") -> list[Any]:
+        holders: list[Any] = []
+        seen: set[int] = set()
+        stack: list[Any] = [model]
+        while stack:
+            obj = stack.pop()
+            if obj is None or id(obj) in seen:
+                continue
+            seen.add(id(obj))
+            if hasattr(obj, "rope_deltas"):
+                holders.append(obj)
+            for attr in ("model", "module", "base_model"):
+                child = getattr(obj, attr, None)
+                if child is not None and id(child) not in seen:
+                    stack.append(child)
+        return holders
+
+    def _swap_rope_deltas(self, model: "torch.nn.Module", new_value: Any) -> list[tuple[Any, Any]]:
+        saved: list[tuple[Any, Any]] = []
+        for holder in self._iter_rope_delta_holders(model):
+            saved.append((holder, getattr(holder, "rope_deltas", None)))
+            holder.rope_deltas = new_value
+        return saved
+
+    @staticmethod
+    def _restore_rope_deltas(saved: list[tuple[Any, Any]]) -> None:
+        for holder, value in saved:
+            holder.rope_deltas = value
+
+    @staticmethod
+    def _mm_tensor_is_empty(value: Any) -> bool:
+        if value is None:
+            return True
+        if torch.is_tensor(value):
+            return value.numel() == 0
+        return False
+
+    def _collect_generate_mm_inputs(self, inputs: dict[str, Any]) -> dict[str, Any]:
+        r"""Copy vision tensors for generate; drop empty groups that crash Qwen2.5-VL max()."""
+        mm_inputs: dict[str, Any] = {}
+        dropped: set[str] = set()
+        for group in _GENERATE_VISION_GROUPS:
+            if any(self._mm_tensor_is_empty(inputs.get(key)) for key in group if key in inputs):
+                dropped.update(group)
+        skip_keys = {
+            "input_ids",
+            "attention_mask",
+            *_DUMP_NON_MODEL_KEYS,
+            *_GENERATE_DROP_KEYS,
+            *dropped,
+        }
+        for key, value in inputs.items():
+            if key in skip_keys:
+                continue
+            if self._mm_tensor_is_empty(value):
+                continue
+            if torch.is_tensor(value) and value.dim() >= 4 and key.endswith("attention_mask"):
+                continue
+            if torch.is_tensor(value) or value is not None:
+                mm_inputs[key] = value
+        return mm_inputs
+
+    @staticmethod
+    def _dump_generate_suppress_token_ids(tokenizer: Any) -> list[int]:
+        r"""Token ids to block during dump generate (chat-start loops, etc.)."""
+        ids: list[int] = []
+        convert = getattr(tokenizer, "convert_tokens_to_ids", None)
+        if convert is None:
+            return ids
+        unk = getattr(tokenizer, "unk_token_id", None)
+        for token in _DUMP_GENERATE_SUPPRESS_TOKENS:
+            try:
+                tid = convert(token)
+            except Exception:
+                continue
+            if isinstance(tid, list | tuple):
+                if len(tid) != 1:
+                    continue
+                tid = tid[0]
+            if tid is None:
+                continue
+            tid = int(tid)
+            if unk is not None and tid == int(unk):
+                continue
+            if tid < 0:
+                continue
+            if tid not in ids:
+                ids.append(tid)
+        return ids
+
+    def _build_dump_generate_kwargs(self, tokenizer: Any) -> dict[str, Any]:
+        r"""Greedy, capped generate kwargs for dumps. Independent of predict_with_generate."""
+        gen_kwargs = dict(getattr(self, "_gen_kwargs", {}) or {})
+        gen_kwargs.pop("skip_special_tokens", None)
+        for drop_key in _GENERATE_DROP_KEYS:
+            gen_kwargs.pop(drop_key, None)
+        gen_kwargs["do_sample"] = False
+        cap = int(getattr(getattr(self, "finetuning_args", None), "eval_dump_max_new_tokens", 256) or 0)
+        configured = int(gen_kwargs.get("max_new_tokens") or 0)
+        if cap > 0:
+            gen_kwargs["max_new_tokens"] = min(configured, cap) if configured > 0 else cap
+            gen_kwargs.pop("max_length", None)
+        suppress_ids = self._dump_generate_suppress_token_ids(tokenizer)
+        if suppress_ids:
+            existing_suppress = [int(t) for t in (gen_kwargs.get("suppress_tokens") or [])]
+            gen_kwargs["suppress_tokens"] = list(dict.fromkeys([*existing_suppress, *suppress_ids]))
+            bad_words = list(gen_kwargs.get("bad_words_ids") or [])
+            for tid in suppress_ids:
+                if [tid] not in bad_words:
+                    bad_words.append([tid])
+            gen_kwargs["bad_words_ids"] = bad_words
+        return gen_kwargs
+
     def _texts_from_generate(
         self,
         model: "torch.nn.Module",
         inputs: dict[str, Union["torch.Tensor", Any]],
         labels: Optional["torch.Tensor"],
+        question_ids: Optional[list[str]] = None,
     ) -> list[str]:
         r"""Free-form generation on prompt-only slices. Expensive; for debug dumps only."""
         tokenizer = self._get_tokenizer()
         if tokenizer is None or labels is None or "input_ids" not in inputs:
             return []
 
-        gen_kwargs = dict(getattr(self, "_gen_kwargs", {}) or {})
-        gen_kwargs.pop("skip_special_tokens", None)
+        gen_kwargs = self._build_dump_generate_kwargs(tokenizer)
         # Ensure generation does not require labels
         prompt_lens = prompt_lengths_from_labels(labels)
         input_ids = inputs["input_ids"]
@@ -779,7 +916,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             if plen <= 0:
                 continue
             prompt_ids[i, :plen] = input_ids[i, :plen]
-            if attention_mask is not None:
+            if attention_mask is not None and attention_mask.dim() == 2:
                 prompt_mask[i, :plen] = attention_mask[i, :plen]
             else:
                 prompt_mask[i, :plen] = 1
@@ -788,28 +925,43 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             "input_ids": prompt_ids,
             "attention_mask": prompt_mask,
         }
-        # Pass through multimodal tensors when present (full batch; models usually index by token layout)
-        skip_keys = {"input_ids", "attention_mask", *_DUMP_NON_MODEL_KEYS}
-        for key, value in inputs.items():
-            if key in skip_keys:
-                continue
-            if torch.is_tensor(value) or value is not None:
-                gen_inputs[key] = value
+        # Vision tensors stay; full-seq position_ids / rope_deltas must not.
+        # generate() recomputes prompt-only mRoPE from input_ids + grids.
+        gen_inputs.update(self._collect_generate_mm_inputs(inputs))
 
+        qids = [qid for qid in (question_ids or []) if qid]
+        rank = self._get_rank()
+        logger.info(
+            f"[rank{rank}] generate dump start qids={qids} prompt_lens={prompt_lens} "
+            f"max_new_tokens={gen_kwargs.get('max_new_tokens')} do_sample={gen_kwargs.get('do_sample')}"
+        )
+        gen_model = self._unwrap_model_for_dump_generate(model)
         was_training = model.training
-        model.eval()
+        saved_rope_deltas = self._swap_rope_deltas(gen_model, None)
+        started = time.time()
         try:
+            gen_model.eval()
             with torch.no_grad():
-                generated = model.generate(**gen_inputs, **gen_kwargs)
+                generated = gen_model.generate(**gen_inputs, **gen_kwargs)
+        except Exception as err:
+            summary = self._summarize_inputs(gen_inputs)
+            logger.warning(f"[rank{rank}] generate dump failed: {err}; gen_inputs={json.dumps(summary, default=str)}")
+            return []
         finally:
+            self._restore_rope_deltas(saved_rope_deltas)
             if was_training:
                 model.train()
+                if gen_model is not model:
+                    gen_model.train()
 
         texts: list[str] = []
+        n_new: list[int] = []
         for i in range(batch_size):
             plen = min(int(prompt_lens[i]), int(generated.size(1)))
             new_tokens = generated[i, plen:]
+            n_new.append(int(new_tokens.numel()))
             texts.append(tokenizer.decode(new_tokens, skip_special_tokens=self._dump_skip_special_tokens))
+        logger.info(f"[rank{rank}] generate dump done qids={qids} n_new={n_new} elapsed={time.time() - started:.1f}s")
         return texts
 
     @override
@@ -856,9 +1008,9 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                         texts = self._texts_from_teacher_forced(None, labels_for_dump, model=model, inputs=inputs)
                 elif train_mode == "generate":
                     try:
-                        texts = self._texts_from_generate(model, inputs, labels_for_dump)
+                        texts = self._texts_from_generate(model, inputs, labels_for_dump, question_ids=qids)
                     except Exception as gen_err:
-                        logger.warning_rank0(f"train generate prediction dump failed: {gen_err}")
+                        logger.warning(f"[rank{self._get_rank()}] train generate prediction dump failed: {gen_err}")
                         texts = []
                 if texts:
                     pairs = [(qid, text) for qid, text in zip(qids, texts) if qid]
@@ -924,34 +1076,28 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 ignore_keys=ignore_keys,
                 **gen_kwargs,
             )
-            batch_size = int(inputs["input_ids"].size(0)) if "input_ids" in inputs else 0
-            qids = normalize_question_ids(question_ids_raw, batch_size)
-            if not any(qids):
-                self._warn_missing_question_ids_once()
-            else:
-                texts: list[str] = []
-                if self.finetuning_args.eval_prediction_mode == "teacher_forced":
+            # teacher_forced dump is one extra no-grad forward (rank-aligned).
+            # generate dumps run after super().evaluate() so they cannot stall the
+            # per-batch NCCL loss allgather inside HuggingFace evaluation_loop.
+            if self.finetuning_args.eval_prediction_mode == "teacher_forced":
+                batch_size = int(inputs["input_ids"].size(0)) if "input_ids" in inputs else 0
+                qids = normalize_question_ids(question_ids_raw, batch_size)
+                if not any(qids):
+                    self._warn_missing_question_ids_once()
+                else:
+                    texts: list[str] = []
                     try:
                         if labels_for_dump is not None:
                             texts = self._texts_from_teacher_forced(None, labels_for_dump, model=model, inputs=inputs)
                     except Exception as err:
-                        logger.warning_rank0(f"eval teacher_forced dump failed: {err}")
-                else:  # generate
-                    try:
-                        # restore labels for prompt length if popped
-                        if labels_for_dump is None:
-                            labels_for_dump = labels
-                        texts = self._texts_from_generate(model, inputs, labels_for_dump)
-                    except Exception as err:
-                        logger.warning_rank0(f"eval generate dump failed: {err}")
-                if texts:
-                    self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
-                else:
-                    logger.warning_rank0(
-                        f"eval prediction dump produced no texts "
-                        f"(mode={self.finetuning_args.eval_prediction_mode}, "
-                        f"qids={len([q for q in qids if q])}, batch={batch_size})"
-                    )
+                        logger.warning(f"[rank{self._get_rank()}] eval teacher_forced dump failed: {err}")
+                    if texts:
+                        self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
+                    else:
+                        logger.warning(
+                            f"[rank{self._get_rank()}] eval prediction dump produced no texts "
+                            f"(mode=teacher_forced, qids={len([q for q in qids if q])}, batch={batch_size})"
+                        )
             if prediction_loss_only:
                 return loss, None, None
             return loss, logits, label_ids if label_ids is not None else labels
@@ -974,11 +1120,74 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
 
         return loss, generated_tokens, labels
 
+    def _iter_eval_dump_batches(self, eval_dataset: Any = None) -> Any:
+        dataset = self.eval_dataset if eval_dataset is None else eval_dataset
+        if dataset is None:
+            return
+        if isinstance(dataset, dict):
+            loaders = (self.get_eval_dataloader(name) for name in dataset)
+        else:
+            loaders = (self.get_eval_dataloader(eval_dataset),)
+        for loader in loaders:
+            for batch in loader:
+                yield self._prepare_inputs(batch)
+
+    def _dump_eval_generate_batch(self, model: "torch.nn.Module", inputs: dict[str, Any]) -> None:
+        inputs = dict(inputs)
+        question_ids_raw = inputs.pop("question_ids", None)
+        inputs.pop("debug_samples", None)
+        inputs.pop("_indices", None)
+        labels = inputs.get("labels")
+        batch_size = int(inputs["input_ids"].size(0)) if "input_ids" in inputs else 0
+        qids = normalize_question_ids(question_ids_raw, batch_size)
+        if not any(qids):
+            self._warn_missing_question_ids_once()
+            return
+        texts: list[str] = []
+        try:
+            texts = self._texts_from_generate(model, inputs, labels, question_ids=qids)
+        except Exception as err:
+            logger.warning(f"[rank{self._get_rank()}] eval generate dump failed: {err}")
+        if not texts and labels is not None:
+            try:
+                texts = self._texts_from_teacher_forced(None, labels, model=model, inputs=inputs)
+                if texts:
+                    logger.warning(f"[rank{self._get_rank()}] eval generate dump empty; fell back to teacher_forced")
+            except Exception as err:
+                logger.warning(f"[rank{self._get_rank()}] eval teacher_forced fallback after generate failed: {err}")
+        if texts:
+            self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
+        else:
+            logger.warning(
+                f"[rank{self._get_rank()}] eval prediction dump produced no texts "
+                f"(mode=generate, qids={len([q for q in qids if q])}, batch={batch_size})"
+            )
+
+    def _dump_eval_generate_pass(self, eval_dataset: Any = None) -> None:
+        r"""Generate eval dumps after the loss loop so NCCL gathers stay rank-aligned."""
+        model = getattr(self, "model", None)
+        if model is None:
+            return
+        was_training = bool(getattr(model, "training", False))
+        try:
+            if hasattr(model, "eval"):
+                model.eval()
+            for batch in self._iter_eval_dump_batches(eval_dataset):
+                self._dump_eval_generate_batch(model, batch)
+        finally:
+            if was_training and hasattr(model, "train"):
+                model.train()
+
     @override
     def evaluate(self, *args, **kwargs):
         self._eval_pred_buffer = []
         metrics = super().evaluate(*args, **kwargs)
         if self.finetuning_args.save_eval_predictions:
+            if self.finetuning_args.eval_prediction_mode == "generate" and not self.args.predict_with_generate:
+                eval_dataset = kwargs.get("eval_dataset")
+                if args:
+                    eval_dataset = args[0]
+                self._dump_eval_generate_pass(eval_dataset=eval_dataset)
             self._flush_eval_predictions()
         return metrics
 

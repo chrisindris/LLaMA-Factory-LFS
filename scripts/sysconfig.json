@@ -113,6 +113,9 @@
         "SIF_FILE": "/scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif",
         "media_dir": "None",
         "VENV_DATASET_UPLOAD": "/scratch/i/indrisch/venv_llamafactory_py313/",
-        "VENV_LLAMAFACTORY": "/scratch/i/indrisch/venv_llamafactory_py313/"
+        "VENV_LLAMAFACTORY": "/scratch/i/indrisch/venv_llamafactory_py313/",
+        "SCANNET_H5_DIR": "/scratch/i/indrisch/ScanNet_h5/scans/",
+        "SPATIALSSRL_H5_DIR": "/scratch/i/indrisch/Spatial-SSRL_images_h5/",
+        "THINKER10K_H5_DIR": "/scratch/i/indrisch/3DThinker10K_images_h5/"
     }
 }
