@@ -14,6 +14,7 @@ debugpy==1.8.19+computecanada
 decorator==5.2.1+computecanada
 dill==0.4.0+computecanada
 distlib @ file:///tmp/ebuser/avx512/Python/3.12.4/GCCcore-13.3-gentoo/distlib/distlib-0.3.8
+docopt==0.6.2+computecanada
 executing==2.2.1+computecanada
 filelock @ file:///tmp/ebuser/avx512/Python/3.12.4/GCCcore-13.3-gentoo/filelock/filelock-3.13.4
 flit_core @ file:///tmp/ebuser/avx512/Python/3.12.4/GCCcore-13.3-gentoo/flit_core/flit_core-3.9.0
@@ -81,6 +82,7 @@ traitlets==5.14.3+computecanada
 trove-classifiers @ file:///cvmfs/soft.computecanada.ca/easybuild/sources/p/Python/extensions/trove_classifiers-2024.4.10-py3-none-any.whl#sha256=678bd6fcc5218d72e3304e27a608acc9b91e17bd00c3f3d8c968497c843ad98b
 typing_extensions @ file:///tmp/ebuser/avx512/Python/3.12.4/GCCcore-13.3-gentoo/typing_extensions/typing_extensions-4.12.1
 tzdata==2025.3+computecanada
+ueberzug==18.3.2
 urllib3==2.5.0+computecanada
 virtualenv @ file:///tmp/ebuser/avx512/Python/3.12.4/GCCcore-13.3-gentoo/virtualenv/virtualenv-20.26.2
 wcwidth==0.5.2+computecanada

@@ -19,7 +19,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export APPTAINER_NUM_THREADS="${APPTAINER_NUM_THREADS:-32}"
 
 APPTAINER_DIR="${APPTAINER_DIR:-${PROJECT_DIR}/apptainer}"
-IMAGE="${IMAGE:-docker://hiyouga/llamafactory:latest-910b-ubuntu}"
+IMAGE="${IMAGE:-docker://hiyouga/llamafactory:latest}"
 SIF="${SIF:-${APPTAINER_DIR}/llamafactory.sif}"
 FORCE_RECREATE="${FORCE_RECREATE:-0}"
 

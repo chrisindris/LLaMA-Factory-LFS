@@ -16,6 +16,11 @@
 export HF_DEBUG=1
 export HF_TOKEN=$(cat ${HOME}/TOKENS/cvis-tmu-organization-token.txt)
 
+# PRESETS
+LEGACY_MODE="${LEGACY_MODE:-false}"
+PRESET="${PRESET:-}" # {FULL_SETUP_LATEST}
+
+
 # vLLM models typically come from the huggingface hub.
 #module load python/3.12 git-lfs/3.4.0 && git-lfs install
 # module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
@@ -24,8 +29,17 @@ export HF_TOKEN=$(cat ${HOME}/TOKENS/cvis-tmu-organization-token.txt)
 # module load git-lfs/3.4.0
 # git-lfs install
 
-module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1 git-lfs
-git-lfs install
+if $LEGACY_MODE; then
+  module load python/3.12 git-lfs/3.4.0 && git-lfs install
+  module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
+  module load python/3.12 cuda/12.6 opencv/4.12.0
+  module load arrow
+  module load git-lfs/3.4.0
+  git-lfs install
+else
+  module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1 git-lfs
+  git-lfs install
+fi
 
 # virtualenv --no-download temp_env && source temp_env/bin/activate
 # pip install --upgrade pip setuptools wheel
@@ -68,6 +82,18 @@ echo "Cluster name: $1"
 echo "HF_HOME: $HF_HOME"
 echo "HF_HUB_CACHE: $HF_HUB_CACHE"
 echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
+
+
+if [[ ${PRESET} == "FULL_SETUP_LATEST" ]]; then
+
+  # apptainer (optional); see `scripts/sysconfig.json`
+
+  # annotations; see `data/dataset_info.json`
+  hf download --max-workers=4 cvis-tmu/Scene30K --repo-type dataset --revision 4e9bc1a04479fedfbb6ee791b7cd55fc6a2804f5 
+  hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type dataset --revision bfa0a5a95683fa71c5a8b28b6560e2d5b7b71f0c 
+  hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset --revision 476dff589138ba1f87258d676fb1a7fb1dfa24ff 
+
+fi
 
 # hf download --max-workers=7 moonshotai/Kimi-VL-A3B-Thinking-2506 # model for generating traces (the "teacher")
 # hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct --revision cc594898137f460bfe9f0759e9844b3ce807cfb5 # model we will use as a student (in addition to LLaVa-3D)
@@ -175,9 +201,9 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 
 # huggingface-cli download --max-workers=4 cvis-tmu/Scene30K --local-dir-use-symlinks False
 
-hf download --max-workers=4 cvis-tmu/Scene30K --repo-type dataset
-hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type dataset
-hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset
+# hf download --max-workers=4 cvis-tmu/Scene30K --repo-type dataset
+# hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type dataset
+# hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset
 
 
 # New .sif optimized for the latest LLaMA-Factory (after latest-hiyouga-changes)
