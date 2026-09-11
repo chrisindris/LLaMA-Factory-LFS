@@ -520,20 +520,34 @@ huggingface-cli login
 > [!IMPORTANT]
 > Installation is mandatory.
 
-#### Using a venv on AllianceCan
+#### AllianceCan/Compute Canada
 
+##### on branches up-to-date with hiyouga/LlamaFactory:
+
+Make sure to get the appropriate dataset/annotation files, and also (for apptainer mode) the appropriate apptainer. See `get_data.sh`.
+
+###### venv:
+
+Set up the venv:
 ```bash
 module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
 virtualenv --no-download ../venv_llamafactory_py313
-source ../venv_llamafactory_py313/bin/activate
-pip install -e .
-pip install -r requirements/metrics.txt -r requirements/deepspeed.txt -r requirements/liger-kernel.txt
-pip install --no-index h5py wandb ray pytest
+source ../venv_llamafactory_py313/
+pip install --no-cache-dir --upgrade pip packaging wheel setuptools
+mkdir -p wheels 
+pushd wheels 
+wget https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3.post1/flash_attn-2.8.3.post1+cu12torch2.7cxx11abiFALSE-cp313-cp313-linux_x86_64.whl
+wget https://github.com/Dao-AILab/causal-conv1d/releases/download/v1.6.2/causal_conv1d-1.6.1+cu12torch2.6cxx11abiFALSE-cp313-cp313-linux_x86_64.whl
+popd
+pip install -e . -r requirements/metrics.txt -r requirements/deepspeed.txt -r requirements/dev.txt -r requirements/logging_analysis.txt h5py wandb ray sentry-sdk liger-kernel flash_linear_attention wheels/causal_conv1d-1.6.1+cu12torch2.6cxx11abiFALSE-cp313-cp313-linux_x86_64.whl wheels/flash_attn-2.8.3.post1+cu12torch2.7cxx11abiFALSE-cp313-cp313-linux_x86_64.whl
+# feel free to cross-reference with ./requirements_venv_llamafactory_py313.txt
 ```
-Feel free to cross-reference with ./requirements_venv_llamafactory_py313.txt.
 Qwen2x and Qwen3x supported since transformers>=5.2.0
 
+###### apptainer:
 
+1. Get the .sif file either by 1) building with `LLaMA-Factory-LFS/scripts/build_apptainer.sh` or 2) pulling using `get_data.sh` (see above).
+2. Get the overlay either by 1) building with `LLaMA-Factory-LFS/scripts/build_apptainer_overlay.sh` or 2) pulling using `get_data.sh` (see above).
 
 #### Install from Source
 
