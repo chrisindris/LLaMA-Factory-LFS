@@ -87,11 +87,17 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 if [[ ${PRESET} == "FULL_SETUP_LATEST" ]]; then
 
   # apptainer (optional); see `scripts/sysconfig.json`
+  hf download --max-workers=4 cvis-tmu/compute_canada_sif_files llamafactory-latest.sif --repo-type dataset --revision e769ca401d054fa2cbdd5fa86e7e6c111e46cdd4
+
+  # overlay (optional)
 
   # annotations; see `data/dataset_info.json`
   hf download --max-workers=4 cvis-tmu/Scene30K --repo-type dataset --revision 4e9bc1a04479fedfbb6ee791b7cd55fc6a2804f5 
   hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type dataset --revision bfa0a5a95683fa71c5a8b28b6560e2d5b7b71f0c 
-  hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset --revision 476dff589138ba1f87258d676fb1a7fb1dfa24ff 
+  hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset --revision 476dff589138ba1f87258d676fb1a7fb1dfa24ff
+
+  # base models 
+  hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct --revision cc594898137f460bfe9f0759e9844b3ce807cfb5
 
 fi
 

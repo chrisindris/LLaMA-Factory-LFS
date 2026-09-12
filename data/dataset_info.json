@@ -909,7 +909,7 @@
     }
   },
   "Scene30k_eval16": {
-    "file_name": "cot_eval16/Scene30k_eval16.json",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--Scene30K/snapshots/4e9bc1a04479fedfbb6ee791b7cd55fc6a2804f5/Scene30k_eval16.json",
     "formatting": "alpaca",
     "columns": {
       "system": "formatting_instruction",
@@ -926,7 +926,7 @@
     }
   },
   "SpatialSSRL_eval16": {
-    "file_name": "cot_eval16/SpatialSSRL_eval16.json",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/476dff589138ba1f87258d676fb1a7fb1dfa24ff/SpatialSSRL_eval16.json",
     "formatting": "alpaca",
     "columns": {
       "prompt": "instruction",
@@ -942,7 +942,7 @@
     }
   },
   "3DThinker10k_eval16": {
-    "file_name": "cot_eval16/3DThinker10k_eval16.jsonl",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/bfa0a5a95683fa71c5a8b28b6560e2d5b7b71f0c/3DThinker10k_eval16.jsonl",
     "formatting": "alpaca",
     "columns": {
       "system": "system",

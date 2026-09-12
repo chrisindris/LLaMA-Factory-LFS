@@ -2,14 +2,14 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps-%j.out
-#SBATCH --cpus-per-task=48
+#SBATCH --cpus-per-task=64
 #SBATCH --time=0-21:00:00
 #SBATCH --mem=0
-#SBATCH --gpus-per-node=h100:4
+#SBATCH --gpus-per-node=1
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 #SBATCH --mail-type=ALL
 
-# ===  tamia_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps.sh  ===
+# ===  vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps.sh  ===
 #  
 #  Prereqs:
 #  - Create ${PROJECT_DIR}/data/control_tokens.yaml (token -> description dict for desc_init) --> DONE!
@@ -17,7 +17,7 @@
 #  - Ensure that the 16 eval samples we use are the SAME, and that of them we have 8 from Scene30k, 4 from SpatialSSRL, and 4 from 3Dthinker (perhaps the first 4 or 8 questions of each used in the eval split), and that we train on the entire dataset.
 #  - Check with AI (give it the llamafactory output instructions and the settings we are using) to suggest alternative optimizers (adam/badam/galore/apollo) [though this is more for memory] or lora settings. Perhaps nonzero --lora-dropout could help? -> keep adam, use nonzero --lora-dropout
 #
-# --- TamIA wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k) on H100 (80GB) GPUs. Identical to tamia_qwen2_5vl_lora_sft_CoT_traineval.sh, but: ---
+# --- vulcan wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k) on H100 (80GB) GPUs. Identical to vulcan_qwen2_5vl_lora_sft_CoT_traineval.sh, but: ---
 # Changes (eval):
 # 1. Every 10 training steps we perform evaluation on the SAME 16 eval examples.; will involve --eval_steps=10, --eval_on_start=True (both of those should use only 16 examples), possibly --eval_strategy=steps, prediction_loss_only=false? Maybe --do-predict=True to do predictions on the test set also, although this would likely want to do predictions on the whole test set which we don't want? 
 # --> Eval of 4384 eval examples (batch size 1, 4 GPUs => 1024 steps) takes ~90 mins; specifically, it was 1:34:55 for the training and 1:35:14 total so it takes about 20 seconds for overhead
@@ -50,9 +50,9 @@
 #
 # Submit from models/qwen2_5vl_lora_sft_CoT/ so SLURM out/
 # lands next to this script:
-#   sbatch tamia_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps.sh
+#   sbatch vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps.sh
 #
-# Uses tamia_qwen2_5vl_lora_sft_CoT_traineval.yaml via the shared
+# Uses vulcan_qwen2_5vl_lora_sft_CoT_traineval.yaml via the shared
 # worker (CLUSTER-detected path).
 #
 # Per-node dataset staging (default ON in the shared multinode worker):
@@ -147,6 +147,52 @@ export SCENE30K_EVAL16_SRC="$(jq -r '.["Scene30k_eval16"].file_name' "${DATASET_
 export SPATIALSSRL_EVAL16_SRC="$(jq -r '.["SpatialSSRL_eval16"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SPATIALSSRL_EVAL16_SRC: ${SPATIALSSRL_EVAL16_SRC}"
 export THINKER10K_EVAL16_SRC="$(jq -r '.["3DThinker10k_eval16"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "THINKER10K_EVAL16_SRC: ${THINKER10K_EVAL16_SRC}"
 
+
+# --- set the path to the correct model (including its tokenizer) ---
+
+# huggingface_hub>=1.0 dropped `hf cache scan` (now `hf cache list`). Resolve the
+# local snapshot from HF_HUB_CACHE so offline compute nodes get a real path.
+
+export BASE_MODEL_PATH="Qwen/Qwen2.5-VL-7B-Instruct"
+
+resolve_local_hf_snapshot() {
+	local repo_id="$1"
+	local cache_root="${HF_HUB_CACHE:-${HF_HOME:-}}"
+	if [[ -d "${repo_id}" ]]; then
+		printf '%s\n' "${repo_id}"
+		return 0
+	fi
+	if [[ -z "${cache_root}" ]]; then
+		echo "Error: HF_HUB_CACHE/HF_HOME is unset; cannot resolve ${repo_id}" >&2
+		return 1
+	fi
+	local repo_dir="${cache_root}/models--${repo_id//\//--}"
+	local snapshots_dir="${repo_dir}/snapshots"
+	if [[ ! -d "${snapshots_dir}" ]]; then
+		echo "Error: no local HF snapshot for ${repo_id}" >&2
+		echo "Expected snapshots under: ${snapshots_dir}" >&2
+		return 1
+	fi
+	local latest=""
+	if [[ -f "${repo_dir}/refs/main" ]]; then
+		latest="${snapshots_dir}/$(tr -d '[:space:]' <"${repo_dir}/refs/main")"
+	fi
+	if [[ -z "${latest}" || ! -d "${latest}" ]]; then
+		latest=$(find "${snapshots_dir}" -maxdepth 1 -mindepth 1 -type d -printf "%T+ %p\n" | sort | tail -n 1 | awk '{print $NF}')
+	fi
+	if [[ -z "${latest}" || ! -d "${latest}" ]]; then
+		echo "Error: snapshots dir is empty: ${snapshots_dir}" >&2
+		return 1
+	fi
+	printf '%s\n' "${latest}"
+}
+
+if ! MODEL_NAME_OR_PATH="$(resolve_local_hf_snapshot "${BASE_MODEL_PATH}")"; then
+	exit 1
+fi
+echo "MODEL_NAME_OR_PATH: $MODEL_NAME_OR_PATH"
+
+
 # --- setting python environment ---
 
 module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
@@ -192,19 +238,11 @@ if [ -z "${YAML_FILE:-}" ]; then
   echo "YAML_FILE: ${YAML_FILE}"
 fi
 
+export CACHE_DIR="${HF_HUB_CACHE:-${HF_HOME}}"
+echo "CACHE_DIR: $CACHE_DIR"
+
 export OUTPUT_DIR_SAVES="saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_ep${ENDING_EPOCH}/" && echo "OUTPUT_DIR_SAVES: ${OUTPUT_DIR_SAVES}"
 export OUTPUT_DIR="${PROJECT_DIR}/${OUTPUT_DIR_SAVES}" && echo "OUTPUT_DIR: ${OUTPUT_DIR}"
-
-# The Trillium template hard-codes cache_dir=/scratch/indrisch/huggingface/hub.
-# That path does not exist on TamIA; transformers then cannot resolve
-# Qwen/Qwen2.5-VL-7B-Instruct under HF_HUB_OFFLINE=1.
-export CACHE_DIR="${HF_HUB_CACHE}" && echo "CACHE_DIR: ${CACHE_DIR}"
-QWEN_CACHE="${CACHE_DIR}/models--Qwen--Qwen2.5-VL-7B-Instruct"
-if [[ ! -d "${QWEN_CACHE}/snapshots" ]]; then
-  echo "Error: Qwen2.5-VL-7B-Instruct not found under ${CACHE_DIR}" >&2
-  echo "Expected: ${QWEN_CACHE}" >&2
-  exit 1
-fi
 
 if [[ "${STARTING_EPOCH}" -gt 0 ]]; then
   export RESUME_CKPT="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))"
@@ -246,6 +284,7 @@ export TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC=10800
 cmd_args=(
     --yaml-template-path "${TEMPLATE_YAML}"
     --yaml-output-path "${YAML_FILE}"
+    --model_name_or_path "${MODEL_NAME_OR_PATH}"
     --cache_dir "${CACHE_DIR}"
     --output_dir "${OUTPUT_DIR_SAVES}"
     --resume_from_checkpoint "${RESUME_CKPT}"

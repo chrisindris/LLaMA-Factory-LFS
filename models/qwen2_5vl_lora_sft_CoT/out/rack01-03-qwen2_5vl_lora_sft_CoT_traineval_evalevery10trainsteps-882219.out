@@ -1,0 +1,171 @@
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: VULCAN
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: l40s
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory-LFS
+SIF_FILE: /scratch/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_py313/
+SCANNET_H5_DIR: /project/aip-wangcs/shared/ScanNet_h5/scans/
+SPATIALSSRL_H5_DIR: /project/aip-wangcs/shared/Spatial-SSRL_images_h5/
+THINKER10K_H5_DIR: /project/aip-wangcs/shared/3DThinker10K_images_h5/
+SLURM_TMPDIR: /tmp
+RUNNING_MODE: VENV
+SCENE30K_ANN_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/4e9bc1a04479fedfbb6ee791b7cd55fc6a2804f5/train-00000-of-00001.with_question_id.formatted.parquet
+SPATIALSSRL_ANN_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/476dff589138ba1f87258d676fb1a7fb1dfa24ff/SFT-coldstart.with_question_id.formatted.json
+THINKER10K_ANN_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/bfa0a5a95683fa71c5a8b28b6560e2d5b7b71f0c/3dthinker10k_cot.with_question_id.formatted.jsonl
+SCENE30K_EVAL16_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/4e9bc1a04479fedfbb6ee791b7cd55fc6a2804f5/Scene30k_eval16.json
+SPATIALSSRL_EVAL16_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/476dff589138ba1f87258d676fb1a7fb1dfa24ff/SpatialSSRL_eval16.json
+THINKER10K_EVAL16_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/bfa0a5a95683fa71c5a8b28b6560e2d5b7b71f0c/3DThinker10k_eval16.jsonl
+
+Lmod is automatically replacing "gcc/12.3" with "go/1.26.5".
+
+
+Lmod is automatically replacing "go/1.26.5" with "gcc/12.3".
+
+
+Activating Modules:
+  1) cuda/12.6           3) gcccore/.12.3        5) opencv/4.14.0     7) pmix/4.2.4
+  2) flexiblas/3.3.1     4) libfabric/1.18.0     6) openmpi/4.1.5
+
+Copying venv to local storage...
+VENV_LLAMAFACTORY: /tmp/venv
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.2.1)
+Requirement already satisfied: setuptools in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (84.0.0+computecanada)
+Requirement already satisfied: wheel in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (0.48.0)
+Requirement already satisfied: packaging>=24.0 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from wheel) (26.3+computecanada)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: packaging in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.3+computecanada)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: huggingface_hub in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (1.31.0)
+Requirement already satisfied: ruamel.yaml in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (0.19.1+computecanada)
+Requirement already satisfied: click<9.0.0,>=8.4.2 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (8.5.0+computecanada)
+Requirement already satisfied: filelock>=3.10.0 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (3.32.6)
+Requirement already satisfied: fsspec>=2023.5.0 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (2025.3.0+computecanada)
+Requirement already satisfied: hf-xet<2.0.0,>=1.5.2 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (1.6.0+computecanada)
+Requirement already satisfied: httpx<1,>=0.23.0 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (0.28.1+computecanada)
+Requirement already satisfied: packaging>=20.9 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (26.3+computecanada)
+Requirement already satisfied: pyyaml>=5.1 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (6.0.3+computecanada)
+Requirement already satisfied: tqdm>=4.42.1 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.70.0+computecanada)
+Requirement already satisfied: typing-extensions>=4.1.0 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.16.0+computecanada)
+Requirement already satisfied: anyio in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (4.15.1)
+Requirement already satisfied: certifi in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (1.0.9+computecanada)
+Requirement already satisfied: idna in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (3.19)
+Requirement already satisfied: h11>=0.16 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpcore==1.*->httpx<1,>=0.23.0->huggingface_hub) (0.16.0+computecanada)
+YAML_FILE: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/examples/train_lora/vulcan_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps_epoch1_job882219.yaml
+OUTPUT_DIR_SAVES: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_ep1/
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_ep1/
+CACHE_DIR: /project/aip-wangcs/indrisch/huggingface/hub
+RESUME_CKPT: null
+GPU NAME: NVIDIA L40S
+GPU TYPE: L40S
+Special-token descriptions (4): ['<think>', '</think>', '<answer>', '</answer>']
+Warning: frozen eval ID manifest missing: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/data/cot_eval16/question_ids.json
+SLURM_JOB_NODELIST: rack01-03
+SLURM_NNODES: 1
+HEAD_NODE: rack01-03
+HEAD_NODE: rack01-03
+MASTER_ADDR: rack01-03
+MASTER_PORT: 29500
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/scripts:/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/scripts/utils:/project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: VULCAN
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: l40s
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory-LFS
+SIF_FILE: /scratch/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_py313/
+SCANNET_H5_DIR: /project/aip-wangcs/shared/ScanNet_h5/scans/
+SPATIALSSRL_H5_DIR: /project/aip-wangcs/shared/Spatial-SSRL_images_h5/
+THINKER10K_H5_DIR: /project/aip-wangcs/shared/3DThinker10K_images_h5/
+SCANNET_H5_DIR: /project/aip-wangcs/shared/ScanNet_h5/scans/
+SPATIALSSRL_H5_DIR: /project/aip-wangcs/shared/Spatial-SSRL_images_h5/
+THINKER10K_H5_DIR: /project/aip-wangcs/shared/3DThinker10K_images_h5/
+CLUSTER: VULCAN
+YAML_FILE: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/examples/train_lora/vulcan_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps_epoch1_job882219.yaml
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_ep1/
+RESUME_CKPT: null
+No resume checkpoint (fresh start from epoch 0).
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00] === Node-local CoT dataset staging ===
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00] HOST=rack01-03 SLURM_NODEID=0 SLURM_NNODES=1
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00] NODE_LOCAL_DATA_ROOT=/tmp/cot_stage
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00] STAGE_COPY_JOBS=8 STAGE_STAGGER_SEC=0
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00] Sources:
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00]   SCENE30K_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/4e9bc1a04479fedfbb6ee791b7cd55fc6a2804f5/train-00000-of-00001.with_question_id.formatted.parquet
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00]   SPATIALSSRL_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/476dff589138ba1f87258d676fb1a7fb1dfa24ff/SFT-coldstart.with_question_id.formatted.json
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00]   THINKER10K_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/bfa0a5a95683fa71c5a8b28b6560e2d5b7b71f0c/3dthinker10k_cot.with_question_id.formatted.jsonl
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00]   SCANNET_H5_DIR(src)=/project/aip-wangcs/shared/ScanNet_h5/scans/
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00]   SPATIALSSRL_H5_DIR(src)=/project/aip-wangcs/shared/Spatial-SSRL_images_h5/
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00]   THINKER10K_H5_DIR(src)=/project/aip-wangcs/shared/3DThinker10K_images_h5/
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00] Free space on /tmp/cot_stage: 7410246656000 bytes (need ~128849018880)
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00] Copying annotations...
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00] Annotations done in 0s
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00] Copying ScanNet H5 tree...
+[stage rack01-03 node=0 2026-09-12T00:10:36-06:00] Copying 700 entries from /project/aip-wangcs/shared/ScanNet_h5/scans/ -> /tmp/cot_stage/media/ScanNet_h5/scans (jobs=8)
+[stage rack01-03 node=0 2026-09-12T00:10:52-06:00] ScanNet done in 16s
+[stage rack01-03 node=0 2026-09-12T00:10:52-06:00] Copying Spatial-SSRL H5 tree...
+[stage rack01-03 node=0 2026-09-12T00:10:52-06:00] Copying 13 entries from /project/aip-wangcs/shared/Spatial-SSRL_images_h5/ -> /tmp/cot_stage/media/Spatial-SSRL_images_h5 (jobs=8)
+[stage rack01-03 node=0 2026-09-12T00:12:20-06:00] Spatial-SSRL done in 88s
+[stage rack01-03 node=0 2026-09-12T00:12:20-06:00] Copying 3DThinker H5 tree...
+[stage rack01-03 node=0 2026-09-12T00:12:20-06:00] Copying 2 entries from /project/aip-wangcs/shared/3DThinker10K_images_h5/ -> /tmp/cot_stage/media/3DThinker10K_images_h5 (jobs=8)
+[stage rack01-03 node=0 2026-09-12T00:12:24-06:00] 3DThinker done in 4s
+Wrote local dataset_info (6 entries) -> /tmp/cot_stage/dataset_dir/dataset_info.json
+  Scene30k: /tmp/cot_stage/annotations/Scene30k.parquet
+  SpatialSSRL_coldstart: /tmp/cot_stage/annotations/SpatialSSRL_coldstart.json
+  3DThinker10k: /tmp/cot_stage/annotations/3dthinker10k_cot.jsonl
+  Scene30k_eval16: /tmp/cot_stage/annotations/Scene30k_eval16.json
+  SpatialSSRL_eval16: /tmp/cot_stage/annotations/SpatialSSRL_eval16.json
+  3DThinker10k_eval16: /tmp/cot_stage/annotations/3DThinker10k_eval16.jsonl
+[stage rack01-03 node=0 2026-09-12T00:12:24-06:00] VERIFY OK under /tmp/cot_stage
+[stage rack01-03 node=0 2026-09-12T00:12:24-06:00] === Staging complete in 108s ===
+[stage rack01-03 node=0 2026-09-12T00:12:24-06:00] LOCAL_DATASET_DIR=/tmp/cot_stage/dataset_dir
+[stage rack01-03 node=0 2026-09-12T00:12:24-06:00] LOCAL_MEDIA_DIR=/tmp/cot_stage/media/ScanNet_h5
+[stage rack01-03 node=0 2026-09-12T00:12:24-06:00] SCANNET_H5_DIR=/tmp/cot_stage/media/ScanNet_h5/scans
+[stage rack01-03 node=0 2026-09-12T00:12:25-06:00] SPATIALSSRL_H5_DIR=/tmp/cot_stage/media/Spatial-SSRL_images_h5
+[stage rack01-03 node=0 2026-09-12T00:12:25-06:00] THINKER10K_H5_DIR=/tmp/cot_stage/media/3DThinker10K_images_h5
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda4       6.9T  243G  6.7T   4% /tmp
+Patched YAML -> /tmp/cot_stage/train.yaml
+  dataset_dir: /tmp/cot_stage/dataset_dir
+  media_dir: /tmp/cot_stage/media/ScanNet_h5
+YAML_FILE (node-local): /tmp/cot_stage/train.yaml
+LOCAL_DATASET_DIR: /tmp/cot_stage/dataset_dir
+LOCAL_MEDIA_DIR: /tmp/cot_stage/media/ScanNet_h5
+SCANNET_H5_DIR (local): /tmp/cot_stage/media/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR (local): /tmp/cot_stage/media/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR (local): /tmp/cot_stage/media/3DThinker10K_images_h5
+Invalid cluster: VULCAN
+srun: error: rack01-03: task 0: Exited with exit code 1
+srun: Terminating StepId=882219.0

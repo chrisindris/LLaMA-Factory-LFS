@@ -1,23 +1,25 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps-%j.out
-#SBATCH --cpus-per-task=48
+#SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps_groksettings_ablation-%j.out
+#SBATCH --cpus-per-task=64
 #SBATCH --time=0-21:00:00
 #SBATCH --mem=0
-#SBATCH --gpus-per-node=h100:4
+#SBATCH --gpus-per-node=4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 #SBATCH --mail-type=ALL
+#SBATCH --array=0-4
 
-# ===  tamia_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps.sh  ===
-#  
+# ===  vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps_groksettings_ablation.sh  ===
+# This is identical to vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps_groksettings.sh, but this is the ablation suggested in #7 of cot_sft_remedy_report.md
+#
 #  Prereqs:
 #  - Create ${PROJECT_DIR}/data/control_tokens.yaml (token -> description dict for desc_init) --> DONE!
 #  - Ensure all datasets have only the think and answer tags -> DONE!
 #  - Ensure that the 16 eval samples we use are the SAME, and that of them we have 8 from Scene30k, 4 from SpatialSSRL, and 4 from 3Dthinker (perhaps the first 4 or 8 questions of each used in the eval split), and that we train on the entire dataset.
 #  - Check with AI (give it the llamafactory output instructions and the settings we are using) to suggest alternative optimizers (adam/badam/galore/apollo) [though this is more for memory] or lora settings. Perhaps nonzero --lora-dropout could help? -> keep adam, use nonzero --lora-dropout
 #
-# --- TamIA wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k) on H100 (80GB) GPUs. Identical to tamia_qwen2_5vl_lora_sft_CoT_traineval.sh, but: ---
+# --- vulcan wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k) on H100 (80GB) GPUs. Identical to vulcan_qwen2_5vl_lora_sft_CoT_traineval.sh, but: ---
 # Changes (eval):
 # 1. Every 10 training steps we perform evaluation on the SAME 16 eval examples.; will involve --eval_steps=10, --eval_on_start=True (both of those should use only 16 examples), possibly --eval_strategy=steps, prediction_loss_only=false? Maybe --do-predict=True to do predictions on the test set also, although this would likely want to do predictions on the whole test set which we don't want? 
 # --> Eval of 4384 eval examples (batch size 1, 4 GPUs => 1024 steps) takes ~90 mins; specifically, it was 1:34:55 for the training and 1:35:14 total so it takes about 20 seconds for overhead
@@ -50,9 +52,9 @@
 #
 # Submit from models/qwen2_5vl_lora_sft_CoT/ so SLURM out/
 # lands next to this script:
-#   sbatch tamia_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps.sh
+#   sbatch vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps_groksettings_ablation.sh
 #
-# Uses tamia_qwen2_5vl_lora_sft_CoT_traineval.yaml via the shared
+# Uses vulcan_qwen2_5vl_lora_sft_CoT_traineval.yaml via the shared
 # worker (CLUSTER-detected path).
 #
 # Per-node dataset staging (default ON in the shared multinode worker):
@@ -69,7 +71,7 @@
 # - we have some hardcoded paths in use, perhaps we can put them into env.sh? -> done!
 # - make sure that the YAML we write to is named according to the experiment. -> done!
 
-EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps"
+EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps_groksettings_ablation_taskid${SLURM_ARRAY_TASK_ID}"
 
 # --- for reading cluster-specific settings ---
 . $(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "env.sh")
@@ -147,6 +149,50 @@ export SCENE30K_EVAL16_SRC="$(jq -r '.["Scene30k_eval16"].file_name' "${DATASET_
 export SPATIALSSRL_EVAL16_SRC="$(jq -r '.["SpatialSSRL_eval16"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SPATIALSSRL_EVAL16_SRC: ${SPATIALSSRL_EVAL16_SRC}"
 export THINKER10K_EVAL16_SRC="$(jq -r '.["3DThinker10k_eval16"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "THINKER10K_EVAL16_SRC: ${THINKER10K_EVAL16_SRC}"
 
+# --- set the path to the correct model (including its tokenizer) ---
+
+# huggingface_hub>=1.0 dropped `hf cache scan` (now `hf cache list`). Resolve the
+# local snapshot from HF_HUB_CACHE so offline compute nodes get a real path.
+
+export BASE_MODEL_PATH="Qwen/Qwen2.5-VL-7B-Instruct"
+
+resolve_local_hf_snapshot() {
+	local repo_id="$1"
+	local cache_root="${HF_HUB_CACHE:-${HF_HOME:-}}"
+	if [[ -d "${repo_id}" ]]; then
+		printf '%s\n' "${repo_id}"
+		return 0
+	fi
+	if [[ -z "${cache_root}" ]]; then
+		echo "Error: HF_HUB_CACHE/HF_HOME is unset; cannot resolve ${repo_id}" >&2
+		return 1
+	fi
+	local repo_dir="${cache_root}/models--${repo_id//\//--}"
+	local snapshots_dir="${repo_dir}/snapshots"
+	if [[ ! -d "${snapshots_dir}" ]]; then
+		echo "Error: no local HF snapshot for ${repo_id}" >&2
+		echo "Expected snapshots under: ${snapshots_dir}" >&2
+		return 1
+	fi
+	local latest=""
+	if [[ -f "${repo_dir}/refs/main" ]]; then
+		latest="${snapshots_dir}/$(tr -d '[:space:]' <"${repo_dir}/refs/main")"
+	fi
+	if [[ -z "${latest}" || ! -d "${latest}" ]]; then
+		latest=$(find "${snapshots_dir}" -maxdepth 1 -mindepth 1 -type d -printf "%T+ %p\n" | sort | tail -n 1 | awk '{print $NF}')
+	fi
+	if [[ -z "${latest}" || ! -d "${latest}" ]]; then
+		echo "Error: snapshots dir is empty: ${snapshots_dir}" >&2
+		return 1
+	fi
+	printf '%s\n' "${latest}"
+}
+
+if ! MODEL_NAME_OR_PATH="$(resolve_local_hf_snapshot "${BASE_MODEL_PATH}")"; then
+	exit 1
+fi
+echo "MODEL_NAME_OR_PATH: $MODEL_NAME_OR_PATH"
+
 # --- setting python environment ---
 
 module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
@@ -172,12 +218,12 @@ TEMPLATE_YAML="${PROJECT_DIR}/examples/train_lora/trillium_qwen2_5vl_lora_sft_Co
 # |------------
 # | Create a copy of TEMPLATE_YAML at ...epoch${ENDING_EPOCH}.yaml (cluster-prefixed).
 # | Always set:
-# |   output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_ep${ENDING_EPOCH}/
+# |   output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_groksettings_ablation_ep${ENDING_EPOCH}/
 # |   stop_at_global_step: $((ENDING_EPOCH * STEPS_PER_EPOCH))
 # |
 # | If STARTING_EPOCH > 0 (resume):
 # |   resume_from_checkpoint / adapter_name_or_path:
-# |     ${PROJECT_DIR}/saves/.../CoT_traineval_evalevery10trainsteps_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))
+# |     ${PROJECT_DIR}/saves/.../CoT_traineval_evalevery10trainsteps_groksettings_ablation_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))
 # |   allow_warm_start_resume / require_resume_bundle as warm-start defaults
 # |
 # | If STARTING_EPOCH == 0 (fresh start, like trillium_*_CoT_traineval.yaml):
@@ -192,11 +238,11 @@ if [ -z "${YAML_FILE:-}" ]; then
   echo "YAML_FILE: ${YAML_FILE}"
 fi
 
-export OUTPUT_DIR_SAVES="saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_ep${ENDING_EPOCH}/" && echo "OUTPUT_DIR_SAVES: ${OUTPUT_DIR_SAVES}"
+export OUTPUT_DIR_SAVES="saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_groksettings_ablation_taskid${SLURM_ARRAY_TASK_ID}_ep${ENDING_EPOCH}/" && echo "OUTPUT_DIR_SAVES: ${OUTPUT_DIR_SAVES}"
 export OUTPUT_DIR="${PROJECT_DIR}/${OUTPUT_DIR_SAVES}" && echo "OUTPUT_DIR: ${OUTPUT_DIR}"
 
 # The Trillium template hard-codes cache_dir=/scratch/indrisch/huggingface/hub.
-# That path does not exist on TamIA; transformers then cannot resolve
+# That path does not exist on vulcan; transformers then cannot resolve
 # Qwen/Qwen2.5-VL-7B-Instruct under HF_HUB_OFFLINE=1.
 export CACHE_DIR="${HF_HUB_CACHE}" && echo "CACHE_DIR: ${CACHE_DIR}"
 QWEN_CACHE="${CACHE_DIR}/models--Qwen--Qwen2.5-VL-7B-Instruct"
@@ -207,7 +253,7 @@ if [[ ! -d "${QWEN_CACHE}/snapshots" ]]; then
 fi
 
 if [[ "${STARTING_EPOCH}" -gt 0 ]]; then
-  export RESUME_CKPT="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))"
+  export RESUME_CKPT="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_groksettings_ablation_taskid${SLURM_ARRAY_TASK_ID}_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))"
 else
   export RESUME_CKPT=null
 fi
@@ -246,6 +292,7 @@ export TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC=10800
 cmd_args=(
     --yaml-template-path "${TEMPLATE_YAML}"
     --yaml-output-path "${YAML_FILE}"
+    --model_name_or_path "${MODEL_NAME_OR_PATH}"
     --cache_dir "${CACHE_DIR}"
     --output_dir "${OUTPUT_DIR_SAVES}"
     --resume_from_checkpoint "${RESUME_CKPT}"
@@ -274,12 +321,33 @@ cmd_args=(
     --init_special_tokens desc_init_w_noise # initialize special tokens with semantic + random noise
     --skip_special_tokens false # ensure that the special tokens are not ignored
     --additional_target embed_tokens,lm_head # need to unfreeze some model (non-LoRA) weights to adapt to the special tokens
-    --warmup_ratio 0.02 # use 68 steps (0.1 epoch) rather than 342 steps (0.5 epoch) for warmup
-    --lr_scheduler_kwargs '{"num_cycles": 0.4}' # HF cosine; quote JSON so bash does not split on the colon/space
+    --warmup_ratio 0.03 # use 102 steps (0.15 epoch) rather than 342 steps (0.5 epoch) for warmup
+    --lr_scheduler_type cosine_with_min_lr
+    --lr_scheduler_kwargs '{"min_lr_rate": 0.1}' # min lr is 10% of max; quote JSON so bash does not split on the colon/space
     --eval_prediction_mode generate # more accurate to external benchmark behaviour, though it would take longer
     --eval_dump_max_new_tokens 256 # hard cap for dump generate; keeps NCCL eval gathers from waiting on 2048-token loops
     --do_sample false # greedy dump generate; sampling looped <|im_start|> and timed out NCCL
+    --learning_rate 2.0e-5 # half of the previous max lr
 )
+
+case "${SLURM_ARRAY_TASK_ID}" in
+    0)
+        cmd_args+=("--use_dft_loss true") 
+        ;;
+    1)
+        cmd_args+=("--lora_rank 16 --use_rslora true") 
+        ;;
+    2)
+        cmd_args+=("--image_max_pixels 131072") 
+        ;;
+    3)
+        cmd_args+=("--image_max_pixels 262144") 
+        ;;
+    4)
+        cmd_args+=("--neftune_noise_alpha 5") 
+        ;;
+esac
+
 
 python "${PROJECT_DIR}/scripts/utils/modify_yaml.py" \
   "${cmd_args[@]}" \

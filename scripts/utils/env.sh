@@ -44,6 +44,9 @@ get_cluster_settings() {
 	elif [[ "${PS1:-}" == *"tamia"* ]] || [[ "$HOSTNAME" == *"tamia"* ]] || [[ "${PS1:-}" == *"tg"* ]] || [[ "$HOSTNAME" == *"tg"* ]]; then
 		export CLUSTER="${CLUSTER:-TAMIA}"
 		export RUNNING_MODE="${RUNNING_MODE:-VENV}"
+  elif [[ "${PS1:-}" == *"vulcan"* ]] || [[ "$HOSTNAME" == *"vulcan"* ]] || [[ "${PS1:-}" == *"rack"* ]] || [[ "$HOSTNAME" == *"rack"* ]] || [[ "${PS1:-}" == *"compute"* ]] || [[ "$HOSTNAME" == *"compute"* ]]; then
+		export CLUSTER="${CLUSTER:-VULCAN}"
+		export RUNNING_MODE="${RUNNING_MODE:-VENV}"
 	elif [[ "$HOSTNAME" == *"nibi"* ]] || [[ "${PS1:-}" == *"nibi"* ]] || [[ "${PS1:-}" == *"g"* ]] || [[ "$HOSTNAME" == *"g"* ]] || [[ "${PS1:-}" == *"c"* ]] || [[ "$HOSTNAME" == *"c"* ]]; then
 		export CLUSTER="${CLUSTER:-NIBI}"
 		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"

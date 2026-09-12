@@ -105,7 +105,7 @@ def test_scene30k_entry_uses_hf_hub_cache(clear_hf_cache_env, monkeypatch: pytes
     monkeypatch.setenv("HF_HUB_CACHE", "/tmp/fake_hub")
     attrs = get_dataset_list(["Scene30k"], DATA_DIR)
     assert attrs[0].dataset_name.startswith("/tmp/fake_hub/datasets--cvis-tmu--Scene30K/")
-    assert attrs[0].dataset_name.endswith("train-00000-of-00001.with_question_id.parquet")
+    assert attrs[0].dataset_name.endswith("train-00000-of-00001.with_question_id.formatted.parquet")
 
 
 @pytest.mark.runs_on(["cpu", "mps"])

@@ -498,6 +498,77 @@ elif [[ "$CLUSTER" == "TAMIA" ]]; then
 		exit 1
 	fi
 
+elif [[ "$CLUSTER" == "VULCAN" ]]; then
+
+	if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
+
+		module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+
+		echo "=== HOST DIAGNOSTICS ==="
+		echo "HOSTNAME: $(hostname)"
+		echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
+		nvidia-smi
+		echo "=== END HOST DIAGNOSTICS ==="
+
+		run_llamafactory_apptainer
+
+	elif [[ "$RUNNING_MODE" == "VENV" ]]; then
+
+		module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+
+		echo "Copying venv to local storage..."
+		cp -a "${VENV_LLAMAFACTORY}" ${SLURM_TMPDIR}/venv_llamafactory_py313
+		source ${SLURM_TMPDIR}/venv_llamafactory_py313/bin/activate
+
+		export PYTHONUNBUFFERED=1
+		export NCCL_DEBUG=INFO
+		export FORCE_TORCHRUN=1
+		export HF_HUB_OFFLINE=1
+		export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
+		export HF_DATASETS_OFFLINE="${HF_DATASETS_OFFLINE:-1}"
+		# YAML cache_dir stays on HF_HUB_CACHE for Qwen snapshots. Arrow cache
+		# must not: /project is often 100% full ("Not enough disk space").
+		export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-${SLURM_TMPDIR}/hf_datasets}"
+		mkdir -p "${HF_DATASETS_CACHE}"
+		export HF_DATASETS_DISABLE_FILE_LOCKING=1
+		export DATASETS_DISABLE_FILE_LOCKING=1
+		export WANDB_MODE=offline
+		export WANDB_DIR="${WANDB_DIR}"
+		export WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb"
+		export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
+		mkdir -p "${TRITON_CACHE_DIR}" "${WANDB_CACHE_DIR}"
+		export DISABLE_VERSION_CHECK=1
+		export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+		export SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR
+		export PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}"
+		echo "HF_DATASETS_CACHE: ${HF_DATASETS_CACHE}"
+
+		pushd ${PROJECT_DIR}
+		llamafactory-cli train ${YAML_FILE}
+
+
+	elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
+
+		module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
+		module load python/3.12 cuda/12.6 opencv/4.12.0
+		module load arrow
+		module load apptainer
+
+		echo "=== HOST DIAGNOSTICS ==="
+		echo "HOSTNAME: $(hostname)"
+		echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
+		nvidia-smi
+		echo "=== END HOST DIAGNOSTICS ==="
+
+		#apptainer exec --overlay /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/overlay_0.img --env TORCH_DEVICE_BACKEND_AUTOLOAD=0 --env PYTHONNOUSERSITE=1 /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory_latest-910b-ubuntu.sif bash -> the original; this container is incomplete 
+    #apptainer exec --overlay /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/overlay.img /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif bash -> better, but not generalized
+    run_llamafactory_apptainer
+
+	else
+		echo "Invalid running mode: $RUNNING_MODE"
+		exit 1
+	fi
+
 elif [[ "$CLUSTER" == "TRILLIUM" ]]; then
 
 	module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
