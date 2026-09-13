@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=64
 #SBATCH --time=0-21:00:00
 #SBATCH --mem=0
-#SBATCH --gpus-per-node=1
+#SBATCH --gpus-per-node=4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 #SBATCH --mail-type=ALL
 
@@ -316,7 +316,7 @@ cmd_args=(
     --warmup_ratio 0.02 # use 68 steps (0.1 epoch) rather than 342 steps (0.5 epoch) for warmup
     --lr_scheduler_kwargs '{"num_cycles": 0.4}' # HF cosine; quote JSON so bash does not split on the colon/space
     --eval_prediction_mode generate # more accurate to external benchmark behaviour, though it would take longer
-    --eval_dump_max_new_tokens 256 # hard cap for dump generate; keeps NCCL eval gathers from waiting on 2048-token loops
+    --eval_dump_max_new_tokens 1024 # hard cap for dump generate; keeps NCCL eval gathers from waiting on 2048-token loops
     --do_sample false # greedy dump generate; sampling looped <|im_start|> and timed out NCCL
 )
 

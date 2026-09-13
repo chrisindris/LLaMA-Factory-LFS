@@ -325,26 +325,29 @@ cmd_args=(
     --lr_scheduler_type cosine_with_min_lr
     --lr_scheduler_kwargs '{"min_lr_rate": 0.1}' # min lr is 10% of max; quote JSON so bash does not split on the colon/space
     --eval_prediction_mode generate # more accurate to external benchmark behaviour, though it would take longer
-    --eval_dump_max_new_tokens 256 # hard cap for dump generate; keeps NCCL eval gathers from waiting on 2048-token loops
+    --eval_dump_max_new_tokens 1024 # hard cap for dump generate; keeps NCCL eval gathers from waiting on 2048-token loops
     --do_sample false # greedy dump generate; sampling looped <|im_start|> and timed out NCCL
     --learning_rate 2.0e-5 # half of the previous max lr
 )
 
+# Each flag and value must be a separate argv word. Quoting the whole
+# "--flag value" string makes modify_yaml.py treat it as one YAML key
+# (e.g. "neftune_noise_alpha 5"), which HfArgumentParser then rejects.
 case "${SLURM_ARRAY_TASK_ID}" in
     0)
-        cmd_args+=("--use_dft_loss true") 
+        cmd_args+=(--use_dft_loss true)
         ;;
     1)
-        cmd_args+=("--lora_rank 16 --use_rslora true") 
+        cmd_args+=(--lora_rank 16 --use_rslora true)
         ;;
     2)
-        cmd_args+=("--image_max_pixels 131072") 
+        cmd_args+=(--image_max_pixels 131072)
         ;;
     3)
-        cmd_args+=("--image_max_pixels 262144") 
+        cmd_args+=(--image_max_pixels 262144)
         ;;
     4)
-        cmd_args+=("--neftune_noise_alpha 5") 
+        cmd_args+=(--neftune_noise_alpha 5)
         ;;
 esac
 

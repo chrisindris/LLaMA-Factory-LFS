@@ -283,21 +283,24 @@ cmd_args=(
     --learning_rate 2.0e-5 # half of the previous max lr
 )
 
+# Each flag and value must be a separate argv word. Quoting the whole
+# "--flag value" string makes modify_yaml.py treat it as one YAML key
+# (e.g. "neftune_noise_alpha 5"), which HfArgumentParser then rejects.
 case "${SLURM_ARRAY_TASK_ID}" in
     0)
-        cmd_args+=("--use_dft_loss true") 
+        cmd_args+=(--use_dft_loss true)
         ;;
     1)
-        cmd_args+=("--lora_rank 16 --use_rslora true") 
+        cmd_args+=(--lora_rank 16 --use_rslora true)
         ;;
     2)
-        cmd_args+=("--image_max_pixels 131072") 
+        cmd_args+=(--image_max_pixels 131072)
         ;;
     3)
-        cmd_args+=("--image_max_pixels 262144") 
+        cmd_args+=(--image_max_pixels 262144)
         ;;
     4)
-        cmd_args+=("--neftune_noise_alpha 5") 
+        cmd_args+=(--neftune_noise_alpha 5)
         ;;
 esac
 
