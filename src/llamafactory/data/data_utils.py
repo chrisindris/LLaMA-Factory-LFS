@@ -17,14 +17,12 @@ from enum import StrEnum, unique
 from typing import TYPE_CHECKING, Any, Optional, TypedDict, Union
 
 import fsspec
-from datasets import DatasetDict, concatenate_datasets, interleave_datasets
+from datasets import Dataset, DatasetDict, IterableDataset, concatenate_datasets, interleave_datasets
 
 from ..extras import logging
 
 
 if TYPE_CHECKING:
-    from datasets import Dataset, IterableDataset
-
     from ..hparams import DataArguments
 
 
@@ -82,6 +80,107 @@ def merge_dataset(
         raise ValueError(f"Unknown mixing strategy: {data_args.mix_strategy}.")
 
 
+def _content_key(prompt: Any, response: Any) -> str:
+    r"""Stable content fingerprint for aligned `_prompt` / `_response` fields."""
+    if prompt is None and response is None:
+        return ""
+    return json.dumps({"prompt": prompt, "response": response}, ensure_ascii=False, sort_keys=True, default=str)
+
+
+def _iter_eval_datasets(
+    eval_dataset: Union["Dataset", "IterableDataset", dict[str, "Dataset"]],
+) -> list[Union["Dataset", "IterableDataset"]]:
+    if isinstance(eval_dataset, dict):
+        return [data for data in eval_dataset.values() if data is not None]
+    return [eval_dataset]
+
+
+def _eval_names_subset_of_train(data_args: "DataArguments") -> bool:
+    train_names = set(data_args.dataset or [])
+    eval_names = set(data_args.eval_dataset or [])
+    return bool(train_names and eval_names and eval_names <= train_names)
+
+
+def _collect_eval_overlap_keys(
+    eval_dataset: Union["Dataset", "IterableDataset", dict[str, "Dataset"]],
+) -> tuple[set[str], set[str]]:
+    r"""Collect eval `_question_id`s and prompt/response fingerprints from map-style eval sets."""
+    eval_ids: set[str] = set()
+    eval_contents: set[str] = set()
+    skipped_streaming = False
+    for dataset in _iter_eval_datasets(eval_dataset):
+        if not isinstance(dataset, Dataset):
+            skipped_streaming = True
+            continue
+        columns = getattr(dataset, "column_names", None) or []
+        if "_question_id" in columns:
+            for qid in dataset["_question_id"]:
+                if qid is None or qid == "":
+                    continue
+                eval_ids.add(str(qid))
+        if "_prompt" in columns and "_response" in columns:
+            for prompt, response in zip(dataset["_prompt"], dataset["_response"], strict=True):
+                key = _content_key(prompt, response)
+                if key:
+                    eval_contents.add(key)
+
+    if skipped_streaming:
+        logger.warning_rank0(
+            "`exclude_eval_from_train` skipped streaming eval dataset(s); map-style eval is required to collect holdout keys."
+        )
+    return eval_ids, eval_contents
+
+
+def _exclude_eval_rows_from_train(
+    dataset: Union["Dataset", "IterableDataset"],
+    eval_ids: set[str],
+    eval_contents: set[str],
+) -> Union["Dataset", "IterableDataset"]:
+    if not eval_ids and not eval_contents:
+        return dataset
+
+    def _keep(example: dict[str, Any]) -> bool:
+        qid = example.get("_question_id")
+        if qid not in (None, "") and str(qid) in eval_ids:
+            return False
+        key = _content_key(example.get("_prompt"), example.get("_response"))
+        return not (key and key in eval_contents)
+
+    return dataset.filter(_keep)
+
+
+def _split_test_size(size: float) -> int | float:
+    r"""Match `val_size` units: integer count if `size > 1`, otherwise a fraction."""
+    return int(size) if size > 1 else size
+
+
+def _downsample_train_to_val_size_equivalent(
+    dataset: Union["Dataset", "IterableDataset"],
+    size: float,
+    seed: int,
+    streaming: bool,
+) -> Union["Dataset", "IterableDataset"]:
+    r"""Keep the train slice `--val_size` would have kept; discard the rest (do not use it as eval)."""
+    if streaming:
+        discarded = int(size)
+        logger.info_rank0(
+            f"`val_size_equivalent={size}`: skipping {discarded} streamed examples as unused val-equivalent; "
+            "eval_dataset is the real eval."
+        )
+        return dataset.skip(discarded)
+
+    test_size = _split_test_size(size)
+    split_result = dataset.train_test_split(test_size=test_size, seed=seed)
+    n_full = len(dataset)
+    n_train = len(split_result["train"])
+    n_discarded = len(split_result["test"])
+    logger.info_rank0(
+        f"`val_size_equivalent={size}`: keeping {n_train}/{n_full} train examples "
+        f"(discarded {n_discarded} as unused val-equivalent; eval_dataset is the real eval)."
+    )
+    return split_result["train"]
+
+
 def split_dataset(
     dataset: Optional[Union["Dataset", "IterableDataset"]],
     eval_dataset: Optional[Union["Dataset", "IterableDataset", dict[str, "Dataset"]]],
@@ -111,10 +210,17 @@ def split_dataset(
                 eval_dict["validation"] = dataset.take(int(data_args.val_size))
                 train_dict["train"] = dataset.skip(int(data_args.val_size))
             else:
-                val_size = int(data_args.val_size) if data_args.val_size > 1 else data_args.val_size
+                val_size = _split_test_size(data_args.val_size)
                 split_result = dataset.train_test_split(test_size=val_size, seed=seed)
                 train_dict["train"] = split_result["train"]
                 eval_dict["validation"] = split_result["test"]
+        elif data_args.val_size_equivalent > 1e-6:
+            train_dict["train"] = _downsample_train_to_val_size_equivalent(
+                dataset,
+                data_args.val_size_equivalent,
+                seed,
+                streaming=data_args.streaming,
+            )
         else:
             train_dict["train"] = dataset
 
@@ -127,6 +233,46 @@ def split_dataset(
                 eval_dataset = eval_dataset.shuffle(buffer_size=data_args.buffer_size, seed=seed)
 
             eval_dict["validation"] = eval_dataset
+
+    if (
+        data_args.exclude_eval_from_train
+        and data_args.eval_dataset
+        and "train" in train_dict
+        and eval_dict
+        and not _eval_names_subset_of_train(data_args)
+    ):
+        eval_ids, eval_contents = _collect_eval_overlap_keys(
+            {key: value for key, value in eval_dict.items() if value is not None}
+        )
+        if eval_ids or eval_contents:
+            train_dataset = train_dict["train"]
+            before = len(train_dataset) if isinstance(train_dataset, Dataset) else None
+            train_ids: set[str] = set()
+            if isinstance(train_dataset, Dataset) and "_question_id" in (train_dataset.column_names or []):
+                train_ids = {str(qid) for qid in train_dataset["_question_id"] if qid not in (None, "")}
+            train_dict["train"] = _exclude_eval_rows_from_train(train_dataset, eval_ids, eval_contents)
+            dropped = None if before is None else before - len(train_dict["train"])
+            missing = sorted(eval_ids - train_ids) if train_ids else []
+            if dropped is None:
+                logger.info_rank0(
+                    f"Excluding eval overlap from train ({len(eval_ids)} eval question_ids, "
+                    f"{len(eval_contents)} eval content keys)."
+                )
+            else:
+                logger.info_rank0(
+                    f"Excluded {dropped}/{before} train examples overlapping eval_dataset "
+                    f"({len(eval_ids)} eval question_ids, {len(eval_contents)} eval content keys)."
+                )
+            if missing:
+                logger.info_rank0(f"eval question_ids not found in train: {missing}")
+        else:
+            logger.warning_rank0(
+                "`exclude_eval_from_train` is enabled but eval_dataset has no `_question_id` or prompt/response keys."
+            )
+    elif data_args.exclude_eval_from_train and _eval_names_subset_of_train(data_args):
+        logger.info_rank0(
+            "Skipping `exclude_eval_from_train`: eval dataset names are a subset of train dataset names."
+        )
 
     return train_dict, eval_dict
 
