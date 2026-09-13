@@ -10,6 +10,8 @@ The [dataset_info.json](dataset_info.json) contains all available datasets. If y
 
 **CoT train mix** (Nibi): set `dataset: Scene30k,SpatialSSRL_coldstart,3DThinker10k` with `mix_strategy: concat` so each epoch includes all three. Example: `examples/train_lora/nibi_qwen2_5vl_lora_sft_CoT_traineval.yaml` and `models/qwen2_5vl_lora_sft_CoT/`.
 
+The frozen 16-row probe (`Scene30k_eval16`, `SpatialSSRL_eval16`, `3DThinker10k_eval16` in `data/cot_eval16/`) is sliced from those parent files. With `exclude_eval_from_train` (default on), the loader drops those `question_id`s from train when they are used as `eval_dataset`. Use `val_size_equivalent: 0.1` (with `val_size: 0`) to keep that 16-row eval but downsample train to the size `--val_size 0.1` would have left, minus any remaining holdout overlap.
+
 H5-backed datasets keep annotation path strings and decode images lazily through `src/llamafactory/data/data_packing/h5_image_store.py` (no need to unpack JPEG trees for Spatial-SSRL or 3DThinker-10k). Scene30k paths that point at another cluster’s ScanNet root are remapped via `SCANNET_H5_DIR`.
 
 ### QUESTION_ID stamping (prediction dumps)

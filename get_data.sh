@@ -89,9 +89,9 @@ if [[ ${PRESET} == "FULL_SETUP_LATEST" ]]; then
   # apptainer (optional); see `scripts/sysconfig.json`
 
   # annotations; see `data/dataset_info.json`
-  hf download --max-workers=4 cvis-tmu/Scene30K --repo-type dataset --revision 4e9bc1a04479fedfbb6ee791b7cd55fc6a2804f5 
-  hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type dataset --revision bfa0a5a95683fa71c5a8b28b6560e2d5b7b71f0c 
-  hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset --revision 476dff589138ba1f87258d676fb1a7fb1dfa24ff 
+  hf download --max-workers=4 cvis-tmu/Scene30K --repo-type dataset --revision cb95b1d90e903d7e187822a82d3048fa83b8d896 
+  hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type dataset --revision 1df383987669bed64185e793f1c8136911a7b7ea 
+  hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset --revision d4bc8d8b4eca4c2e61135888f9e4f1721c9dedc7 
 
 fi
 
