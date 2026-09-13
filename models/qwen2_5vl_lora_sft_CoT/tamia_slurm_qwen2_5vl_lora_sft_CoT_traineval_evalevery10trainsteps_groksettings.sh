@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps_groksettings-%j.out
 #SBATCH --cpus-per-task=48
-#SBATCH --time=0-21:00:00
+#SBATCH --time=0-19:00:00
 #SBATCH --mem=0
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
@@ -16,7 +16,7 @@
 #  Prereqs:
 #  - Create ${PROJECT_DIR}/data/control_tokens.yaml (token -> description dict for desc_init) --> DONE!
 #  - Ensure all datasets have only the think and answer tags -> DONE!
-#  - Ensure that the 16 eval samples we use are the SAME, and that of them we have 8 from Scene30k, 4 from SpatialSSRL, and 4 from 3Dthinker (perhaps the first 4 or 8 questions of each used in the eval split), and that we train on the entire dataset.
+#  - Ensure that the 16 eval samples we use are the SAME (8 Scene30k + 4 SpatialSSRL + 4 3DThinker). Train on the parent mixes minus those frozen question_ids (`exclude_eval_from_train`).
 #  - Check with AI (give it the llamafactory output instructions and the settings we are using) to suggest alternative optimizers (adam/badam/galore/apollo) [though this is more for memory] or lora settings. Perhaps nonzero --lora-dropout could help? -> keep adam, use nonzero --lora-dropout
 #
 # --- TamIA wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k) on H100 (80GB) GPUs. Identical to tamia_qwen2_5vl_lora_sft_CoT_traineval.sh, but: ---
@@ -24,7 +24,7 @@
 # 1. Every 10 training steps we perform evaluation on the SAME 16 eval examples.; will involve --eval_steps=10, --eval_on_start=True (both of those should use only 16 examples), possibly --eval_strategy=steps, prediction_loss_only=false? Maybe --do-predict=True to do predictions on the test set also, although this would likely want to do predictions on the whole test set which we don't want? 
 # --> Eval of 4384 eval examples (batch size 1, 4 GPUs => 1024 steps) takes ~90 mins; specifically, it was 1:34:55 for the training and 1:35:14 total so it takes about 20 seconds for overhead
 # --> therefore 16 examples (4 steps) should take ~20 seconds each and about 20 seconds for overhead (40 seconds); let's be generous and give 1 min per eval
-# --> evaluating every 10 steps means (for 685 steps per epoch) 68 rounds
+# --> evaluating every 10 steps means (for 616 steps per epoch with val_size_equivalent=0.1) 62 rounds
 # --> therefore, eval 16 examples every 10 steps should only take 1 extra hour
 # 2. We could change --repetition_penalty=1.1 to slightly prevent repetition, though this does not affect the training, only the eval output. We'd want to adjust this for when we are benchmarking.
 # Changes (tokens):
@@ -79,7 +79,7 @@ EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps_groksett
 # ----- DEFAULT ARGUMENTS -----
 export STARTING_EPOCH="${STARTING_EPOCH:-0}"
 export ENDING_EPOCH="${ENDING_EPOCH:-1}"
-export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-685}" # Value determined based on the settings. The default value of this should be equal to 4 / num_of_gpus_used * 685
+export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-616}" # val_size_equivalent=0.1 on 43835 -> 39451, minus X eval16 overlaps; 4 GPU, bs=2, ga=8 -> 616 if X=0. Scale as 4/num_gpus * 616
 export TOTAL_EPOCHS="${TOTAL_EPOCHS:-5}" # 
 
 # ----- ARGUMENT PARSING -----
@@ -266,7 +266,9 @@ cmd_args=(
     --eval_on_start true # to eval on the base qwen
     --eval_strategy steps # to ensure that we eval every 10 steps not every 10 epochs
     --eval_dataset Scene30k_eval16,SpatialSSRL_eval16,3DThinker10k_eval16 # frozen 8+4+4 probe
-    --val_size 0 # train on the full mix; eval_dataset cannot be combined with val_size>0
+    --val_size 0 # eval_dataset cannot be combined with val_size>0
+    --val_size_equivalent 0.1 # train size as if val_size=0.1 (39451 before dropping X eval16 overlaps)
+    --exclude_eval_from_train true # drop the 16 holdout question_ids from Scene30k/SpatialSSRL/3DThinker train mixes
     --lora_dropout 0.05 # reduce LoRA adapter overfitting
     --compute_accuracy true # we will compute the token accuracy too
     --repetition_penalty 1.1 # slightly prevents repetition; this is only for eval, we'd want to set this when benchmarking.
@@ -278,7 +280,7 @@ cmd_args=(
     --lr_scheduler_type cosine_with_min_lr
     --lr_scheduler_kwargs '{"min_lr_rate": 0.1}' # min lr is 10% of max; quote JSON so bash does not split on the colon/space
     --eval_prediction_mode generate # more accurate to external benchmark behaviour, though it would take longer
-    --eval_dump_max_new_tokens 256 # hard cap for dump generate; keeps NCCL eval gathers from waiting on 2048-token loops
+    --eval_dump_max_new_tokens 1024 # hard cap for dump generate; keeps NCCL eval gathers from waiting on 2048-token loops
     --do_sample false # greedy dump generate; sampling looped <|im_start|> and timed out NCCL
     --learning_rate 2.0e-5 # half of the previous max lr
 )

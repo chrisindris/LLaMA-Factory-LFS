@@ -1,4 +1,4 @@
-[WARNING|2026-08-26 16:50:22] llamafactory.extras.misc:155 >> Version checking has been disabled, may lead to unexpected behaviors.
+[WARNING|2026-09-12 22:41:43] llamafactory.extras.misc:163 >> Version checking has been disabled, may lead to unexpected behaviors.
 usage: llamafactory-cli [-h] [--model_name_or_path MODEL_NAME_OR_PATH]
                         [--adapter_name_or_path ADAPTER_NAME_OR_PATH]
                         [--adapter_folder ADAPTER_FOLDER]
@@ -98,8 +98,11 @@ usage: llamafactory-cli [-h] [--model_name_or_path MODEL_NAME_OR_PATH]
                         [--eval_num_beams EVAL_NUM_BEAMS]
                         [--ignore_pad_token_for_loss [IGNORE_PAD_TOKEN_FOR_LOSS]]
                         [--no_ignore_pad_token_for_loss] [--val_size VAL_SIZE]
+                        [--val_size_equivalent VAL_SIZE_EQUIVALENT]
                         [--eval_on_each_dataset [EVAL_ON_EACH_DATASET]]
-                        [--packing PACKING] [--neat_packing [NEAT_PACKING]]
+                        [--exclude_eval_from_train [EXCLUDE_EVAL_FROM_TRAIN]]
+                        [--no_exclude_eval_from_train] [--packing PACKING]
+                        [--neat_packing [NEAT_PACKING]]
                         [--tool_format TOOL_FORMAT]
                         [--default_system DEFAULT_SYSTEM]
                         [--enable_thinking [ENABLE_THINKING]]
@@ -341,6 +344,7 @@ usage: llamafactory-cli [-h] [--model_name_or_path MODEL_NAME_OR_PATH]
                         [--train_predictions_file TRAIN_PREDICTIONS_FILE]
                         [--save_eval_predictions [SAVE_EVAL_PREDICTIONS]]
                         [--eval_prediction_mode {teacher_forced,generate}]
+                        [--eval_dump_max_new_tokens EVAL_DUMP_MAX_NEW_TOKENS]
                         [--eval_predictions_file EVAL_PREDICTIONS_FILE]
                         [--allow_warm_start_resume [ALLOW_WARM_START_RESUME]]
                         [--no_allow_warm_start_resume]
@@ -682,9 +686,31 @@ options:
   --val_size, --val-size VAL_SIZE
                         Size of the validation set, should be an integer or a
                         float in range `[0,1)`. (default: 0.0)
+  --val_size_equivalent, --val-size-equivalent VAL_SIZE_EQUIVALENT
+                        Downsample the train set to the size `--val_size`
+                        would have left, but keep `eval_dataset` as eval (the
+                        discarded slice is unused). Same units as `val_size`:
+                        a float in `[0,1)` or an integer. Requires
+                        `eval_dataset`. Cannot be combined with `val_size`.
+                        `exclude_eval_from_train` then drops any remaining
+                        eval overlap (`X`). (default: 0.0)
   --eval_on_each_dataset, --eval-on-each-dataset [EVAL_ON_EACH_DATASET]
                         Whether or not to evaluate on each dataset separately.
                         (default: False)
+  --exclude_eval_from_train, --exclude-eval-from-train [EXCLUDE_EVAL_FROM_TRAIN]
+                        Drop train rows that also appear in `eval_dataset` (by
+                        `_question_id` or prompt/response contents). No-op
+                        when `eval_dataset` is unset, and skipped when every
+                        eval dataset name is also a train dataset name (eval-
+                        on-train smoke). Disable with
+                        `--no_exclude_eval_from_train`. (default: True)
+  --no_exclude_eval_from_train, --no-exclude-eval-from-train
+                        Drop train rows that also appear in `eval_dataset` (by
+                        `_question_id` or prompt/response contents). No-op
+                        when `eval_dataset` is unset, and skipped when every
+                        eval dataset name is also a train dataset name (eval-
+                        on-train smoke). Disable with
+                        `--no_exclude_eval_from_train`. (default: False)
   --packing PACKING     Enable sequences packing in training. Will
                         automatically enable in pre-training. (default: None)
   --neat_packing, --neat-packing [NEAT_PACKING]
@@ -1605,7 +1631,16 @@ options:
   --eval_prediction_mode, --eval-prediction-mode {teacher_forced,generate}
                         How to obtain MODEL_OUTPUT for eval dumps:
                         teacher_forced or generate. Uses GeneratingArguments
-                        when mode is generate. (default: generate)
+                        when mode is generate. Dump generate is greedy, capped
+                        by eval_dump_max_new_tokens, and runs after the loss
+                        eval loop so it cannot desynchronize HuggingFace's
+                        per-batch NCCL gather. (default: generate)
+  --eval_dump_max_new_tokens, --eval-dump-max-new-tokens EVAL_DUMP_MAX_NEW_TOKENS
+                        Hard cap on new tokens for dump-mode model.generate()
+                        (eval and train dumps). Does not change
+                        GeneratingArguments.max_new_tokens used by
+                        predict_with_generate. 0 disables the extra cap and
+                        keeps the configured max_new_tokens. (default: 256)
   --eval_predictions_file, --eval-predictions-file EVAL_PREDICTIONS_FILE
                         Path pattern for eval prediction JSON. Default:
                         {output_dir}/eval_predictions_ep{epoch}.json.

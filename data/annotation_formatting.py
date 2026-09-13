@@ -32,16 +32,22 @@ scene30k = pd.read_parquet(scene30k_path) # we load as a table.
 
 # TODO: adjust the formatting of the 'system' entry.
 # "You only need to provide *ONE* correct answer selecting from the options listed below. For example, if you think the correct answer is 'A. Above' from 'A. Above B. Under C. Front D. Behind', your response should **only** be '<answer>A. Above</answer>'."
-_3dthinker10k_answerinstruction = re.match(r".*\n\[Answer Instruction\]\n(.*)\n\n\[Question\]\n.*", _3dthinker10k[0]["system"], re.DOTALL).group(1) # confirmed to be in all 10000 prompts
+#_3dthinker10k_answerinstruction = re.match(r".*\n\[Answer Instruction\]\n(.*)\n\n\[Question\]\n.*", _3dthinker10k[0]["system"], re.DOTALL).group(1) # confirmed to be in all 10000 prompts
 # _3dthinker10k_answerinstruction_new = "\n[Answer Instruction]\n" + general_formatting_instruction_multiplechoice + "\n\n[Question]\n"
 
 for i in range(len(_3dthinker10k)):
+    _3dthinker10k_answerinstruction = re.match(r".*\n\[Answer Instruction\]\n(.*)\n\n\[Question\]\n.*", _3dthinker10k[i]["system"], re.DOTALL).group(1)
     # fix the system entry
     _3dthinker10k[i]["system"] = _3dthinker10k[i]["system"].replace(_3dthinker10k_answerinstruction, general_formatting_instruction_multiplechoice)
-    # TODO: remove the <output_3D>\n at the beginning, and also remove anything between </think> and <answer>.
+    _3dthinker10k[i]["system"] = "".join(_3dthinker10k[i]['system'].split('.')[:["[Question]" in x for x in _3dthinker10k[i]['system'].split('.')].index(True)]) # remove the question from the system prompt
+    # TODO: remove the <output_3D>\n at the beginning, and also remove anything between </think> and <answer>. -> done!
     _3dthinker10k[i]["output"] = _3dthinker10k[i]['output'][12:]
     extra_content = re.search(r"</think>(.*?)<answer>", _3dthinker10k[i]['output'], re.DOTALL).group()
     _3dthinker10k[i]["output"] = _3dthinker10k[i]["output"].replace(extra_content, "</think><answer>")
+    # take the preceeding <image> tag section from system, remove the '\n's and put it at the start of the question
+    image_portion = _3dthinker10k[i]['system'][::-1][_3dthinker10k[i]['system'][::-1].index("<image>"[::-1]):][::-1].replace("\n", "") # get the image tags (without the newlines)
+    _3dthinker10k[i]["system"] = _3dthinker10k[i]['system'][::-1][:_3dthinker10k[i]['system'][::-1].index("<image>"[::-1])][::-1] # remove the image part
+    _3dthinker10k[i]["instruction"] = image_portion + " " + _3dthinker10k[i]["instruction"] # add the image part
 
 # ---- spatialssrl ----
 
@@ -54,15 +60,16 @@ spatialssrl_answerformat_4 = "You FIRST think about the reasoning process as an 
 
 for i in range(len(spatialssrl)):
 
-    # TODO: ensure that we get the multiple choice formatting and extract the full answer string also.
+    # rename instruction to the unused 'input' to be the query (which includes the image tags, as the queery should). Ensure that the input is for putting think and answer tags. Add the extra space.
+    new_instruction = spatialssrl[i]['instruction'].replace(spatialssrl_answerformat, "")
+    new_instruction = new_instruction.replace(spatialssrl_answerformat_2, "")
+    new_instruction = new_instruction.replace(spatialssrl_answerformat_3, "")
+    new_instruction = new_instruction.replace(spatialssrl_answerformat_4, "")
+    new_instruction = new_instruction.replace("image<image>", "image <image>") # NOTE: does this need to be added as a special tag? ANS: no.
+    spatialssrl[i]['input'] = new_instruction
 
-    # ensure that the instruction is for putting think and answer tags. Add the extra space.
-    new_instruction = spatialssrl[i]['instruction'].replace(spatialssrl_answerformat, " " + general_formatting_instruction)
-    new_instruction = new_instruction.replace(spatialssrl_answerformat_2, " " + general_formatting_instruction)
-    new_instruction = new_instruction.replace(spatialssrl_answerformat_3, " " + general_formatting_instruction)
-    new_instruction = new_instruction.replace(spatialssrl_answerformat_4, " " + general_formatting_instruction)
-    new_instruction = new_instruction.replace("image<image>", "image <image>") # NOTE: does this need to be added as a special tag?
-    spatialssrl[i]['instruction'] = new_instruction
+    # put the instruction as a separate column 'instruction' to be the system prompt.
+    spatialssrl[i]['instruction'] = general_formatting_instruction 
 
     # replace the output from the \boxed format to think and answer
     spatialssrl_output = re.match(r"(.*)\\boxed{(.*)}.*", spatialssrl[i]['output'], re.DOTALL)
@@ -72,7 +79,7 @@ for i in range(len(spatialssrl)):
 
     # if we are in the case where we have a multiple choice, we replace the single char answer with the full answer.
     try:
-        r = re.match(r".*(A\..*)\s(B\..*)\s(C\..*)\s(D\.\s[^\.]+)\..*", spatialssrl[i]['instruction'], re.DOTALL)
+        r = re.match(r".*(A\..*)\s(B\..*)\s(C\..*)\s(D\.\s[^\.]+)\..*", spatialssrl[i]['input'], re.DOTALL)
         answers = [r.group(i) for i in range(1, 5)] # put the extracted possible answers in a list
         answer = answers[ord(answer)-ord('A')] # this will map the answer \in {'A', 'B', 'C', 'D'} to the full extracted answer. This has been confirmed to copy correctly.
     except AttributeError:
@@ -85,6 +92,12 @@ for i in range(len(spatialssrl)):
 
 scene30k["formatting_instruction"] = general_formatting_instruction # add a new column which we can use as a system prompt
 
+# ensure that the question_with_image_tags is formatted as "<image>...<image> <question>" rather than "<question> <image>...<image>"
+def scene30k_move_image_tags(question_with_image_tags):
+    tags_start_idx = question_with_image_tags.index("<image>")
+    return question_with_image_tags[tags_start_idx:] + " " + question_with_image_tags[:tags_start_idx].strip()
+    
+scene30k['question_with_image_tags'] = scene30k['question_with_image_tags'].map(lambda x : scene30k_move_image_tags(x))
 
 # === output ===
 

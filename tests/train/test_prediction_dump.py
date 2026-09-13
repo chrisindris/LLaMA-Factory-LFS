@@ -19,8 +19,6 @@ from types import SimpleNamespace
 import torch
 from transformers import Seq2SeqTrainer
 
-from llamafactory.train.sft.trainer import CustomSeq2SeqTrainer
-
 from llamafactory.hparams.finetuning_args import FinetuningArguments
 from llamafactory.train.prediction_dump import (
     IGNORE_INDEX,
@@ -32,6 +30,7 @@ from llamafactory.train.prediction_dump import (
     resolve_prediction_dump_path,
     should_record_train_prediction,
 )
+from llamafactory.train.sft.trainer import CustomSeq2SeqTrainer
 
 
 def test_format_epoch_name():

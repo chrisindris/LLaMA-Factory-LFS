@@ -109,9 +109,30 @@ class DataArguments:
         default=0.0,
         metadata={"help": "Size of the validation set, should be an integer or a float in range `[0,1)`."},
     )
+    val_size_equivalent: float = field(
+        default=0.0,
+        metadata={
+            "help": (
+                "Downsample the train set to the size `--val_size` would have left, but keep `eval_dataset` as eval "
+                "(the discarded slice is unused). Same units as `val_size`: a float in `[0,1)` or an integer. "
+                "Requires `eval_dataset`. Cannot be combined with `val_size`. "
+                "`exclude_eval_from_train` then drops any remaining eval overlap (`X`)."
+            )
+        },
+    )
     eval_on_each_dataset: bool = field(
         default=False,
         metadata={"help": "Whether or not to evaluate on each dataset separately."},
+    )
+    exclude_eval_from_train: bool = field(
+        default=True,
+        metadata={
+            "help": (
+                "Drop train rows that also appear in `eval_dataset` (by `_question_id` or prompt/response contents). "
+                "No-op when `eval_dataset` is unset, and skipped when every eval dataset name is also a train dataset "
+                "name (eval-on-train smoke). Disable with `--no_exclude_eval_from_train`."
+            )
+        },
     )
     packing: bool | None = field(
         default=None,
@@ -167,6 +188,15 @@ class DataArguments:
         if self.dataset is None and self.val_size > 1e-6:
             raise ValueError("Cannot specify `val_size` if `dataset` is None.")
 
+        if self.dataset is None and self.val_size_equivalent > 1e-6:
+            raise ValueError("Cannot specify `val_size_equivalent` if `dataset` is None.")
+
+        if self.val_size > 1e-6 and self.val_size_equivalent > 1e-6:
+            raise ValueError("Cannot specify both `val_size` and `val_size_equivalent`.")
+
+        if self.val_size_equivalent > 1e-6 and self.eval_dataset is None:
+            raise ValueError("Cannot specify `val_size_equivalent` if `eval_dataset` is None; use `val_size` instead.")
+
         if self.eval_dataset is not None and self.val_size > 1e-6:
             raise ValueError("Cannot specify `val_size` if `eval_dataset` is not None.")
 
@@ -183,6 +213,9 @@ class DataArguments:
 
         if self.streaming and self.val_size > 1e-6 and self.val_size < 1:
             raise ValueError("Streaming mode should have an integer val size.")
+
+        if self.streaming and self.val_size_equivalent > 1e-6 and self.val_size_equivalent < 1:
+            raise ValueError("Streaming mode should have an integer val_size_equivalent.")
 
         if self.streaming and self.max_samples is not None:
             raise ValueError("`max_samples` is incompatible with `streaming`.")
