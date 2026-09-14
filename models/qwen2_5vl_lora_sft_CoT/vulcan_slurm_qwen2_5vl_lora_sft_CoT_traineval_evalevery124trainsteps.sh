@@ -1,20 +1,25 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps-%j.out
+#SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps-%j.out
 #SBATCH --cpus-per-task=64
-#SBATCH --time=1-00:00:00
+#SBATCH --time=0-00:30:00
 #SBATCH --mem=0
 #SBATCH --gpus-per-node=4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 #SBATCH --mail-type=ALL
 
-# ===  vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps.sh  ===
+# ===  vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps.sh  ===
+# Same as vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps.sh except:
+# - train logging and eval every 124 rather than every 10 steps (saves time)
+# - approx same eval set size as when we use val_size = 0.1 (i.e. 616 steps per epoch; note that before it was 617 but we used 620)
+# - excluded eval from the training set (no leakage)
+# - #TODO: how important is it for SFT and later RL if we don't have the <image> tokens in the same part of the input (prompt, instruction, etc)?
 #  
 #  Prereqs:
 #  - Create ${PROJECT_DIR}/data/control_tokens.yaml (token -> description dict for desc_init) --> DONE!
 #  - Ensure all datasets have only the think and answer tags -> DONE!
-#  - Ensure that the 16 eval samples we use are the SAME, and that of them we have 8 from Scene30k, 4 from SpatialSSRL, and 4 from 3Dthinker (perhaps the first 4 or 8 questions of each used in the eval split), and that we train on the entire dataset.
+#  - Ensure that the 16 eval samples we use are the SAME (8 Scene30k + 4 SpatialSSRL + 4 3DThinker). Train on the parent mixes minus those frozen question_ids (`exclude_eval_from_train`).
 #  - Check with AI (give it the llamafactory output instructions and the settings we are using) to suggest alternative optimizers (adam/badam/galore/apollo) [though this is more for memory] or lora settings. Perhaps nonzero --lora-dropout could help? -> keep adam, use nonzero --lora-dropout
 #
 # --- vulcan wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k) on H100 (80GB) GPUs. Identical to vulcan_qwen2_5vl_lora_sft_CoT_traineval.sh, but: ---
@@ -22,7 +27,7 @@
 # 1. Every 10 training steps we perform evaluation on the SAME 16 eval examples.; will involve --eval_steps=10, --eval_on_start=True (both of those should use only 16 examples), possibly --eval_strategy=steps, prediction_loss_only=false? Maybe --do-predict=True to do predictions on the test set also, although this would likely want to do predictions on the whole test set which we don't want? 
 # --> Eval of 4384 eval examples (batch size 1, 4 GPUs => 1024 steps) takes ~90 mins; specifically, it was 1:34:55 for the training and 1:35:14 total so it takes about 20 seconds for overhead
 # --> therefore 16 examples (4 steps) should take ~20 seconds each and about 20 seconds for overhead (40 seconds); let's be generous and give 1 min per eval
-# --> evaluating every 10 steps means (for 685 steps per epoch) 68 rounds
+# --> evaluating every 10 steps means (for 616 steps per epoch with val_size_equivalent=0.1) 62 rounds
 # --> therefore, eval 16 examples every 10 steps should only take 1 extra hour
 # 2. We could change --repetition_penalty=1.1 to slightly prevent repetition, though this does not affect the training, only the eval output. We'd want to adjust this for when we are benchmarking.
 # Changes (tokens):
@@ -50,7 +55,7 @@
 #
 # Submit from models/qwen2_5vl_lora_sft_CoT/ so SLURM out/
 # lands next to this script:
-#   sbatch vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps.sh
+#   sbatch vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps.sh
 #
 # Uses vulcan_qwen2_5vl_lora_sft_CoT_traineval.yaml via the shared
 # worker (CLUSTER-detected path).
@@ -69,7 +74,7 @@
 # - we have some hardcoded paths in use, perhaps we can put them into env.sh? -> done!
 # - make sure that the YAML we write to is named according to the experiment. -> done!
 
-EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps"
+EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps"
 
 # --- for reading cluster-specific settings ---
 . $(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "env.sh")
@@ -79,7 +84,7 @@ export DATASET_INFO_PATH=$(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~
 # ----- DEFAULT ARGUMENTS -----
 export STARTING_EPOCH="${STARTING_EPOCH:-0}"
 export ENDING_EPOCH="${ENDING_EPOCH:-1}"
-export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-685}" # Value determined based on the settings. The default value of this should be equal to 4 / num_of_gpus_used * 685
+export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-616}" # val_size_equivalent=0.1 on 43835 -> 39451, minus X eval16 overlaps; 4 GPU, bs=2, ga=8 -> 616 if X=0. Scale as 4/num_gpus * 616
 export TOTAL_EPOCHS="${TOTAL_EPOCHS:-5}" # 
 
 # ----- ARGUMENT PARSING -----
@@ -132,20 +137,24 @@ fi
 echo "SLURM_TMPDIR: $SLURM_TMPDIR"
 echo "RUNNING_MODE: $RUNNING_MODE"
 
-# --- set the paths to the datasets on this cluster ---
-
 # these should be exported through sysconfig.json 
 # export SCANNET_H5_DIR="/scratch/i/indrisch/ScanNet_h5/scans"
 # export SPATIALSSRL_H5_DIR="/scratch/i/indrisch/Spatial-SSRL_images_h5"
 # export THINKER10K_H5_DIR="/scratch/i/indrisch/3DThinker10K_images_h5/"
 
+# Must match data/dataset_info.json (formatted CoT mix). Job 445260 staged the
+# unformatted Scene30k parquet, which has no formatting_instruction column.
+# export SCENE30K_ANN_SRC="${HF_HUB_CACHE}/datasets--cvis-tmu--Scene30K/snapshots/84a202a417f455f197879495c81b1095f1cf8f53/train-00000-of-00001.with_question_id.formatted.parquet"
+# export SPATIALSSRL_ANN_SRC="${HF_HUB_CACHE}/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/d8e2fabf27e68f41c997b4e7532c67758668c0bd/SFT-coldstart.with_question_id.formatted.json"
+# export THINKER10K_ANN_SRC="${HF_HUB_CACHE}/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/4dd9eb7f24b03c4e9f1265c7e177325cadec9d2d/3dthinker10k_cot.with_question_id.formatted.jsonl"
+
 export SCENE30K_ANN_SRC="$(jq -r '.["Scene30k"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SCENE30K_ANN_SRC: ${SCENE30K_ANN_SRC}"
 export SPATIALSSRL_ANN_SRC="$(jq -r '.["SpatialSSRL_coldstart"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SPATIALSSRL_ANN_SRC: ${SPATIALSSRL_ANN_SRC}"
 export THINKER10K_ANN_SRC="$(jq -r '.["3DThinker10k"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "THINKER10K_ANN_SRC: ${THINKER10K_ANN_SRC}"
 
-export SCENE30K_EVAL16_SRC="$(jq -r '.["Scene30k_eval16"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SCENE30K_EVAL16_SRC: ${SCENE30K_EVAL16_SRC}"
-export SPATIALSSRL_EVAL16_SRC="$(jq -r '.["SpatialSSRL_eval16"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SPATIALSSRL_EVAL16_SRC: ${SPATIALSSRL_EVAL16_SRC}"
-export THINKER10K_EVAL16_SRC="$(jq -r '.["3DThinker10k_eval16"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "THINKER10K_EVAL16_SRC: ${THINKER10K_EVAL16_SRC}"
+export SCENE30K_ANN_SRC="$(jq -r '.["Scene30k"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SCENE30K_ANN_SRC: ${SCENE30K_ANN_SRC}"
+export SPATIALSSRL_ANN_SRC="$(jq -r '.["SpatialSSRL_coldstart"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SPATIALSSRL_ANN_SRC: ${SPATIALSSRL_ANN_SRC}"
+export THINKER10K_ANN_SRC="$(jq -r '.["3DThinker10k"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "THINKER10K_ANN_SRC: ${THINKER10K_ANN_SRC}"
 
 
 # --- set the path to the correct model (including its tokenizer) ---
@@ -218,12 +227,12 @@ TEMPLATE_YAML="${PROJECT_DIR}/examples/train_lora/trillium_qwen2_5vl_lora_sft_Co
 # |------------
 # | Create a copy of TEMPLATE_YAML at ...epoch${ENDING_EPOCH}.yaml (cluster-prefixed).
 # | Always set:
-# |   output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_ep${ENDING_EPOCH}/
+# |   output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_ep${ENDING_EPOCH}/
 # |   stop_at_global_step: $((ENDING_EPOCH * STEPS_PER_EPOCH))
 # |
 # | If STARTING_EPOCH > 0 (resume):
 # |   resume_from_checkpoint / adapter_name_or_path:
-# |     ${PROJECT_DIR}/saves/.../CoT_traineval_evalevery10trainsteps_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))
+# |     ${PROJECT_DIR}/saves/.../CoT_traineval_evalevery124trainsteps_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))
 # |   allow_warm_start_resume / require_resume_bundle as warm-start defaults
 # |
 # | If STARTING_EPOCH == 0 (fresh start, like trillium_*_CoT_traineval.yaml):
@@ -238,14 +247,22 @@ if [ -z "${YAML_FILE:-}" ]; then
   echo "YAML_FILE: ${YAML_FILE}"
 fi
 
-export CACHE_DIR="${HF_HUB_CACHE:-${HF_HOME}}"
-echo "CACHE_DIR: $CACHE_DIR"
-
-export OUTPUT_DIR_SAVES="saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_ep${ENDING_EPOCH}/" && echo "OUTPUT_DIR_SAVES: ${OUTPUT_DIR_SAVES}"
+export OUTPUT_DIR_SAVES="saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_ep${ENDING_EPOCH}/" && echo "OUTPUT_DIR_SAVES: ${OUTPUT_DIR_SAVES}"
 export OUTPUT_DIR="${PROJECT_DIR}/${OUTPUT_DIR_SAVES}" && echo "OUTPUT_DIR: ${OUTPUT_DIR}"
 
+# The Trillium template hard-codes cache_dir=/scratch/indrisch/huggingface/hub.
+# That path does not exist on vulcan; transformers then cannot resolve
+# Qwen/Qwen2.5-VL-7B-Instruct under HF_HUB_OFFLINE=1.
+export CACHE_DIR="${HF_HUB_CACHE}" && echo "CACHE_DIR: ${CACHE_DIR}"
+QWEN_CACHE="${CACHE_DIR}/models--Qwen--Qwen2.5-VL-7B-Instruct"
+if [[ ! -d "${QWEN_CACHE}/snapshots" ]]; then
+  echo "Error: Qwen2.5-VL-7B-Instruct not found under ${CACHE_DIR}" >&2
+  echo "Expected: ${QWEN_CACHE}" >&2
+  exit 1
+fi
+
 if [[ "${STARTING_EPOCH}" -gt 0 ]]; then
-  export RESUME_CKPT="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))"
+  export RESUME_CKPT="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))"
 else
   export RESUME_CKPT=null
 fi
@@ -299,13 +316,15 @@ cmd_args=(
     --preprocessing_num_workers "${PREPROCESSING_NUM_WORKERS}"
     --dataloader_num_workers "${DATALOADER_NUM_WORKERS}"
     --ddp_timeout "${TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC}" # avoid NCCL timeouts
-    --train_prediction_interval 10 # save the training every 10 steps
+    --train_prediction_interval 124 # save the training every 124 steps
     --train_prediction_max_samples 0 # no cap
-    --eval_steps 10 # to run an evaluation (and log it) every 10 training steps.
+    --eval_steps 124 # to run an evaluation (and log it) every 124 training steps.
     --eval_on_start true # to eval on the base qwen
     --eval_strategy steps # to ensure that we eval every 10 steps not every 10 epochs
     --eval_dataset Scene30k_eval16,SpatialSSRL_eval16,3DThinker10k_eval16 # frozen 8+4+4 probe
-    --val_size 0 # train on the full mix; eval_dataset cannot be combined with val_size>0
+    --val_size 0 # eval_dataset cannot be combined with val_size>0
+    --val_size_equivalent 0.1 # train size as if val_size=0.1 (39451 before dropping X eval16 overlaps)
+    --exclude_eval_from_train true # drop the 16 holdout question_ids from Scene30k/SpatialSSRL/3DThinker train mixes
     --lora_dropout 0.05 # reduce LoRA adapter overfitting
     --compute_accuracy true # we will compute the token accuracy too
     --repetition_penalty 1.1 # slightly prevents repetition; this is only for eval, we'd want to set this when benchmarking.

@@ -38,14 +38,14 @@ COUNTS = {
     "3DThinker10k": 4,
 }
 
-DEFAULT_CSV = Path("debug/logging_analysis/out/eval_compare/detailed_predictions.csv")
-DEFAULT_DATASET_INFO = Path("data/dataset_info.json")
-DEFAULT_OUT_DIR = Path("data/cot_eval16")
+DEFAULT_CSV = Path("/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/debug/logging_analysis/out/eval_compare/detailed_predictions.csv")
+DEFAULT_DATASET_INFO = Path("/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/data/dataset_info.json")
+DEFAULT_OUT_DIR = Path("/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/data/cot_eval16")
 
 LOCAL_FALLBACKS = {
-    "Scene30k": Path("data/train-00000-of-00001.with_question_id.formatted.parquet"),
-    "SpatialSSRL_coldstart": Path("data/SFT-coldstart.with_question_id.formatted.json"),
-    "3DThinker10k": Path("data/3dthinker10k_cot.with_question_id.formatted.jsonl"),
+    "Scene30k": Path("/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/d094c4d0297f42915f6bdbd744504fbc96b3a646/train-00000-of-00001.with_question_id.unifiedformat.parquet"),
+    "SpatialSSRL_coldstart": Path("/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/e4359d66da7adc78993f2ad163253c81eb0baf70/SFT-coldstart.with_question_id.unifiedformat.json"),
+    "3DThinker10k": Path("/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/a64cb299ed3e8892f9f75f35607890b64e232451/3dthinker10k_cot.with_question_id.unifiedformat.jsonl"),
 }
 
 OUTPUT_NAMES = {

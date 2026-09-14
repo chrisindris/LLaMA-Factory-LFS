@@ -516,9 +516,11 @@ elif [[ "$CLUSTER" == "VULCAN" ]]; then
 
 		module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
 
-		echo "Copying venv to local storage..."
-		cp -a "${VENV_LLAMAFACTORY}" ${SLURM_TMPDIR}/venv_llamafactory_py313
-		source ${SLURM_TMPDIR}/venv_llamafactory_py313/bin/activate
+    echo "activating venv ${VENV_LLAMAFACTORY}"
+    source "${VENV_LLAMAFACTORY}/bin/activate"
+		#echo "Copying venv to local storage..."
+		#cp -a "${VENV_LLAMAFACTORY}" ${SLURM_TMPDIR}/venv_llamafactory_py313
+		#source ${SLURM_TMPDIR}/venv_llamafactory_py313/bin/activate
 
 		export PYTHONUNBUFFERED=1
 		export NCCL_DEBUG=INFO

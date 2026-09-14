@@ -96,9 +96,9 @@ if [[ ${PRESET} == "FULL_SETUP_LATEST" ]]; then
   # base models 
   hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct --revision cc594898137f460bfe9f0759e9844b3ce807cfb5
 
-  hf download --max-workers=4 cvis-tmu/Scene30K --repo-type dataset --revision cb95b1d90e903d7e187822a82d3048fa83b8d896 
-  hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type dataset --revision 1df383987669bed64185e793f1c8136911a7b7ea 
-  hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset --revision d4bc8d8b4eca4c2e61135888f9e4f1721c9dedc7 
+  hf download --max-workers=4 cvis-tmu/Scene30K --repo-type dataset --revision d094c4d0297f42915f6bdbd744504fbc96b3a646 
+  hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type dataset --revision a64cb299ed3e8892f9f75f35607890b64e232451 
+  hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset --revision e4359d66da7adc78993f2ad163253c81eb0baf70 
 
 fi
 

@@ -147,10 +147,6 @@ echo "RUNNING_MODE: $RUNNING_MODE"
 # export THINKER10K_ANN_SRC="${HF_HUB_CACHE}/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/4dd9eb7f24b03c4e9f1265c7e177325cadec9d2d/3dthinker10k_cot.with_question_id.formatted.jsonl"
 export DATASET_INFO_PATH=$(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "dataset_info.json")
 
-export SCENE30K_ANN_SRC="/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/cb95b1d90e903d7e187822a82d3048fa83b8d896/train-00000-of-00001.with_question_id.unifiedformat.parquet"
-export SPATIALSSRL_ANN_SRC="/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/d4bc8d8b4eca4c2e61135888f9e4f1721c9dedc7/SFT-coldstart.with_question_id.unifiedformat.json"
-export THINKER10K_ANN_SRC="/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/1df383987669bed64185e793f1c8136911a7b7ea/3dthinker10k_cot.with_question_id.unifiedformat.jsonl"
-
 export SCENE30K_ANN_SRC="$(jq -r '.["Scene30k"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SCENE30K_ANN_SRC: ${SCENE30K_ANN_SRC}"
 export SPATIALSSRL_ANN_SRC="$(jq -r '.["SpatialSSRL_coldstart"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SPATIALSSRL_ANN_SRC: ${SPATIALSSRL_ANN_SRC}"
 export THINKER10K_ANN_SRC="$(jq -r '.["3DThinker10k"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "THINKER10K_ANN_SRC: ${THINKER10K_ANN_SRC}"

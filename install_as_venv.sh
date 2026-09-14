@@ -59,6 +59,75 @@ lmod_preflight() {
 	fi
 }
 
+# DeepSpeed 0.18 cpu_arch() always returns -march=x86-64-v3 on x86, while
+# simd_width() sets -D__AVX512__ from CPU flags. AVX-512 intrinsics in
+# cpu_adam then fail to inline (target specific option mismatch). CFLAGS /
+# CXXFLAGS do not reach this JIT: DeepSpeed passes cpu_arch() as extra_cflags.
+# Patch after pip install; the Alliance wheel does not prebuild CPUAdam.
+patch_deepspeed_cpu_arch() {
+	python - <<'PY'
+from pathlib import Path
+import site
+
+old_line = "        return '-march=x86-64-v3'"
+replacement = (
+    "        flags = cpu_info.get('flags', '')\n"
+    "        flags_str = ' '.join(flags) if isinstance(flags, (list, tuple, set)) else str(flags)\n"
+    "        if 'avx512' in flags_str:\n"
+    "            return '-march=x86-64-v4'\n"
+    "        return '-march=x86-64-v3'"
+)
+marker = "return '-march=x86-64-v4'"
+
+patched = False
+for site_dir in site.getsitepackages():
+    builder_path = Path(site_dir) / "deepspeed" / "ops" / "op_builder" / "builder.py"
+    if not builder_path.is_file():
+        continue
+    builder_text = builder_path.read_text()
+    if marker in builder_text:
+        print(f"Already patched {builder_path}")
+        patched = True
+        break
+    if old_line not in builder_text:
+        raise SystemExit(f"ERROR: expected cpu_arch() return not found in {builder_path}")
+    builder_path.write_text(builder_text.replace(old_line, replacement, 1))
+    print(f"Patched {builder_path}")
+    patched = True
+    break
+if not patched:
+    raise SystemExit("ERROR: DeepSpeed builder.py not found in site-packages")
+PY
+}
+
+prebuild_cpu_adam() {
+	if [[ "${DS_BUILD_CPU_ADAM}" != "1" ]]; then
+		echo "Skipping CPUAdam prebuild (DS_BUILD_CPU_ADAM=${DS_BUILD_CPU_ADAM})"
+		return 0
+	fi
+	if [[ -z "${VENV_LLAMAFACTORY}" ]]; then
+		echo "ERROR: VENV_LLAMAFACTORY is not set; cannot prebuild CPUAdam"
+		exit 1
+	fi
+
+	export TORCH_EXTENSIONS_DIR="${VENV_LLAMAFACTORY%/}/torch_extensions"
+	mkdir -p "${TORCH_EXTENSIONS_DIR}"
+
+	local root
+	for root in \
+		"${TORCH_EXTENSIONS_DIR}" \
+		"${HOME}/.cache/torch_extensions" \
+		"/tmp/torch_extensions" \
+		"${SLURM_TMPDIR}/.cache/torch_extensions"; do
+		if [[ -d "$root" ]]; then
+			find "$root" -type d -name "cpu_adam" -prune -exec rm -rf {} +
+		fi
+	done
+
+	echo "Prebuilding DeepSpeed CPUAdam into ${TORCH_EXTENSIONS_DIR}"
+	python -c "import deepspeed; deepspeed.ops.op_builder.CPUAdamBuilder().load(); print('cpu_adam OK')"
+}
+
 # if SLURM_TMPDIR is not set, set it to /tmp
 if [ -z "$SLURM_TMPDIR" ]; then
 	SLURM_TMPDIR="/tmp"
@@ -85,9 +154,9 @@ export DISABLE_VERSION_CHECK=1 # since the automatic detector doesn't automatica
 # --- build CPU Adam if we have set DS_BUILD_CPU_ADAM, BUILD_UTILS and DS_BUILD_OPS to 1 ---
 
 # needed when we get AttributeError: 'DeepSpeedCPUAdam' object has no attribute 'ds_opt_adam'
-export DS_BUILD_CPU_ADAM=${DS_BUILD_CPU_ADAM:-0}
-export BUILD_UTILS=${BUILD_UTILS:-0}
-export DS_BUILD_OPS=${DS_BUILD_OPS:-0}
+export DS_BUILD_CPU_ADAM=${DS_BUILD_CPU_ADAM:-1}
+export BUILD_UTILS=${BUILD_UTILS:-1}
+export DS_BUILD_OPS=${DS_BUILD_OPS:-1}
 
 # Auto-detect AVX-512 support and set compiler flags for building CPU extensions.
 # If `DS_FORCE_BUILD_CPU_ADAM=1` is set in the environment, force build regardless
@@ -116,14 +185,16 @@ fi
 if [[ "$VENV_LLAMAFACTORY" == *py313* ]]; then
 	module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
 	virtualenv --no-download "$VENV_LLAMAFACTORY"
-	source "$VENV_LLAMAFACTORY"
-	pip install --no-cache-dir --upgrade pip packaging wheel setuptools
+	source "${VENV_LLAMAFACTORY}/bin/activate"
+	python -m pip install --no-cache-dir --upgrade pip packaging wheel setuptools
 	mkdir -p wheels
 	pushd wheels
 	wget https://github.com/Dao-AILab/flash-attention/releases/download/v2.8.3.post1/flash_attn-2.8.3.post1+cu12torch2.7cxx11abiFALSE-cp313-cp313-linux_x86_64.whl
 	wget https://github.com/Dao-AILab/causal-conv1d/releases/download/v1.6.2/causal_conv1d-1.6.1+cu12torch2.6cxx11abiFALSE-cp313-cp313-linux_x86_64.whl
 	popd
-	pip install -e . -r requirements/metrics.txt -r requirements/deepspeed.txt -r requirements/dev.txt -r requirements/logging_analysis.txt h5py wandb ray sentry-sdk liger-kernel flash_linear_attention wheels/causal_conv1d-1.6.1+cu12torch2.6cxx11abiFALSE-cp313-cp313-linux_x86_64.whl wheels/flash_attn-2.8.3.post1+cu12torch2.7cxx11abiFALSE-cp313-cp313-linux_x86_64.whl
+	python -m pip install -e . -r requirements/metrics.txt -r requirements/deepspeed.txt -r requirements/dev.txt -r requirements/logging_analysis.txt h5py wandb ray sentry-sdk liger-kernel flash_linear_attention wheels/causal_conv1d-1.6.1+cu12torch2.6cxx11abiFALSE-cp313-cp313-linux_x86_64.whl wheels/flash_attn-2.8.3.post1+cu12torch2.7cxx11abiFALSE-cp313-cp313-linux_x86_64.whl
+	patch_deepspeed_cpu_arch
+	prebuild_cpu_adam
 	exit 0
 elif [[ "$VENV_LLAMAFACTORY" == *cu12* ]]; then
 	echo "Setting up environment for CUDA 12.x"
@@ -166,25 +237,6 @@ else
 	python3 -m pip install packaging psutil pandas pillow decorator scipy matplotlib platformdirs pyarrow sympy wandb ray h5py "transformers==4.57.1" flash_linear_attention causal_conv1d -e ".[torch,metrics,deepspeed,liger-kernel]"
 fi
 
-# DeepSpeed's CPUAdam builder defaults to -march=x86-64-v3, which is too weak
-# for the AVX-512 intrinsics used by cpu_adam.cpp on Killarney. Rewrite the
-# installed builder so AVX-512-capable nodes compile CPUAdam with native CPU
-# flags and can produce cpu_adam.so.
-python3 - <<'PY'
-from pathlib import Path
-import site
-
-replacement = "        if 'avx512' in cpu_info['flags'] or 'avx512f' in cpu_info['flags']:\n            return '-march=native'\n        return '-march=x86-64-v3'"
-
-for site_dir in site.getsitepackages():
-    builder_path = Path(site_dir) / 'deepspeed' / 'ops' / 'op_builder' / 'builder.py'
-    if not builder_path.is_file():
-        continue
-    builder_text = builder_path.read_text()
-    old_line = "        return '-march=x86-64-v3'"
-    if old_line in builder_text and replacement not in builder_text:
-        builder_path.write_text(builder_text.replace(old_line, replacement, 1))
-        print(f'Patched {builder_path}')
-    break
-PY
+patch_deepspeed_cpu_arch
+prebuild_cpu_adam
 popd >/dev/null

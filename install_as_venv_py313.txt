@@ -1,3 +1,6 @@
+export DS_BUILD_CPU_ADAM=1 
+export BUILD_UTILS=1 
+export DS_BUILD_OPS=1 
 module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
 virtualenv --no-download ../venv_llamafactory_py313
 source ../venv_llamafactory_py313/
