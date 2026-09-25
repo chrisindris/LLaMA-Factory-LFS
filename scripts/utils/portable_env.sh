@@ -501,10 +501,9 @@ portable_stage_assets() {
 	_portable_link "${PROJECT_DIR}/data/h5/Spatial-SSRL_images_h5" "${PORTABLE_SRC_SPATIALSSRL_H5:-}" || rc=1
 	_portable_link "${PROJECT_DIR}/data/h5/3DThinker10K_images_h5" "${PORTABLE_SRC_THINKER10K_H5:-}" || rc=1
 
-	# Forward the site.env annotation redirects. The registry's recorded paths
-	# belong to the original author and are unreadable for anyone else, so without
-	# these two overrides Scene30k and SpatialSSRL_coldstart cannot be staged at
-	# all -- and the design forbids editing data/dataset_info.json to fix it.
+	# Forward site.env redirects for external annotations. Scene30k and
+	# SpatialSSRL_coldstart need local sources on this cluster; 3DThinker10k
+	# defaults to the checked-in, repo-relative file unless overridden.
 	local -a gen_args=(
 		--source "${PROJECT_DIR}/data/dataset_info.json"
 		--dest "${PROJECT_DIR}/data/annotations/dataset_info.json"
@@ -514,6 +513,8 @@ portable_stage_assets() {
 		gen_args+=(--override "Scene30k=${PORTABLE_SRC_SCENE30K_ANNOTATION}")
 	[[ -n "${PORTABLE_SRC_SPATIALSSRL_ANNOTATION:-}" ]] &&
 		gen_args+=(--override "SpatialSSRL_coldstart=${PORTABLE_SRC_SPATIALSSRL_ANNOTATION}")
+	[[ -n "${PORTABLE_SRC_THINKER10K_ANNOTATION:-}" ]] &&
+		gen_args+=(--override "3DThinker10k=${PORTABLE_SRC_THINKER10K_ANNOTATION}")
 
 	echo "portable_env: generating data/annotations/dataset_info.json" >&2
 	python3 "${PROJECT_DIR}/scripts/make_portable_dataset_info.py" "${gen_args[@]}" || rc=1

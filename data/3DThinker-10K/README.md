@@ -6,7 +6,13 @@
 |------|-------------|
 | `3DThinker10k` | CoT SFT (10k rows): system=`mindcube_input`, user=`text_input`, target=`text_output` |
 
-Prepared annotations:
+The registered `3DThinker10k` dataset uses the checked-in annotation file with question IDs:
+
+```text
+data/3DThinker-10K/out/3dthinker10k_cot.with_question_id.jsonl
+```
+
+The preparation script also produces the original annotation file without question IDs:
 
 ```text
 data/3DThinker-10K/out/3dthinker10k_cot.jsonl

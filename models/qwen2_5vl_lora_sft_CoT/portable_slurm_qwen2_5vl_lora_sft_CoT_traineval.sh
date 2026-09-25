@@ -3,8 +3,8 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
 #SBATCH --cpus-per-task=96
-#SBATCH --time=1-00:00:00
-#SBATCH --gpus-per-node=h100:4
+#SBATCH --time=04:00:00
+#SBATCH --gpus-per-node=h100:2
 
 # Portable wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k).
 #
@@ -16,9 +16,9 @@
 #   mkdir -p out
 #   sbatch portable_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh
 #
-# Site flags as needed. Defaults are Trillium-shaped (h100:4, no --mem); override
+# Site flags as needed. Defaults are Trillium-shaped (h100:2, no --mem); override
 # on clusters that differ, e.g. Killarney L40S:
-#   sbatch -A <account> --gpus-per-node=l40s:4 --mem=0 \
+#   sbatch -A <account> --gpus-per-node=l40s:2 --mem=0 \
 #     --mail-user=<you> --mail-type=ALL portable_slurm_...sh
 #
 # One-time setup on a login node:
@@ -26,6 +26,14 @@
 #   PREFLIGHT=1      ./portable_body_qwen2_5vl_lora_sft_CoT_traineval.sh
 set -euo pipefail
 
-WRAPPER_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+# SLURM copies the batch script to /var/spool/slurmd/job*/slurm_script, so
+# BASH_SOURCE points at the spool copy — not the repo. Prefer SLURM_SUBMIT_DIR
+# (cwd at sbatch time) when the body lives next to the submitted wrapper.
+BODY_NAME="portable_body_qwen2_5vl_lora_sft_CoT_traineval.sh"
+if [[ -n "${SLURM_SUBMIT_DIR:-}" && -f "${SLURM_SUBMIT_DIR}/${BODY_NAME}" ]]; then
+	WRAPPER_DIR="$(cd "${SLURM_SUBMIT_DIR}" && pwd -P)"
+else
+	WRAPPER_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+fi
 
-exec "${WRAPPER_DIR}/portable_body_qwen2_5vl_lora_sft_CoT_traineval.sh" "$@"
+exec "${WRAPPER_DIR}/${BODY_NAME}" "$@"

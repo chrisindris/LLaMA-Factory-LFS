@@ -121,7 +121,7 @@ run_in_apptainer() {
 	# Use the CUDA toolkit inside the image, not a host module path.
 	export APPTAINERENV_CUDA_HOME=/usr/local/cuda
 
-	apptainer run --nv "${overlay[@]}" \
+	apptainer run --nv --fakeroot "${overlay[@]}" \
 		"${binds[@]}" \
 		-W "${SLURM_TMPDIR:-/tmp}" \
 		--env HF_HOME="${HF_HOME}" \

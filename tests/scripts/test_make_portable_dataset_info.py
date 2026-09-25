@@ -283,6 +283,20 @@ def test_required_relative_entry_that_exists_passes(tmp_path):
     assert dest.exists()
 
 
+def test_thinker10k_portable_registry_reads_question_ids(tmp_path):
+    source = REPO_ROOT / "data" / "dataset_info.json"
+    dest = tmp_path / "annotations" / "dataset_info.json"
+
+    assert mpdi.main(["--source", str(source), "--dest", str(dest), "--no-symlinks", "--require", "3DThinker10k"]) == 0
+
+    entry = json.loads(dest.read_text(encoding="utf-8"))["3DThinker10k"]
+    annotation = (dest.parent / entry["file_name"]).resolve()
+    with annotation.open(encoding="utf-8") as rows:
+        first_row = json.loads(next(rows))
+
+    assert first_row["question_id"] == "3DThinker10k_0"
+
+
 def test_required_hub_only_entry_is_not_flagged(tmp_path):
     # An hf_hub_url entry has no file_name to check; requiring it must not fail.
     source = tmp_path / "dataset_info.json"

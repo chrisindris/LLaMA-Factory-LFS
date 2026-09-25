@@ -869,7 +869,7 @@
     }
   },
   "3DThinker10k": {
-    "file_name": "3DThinker-10K/out/3dthinker10k_cot.jsonl",
+    "file_name": "3DThinker-10K/out/3dthinker10k_cot.with_question_id.jsonl",
     "formatting": "alpaca",
     "columns": {
       "system": "system",
