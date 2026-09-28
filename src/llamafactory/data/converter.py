@@ -16,12 +16,14 @@ import os
 import re
 from abc import abstractmethod
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import TYPE_CHECKING, Any, Optional, Union
 
 from ..extras import logging
 from ..extras.constants import IMAGE_PLACEHOLDER
-from .data_utils import Role
 from .data_packing.h5_image_store import can_resolve_h5_image
+from .data_utils import Role
+
 
 if TYPE_CHECKING:
     from datasets import Dataset, IterableDataset
@@ -35,6 +37,25 @@ if TYPE_CHECKING:
 
 
 logger = logging.get_logger(__name__)
+
+
+@lru_cache(maxsize=65536)
+def _resolve_media_path(original: str, media_dir: str, context: tuple) -> str:
+    """Cache successful path checks for immutable assets within a preprocessing worker.
+
+    Context includes PID, cwd and H5 roots. Keep real-file precedence; failures
+    raise rather than being cached, so newly staged assets can be retried.
+    """
+    media_path = os.path.join(media_dir, original)
+    if os.path.isfile(media_path):
+        return media_path
+    if os.path.isfile(original):
+        return original
+    if can_resolve_h5_image(original):
+        return original
+    if media_path != original and can_resolve_h5_image(media_path):
+        return media_path
+    raise ValueError(f"Failed to resolve image path: original={original!r}, media_path={media_path!r}")
 
 
 @dataclass
@@ -82,7 +103,7 @@ class DatasetConverter:
             new_content_parts = []
             last_end = 0
             for match in image_pattern.finditer(content):
-                new_content_parts.append(content[last_end:match.start()])
+                new_content_parts.append(content[last_end : match.start()])
                 if placeholder_index in selected_indices:
                     new_content_parts.append(image_placeholder)
                 placeholder_index += 1
@@ -97,9 +118,6 @@ class DatasetConverter:
 
     def _find_medias(self, medias: Union["MediaType", list["MediaType"], None]) -> Optional[list["MediaType"]]:
         r"""Optionally concatenate media path to media dir when loading from local disk."""
-        
-        logger.info_rank0(f"DEBUG _find_medias: load_from={self.dataset_attr.load_from}, media_dir={self.data_args.media_dir}")
-        
         if medias is None:
             return None
         elif not isinstance(medias, list):
@@ -110,23 +128,14 @@ class DatasetConverter:
             medias = medias[:]
 
         if self.dataset_attr.load_from in ["script", "file"]:
+            context = (
+                os.getpid(),
+                os.getcwd(),
+                *(os.environ.get(key) for key in ("SCANNET_H5_DIR", "SPATIALSSRL_H5_DIR", "THINKER10K_H5_DIR")),
+            )
             if isinstance(medias[0], str):
                 for i in range(len(medias)):
-                    original = medias[i]
-                    media_path = os.path.join(self.data_args.media_dir, original)
-                    if os.path.isfile(media_path):  # filesystem path under media_dir
-                        medias[i] = media_path
-                    elif os.path.isfile(original):  # already absolute / cwd-relative file
-                        medias[i] = original
-                    elif can_resolve_h5_image(original) or can_resolve_h5_image(media_path):
-                        # Keep a resolvable path string for lazy H5 decode in mm_plugin.
-                        # Prefer the annotation-relative key (original) for index normalize.
-                        medias[i] = original if can_resolve_h5_image(original) else media_path
-                    else:
-                        logger.warning_rank0_once(
-                            f"Media {media_path} does not exist in `media_dir` and is not in H5 indexes."
-                        )
-                        raise ValueError(f"Failed to resolve image path: original={original!r}, media_path={media_path!r}")
+                    medias[i] = _resolve_media_path(medias[i], self.data_args.media_dir, context)
             elif isinstance(medias[0], list):  # for processed video frames
                 # medias is a list of lists, e.g., [[frame1.jpg, frame2.jpg], [frame3.jpg, frame4.jpg]]
                 for i in range(len(medias)):
@@ -134,14 +143,9 @@ class DatasetConverter:
                         original = medias[i][j]
                         if not isinstance(original, str):
                             continue
-                        media_path = os.path.join(self.data_args.media_dir, original)
-                        if os.path.isfile(media_path):
-                            medias[i][j] = media_path
-                        elif os.path.isfile(original):
-                            medias[i][j] = original
-                        elif can_resolve_h5_image(original) or can_resolve_h5_image(media_path):
-                            medias[i][j] = original if can_resolve_h5_image(original) else media_path
-                        else:
+                        try:
+                            medias[i][j] = _resolve_media_path(original, self.data_args.media_dir, context)
+                        except ValueError:
                             logger.warning_rank0_once(
                                 f"Media {medias[i][j]} does not exist in `media_dir` and is not in H5 indexes."
                             )
@@ -544,4 +548,3 @@ def align_dataset(
         remove_columns=column_names,
         **kwargs,
     )
-

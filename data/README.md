@@ -12,6 +12,13 @@ The [dataset_info.json](dataset_info.json) contains all available datasets. If y
 
 H5-backed datasets keep annotation path strings and decode images lazily through `src/llamafactory/data/data_packing/h5_image_store.py` (no need to unpack JPEG trees for Spatial-SSRL or 3DThinker-10k). Scene30k paths that point at another cluster’s ScanNet root are remapped via `SCANNET_H5_DIR`.
 
+Format conversion caches resolved media paths (up to 65,536) and ScanNet scene directories
+(up to 4,096) per worker context, avoiding repeated filesystem checks for questions sharing
+the same images. Image selection, order, and real-file precedence are unchanged. Cache keys
+include the process, working directory, and relevant H5 roots; failed lookups are retried.
+Stage assets before preprocessing and keep them unchanged during a run. These in-memory
+caches are separate from the Hugging Face dataset cache and require no configuration.
+
 ### Portable (repo-relative) CoT job
 
 `models/qwen2_5vl_lora_sft_CoT/portable_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh`
