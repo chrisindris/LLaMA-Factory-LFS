@@ -52,6 +52,10 @@ def eval_logit_processor(logits: "torch.Tensor", labels: "torch.Tensor") -> "tor
         else:  # moe models have aux loss
             logits = logits[1]
 
+    if logits.dim() == 2:
+        # CustomSeq2SeqTrainer eval already returns token ids when skip_logits avoids [B, S, V].
+        return logits
+
     if logits.dim() != 3:
         raise ValueError("Cannot process the logits.")
 

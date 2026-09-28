@@ -879,6 +879,7 @@
     "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/e4359d66da7adc78993f2ad163253c81eb0baf70/SFT-coldstart.with_question_id.unifiedformat.json",
     "formatting": "alpaca",
     "columns": {
+      "system": "instruction",
       "prompt": "input",
       "response": "output",
       "images": "images",

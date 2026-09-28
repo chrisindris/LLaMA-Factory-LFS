@@ -21,6 +21,7 @@
 import inspect
 import os
 from collections.abc import Callable
+from contextlib import nullcontext
 from functools import WRAPPER_ASSIGNMENTS, partial, wraps
 from types import MethodType
 from typing import TYPE_CHECKING, Any, Optional, Union
@@ -38,6 +39,107 @@ if TYPE_CHECKING:
 
 
 logger = logging.get_logger(__name__)
+
+_ZERO3_GATHER_CKPT_LOGGED = False
+
+
+def _deepspeed_zero3_active() -> bool:
+    try:
+        from transformers.integrations import is_deepspeed_zero3_enabled
+
+        return bool(is_deepspeed_zero3_enabled())
+    except Exception:
+        return False
+
+
+def _gather_module_params(module: Optional["torch.nn.Module"]):
+    if module is None:
+        return nullcontext()
+    params = [p for p in module.parameters() if p is not None]
+    if not params:
+        return nullcontext()
+    try:
+        from deepspeed.runtime.zero.partition_parameters import GatheredParameters
+    except ImportError:
+        return nullcontext()
+    return GatheredParameters(params, modifier_rank=None)
+
+
+def _deepspeed_checkpoint(function: Callable, *args: Any, **kwargs: Any) -> Any:
+    r"""Checkpoint that gathers ZeRO-3 shards before recompute.
+
+    DeepSpeed's stock activation checkpoint (job 1209872) still recomputes into
+    0-width partitions: ``tensor a (0) vs b (3584)`` on the first training
+    backward. Gather the block's parameters on every rank, then recompute.
+    """
+    global _ZERO3_GATHER_CKPT_LOGGED
+    if not _ZERO3_GATHER_CKPT_LOGGED:
+        logger.info_rank0("Using ZeRO-3 gather-on-recompute checkpointing.")
+        _ZERO3_GATHER_CKPT_LOGGED = True
+
+    if kwargs:
+        function = partial(function, **kwargs)
+    if isinstance(function, partial):
+        module: Optional[torch.nn.Module] = getattr(function.func, "__self__", None)
+    else:
+        module = getattr(function, "__self__", None)
+
+    mixed: list[Any] = []
+    tensors: list[torch.Tensor] = []
+    for arg in args:
+        if torch.is_tensor(arg):
+            mixed.append(None)
+            tensors.append(arg)
+        else:
+            mixed.append(arg)
+
+    class _Zero3GatherCheckpoint(torch.autograd.Function):
+        @staticmethod
+        def forward(ctx: Any, *ts: torch.Tensor) -> Any:
+            ctx.save_for_backward(*ts)
+            rebuilt: list[Any] = []
+            idx = 0
+            for item in mixed:
+                if item is None:
+                    rebuilt.append(ts[idx])
+                    idx += 1
+                else:
+                    rebuilt.append(item)
+            with torch.no_grad():
+                return function(*rebuilt)
+
+        @staticmethod
+        def backward(ctx: Any, *grad_outputs: Any) -> Any:
+            ts = ctx.saved_tensors
+            rebuilt: list[Any] = []
+            tracked: list[torch.Tensor] = []
+            idx = 0
+            for item in mixed:
+                if item is None:
+                    tensor = ts[idx].detach()
+                    if tensor.is_floating_point():
+                        tensor.requires_grad_(True)
+                    rebuilt.append(tensor)
+                    tracked.append(tensor)
+                    idx += 1
+                else:
+                    rebuilt.append(item)
+            with _gather_module_params(module):
+                with torch.enable_grad():
+                    outputs = function(*rebuilt)
+            if not isinstance(outputs, tuple):
+                outputs = (outputs,)
+            to_back: list[torch.Tensor] = []
+            grads: list[Any] = []
+            for output, grad in zip(outputs, grad_outputs, strict=False):
+                if torch.is_tensor(output) and output.requires_grad:
+                    to_back.append(output)
+                    grads.append(grad)
+            if to_back:
+                torch.autograd.backward(to_back, grads)
+            return tuple(tensor.grad for tensor in tracked)
+
+    return _Zero3GatherCheckpoint.apply(*tensors)
 
 
 def _get_gradient_checkpointing_kwargs(model_args: "ModelArguments") -> dict[str, Any]:
@@ -117,8 +219,12 @@ def get_custom_gradient_checkpointing_func(gradient_checkpointing_func: Callable
                     break  # assume the first tensor is always the hidden states
 
         # Frozen ViT blocks still sit in the graph when patch_embed outputs require grad.
+        # Checkpoint them (job 1209289 OOM without it) via gather-on-recompute under
+        # ZeRO-3 (jobs 1208382/1208740/1209872: 0-width shard vs hidden 3584).
         input_requires_grad = any(torch.is_tensor(arg) and arg.requires_grad for arg in args)
         if module_has_grad or input_requires_grad:
+            if _deepspeed_zero3_active():
+                return _deepspeed_checkpoint(func, *args)
             return gradient_checkpointing_func(func, *args, **kwargs)
 
         return func(*args, **kwargs)
@@ -146,7 +252,15 @@ def _gradient_checkpointing_enable(
     if use_unsloth_gc:
         gradient_checkpointing_func = get_unsloth_gradient_checkpointing_func()
     else:
-        gradient_checkpointing_func = partial(checkpoint, **gradient_checkpointing_kwargs)
+        # ZeRO-3 is often not active yet at load_model time. Dispatch at call time.
+        torch_ckpt = partial(checkpoint, **gradient_checkpointing_kwargs)
+
+        def _runtime_checkpoint(function, *args, **kwargs):
+            if _deepspeed_zero3_active():
+                return _deepspeed_checkpoint(function, *args)
+            return torch_ckpt(function, *args, **kwargs)
+
+        gradient_checkpointing_func = _runtime_checkpoint
 
     gradient_checkpointing_func = get_custom_gradient_checkpointing_func(gradient_checkpointing_func)
     if "value" in inspect.signature(self._set_gradient_checkpointing).parameters:  # old GC format

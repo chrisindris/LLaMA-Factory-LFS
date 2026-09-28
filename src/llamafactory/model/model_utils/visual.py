@@ -193,6 +193,34 @@ def get_forbidden_modules(config: "PretrainedConfig", finetuning_args: "Finetuni
     return forbidden_modules
 
 
+def apply_frozen_vision_no_grad(model: "PreTrainedModel") -> None:
+    r"""Run a fully frozen vision tower under ``torch.no_grad``.
+
+    Keeps ViT off the autograd graph so ZeRO-3 checkpoint recompute cannot see
+    0-width shards (jobs 1208382/1208740/1209872/1210206) and so 76-image
+    batches do not store every ViT activation (job 1209289). LLM LoRA still
+    receives grads through text embeddings.
+    """
+    visual = getattr(model, "visual", None)
+    if visual is None:
+        inner = getattr(model, "model", None)
+        visual = getattr(inner, "visual", None) if inner is not None else None
+    if visual is None or getattr(visual, "_llamafactory_frozen_no_grad", False):
+        return
+    if any(param.requires_grad for param in visual.parameters()):
+        return
+
+    orig_forward = visual.forward
+
+    def _no_grad_forward(*args, **kwargs):
+        with torch.no_grad():
+            return orig_forward(*args, **kwargs)
+
+    visual.forward = _no_grad_forward
+    visual._llamafactory_frozen_no_grad = True
+    logger.info_rank0("Frozen vision tower will run under torch.no_grad().")
+
+
 def patch_target_modules(
     model: "PreTrainedModel", finetuning_args: "FinetuningArguments", target_modules: list[str]
 ) -> list[str]:

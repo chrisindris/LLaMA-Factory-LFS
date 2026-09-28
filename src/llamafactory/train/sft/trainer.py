@@ -18,6 +18,7 @@
 import json
 import os
 import time
+from contextlib import nullcontext
 from functools import partial
 from types import MethodType
 from typing import TYPE_CHECKING, Any, Optional, Union
@@ -76,6 +77,8 @@ _GENERATE_VISION_GROUPS = (
 )
 # Degenerate Qwen chat-start loops observed in CoT eval dumps (NCCL timeout).
 _DUMP_GENERATE_SUPPRESS_TOKENS = ("<|im_start|>",)
+# Chunked lm_head argmax during eval: 512 * Qwen2.5-VL vocab * 4 bytes ≈ 0.3 GiB, not [B,S,V].
+_EVAL_LM_HEAD_CHUNK_SIZE = 512
 
 
 def _dataset_from_question_id(question_id: str) -> str:
@@ -702,27 +705,81 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         table = wandb.Table(columns=columns, data=data)
         wandb.log({"eval_predictions": table}, step=step)
 
-    def _forward_logits_for_dump(self, model: "torch.nn.Module", inputs: dict[str, Any]) -> Optional["torch.Tensor"]:
-        r"""Run a no-grad forward that materializes logits for teacher-forced dumps.
+    def _deepspeed_zero3_enabled(self) -> bool:
+        r"""True if this trainer is running DeepSpeed ZeRO-3.
 
-        Liger fused CE sets ``skip_logits=True`` whenever ``model.training and labels
-        is not None``, so the training forward often returns ``logits=None``. Dropping
-        labels for this diagnostic pass forces logits to be returned without affecting
-        the training loss path.
+        ``transformers.integrations.is_deepspeed_zero3_enabled()`` is a weakref to
+        the HF DeepSpeed config and often returns False later in the run (job
+        1155182 / 919092: eval still partitioned params, detector said no, then
+        per-chunk ``lm_head`` allgathers desynced). Prefer the live engine stage.
         """
-        model_inputs = {k: v for k, v in inputs.items() if k not in _DUMP_NON_MODEL_KEYS}
+        try:
+            from transformers.integrations import is_deepspeed_zero3_enabled
+
+            if is_deepspeed_zero3_enabled():
+                return True
+        except Exception:
+            pass
+
+        candidates: list[Any] = [
+            getattr(self, "deepspeed", None),
+            getattr(self, "model", None),
+            getattr(getattr(self, "accelerator", None), "deepspeed_engine_wrapped", None),
+        ]
+        plugin = getattr(getattr(self, "accelerator", None), "state", None)
+        plugin = getattr(plugin, "deepspeed_plugin", None) if plugin is not None else None
+        if plugin is not None:
+            try:
+                if int(getattr(plugin, "zero_stage", 0) or 0) >= 3:
+                    return True
+            except Exception:
+                pass
+        for obj in candidates:
+            if obj is None:
+                continue
+            engine = getattr(obj, "engine", obj)
+            stage_fn = getattr(engine, "zero_optimization_stage", None)
+            if callable(stage_fn):
+                try:
+                    if int(stage_fn()) >= 3:
+                        return True
+                except Exception:
+                    continue
+        return False
+
+    def _zero3_gather_params(self, module: Optional["torch.nn.Module"]):
+        r"""All-ranks gather of a module's partitioned weights (ZeRO-3).
+
+        Job 919092 hung 3h in eval: rank 0 allgathered lm_head (152064*3584) while
+        other ranks issued a 1-element allgather. Cause: chunked ``lm_head(chunk)``
+        under ZeRO-3 does one param allgather per chunk, and chunk count follows
+        local seq len (21k vs ~6k). Gather once, then argmax locally.
+        """
+        if module is None or not self._deepspeed_zero3_enabled():
+            return nullcontext()
+        params = [p for p in module.parameters() if p is not None]
+        if not params:
+            return nullcontext()
+        try:
+            from deepspeed.runtime.zero.partition_parameters import GatheredParameters
+        except ImportError:
+            return nullcontext()
+        return GatheredParameters(params, modifier_rank=None)
+
+    def _forward_preds_for_dump(self, model: "torch.nn.Module", inputs: dict[str, Any]) -> Optional["torch.Tensor"]:
+        r"""Token ids for teacher-forced dumps without allocating [B, S, vocab].
+
+        Liger fused CE skips logits during training, so a second dump forward used
+        to drop labels and materialize full vocab logits (12+ GiB on long VL rows).
+        Reuse the eval skip_logits + chunked lm_head argmax path instead.
+        """
         was_training = model.training
         try:
-            # Keep train/eval mode as-is for correct dropout/BN, but no_grad for dump.
             with torch.no_grad():
-                outputs = model(**model_inputs)
-            logits = getattr(outputs, "logits", None)
-            if logits is None and isinstance(outputs, (tuple, list)) and len(outputs) > 0:
-                logits = outputs[0] if torch.is_tensor(outputs[0]) else None
-            del outputs
-            return logits
+                _, preds = self._eval_loss_without_vocab_logits(model, inputs, need_token_preds=True)
+            return preds
         except Exception as err:
-            logger.warning_rank0(f"prediction dump logits forward failed: {err}")
+            logger.warning_rank0(f"prediction dump token-id forward failed: {err}")
             return None
         finally:
             if was_training and not model.training:
@@ -731,6 +788,40 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
     def _release_cuda_cache(self) -> None:
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
+
+    def _zero3_engine(self, model: Optional["torch.nn.Module"] = None) -> Optional[Any]:
+        for obj in (
+            getattr(self, "deepspeed", None),
+            getattr(getattr(self, "accelerator", None), "deepspeed_engine_wrapped", None),
+            model,
+            getattr(self, "model", None),
+        ):
+            if obj is None:
+                continue
+            engine = getattr(obj, "engine", obj)
+            if callable(getattr(engine, "empty_partition_cache", None)):
+                return engine
+            if callable(getattr(engine, "zero_optimization_stage", None)):
+                return engine
+        return None
+
+    def _restore_zero3_train_state(self, model: Optional["torch.nn.Module"] = None) -> None:
+        r"""Re-partition ZeRO-3 params after eval generate so training backward is valid.
+
+        Job 1208382: eval_on_start + generate dumps succeeded, then the first
+        training backward failed on all ranks with ``tensor a (0) vs b (3584)`` at
+        dim 1. Generate under ZeRO-3 leaves params AVAILABLE; ``empty_cache``
+        between dump batches can drop those GPU tensors and leave 0-sized shards.
+        """
+        if not self._deepspeed_zero3_enabled():
+            return
+        engine = self._zero3_engine(model)
+        fn = getattr(engine, "empty_partition_cache", None) if engine is not None else None
+        if callable(fn):
+            fn()
+        target = model if model is not None else getattr(self, "model", None)
+        if target is not None and hasattr(target, "train"):
+            target.train()
 
     def _texts_from_teacher_forced(
         self,
@@ -742,22 +833,22 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         tokenizer = self._get_tokenizer()
         if tokenizer is None:
             return []
-        owned_logits = False
+        owned_preds = False
         try:
             if logits is None and model is not None and inputs is not None:
-                logits = self._forward_logits_for_dump(model, inputs)
-                owned_logits = logits is not None
+                logits = self._forward_preds_for_dump(model, inputs)
+                owned_preds = logits is not None
             if logits is None:
                 logger.warning_rank0(
-                    "teacher_forced prediction dump got no logits "
-                    "(Liger may skip them when labels are present; dump forward also failed)."
+                    "teacher_forced prediction dump got no token preds "
+                    "(skip_logits dump forward failed; refusing to materialize full vocab logits)."
                 )
                 return []
             return decode_teacher_forced_batch(
                 logits, labels, tokenizer, skip_special_tokens=self._dump_skip_special_tokens
             )
         finally:
-            if owned_logits:
+            if owned_preds:
                 del logits
                 self._release_cuda_cache()
 
@@ -935,12 +1026,22 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             f"[rank{rank}] generate dump start qids={qids} prompt_lens={prompt_lens} "
             f"max_new_tokens={gen_kwargs.get('max_new_tokens')} do_sample={gen_kwargs.get('do_sample')}"
         )
-        gen_model = self._unwrap_model_for_dump_generate(model)
+        inner_model = self._unwrap_model_for_dump_generate(model)
+        # ZeRO-3 partitions weights. generate() must run on the DeepSpeed engine so
+        # layers gather incrementally; unwrapping forces a full replica and OOMs.
+        zero3 = self._deepspeed_zero3_enabled()
+        gen_model = model if zero3 else inner_model
+        if zero3:
+            gen_kwargs = dict(gen_kwargs)
+            gen_kwargs["synced_gpus"] = True
         was_training = model.training
-        saved_rope_deltas = self._swap_rope_deltas(gen_model, None)
+        saved_rope_deltas = self._swap_rope_deltas(inner_model, None)
         started = time.time()
         try:
-            gen_model.eval()
+            if hasattr(gen_model, "eval"):
+                gen_model.eval()
+            if inner_model is not gen_model and hasattr(inner_model, "eval"):
+                inner_model.eval()
             with torch.no_grad():
                 generated = gen_model.generate(**gen_inputs, **gen_kwargs)
         except Exception as err:
@@ -951,7 +1052,9 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             self._restore_rope_deltas(saved_rope_deltas)
             if was_training:
                 model.train()
-                if gen_model is not model:
+                if inner_model is not model and hasattr(inner_model, "train"):
+                    inner_model.train()
+                if gen_model is not model and gen_model is not inner_model and hasattr(gen_model, "train"):
                     gen_model.train()
 
         texts: list[str] = []
@@ -963,6 +1066,132 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             texts.append(tokenizer.decode(new_tokens, skip_special_tokens=self._dump_skip_special_tokens))
         logger.info(f"[rank{rank}] generate dump done qids={qids} n_new={n_new} elapsed={time.time() - started:.1f}s")
         return texts
+
+    def _unwrap_causal_lm(self, model: "torch.nn.Module") -> "torch.nn.Module":
+        lm = self._unwrap_model_for_dump_generate(model)
+        get_base = getattr(lm, "get_base_model", None)
+        if callable(get_base):
+            try:
+                lm = get_base()
+            except Exception:
+                pass
+        if not hasattr(lm, "lm_head") and hasattr(lm, "model") and getattr(lm, "model", None) is not lm:
+            inner = lm.model
+            if hasattr(inner, "lm_head"):
+                lm = inner
+        return lm
+
+    def _eval_backbone_and_lm_head(
+        self, model: "torch.nn.Module"
+    ) -> tuple["torch.nn.Module", Optional["torch.nn.Module"], Optional["torch.nn.Module"]]:
+        lm = self._unwrap_causal_lm(model)
+        lm_head = getattr(lm, "lm_head", None)
+        backbone = getattr(lm, "model", None)
+        if backbone is lm:
+            backbone = None
+        return lm, backbone, lm_head
+
+    def _chunked_argmax_lm_head(
+        self,
+        lm_head: "torch.nn.Module",
+        hidden: "torch.Tensor",
+        chunk_size: Optional[int] = None,
+    ) -> "torch.Tensor":
+        r"""Argmax vocab in sequence chunks so eval never materializes [B, S, V].
+
+        Use ``F.linear`` on ``lm_head.weight`` (not ``lm_head(chunk)``) so ZeRO-3
+        param hooks cannot issue a new allgather per chunk after weights are gathered.
+        """
+        if chunk_size is None:
+            chunk_size = _EVAL_LM_HEAD_CHUNK_SIZE
+        parts: list[torch.Tensor] = []
+        seq_len = int(hidden.size(1))
+        weight = getattr(lm_head, "weight", None)
+        if weight is None:
+            raise RuntimeError("lm_head has no weight for chunked eval argmax")
+        bias = getattr(lm_head, "bias", None)
+        head_dtype = weight.dtype
+        for start in range(0, seq_len, chunk_size):
+            chunk = hidden[:, start : start + chunk_size]
+            if chunk.dtype != head_dtype:
+                chunk = chunk.to(dtype=head_dtype)
+            logits = torch.nn.functional.linear(chunk, weight, bias)
+            parts.append(torch.argmax(logits, dim=-1))
+            del logits
+        if not parts:
+            return hidden.new_zeros((hidden.size(0), 0), dtype=torch.long)
+        return torch.cat(parts, dim=1)
+
+    def _eval_loss_without_vocab_logits(
+        self,
+        model: "torch.nn.Module",
+        inputs: dict[str, Any],
+        need_token_preds: bool,
+    ) -> tuple["torch.Tensor", Optional["torch.Tensor"]]:
+        r"""Eval CE without allocating full-vocab logits.
+
+        Liger fused CE only sets skip_logits during training. HuggingFace eval still
+        calls compute_loss(return_outputs=True), which materializes float32
+        [B, S, vocab] (12+ GiB on a 22k Qwen2.5-VL row). Force skip_logits and, when
+        compute_accuracy needs token ids, argmax the lm_head in chunks from last
+        hidden states captured on the backbone.
+        """
+        model_inputs = {k: v for k, v in inputs.items() if k not in ("question_ids", "debug_samples", "_indices")}
+        _, backbone, lm_head = self._eval_backbone_and_lm_head(model)
+        captured: dict[str, torch.Tensor] = {}
+        handle = None
+
+        def _capture_hidden(_module: "torch.nn.Module", _args: Any, output: Any) -> None:
+            hidden = None
+            if torch.is_tensor(output):
+                hidden = output
+            elif hasattr(output, "last_hidden_state") and torch.is_tensor(output.last_hidden_state):
+                hidden = output.last_hidden_state
+            elif isinstance(output, tuple | list) and output and torch.is_tensor(output[0]):
+                hidden = output[0]
+            if hidden is not None:
+                captured["hidden"] = hidden
+
+        try:
+            if need_token_preds and backbone is not None and hasattr(backbone, "register_forward_hook"):
+                handle = backbone.register_forward_hook(_capture_hidden)
+            try:
+                outputs = model(**model_inputs, skip_logits=True)
+            except TypeError as err:
+                if "skip_logits" not in str(err):
+                    raise
+                outputs = model(**model_inputs)
+
+            loss = getattr(outputs, "loss", None)
+            if loss is None and isinstance(outputs, tuple | list) and outputs:
+                loss = outputs[0]
+            if loss is None:
+                raise RuntimeError("eval forward returned no loss")
+            loss = loss.detach()
+            if torch.is_tensor(loss) and loss.numel() > 1:
+                loss = loss.mean()
+
+            token_preds = getattr(outputs, "predicted_tokens", None)
+            logits = getattr(outputs, "logits", None)
+            if token_preds is None and torch.is_tensor(logits) and logits.dim() == 3:
+                token_preds = torch.argmax(logits, dim=-1)
+            # All ranks must enter the gather, even if this rank already has preds or
+            # captured no hidden (uneven seq lengths under ZeRO-3).
+            if need_token_preds and lm_head is not None:
+                hidden = captured.get("hidden")
+                with self._zero3_gather_params(lm_head):
+                    if token_preds is None and hidden is not None:
+                        token_preds = self._chunked_argmax_lm_head(lm_head, hidden)
+            if need_token_preds and token_preds is None:
+                logger.warning(
+                    f"[rank{self._get_rank()}] eval skip_logits produced no token preds "
+                    "(compute_accuracy will be skipped for this batch)"
+                )
+            return loss, token_preds
+        finally:
+            if handle is not None:
+                handle.remove()
+            captured.clear()
 
     @override
     def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
@@ -1059,16 +1288,26 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
 
         if self.args.predict_with_generate:  # do not pass labels to model when generate
             labels = inputs.pop("labels", None)
-        else:
-            labels = inputs.get("labels")
+            loss, generated_tokens, _ = super().prediction_step(
+                model, inputs, prediction_loss_only=prediction_loss_only, ignore_keys=ignore_keys, **gen_kwargs
+            )
+            if generated_tokens is not None:
+                generated_tokens[:, : inputs["input_ids"].size(-1)] = self.processing_class.pad_token_id
+                generated_tokens = generated_tokens.contiguous()
+                if dump_eval:
+                    tokenizer = self._get_tokenizer()
+                    batch_size = int(generated_tokens.size(0))
+                    qids = normalize_question_ids(question_ids_raw, batch_size)
+                    if tokenizer is not None and any(qids):
+                        texts = tokenizer.batch_decode(
+                            generated_tokens, skip_special_tokens=self._dump_skip_special_tokens
+                        )
+                        self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
+            return loss, generated_tokens, labels
 
-        # When dumping eval predictions without stock predict_with_generate, still compute loss.
-        # Stay loss-only for HuggingFace: returning [B, S, vocab] logits makes evaluation_loop
-        # concat them on GPU (Qwen2.5-VL vocab is 152064 → tens of GiB per long CoT row).
-        if dump_eval and not self.args.predict_with_generate:
-            # Honor prediction_loss_only. Forcing logits makes HuggingFace concat
-            # [B, S, V] on GPU across the eval set (OOM on long VL sequences).
-            # Dump texts independently; drop vocab logits when the loop only needs loss.
+        labels = inputs.get("labels")
+        # Custom CE losses (DFT/ASFT/EAFT) still need vocab logits; keep the HF path.
+        if getattr(self, "compute_loss_func", None) is not None:
             loss, logits, label_ids = super().prediction_step(
                 model,
                 inputs,
@@ -1076,49 +1315,60 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 ignore_keys=ignore_keys,
                 **gen_kwargs,
             )
-            # teacher_forced dump is one extra no-grad forward (rank-aligned).
-            # generate dumps run after super().evaluate() so they cannot stall the
-            # per-batch NCCL loss allgather inside HuggingFace evaluation_loop.
-            if self.finetuning_args.eval_prediction_mode == "teacher_forced":
-                batch_size = int(inputs["input_ids"].size(0)) if "input_ids" in inputs else 0
-                qids = normalize_question_ids(question_ids_raw, batch_size)
-                if not any(qids):
-                    self._warn_missing_question_ids_once()
-                else:
-                    texts: list[str] = []
-                    try:
-                        if labels_for_dump is not None:
-                            texts = self._texts_from_teacher_forced(None, labels_for_dump, model=model, inputs=inputs)
-                    except Exception as err:
-                        logger.warning(f"[rank{self._get_rank()}] eval teacher_forced dump failed: {err}")
-                    if texts:
-                        self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
-                    else:
-                        logger.warning(
-                            f"[rank{self._get_rank()}] eval prediction dump produced no texts "
-                            f"(mode=teacher_forced, qids={len([q for q in qids if q])}, batch={batch_size})"
-                        )
+            self._maybe_dump_eval_teacher_forced(dump_eval, model, inputs, labels_for_dump, question_ids_raw)
             if prediction_loss_only:
                 return loss, None, None
             return loss, logits, label_ids if label_ids is not None else labels
 
-        loss, generated_tokens, _ = super().prediction_step(
-            model, inputs, prediction_loss_only=prediction_loss_only, ignore_keys=ignore_keys, **gen_kwargs
-        )
-        if generated_tokens is not None and self.args.predict_with_generate:
-            generated_tokens[:, : inputs["input_ids"].size(-1)] = self.processing_class.pad_token_id
-            generated_tokens = generated_tokens.contiguous()
-            if dump_eval:
-                tokenizer = self._get_tokenizer()
-                batch_size = int(generated_tokens.size(0))
-                qids = normalize_question_ids(question_ids_raw, batch_size)
-                if tokenizer is not None and any(qids):
-                    texts = tokenizer.batch_decode(
-                        generated_tokens, skip_special_tokens=self._dump_skip_special_tokens
-                    )
-                    self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
+        # Liger skip_logits is training-only by default. HF eval still does
+        # compute_loss(return_outputs=True), which allocates [B, S, vocab] (job 913360
+        # died on a 22k-token / 233-image eval row at 12.45 GiB). Generate dumps run
+        # after this loss loop and never needed that tensor.
+        # ZeRO-3: skip extra lm_head gather for token-acc. Generate dumps are the
+        # eval signal; gathering modules_to_save (embed/lm_head) before training
+        # backward has left 0-width shards (job 1208740).
+        need_token_preds = (not prediction_loss_only) and not self._deepspeed_zero3_enabled()
+        loss_ctx = getattr(self, "compute_loss_context_manager", None)
+        manager = loss_ctx() if callable(loss_ctx) else nullcontext()
+        with torch.no_grad():
+            with manager:
+                loss, token_preds = self._eval_loss_without_vocab_logits(
+                    model, inputs, need_token_preds=need_token_preds
+                )
+        self._maybe_dump_eval_teacher_forced(dump_eval, model, inputs, labels_for_dump, question_ids_raw)
+        self._release_cuda_cache()
+        if prediction_loss_only:
+            return loss, None, None
+        return loss, token_preds, labels
 
-        return loss, generated_tokens, labels
+    def _maybe_dump_eval_teacher_forced(
+        self,
+        dump_eval: bool,
+        model: "torch.nn.Module",
+        inputs: dict[str, Any],
+        labels_for_dump: Any,
+        question_ids_raw: Any,
+    ) -> None:
+        if not dump_eval or self.finetuning_args.eval_prediction_mode != "teacher_forced":
+            return
+        batch_size = int(inputs["input_ids"].size(0)) if "input_ids" in inputs else 0
+        qids = normalize_question_ids(question_ids_raw, batch_size)
+        if not any(qids):
+            self._warn_missing_question_ids_once()
+            return
+        texts: list[str] = []
+        try:
+            if labels_for_dump is not None:
+                texts = self._texts_from_teacher_forced(None, labels_for_dump, model=model, inputs=inputs)
+        except Exception as err:
+            logger.warning(f"[rank{self._get_rank()}] eval teacher_forced dump failed: {err}")
+        if texts:
+            self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
+        else:
+            logger.warning(
+                f"[rank{self._get_rank()}] eval prediction dump produced no texts "
+                f"(mode=teacher_forced, qids={len([q for q in qids if q])}, batch={batch_size})"
+            )
 
     def _iter_eval_dump_batches(self, eval_dataset: Any = None) -> Any:
         dataset = self.eval_dataset if eval_dataset is None else eval_dataset
@@ -1169,14 +1419,20 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if model is None:
             return
         was_training = bool(getattr(model, "training", False))
+        zero3 = self._deepspeed_zero3_enabled()
         try:
             if hasattr(model, "eval"):
                 model.eval()
+            if not zero3:
+                self._release_cuda_cache()
             for batch in self._iter_eval_dump_batches(eval_dataset):
                 self._dump_eval_generate_batch(model, batch)
+                if not zero3:
+                    self._release_cuda_cache()
         finally:
             if was_training and hasattr(model, "train"):
                 model.train()
+            self._restore_zero3_train_state(model)
 
     @override
     def evaluate(self, *args, **kwargs):
@@ -1189,6 +1445,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                     eval_dataset = args[0]
                 self._dump_eval_generate_pass(eval_dataset=eval_dataset)
             self._flush_eval_predictions()
+        self._restore_zero3_train_state(getattr(self, "model", None))
         return metrics
 
     def save_predictions(

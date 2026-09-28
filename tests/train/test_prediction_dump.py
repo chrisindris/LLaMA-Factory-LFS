@@ -188,6 +188,12 @@ def test_decode_teacher_forced_batch_greedy_on_response_positions():
     assert decode_teacher_forced_batch(logits, labels, _IdTokenizer()) == ["1,2,3"]
 
 
+def test_decode_teacher_forced_batch_accepts_2d_token_ids():
+    pred_ids = torch.tensor([[0, 1, 2, 3, 0]])
+    labels = torch.tensor([[IGNORE_INDEX, IGNORE_INDEX, 1, 2, 3]])
+    assert decode_teacher_forced_batch(pred_ids, labels, _IdTokenizer()) == ["1,2,3"]
+
+
 def test_flatten_gathered_pairs_keeps_empty_rank_chunks():
     assert flatten_gathered_pairs(None) == []
     assert flatten_gathered_pairs([[], [], []]) == []
@@ -353,55 +359,128 @@ def test_eval_dump_max_new_tokens_zero_keeps_configured_cap():
     assert kwargs["do_sample"] is False
 
 
-def test_prediction_step_generate_mode_does_not_call_generate(monkeypatch, tmp_path):
-    from transformers import Seq2SeqTrainer
+class _EvalBackbone(torch.nn.Module):
+    def __init__(self, hidden: torch.Tensor):
+        super().__init__()
+        self._hidden = hidden
 
+    def forward(self, *args, **kwargs):
+        return self._hidden
+
+
+class _EvalCausalLM(torch.nn.Module):
+    def __init__(self, hidden: torch.Tensor, vocab: int = 8):
+        super().__init__()
+        self.model = _EvalBackbone(hidden)
+        self.lm_head = torch.nn.Linear(hidden.size(-1), vocab, bias=False)
+        self.skip_logits_calls: list[object] = []
+        self.full_logit_calls = 0
+        self.generate_calls = 0
+
+    def forward(self, input_ids=None, labels=None, skip_logits=None, **kwargs):
+        hidden = self.model(input_ids=input_ids, **kwargs)
+        self.skip_logits_calls.append(skip_logits)
+        loss = torch.tensor(0.5)
+        if skip_logits:
+            return SimpleNamespace(loss=loss, logits=None, predicted_tokens=None)
+        self.full_logit_calls += 1
+        return SimpleNamespace(loss=loss, logits=self.lm_head(hidden), predicted_tokens=None)
+
+    def generate(self, **kwargs):
+        self.generate_calls += 1
+        raise AssertionError("generate should not run in prediction_step")
+
+    def eval(self):
+        self.training = False
+        return self
+
+    def train(self, mode: bool = True):
+        self.training = bool(mode)
+        return self
+
+
+def _make_eval_loss_trainer(tmp_path: Path):
     from llamafactory.train.sft.trainer import CustomSeq2SeqTrainer
 
     trainer = CustomSeq2SeqTrainer.__new__(CustomSeq2SeqTrainer)
+    trainer.processing_class = _IdTokenizer()
+    trainer._dump_skip_special_tokens = True
+    trainer._gen_kwargs = {"max_new_tokens": 2048, "do_sample": True}
     trainer.finetuning_args = SimpleNamespace(
         save_eval_predictions=True,
         eval_prediction_mode="generate",
         eval_dump_max_new_tokens=256,
+        debug_mm_training=False,
     )
-    trainer.args = SimpleNamespace(predict_with_generate=False)
+    trainer.args = SimpleNamespace(predict_with_generate=False, output_dir=str(tmp_path), report_to=[])
     trainer.prediction_dump = PredictionDumpStore(eval_path_template=str(tmp_path / "eval_predictions.json"))
     trainer._eval_pred_buffer = []
     trainer._pred_dump_warned_missing_qid = False
-    trainer.processing_class = _IdTokenizer()
-    trainer._dump_skip_special_tokens = True
-    trainer._gen_kwargs = {"max_new_tokens": 2048, "do_sample": True}
+    trainer.compute_loss_func = None
+    trainer.compute_loss_context_manager = None
+    return trainer
 
-    generate_calls = {"n": 0}
-    parent_logits = torch.zeros(1, 4, 8)
-    parent_labels = torch.ones(1, 4, dtype=torch.long)
 
-    def fake_parent_step(self, model, inputs, prediction_loss_only=False, ignore_keys=None, **kwargs):
-        return torch.tensor(0.5), parent_logits, parent_labels
+def test_prediction_step_generate_mode_does_not_call_generate(tmp_path):
+    from llamafactory.train.sft.trainer import CustomSeq2SeqTrainer
 
-    monkeypatch.setattr(Seq2SeqTrainer, "prediction_step", fake_parent_step)
-
-    class BoomGenerate:
-        training = False
-
-        def generate(self, **kwargs):
-            generate_calls["n"] += 1
-            raise AssertionError("generate should not run in prediction_step")
-
+    hidden = torch.randn(1, 4, 8)
+    model = _EvalCausalLM(hidden)
+    trainer = _make_eval_loss_trainer(tmp_path)
     inputs = {
         "input_ids": torch.ones(1, 4, dtype=torch.long),
-        "labels": parent_labels.clone(),
+        "labels": torch.ones(1, 4, dtype=torch.long),
         "question_ids": ["q1"],
     }
     loss, logits, labels = CustomSeq2SeqTrainer.prediction_step(
-        trainer, model=BoomGenerate(), inputs=inputs, prediction_loss_only=True
+        trainer, model=model, inputs=inputs, prediction_loss_only=True
     )
 
-    assert generate_calls["n"] == 0
+    assert model.generate_calls == 0
+    assert model.full_logit_calls == 0
+    assert model.skip_logits_calls == [True]
     assert trainer._eval_pred_buffer == []
     assert logits is None
     assert labels is None
     assert float(loss) == 0.5
+
+
+def test_eval_loss_returns_chunked_token_preds_without_vocab_logits(tmp_path):
+    from llamafactory.train.sft.trainer import CustomSeq2SeqTrainer
+
+    hidden = torch.randn(1, 6, 4)
+    model = _EvalCausalLM(hidden, vocab=8)
+    trainer = _make_eval_loss_trainer(tmp_path)
+    inputs = {
+        "input_ids": torch.ones(1, 6, dtype=torch.long),
+        "labels": torch.ones(1, 6, dtype=torch.long),
+        "attention_mask": torch.ones(1, 6, dtype=torch.long),
+        "question_ids": ["q1"],
+    }
+    loss, preds, labels = CustomSeq2SeqTrainer.prediction_step(
+        trainer, model=model, inputs=inputs, prediction_loss_only=False
+    )
+
+    assert float(loss) == 0.5
+    assert model.full_logit_calls == 0
+    assert model.skip_logits_calls == [True]
+    assert preds is not None
+    assert preds.dim() == 2
+    assert list(preds.shape) == [1, 6]
+    assert list(labels.shape) == [1, 6]
+    assert trainer._eval_pred_buffer == []
+
+
+def test_eval_logit_processor_passthrough_token_ids():
+    from llamafactory.train.sft.metric import eval_logit_processor
+
+    token_ids = torch.tensor([[1, 2, 3, 4]])
+    assert torch.equal(eval_logit_processor(token_ids, token_ids), token_ids)
+    logits = torch.zeros(1, 3, 5)
+    logits[0, 0, 2] = 1.0
+    logits[0, 1, 4] = 1.0
+    logits[0, 2, 1] = 1.0
+    assert torch.equal(eval_logit_processor(logits, token_ids), torch.tensor([[2, 4, 1]]))
 
 
 def test_deferred_eval_generate_pass_records_pairs_and_empty_flush_gathers(tmp_path):
@@ -456,3 +535,191 @@ def test_deferred_eval_generate_pass_records_pairs_and_empty_flush_gathers(tmp_p
     trainer._flush_eval_predictions()
     assert gathered["called"] is True
     assert trainer._eval_pred_buffer == []
+
+
+def test_teacher_forced_dump_uses_chunked_preds_not_vocab_logits(tmp_path):
+    from llamafactory.train.sft.trainer import CustomSeq2SeqTrainer
+
+    hidden = torch.randn(1, 5, 4)
+    model = _EvalCausalLM(hidden, vocab=8)
+    trainer = _make_eval_loss_trainer(tmp_path)
+    labels = torch.tensor([[IGNORE_INDEX, IGNORE_INDEX, 1, 2, 3]])
+    inputs = {
+        "input_ids": torch.ones(1, 5, dtype=torch.long),
+        "labels": labels,
+        "attention_mask": torch.ones(1, 5, dtype=torch.long),
+    }
+    texts = CustomSeq2SeqTrainer._texts_from_teacher_forced(trainer, None, labels, model=model, inputs=inputs)
+    assert model.full_logit_calls == 0
+    assert True in model.skip_logits_calls
+    assert isinstance(texts, list)
+    assert len(texts) == 1
+
+
+class _EngineWrapper:
+    def __init__(self, inner):
+        self.module = inner
+        self.training = False
+        self.generate_kwargs = None
+
+    def generate(self, **kwargs):
+        self.generate_kwargs = kwargs
+        return self.module.generate(**kwargs)
+
+    def eval(self):
+        self.training = False
+        return self
+
+    def train(self, mode: bool = True):
+        self.training = bool(mode)
+        return self
+
+
+def test_chunked_argmax_uses_functional_linear_not_module_forward(tmp_path):
+    trainer = _make_eval_loss_trainer(tmp_path)
+    hidden = torch.randn(1, 6, 4)
+    model = _EvalCausalLM(hidden, vocab=8)
+    calls = {"n": 0}
+    orig = model.lm_head.forward
+
+    def wrapped(*args, **kwargs):
+        calls["n"] += 1
+        return orig(*args, **kwargs)
+
+    model.lm_head.forward = wrapped
+    preds = trainer._chunked_argmax_lm_head(model.lm_head, hidden, chunk_size=2)
+    assert calls["n"] == 0
+    assert list(preds.shape) == [1, 6]
+
+
+def test_zero3_detected_from_engine_stage(tmp_path):
+    trainer = _make_eval_loss_trainer(tmp_path)
+    trainer.deepspeed = SimpleNamespace(zero_optimization_stage=lambda: 3)
+    assert trainer._deepspeed_zero3_enabled() is True
+    trainer.deepspeed = SimpleNamespace(zero_optimization_stage=lambda: 2)
+    trainer.model = None
+    trainer.accelerator = None
+    # HF weakref is typically False in unit tests
+    assert trainer._deepspeed_zero3_enabled() is False
+
+
+def test_zero3_eval_skips_lm_head_gather_for_token_preds(tmp_path):
+    from llamafactory.train.sft.trainer import CustomSeq2SeqTrainer
+
+    hidden = torch.randn(1, 6, 4)
+    model = _EvalCausalLM(hidden, vocab=8)
+    trainer = _make_eval_loss_trainer(tmp_path)
+    trainer._deepspeed_zero3_enabled = lambda: True
+    entered = {"n": 0}
+
+    class _Gather:
+        def __enter__(self):
+            entered["n"] += 1
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+    trainer._zero3_gather_params = lambda module: _Gather()
+    inputs = {
+        "input_ids": torch.ones(1, 6, dtype=torch.long),
+        "labels": torch.ones(1, 6, dtype=torch.long),
+        "attention_mask": torch.ones(1, 6, dtype=torch.long),
+        "question_ids": ["q1"],
+    }
+    loss, preds, labels = CustomSeq2SeqTrainer.prediction_step(
+        trainer, model=model, inputs=inputs, prediction_loss_only=False
+    )
+    assert float(loss) == 0.5
+    assert entered["n"] == 0
+    assert model.full_logit_calls == 0
+    assert preds is None
+    assert list(labels.shape) == [1, 6]
+
+
+def test_zero3_gather_checkpoint_backward():
+    from llamafactory.model.model_utils import checkpointing as ckpt
+
+    linear = torch.nn.Linear(4, 4)
+    inputs = torch.randn(2, 4, requires_grad=True)
+    outputs = ckpt._deepspeed_checkpoint(linear.forward, inputs)
+    assert list(outputs.shape) == [2, 4]
+    outputs.sum().backward()
+    assert inputs.grad is not None
+    assert linear.weight.grad is not None
+
+
+def test_zero3_checkpoints_frozen_modules_via_deepspeed(monkeypatch):
+    from llamafactory.model.model_utils import checkpointing as ckpt
+
+    monkeypatch.setattr(ckpt, "_deepspeed_zero3_active", lambda: True)
+    ds_calls = {"n": 0}
+
+    def fake_ds(func, *args, **kwargs):
+        ds_calls["n"] += 1
+        return func(*args, **kwargs)
+
+    monkeypatch.setattr(ckpt, "_deepspeed_checkpoint", fake_ds)
+    frozen = torch.nn.Linear(4, 4)
+    for param in frozen.parameters():
+        param.requires_grad = False
+    x = torch.randn(2, 4, requires_grad=True)
+    torch_calls = {"n": 0}
+
+    def fake_torch_ckpt(func, *args, **kwargs):
+        torch_calls["n"] += 1
+        return func(*args, **kwargs)
+
+    wrapped = ckpt.get_custom_gradient_checkpointing_func(fake_torch_ckpt)
+    wrapped(frozen.forward, x)
+    assert ds_calls["n"] == 1
+    assert torch_calls["n"] == 0
+
+
+def test_zero3_generate_pass_repartitions_params(tmp_path):
+    trainer = _make_generate_dump_trainer()
+    trainer._deepspeed_zero3_enabled = lambda: True
+    calls = {"n": 0}
+
+    class _Engine(_CaptureGenerateModel):
+        def empty_partition_cache(self):
+            calls["n"] += 1
+
+    engine = _Engine()
+    trainer.model = engine
+    trainer._eval_pred_buffer = []
+    trainer._pred_dump_warned_missing_qid = False
+    trainer._unwrap_model_for_dump_generate = lambda model: engine
+    batch = {
+        "input_ids": torch.tensor([[10, 1, 2]]),
+        "attention_mask": torch.tensor([[1, 1, 1]]),
+        "labels": torch.tensor([[IGNORE_INDEX, 1, 2]]),
+        "question_ids": ["q1"],
+    }
+    trainer.eval_dataset = object()
+    trainer.get_eval_dataloader = lambda eval_dataset=None: [batch]
+    trainer._prepare_inputs = lambda x: dict(x)
+    trainer._dump_eval_generate_pass()
+    assert calls["n"] >= 1
+    assert engine.training is True
+    assert trainer._eval_pred_buffer == [("q1", "9")]
+
+
+def test_zero3_generate_dump_uses_engine_and_synced_gpus():
+    trainer = _make_generate_dump_trainer()
+    trainer._deepspeed_zero3_enabled = lambda: True
+    inner = _CaptureGenerateModel()
+    engine = _EngineWrapper(inner)
+    trainer._unwrap_model_for_dump_generate = lambda model: inner
+    labels = torch.tensor([[IGNORE_INDEX, 1, 2]])
+    inputs = {
+        "input_ids": torch.tensor([[10, 1, 2]]),
+        "attention_mask": torch.tensor([[1, 1, 1]]),
+        "labels": labels,
+    }
+    texts = trainer._texts_from_generate(engine, inputs, labels, question_ids=["q1"])
+    assert texts == ["9"]
+    assert engine.generate_kwargs is not None
+    assert engine.generate_kwargs["synced_gpus"] is True
+    assert inner.generate_kwargs is not None
+    assert inner.generate_kwargs.get("synced_gpus") is True

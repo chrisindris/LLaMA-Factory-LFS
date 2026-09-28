@@ -272,6 +272,10 @@ CUTOFF_LEN=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${CUTOFF_LEN:-32768} || echo 13
 IMAGE_SAMPLE_COUNT=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_IMAGE_SAMPLE_COUNT:-300} || echo "-1") # large values shown to work on l40s; 360 should prevent all but the most massive loads
 PER_DEVICE_TRAIN_BATCH_SIZE=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_PER_DEVICE_TRAIN_BATCH_SIZE:-1} || echo 2) # prevents GPU OOM on l40s
 GRADIENT_ACCUMULATION_STEPS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 16 || echo 8)
+# L40S stays ZeRO-2 offload. ZeRO-3 + Liger fused kernels still die on the first
+# training backward with 0-width shards vs hidden 3584 (jobs 1208382–1210206),
+# even with gather-on-recompute checkpointing. Keep additional_target. unsloth_gc
+# is the lever for the 188 MiB Z2 whale OOM (job 918473).
 DEEPSPEED=$([[ "$GPU_TYPE" == "L40S" ]] && echo "examples/deepspeed/ds_z2_offload_config.json" || echo "examples/deepspeed/ds_z2_config.json")
 PREPROCESSING_NUM_WORKERS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 64 || echo 32) # With large multimodal data on some systems (seen on Rorqual), 32 may deadlock with large multimodal data. However, if we have the data on each compute node, even 64 might be acceptable.
 DATALOADER_NUM_WORKERS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 2 || echo 4) # experiments 4667851_[N] showed that our loaders are running out of memory; additionally, Killarney's l40s nodes only have 512GB of memory.
@@ -319,6 +323,21 @@ cmd_args=(
     --eval_dump_max_new_tokens 1024 # hard cap for dump generate; keeps NCCL eval gathers from waiting on 2048-token loops
     --do_sample false # greedy dump generate; sampling looped <|im_start|> and timed out NCCL
 )
+
+# L40S: keep Killarney image/cutoff caps and additional_target. ZeRO-3 offload is
+# set above. Exception-only mm_debug so the next whale logs tensor shapes.
+if [[ "$GPU_TYPE" == "L40S" ]]; then
+  export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
+  cmd_args+=(
+    --bf16_full_eval true
+    --debug_mm_training true
+    --debug_mm_steps 0
+    --print_param_status false
+    --debug ""
+    --use_reentrant_gc false
+    --use_unsloth_gc true
+  )
+fi
 
 python "${PROJECT_DIR}/scripts/utils/modify_yaml.py" \
   "${cmd_args[@]}" \
