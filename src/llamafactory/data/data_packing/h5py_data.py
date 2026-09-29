@@ -12,9 +12,11 @@ import fnmatch
 import json
 import os
 import re
-from pathlib import Path
-from concurrent.futures import ProcessPoolExecutor, as_completed
 import warnings
+from collections import OrderedDict
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from functools import lru_cache
+from pathlib import Path
 
 try:
     import h5py
@@ -270,6 +272,45 @@ def _process_scene_wrapper(args):
 # Override with SCANNET_H5_DIR when annotations point at a different cluster prefix.
 DEFAULT_SCANNET_H5_DIR = "/scratch/indrisch/ScanNet_h5/scans"
 ENV_SCANNET_H5_DIR = "SCANNET_H5_DIR"
+_SCANNET_MAX_OPEN_FILES = 8
+_SCANNET_OPEN_FILES = OrderedDict()
+_SCANNET_CACHE_PID = os.getpid()
+
+
+def _reset_scannet_cache():
+    """Close this process's cached readers and forget scene metadata."""
+    global _SCANNET_CACHE_PID
+    for handle in _SCANNET_OPEN_FILES.values():
+        handle.close()
+    _SCANNET_OPEN_FILES.clear()
+    _load_scannet_mapping.cache_clear()
+    _cached_scannet_scene_path.cache_clear()
+    _SCANNET_CACHE_PID = os.getpid()
+
+
+def _ensure_scannet_cache_pid():
+    if _SCANNET_CACHE_PID != os.getpid():
+        _reset_scannet_cache()
+
+
+@lru_cache(maxsize=128)
+def _load_scannet_mapping(json_file: Path):
+    with open(json_file, "r") as mapping_file:
+        return json.load(mapping_file)
+
+
+def _get_scannet_file(h5py_file: Path):
+    handle = _SCANNET_OPEN_FILES.get(h5py_file)
+    if handle is not None:
+        _SCANNET_OPEN_FILES.move_to_end(h5py_file)
+        return handle
+
+    handle = h5py.File(h5py_file, "r")
+    _SCANNET_OPEN_FILES[h5py_file] = handle
+    if len(_SCANNET_OPEN_FILES) > _SCANNET_MAX_OPEN_FILES:
+        _, old_handle = _SCANNET_OPEN_FILES.popitem(last=False)
+        old_handle.close()
+    return handle
 
 
 def _scannet_h5_root() -> Path:
@@ -314,6 +355,14 @@ def _resolve_scannet_scene_path(
     )
 
 
+@lru_cache(maxsize=4096)
+def _cached_scannet_scene_path(
+    output_dir: Path, scene_name: str, h5py_filename: str, json_filename: str, root: str, cwd: str
+) -> Path:
+    # root and cwd are part of the key because either can change where a relative path resolves.
+    return _resolve_scannet_scene_path(output_dir, scene_name, h5py_filename, json_filename).absolute()
+
+
 def retrieve_image(image_path=None, output_dir=None, scene_name=None, image_name=None, output_path=None, 
                    h5py_filename="images.hdf5", json_filename="image_mapping.json", 
                    verbose=False):
@@ -351,10 +400,16 @@ def retrieve_image(image_path=None, output_dir=None, scene_name=None, image_name
             raise ValueError(f"Invalid image path: {image_path}")
     
     
+    _ensure_scannet_cache_pid()
     output_dir_path = Path(output_dir)
     try:
-        scene_path = _resolve_scannet_scene_path(
-            output_dir_path, scene_name, h5py_filename=h5py_filename, json_filename=json_filename
+        scene_path = _cached_scannet_scene_path(
+            output_dir_path,
+            scene_name,
+            h5py_filename,
+            json_filename,
+            str(_scannet_h5_root()),
+            os.getcwd(),
         )
     except FileNotFoundError as e:
         if output_path is None:
@@ -375,8 +430,7 @@ def retrieve_image(image_path=None, output_dir=None, scene_name=None, image_name
     
     # Load JSON mapping
     try:
-        with open(json_file, 'r') as f:
-            image_number_to_idx = json.load(f)
+        image_number_to_idx = _load_scannet_mapping(json_file)
     except Exception as e:
         error_msg = f"Failed to load JSON mapping file: {e}"
         if output_path is None:
@@ -402,22 +456,21 @@ def retrieve_image(image_path=None, output_dir=None, scene_name=None, image_name
     
     # Load binary data from h5py file
     try:
-        with h5py.File(h5py_file, 'r') as f:
-            dset = f['binary_data']
-            if idx >= len(dset):
-                error_msg = f"Index {idx} is out of range (dataset has {len(dset)} images)"
-                if output_path is None:
-                    raise ValueError(error_msg)
-                print(f"Error: {error_msg}")
-                return False
-            
-            # Get binary data
-            binary_data = dset[idx]
-            # Convert numpy array back to bytes
-            if isinstance(binary_data, np.ndarray):
-                image_bytes = binary_data.tobytes()
-            else:
-                image_bytes = bytes(binary_data)
+        dset = _get_scannet_file(h5py_file)['binary_data']
+        if idx >= len(dset):
+            error_msg = f"Index {idx} is out of range (dataset has {len(dset)} images)"
+            if output_path is None:
+                raise ValueError(error_msg)
+            print(f"Error: {error_msg}")
+            return False
+
+        # Get binary data
+        binary_data = dset[idx]
+        # Convert numpy array back to bytes
+        if isinstance(binary_data, np.ndarray):
+            image_bytes = binary_data.tobytes()
+        else:
+            image_bytes = bytes(binary_data)
             
     except Exception as e:
         error_msg = f"Failed to read from h5py file: {e}"

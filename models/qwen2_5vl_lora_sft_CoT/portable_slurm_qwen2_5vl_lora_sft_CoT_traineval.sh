@@ -2,7 +2,8 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval-%j.out
-#SBATCH --cpus-per-task=96
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=128G
 #SBATCH --time=04:00:00
 #SBATCH --gpus-per-node=h100:2
 
@@ -16,7 +17,7 @@
 #   mkdir -p out
 #   sbatch portable_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh
 #
-# Site flags as needed. Defaults are Trillium-shaped (h100:2, no --mem); override
+# Site flags as needed. Defaults request 2 H100s, 16 CPUs and 128 GB; override
 # on clusters that differ, e.g. Killarney L40S:
 #   sbatch -A <account> --gpus-per-node=l40s:2 --mem=0 \
 #     --mail-user=<you> --mail-type=ALL portable_slurm_...sh
