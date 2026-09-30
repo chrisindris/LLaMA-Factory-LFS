@@ -38,6 +38,7 @@ def test_alpaca_converter():
         "_images": None,
         "_videos": None,
         "_audios": None,
+        "_question_id": None,
     }
 
 
@@ -60,6 +61,7 @@ def test_sharegpt_converter():
         "_images": None,
         "_videos": None,
         "_audios": None,
+        "_question_id": None,
     }
 
 

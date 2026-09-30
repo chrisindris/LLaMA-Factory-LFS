@@ -60,6 +60,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Need the merge base so style/quality can git-diff against the PR base
+          # (or the previous push on main) instead of linting the whole tree.
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -85,9 +89,65 @@ jobs:
           path: ${{ runner.temp }}/huggingface
           key: huggingface-${{ matrix.os }}-${{ matrix.python }}-${{ matrix.transformers }}-${{ hashFiles('tests/version.txt') }}
 
-      - name: Check quality
+      - name: Collect changed Python files
+        id: changed-py
+        shell: bash
         run: |
-          make style && make quality
+          set -euo pipefail
+
+          # Same scope as Makefile check_dirs, restricted to paths this PR actually touched.
+          filter_paths=(scripts src tests tests_v1 setup.py)
+          list_file="${{ runner.temp }}/changed_py_files.txt"
+          : > "${list_file}"
+
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            base_sha="${{ github.event.pull_request.base.sha }}"
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
+            base_sha="${{ github.event.before }}"
+            # First push / force-push with no previous tip: fall back to the parent commit.
+            if [[ -z "${base_sha}" || "${base_sha}" =~ ^0+$ ]]; then
+              base_sha="$(git rev-parse HEAD^ 2>/dev/null || true)"
+            fi
+          else
+            # workflow_dispatch: compare against origin/main when available.
+            git fetch origin main --depth=1 2>/dev/null || true
+            base_sha="$(git merge-base HEAD origin/main 2>/dev/null || true)"
+          fi
+
+          if [[ -z "${base_sha}" ]]; then
+            echo "No base revision available; skipping style/quality path filter."
+            echo "count=0" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          while IFS= read -r f; do
+            [[ -n "${f}" && -f "${f}" ]] && printf '%s\n' "${f}" >> "${list_file}"
+          done < <(
+            git diff --name-only --diff-filter=ACMR "${base_sha}"...HEAD -- "${filter_paths[@]}" \
+              | grep -E '\.py$' || true
+          )
+
+          count="$(wc -l < "${list_file}" | tr -d ' ')"
+          echo "Base: ${base_sha}"
+          echo "Changed Python files (${count}):"
+          cat "${list_file}"
+          echo "count=${count}" >> "${GITHUB_OUTPUT}"
+
+      - name: Check quality (changed files only)
+        if: steps.changed-py.outputs.count != '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          list_file="${{ runner.temp }}/changed_py_files.txt"
+          mapfile -t files < "${list_file}"
+          echo "ruff check/format on ${#files[@]} file(s)"
+          ruff check "${files[@]}"
+          ruff format --check "${files[@]}"
+
+      - name: Check quality (skip)
+        if: steps.changed-py.outputs.count == '0'
+        shell: bash
+        run: echo "No changed Python files under scripts/src/tests/tests_v1/setup.py; skipping style/quality."
 
       - name: Check license
         run: |

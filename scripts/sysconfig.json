@@ -114,5 +114,18 @@
         "media_dir": "None",
         "VENV_DATASET_UPLOAD": "/project/aip-wangcs/indrisch/venv_llamafactory_cu126/",
         "VENV_LLAMAFACTORY": "/project/aip-wangcs/indrisch/venv_llamafactory_cu126/"
+    },
+    "PORTABLE": {
+        "HF_HOME": "${PROJECT_DIR}/.cache/huggingface",
+        "HF_HUB_CACHE": "${PROJECT_DIR}/.cache/huggingface",
+        "HF_HUB_DISABLE_XET": "1",
+        "BEST_GPU": "h100",
+        "LLAMAFACTORY_HOME": "${PROJECT_DIR}",
+        "SIF_FILE": "${PROJECT_DIR}/containers/llamafactory.sif",
+        "MEDIA_DIR": "${PROJECT_DIR}/data/h5/ScanNet_h5",
+        "VENV_LLAMAFACTORY": "${PROJECT_DIR}/.venv",
+        "SCANNET_H5_DIR": "${PROJECT_DIR}/data/h5/ScanNet_h5/scans",
+        "SPATIALSSRL_H5_DIR": "${PROJECT_DIR}/data/h5/Spatial-SSRL_images_h5",
+        "THINKER10K_H5_DIR": "${PROJECT_DIR}/data/h5/3DThinker10K_images_h5"
     }
 }

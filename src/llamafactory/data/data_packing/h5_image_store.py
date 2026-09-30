@@ -7,16 +7,17 @@ from __future__ import annotations
 
 import os
 import re
+from functools import lru_cache
 from pathlib import Path
-from typing import Optional, Union
 
 from PIL import Image
 
+
 # Process-local stores (rebuilt after fork)
 _SPATIAL_STORE = None
-_SPATIAL_PID: Optional[int] = None
+_SPATIAL_PID: int | None = None
 _THINKER_STORE = None
-_THINKER_PID: Optional[int] = None
+_THINKER_PID: int | None = None
 
 _SCANNET_RE = re.compile(r"(.*)(scene\d+_\d+).*color/(.*\.jpe?g)", re.IGNORECASE)
 
@@ -81,29 +82,39 @@ def looks_like_thinker10k_path(path: str) -> bool:
     return "other_all_image_resize/" in p
 
 
+@lru_cache(maxsize=4096)
+def _probe_scannet_scene(prefix: str, scene: str, root: str, cwd: str, pid: int) -> bool:
+    """Cache successful scene probes for immutable assets per worker/root/cwd.
+
+    The resolver reads the root from the environment; root, cwd and pid are
+    also cache keys to prevent reuse when the execution context changes.
+    Exceptions are not cached, allowing missing assets to be staged and retried.
+    """
+    from .h5py_data import _resolve_scannet_scene_path
+
+    _resolve_scannet_scene_path(Path(prefix), scene)
+    return True
+
+
 def can_resolve_h5_image(path: str) -> bool:
     """Cheap probe: True if path is likely resolvable via an H5 backend."""
     if not isinstance(path, str):
         return False
-    if looks_like_scannet_path(path):
+    match = _SCANNET_RE.search(path.replace("\\", "/"))
+    if match:
         # Path-derived prefix may be from another cluster; accept if scene packs
         # exist under SCANNET_H5_DIR (or the path prefix). Lazy decode still goes
         # through retrieve_image which remaps the root.
         try:
-            from .h5py_data import _resolve_scannet_scene_path, DEFAULT_SCANNET_H5_DIR, ENV_SCANNET_H5_DIR
-            import re as _re
+            from .h5py_data import DEFAULT_SCANNET_H5_DIR, ENV_SCANNET_H5_DIR
 
-            m = _re.search(r"(.*)(scene\d+_\d+).*color/(.*\.jpe?g)", path.replace("\\", "/"), _re.IGNORECASE)
-            if m:
-                prefix, scene = m.group(1), m.group(2)
-                try:
-                    _resolve_scannet_scene_path(Path(prefix), scene)
-                    return True
-                except FileNotFoundError:
-                    # Still return True if SCANNET_H5_DIR root exists: packs may appear later
-                    # and converter needs to keep the path string for lazy load.
-                    root = Path(os.environ.get(ENV_SCANNET_H5_DIR, DEFAULT_SCANNET_H5_DIR))
-                    return root.is_dir()
+            root = os.environ.get(ENV_SCANNET_H5_DIR, DEFAULT_SCANNET_H5_DIR)
+            try:
+                return _probe_scannet_scene(match.group(1), match.group(2), root, os.getcwd(), os.getpid())
+            except FileNotFoundError:
+                # Still return True if SCANNET_H5_DIR root exists: packs may appear later
+                # and converter needs to keep the path string for lazy load.
+                return Path(root).is_dir()
         except Exception:
             pass
         return True
@@ -131,9 +142,8 @@ def can_resolve_h5_image(path: str) -> bool:
     return False
 
 
-def resolve_h5_image(path: str) -> Union[bytes, Image.Image]:
-    """
-    Resolve an image path via H5 backends.
+def resolve_h5_image(path: str) -> bytes | Image.Image:
+    """Resolve an image path via H5 backends.
 
     Returns:
         - bytes (JPEG) for ScanNet-style packs
