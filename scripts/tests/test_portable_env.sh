@@ -74,6 +74,13 @@ cp "${RESOLVER}" "${RELOC}/scripts/utils/portable_env.sh"
 touch "${RELOC}/setup.py"
 actual="$(cd /tmp && source "${RELOC}/scripts/utils/portable_env.sh" >/dev/null 2>&1 && portable_resolve_project_dir >/dev/null 2>&1 && echo "${PROJECT_DIR}")"
 assert_eq "$(cd "${RELOC}" && pwd -P)" "${actual}" "relocated+renamed checkout resolves to itself"
+mv "${RELOC}/setup.py" "${RELOC}/pyproject.toml"
+actual="$(cd /tmp && source "${RELOC}/scripts/utils/portable_env.sh" >/dev/null 2>&1 && portable_resolve_project_dir >/dev/null 2>&1 && echo "${PROJECT_DIR}")"
+assert_eq "$(cd "${RELOC}" && pwd -P)" "${actual}" "pyproject-only checkout resolves to itself"
+out="$(LFS_PROJECT_DIR="${RELOC}" CLUSTER=PORTABLE RUNNING_MODE=SHELL PORTABLE_SKIP_SITE_ENV=1 \
+	bash -c 'source "$1"; portable_init && portable_preflight' _ "${RELOC}/scripts/utils/portable_env.sh" 2>&1)"
+assert_eq "yes" "$(grep -qE '^OK +project_root .*pyproject.toml' <<<"${out}" && echo yes || echo no)" \
+	"preflight accepts pyproject-only package metadata"
 rm -rf "$(dirname "${RELOC}")"
 
 # --- Task 3: path defaults, precedence, cluster detection ---

@@ -10,13 +10,14 @@
 # checkout can be moved or renamed and still run. See
 # docs/superpowers/specs/2026-09-05-portable-slurm-wrapper-design.md
 
-# A directory is the repo root when it holds both of these.
-PORTABLE_ROOT_SENTINEL_FILE="setup.py"
+# A repo root has package metadata and the library source directory.
+# Upstream moved packaging from setup.py to pyproject.toml.
+PORTABLE_ROOT_SENTINEL_FILE="pyproject.toml"
 PORTABLE_ROOT_SENTINEL_DIR="src/llamafactory"
 
 _portable_is_root() {
 	local candidate="$1"
-	[[ -f "${candidate}/${PORTABLE_ROOT_SENTINEL_FILE}" ]] &&
+	{ [[ -f "${candidate}/${PORTABLE_ROOT_SENTINEL_FILE}" ]] || [[ -f "${candidate}/setup.py" ]]; } &&
 		[[ -d "${candidate}/${PORTABLE_ROOT_SENTINEL_DIR}" ]]
 }
 
@@ -390,7 +391,9 @@ portable_preflight() {
 	echo "RUNNING_MODE: ${RUNNING_MODE}"
 	echo "---"
 
-	_portable_pf_require "project_root" "${PROJECT_DIR}/setup.py"
+	local package_metadata="${PROJECT_DIR}/${PORTABLE_ROOT_SENTINEL_FILE}"
+	[[ -f "${package_metadata}" ]] || package_metadata="${PROJECT_DIR}/setup.py"
+	_portable_pf_require "project_root" "${package_metadata}"
 	_portable_pf_require "llamafactory_src" "${PROJECT_DIR}/src/llamafactory"
 	_portable_pf_require "deepspeed_config" "${PROJECT_DIR}/examples/deepspeed/ds_z2_config.json"
 	_portable_pf_require "hf_cache" "${HF_HUB_CACHE}"
