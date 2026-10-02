@@ -1,24 +1,20 @@
 #!/bin/bash
-#SBATCH --nodes=1
+#SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
-#SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_groksettings-%j.out
-#SBATCH --cpus-per-task=48
-#SBATCH --time=1-00:00:00
+#SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps-%j.out
+#SBATCH --cpus-per-task=64
+#SBATCH --time=0-22:00:00
 #SBATCH --mem=0
-#SBATCH --gpus-per-node=h100:4
+#SBATCH --gpus-per-node=4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 #SBATCH --mail-type=ALL
 
-# ===  tamia_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_groksettings.sh  ===
-# Same as tamia_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_groksettings.sh except:
+# ===  vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps.sh  ===
+# Same as vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps.sh except:
 # - train logging and eval every 124 rather than every 10 steps (saves time)
 # - approx same eval set size as when we use val_size = 0.1 (i.e. 616 steps per epoch; note that before it was 617 but we used 620)
 # - excluded eval from the training set (no leakage)
 # - #TODO: how important is it for SFT and later RL if we don't have the <image> tokens in the same part of the input (prompt, instruction, etc)?
-#
-#
-# This is identical to tamia_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_groksettings.sh, but using the settings suggested by grok in debug/logging_analysis/out/cot_sft_remedy_report.md.
-# - This will be followed up by grok's suggested ablation study (array job).
 #  
 #  Prereqs:
 #  - Create ${PROJECT_DIR}/data/control_tokens.yaml (token -> description dict for desc_init) --> DONE!
@@ -26,7 +22,7 @@
 #  - Ensure that the 16 eval samples we use are the SAME (8 Scene30k + 4 SpatialSSRL + 4 3DThinker). Train on the parent mixes minus those frozen question_ids (`exclude_eval_from_train`).
 #  - Check with AI (give it the llamafactory output instructions and the settings we are using) to suggest alternative optimizers (adam/badam/galore/apollo) [though this is more for memory] or lora settings. Perhaps nonzero --lora-dropout could help? -> keep adam, use nonzero --lora-dropout
 #
-# --- TamIA wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k) on H100 (80GB) GPUs. Identical to tamia_qwen2_5vl_lora_sft_CoT_traineval.sh, but: ---
+# --- vulcan wrapper for CoT SFT (Scene30k + SpatialSSRL_coldstart + 3DThinker10k) on H100 (80GB) GPUs. Identical to vulcan_qwen2_5vl_lora_sft_CoT_traineval.sh, but: ---
 # Changes (eval):
 # 1. Every 10 training steps we perform evaluation on the SAME 16 eval examples.; will involve --eval_steps=10, --eval_on_start=True (both of those should use only 16 examples), possibly --eval_strategy=steps, prediction_loss_only=false? Maybe --do-predict=True to do predictions on the test set also, although this would likely want to do predictions on the whole test set which we don't want? 
 # --> Eval of 4384 eval examples (batch size 1, 4 GPUs => 1024 steps) takes ~90 mins; specifically, it was 1:34:55 for the training and 1:35:14 total so it takes about 20 seconds for overhead
@@ -59,9 +55,9 @@
 #
 # Submit from models/qwen2_5vl_lora_sft_CoT/ so SLURM out/
 # lands next to this script:
-#   sbatch tamia_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_groksettings.sh
+#   sbatch vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps.sh
 #
-# Uses tamia_qwen2_5vl_lora_sft_CoT_traineval.yaml via the shared
+# Uses vulcan_qwen2_5vl_lora_sft_CoT_traineval.yaml via the shared
 # worker (CLUSTER-detected path).
 #
 # Per-node dataset staging (default ON in the shared multinode worker):
@@ -78,15 +74,17 @@
 # - we have some hardcoded paths in use, perhaps we can put them into env.sh? -> done!
 # - make sure that the YAML we write to is named according to the experiment. -> done!
 
-EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_groksettings"
+EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps"
 
 # --- for reading cluster-specific settings ---
 . $(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "env.sh")
 
+export DATASET_INFO_PATH=$(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "dataset_info.json")
+
 # ----- DEFAULT ARGUMENTS -----
 export STARTING_EPOCH="${STARTING_EPOCH:-0}"
 export ENDING_EPOCH="${ENDING_EPOCH:-1}"
-export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-616}" # val_size_equivalent=0.1 on 43835 -> 39451, minus X eval16 overlaps; 4 GPU, bs=2, ga=8 -> 616 if X=0. Scale as 4/num_gpus * 616
+export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-617}" # val_size_equivalent=0.1 on 43835 -> 39451, minus X eval16 overlaps; 4 GPU, bs=2, ga=8 -> 616 if X=0. Scale as 4/num_gpus * 2/batch_size * 616 (NOTE: the other cluster uses 617, and we needed 309 here, so we use 617)
 export TOTAL_EPOCHS="${TOTAL_EPOCHS:-5}" # 
 
 # ----- ARGUMENT PARSING -----
@@ -149,15 +147,60 @@ echo "RUNNING_MODE: $RUNNING_MODE"
 # export SCENE30K_ANN_SRC="${HF_HUB_CACHE}/datasets--cvis-tmu--Scene30K/snapshots/84a202a417f455f197879495c81b1095f1cf8f53/train-00000-of-00001.with_question_id.formatted.parquet"
 # export SPATIALSSRL_ANN_SRC="${HF_HUB_CACHE}/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/d8e2fabf27e68f41c997b4e7532c67758668c0bd/SFT-coldstart.with_question_id.formatted.json"
 # export THINKER10K_ANN_SRC="${HF_HUB_CACHE}/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/4dd9eb7f24b03c4e9f1265c7e177325cadec9d2d/3dthinker10k_cot.with_question_id.formatted.jsonl"
-export DATASET_INFO_PATH=$(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "dataset_info.json")
-
-export SCENE30K_ANN_SRC="/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/d094c4d0297f42915f6bdbd744504fbc96b3a646/train-00000-of-00001.with_question_id.unifiedformat.parquet"
-export SPATIALSSRL_ANN_SRC="/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/e4359d66da7adc78993f2ad163253c81eb0baf70/SFT-coldstart.with_question_id.unifiedformat.json"
-export THINKER10K_ANN_SRC="/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/a64cb299ed3e8892f9f75f35607890b64e232451/3dthinker10k_cot.with_question_id.unifiedformat.jsonl"
 
 export SCENE30K_ANN_SRC="$(jq -r '.["Scene30k"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SCENE30K_ANN_SRC: ${SCENE30K_ANN_SRC}"
 export SPATIALSSRL_ANN_SRC="$(jq -r '.["SpatialSSRL_coldstart"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SPATIALSSRL_ANN_SRC: ${SPATIALSSRL_ANN_SRC}"
 export THINKER10K_ANN_SRC="$(jq -r '.["3DThinker10k"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "THINKER10K_ANN_SRC: ${THINKER10K_ANN_SRC}"
+
+export SCENE30K_ANN_SRC="$(jq -r '.["Scene30k"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SCENE30K_ANN_SRC: ${SCENE30K_ANN_SRC}"
+export SPATIALSSRL_ANN_SRC="$(jq -r '.["SpatialSSRL_coldstart"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SPATIALSSRL_ANN_SRC: ${SPATIALSSRL_ANN_SRC}"
+export THINKER10K_ANN_SRC="$(jq -r '.["3DThinker10k"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "THINKER10K_ANN_SRC: ${THINKER10K_ANN_SRC}"
+
+
+# --- set the path to the correct model (including its tokenizer) ---
+
+# huggingface_hub>=1.0 dropped `hf cache scan` (now `hf cache list`). Resolve the
+# local snapshot from HF_HUB_CACHE so offline compute nodes get a real path.
+
+export BASE_MODEL_PATH="Qwen/Qwen2.5-VL-7B-Instruct"
+
+resolve_local_hf_snapshot() {
+	local repo_id="$1"
+	local cache_root="${HF_HUB_CACHE:-${HF_HOME:-}}"
+	if [[ -d "${repo_id}" ]]; then
+		printf '%s\n' "${repo_id}"
+		return 0
+	fi
+	if [[ -z "${cache_root}" ]]; then
+		echo "Error: HF_HUB_CACHE/HF_HOME is unset; cannot resolve ${repo_id}" >&2
+		return 1
+	fi
+	local repo_dir="${cache_root}/models--${repo_id//\//--}"
+	local snapshots_dir="${repo_dir}/snapshots"
+	if [[ ! -d "${snapshots_dir}" ]]; then
+		echo "Error: no local HF snapshot for ${repo_id}" >&2
+		echo "Expected snapshots under: ${snapshots_dir}" >&2
+		return 1
+	fi
+	local latest=""
+	if [[ -f "${repo_dir}/refs/main" ]]; then
+		latest="${snapshots_dir}/$(tr -d '[:space:]' <"${repo_dir}/refs/main")"
+	fi
+	if [[ -z "${latest}" || ! -d "${latest}" ]]; then
+		latest=$(find "${snapshots_dir}" -maxdepth 1 -mindepth 1 -type d -printf "%T+ %p\n" | sort | tail -n 1 | awk '{print $NF}')
+	fi
+	if [[ -z "${latest}" || ! -d "${latest}" ]]; then
+		echo "Error: snapshots dir is empty: ${snapshots_dir}" >&2
+		return 1
+	fi
+	printf '%s\n' "${latest}"
+}
+
+if ! MODEL_NAME_OR_PATH="$(resolve_local_hf_snapshot "${BASE_MODEL_PATH}")"; then
+	exit 1
+fi
+echo "MODEL_NAME_OR_PATH: $MODEL_NAME_OR_PATH"
+
 
 # --- setting python environment ---
 
@@ -184,12 +227,12 @@ TEMPLATE_YAML="${PROJECT_DIR}/examples/train_lora/trillium_qwen2_5vl_lora_sft_Co
 # |------------
 # | Create a copy of TEMPLATE_YAML at ...epoch${ENDING_EPOCH}.yaml (cluster-prefixed).
 # | Always set:
-# |   output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_groksettings_ep${ENDING_EPOCH}/
+# |   output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_ep${ENDING_EPOCH}/
 # |   stop_at_global_step: $((ENDING_EPOCH * STEPS_PER_EPOCH))
 # |
 # | If STARTING_EPOCH > 0 (resume):
 # |   resume_from_checkpoint / adapter_name_or_path:
-# |     ${PROJECT_DIR}/saves/.../CoT_traineval_evalevery124trainsteps_groksettings_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))
+# |     ${PROJECT_DIR}/saves/.../CoT_traineval_evalevery124trainsteps_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))
 # |   allow_warm_start_resume / require_resume_bundle as warm-start defaults
 # |
 # | If STARTING_EPOCH == 0 (fresh start, like trillium_*_CoT_traineval.yaml):
@@ -204,11 +247,11 @@ if [ -z "${YAML_FILE:-}" ]; then
   echo "YAML_FILE: ${YAML_FILE}"
 fi
 
-export OUTPUT_DIR_SAVES="saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_groksettings_ep${ENDING_EPOCH}/" && echo "OUTPUT_DIR_SAVES: ${OUTPUT_DIR_SAVES}"
+export OUTPUT_DIR_SAVES="saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_ep${ENDING_EPOCH}/" && echo "OUTPUT_DIR_SAVES: ${OUTPUT_DIR_SAVES}"
 export OUTPUT_DIR="${PROJECT_DIR}/${OUTPUT_DIR_SAVES}" && echo "OUTPUT_DIR: ${OUTPUT_DIR}"
 
 # The Trillium template hard-codes cache_dir=/scratch/indrisch/huggingface/hub.
-# That path does not exist on TamIA; transformers then cannot resolve
+# That path does not exist on vulcan; transformers then cannot resolve
 # Qwen/Qwen2.5-VL-7B-Instruct under HF_HUB_OFFLINE=1.
 export CACHE_DIR="${HF_HUB_CACHE}" && echo "CACHE_DIR: ${CACHE_DIR}"
 QWEN_CACHE="${CACHE_DIR}/models--Qwen--Qwen2.5-VL-7B-Instruct"
@@ -219,7 +262,7 @@ if [[ ! -d "${QWEN_CACHE}/snapshots" ]]; then
 fi
 
 if [[ "${STARTING_EPOCH}" -gt 0 ]]; then
-  export RESUME_CKPT="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_groksettings_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))"
+  export RESUME_CKPT="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))"
 else
   export RESUME_CKPT=null
 fi
@@ -246,6 +289,10 @@ CUTOFF_LEN=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${CUTOFF_LEN:-32768} || echo 13
 IMAGE_SAMPLE_COUNT=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_IMAGE_SAMPLE_COUNT:-300} || echo "-1") # large values shown to work on l40s; 360 should prevent all but the most massive loads
 PER_DEVICE_TRAIN_BATCH_SIZE=$([[ "$GPU_TYPE" == "L40S" ]] && echo ${L40S_PER_DEVICE_TRAIN_BATCH_SIZE:-1} || echo 2) # prevents GPU OOM on l40s
 GRADIENT_ACCUMULATION_STEPS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 16 || echo 8)
+# L40S stays ZeRO-2 offload. ZeRO-3 + Liger fused kernels still die on the first
+# training backward with 0-width shards vs hidden 3584 (jobs 1208382–1210206),
+# even with gather-on-recompute checkpointing. Keep additional_target. unsloth_gc
+# is the lever for the 188 MiB Z2 whale OOM (job 918473).
 DEEPSPEED=$([[ "$GPU_TYPE" == "L40S" ]] && echo "examples/deepspeed/ds_z2_offload_config.json" || echo "examples/deepspeed/ds_z2_config.json")
 PREPROCESSING_NUM_WORKERS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 64 || echo 32) # With large multimodal data on some systems (seen on Rorqual), 32 may deadlock with large multimodal data. However, if we have the data on each compute node, even 64 might be acceptable.
 DATALOADER_NUM_WORKERS=$([[ "$GPU_TYPE" == "L40S" ]] && echo 2 || echo 4) # experiments 4667851_[N] showed that our loaders are running out of memory; additionally, Killarney's l40s nodes only have 512GB of memory.
@@ -258,6 +305,7 @@ export TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC=10800
 cmd_args=(
     --yaml-template-path "${TEMPLATE_YAML}"
     --yaml-output-path "${YAML_FILE}"
+    --model_name_or_path "${MODEL_NAME_OR_PATH}"
     --cache_dir "${CACHE_DIR}"
     --output_dir "${OUTPUT_DIR_SAVES}"
     --resume_from_checkpoint "${RESUME_CKPT}"
@@ -272,9 +320,9 @@ cmd_args=(
     --preprocessing_num_workers "${PREPROCESSING_NUM_WORKERS}"
     --dataloader_num_workers "${DATALOADER_NUM_WORKERS}"
     --ddp_timeout "${TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC}" # avoid NCCL timeouts
-    --train_prediction_interval 124 # save the training every 10 steps
+    --train_prediction_interval 124 # save the training every 124 steps
     --train_prediction_max_samples 0 # no cap
-    --eval_steps 124 # to run an evaluation (and log it) every 10 training steps.
+    --eval_steps 124 # to run an evaluation (and log it) every 124 training steps.
     --eval_on_start true # to eval on the base qwen
     --eval_strategy steps # to ensure that we eval every 10 steps not every 10 epochs
     --eval_dataset Scene30k_eval16,SpatialSSRL_eval16,3DThinker10k_eval16 # frozen 8+4+4 probe
@@ -296,6 +344,21 @@ cmd_args=(
     --do_sample false # greedy dump generate; sampling looped <|im_start|> and timed out NCCL
     --learning_rate 2.0e-5 # half of the previous max lr
 )
+
+# L40S: keep Killarney image/cutoff caps and additional_target. ZeRO-3 offload is
+# set above. Exception-only mm_debug so the next whale logs tensor shapes.
+if [[ "$GPU_TYPE" == "L40S" ]]; then
+  export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
+  cmd_args+=(
+    --bf16_full_eval true
+    --debug_mm_training true
+    --debug_mm_steps 0
+    --print_param_status false
+    --debug ""
+    --use_reentrant_gc false
+    --use_unsloth_gc true
+  )
+fi
 
 python "${PROJECT_DIR}/scripts/utils/modify_yaml.py" \
   "${cmd_args[@]}" \

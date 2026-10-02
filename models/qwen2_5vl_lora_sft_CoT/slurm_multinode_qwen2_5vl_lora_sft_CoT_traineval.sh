@@ -57,6 +57,20 @@ export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-620}"
 
 EXPERIMENT_NAME="multinode_qwen2_5vl_lora_sft_CoT_traineval"
 
+# Vulcan and Tamia set SLURM_TMPDIR=/tmp: the node-wide local disk, not a
+# per-job directory. Nest this job's stage and caches so two jobs on the
+# same node do not share /tmp/cot_stage. Wrappers that already namespaced
+# the path (anything other than bare /tmp) are left alone.
+if [[ "${RUNNING_MODE}" != "SHELL" && ( "${CLUSTER}" == "VULCAN" || "${CLUSTER}" == "TAMIA" ) ]]; then
+	case "${SLURM_TMPDIR:-/tmp}" in
+		/tmp|/tmp/)
+			export SLURM_TMPDIR="/tmp/${EXPERIMENT_NAME}_${SLURM_JOB_ID:-$$}"
+			mkdir -p "${SLURM_TMPDIR}"
+			;;
+	esac
+fi
+echo "SLURM_TMPDIR: ${SLURM_TMPDIR:-unset} (host=$(hostname))"
+
 # --- H5 roots (override per-cluster if needed) ---
 
 if [[ "$CLUSTER" == "RORQUAL" ]]; then
@@ -164,6 +178,32 @@ if [[ "${STAGE_DATASETS_LOCAL}" != "1" ]]; then
 fi
 
 # ----- EXPERIMENT -----
+
+# LLaMA-Factory defaults NODE_RANK to 0. Each srun task must set it from
+# SLURM_NODEID. If every node launches torchrun --node_rank 0, both agents
+# write torchelastic/role_info/0 and wait until timeout for role_info/1
+# (job 1217367, DistStoreError after 900s).
+export_multinode_torchrun_env() {
+	export NNODES="${SLURM_NNODES:-1}"
+	if [[ "${NNODES}" -ge 2 && -z "${SLURM_NODEID:-}" ]]; then
+		echo "ERROR: SLURM_NNODES=${NNODES} but SLURM_NODEID is unset on $(hostname)."
+		echo "Refusing to launch: NODE_RANK would default to 0 on every node."
+		exit 1
+	fi
+	export NODE_RANK="${SLURM_NODEID:-0}"
+	export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE:-$(hostname)}}"
+	export MASTER_PORT="${MASTER_PORT:-29500}"
+	if [[ "${NNODES}" -ge 2 ]]; then
+		export NCCL_ASYNC_ERROR_HANDLING="${NCCL_ASYNC_ERROR_HANDLING:-1}"
+		export TORCH_NCCL_ASYNC_ERROR_HANDLING="${TORCH_NCCL_ASYNC_ERROR_HANDLING:-1}"
+		export NCCL_SOCKET_IFNAME="${NCCL_SOCKET_IFNAME:-^docker0,lo}"
+	fi
+	echo "NNODES: ${NNODES}"
+	echo "NODE_RANK: ${NODE_RANK} (SLURM_NODEID=${SLURM_NODEID:-unset} HOST=$(hostname))"
+	echo "MASTER_ADDR: ${MASTER_ADDR}"
+	echo "MASTER_PORT: ${MASTER_PORT}"
+	echo "NCCL_SOCKET_IFNAME: ${NCCL_SOCKET_IFNAME:-unset}"
+}
 
 # Note: binding host nvcc via -B $(dirname $(which nvcc)) does not work
 # reliably on these clusters; use the CUDA toolkit inside the SIF instead.
@@ -371,6 +411,8 @@ if [[ "$CLUSTER" == "NIBI" ]]; then
 		python3 -c "import torch; print('CUDA available:', torch.cuda.is_available()); print('Device count:', torch.cuda.device_count())"
 		echo "=== END VENV DIAGNOSTICS ==="
 
+		export_multinode_torchrun_env
+
 		pushd /scratch/indrisch/LLaMA-Factory
 		llamafactory-cli train ${YAML_FILE}
 
@@ -417,6 +459,8 @@ elif [[ "$CLUSTER" == "RORQUAL" ]]; then
 		export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
 		export DISABLE_VERSION_CHECK=1
 		export SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR
+
+		export_multinode_torchrun_env
 
 		pushd ${PROJECT_DIR}
 		llamafactory-cli train ${YAML_FILE}
@@ -471,6 +515,8 @@ elif [[ "$CLUSTER" == "TAMIA" ]]; then
 		export SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR
 		export PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}"
 		echo "HF_DATASETS_CACHE: ${HF_DATASETS_CACHE}"
+
+		export_multinode_torchrun_env
 
 		pushd ${PROJECT_DIR}
 		llamafactory-cli train ${YAML_FILE}
@@ -544,6 +590,8 @@ elif [[ "$CLUSTER" == "VULCAN" ]]; then
 		export SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR
 		export PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}"
 		echo "HF_DATASETS_CACHE: ${HF_DATASETS_CACHE}"
+
+		export_multinode_torchrun_env
 
 		pushd ${PROJECT_DIR}
 		llamafactory-cli train ${YAML_FILE}
