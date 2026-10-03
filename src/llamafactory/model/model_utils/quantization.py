@@ -40,6 +40,10 @@ if TYPE_CHECKING:
 logger = logging.get_logger(__name__)
 
 
+def _uses_kt_non_expert_cache(model_args: "ModelArguments") -> bool:
+    return model_args.use_kt and bool(model_args.kt_non_expert_weight_path)
+
+
 def _get_quantization_dataset(tokenizer: "PreTrainedTokenizer", model_args: "ModelArguments") -> list[dict[str, Any]]:
     r"""Prepare the tokenized dataset to perform AutoGPTQ. Do not use tensor output for JSON serialization."""
     if os.path.isfile(model_args.export_quantization_dataset):
@@ -83,6 +87,7 @@ def configure_quantization(
     config: "PretrainedConfig",
     tokenizer: "PreTrainedTokenizer",
     model_args: "ModelArguments",
+    is_trainable: bool,
     init_kwargs: dict[str, Any],
 ) -> None:
     r"""Priority: PTQ-quantized (train/infer) > AutoGPTQ (export) > On-the-fly quantization (train/infer)."""
@@ -93,9 +98,32 @@ def configure_quantization(
         quantization_config: dict[str, Any] = getattr(config, "quantization_config", None)
         quant_method = quantization_config.get("quant_method", "")
 
-        if quant_method != QuantizationMethod.MXFP4 and (is_deepspeed_zero3_enabled() or is_fsdp_enabled()):
+        if quant_method not in (QuantizationMethod.MXFP4, QuantizationMethod.FP8) and (
+            is_deepspeed_zero3_enabled() or is_fsdp_enabled()
+        ):
             # mxfp4 will dequant the model weights
             raise ValueError("DeepSpeed ZeRO-3 or FSDP is incompatible with PTQ-quantized models.")
+
+        if quant_method == QuantizationMethod.MXFP4:
+            from transformers import Mxfp4Config
+
+            quant_config = Mxfp4Config(dequantize=True)
+            init_kwargs["quantization_config"] = quant_config
+            init_kwargs["ignore_mismatched_sizes"] = True
+
+        if quant_method == QuantizationMethod.FP8:
+            if _uses_kt_non_expert_cache(model_args):
+                if model_args.quantization_bit is not None:
+                    raise ValueError("`quantization_bit` cannot be combined with KT weight caches.")
+
+                logger.info_rank0("Skipping source FP8 dequantization because KT weight caches are configured.")
+                return
+
+            from transformers import FineGrainedFP8Config
+
+            quant_config = FineGrainedFP8Config(dequantize=True)
+            init_kwargs["quantization_config"] = quant_config
+            init_kwargs["ignore_mismatched_sizes"] = True
 
         if quant_method == QuantizationMethod.GPTQ:
             check_version("gptqmodel>=2.0.0", mandatory=True)

@@ -41,12 +41,13 @@ class LoggerHandler(logging.Handler):
             datefmt="%Y-%m-%d %H:%M:%S",
         )
         self.setLevel(logging.INFO)
+        self.thread_pool = ThreadPoolExecutor(max_workers=1)
         os.makedirs(output_dir, exist_ok=True)
         self.running_log = os.path.join(output_dir, RUNNING_LOG)
-        if os.path.exists(self.running_log):
+        try:
             os.remove(self.running_log)
-
-        self.thread_pool = ThreadPoolExecutor(max_workers=1)
+        except OSError:
+            pass
 
     def _write_log(self, log_entry: str) -> None:
         with open(self.running_log, "a", encoding="utf-8") as f:
@@ -72,6 +73,9 @@ class _Logger(logging.Logger):
 
     def warning_rank0(self, *args, **kwargs) -> None:
         self.warning(*args, **kwargs)
+
+    def error_rank0(self, *args, **kwargs) -> None:
+        self.error(*args, **kwargs)
 
     def warning_rank0_once(self, *args, **kwargs) -> None:
         self.warning(*args, **kwargs)
@@ -117,7 +121,7 @@ def _configure_library_root_logger() -> None:
         library_root_logger.propagate = False
 
 
-def get_logger(name: Optional[str] = None) -> "_Logger":
+def get_logger(name: str | None = None) -> "_Logger":
     r"""Return a logger with the specified name. It it not supposed to be accessed externally."""
     if name is None:
         name = _get_library_name()
@@ -148,6 +152,11 @@ def warning_rank0(self: "logging.Logger", *args, **kwargs) -> None:
         self.warning(*args, **kwargs)
 
 
+def error_rank0(self: "logging.Logger", *args, **kwargs) -> None:
+    if int(os.getenv("LOCAL_RANK", "0")) == 0:
+        self.error(*args, **kwargs)
+
+
 @lru_cache(None)
 def warning_rank0_once(self: "logging.Logger", *args, **kwargs) -> None:
     if int(os.getenv("LOCAL_RANK", "0")) == 0:
@@ -156,4 +165,5 @@ def warning_rank0_once(self: "logging.Logger", *args, **kwargs) -> None:
 
 logging.Logger.info_rank0 = info_rank0
 logging.Logger.warning_rank0 = warning_rank0
+logging.Logger.error_rank0 = error_rank0
 logging.Logger.warning_rank0_once = warning_rank0_once

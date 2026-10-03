@@ -19,9 +19,11 @@
 # limitations under the License.
 
 import inspect
+import os
+from collections.abc import Callable
 from functools import WRAPPER_ASSIGNMENTS, partial, wraps
 from types import MethodType
-from typing import TYPE_CHECKING, Any, Callable, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 import torch
 
@@ -36,6 +38,23 @@ if TYPE_CHECKING:
 
 
 logger = logging.get_logger(__name__)
+
+
+def _get_gradient_checkpointing_kwargs(model_args: "ModelArguments") -> dict[str, Any]:
+    r"""Build checkpoint kwargs through KT's public activation-context provider."""
+    if not model_args.use_kt:
+        return {"use_reentrant": model_args.use_reentrant_gc}
+
+    policy = model_args.get_kt_activation_policy()
+    if policy["gpu"] != "recompute":
+        return {"use_reentrant": False}
+
+    try:
+        from kt_kernel.sft import get_activation_checkpoint_context_fn
+    except (ImportError, ModuleNotFoundError) as exc:
+        raise RuntimeError("The installed kt-kernel does not provide the activation checkpoint context API.") from exc
+
+    return {"use_reentrant": False, "context_fn": get_activation_checkpoint_context_fn()}
 
 
 def get_unsloth_gradient_checkpointing_func() -> Callable:
@@ -76,7 +95,12 @@ def get_unsloth_gradient_checkpointing_func() -> Callable:
 
 
 def get_custom_gradient_checkpointing_func(gradient_checkpointing_func: Callable) -> Callable:
-    r"""Only applies gradient checkpointing to trainable layers."""
+    r"""Apply gradient checkpointing to trainable layers and frozen layers on the autograd graph.
+
+    Frozen modules (for example a VLM vision tower) can still receive tensors that require grad when
+    ``enable_input_require_grads()`` hooks embeddings or patch_embed. Skipping checkpointing in that
+    case stores every layer's activations and can OOM on long multimodal sequences.
+    """
 
     @wraps(gradient_checkpointing_func, assigned=WRAPPER_ASSIGNMENTS + ("__self__",))
     def custom_gradient_checkpointing_func(func: Callable, *args: Union["torch.Tensor", Any], **kwargs):
@@ -85,18 +109,19 @@ def get_custom_gradient_checkpointing_func(gradient_checkpointing_func: Callable
         else:
             module: torch.nn.Module = func.__self__
 
-        has_grad = False
-        if any(param.requires_grad for param in module.parameters()):
-            has_grad = True
+        module_has_grad = any(param.requires_grad for param in module.parameters())
+        if module_has_grad:
             for arg in args:
                 if torch.is_tensor(arg) and torch.is_floating_point(arg):
                     arg.requires_grad_(True)
                     break  # assume the first tensor is always the hidden states
 
-        if has_grad:
+        # Frozen ViT blocks still sit in the graph when patch_embed outputs require grad.
+        input_requires_grad = any(torch.is_tensor(arg) and arg.requires_grad for arg in args)
+        if module_has_grad or input_requires_grad:
             return gradient_checkpointing_func(func, *args, **kwargs)
-        else:
-            return func(*args, **kwargs)
+
+        return func(*args, **kwargs)
 
     return custom_gradient_checkpointing_func
 
@@ -152,6 +177,13 @@ def prepare_model_for_training(model: "PreTrainedModel", model_args: "ModelArgum
             if param.ndim == 1 and any(ln_name in name for ln_name in LAYERNORM_NAMES):
                 param.data = param.data.to(torch.float32)
 
+    if (
+        os.environ.get("ACCELERATE_USE_FSDP", "false").lower() == "true"
+        and int(os.environ.get("FSDP_VERSION", "1")) == 2
+    ):
+        model_args.use_reentrant_gc = False
+        logger.warning_rank0("You are using fsdp2, `use_reentrant_gc` has been set to False.")
+
     if not model_args.disable_gradient_checkpointing:
         if not getattr(model, "supports_gradient_checkpointing", False):
             logger.warning_rank0("Current model does not support gradient checkpointing.")
@@ -163,10 +195,14 @@ def prepare_model_for_training(model: "PreTrainedModel", model_args: "ModelArgum
             )
             model.gradient_checkpointing_enable = MethodType(gradient_checkpointing_enable, model)
             model.gradient_checkpointing_enable(
-                gradient_checkpointing_kwargs={"use_reentrant": model_args.use_reentrant_gc}
+                gradient_checkpointing_kwargs=_get_gradient_checkpointing_kwargs(model_args)
             )
             setattr(model.config, "use_cache", False)  # turn off when gradient checkpointing is enabled
             logger.info_rank0("Gradient checkpointing enabled.")
+            logger.info_rank0(
+                "Frozen layers that still receive tensors requiring grad (e.g. VLM vision towers) "
+                "are checkpointed to avoid storing full activations."
+            )
 
     if model_args.upcast_lmhead_output:
         output_layer = model.get_output_embeddings()

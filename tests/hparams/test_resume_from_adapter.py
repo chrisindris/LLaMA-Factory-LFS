@@ -36,7 +36,7 @@ def _build_args(
     overwrite_output_dir: bool = False,
     create_new_adapter: bool = False,
 ):
-    model_args = SimpleNamespace(adapter_name_or_path=adapter_paths)
+    model_args = SimpleNamespace(adapter_name_or_path=adapter_paths, model_name_or_path=None)
     training_args = SimpleNamespace(
         resume_from_checkpoint=resume_from_checkpoint,
         do_train=do_train,
@@ -47,6 +47,8 @@ def _build_args(
         stage=stage,
         finetuning_type=finetuning_type,
         create_new_adapter=create_new_adapter,
+        resume_bundle_dir=None,
+        allow_warm_start_resume=True,
     )
     return model_args, training_args, finetuning_args
 

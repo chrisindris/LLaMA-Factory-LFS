@@ -18,6 +18,7 @@
 import json
 import os
 import time
+from functools import partial
 from types import MethodType
 from typing import TYPE_CHECKING, Any, Optional, Union
 
@@ -29,27 +30,59 @@ from typing_extensions import override
 from ...extras import logging
 from ...extras.constants import IGNORE_INDEX
 from ...extras.misc import get_current_memory
-from ...extras.packages import is_transformers_version_greater_than
 from ..callbacks import SaveProcessorCallback
-from ..fp8_utils import configure_fp8_environment, verify_fp8_status
+from ..fp8_utils import configure_fp8_environment, patch_accelerator_for_fp8, verify_fp8_status
 from ..prediction_dump import (
     PredictionDumpStore,
     decode_teacher_forced_batch,
+    flatten_gathered_pairs,
+    format_epoch_name,
     normalize_question_ids,
     prompt_lengths_from_labels,
+    should_record_train_prediction,
 )
 from ..trainer_utils import create_custom_optimizer, create_custom_scheduler
 
 
 if TYPE_CHECKING:
     from torch.utils.data import Dataset
-    from transformers import PreTrainedTokenizer, ProcessorMixin
+    from transformers import ProcessorMixin
     from transformers.trainer import PredictionOutput
 
-    from ...hparams import FinetuningArguments, ModelArguments
+    from ...hparams import FinetuningArguments, ModelArguments, TrainingArguments
 
 
 logger = logging.get_logger(__name__)
+
+_QID_DATASET_PREFIXES = (
+    ("SpatialSSRL_coldstart_", "SpatialSSRL_coldstart"),
+    ("3DThinker10k_", "3DThinker10k"),
+    ("Scene30k_", "Scene30k"),
+)
+
+# Side channels that must never reach model.forward / model.generate.
+_DUMP_NON_MODEL_KEYS = ("labels", "question_ids", "debug_samples", "_indices")
+# Full-sequence collator tensors. generate() must recompute prompt-only mRoPE.
+_GENERATE_DROP_KEYS = (
+    "position_ids",
+    "rope_deltas",
+    "cache_position",
+    "past_key_values",
+    "mm_token_type_ids",
+)
+_GENERATE_VISION_GROUPS = (
+    ("pixel_values", "image_grid_thw"),
+    ("pixel_values_videos", "video_grid_thw", "second_per_grid_ts", "video_second_per_grid"),
+)
+# Degenerate Qwen chat-start loops observed in CoT eval dumps (NCCL timeout).
+_DUMP_GENERATE_SUPPRESS_TOKENS = ("<|im_start|>",)
+
+
+def _dataset_from_question_id(question_id: str) -> str:
+    for prefix, name in _QID_DATASET_PREFIXES:
+        if question_id.startswith(prefix):
+            return name
+    return "UNKNOWN"
 
 
 class CustomSeq2SeqTrainer(Seq2SeqTrainer):
@@ -61,15 +94,17 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         processor: Optional["ProcessorMixin"],
         model_args: Optional["ModelArguments"] = None,
         gen_kwargs: Optional[dict[str, Any]] = None,
+        ref_model: Optional["torch.nn.Module"] = None,
+        dump_skip_special_tokens: bool = True,
         **kwargs,
     ) -> None:
+        kwargs["processing_class"] = kwargs.pop("tokenizer")
         # Configure FP8 environment if enabled
-        if model_args is not None and model_args.fp8:
-            configure_fp8_environment(model_args)
-        if is_transformers_version_greater_than("4.46"):
-            kwargs["processing_class"] = kwargs.pop("tokenizer")
-        else:
-            self.processing_class: PreTrainedTokenizer = kwargs.get("tokenizer")
+        training_args: TrainingArguments = kwargs.get("args")
+        if training_args.fp8:
+            configure_fp8_environment(training_args)
+            if getattr(training_args, "fp8_backend", "auto") == "te":
+                patch_accelerator_for_fp8()
 
         super().__init__(**kwargs)
         if processor is not None:
@@ -82,29 +117,37 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         self._debug_mm_seen = 0
         self._debug_mm_pre_step_seen = 0
         self._debug_mm_started_at = time.time()
+        self._dump_skip_special_tokens = bool(dump_skip_special_tokens)
         if gen_kwargs is not None:
             # https://github.com/huggingface/transformers/blob/v4.45.0/src/transformers/trainer_seq2seq.py#L287
-            self._gen_kwargs = gen_kwargs
+            self._gen_kwargs = dict(gen_kwargs)
+            if "skip_special_tokens" in self._gen_kwargs:
+                self._dump_skip_special_tokens = bool(self._gen_kwargs.pop("skip_special_tokens"))
 
         # Prediction JSON dumps (QUESTION_ID keyed); optional debug feature.
         self._pred_dump_warned_missing_qid = False
         self._eval_pred_buffer: list[tuple[str, str]] = []
+        # Synced across ranks after gather; never use rank-0-only store.train_full() to skip.
+        self._train_dump_full = False
+        self._last_dumped_train_step = -1
+        self._last_dumped_epoch: Optional[str] = None
         train_path = None
         eval_path = None
         if finetuning_args.save_train_predictions:
             train_path = finetuning_args.train_predictions_file or os.path.join(
-                self.args.output_dir, "train_predictions.json"
+                self.args.output_dir, "train_predictions_ep{epoch}.json"
             )
         if finetuning_args.save_eval_predictions:
             eval_path = finetuning_args.eval_predictions_file or os.path.join(
-                self.args.output_dir, "eval_predictions.json"
+                self.args.output_dir, "eval_predictions_ep{epoch}.json"
             )
         self.prediction_dump: Optional[PredictionDumpStore] = None
         if train_path or eval_path:
             self.prediction_dump = PredictionDumpStore(
-                train_path=train_path,
-                eval_path=eval_path,
+                train_path_template=train_path,
+                eval_path_template=eval_path,
                 max_train_samples=finetuning_args.train_prediction_max_samples,
+                output_dir=self.args.output_dir,
             )
 
         if processor is not None:
@@ -116,20 +159,54 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             self.accelerator.clip_grad_norm_ = MethodType(clip_grad_norm_old_version, self.accelerator)
             self.add_callback(BAdamCallback)
 
+        self.ref_model = ref_model
+
+        if ref_model is not None:
+            from trl.models.utils import prepare_deepspeed, prepare_fsdp
+
+            if getattr(self.accelerator.state, "deepspeed_plugin", None) is not None:
+                if not (
+                    getattr(ref_model, "is_loaded_in_8bit", False) or getattr(ref_model, "is_loaded_in_4bit", False)
+                ):  # quantized models are already set on the correct device
+                    self.ref_model = prepare_deepspeed(self.ref_model, self.accelerator)
+            elif getattr(self.accelerator.state, "fsdp_plugin", None) is not None:
+                if self.accelerator.is_fsdp2:
+                    from accelerate.utils.fsdp_utils import fsdp2_prepare_model
+
+                    self.ref_model = fsdp2_prepare_model(self.accelerator, self.ref_model)
+                else:
+                    self.ref_model = prepare_fsdp(self.ref_model, self.accelerator)
+            else:
+                self.ref_model = self.accelerator.prepare_model(self.ref_model, evaluation_mode=True)
+                self.ref_model.eval()
+
         if finetuning_args.use_dft_loss:
             from ..trainer_utils import dft_loss_func
 
             self.compute_loss_func = dft_loss_func
 
-        # Verify FP8 status after trainer initialization (accelerator should be available)
-        if model_args is not None and model_args.fp8 and hasattr(self, "accelerator"):
-            verify_fp8_status(self.accelerator, model_args)
+        elif finetuning_args.use_eaft_loss:
+            from ..trainer_utils import eaft_loss_func
+
+            self.compute_loss_func = lambda outputs, labels, num_items_in_batch=None: eaft_loss_func(
+                outputs, labels, num_items_in_batch, finetuning_args.eaft_alpha
+            )
+        elif finetuning_args.use_asft_loss:
+            from ..trainer_utils import asft_loss_func
+
+            self.compute_loss_func = partial(
+                asft_loss_func,
+                asft_alpha=finetuning_args.asft_alpha,
+            )
+
+        if training_args.fp8 and hasattr(self, "accelerator"):  # verify FP8 status after trainer initialization
+            verify_fp8_status(self.accelerator, training_args)
 
     @override
-    def create_optimizer(self) -> "torch.optim.Optimizer":
+    def create_optimizer(self, *args, **kwargs) -> "torch.optim.Optimizer":
         if self.optimizer is None:
             self.optimizer = create_custom_optimizer(self.model, self.args, self.finetuning_args)
-        return super().create_optimizer()
+        return super().create_optimizer(*args, **kwargs)
 
     @override
     def create_scheduler(
@@ -361,7 +438,9 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
 
         latest_log = {}
         for entry in reversed(getattr(self.state, "log_history", [])):
-            if isinstance(entry, dict) and any(key in entry for key in ("loss", "grad_norm", "learning_rate", "epoch")):
+            if isinstance(entry, dict) and any(
+                key in entry for key in ("loss", "grad_norm", "learning_rate", "epoch")
+            ):
                 latest_log = entry
                 break
 
@@ -381,14 +460,17 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         logger.info_rank0(message)
 
         if latest_log:
-            log_snapshot = {k: latest_log.get(k) for k in ("loss", "grad_norm", "learning_rate", "epoch") if latest_log.get(k) is not None}
+            log_snapshot = {
+                k: latest_log.get(k)
+                for k in ("loss", "grad_norm", "learning_rate", "epoch")
+                if latest_log.get(k) is not None
+            }
             if log_snapshot:
                 progress_line = (
                     f"[rank{payload['rank']}] mm_debug pre_step progress="
                     f"{current_steps}/{total_steps if total_steps > 0 else '?'} "
                     f"elapsed={elapsed_seconds:.0f}s remaining={remaining_seconds:.0f}s "
-                    f"s/it={seconds_per_it:.2f} "
-                    + json.dumps(log_snapshot, default=str)
+                    f"s/it={seconds_per_it:.2f} " + json.dumps(log_snapshot, default=str)
                 )
                 logger.info_rank0(progress_line)
 
@@ -433,14 +515,24 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
     def _get_tokenizer(self):
         return getattr(self, "processing_class", None) or getattr(self, "tokenizer", None)
 
+    def _get_current_epoch_str(self, is_training: bool = True) -> str:
+        epoch = getattr(self.state, "epoch", None)
+        if epoch is not None:
+            return format_epoch_name(epoch, is_training=is_training)
+        return "1" if is_training else "0"
+
     def _should_record_train_prediction_now(self) -> bool:
         if not self.finetuning_args.save_train_predictions or self.prediction_dump is None:
             return False
-        if self.prediction_dump.train_full():
-            return False
-        step = int(getattr(self.state, "global_step", 0))
-        interval = max(int(self.finetuning_args.train_prediction_interval), 1)
-        return step > 0 and step % interval == 0
+        epoch_str = self._get_current_epoch_str(is_training=True)
+        if self._last_dumped_epoch is not None and self._last_dumped_epoch != epoch_str:
+            self._train_dump_full = False
+        return should_record_train_prediction(
+            dump_full=self._train_dump_full,
+            global_step=int(getattr(self.state, "global_step", 0)),
+            interval=int(self.finetuning_args.train_prediction_interval),
+            last_dumped_step=self._last_dumped_train_step,
+        )
 
     def _warn_missing_question_ids_once(self) -> None:
         if not self._pred_dump_warned_missing_qid:
@@ -448,38 +540,17 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 "save_*_predictions is enabled but batch has no question_ids. "
                 "IDs are normally auto-assigned at convert time as {dataset}_{row_index}; "
                 "if you still see this, ensure overwrite_cache=true so convert re-runs, "
-                "or stamp annotations via scripts/assign_question_ids.py. Skipping dump."
+                "or stamp annotations via scripts/assign_question_ids.py. "
+                "Gathering empty pairs so ranks stay aligned."
             )
             self._pred_dump_warned_missing_qid = True
 
     @staticmethod
     def _flatten_gathered_pairs(gathered: Any) -> list[tuple[str, str]]:
         r"""Normalize gather_object / all_gather_object results to a flat pair list."""
-        if gathered is None:
-            return []
-        merged: list[tuple[str, str]] = []
-        if isinstance(gathered, list) and gathered and isinstance(gathered[0], list):
-            for chunk in gathered:
-                if isinstance(chunk, list):
-                    merged.extend(chunk)
-        elif isinstance(gathered, list) and gathered and isinstance(gathered[0], tuple):
-            merged = list(gathered)
-        else:
-            for chunk in gathered or []:
-                if isinstance(chunk, list):
-                    merged.extend(chunk)
-                elif isinstance(chunk, tuple) and len(chunk) == 2:
-                    merged.append(chunk)
-        return merged
+        return flatten_gathered_pairs(gathered)
 
-    def _gather_prediction_pairs(self, local_pairs: list[tuple[str, str]]) -> list[tuple[str, str]]:
-        r"""Gather (question_id, text) pairs from all ranks.
-
-        Note: ``Accelerator.gather_object`` is **not** available on accelerate 1.x
-        (e.g. 1.11.0). Use ``accelerate.utils.gather_object`` or
-        ``torch.distributed.all_gather_object`` instead. No package upgrade required.
-        """
-        # Single-process fast path (also covers smoke 1-GPU torchrun).
+    def _distributed_world_size(self) -> int:
         world_size = 1
         if hasattr(self, "accelerator") and self.accelerator is not None:
             world_size = int(getattr(self.accelerator, "num_processes", 1) or 1)
@@ -490,7 +561,17 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 world_size = max(world_size, int(dist.get_world_size()))
         except Exception:
             pass
+        return world_size
 
+    def _gather_prediction_pairs(self, local_pairs: list[tuple[str, str]]) -> list[tuple[str, str]]:
+        r"""Gather (question_id, text) pairs from all ranks.
+
+        Note: ``Accelerator.gather_object`` is **not** available on accelerate 1.x
+        (e.g. 1.11.0). Use ``accelerate.utils.gather_object`` or
+        ``torch.distributed.all_gather_object`` instead. No package upgrade required.
+        """
+        # Single-process fast path (also covers smoke 1-GPU torchrun).
+        world_size = self._distributed_world_size()
         if world_size <= 1:
             return list(local_pairs)
 
@@ -503,9 +584,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             if merged or not local_pairs:
                 return merged
         except Exception as err_accel:
-            logger.warning_rank0(
-                f"accelerate.utils.gather_object failed ({err_accel}); trying torch.distributed"
-            )
+            logger.warning_rank0(f"accelerate.utils.gather_object failed ({err_accel}); trying torch.distributed")
 
         # 2) torch.distributed.all_gather_object
         try:
@@ -524,18 +603,63 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         # 3) Last resort: local only (incomplete multi-GPU dump)
         return list(local_pairs)
 
+    def _sync_train_dump_full(self, epoch: Optional[str] = None) -> None:
+        r"""Broadcast rank-0 store.train_full(epoch) so every rank skips (or dumps) together.
+
+        If the collective fails, leave ``_train_dump_full`` unchanged (False) so all
+        ranks keep dumping and gathering — extra work, but not a deadlock.
+        """
+        if epoch is None:
+            epoch = self._get_current_epoch_str(is_training=True)
+
+        full_int = 0
+        if self.prediction_dump is not None and self.is_world_process_zero():
+            full_int = int(self.prediction_dump.train_full(epoch))
+
+        world_size = self._distributed_world_size()
+        if world_size <= 1:
+            self._train_dump_full = bool(full_int)
+            return
+
+        try:
+            import torch.distributed as dist
+
+            if not (dist.is_available() and dist.is_initialized()):
+                self._train_dump_full = bool(full_int)
+                return
+
+            device = torch.device("cpu")
+            if dist.get_backend() == "nccl" and torch.cuda.is_available():
+                device = torch.device("cuda", torch.cuda.current_device())
+            flag = torch.tensor([full_int], device=device, dtype=torch.int32)
+            dist.broadcast(flag, src=0)
+            self._train_dump_full = bool(int(flag.item()))
+        except Exception as err:
+            logger.warning_rank0(f"train dump full-flag broadcast failed ({err}); keeping dump enabled")
+
     def _record_train_pairs(self, pairs: list[tuple[str, str]]) -> None:
-        if self.prediction_dump is None or not pairs:
+        r"""Gather local pairs from every rank, then rank-0 writes.
+
+        Always gather, including when ``pairs`` is empty. Skipping the collective
+        on some ranks (empty texts or a local train_full() cap) deadlocks NCCL.
+        """
+        if self.prediction_dump is None:
             return
         step = int(getattr(self.state, "global_step", 0))
-        all_pairs = self._gather_prediction_pairs(pairs)
+        epoch_str = self._get_current_epoch_str(is_training=True)
+        all_pairs = self._gather_prediction_pairs(list(pairs or []))
         if self.is_world_process_zero():
-            added = self.prediction_dump.add_train_records(step, all_pairs)
-            self.prediction_dump.flush_train()
+            added = self.prediction_dump.add_train_records(step, all_pairs, epoch=epoch_str)
+            if added or all_pairs:
+                self.prediction_dump.flush_train(epoch=epoch_str)
             logger.info_rank0(
-                f"train prediction dump: step={step} local={len(pairs)} "
-                f"gathered={len(all_pairs)} added={added} total={self.prediction_dump.train_record_count}"
+                f"train prediction dump: epoch={epoch_str} step={step} local={len(pairs)} "
+                f"gathered={len(all_pairs)} added={added} "
+                f"total_epoch={self.prediction_dump.get_train_record_count(epoch_str)}"
             )
+        self._last_dumped_train_step = step
+        self._last_dumped_epoch = epoch_str
+        self._sync_train_dump_full(epoch=epoch_str)
 
     def _record_eval_pairs(self, pairs: list[tuple[str, str]]) -> None:
         if not pairs:
@@ -546,20 +670,39 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if self.prediction_dump is None or not self.finetuning_args.save_eval_predictions:
             self._eval_pred_buffer = []
             return
+        epoch_str = self._get_current_epoch_str(is_training=False)
+        step = int(getattr(self.state, "global_step", 0) or 0)
         local_n = len(self._eval_pred_buffer)
         all_pairs = self._gather_prediction_pairs(self._eval_pred_buffer)
         self._eval_pred_buffer = []
         if self.is_world_process_zero():
-            added = self.prediction_dump.add_eval_records(all_pairs)
-            self.prediction_dump.flush_eval()
+            added = self.prediction_dump.add_eval_records(all_pairs, epoch=epoch_str, step=step)
+            self.prediction_dump.flush_eval(epoch=epoch_str)
+            self._log_eval_predictions_to_wandb(all_pairs, step=step)
             logger.info_rank0(
-                f"eval prediction dump: local_buffer={local_n} gathered={len(all_pairs)} "
-                f"added={added} total={len(self.prediction_dump.eval_data)}"
+                f"eval prediction dump: epoch={epoch_str} step={step} local_buffer={local_n} "
+                f"gathered={len(all_pairs)} added={added} "
+                f"total={len(self.prediction_dump.eval_data_by_epoch.get(epoch_str, {}))}"
             )
 
-    def _forward_logits_for_dump(
-        self, model: "torch.nn.Module", inputs: dict[str, Any]
-    ) -> Optional["torch.Tensor"]:
+    def _log_eval_predictions_to_wandb(self, pairs: list[tuple[str, str]], step: int) -> None:
+        report_to = getattr(self.args, "report_to", None) or []
+        if isinstance(report_to, str):
+            report_to = [report_to]
+        if "wandb" not in report_to:
+            return
+        try:
+            import wandb
+        except ImportError:
+            return
+        if wandb.run is None:
+            return
+        columns = ["question_id", "dataset", "prediction"]
+        data = [[qid, _dataset_from_question_id(qid), text] for qid, text in pairs]
+        table = wandb.Table(columns=columns, data=data)
+        wandb.log({"eval_predictions": table}, step=step)
+
+    def _forward_logits_for_dump(self, model: "torch.nn.Module", inputs: dict[str, Any]) -> Optional["torch.Tensor"]:
         r"""Run a no-grad forward that materializes logits for teacher-forced dumps.
 
         Liger fused CE sets ``skip_logits=True`` whenever ``model.training and labels
@@ -567,11 +710,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         labels for this diagnostic pass forces logits to be returned without affecting
         the training loss path.
         """
-        model_inputs = {
-            k: v
-            for k, v in inputs.items()
-            if k not in ("labels", "question_ids", "debug_samples", "_indices")
-        }
+        model_inputs = {k: v for k, v in inputs.items() if k not in _DUMP_NON_MODEL_KEYS}
         was_training = model.training
         try:
             # Keep train/eval mode as-is for correct dropout/BN, but no_grad for dump.
@@ -580,6 +719,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             logits = getattr(outputs, "logits", None)
             if logits is None and isinstance(outputs, (tuple, list)) and len(outputs) > 0:
                 logits = outputs[0] if torch.is_tensor(outputs[0]) else None
+            del outputs
             return logits
         except Exception as err:
             logger.warning_rank0(f"prediction dump logits forward failed: {err}")
@@ -587,6 +727,10 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         finally:
             if was_training and not model.training:
                 model.train()
+
+    def _release_cuda_cache(self) -> None:
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
     def _texts_from_teacher_forced(
         self,
@@ -598,28 +742,161 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         tokenizer = self._get_tokenizer()
         if tokenizer is None:
             return []
-        if logits is None and model is not None and inputs is not None:
-            logits = self._forward_logits_for_dump(model, inputs)
-        if logits is None:
-            logger.warning_rank0(
-                "teacher_forced prediction dump got no logits "
-                "(Liger may skip them when labels are present; dump forward also failed)."
+        owned_logits = False
+        try:
+            if logits is None and model is not None and inputs is not None:
+                logits = self._forward_logits_for_dump(model, inputs)
+                owned_logits = logits is not None
+            if logits is None:
+                logger.warning_rank0(
+                    "teacher_forced prediction dump got no logits "
+                    "(Liger may skip them when labels are present; dump forward also failed)."
+                )
+                return []
+            return decode_teacher_forced_batch(
+                logits, labels, tokenizer, skip_special_tokens=self._dump_skip_special_tokens
             )
-            return []
-        return decode_teacher_forced_batch(logits, labels, tokenizer, skip_special_tokens=True)
+        finally:
+            if owned_logits:
+                del logits
+                self._release_cuda_cache()
+
+    def _unwrap_model_for_dump_generate(self, model: "torch.nn.Module") -> "torch.nn.Module":
+        accelerator = getattr(self, "accelerator", None)
+        if accelerator is None:
+            return model
+        try:
+            return accelerator.unwrap_model(model)
+        except Exception:
+            return model
+
+    @staticmethod
+    def _iter_rope_delta_holders(model: "torch.nn.Module") -> list[Any]:
+        holders: list[Any] = []
+        seen: set[int] = set()
+        stack: list[Any] = [model]
+        while stack:
+            obj = stack.pop()
+            if obj is None or id(obj) in seen:
+                continue
+            seen.add(id(obj))
+            if hasattr(obj, "rope_deltas"):
+                holders.append(obj)
+            for attr in ("model", "module", "base_model"):
+                child = getattr(obj, attr, None)
+                if child is not None and id(child) not in seen:
+                    stack.append(child)
+        return holders
+
+    def _swap_rope_deltas(self, model: "torch.nn.Module", new_value: Any) -> list[tuple[Any, Any]]:
+        saved: list[tuple[Any, Any]] = []
+        for holder in self._iter_rope_delta_holders(model):
+            saved.append((holder, getattr(holder, "rope_deltas", None)))
+            holder.rope_deltas = new_value
+        return saved
+
+    @staticmethod
+    def _restore_rope_deltas(saved: list[tuple[Any, Any]]) -> None:
+        for holder, value in saved:
+            holder.rope_deltas = value
+
+    @staticmethod
+    def _mm_tensor_is_empty(value: Any) -> bool:
+        if value is None:
+            return True
+        if torch.is_tensor(value):
+            return value.numel() == 0
+        return False
+
+    def _collect_generate_mm_inputs(self, inputs: dict[str, Any]) -> dict[str, Any]:
+        r"""Copy vision tensors for generate; drop empty groups that crash Qwen2.5-VL max()."""
+        mm_inputs: dict[str, Any] = {}
+        dropped: set[str] = set()
+        for group in _GENERATE_VISION_GROUPS:
+            if any(self._mm_tensor_is_empty(inputs.get(key)) for key in group if key in inputs):
+                dropped.update(group)
+        skip_keys = {
+            "input_ids",
+            "attention_mask",
+            *_DUMP_NON_MODEL_KEYS,
+            *_GENERATE_DROP_KEYS,
+            *dropped,
+        }
+        for key, value in inputs.items():
+            if key in skip_keys:
+                continue
+            if self._mm_tensor_is_empty(value):
+                continue
+            if torch.is_tensor(value) and value.dim() >= 4 and key.endswith("attention_mask"):
+                continue
+            if torch.is_tensor(value) or value is not None:
+                mm_inputs[key] = value
+        return mm_inputs
+
+    @staticmethod
+    def _dump_generate_suppress_token_ids(tokenizer: Any) -> list[int]:
+        r"""Token ids to block during dump generate (chat-start loops, etc.)."""
+        ids: list[int] = []
+        convert = getattr(tokenizer, "convert_tokens_to_ids", None)
+        if convert is None:
+            return ids
+        unk = getattr(tokenizer, "unk_token_id", None)
+        for token in _DUMP_GENERATE_SUPPRESS_TOKENS:
+            try:
+                tid = convert(token)
+            except Exception:
+                continue
+            if isinstance(tid, list | tuple):
+                if len(tid) != 1:
+                    continue
+                tid = tid[0]
+            if tid is None:
+                continue
+            tid = int(tid)
+            if unk is not None and tid == int(unk):
+                continue
+            if tid < 0:
+                continue
+            if tid not in ids:
+                ids.append(tid)
+        return ids
+
+    def _build_dump_generate_kwargs(self, tokenizer: Any) -> dict[str, Any]:
+        r"""Greedy, capped generate kwargs for dumps. Independent of predict_with_generate."""
+        gen_kwargs = dict(getattr(self, "_gen_kwargs", {}) or {})
+        gen_kwargs.pop("skip_special_tokens", None)
+        for drop_key in _GENERATE_DROP_KEYS:
+            gen_kwargs.pop(drop_key, None)
+        gen_kwargs["do_sample"] = False
+        cap = int(getattr(getattr(self, "finetuning_args", None), "eval_dump_max_new_tokens", 256) or 0)
+        configured = int(gen_kwargs.get("max_new_tokens") or 0)
+        if cap > 0:
+            gen_kwargs["max_new_tokens"] = min(configured, cap) if configured > 0 else cap
+            gen_kwargs.pop("max_length", None)
+        suppress_ids = self._dump_generate_suppress_token_ids(tokenizer)
+        if suppress_ids:
+            existing_suppress = [int(t) for t in (gen_kwargs.get("suppress_tokens") or [])]
+            gen_kwargs["suppress_tokens"] = list(dict.fromkeys([*existing_suppress, *suppress_ids]))
+            bad_words = list(gen_kwargs.get("bad_words_ids") or [])
+            for tid in suppress_ids:
+                if [tid] not in bad_words:
+                    bad_words.append([tid])
+            gen_kwargs["bad_words_ids"] = bad_words
+        return gen_kwargs
 
     def _texts_from_generate(
         self,
         model: "torch.nn.Module",
         inputs: dict[str, Union["torch.Tensor", Any]],
         labels: Optional["torch.Tensor"],
+        question_ids: Optional[list[str]] = None,
     ) -> list[str]:
         r"""Free-form generation on prompt-only slices. Expensive; for debug dumps only."""
         tokenizer = self._get_tokenizer()
         if tokenizer is None or labels is None or "input_ids" not in inputs:
             return []
 
-        gen_kwargs = dict(getattr(self, "_gen_kwargs", {}) or {})
+        gen_kwargs = self._build_dump_generate_kwargs(tokenizer)
         # Ensure generation does not require labels
         prompt_lens = prompt_lengths_from_labels(labels)
         input_ids = inputs["input_ids"]
@@ -639,7 +916,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             if plen <= 0:
                 continue
             prompt_ids[i, :plen] = input_ids[i, :plen]
-            if attention_mask is not None:
+            if attention_mask is not None and attention_mask.dim() == 2:
                 prompt_mask[i, :plen] = attention_mask[i, :plen]
             else:
                 prompt_mask[i, :plen] = 1
@@ -648,39 +925,52 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             "input_ids": prompt_ids,
             "attention_mask": prompt_mask,
         }
-        # Pass through multimodal tensors when present (full batch; models usually index by token layout)
-        for key, value in inputs.items():
-            if key in ("input_ids", "attention_mask", "labels", "question_ids", "debug_samples"):
-                continue
-            if torch.is_tensor(value) or value is not None:
-                gen_inputs[key] = value
+        # Vision tensors stay; full-seq position_ids / rope_deltas must not.
+        # generate() recomputes prompt-only mRoPE from input_ids + grids.
+        gen_inputs.update(self._collect_generate_mm_inputs(inputs))
 
+        qids = [qid for qid in (question_ids or []) if qid]
+        rank = self._get_rank()
+        logger.info(
+            f"[rank{rank}] generate dump start qids={qids} prompt_lens={prompt_lens} "
+            f"max_new_tokens={gen_kwargs.get('max_new_tokens')} do_sample={gen_kwargs.get('do_sample')}"
+        )
+        gen_model = self._unwrap_model_for_dump_generate(model)
         was_training = model.training
-        model.eval()
+        saved_rope_deltas = self._swap_rope_deltas(gen_model, None)
+        started = time.time()
         try:
+            gen_model.eval()
             with torch.no_grad():
-                generated = model.generate(**gen_inputs, **gen_kwargs)
+                generated = gen_model.generate(**gen_inputs, **gen_kwargs)
+        except Exception as err:
+            summary = self._summarize_inputs(gen_inputs)
+            logger.warning(f"[rank{rank}] generate dump failed: {err}; gen_inputs={json.dumps(summary, default=str)}")
+            return []
         finally:
+            self._restore_rope_deltas(saved_rope_deltas)
             if was_training:
                 model.train()
+                if gen_model is not model:
+                    gen_model.train()
 
         texts: list[str] = []
+        n_new: list[int] = []
         for i in range(batch_size):
             plen = min(int(prompt_lens[i]), int(generated.size(1)))
             new_tokens = generated[i, plen:]
-            texts.append(tokenizer.decode(new_tokens, skip_special_tokens=True))
+            n_new.append(int(new_tokens.numel()))
+            texts.append(tokenizer.decode(new_tokens, skip_special_tokens=self._dump_skip_special_tokens))
+        logger.info(f"[rank{rank}] generate dump done qids={qids} n_new={n_new} elapsed={time.time() - started:.1f}s")
         return texts
 
     @override
     def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
         debug_samples = inputs.pop("debug_samples", None)
         question_ids_raw = inputs.pop("question_ids", None)
-
-        if (os.getenv("CLUSTER") == "KILLARNEY" and os.getenv("RUNNING_MODE") == "VENV") or os.getenv("RUNNING_MODE") == "SMOKE":
-            # HACK: to avoid "liger_fused_linear_cross_entropy() got an unexpected keyword argument '_indices'"
-            # Defense in depth: never forward dataset index bookkeeping into the model
-            # (Liger fused CE rejects unexpected kwargs like _indices).
-            inputs.pop("_indices", None)
+        # Defense in depth: never forward dataset index bookkeeping into the model
+        # (generate() rejects unused kwargs; Liger fused CE rejects unexpected _indices).
+        inputs.pop("_indices", None)
         if model.training and self._should_log_mm_debug():
             self._log_mm_debug(inputs, when="pre_forward", debug_samples=debug_samples)
             self._debug_mm_seen += 1
@@ -706,6 +996,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         if need_train_dump:
             batch_size = int(inputs["input_ids"].size(0)) if "input_ids" in inputs else 0
             qids = normalize_question_ids(question_ids_raw, batch_size)
+            pairs: list[tuple[str, str]] = []
             if not any(qids):
                 self._warn_missing_question_ids_once()
             else:
@@ -714,25 +1005,37 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                     # Do NOT rely on the loss forward: Liger fused CE sets skip_logits=True
                     # whenever training and labels are present, so outputs.logits is None.
                     if labels_for_dump is not None:
-                        texts = self._texts_from_teacher_forced(
-                            None, labels_for_dump, model=model, inputs=inputs
-                        )
+                        texts = self._texts_from_teacher_forced(None, labels_for_dump, model=model, inputs=inputs)
                 elif train_mode == "generate":
                     try:
-                        texts = self._texts_from_generate(model, inputs, labels_for_dump)
+                        texts = self._texts_from_generate(model, inputs, labels_for_dump, question_ids=qids)
                     except Exception as gen_err:
-                        logger.warning_rank0(f"train generate prediction dump failed: {gen_err}")
+                        logger.warning(f"[rank{self._get_rank()}] train generate prediction dump failed: {gen_err}")
                         texts = []
                 if texts:
                     pairs = [(qid, text) for qid, text in zip(qids, texts) if qid]
-                    self._record_train_pairs(pairs)
                 else:
                     logger.warning_rank0(
                         f"train prediction dump produced no texts "
                         f"(mode={train_mode}, qids={len([q for q in qids if q])}, batch={batch_size})"
                     )
+            # All ranks must gather, even with empty local pairs.
+            self._record_train_pairs(pairs)
 
         return result
+
+    # def compute_loss(self, model, inputs, *args, **kwargs):
+    #     if self.finetuning_args.use_asft_loss:
+    #         with torch.no_grad():
+    #             ref_outputs = self.ref_model(
+    #                 input_ids=inputs["input_ids"],
+    #                 attention_mask=inputs.get("attention_mask", None),
+    #             )
+    #             ref_logits = ref_outputs.logits
+    #         outputs = model(**inputs)
+    #         return self.compute_loss_func(outputs, inputs["labels"], ref_logits)
+    #     else:
+    #         return super().compute_loss(model, inputs, *args, **kwargs)
 
     @override
     def prediction_step(
@@ -749,6 +1052,7 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         """
         question_ids_raw = inputs.pop("question_ids", None)
         inputs.pop("debug_samples", None)
+        inputs.pop("_indices", None)
 
         labels_for_dump = inputs.get("labels")
         dump_eval = self.finetuning_args.save_eval_predictions and self.prediction_dump is not None
@@ -759,49 +1063,41 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             labels = inputs.get("labels")
 
         # When dumping eval predictions without stock predict_with_generate, still compute loss.
+        # Stay loss-only for HuggingFace: returning [B, S, vocab] logits makes evaluation_loop
+        # concat them on GPU (Qwen2.5-VL vocab is 152064 → tens of GiB per long CoT row).
         if dump_eval and not self.args.predict_with_generate:
-            # Force non-loss-only so we can obtain logits for teacher_forced if needed.
-            want_logits = self.finetuning_args.eval_prediction_mode == "teacher_forced"
-            loss, logits, label_ids = super().prediction_step(
+            loss, _, label_ids = super().prediction_step(
                 model,
                 inputs,
-                prediction_loss_only=prediction_loss_only and not want_logits,
+                prediction_loss_only=True,
                 ignore_keys=ignore_keys,
                 **gen_kwargs,
             )
-            batch_size = int(inputs["input_ids"].size(0)) if "input_ids" in inputs else 0
-            qids = normalize_question_ids(question_ids_raw, batch_size)
-            if not any(qids):
-                self._warn_missing_question_ids_once()
-            else:
-                texts: list[str] = []
-                if self.finetuning_args.eval_prediction_mode == "teacher_forced":
-                    # Prefer a dump forward without relying on HF prediction_step logits
-                    # (may be reduced/absent). Use labels for decoding mask only.
+            # teacher_forced dump is one extra no-grad forward (rank-aligned).
+            # generate dumps run after super().evaluate() so they cannot stall the
+            # per-batch NCCL loss allgather inside HuggingFace evaluation_loop.
+            if self.finetuning_args.eval_prediction_mode == "teacher_forced":
+                batch_size = int(inputs["input_ids"].size(0)) if "input_ids" in inputs else 0
+                qids = normalize_question_ids(question_ids_raw, batch_size)
+                if not any(qids):
+                    self._warn_missing_question_ids_once()
+                else:
+                    texts: list[str] = []
                     try:
                         if labels_for_dump is not None:
-                            texts = self._texts_from_teacher_forced(
-                                None, labels_for_dump, model=model, inputs=inputs
-                            )
+                            texts = self._texts_from_teacher_forced(None, labels_for_dump, model=model, inputs=inputs)
                     except Exception as err:
-                        logger.warning_rank0(f"eval teacher_forced dump failed: {err}")
-                else:  # generate
-                    try:
-                        # restore labels for prompt length if popped
-                        if labels_for_dump is None:
-                            labels_for_dump = labels
-                        texts = self._texts_from_generate(model, inputs, labels_for_dump)
-                    except Exception as err:
-                        logger.warning_rank0(f"eval generate dump failed: {err}")
-                if texts:
-                    self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
-                else:
-                    logger.warning_rank0(
-                        f"eval prediction dump produced no texts "
-                        f"(mode={self.finetuning_args.eval_prediction_mode}, "
-                        f"qids={len([q for q in qids if q])}, batch={batch_size})"
-                    )
-            return loss, logits, label_ids if label_ids is not None else labels
+                        logger.warning(f"[rank{self._get_rank()}] eval teacher_forced dump failed: {err}")
+                    if texts:
+                        self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
+                    else:
+                        logger.warning(
+                            f"[rank{self._get_rank()}] eval prediction dump produced no texts "
+                            f"(mode=teacher_forced, qids={len([q for q in qids if q])}, batch={batch_size})"
+                        )
+            if prediction_loss_only:
+                return loss, None, None
+            return loss, None, label_ids if label_ids is not None else labels
 
         loss, generated_tokens, _ = super().prediction_step(
             model, inputs, prediction_loss_only=prediction_loss_only, ignore_keys=ignore_keys, **gen_kwargs
@@ -814,16 +1110,81 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
                 batch_size = int(generated_tokens.size(0))
                 qids = normalize_question_ids(question_ids_raw, batch_size)
                 if tokenizer is not None and any(qids):
-                    texts = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
+                    texts = tokenizer.batch_decode(
+                        generated_tokens, skip_special_tokens=self._dump_skip_special_tokens
+                    )
                     self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
 
         return loss, generated_tokens, labels
+
+    def _iter_eval_dump_batches(self, eval_dataset: Any = None) -> Any:
+        dataset = self.eval_dataset if eval_dataset is None else eval_dataset
+        if dataset is None:
+            return
+        if isinstance(dataset, dict):
+            loaders = (self.get_eval_dataloader(name) for name in dataset)
+        else:
+            loaders = (self.get_eval_dataloader(eval_dataset),)
+        for loader in loaders:
+            for batch in loader:
+                yield self._prepare_inputs(batch)
+
+    def _dump_eval_generate_batch(self, model: "torch.nn.Module", inputs: dict[str, Any]) -> None:
+        inputs = dict(inputs)
+        question_ids_raw = inputs.pop("question_ids", None)
+        inputs.pop("debug_samples", None)
+        inputs.pop("_indices", None)
+        labels = inputs.get("labels")
+        batch_size = int(inputs["input_ids"].size(0)) if "input_ids" in inputs else 0
+        qids = normalize_question_ids(question_ids_raw, batch_size)
+        if not any(qids):
+            self._warn_missing_question_ids_once()
+            return
+        texts: list[str] = []
+        try:
+            texts = self._texts_from_generate(model, inputs, labels, question_ids=qids)
+        except Exception as err:
+            logger.warning(f"[rank{self._get_rank()}] eval generate dump failed: {err}")
+        if not texts and labels is not None:
+            try:
+                texts = self._texts_from_teacher_forced(None, labels, model=model, inputs=inputs)
+                if texts:
+                    logger.warning(f"[rank{self._get_rank()}] eval generate dump empty; fell back to teacher_forced")
+            except Exception as err:
+                logger.warning(f"[rank{self._get_rank()}] eval teacher_forced fallback after generate failed: {err}")
+        if texts:
+            self._record_eval_pairs([(qid, text) for qid, text in zip(qids, texts) if qid])
+        else:
+            logger.warning(
+                f"[rank{self._get_rank()}] eval prediction dump produced no texts "
+                f"(mode=generate, qids={len([q for q in qids if q])}, batch={batch_size})"
+            )
+
+    def _dump_eval_generate_pass(self, eval_dataset: Any = None) -> None:
+        r"""Generate eval dumps after the loss loop so NCCL gathers stay rank-aligned."""
+        model = getattr(self, "model", None)
+        if model is None:
+            return
+        was_training = bool(getattr(model, "training", False))
+        try:
+            if hasattr(model, "eval"):
+                model.eval()
+            for batch in self._iter_eval_dump_batches(eval_dataset):
+                self._dump_eval_generate_batch(model, batch)
+        finally:
+            if was_training and hasattr(model, "train"):
+                model.train()
 
     @override
     def evaluate(self, *args, **kwargs):
         self._eval_pred_buffer = []
         metrics = super().evaluate(*args, **kwargs)
         if self.finetuning_args.save_eval_predictions:
+            if self.finetuning_args.eval_prediction_mode == "generate" and not self.args.predict_with_generate:
+                eval_dataset = kwargs.get("eval_dataset")
+                if args:
+                    eval_dataset = args[0]
+                self._dump_eval_generate_pass(eval_dataset=eval_dataset)
             self._flush_eval_predictions()
         return metrics
 
@@ -854,7 +1215,13 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             if len(pad_len):  # move pad token to last
                 preds[i] = np.concatenate((preds[i][pad_len[0] :], preds[i][: pad_len[0]]), axis=-1)
 
-        decoded_inputs = self.processing_class.batch_decode(dataset["input_ids"], skip_special_tokens=False)
+        input_ids_column = dataset["input_ids"]
+        try:
+            input_ids_list = input_ids_column.to_pylist()
+        except AttributeError:
+            input_ids_list = list(input_ids_column)
+
+        decoded_inputs = self.processing_class.batch_decode(input_ids_list, skip_special_tokens=False)
         decoded_preds = self.processing_class.batch_decode(preds, skip_special_tokens=skip_special_tokens)
         decoded_labels = self.processing_class.batch_decode(labels, skip_special_tokens=skip_special_tokens)
 

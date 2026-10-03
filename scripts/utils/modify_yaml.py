@@ -4,6 +4,7 @@
 """
 
 import argparse
+import json
 import typing
 import sys
 import os
@@ -55,6 +56,11 @@ def infer_data_type(value: str):
         return True
     elif value.lower() == "false":
         return False
+    if (value.startswith("{") and value.endswith("}")) or (value.startswith("[") and value.endswith("]")):
+        try:
+            return json.loads(value)
+        except json.JSONDecodeError:
+            pass
     try:
         return int(value)
     except ValueError:

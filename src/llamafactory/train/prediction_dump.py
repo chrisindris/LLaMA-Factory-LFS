@@ -18,9 +18,10 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import os
 import tempfile
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 
 if TYPE_CHECKING:
@@ -33,6 +34,83 @@ except Exception:  # pragma: no cover - allow lightweight unit import
 
 
 logger = logging.getLogger(__name__)
+
+
+def format_epoch_name(epoch: Any, is_training: bool = False) -> str:
+    r"""Format epoch as integer string, dropping trailing decimals (e.g. 1.0 -> '1')."""
+    if epoch is None:
+        return "1" if is_training else "0"
+    try:
+        val = float(epoch)
+        if is_training:
+            return str(max(1, int(math.ceil(val)))) if val > 0 else "1"
+        if val.is_integer():
+            return str(int(val))
+        return str(int(round(val)))
+    except (ValueError, TypeError):
+        return str(epoch)
+
+
+def resolve_prediction_dump_path(
+    template_or_path: Optional[str],
+    epoch: str,
+    default_prefix: str,
+    output_dir: str = ".",
+) -> Optional[str]:
+    r"""Resolve path for prediction dumps for a specific epoch."""
+    if not template_or_path:
+        return os.path.join(output_dir, f"{default_prefix}_ep{epoch}.json")
+    if "{epoch}" in template_or_path:
+        return template_or_path.format(epoch=epoch)
+    if template_or_path.endswith(".json"):
+        if f"_ep{epoch}.json" in template_or_path:
+            return template_or_path
+        return template_or_path[:-5] + f"_ep{epoch}.json"
+    return f"{template_or_path}_ep{epoch}.json"
+
+
+def should_record_train_prediction(
+    *,
+    dump_full: bool,
+    global_step: int,
+    interval: int,
+    last_dumped_step: int,
+) -> bool:
+    r"""Whether this microbatch should run a train prediction dump.
+
+    Cap must be a **synced** flag (broadcast after gather), not a rank-0-only
+    ``store.train_full()``. Using a local cap to skip gather deadlocks NCCL.
+    ``last_dumped_step`` limits dumps to once per optimizer step.
+    """
+    if dump_full:
+        return False
+    interval = max(int(interval), 1)
+    step = int(global_step)
+    if step <= 0 or step % interval != 0:
+        return False
+    if step == int(last_dumped_step):
+        return False
+    return True
+
+
+def flatten_gathered_pairs(gathered: Any) -> list[tuple[str, str]]:
+    r"""Normalize gather_object / all_gather_object results to a flat pair list."""
+    if gathered is None:
+        return []
+    merged: list[tuple[str, str]] = []
+    if isinstance(gathered, list) and gathered and isinstance(gathered[0], list):
+        for chunk in gathered:
+            if isinstance(chunk, list):
+                merged.extend(chunk)
+    elif isinstance(gathered, list) and gathered and isinstance(gathered[0], tuple):
+        merged = list(gathered)
+    else:
+        for chunk in gathered or []:
+            if isinstance(chunk, list):
+                merged.extend(chunk)
+            elif isinstance(chunk, tuple) and len(chunk) == 2:
+                merged.append(chunk)
+    return merged
 
 
 def atomic_write_json(path: str, data: dict[str, Any]) -> None:
@@ -54,72 +132,150 @@ def atomic_write_json(path: str, data: dict[str, Any]) -> None:
 
 
 class PredictionDumpStore:
-    r"""In-memory store for train/eval prediction JSON dumps."""
+    r"""In-memory store for train/eval prediction JSON dumps partitioned by epoch."""
 
     def __init__(
         self,
         train_path: Optional[str] = None,
         eval_path: Optional[str] = None,
+        train_path_template: Optional[str] = None,
+        eval_path_template: Optional[str] = None,
         max_train_samples: int = 0,
+        output_dir: str = ".",
     ) -> None:
-        self.train_path = train_path
-        self.eval_path = eval_path
+        self.train_path_template = train_path_template or train_path
+        self.eval_path_template = eval_path_template or eval_path
         self.max_train_samples = max(int(max_train_samples), 0)
-        self.train_data: dict[str, dict[str, str]] = {}
-        self.eval_data: dict[str, str] = {}
-        self.train_record_count = 0
+        self.output_dir = output_dir
+        self.train_data_by_epoch: dict[str, dict[str, dict[str, str]]] = {}
+        self.train_record_counts: dict[str, int] = {}
+        self.eval_data_by_epoch: dict[str, dict[str, dict[str, str]]] = {}
+        self.last_train_epoch: str = "1"
+        self.last_eval_epoch: str = "0"
+
+    def get_train_record_count(self, epoch: Optional[Union[str, int, float]] = None) -> int:
+        epoch_key = format_epoch_name(epoch, is_training=True) if epoch is not None else self.last_train_epoch
+        return self.train_record_counts.get(epoch_key, 0)
 
     @property
-    def train_capacity_remaining(self) -> Optional[int]:
+    def train_record_count(self) -> int:
+        return self.get_train_record_count(self.last_train_epoch)
+
+    def train_capacity_remaining(self, epoch: Optional[Union[str, int, float]] = None) -> Optional[int]:
         if self.max_train_samples <= 0:
             return None
-        return max(self.max_train_samples - self.train_record_count, 0)
+        count = self.get_train_record_count(epoch)
+        return max(self.max_train_samples - count, 0)
 
-    def train_full(self) -> bool:
-        return self.max_train_samples > 0 and self.train_record_count >= self.max_train_samples
+    def train_full(self, epoch: Optional[Union[str, int, float]] = None) -> bool:
+        if self.max_train_samples <= 0:
+            return False
+        return self.get_train_record_count(epoch) >= self.max_train_samples
 
-    def add_train_records(self, step: int, pairs: list[tuple[str, str]]) -> int:
-        r"""Add train records as D[QUESTION_ID][STEP] = text. Returns number added."""
+    def add_train_records(
+        self,
+        step: int,
+        pairs: list[tuple[str, str]],
+        epoch: Optional[Union[str, int, float]] = None,
+    ) -> int:
+        r"""Add train records as D[QUESTION_ID][STEP] = text for given epoch. Returns number added."""
         if not pairs:
             return 0
 
+        epoch_key = format_epoch_name(epoch, is_training=True) if epoch is not None else self.last_train_epoch
+        self.last_train_epoch = epoch_key
+
         step_key = str(int(step))
         added = 0
+        epoch_data = self.train_data_by_epoch.setdefault(epoch_key, {})
         for question_id, text in pairs:
             if not question_id:
                 continue
-            if self.train_full():
+            if self.train_full(epoch_key):
                 break
-            bucket = self.train_data.setdefault(question_id, {})
+            bucket = epoch_data.setdefault(question_id, {})
             # count only first write for this (qid, step); overwrites do not inflate the cap
             is_new = step_key not in bucket
             bucket[step_key] = text
             if is_new:
-                self.train_record_count += 1
+                self.train_record_counts[epoch_key] = self.train_record_counts.get(epoch_key, 0) + 1
                 added += 1
         return added
 
-    def add_eval_records(self, pairs: list[tuple[str, str]]) -> int:
-        r"""Add eval records as D[QUESTION_ID] = text (overwrite on repeat)."""
+    def add_eval_records(
+        self,
+        pairs: list[tuple[str, str]],
+        epoch: Optional[Union[str, int, float]] = None,
+        step: Optional[int] = None,
+    ) -> int:
+        r"""Add eval records as D[QUESTION_ID][STEP] = text for given epoch.
+
+        Mid-epoch evals (e.g. every 10 steps) share an epoch bucket; the inner
+        step key keeps each probe generation instead of overwriting.
+        """
+        epoch_key = format_epoch_name(epoch, is_training=False) if epoch is not None else self.last_eval_epoch
+        self.last_eval_epoch = epoch_key
+        epoch_data = self.eval_data_by_epoch.setdefault(epoch_key, {})
+        step_key = str(int(step)) if step is not None else "0"
         added = 0
         for question_id, text in pairs:
             if not question_id:
                 continue
-            self.eval_data[question_id] = text
-            added += 1
+            bucket = epoch_data.setdefault(question_id, {})
+            is_new = step_key not in bucket
+            bucket[step_key] = text
+            if is_new:
+                added += 1
         return added
 
-    def flush_train(self) -> None:
-        if not self.train_path:
-            return
-        atomic_write_json(self.train_path, self.train_data)
-        logger.info("Wrote train predictions (%s records) to %s", self.train_record_count, self.train_path)
+    def get_train_path(self, epoch: Optional[Union[str, int, float]] = None) -> Optional[str]:
+        if not self.train_path_template:
+            return None
+        epoch_key = format_epoch_name(epoch, is_training=True) if epoch is not None else self.last_train_epoch
+        return resolve_prediction_dump_path(self.train_path_template, epoch_key, "train_predictions", self.output_dir)
 
-    def flush_eval(self) -> None:
-        if not self.eval_path:
-            return
-        atomic_write_json(self.eval_path, self.eval_data)
-        logger.info("Wrote eval predictions (%s records) to %s", len(self.eval_data), self.eval_path)
+    def get_eval_path(self, epoch: Optional[Union[str, int, float]] = None) -> Optional[str]:
+        if not self.eval_path_template:
+            return None
+        epoch_key = format_epoch_name(epoch, is_training=False) if epoch is not None else self.last_eval_epoch
+        return resolve_prediction_dump_path(self.eval_path_template, epoch_key, "eval_predictions", self.output_dir)
+
+    @property
+    def train_path(self) -> Optional[str]:
+        return self.get_train_path(self.last_train_epoch)
+
+    @property
+    def eval_path(self) -> Optional[str]:
+        return self.get_eval_path(self.last_eval_epoch)
+
+    @property
+    def train_data(self) -> dict[str, dict[str, str]]:
+        return self.train_data_by_epoch.get(self.last_train_epoch, {})
+
+    @property
+    def eval_data(self) -> dict[str, dict[str, str]]:
+        return self.eval_data_by_epoch.get(self.last_eval_epoch, {})
+
+    def flush_train(self, epoch: Optional[Union[str, int, float]] = None) -> Optional[str]:
+        path = self.get_train_path(epoch)
+        if not path:
+            return None
+        epoch_key = format_epoch_name(epoch, is_training=True) if epoch is not None else self.last_train_epoch
+        data = self.train_data_by_epoch.get(epoch_key, {})
+        atomic_write_json(path, data)
+        count = self.get_train_record_count(epoch_key)
+        logger.info("Wrote train predictions (%s records) to %s", count, path)
+        return path
+
+    def flush_eval(self, epoch: Optional[Union[str, int, float]] = None) -> Optional[str]:
+        path = self.get_eval_path(epoch)
+        if not path:
+            return None
+        epoch_key = format_epoch_name(epoch, is_training=False) if epoch is not None else self.last_eval_epoch
+        data = self.eval_data_by_epoch.get(epoch_key, {})
+        atomic_write_json(path, data)
+        logger.info("Wrote eval predictions (%s records) to %s", len(data), path)
+        return path
 
 
 def decode_teacher_forced_batch(
@@ -137,14 +293,14 @@ def decode_teacher_forced_batch(
     if logits is None or labels is None:
         return []
 
-    # Align next-token prediction: pred at position t predicts token t+1
-    shift_logits = logits[:, :-1, :].detach()
-    shift_labels = labels[:, 1:]
-    pred_ids = shift_logits.argmax(dim=-1)
+    # Align next-token prediction: pred at position t predicts token t+1.
+    # Argmax in-place on a view; do not keep a shifted logits copy (VL vocab is huge).
+    pred_ids = logits[:, :-1, :].argmax(dim=-1)
+    labels_cpu = labels[:, 1:].detach().cpu()
+    pred_ids_cpu = pred_ids.cpu()
+    del pred_ids
 
     batch_texts: list[str] = []
-    pred_ids_cpu = pred_ids.cpu()
-    labels_cpu = shift_labels.cpu()
     for i in range(pred_ids_cpu.size(0)):
         mask = labels_cpu[i] != IGNORE_INDEX
         token_ids = pred_ids_cpu[i][mask].tolist()

@@ -14,6 +14,11 @@
 
 
 def main():
+    from .extras.backend_compat import apply_optional_backend_compat
+    from .extras.hf_hub_compat import apply_huggingface_hub_compat
+
+    apply_huggingface_hub_compat()
+    apply_optional_backend_compat()
     from .extras.misc import is_env_enabled
 
     if is_env_enabled("USE_V1"):

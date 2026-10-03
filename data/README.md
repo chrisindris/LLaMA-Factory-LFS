@@ -10,6 +10,8 @@ The [dataset_info.json](dataset_info.json) contains all available datasets. If y
 
 **CoT train mix** (Nibi): set `dataset: Scene30k,SpatialSSRL_coldstart,3DThinker10k` with `mix_strategy: concat` so each epoch includes all three. Example: `examples/train_lora/nibi_qwen2_5vl_lora_sft_CoT_traineval.yaml` and `models/qwen2_5vl_lora_sft_CoT/`.
 
+The frozen 16-row probe (`Scene30k_eval16`, `SpatialSSRL_eval16`, `3DThinker10k_eval16` in `data/cot_eval16/`) is sliced from those parent files. With `exclude_eval_from_train` (default on), the loader drops those `question_id`s from train when they are used as `eval_dataset`. Use `val_size_equivalent: 0.1` (with `val_size: 0`) to keep that 16-row eval but downsample train to the size `--val_size 0.1` would have left, minus any remaining holdout overlap.
+
 H5-backed datasets keep annotation path strings and decode images lazily through `src/llamafactory/data/data_packing/h5_image_store.py` (no need to unpack JPEG trees for Spatial-SSRL or 3DThinker-10k). Scene30k paths that point at another cluster’s ScanNet root are remapped via `SCANNET_H5_DIR`.
 
 Format conversion caches resolved media paths (up to 65,536) and ScanNet scene directories
@@ -101,7 +103,7 @@ and `examples/train_lora/trillium_qwen2_5vl_lora_sft_CoT_prediction_dump_smoke.y
 
 **Single `media_dir` vs multi-root H5:** LLaMA-Factory CLI accepts only one `--media_dir`, which is a filesystem join prefix for relative image paths. That is **not** a problem for the CoT mix in this fork: `converter._find_medias` falls back to `can_resolve_h5_image`, and `h5_image_store.resolve_h5_image` routes by path pattern to the correct store (`SCANNET_H5_DIR` / `SPATIALSSRL_H5_DIR` / `THINKER10K_H5_DIR`). You do **not** need a unified CoT symlink tree or a custom CoT dataset for multi-source images. Specs: [`Spatial-SSRL/h5_dataloader_spec.md`](Spatial-SSRL/h5_dataloader_spec.md), [`3DThinker-10K/3dthinker10k_h5_dataloader_spec.md`](3DThinker-10K/3dthinker10k_h5_dataloader_spec.md). Smoke: `scripts/smoke_cot_h5_resolve.py`.
 
-The `dataset_info.json` file should be put in the `dataset_dir` directory. You can change `dataset_dir` to use another directory. The default value is `./data`.
+The `dataset_info.json` file should be put in the `dataset_dir` directory. You can change `dataset_dir` to use another directory. The default value is `./data`. Hub-cache `file_name` values may start with `${HF_HUB_CACHE}` or `${HF_HOME}` and are expanded at load time; those variables are set per cluster by `scripts/utils/env.sh`.
 
 Currently we support datasets in **alpaca** and **sharegpt** format. Allowed file types include json, jsonl, csv, parquet, arrow.
 

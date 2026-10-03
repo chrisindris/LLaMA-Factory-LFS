@@ -14,13 +14,77 @@
 
 import json
 import os
+import re
 from dataclasses import dataclass
-from typing import Any, Literal, Optional, Union
+from typing import Any, Literal
 
 from huggingface_hub import hf_hub_download
 
 from ..extras.constants import DATA_CONFIG
 from ..extras.misc import use_modelscope, use_openmind
+
+
+# Match ${HF_HUB_CACHE} / $HF_HUB_CACHE and ${HF_HOME} / $HF_HOME only.
+# Do not use huggingface_hub's default `$HF_HOME/hub`: this repo's sysconfig
+# points HF_HOME at the hub cache directory itself.
+_HF_CACHE_VAR_RE = re.compile(r"\$\{(HF_HUB_CACHE|HF_HOME)\}|\$(HF_HUB_CACHE|HF_HOME)(?![A-Za-z0-9_])")
+
+_MISSING_HF_CACHE_MSG = (
+    "file_name uses $HF_HOME or $HF_HUB_CACHE but neither environment variable is set. "
+    "Source scripts/utils/env.sh or export HF_HUB_CACHE (or HF_HOME) to the Hugging Face hub cache."
+)
+
+
+def resolve_hf_cache_root() -> str | None:
+    r"""Return HF_HUB_CACHE, falling back to HF_HOME. Does not append ``/hub``."""
+    return os.environ.get("HF_HUB_CACHE") or os.environ.get("HF_HOME") or None
+
+
+def expand_dataset_path(path: str) -> str:
+    r"""Expand ``$HF_HOME`` / ``$HF_HUB_CACHE`` in a dataset_info ``file_name``.
+
+    If only one of the two env vars is set, the other is filled from it. Other
+    ``$VARS`` and ordinary relative or absolute paths are left unchanged.
+    """
+    if not path:
+        return path
+
+    path = os.path.expanduser(path)
+    if _HF_CACHE_VAR_RE.search(path) is None:
+        return path
+
+    cache_root = resolve_hf_cache_root()
+    if not cache_root:
+        raise ValueError(_MISSING_HF_CACHE_MSG)
+
+    hf_hub_cache = os.environ.get("HF_HUB_CACHE") or cache_root
+    hf_home = os.environ.get("HF_HOME") or cache_root
+
+    def _repl(match: re.Match[str]) -> str:
+        name = match.group(1) or match.group(2)
+        return hf_hub_cache if name == "HF_HUB_CACHE" else hf_home
+
+    return _HF_CACHE_VAR_RE.sub(_repl, path)
+
+
+def cache_relative_file_name(path: str) -> str | None:
+    r"""Rewrite an absolute path under the HF cache as ``${HF_HUB_CACHE}/...``.
+
+    Returns None if the path is not under the current cache root.
+    """
+    root = resolve_hf_cache_root()
+    if not root:
+        return None
+
+    abs_path = os.path.abspath(path)
+    abs_root = os.path.abspath(root)
+    prefix = abs_root if abs_root.endswith(os.sep) else abs_root + os.sep
+    if abs_path == abs_root:
+        return "${HF_HUB_CACHE}"
+    if abs_path.startswith(prefix):
+        rel = abs_path[len(prefix) :].replace(os.sep, "/")
+        return "${HF_HUB_CACHE}/" + rel
+    return None
 
 
 @dataclass
@@ -30,44 +94,44 @@ class DatasetAttr:
     # basic configs
     load_from: Literal["hf_hub", "ms_hub", "om_hub", "script", "file"]
     dataset_name: str
-    formatting: Literal["alpaca", "sharegpt"] = "alpaca"
+    formatting: Literal["alpaca", "sharegpt", "openai"] = "alpaca"
     ranking: bool = False
     # extra configs
-    subset: Optional[str] = None
+    subset: str | None = None
     split: str = "train"
-    folder: Optional[str] = None
-    num_samples: Optional[int] = None
+    folder: str | None = None
+    num_samples: int | None = None
     # common columns
-    system: Optional[str] = None
-    tools: Optional[str] = None
-    images: Optional[str] = None
-    videos: Optional[str] = None
-    audios: Optional[str] = None
-    question_id: Optional[str] = None
+    system: str | None = None
+    tools: str | None = None
+    images: str | None = None
+    videos: str | None = None
+    audios: str | None = None
     # dpo columns
-    chosen: Optional[str] = None
-    rejected: Optional[str] = None
-    kto_tag: Optional[str] = None
+    chosen: str | None = None
+    rejected: str | None = None
+    kto_tag: str | None = None
+    question_id: str | None = None
     # alpaca columns
-    prompt: Optional[str] = "instruction"
-    query: Optional[str] = "input"
-    response: Optional[str] = "output"
-    history: Optional[str] = None
+    prompt: str | None = "instruction"
+    query: str | None = "input"
+    response: str | None = "output"
+    history: str | None = None
     # sharegpt columns
-    messages: Optional[str] = "conversations"
+    messages: str | None = "conversations"
     # sharegpt tags
-    role_tag: Optional[str] = "from"
-    content_tag: Optional[str] = "value"
-    user_tag: Optional[str] = "human"
-    assistant_tag: Optional[str] = "gpt"
-    observation_tag: Optional[str] = "observation"
-    function_tag: Optional[str] = "function_call"
-    system_tag: Optional[str] = "system"
+    role_tag: str | None = "from"
+    content_tag: str | None = "value"
+    user_tag: str | None = "human"
+    assistant_tag: str | None = "gpt"
+    observation_tag: str | None = "observation"
+    function_tag: str | None = "function_call"
+    system_tag: str | None = "system"
 
     def __repr__(self) -> str:
         return self.dataset_name
 
-    def set_attr(self, key: str, obj: dict[str, Any], default: Optional[Any] = None) -> None:
+    def set_attr(self, key: str, obj: dict[str, Any], default: Any | None = None) -> None:
         setattr(self, key, obj.get(key, default))
 
     def join(self, attr: dict[str, Any]) -> None:
@@ -91,7 +155,7 @@ class DatasetAttr:
                 self.set_attr(tag, attr["tags"])
 
 
-def get_dataset_list(dataset_names: Optional[list[str]], dataset_dir: Union[str, dict]) -> list["DatasetAttr"]:
+def get_dataset_list(dataset_names: list[str] | None, dataset_dir: str | dict) -> list["DatasetAttr"]:
     r"""Get the attributes of the datasets."""
     if dataset_names is None:
         dataset_names = []
@@ -140,9 +204,11 @@ def get_dataset_list(dataset_names: Optional[list[str]], dataset_dir: Union[str,
         elif "script_url" in dataset_info[name]:
             dataset_attr = DatasetAttr("script", dataset_name=dataset_info[name]["script_url"])
         elif "cloud_file_name" in dataset_info[name]:
-            dataset_attr = DatasetAttr("cloud_file", dataset_name=dataset_info[name]["cloud_file_name"])
+            cloud_path = expand_dataset_path(dataset_info[name]["cloud_file_name"])
+            dataset_attr = DatasetAttr("cloud_file", dataset_name=cloud_path)
         else:
-            dataset_attr = DatasetAttr("file", dataset_name=dataset_info[name]["file_name"])
+            file_path = expand_dataset_path(dataset_info[name]["file_name"])
+            dataset_attr = DatasetAttr("file", dataset_name=file_path)
 
         dataset_attr.join(dataset_info[name])
         dataset_list.append(dataset_attr)

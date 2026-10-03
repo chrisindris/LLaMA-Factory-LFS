@@ -1,0 +1,1661 @@
+PROJECT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: TAMIA
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: None
+SIF_FILE: None
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/i/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/i/indrisch/venv_llamafactory_py313/
+RUNNING_MODE: VENV
+
+Lmod is automatically replacing "gcc/12.3" with "go/1.26.5".
+
+
+Lmod is automatically replacing "go/1.26.5" with "gcc/12.3".
+
+
+Activating Modules:
+  1) flexiblas/3.3.1     2) openmpi/4.1.5
+
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.2.1)
+Requirement already satisfied: setuptools in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (84.0.0+computecanada)
+Requirement already satisfied: wheel in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (0.48.0)
+Requirement already satisfied: packaging>=24.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from wheel) (26.3)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: packaging in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.3)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: huggingface_hub in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (1.27.0)
+Requirement already satisfied: ruamel.yaml in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (0.19.1+computecanada)
+Requirement already satisfied: click<9.0.0,>=8.4.2 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (8.4.2+computecanada)
+Requirement already satisfied: filelock>=3.10.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (3.32.3)
+Requirement already satisfied: fsspec>=2023.5.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (2025.3.0+computecanada)
+Requirement already satisfied: hf-xet<2.0.0,>=1.5.2 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (1.5.2+computecanada)
+Requirement already satisfied: httpx<1,>=0.23.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (0.28.1+computecanada)
+Requirement already satisfied: packaging>=20.9 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (26.3)
+Requirement already satisfied: pyyaml>=5.1 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (6.0.3+computecanada)
+Requirement already satisfied: tqdm>=4.42.1 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.70.0+computecanada)
+Requirement already satisfied: typing-extensions>=4.1.0 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.16.0+computecanada)
+Requirement already satisfied: anyio in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (4.14.2+computecanada)
+Requirement already satisfied: certifi in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (1.0.9+computecanada)
+Requirement already satisfied: idna in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (3.18+computecanada)
+Requirement already satisfied: h11>=0.16 in /scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpcore==1.*->httpx<1,>=0.23.0->huggingface_hub) (0.16.0+computecanada)
+YAML_FILE: /scratch/i/indrisch//LLaMA-Factory-LFS/examples/train_lora/tamia_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR_SAVES: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+OUTPUT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+CACHE_DIR: /project/aip-wangcs/indrisch/huggingface/hub
+RESUME_CKPT: null
+GPU TYPE: HBM3
+SLURM_JOB_NODELIST: tg11307
+HEAD_NODE: tg11307
+HEAD_NODE: tg11307
+MASTER_ADDR: tg11307
+MASTER_PORT: 29500
+PROJECT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/scratch/i/indrisch/LLaMA-Factory-LFS/scripts:/scratch/i/indrisch/LLaMA-Factory-LFS/scripts/utils:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts:/scratch/i/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: TAMIA
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 9.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: h100
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: None
+SIF_FILE: None
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/i/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/i/indrisch/venv_llamafactory_py313/
+SCANNET_H5_DIR: /scratch/i/indrisch/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR: /scratch/i/indrisch/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR: /scratch/i/indrisch/3DThinker10K_images_h5/
+CLUSTER: TAMIA
+YAML_FILE: /scratch/i/indrisch//LLaMA-Factory-LFS/examples/train_lora/tamia_qwen2_5vl_lora_sft_CoT_traineval_resume_epoch1.yaml
+OUTPUT_DIR: /scratch/i/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/
+RESUME_CKPT: null
+No resume checkpoint (fresh start from epoch 0).
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00] === Node-local CoT dataset staging ===
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00] HOST=tg11307.tamia.ecpia.ca SLURM_NODEID=0 SLURM_NNODES=1
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00] NODE_LOCAL_DATA_ROOT=/tmp/cot_stage
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00] STAGE_COPY_JOBS=24 STAGE_STAGGER_SEC=0
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00] Sources:
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00]   SCENE30K_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.parquet
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00]   SPATIALSSRL_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00]   THINKER10K_ANN_SRC=/scratch/i/indrisch//LLaMA-Factory-LFS/data/3DThinker-10K/out/3dthinker10k_cot.jsonl
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00]   SCANNET_H5_DIR(src)=/scratch/i/indrisch/ScanNet_h5/scans
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00]   SPATIALSSRL_H5_DIR(src)=/scratch/i/indrisch/Spatial-SSRL_images_h5
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00]   THINKER10K_H5_DIR(src)=/scratch/i/indrisch/3DThinker10K_images_h5/
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00] Free space on /tmp/cot_stage: 7235681542144 bytes (need ~128849018880)
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00] Copying annotations...
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00] Annotations done in -1786999992s
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00] Copying ScanNet H5 tree...
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:12-04:00] Copying 700 entries from /scratch/i/indrisch/ScanNet_h5/scans -> /tmp/cot_stage/media/ScanNet_h5/scans (jobs=24)
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:17-04:00] ScanNet done in -1786999992s
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:17-04:00] Copying Spatial-SSRL H5 tree...
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:53:17-04:00] Copying 13 entries from /scratch/i/indrisch/Spatial-SSRL_images_h5 -> /tmp/cot_stage/media/Spatial-SSRL_images_h5 (jobs=24)
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:54:18-04:00] Spatial-SSRL done in -1786999997s
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:54:18-04:00] Copying 3DThinker H5 tree...
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:54:18-04:00] Copying 2 entries from /scratch/i/indrisch/3DThinker10K_images_h5/ -> /tmp/cot_stage/media/3DThinker10K_images_h5 (jobs=24)
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:54:22-04:00] 3DThinker done in -1787000058s
+Wrote local dataset_info (3 entries) -> /tmp/cot_stage/dataset_dir/dataset_info.json
+  Scene30k: /tmp/cot_stage/annotations/Scene30k.parquet
+  SpatialSSRL_coldstart: /tmp/cot_stage/annotations/SpatialSSRL_coldstart.json
+  3DThinker10k: /tmp/cot_stage/annotations/3dthinker10k_cot.jsonl
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:54:22-04:00] VERIFY OK under /tmp/cot_stage
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:54:22-04:00] === Staging complete in 70s ===
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:54:22-04:00] LOCAL_DATASET_DIR=/tmp/cot_stage/dataset_dir
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:54:22-04:00] LOCAL_MEDIA_DIR=/tmp/cot_stage/media/ScanNet_h5
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:54:22-04:00] SCANNET_H5_DIR=/tmp/cot_stage/media/ScanNet_h5/scans
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:54:22-04:00] SPATIALSSRL_H5_DIR=/tmp/cot_stage/media/Spatial-SSRL_images_h5
+[stage tg11307.tamia.ecpia.ca node=0 2026-08-17T16:54:22-04:00] THINKER10K_H5_DIR=/tmp/cot_stage/media/3DThinker10K_images_h5
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme1n1    7.0T  105G  6.5T   2% /tmp
+Patched YAML -> /tmp/cot_stage/train.yaml
+  dataset_dir: /tmp/cot_stage/dataset_dir
+  media_dir: /tmp/cot_stage/media/ScanNet_h5
+YAML_FILE (node-local): /tmp/cot_stage/train.yaml
+LOCAL_DATASET_DIR: /tmp/cot_stage/dataset_dir
+LOCAL_MEDIA_DIR: /tmp/cot_stage/media/ScanNet_h5
+SCANNET_H5_DIR (local): /tmp/cot_stage/media/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR (local): /tmp/cot_stage/media/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR (local): /tmp/cot_stage/media/3DThinker10K_images_h5
+Copying venv to local storage...
+/scratch/i/indrisch/LLaMA-Factory-LFS /scratch/i/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT
+[INFO|2026-08-17 16:55:55] llamafactory.launcher:144 >> Initializing 4 distributed tasks at: tg11307:29500
+W0817 16:55:57.214000 1468997 torch/distributed/run.py:851] 
+W0817 16:55:57.214000 1468997 torch/distributed/run.py:851] *****************************************
+W0817 16:55:57.214000 1468997 torch/distributed/run.py:851] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0817 16:55:57.214000 1468997 torch/distributed/run.py:851] *****************************************
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[WARNING|2026-08-17 16:56:08] llamafactory.extras.misc:155 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+df: /tmp/.triton_cachedf: /tmp/.triton_cachedf: /tmp/.triton_cache: No such file or directory
+: No such file or directory
+df: /tmp/.triton_cache: No such file or directory
+: No such file or directory
+[W817 16:56:17.059969035 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[W817 16:56:17.059973118 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[W817 16:56:17.059986070 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[W817 16:56:17.060374712 ProcessGroupNCCL.cpp:932] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+tg11307:1469000:1469000 [0] NCCL INFO Bootstrap: Using ibp77s0:10.225.0.78<0>
+tg11307:1469000:1469000 [0] NCCL INFO cudaDriverVersion 13000
+tg11307:1469000:1469000 [0] NCCL INFO NCCL version 2.27.7+cuda12.9
+tg11307:1469000:1469000 [0] NCCL INFO Comm config Blocking set to 1
+tg11307:1469003:1469003 [3] NCCL INFO cudaDriverVersion 13000
+tg11307:1469003:1469003 [3] NCCL INFO Bootstrap: Using ibp77s0:10.225.0.78<0>
+tg11307:1469003:1469003 [3] NCCL INFO NCCL version 2.27.7+cuda12.9
+tg11307:1469003:1469003 [3] NCCL INFO Comm config Blocking set to 1
+tg11307:1469001:1469001 [1] NCCL INFO cudaDriverVersion 13000
+tg11307:1469001:1469001 [1] NCCL INFO Bootstrap: Using ibp77s0:10.225.0.78<0>
+tg11307:1469001:1469001 [1] NCCL INFO NCCL version 2.27.7+cuda12.9
+tg11307:1469002:1469002 [2] NCCL INFO cudaDriverVersion 13000
+tg11307:1469001:1469001 [1] NCCL INFO Comm config Blocking set to 1
+tg11307:1469002:1469002 [2] NCCL INFO Bootstrap: Using ibp77s0:10.225.0.78<0>
+tg11307:1469002:1469002 [2] NCCL INFO NCCL version 2.27.7+cuda12.9
+tg11307:1469002:1469002 [2] NCCL INFO Comm config Blocking set to 1
+tg11307:1469000:1469429 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+tg11307:1469003:1469430 [3] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+tg11307:1469000:1469429 [0] NCCL INFO NET/IB : Using [0]mlx5_2:1/IB [1]mlx5_0:1/IB [2]mlx5_3:1/IB [3]mlx5_1:1/IB [RO]; OOB ibp77s0:10.225.0.78<0>
+tg11307:1469000:1469429 [0] NCCL INFO Initialized NET plugin IB
+tg11307:1469000:1469429 [0] NCCL INFO Assigned NET plugin IB to comm
+tg11307:1469000:1469429 [0] NCCL INFO Using network IB
+tg11307:1469003:1469430 [3] NCCL INFO NET/IB : Using [0]mlx5_2:1/IB [1]mlx5_0:1/IB [2]mlx5_3:1/IB [3]mlx5_1:1/IB [RO]; OOB ibp77s0:10.225.0.78<0>
+tg11307:1469003:1469430 [3] NCCL INFO Initialized NET plugin IB
+tg11307:1469003:1469430 [3] NCCL INFO Assigned NET plugin IB to comm
+tg11307:1469003:1469430 [3] NCCL INFO Using network IB
+tg11307:1469002:1469432 [2] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+tg11307:1469001:1469431 [1] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+tg11307:1469002:1469432 [2] NCCL INFO NET/IB : Using [0]mlx5_2:1/IB [1]mlx5_0:1/IB [2]mlx5_3:1/IB [3]mlx5_1:1/IB [RO]; OOB ibp77s0:10.225.0.78<0>
+tg11307:1469002:1469432 [2] NCCL INFO Initialized NET plugin IB
+tg11307:1469001:1469431 [1] NCCL INFO NET/IB : Using [0]mlx5_2:1/IB [1]mlx5_0:1/IB [2]mlx5_3:1/IB [3]mlx5_1:1/IB [RO]; OOB ibp77s0:10.225.0.78<0>
+tg11307:1469001:1469431 [1] NCCL INFO Initialized NET plugin IB
+tg11307:1469002:1469432 [2] NCCL INFO Assigned NET plugin IB to comm
+tg11307:1469002:1469432 [2] NCCL INFO Using network IB
+tg11307:1469001:1469431 [1] NCCL INFO Assigned NET plugin IB to comm
+tg11307:1469001:1469431 [1] NCCL INFO Using network IB
+tg11307:1469003:1469430 [3] NCCL INFO ncclCommInitRankConfig comm 0x178e25e0 rank 3 nranks 4 cudaDev 3 nvmlDev 3 busId db000 commId 0x2ae77c3fd8cf085e - Init START
+tg11307:1469000:1469429 [0] NCCL INFO ncclCommInitRankConfig comm 0x3bcf0380 rank 0 nranks 4 cudaDev 0 nvmlDev 0 busId 4e000 commId 0x2ae77c3fd8cf085e - Init START
+tg11307:1469002:1469432 [2] NCCL INFO ncclCommInitRankConfig comm 0x2f78f350 rank 2 nranks 4 cudaDev 2 nvmlDev 2 busId cb000 commId 0x2ae77c3fd8cf085e - Init START
+tg11307:1469001:1469431 [1] NCCL INFO ncclCommInitRankConfig comm 0x390b4460 rank 1 nranks 4 cudaDev 1 nvmlDev 1 busId 5f000 commId 0x2ae77c3fd8cf085e - Init START
+tg11307:1469003:1469430 [3] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+tg11307:1469000:1469429 [0] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+tg11307:1469002:1469432 [2] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+tg11307:1469001:1469431 [1] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+tg11307:1469000:1469429 [0] NCCL INFO Bootstrap timings total 0.001931 (create 0.000078, send 0.000201, recv 0.000869, ring 0.000201, delay 0.000002)
+tg11307:1469003:1469430 [3] NCCL INFO Bootstrap timings total 0.002034 (create 0.000070, send 0.000226, recv 0.000582, ring 0.000386, delay 0.000001)
+tg11307:1469002:1469432 [2] NCCL INFO Bootstrap timings total 0.001675 (create 0.000066, send 0.000206, recv 0.000459, ring 0.000143, delay 0.000001)
+tg11307:1469001:1469431 [1] NCCL INFO Bootstrap timings total 0.001586 (create 0.000088, send 0.000198, recv 0.000613, ring 0.000101, delay 0.000001)
+tg11307:1469002:1469432 [2] NCCL INFO Setting affinity for GPU 2 to 1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47
+tg11307:1469002:1469432 [2] NCCL INFO NVLS multicast support is not available on dev 2 (NVLS_NCHANNELS 0)
+tg11307:1469001:1469431 [1] NCCL INFO Setting affinity for GPU 1 to 0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46
+tg11307:1469001:1469431 [1] NCCL INFO NVLS multicast support is not available on dev 1 (NVLS_NCHANNELS 0)
+tg11307:1469003:1469430 [3] NCCL INFO Setting affinity for GPU 3 to 1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47
+tg11307:1469003:1469430 [3] NCCL INFO NVLS multicast support is not available on dev 3 (NVLS_NCHANNELS 0)
+tg11307:1469000:1469429 [0] NCCL INFO Setting affinity for GPU 0 to 0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46
+tg11307:1469000:1469429 [0] NCCL INFO NVLS multicast support is not available on dev 0 (NVLS_NCHANNELS 0)
+tg11307:1469002:1469432 [2] NCCL INFO comm 0x2f78f350 rank 2 nRanks 4 nNodes 1 localRanks 4 localRank 2 MNNVL 0
+tg11307:1469000:1469429 [0] NCCL INFO comm 0x3bcf0380 rank 0 nRanks 4 nNodes 1 localRanks 4 localRank 0 MNNVL 0
+tg11307:1469003:1469430 [3] NCCL INFO comm 0x178e25e0 rank 3 nRanks 4 nNodes 1 localRanks 4 localRank 3 MNNVL 0
+tg11307:1469000:1469429 [0] NCCL INFO Channel 00/24 : 0 1 2 3
+tg11307:1469000:1469429 [0] NCCL INFO Channel 01/24 : 0 1 3 2
+tg11307:1469001:1469431 [1] NCCL INFO comm 0x390b4460 rank 1 nRanks 4 nNodes 1 localRanks 4 localRank 1 MNNVL 0
+tg11307:1469000:1469429 [0] NCCL INFO Channel 02/24 : 0 2 3 1
+tg11307:1469000:1469429 [0] NCCL INFO Channel 03/24 : 0 2 1 3
+tg11307:1469000:1469429 [0] NCCL INFO Channel 04/24 : 0 3 1 2
+tg11307:1469000:1469429 [0] NCCL INFO Channel 05/24 : 0 3 2 1
+tg11307:1469002:1469432 [2] NCCL INFO Trees [0] 3/-1/-1->2->1 [1] 3/-1/-1->2->1 [2] 3/-1/-1->2->1 [3] 3/-1/-1->2->1 [4] 1/-1/-1->2->0 [5] 1/-1/-1->2->0 [6] 1/-1/-1->2->0 [7] 1/-1/-1->2->0 [8] -1/-1/-1->2->3 [9] -1/-1/-1->2->3 [10] -1/-1/-1->2->3 [11] -1/-1/-1->2->3 [12] 3/-1/-1->2->1 [13] 3/-1/-1->2->1 [14] 3/-1/-1->2->1 [15] 3/-1/-1->2->1 [16] 1/-1/-1->2->0 [17] 1/-1/-1->2->0 [18] 1/-1/-1->2->0 [19] 1/-1/-1->2->0 [20] -1/-1/-1->2->3 [21] -1/-1/-1->2->3 [22] -1/-1/-1->2->3 [23] -1/-1/-1->2->3
+tg11307:1469000:1469429 [0] NCCL INFO Channel 06/24 : 0 1 2 3
+tg11307:1469002:1469432 [2] NCCL INFO P2P Chunksize set to 524288
+tg11307:1469003:1469430 [3] NCCL INFO Trees [0] -1/-1/-1->3->2 [1] -1/-1/-1->3->2 [2] -1/-1/-1->3->2 [3] -1/-1/-1->3->2 [4] -1/-1/-1->3->1 [5] -1/-1/-1->3->1 [6] -1/-1/-1->3->1 [7] -1/-1/-1->3->1 [8] 2/-1/-1->3->0 [9] 2/-1/-1->3->0 [10] 2/-1/-1->3->0 [11] 2/-1/-1->3->0 [12] -1/-1/-1->3->2 [13] -1/-1/-1->3->2 [14] -1/-1/-1->3->2 [15] -1/-1/-1->3->2 [16] -1/-1/-1->3->1 [17] -1/-1/-1->3->1 [18] -1/-1/-1->3->1 [19] -1/-1/-1->3->1 [20] 2/-1/-1->3->0 [21] 2/-1/-1->3->0 [22] 2/-1/-1->3->0 [23] 2/-1/-1->3->0
+tg11307:1469000:1469429 [0] NCCL INFO Channel 07/24 : 0 1 3 2
+tg11307:1469000:1469429 [0] NCCL INFO Channel 08/24 : 0 2 3 1
+tg11307:1469003:1469430 [3] NCCL INFO P2P Chunksize set to 524288
+tg11307:1469000:1469429 [0] NCCL INFO Channel 09/24 : 0 2 1 3
+tg11307:1469000:1469429 [0] NCCL INFO Channel 10/24 : 0 3 1 2
+tg11307:1469000:1469429 [0] NCCL INFO Channel 11/24 : 0 3 2 1
+tg11307:1469000:1469429 [0] NCCL INFO Channel 12/24 : 0 1 2 3
+tg11307:1469000:1469429 [0] NCCL INFO Channel 13/24 : 0 1 3 2
+tg11307:1469000:1469429 [0] NCCL INFO Channel 14/24 : 0 2 3 1
+tg11307:1469001:1469431 [1] NCCL INFO Trees [0] 2/-1/-1->1->0 [1] 2/-1/-1->1->0 [2] 2/-1/-1->1->0 [3] 2/-1/-1->1->0 [4] 3/-1/-1->1->2 [5] 3/-1/-1->1->2 [6] 3/-1/-1->1->2 [7] 3/-1/-1->1->2 [8] 0/-1/-1->1->-1 [9] 0/-1/-1->1->-1 [10] 0/-1/-1->1->-1 [11] 0/-1/-1->1->-1 [12] 2/-1/-1->1->0 [13] 2/-1/-1->1->0 [14] 2/-1/-1->1->0 [15] 2/-1/-1->1->0 [16] 3/-1/-1->1->2 [17] 3/-1/-1->1->2 [18] 3/-1/-1->1->2 [19] 3/-1/-1->1->2 [20] 0/-1/-1->1->-1 [21] 0/-1/-1->1->-1 [22] 0/-1/-1->1->-1 [23] 0/-1/-1->1->-1
+tg11307:1469000:1469429 [0] NCCL INFO Channel 15/24 : 0 2 1 3
+tg11307:1469000:1469429 [0] NCCL INFO Channel 16/24 : 0 3 1 2
+tg11307:1469001:1469431 [1] NCCL INFO P2P Chunksize set to 524288
+tg11307:1469000:1469429 [0] NCCL INFO Channel 17/24 : 0 3 2 1
+tg11307:1469000:1469429 [0] NCCL INFO Channel 18/24 : 0 1 2 3
+tg11307:1469000:1469429 [0] NCCL INFO Channel 19/24 : 0 1 3 2
+tg11307:1469000:1469429 [0] NCCL INFO Channel 20/24 : 0 2 3 1
+tg11307:1469000:1469429 [0] NCCL INFO Channel 21/24 : 0 2 1 3
+tg11307:1469000:1469429 [0] NCCL INFO Channel 22/24 : 0 3 1 2
+tg11307:1469000:1469429 [0] NCCL INFO Channel 23/24 : 0 3 2 1
+tg11307:1469000:1469429 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1 [2] 1/-1/-1->0->-1 [3] 1/-1/-1->0->-1 [4] 2/-1/-1->0->-1 [5] 2/-1/-1->0->-1 [6] 2/-1/-1->0->-1 [7] 2/-1/-1->0->-1 [8] 3/-1/-1->0->1 [9] 3/-1/-1->0->1 [10] 3/-1/-1->0->1 [11] 3/-1/-1->0->1 [12] 1/-1/-1->0->-1 [13] 1/-1/-1->0->-1 [14] 1/-1/-1->0->-1 [15] 1/-1/-1->0->-1 [16] 2/-1/-1->0->-1 [17] 2/-1/-1->0->-1 [18] 2/-1/-1->0->-1 [19] 2/-1/-1->0->-1 [20] 3/-1/-1->0->1 [21] 3/-1/-1->0->1 [22] 3/-1/-1->0->1 [23] 3/-1/-1->0->1
+tg11307:1469000:1469429 [0] NCCL INFO P2P Chunksize set to 524288
+tg11307:1469003:1469430 [3] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+tg11307:1469003:1469453 [3] NCCL INFO [Proxy Service] Device 3 CPU core 5
+tg11307:1469002:1469432 [2] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+tg11307:1469003:1469454 [3] NCCL INFO [Proxy Service UDS] Device 3 CPU core 11
+tg11307:1469002:1469455 [2] NCCL INFO [Proxy Service] Device 2 CPU core 27
+tg11307:1469002:1469456 [2] NCCL INFO [Proxy Service UDS] Device 2 CPU core 29
+tg11307:1469000:1469429 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+tg11307:1469000:1469429 [0] NCCL INFO Check P2P Type isAllDirectP2p 1 directMode 0
+tg11307:1469000:1469457 [0] NCCL INFO [Proxy Service] Device 0 CPU core 4
+tg11307:1469000:1469458 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 8
+tg11307:1469001:1469431 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+tg11307:1469001:1469459 [1] NCCL INFO [Proxy Service] Device 1 CPU core 22
+tg11307:1469001:1469460 [1] NCCL INFO [Proxy Service UDS] Device 1 CPU core 24
+tg11307:1469003:1469430 [3] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+tg11307:1469003:1469430 [3] NCCL INFO 24 coll channels, 24 collnet channels, 0 nvls channels, 32 p2p channels, 16 p2p channels per peer
+tg11307:1469002:1469432 [2] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+tg11307:1469002:1469432 [2] NCCL INFO 24 coll channels, 24 collnet channels, 0 nvls channels, 32 p2p channels, 16 p2p channels per peer
+tg11307:1469000:1469429 [0] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+tg11307:1469000:1469429 [0] NCCL INFO 24 coll channels, 24 collnet channels, 0 nvls channels, 32 p2p channels, 16 p2p channels per peer
+tg11307:1469000:1469429 [0] NCCL INFO CC Off, workFifoBytes 1048576
+tg11307:1469001:1469431 [1] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+tg11307:1469001:1469431 [1] NCCL INFO 24 coll channels, 24 collnet channels, 0 nvls channels, 32 p2p channels, 16 p2p channels per peer
+tg11307:1469001:1469431 [1] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+tg11307:1469001:1469431 [1] NCCL INFO ncclCommInitRankConfig comm 0x390b4460 rank 1 nranks 4 cudaDev 1 nvmlDev 1 busId 5f000 commId 0x2ae77c3fd8cf085e - Init COMPLETE
+tg11307:1469000:1469429 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+tg11307:1469002:1469432 [2] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+tg11307:1469003:1469430 [3] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+tg11307:1469001:1469431 [1] NCCL INFO Init timings - ncclCommInitRankConfig: rank 1 nranks 4 total 2.09 (kernels 0.24, alloc 1.71, bootstrap 0.00, allgathers 0.00, topo 0.05, graphs 0.02, connections 0.05, rest 0.02)
+tg11307:1469000:1469429 [0] NCCL INFO ncclCommInitRankConfig comm 0x3bcf0380 rank 0 nranks 4 cudaDev 0 nvmlDev 0 busId 4e000 commId 0x2ae77c3fd8cf085e - Init COMPLETE
+tg11307:1469002:1469432 [2] NCCL INFO ncclCommInitRankConfig comm 0x2f78f350 rank 2 nranks 4 cudaDev 2 nvmlDev 2 busId cb000 commId 0x2ae77c3fd8cf085e - Init COMPLETE
+tg11307:1469003:1469430 [3] NCCL INFO ncclCommInitRankConfig comm 0x178e25e0 rank 3 nranks 4 cudaDev 3 nvmlDev 3 busId db000 commId 0x2ae77c3fd8cf085e - Init COMPLETE
+tg11307:1469002:1469432 [2] NCCL INFO Init timings - ncclCommInitRankConfig: rank 2 nranks 4 total 2.08 (kernels 0.24, alloc 1.71, bootstrap 0.00, allgathers 0.01, topo 0.05, graphs 0.02, connections 0.04, rest 0.02)
+tg11307:1469000:1469429 [0] NCCL INFO Init timings - ncclCommInitRankConfig: rank 0 nranks 4 total 2.10 (kernels 0.24, alloc 1.73, bootstrap 0.00, allgathers 0.00, topo 0.05, graphs 0.02, connections 0.04, rest 0.02)
+tg11307:1469003:1469430 [3] NCCL INFO Init timings - ncclCommInitRankConfig: rank 3 nranks 4 total 2.10 (kernels 0.24, alloc 1.72, bootstrap 0.00, allgathers 0.00, topo 0.05, graphs 0.02, connections 0.04, rest 0.02)
+[INFO|2026-08-17 16:56:20] llamafactory.hparams.parser:887 >> Process rank: 3, world size: 4, device: cuda:3, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-17 16:56:20] llamafactory.hparams.parser:887 >> Process rank: 2, world size: 4, device: cuda:2, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-17 16:56:20] llamafactory.hparams.parser:887 >> Process rank: 1, world size: 4, device: cuda:1, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-17 16:56:20] llamafactory.hparams.parser:144 >> Set `ddp_find_unused_parameters` to False in DDP training since LoRA is enabled.
+[INFO|2026-08-17 16:56:20] llamafactory.hparams.parser:887 >> Process rank: 0, world size: 4, device: cuda:0, distributed training: True, compute dtype: torch.bfloat16
+[INFO|2026-08-17 16:56:20] llamafactory.train.tuner:144 >> SDPA backend flags: {'flash': True, 'mem_efficient': True, 'math': True, 'cudnn': True}
+[INFO|hub.py:364] 2026-08-17 16:56:20,605 >> Offline mode: forcing local_files_only=True
+[INFO|configuration_utils.py:780] 2026-08-17 16:56:20,611 >> loading configuration file config.json from cache at /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/config.json
+[INFO|configuration_utils.py:856] 2026-08-17 16:56:20,656 >> Model config Qwen2_5_VLConfig {
+  "architectures": [
+    "Qwen2_5_VLForConditionalGeneration"
+  ],
+  "dtype": "bfloat16",
+  "image_token_id": 151655,
+  "model_type": "qwen2_5_vl",
+  "text_config": {
+    "attention_dropout": 0.0,
+    "bos_token_id": 151643,
+    "dtype": "bfloat16",
+    "eos_token_id": 151645,
+    "hidden_act": "silu",
+    "hidden_size": 3584,
+    "initializer_range": 0.02,
+    "intermediate_size": 18944,
+    "layer_types": [
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention"
+    ],
+    "max_position_embeddings": 128000,
+    "max_window_layers": 28,
+    "model_type": "qwen2_5_vl_text",
+    "num_attention_heads": 28,
+    "num_hidden_layers": 28,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_section": [
+        16,
+        24,
+        24
+      ],
+      "rope_theta": 1000000.0,
+      "rope_type": "default",
+      "type": "mrope"
+    },
+    "sliding_window": null,
+    "use_cache": true,
+    "use_sliding_window": false,
+    "vocab_size": 152064
+  },
+  "tie_word_embeddings": false,
+  "transformers_version": "5.8.0",
+  "video_token_id": 151656,
+  "vision_config": {
+    "depth": 32,
+    "fullatt_block_indexes": [
+      7,
+      15,
+      23,
+      31
+    ],
+    "hidden_act": "silu",
+    "hidden_size": 1280,
+    "in_channels": 3,
+    "in_chans": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 3420,
+    "model_type": "qwen2_5_vl_vision",
+    "num_heads": 16,
+    "out_hidden_size": 3584,
+    "patch_size": 14,
+    "spatial_merge_size": 2,
+    "spatial_patch_size": 14,
+    "temporal_patch_size": 2,
+    "tokens_per_second": 2,
+    "window_size": 112
+  },
+  "vision_end_token_id": 151653,
+  "vision_start_token_id": 151652,
+  "vision_token_id": 151654
+}
+
+[INFO|hub.py:364] 2026-08-17 16:56:20,657 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1595] 2026-08-17 16:56:20,660 >> Offline mode: forcing local_files_only=True
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|hub.py:364] 2026-08-17 16:56:20,948 >> Offline mode: forcing local_files_only=True
+[INFO|hub.py:364] 2026-08-17 16:56:20,948 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:268] 2026-08-17 16:56:20,949 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-08-17 16:56:20,950 >> loading configuration file preprocessor_config.json from cache at /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|processing_utils.py:950] 2026-08-17 16:56:20,952 >> Offline mode: forcing local_files_only=True
+[INFO|processing_utils.py:1124] 2026-08-17 16:56:20,954 >> loading configuration file processor_config.json from cache at None
+[INFO|image_processing_base.py:268] 2026-08-17 16:56:20,954 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-08-17 16:56:20,955 >> loading configuration file preprocessor_config.json from cache at /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[WARNING|logging.py:340] 2026-08-17 16:56:20,955 >> The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|image_processing_base.py:268] 2026-08-17 16:56:20,964 >> Offline mode: forcing local_files_only=True
+[INFO|image_processing_base.py:344] 2026-08-17 16:56:20,965 >> loading configuration file preprocessor_config.json from cache at /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:385] 2026-08-17 16:56:20,966 >> Image processor Qwen2VLImageProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "merge_size": 2,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|hub.py:364] 2026-08-17 16:56:20,966 >> Offline mode: forcing local_files_only=True
+[INFO|configuration_utils.py:780] 2026-08-17 16:56:20,966 >> loading configuration file config.json from cache at /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/config.json
+[INFO|configuration_utils.py:856] 2026-08-17 16:56:20,977 >> Model config Qwen2_5_VLConfig {
+  "architectures": [
+    "Qwen2_5_VLForConditionalGeneration"
+  ],
+  "dtype": "bfloat16",
+  "image_token_id": 151655,
+  "model_type": "qwen2_5_vl",
+  "text_config": {
+    "attention_dropout": 0.0,
+    "bos_token_id": 151643,
+    "dtype": "bfloat16",
+    "eos_token_id": 151645,
+    "hidden_act": "silu",
+    "hidden_size": 3584,
+    "initializer_range": 0.02,
+    "intermediate_size": 18944,
+    "layer_types": [
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention"
+    ],
+    "max_position_embeddings": 128000,
+    "max_window_layers": 28,
+    "model_type": "qwen2_5_vl_text",
+    "num_attention_heads": 28,
+    "num_hidden_layers": 28,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_section": [
+        16,
+        24,
+        24
+      ],
+      "rope_theta": 1000000.0,
+      "rope_type": "default",
+      "type": "mrope"
+    },
+    "sliding_window": null,
+    "use_cache": true,
+    "use_sliding_window": false,
+    "vocab_size": 152064
+  },
+  "tie_word_embeddings": false,
+  "transformers_version": "5.8.0",
+  "video_token_id": 151656,
+  "vision_config": {
+    "depth": 32,
+    "fullatt_block_indexes": [
+      7,
+      15,
+      23,
+      31
+    ],
+    "hidden_act": "silu",
+    "hidden_size": 1280,
+    "in_channels": 3,
+    "in_chans": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 3420,
+    "model_type": "qwen2_5_vl_vision",
+    "num_heads": 16,
+    "out_hidden_size": 3584,
+    "patch_size": 14,
+    "spatial_merge_size": 2,
+    "spatial_patch_size": 14,
+    "temporal_patch_size": 2,
+    "tokens_per_second": 2,
+    "window_size": 112
+  },
+  "vision_end_token_id": 151653,
+  "vision_start_token_id": 151652,
+  "vision_token_id": 151654
+}
+
+[INFO|hub.py:364] 2026-08-17 16:56:20,978 >> Offline mode: forcing local_files_only=True
+[INFO|tokenization_utils_base.py:1595] 2026-08-17 16:56:20,978 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:600] 2026-08-17 16:56:21,232 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:686] 2026-08-17 16:56:21,234 >> loading configuration file video_preprocessor_config.json from cache at /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:600] 2026-08-17 16:56:21,235 >> Offline mode: forcing local_files_only=True
+[INFO|video_processing_utils.py:686] 2026-08-17 16:56:21,236 >> loading configuration file video_preprocessor_config.json from cache at /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:727] 2026-08-17 16:56:21,237 >> Video processor Qwen2VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['aeva', 'alpaca', 'bailing', 'bailing_v2', 'breeze', 'chatglm3', 'chatml', 'chatml_de', 'cohere', 'cpm4', 'dbrx', 'deepseek', 'deepseek3', 'deepseekcoder', 'deepseekr1', 'default', 'dots_ocr', 'empty', 'ernie', 'ernie_nothink']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 125
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+[INFO|processing_utils.py:1199] 2026-08-17 16:56:21,238 >> Processor Qwen2_5_VLProcessor:
+- image_processor: Qwen2VLImageProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "merge_size": 2,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2Tokenizer(name_or_path='Qwen/Qwen2.5-VL-7B-Instruct', vocab_size=151643, model_max_length=131072, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>'}, added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151647: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151648: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151649: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151650: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151651: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151652: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151653: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151654: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151655: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151656: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151657: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151658: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151659: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151660: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151661: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151662: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151663: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151664: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+})
+- video_processor: Qwen2VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+
+{
+  "image_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "image_mean": [
+      0.48145466,
+      0.4578275,
+      0.40821073
+    ],
+    "image_processor_type": "Qwen2VLImageProcessor",
+    "image_std": [
+      0.26862954,
+      0.26130258,
+      0.27577711
+    ],
+    "merge_size": 2,
+    "patch_size": 14,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "size": {
+      "longest_edge": 12845056,
+      "shortest_edge": 3136
+    },
+    "temporal_patch_size": 2
+  },
+  "processor_class": "Qwen2_5_VLProcessor",
+  "video_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "do_sample_frames": false,
+    "image_mean": [
+      0.48145466,
+      0.4578275,
+      0.40821073
+    ],
+    "image_std": [
+      0.26862954,
+      0.26130258,
+      0.27577711
+    ],
+    "max_frames": 768,
+    "merge_size": 2,
+    "min_frames": 4,
+    "patch_size": 14,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "return_metadata": false,
+    "size": {
+      "longest_edge": 12845056,
+      "shortest_edge": 3136
+    },
+    "temporal_patch_size": 2,
+    "video_processor_type": "Qwen2VLVideoProcessor"
+  }
+}
+
+tg11307:1469002:1469469 [2] NCCL INFO Channel 00/0 : 2[2] -> 3[3] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 02/0 : 2[2] -> 3[3] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 06/0 : 2[2] -> 3[3] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 08/0 : 2[2] -> 3[3] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 12/0 : 2[2] -> 3[3] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 14/0 : 2[2] -> 3[3] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 18/0 : 2[2] -> 3[3] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 20/0 : 2[2] -> 3[3] via P2P/CUMEM
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['aeva', 'alpaca', 'bailing', 'bailing_v2', 'breeze', 'chatglm3', 'chatml', 'chatml_de', 'cohere', 'cpm4', 'dbrx', 'deepseek', 'deepseek3', 'deepseekcoder', 'deepseekr1', 'default', 'dots_ocr', 'empty', 'ernie', 'ernie_nothink']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 125
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['aeva', 'alpaca', 'bailing', 'bailing_v2', 'breeze', 'chatglm3', 'chatml', 'chatml_de', 'cohere', 'cpm4', 'dbrx', 'deepseek', 'deepseek3', 'deepseekcoder', 'deepseekr1', 'default', 'dots_ocr', 'empty', 'ernie', 'ernie_nothink']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 125
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+tg11307:1469001:1469470 [1] NCCL INFO Channel 00/0 : 1[1] -> 2[2] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 04/0 : 1[1] -> 2[2] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 06/0 : 1[1] -> 2[2] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 10/0 : 1[1] -> 2[2] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 12/0 : 1[1] -> 2[2] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 16/0 : 1[1] -> 2[2] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 18/0 : 1[1] -> 2[2] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 22/0 : 1[1] -> 2[2] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 00/0 : 3[3] -> 0[0] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 03/0 : 3[3] -> 0[0] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 06/0 : 3[3] -> 0[0] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 09/0 : 3[3] -> 0[0] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 12/0 : 3[3] -> 0[0] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 15/0 : 3[3] -> 0[0] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 18/0 : 3[3] -> 0[0] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 21/0 : 3[3] -> 0[0] via P2P/CUMEM
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['aeva', 'alpaca', 'bailing', 'bailing_v2', 'breeze', 'chatglm3', 'chatml', 'chatml_de', 'cohere', 'cpm4', 'dbrx', 'deepseek', 'deepseek3', 'deepseekcoder', 'deepseekr1', 'default', 'dots_ocr', 'empty', 'ernie', 'ernie_nothink']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 125
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+[INFO|2026-08-17 16:56:21] llamafactory.data.loader:144 >> Loading dataset /tmp/cot_stage/annotations/Scene30k.parquet...
+tg11307:1469002:1469469 [2] NCCL INFO Channel 01/0 : 2[2] -> 0[0] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 04/0 : 2[2] -> 0[0] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 07/0 : 2[2] -> 0[0] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 10/0 : 2[2] -> 0[0] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 13/0 : 2[2] -> 0[0] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 16/0 : 2[2] -> 0[0] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 19/0 : 2[2] -> 0[0] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 22/0 : 2[2] -> 0[0] via P2P/CUMEM
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:21] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 0/100 [00:00<?, ? examples/s]Converting format of dataset (num_proc=32):   1%|          | 1/100 [00:00<00:49,  1.98 examples/s]Converting format of dataset (num_proc=32):  72%|███████▏  | 72/100 [00:00<00:00, 157.95 examples/s]Converting format of dataset (num_proc=32): 100%|██████████| 100/100 [00:00<00:00, 126.64 examples/s]
+[INFO|2026-08-17 16:56:22] llamafactory.data.loader:144 >> Loading dataset /tmp/cot_stage/annotations/SpatialSSRL_coldstart.json...
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:22] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 0/100 [00:00<?, ? examples/s]Converting format of dataset (num_proc=32):   1%|          | 1/100 [00:00<01:14,  1.33 examples/s]Converting format of dataset (num_proc=32): 100%|██████████| 100/100 [00:00<00:00, 101.43 examples/s]
+[INFO|2026-08-17 16:56:23] llamafactory.data.loader:144 >> Loading dataset /tmp/cot_stage/annotations/3dthinker10k_cot.jsonl...
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+[INFO|2026-08-17 16:56:23] llamafactory.data.converter:144 >> DEBUG _find_medias: load_from=file, media_dir=/tmp/cot_stage/media/ScanNet_h5
+Converting format of dataset (num_proc=32):   0%|          | 0/100 [00:00<?, ? examples/s]Converting format of dataset (num_proc=32):   3%|▎         | 3/100 [00:00<00:14,  6.78 examples/s]Converting format of dataset (num_proc=32): 100%|██████████| 100/100 [00:00<00:00, 146.89 examples/s]
+tg11307:1469000:1469940 [0] NCCL INFO Channel 00/0 : 0[0] -> 1[1] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 01/0 : 0[0] -> 1[1] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 06/0 : 0[0] -> 1[1] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 07/0 : 0[0] -> 1[1] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 12/0 : 0[0] -> 1[1] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 13/0 : 0[0] -> 1[1] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 18/0 : 0[0] -> 1[1] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 19/0 : 0[0] -> 1[1] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 02/0 : 0[0] -> 2[2] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 03/0 : 0[0] -> 2[2] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 02/0 : 3[3] -> 1[1] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 04/0 : 3[3] -> 1[1] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 08/0 : 0[0] -> 2[2] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 09/0 : 0[0] -> 2[2] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 08/0 : 3[3] -> 1[1] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 01/0 : 1[1] -> 3[3] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 03/0 : 1[1] -> 3[3] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 14/0 : 0[0] -> 2[2] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 10/0 : 3[3] -> 1[1] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 14/0 : 3[3] -> 1[1] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 15/0 : 0[0] -> 2[2] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 07/0 : 1[1] -> 3[3] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 09/0 : 1[1] -> 3[3] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 20/0 : 0[0] -> 2[2] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 16/0 : 3[3] -> 1[1] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 20/0 : 3[3] -> 1[1] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 13/0 : 1[1] -> 3[3] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 21/0 : 0[0] -> 2[2] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 15/0 : 1[1] -> 3[3] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 22/0 : 3[3] -> 1[1] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 19/0 : 1[1] -> 3[3] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 21/0 : 1[1] -> 3[3] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 04/0 : 0[0] -> 3[3] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 03/0 : 2[2] -> 1[1] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 05/0 : 0[0] -> 3[3] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 05/0 : 2[2] -> 1[1] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 10/0 : 0[0] -> 3[3] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 09/0 : 2[2] -> 1[1] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 11/0 : 0[0] -> 3[3] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 16/0 : 0[0] -> 3[3] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 01/0 : 3[3] -> 2[2] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 02/0 : 1[1] -> 0[0] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 11/0 : 2[2] -> 1[1] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 15/0 : 2[2] -> 1[1] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 05/0 : 3[3] -> 2[2] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 17/0 : 0[0] -> 3[3] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 05/0 : 1[1] -> 0[0] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 08/0 : 1[1] -> 0[0] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 22/0 : 0[0] -> 3[3] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 07/0 : 3[3] -> 2[2] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 17/0 : 2[2] -> 1[1] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 11/0 : 1[1] -> 0[0] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 11/0 : 3[3] -> 2[2] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Channel 23/0 : 0[0] -> 3[3] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 21/0 : 2[2] -> 1[1] via P2P/CUMEM
+tg11307:1469002:1469469 [2] NCCL INFO Channel 23/0 : 2[2] -> 1[1] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 13/0 : 3[3] -> 2[2] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 14/0 : 1[1] -> 0[0] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 17/0 : 1[1] -> 0[0] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 17/0 : 3[3] -> 2[2] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 19/0 : 3[3] -> 2[2] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 20/0 : 1[1] -> 0[0] via P2P/CUMEM
+tg11307:1469001:1469470 [1] NCCL INFO Channel 23/0 : 1[1] -> 0[0] via P2P/CUMEM
+tg11307:1469003:1469471 [3] NCCL INFO Channel 23/0 : 3[3] -> 2[2] via P2P/CUMEM
+tg11307:1469000:1469940 [0] NCCL INFO Connected all rings, use ring PXN 0 GDR 1
+tg11307:1469001:1469470 [1] NCCL INFO Connected all rings, use ring PXN 0 GDR 1
+tg11307:1469002:1469469 [2] NCCL INFO Connected all rings, use ring PXN 0 GDR 1
+tg11307:1469003:1469471 [3] NCCL INFO Connected all rings, use ring PXN 0 GDR 1
+Running tokenizer on dataset (num_proc=32):   0%|          | 0/270 [00:00<?, ? examples/s]Running tokenizer on dataset (num_proc=32):   3%|▎         | 9/270 [00:07<03:32,  1.23 examples/s]Running tokenizer on dataset (num_proc=32):   7%|▋         | 18/270 [00:12<02:55,  1.43 examples/s]Running tokenizer on dataset (num_proc=32):  10%|█         | 27/270 [00:15<02:07,  1.91 examples/s]Running tokenizer on dataset (num_proc=32):  13%|█▎        | 36/270 [00:16<01:17,  3.03 examples/s]Running tokenizer on dataset (num_proc=32):  17%|█▋        | 45/270 [00:16<00:51,  4.40 examples/s]Running tokenizer on dataset (num_proc=32):  20%|██        | 54/270 [00:17<00:42,  5.13 examples/s]Running tokenizer on dataset (num_proc=32):  23%|██▎       | 63/270 [00:19<00:39,  5.25 examples/s]Running tokenizer on dataset (num_proc=32):  27%|██▋       | 72/270 [00:20<00:35,  5.57 examples/s]Running tokenizer on dataset (num_proc=32):  30%|███       | 81/270 [00:21<00:28,  6.71 examples/s]Running tokenizer on dataset (num_proc=32):  33%|███▎      | 89/270 [00:24<00:37,  4.85 examples/s]Running tokenizer on dataset (num_proc=32):  36%|███▋      | 98/270 [00:26<00:36,  4.67 examples/s]Running tokenizer on dataset (num_proc=32):  40%|███▉      | 107/270 [00:27<00:28,  5.79 examples/s]Running tokenizer on dataset (num_proc=32):  43%|████▎     | 116/270 [00:28<00:27,  5.67 examples/s]Running tokenizer on dataset (num_proc=32):  46%|████▌     | 124/270 [00:31<00:34,  4.18 examples/s]Running tokenizer on dataset (num_proc=32):  49%|████▉     | 132/270 [00:33<00:29,  4.65 examples/s]Running tokenizer on dataset (num_proc=32):  52%|█████▏    | 141/270 [00:33<00:21,  6.08 examples/s]Running tokenizer on dataset (num_proc=32):  55%|█████▌    | 149/270 [00:35<00:20,  5.85 examples/s]Running tokenizer on dataset (num_proc=32):  59%|█████▊    | 158/270 [00:35<00:14,  7.88 examples/s]Running tokenizer on dataset (num_proc=32):  61%|██████▏   | 166/270 [00:39<00:24,  4.18 examples/s]Running tokenizer on dataset (num_proc=32):  64%|██████▍   | 174/270 [00:41<00:22,  4.29 examples/s]Running tokenizer on dataset (num_proc=32):  67%|██████▋   | 182/270 [00:42<00:19,  4.61 examples/s]Running tokenizer on dataset (num_proc=32):  70%|███████   | 190/270 [00:43<00:13,  6.05 examples/s]Running tokenizer on dataset (num_proc=32):  73%|███████▎  | 198/270 [00:43<00:09,  7.73 examples/s]Running tokenizer on dataset (num_proc=32):  76%|███████▋  | 206/270 [00:44<00:07,  8.40 examples/s]Running tokenizer on dataset (num_proc=32):  79%|███████▉  | 214/270 [00:48<00:13,  4.30 examples/s]Running tokenizer on dataset (num_proc=32):  82%|████████▏ | 222/270 [00:49<00:10,  4.61 examples/s]Running tokenizer on dataset (num_proc=32):  85%|████████▌ | 230/270 [00:50<00:07,  5.34 examples/s]Running tokenizer on dataset (num_proc=32):  88%|████████▊ | 238/270 [00:51<00:04,  6.67 examples/s]Running tokenizer on dataset (num_proc=32):  91%|█████████ | 246/270 [00:54<00:06,  3.97 examples/s]Running tokenizer on dataset (num_proc=32):  94%|█████████▍| 254/270 [00:56<00:03,  4.61 examples/s]Running tokenizer on dataset (num_proc=32):  97%|█████████▋| 262/270 [00:57<00:01,  4.93 examples/s]Running tokenizer on dataset (num_proc=32): 100%|██████████| 270/270 [00:58<00:00,  5.84 examples/s]Running tokenizer on dataset (num_proc=32): 100%|██████████| 270/270 [00:58<00:00,  4.62 examples/s]
+training example:
+input_ids:
+[151644, 8948, 198, 2610, 525, 264, 10950, 17847, 13, 151645, 198, 151644, 872, 198, 40, 3003, 4429, 458, 2168, 151652, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151653, 323, 1052, 525, 1378, 13604, 12864, 438, 220, 16, 11, 323, 220, 17, 389, 279, 2168, 13, 62197, 429, 1052, 374, 264, 6249, 518, 2309, 364, 17, 6, 323, 432, 594, 12880, 311, 752, 13, 10548, 311, 279, 6249, 11, 1380, 374, 279, 5537, 11134, 364, 16, 69990, 362, 13, 14902, 425, 13, 10083, 356, 13, 6841, 422, 13, 13727, 13, 21144, 55916, 1741, 438, 7990, 11, 16725, 11, 323, 220, 18, 35, 27979, 5025, 13, 576, 1590, 4226, 1265, 387, 11882, 504, 364, 32, 516, 364, 33, 516, 364, 34, 516, 323, 364, 35, 4427, 2610, 34813, 1744, 911, 279, 32711, 1882, 438, 458, 5306, 1615, 76728, 323, 2182, 697, 1590, 4226, 304, 5196, 79075, 38238, 151645, 198, 151644, 77091, 198, 1249, 11625, 419, 11, 358, 1184, 311, 8253, 279, 8674, 2309, 315, 5537, 11134, 364, 16, 6, 504, 279, 13057, 315, 279, 6249, 518, 2309, 364, 17, 29636, 16, 13, 576, 6249, 518, 2309, 364, 17, 6, 374, 12880, 6974, 279, 25708, 320, 9330, 8, 304, 279, 2168, 624, 17, 13, 17152, 11134, 364, 16, 6, 374, 7407, 10078, 311, 279, 1290, 315, 279, 6249, 594, 2309, 624, 18, 13, 16246, 429, 279, 6249, 374, 12880, 6974, 279, 25708, 11, 4113, 311, 279, 1290, 315, 279, 6249, 1035, 387, 6509, 311, 1181, 2115, 504, 1181, 13057, 382, 44500, 11, 504, 279, 6249, 594, 13057, 518, 2309, 364, 17, 516, 279, 5537, 11134, 364, 16, 6, 374, 389, 279, 2115, 382, 4416, 279, 1590, 4226, 374, 1124, 11520, 79075, 90, 35, 11035, 568, 151645, 198]
+inputs:
+<|im_start|>system
+You are a helpful assistant.<|im_end|>
+<|im_start|>user
+I've taken an image<|vision_start|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|vision_end|> and there are two regions marked as 1, and 2 on the image. Assume that there is a camera at position '2' and it's facing to me. According to the camera, where is the region marker '1'? A. Front B. Right C. Back D. Left. Consider cues such as depth, orientation, and 3D spatial relationship. The final answer should be chosen from 'A', 'B', 'C', and 'D'.You FIRST think about the reasoning process as an internal monologue and put your final answer in '\boxed{}'.<|im_end|>
+<|im_start|>assistant
+To solve this, I need to determine the relative position of region marker '1' from the perspective of the camera at position '2'.
+
+1. The camera at position '2' is facing towards the viewer (you) in the image.
+2. Region marker '1' is located slightly to the right of the camera's position.
+3. Given that the camera is facing towards the viewer, anything to the right of the camera would be considered to its left from its perspective.
+
+Thus, from the camera's perspective at position '2', the region marker '1' is on the left.
+
+So the final answer is \(\boxed{D}\).<|im_end|>
+
+label_ids:
+[-100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 1249, 11625, 419, 11, 358, 1184, 311, 8253, 279, 8674, 2309, 315, 5537, 11134, 364, 16, 6, 504, 279, 13057, 315, 279, 6249, 518, 2309, 364, 17, 29636, 16, 13, 576, 6249, 518, 2309, 364, 17, 6, 374, 12880, 6974, 279, 25708, 320, 9330, 8, 304, 279, 2168, 624, 17, 13, 17152, 11134, 364, 16, 6, 374, 7407, 10078, 311, 279, 1290, 315, 279, 6249, 594, 2309, 624, 18, 13, 16246, 429, 279, 6249, 374, 12880, 6974, 279, 25708, 11, 4113, 311, 279, 1290, 315, 279, 6249, 1035, 387, 6509, 311, 1181, 2115, 504, 1181, 13057, 382, 44500, 11, 504, 279, 6249, 594, 13057, 518, 2309, 364, 17, 516, 279, 5537, 11134, 364, 16, 6, 374, 389, 279, 2115, 382, 4416, 279, 1590, 4226, 374, 1124, 11520, 79075, 90, 35, 11035, 568, 151645, 198]
+labels:
+To solve this, I need to determine the relative position of region marker '1' from the perspective of the camera at position '2'.
+
+1. The camera at position '2' is facing towards the viewer (you) in the image.
+2. Region marker '1' is located slightly to the right of the camera's position.
+3. Given that the camera is facing towards the viewer, anything to the right of the camera would be considered to its left from its perspective.
+
+Thus, from the camera's perspective at position '2', the region marker '1' is on the left.
+
+So the final answer is \(\boxed{D}\).<|im_end|>
+
+num_proc must be <= 30. Reducing num_proc to 30 for dataset of size 30.
+Running tokenizer on dataset (num_proc=30):   0%|          | 0/30 [00:00<?, ? examples/s]Running tokenizer on dataset (num_proc=30):   3%|▎         | 1/30 [00:02<01:12,  2.51s/ examples]Running tokenizer on dataset (num_proc=30):   7%|▋         | 2/30 [00:03<00:52,  1.86s/ examples]Running tokenizer on dataset (num_proc=30):  10%|█         | 3/30 [00:06<01:03,  2.37s/ examples]Running tokenizer on dataset (num_proc=30):  13%|█▎        | 4/30 [00:08<00:54,  2.10s/ examples]Running tokenizer on dataset (num_proc=30):  17%|█▋        | 5/30 [00:08<00:35,  1.43s/ examples]Running tokenizer on dataset (num_proc=30):  20%|██        | 6/30 [00:10<00:38,  1.61s/ examples]Running tokenizer on dataset (num_proc=30):  23%|██▎       | 7/30 [00:11<00:30,  1.33s/ examples]Running tokenizer on dataset (num_proc=30):  27%|██▋       | 8/30 [00:12<00:28,  1.31s/ examples]Running tokenizer on dataset (num_proc=30):  30%|███       | 9/30 [00:15<00:35,  1.67s/ examples]Running tokenizer on dataset (num_proc=30):  33%|███▎      | 10/30 [00:15<00:26,  1.31s/ examples]Running tokenizer on dataset (num_proc=30):  37%|███▋      | 11/30 [00:17<00:27,  1.42s/ examples]Running tokenizer on dataset (num_proc=30):  40%|████      | 12/30 [00:19<00:26,  1.49s/ examples]Running tokenizer on dataset (num_proc=30):  43%|████▎     | 13/30 [00:20<00:25,  1.49s/ examples]Running tokenizer on dataset (num_proc=30):  47%|████▋     | 14/30 [00:23<00:31,  1.94s/ examples]Running tokenizer on dataset (num_proc=30):  50%|█████     | 15/30 [00:25<00:28,  1.87s/ examples]Running tokenizer on dataset (num_proc=30):  53%|█████▎    | 16/30 [00:25<00:19,  1.37s/ examples]Running tokenizer on dataset (num_proc=30):  57%|█████▋    | 17/30 [00:29<00:29,  2.30s/ examples]Running tokenizer on dataset (num_proc=30):  60%|██████    | 18/30 [00:31<00:23,  1.99s/ examples]Running tokenizer on dataset (num_proc=30):  63%|██████▎   | 19/30 [00:31<00:15,  1.45s/ examples]Running tokenizer on dataset (num_proc=30):  67%|██████▋   | 20/30 [00:32<00:13,  1.34s/ examples]Running tokenizer on dataset (num_proc=30):  70%|███████   | 21/30 [00:32<00:09,  1.05s/ examples]Running tokenizer on dataset (num_proc=30):  73%|███████▎  | 22/30 [00:33<00:08,  1.07s/ examples]Running tokenizer on dataset (num_proc=30):  77%|███████▋  | 23/30 [00:35<00:08,  1.20s/ examples]Running tokenizer on dataset (num_proc=30):  80%|████████  | 24/30 [00:36<00:07,  1.27s/ examples]Running tokenizer on dataset (num_proc=30):  83%|████████▎ | 25/30 [00:38<00:06,  1.35s/ examples]Running tokenizer on dataset (num_proc=30):  87%|████████▋ | 26/30 [00:39<00:05,  1.39s/ examples]Running tokenizer on dataset (num_proc=30):  90%|█████████ | 27/30 [00:44<00:06,  2.30s/ examples]Running tokenizer on dataset (num_proc=30):  93%|█████████▎| 28/30 [00:45<00:03,  1.85s/ examples]Running tokenizer on dataset (num_proc=30):  97%|█████████▋| 29/30 [00:46<00:01,  1.63s/ examples]Running tokenizer on dataset (num_proc=30): 100%|██████████| 30/30 [00:49<00:00,  2.04s/ examples]Running tokenizer on dataset (num_proc=30): 100%|██████████| 30/30 [00:49<00:00,  1.65s/ examples]
+eval example:
+input_ids:
+[151644, 8948, 198, 151652, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151653, 198, 151652, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151653, 198, 151652, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151653, 198, 151652, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151655, 151653, 198, 58, 6262, 921, 7771, 3383, 374, 311, 23643, 279, 27979, 26112, 315, 6171, 304, 279, 6109, 553, 37836, 279, 3897, 5335, 11, 892, 1473, 279, 6109, 504, 2155, 89809, 624, 58, 16141, 29051, 921, 2610, 1172, 1184, 311, 3410, 353, 5225, 9, 4396, 4226, 26301, 504, 279, 2606, 10007, 3685, 13, 1752, 3110, 11, 421, 498, 1744, 279, 4396, 4226, 374, 364, 32, 13, 43610, 6, 504, 364, 32, 13, 43610, 425, 13, 9449, 356, 13, 14902, 422, 13, 42374, 516, 697, 2033, 1265, 3070, 3243, 334, 387, 3857, 9217, 23465, 13, 43610, 522, 9217, 5592, 382, 58, 14582, 921, 28715, 389, 1493, 3040, 5335, 320, 1805, 220, 16, 11, 220, 17, 11, 220, 18, 11, 323, 220, 19, 8, 9027, 279, 86595, 6321, 16486, 504, 2155, 89809, 320, 6951, 11, 2115, 11, 1182, 11, 323, 1290, 701, 448, 1817, 6249, 26118, 448, 3054, 14285, 323, 25244, 39780, 279, 39090, 25, 5542, 279, 58385, 10449, 304, 2168, 220, 19, 11, 1128, 374, 311, 279, 1290, 315, 279, 86595, 6321, 16486, 30, 362, 13, 3731, 63072, 425, 13, 8658, 57722, 31069, 356, 13, 32946, 323, 281, 15521, 6008, 422, 13, 12258, 13876, 31069, 151645, 198, 151644, 872, 198, 28715, 389, 1493, 3040, 5335, 320, 1805, 220, 16, 11, 220, 17, 11, 220, 18, 11, 323, 220, 19, 8, 9027, 279, 86595, 6321, 16486, 504, 2155, 89809, 320, 6951, 11, 2115, 11, 1182, 11, 323, 1290, 701, 448, 1817, 6249, 26118, 448, 3054, 14285, 323, 25244, 39780, 279, 39090, 25, 5542, 279, 58385, 10449, 304, 2168, 220, 19, 11, 1128, 374, 311, 279, 1290, 315, 279, 86595, 6321, 16486, 30, 362, 13, 3731, 63072, 425, 13, 8658, 57722, 31069, 356, 13, 32946, 323, 281, 15521, 6008, 422, 13, 12258, 13876, 31069, 151645, 198, 151644, 77091, 198, 27, 3006, 62, 18, 35, 397, 13708, 766, 65828, 2776, 33225, 49353, 264, 220, 18, 35, 2415, 315, 279, 3054, 1667, 279, 3040, 3897, 5335, 11, 1817, 9027, 279, 86595, 6321, 16486, 504, 264, 2155, 55880, 5106, 320, 6951, 11, 2115, 11, 1182, 11, 1290, 568, 576, 16486, 23011, 30188, 389, 264, 1965, 11, 323, 1817, 7002, 374, 10457, 304, 49687, 382, 1906, 220, 16, 320, 6951, 1648, 576, 3054, 20992, 264, 6319, 13876, 31069, 2348, 264, 7002, 448, 264, 3594, 9009, 77900, 16658, 323, 3241, 27996, 1293, 31069, 11, 4363, 4303, 15279, 311, 279, 1965, 323, 16486, 382, 1906, 220, 17, 320, 2359, 1648, 362, 7002, 448, 264, 21921, 2687, 577, 2482, 11, 5257, 3589, 389, 1909, 11, 323, 264, 2518, 63072, 29356, 13, 2308, 1841, 315, 894, 96406, 1588, 382, 1906, 220, 18, 320, 1419, 1648, 1096, 13057, 4933, 264, 21921, 448, 264, 281, 15521, 6008, 9099, 1790, 311, 432, 11, 264, 37299, 3082, 304, 279, 6010, 11, 323, 33832, 8991, 14038, 11, 22561, 419, 3108, 374, 803, 1787, 382, 1906, 220, 19, 320, 1291, 1648, 36280, 264, 3100, 57722, 31069, 738, 448, 60736, 14, 7119, 323, 65926, 11, 10767, 458, 1007, 15858, 476, 78265, 1894, 13, 1096, 374, 279, 3108, 4588, 911, 304, 279, 3405, 382, 7039, 11, 11485, 287, 7037, 438, 279, 6249, 304, 2168, 220, 19, 320, 1291, 8, 3330, 7678, 8305, 518, 279, 1965, 3470, 62118, 323, 279, 3100, 57722, 31069, 11, 279, 1290, 315, 279, 16486, 320, 1499, 419, 58385, 8, 5285, 82, 448, 279, 1790, 7002, 304, 264, 65670, 26112, 13, 20205, 389, 279, 27979, 8500, 1447, 12, 14902, 320, 1805, 220, 16, 1648, 3594, 9009, 77900, 16658, 323, 6319, 13876, 31069, 624, 12, 13727, 320, 1805, 220, 17, 1648, 21921, 323, 2518, 63072, 624, 12, 6841, 320, 1805, 220, 18, 1648, 21921, 323, 281, 15521, 6008, 11, 28727, 37299, 624, 12, 10083, 320, 1805, 220, 19, 1648, 3100, 57722, 31069, 382, 4416, 11, 504, 279, 16725, 315, 2168, 220, 19, 320, 1291, 315, 16486, 374, 8841, 279, 4065, 7002, 701, 279, 3082, 311, 279, 1290, 315, 279, 16486, 320, 1499, 2168, 220, 19, 594, 58385, 8, 374, 279, 3108, 3884, 304, 2168, 220, 16, 11, 892, 374, 279, 7002, 448, 279, 6319, 13876, 31069, 382, 44500, 11, 2661, 847, 220, 18, 35, 10502, 2415, 11, 279, 4396, 4226, 374, 422, 13, 12258, 13876, 31069, 1576, 279, 16725, 7482, 279, 6319, 13876, 31069, 5961, 311, 279, 1290, 315, 279, 16486, 304, 279, 1651, 315, 2168, 220, 19, 3918, 26865, 397, 27, 9217, 36495, 13, 12258, 13876, 31069, 522, 9217, 29, 151645, 198]
+inputs:
+<|im_start|>system
+<|vision_start|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|vision_end|>
+<|vision_start|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|vision_end|>
+<|vision_start|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|vision_end|>
+<|vision_start|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|vision_end|>
+[Task]
+Your task is to analyze the spatial arrangement of objects in the scene by examining the provided images, which show the scene from different viewpoints.
+[Answer Instruction]
+You only need to provide *ONE* correct answer selecting from the options listed below. For example, if you think the correct answer is 'A. Above' from 'A. Above B. Under C. Front D. Behind', your response should **only** be '<answer>A. Above</answer>'.
+
+[Question]
+Based on these four images (image 1, 2, 3, and 4) showing the pepsi bottle from different viewpoints (front, left, back, and right), with each camera aligned with room walls and partially capturing the surroundings: From the viewpoint presented in image 4, what is to the right of the pepsi bottle? A. Red stool B. Light-colored sofa C. Cabinet and potted plant D. Dark brown sofa<|im_end|>
+<|im_start|>user
+Based on these four images (image 1, 2, 3, and 4) showing the pepsi bottle from different viewpoints (front, left, back, and right), with each camera aligned with room walls and partially capturing the surroundings: From the viewpoint presented in image 4, what is to the right of the pepsi bottle? A. Red stool B. Light-colored sofa C. Cabinet and potted plant D. Dark brown sofa<|im_end|>
+<|im_start|>assistant
+<output_3D>
+<think>I'm mentally constructing a 3D map of the room using the four provided images, each showing the pepsi bottle from a different cardinal direction (front, left, back, right). The bottle sits centered on a table, and each wall is revealed in succession.
+
+Image 1 (front): The room reveals a dark brown sofa against a wall with a maroon/red partition and window—a long sofa, likely running parallel to the table and bottle.
+
+Image 2 (left): A wall with a cabinet/sideboard, various items on top, and a red stool underneath. No sign of any sofas here.
+
+Image 3 (back): This perspective shows a cabinet with a potted plant placed next to it, a seating area in the distance, and sliding glass doors, suggesting this side is more open.
+
+Image 4 (right): Shows a light-colored sofa set with quilt/throw and pillows, possibly an off-white or beige color. This is the side asked about in the question.
+
+Now, orienting myself as the camera in image 4 (right) looking straight ahead at the table/bottle and the light-colored sofa, the right of the bottle (from this viewpoint) aligns with the next wall in a clockwise arrangement. Based on the spatial sequence:
+
+- Front (image 1): maroon/red partition and dark brown sofa.
+- Left (image 2): cabinet and red stool.
+- Back (image 3): cabinet and potted plant, distant seating.
+- Right (image 4): light-colored sofa.
+
+So, from the orientation of image 4 (right of bottle is toward the front wall), the area to the right of the bottle (from image 4's viewpoint) is the side seen in image 1, which is the wall with the dark brown sofa.
+
+Thus, given my 3D mental map, the correct answer is D. Dark brown sofa because the orientation places the dark brown sofa directly to the right of the bottle in the view of image 4.</think>
+<answer>D. Dark brown sofa</answer><|im_end|>
+
+label_ids:
+[-100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 27, 3006, 62, 18, 35, 397, 13708, 766, 65828, 2776, 33225, 49353, 264, 220, 18, 35, 2415, 315, 279, 3054, 1667, 279, 3040, 3897, 5335, 11, 1817, 9027, 279, 86595, 6321, 16486, 504, 264, 2155, 55880, 5106, 320, 6951, 11, 2115, 11, 1182, 11, 1290, 568, 576, 16486, 23011, 30188, 389, 264, 1965, 11, 323, 1817, 7002, 374, 10457, 304, 49687, 382, 1906, 220, 16, 320, 6951, 1648, 576, 3054, 20992, 264, 6319, 13876, 31069, 2348, 264, 7002, 448, 264, 3594, 9009, 77900, 16658, 323, 3241, 27996, 1293, 31069, 11, 4363, 4303, 15279, 311, 279, 1965, 323, 16486, 382, 1906, 220, 17, 320, 2359, 1648, 362, 7002, 448, 264, 21921, 2687, 577, 2482, 11, 5257, 3589, 389, 1909, 11, 323, 264, 2518, 63072, 29356, 13, 2308, 1841, 315, 894, 96406, 1588, 382, 1906, 220, 18, 320, 1419, 1648, 1096, 13057, 4933, 264, 21921, 448, 264, 281, 15521, 6008, 9099, 1790, 311, 432, 11, 264, 37299, 3082, 304, 279, 6010, 11, 323, 33832, 8991, 14038, 11, 22561, 419, 3108, 374, 803, 1787, 382, 1906, 220, 19, 320, 1291, 1648, 36280, 264, 3100, 57722, 31069, 738, 448, 60736, 14, 7119, 323, 65926, 11, 10767, 458, 1007, 15858, 476, 78265, 1894, 13, 1096, 374, 279, 3108, 4588, 911, 304, 279, 3405, 382, 7039, 11, 11485, 287, 7037, 438, 279, 6249, 304, 2168, 220, 19, 320, 1291, 8, 3330, 7678, 8305, 518, 279, 1965, 3470, 62118, 323, 279, 3100, 57722, 31069, 11, 279, 1290, 315, 279, 16486, 320, 1499, 419, 58385, 8, 5285, 82, 448, 279, 1790, 7002, 304, 264, 65670, 26112, 13, 20205, 389, 279, 27979, 8500, 1447, 12, 14902, 320, 1805, 220, 16, 1648, 3594, 9009, 77900, 16658, 323, 6319, 13876, 31069, 624, 12, 13727, 320, 1805, 220, 17, 1648, 21921, 323, 2518, 63072, 624, 12, 6841, 320, 1805, 220, 18, 1648, 21921, 323, 281, 15521, 6008, 11, 28727, 37299, 624, 12, 10083, 320, 1805, 220, 19, 1648, 3100, 57722, 31069, 382, 4416, 11, 504, 279, 16725, 315, 2168, 220, 19, 320, 1291, 315, 16486, 374, 8841, 279, 4065, 7002, 701, 279, 3082, 311, 279, 1290, 315, 279, 16486, 320, 1499, 2168, 220, 19, 594, 58385, 8, 374, 279, 3108, 3884, 304, 2168, 220, 16, 11, 892, 374, 279, 7002, 448, 279, 6319, 13876, 31069, 382, 44500, 11, 2661, 847, 220, 18, 35, 10502, 2415, 11, 279, 4396, 4226, 374, 422, 13, 12258, 13876, 31069, 1576, 279, 16725, 7482, 279, 6319, 13876, 31069, 5961, 311, 279, 1290, 315, 279, 16486, 304, 279, 1651, 315, 2168, 220, 19, 3918, 26865, 397, 27, 9217, 36495, 13, 12258, 13876, 31069, 522, 9217, 29, 151645, 198]
+labels:
+<output_3D>
+<think>I'm mentally constructing a 3D map of the room using the four provided images, each showing the pepsi bottle from a different cardinal direction (front, left, back, right). The bottle sits centered on a table, and each wall is revealed in succession.
+
+Image 1 (front): The room reveals a dark brown sofa against a wall with a maroon/red partition and window—a long sofa, likely running parallel to the table and bottle.
+
+Image 2 (left): A wall with a cabinet/sideboard, various items on top, and a red stool underneath. No sign of any sofas here.
+
+Image 3 (back): This perspective shows a cabinet with a potted plant placed next to it, a seating area in the distance, and sliding glass doors, suggesting this side is more open.
+
+Image 4 (right): Shows a light-colored sofa set with quilt/throw and pillows, possibly an off-white or beige color. This is the side asked about in the question.
+
+Now, orienting myself as the camera in image 4 (right) looking straight ahead at the table/bottle and the light-colored sofa, the right of the bottle (from this viewpoint) aligns with the next wall in a clockwise arrangement. Based on the spatial sequence:
+
+- Front (image 1): maroon/red partition and dark brown sofa.
+- Left (image 2): cabinet and red stool.
+- Back (image 3): cabinet and potted plant, distant seating.
+- Right (image 4): light-colored sofa.
+
+So, from the orientation of image 4 (right of bottle is toward the front wall), the area to the right of the bottle (from image 4's viewpoint) is the side seen in image 1, which is the wall with the dark brown sofa.
+
+Thus, given my 3D mental map, the correct answer is D. Dark brown sofa because the orientation places the dark brown sofa directly to the right of the bottle in the view of image 4.</think>
+<answer>D. Dark brown sofa</answer><|im_end|>
+
+[INFO|hub.py:364] 2026-08-17 16:58:16,437 >> Offline mode: forcing local_files_only=True
+[INFO|configuration_utils.py:780] 2026-08-17 16:58:16,439 >> loading configuration file config.json from cache at /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/config.json
+[INFO|configuration_utils.py:856] 2026-08-17 16:58:16,450 >> Model config Qwen2_5_VLConfig {
+  "architectures": [
+    "Qwen2_5_VLForConditionalGeneration"
+  ],
+  "dtype": "bfloat16",
+  "image_token_id": 151655,
+  "model_type": "qwen2_5_vl",
+  "text_config": {
+    "attention_dropout": 0.0,
+    "bos_token_id": 151643,
+    "dtype": "bfloat16",
+    "eos_token_id": 151645,
+    "hidden_act": "silu",
+    "hidden_size": 3584,
+    "initializer_range": 0.02,
+    "intermediate_size": 18944,
+    "layer_types": [
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention"
+    ],
+    "max_position_embeddings": 128000,
+    "max_window_layers": 28,
+    "model_type": "qwen2_5_vl_text",
+    "num_attention_heads": 28,
+    "num_hidden_layers": 28,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_section": [
+        16,
+        24,
+        24
+      ],
+      "rope_theta": 1000000.0,
+      "rope_type": "default",
+      "type": "mrope"
+    },
+    "sliding_window": null,
+    "use_cache": true,
+    "use_sliding_window": false,
+    "vocab_size": 152064
+  },
+  "tie_word_embeddings": false,
+  "transformers_version": "5.8.0",
+  "video_token_id": 151656,
+  "vision_config": {
+    "depth": 32,
+    "fullatt_block_indexes": [
+      7,
+      15,
+      23,
+      31
+    ],
+    "hidden_act": "silu",
+    "hidden_size": 1280,
+    "in_channels": 3,
+    "in_chans": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 3420,
+    "model_type": "qwen2_5_vl_vision",
+    "num_heads": 16,
+    "out_hidden_size": 3584,
+    "patch_size": 14,
+    "spatial_merge_size": 2,
+    "spatial_patch_size": 14,
+    "temporal_patch_size": 2,
+    "tokens_per_second": 2,
+    "window_size": 112
+  },
+  "vision_end_token_id": 151653,
+  "vision_start_token_id": 151652,
+  "vision_token_id": 151654
+}
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+[rank0]:     run_exp()
+[rank0]:     ~~~~~~~^^
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+[rank0]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank0]:     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 187, in _training_function
+[rank0]:     run_sft(model_args, data_args, training_args, finetuning_args, generating_args, callbacks)
+[rank0]:     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/sft/workflow.py", line 54, in run_sft
+[rank0]:     model = load_model(tokenizer, model_args, finetuning_args, training_args.do_train)
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/model/loader.py", line 146, in load_model
+[rank0]:     patch_config(config, tokenizer, model_args, init_kwargs, is_trainable)
+[rank0]:     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/model/patcher.py", line 381, in patch_config
+[rank0]:     configure_attn_implementation(config, model_args)
+[rank0]:     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/model/model_utils/attention.py", line 32, in configure_attn_implementation
+[rank0]:     from transformers.utils import is_flash_attn_2_available, is_torch_sdpa_available
+[rank0]: ImportError: cannot import name 'is_torch_sdpa_available' from 'transformers.utils' (/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/utils/__init__.py)
+[rank0]:[W817 16:58:17.772670358 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+tg11307:1469000:1470264 [0] NCCL INFO misc/socket.cc:64 -> 3
+tg11307:1469000:1470264 [0] NCCL INFO misc/socket.cc:81 -> 3
+tg11307:1469000:1469457 [0] NCCL INFO misc/socket.cc:916 -> 3
+tg11307:1469000:1470264 [0] NCCL INFO misc/socket.cc:864 -> 3
+tg11307:1469000:1470264 [0] NCCL INFO misc/socket.cc:64 -> 3
+tg11307:1469000:1470264 [0] NCCL INFO misc/socket.cc:81 -> 3
+tg11307:1469000:1470264 [0] NCCL INFO misc/socket.cc:864 -> 3
+tg11307:1469000:1470264 [0] NCCL INFO misc/socket.cc:64 -> 3
+tg11307:1469000:1470264 [0] NCCL INFO misc/socket.cc:81 -> 3
+tg11307:1469000:1470264 [0] NCCL INFO misc/socket.cc:864 -> 3
+tg11307:1469000:1470264 [0] NCCL INFO misc/socket.cc:64 -> 3
+tg11307:1469000:1470264 [0] NCCL INFO misc/socket.cc:81 -> 3
+tg11307:1469000:1470264 [0] NCCL INFO misc/socket.cc:864 -> 3
+tg11307:1469000:1470264 [0] NCCL INFO comm 0x3bcf0380 rank 0 nranks 4 cudaDev 0 busId 4e000 - Abort COMPLETE
+num_proc must be <= 30. Reducing num_proc to 30 for dataset of size 30.
+num_proc must be <= 30. Reducing num_proc to 30 for dataset of size 30.
+num_proc must be <= 30. Reducing num_proc to 30 for dataset of size 30.
+W0817 16:58:18.536000 1468997 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 1469001 closing signal SIGTERM
+W0817 16:58:18.542000 1468997 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 1469002 closing signal SIGTERM
+W0817 16:58:18.543000 1468997 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 1469003 closing signal SIGTERM
+E0817 16:58:18.908000 1468997 torch/distributed/elastic/multiprocessing/api.py:986] failed (exitcode: 1) local_rank: 0 (pid: 1469000) of binary: /scratch/i/indrisch/venv_llamafactory_py313/bin/python
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/venv_llamafactory_py313/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 362, in wrapper
+    return f(*args, **kwargs)
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/run.py", line 990, in main
+    run(args)
+    ~~~^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/run.py", line 981, in run
+    elastic_launch(
+    ~~~~~~~~~~~~~~~
+        config=config,
+        ~~~~~~~~~~~~~~
+        entrypoint=cmd,
+        ~~~~~~~~~~~~~~~
+    )(*cmd_args)
+    ~^^^^^^^^^^^
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/launcher/api.py", line 170, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/scratch/i/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/launcher/api.py", line 317, in launch_agent
+    raise ChildFailedError(
+    ...<2 lines>...
+    )
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+[1]:
+  time      : 2026-08-17_16:58:18
+  host      : tg11307.tamia.ecpia.ca
+  rank      : 1 (local_rank: 1)
+  exitcode  : -15 (pid: 1469001)
+  error_file: <N/A>
+  traceback : Signal 15 (SIGTERM) received by PID 1469001
+[2]:
+  time      : 2026-08-17_16:58:18
+  host      : tg11307.tamia.ecpia.ca
+  rank      : 2 (local_rank: 2)
+  exitcode  : -15 (pid: 1469002)
+  error_file: <N/A>
+  traceback : Signal 15 (SIGTERM) received by PID 1469002
+[3]:
+  time      : 2026-08-17_16:58:18
+  host      : tg11307.tamia.ecpia.ca
+  rank      : 3 (local_rank: 3)
+  exitcode  : -15 (pid: 1469003)
+  error_file: <N/A>
+  traceback : Signal 15 (SIGTERM) received by PID 1469003
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-08-17_16:58:18
+  host      : tg11307.tamia.ecpia.ca
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 1469000)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/venv_llamafactory_py313/bin/llamafactory-cli", line 6, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/cli.py", line 24, in main
+    launcher.launch()
+    ~~~~~~~~~~~~~~~^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 115, in launch
+    process = subprocess.run(
+        (
+    ...<14 lines>...
+        check=True,
+    )
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/subprocess.py", line 579, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', 'tg11307', '--master_port', '29500', '/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py', '/tmp/cot_stage/train.yaml']' returned non-zero exit status 1.
+
+======== GPU REPORT ========
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Mon Aug 17 16:58:20 2026
+Driver Version                                         : 580.159.04
+CUDA Version                                           : 13.0
+
+Attached GPUs                                          : 4
+GPU 00000000:4E:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1469000
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 1460 MiB
+            Time                                       : 133668 ms
+            Is Running                                 : 0
+
+GPU 00000000:5F:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1469001
+            GPU Utilization                            : 83 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 1460 MiB
+            Time                                       : 133999 ms
+            Is Running                                 : 0
+
+GPU 00000000:CB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1469002
+            GPU Utilization                            : 82 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 1460 MiB
+            Time                                       : 133774 ms
+            Is Running                                 : 0
+
+GPU 00000000:DB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1469003
+            GPU Utilization                            : 82 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 1460 MiB
+            Time                                       : 133826 ms
+            Is Running                                 : 0
+
+Mon Aug 17 16:58:20 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   39C    P0             77W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   38C    P0             85W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   38C    P0             97W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   39C    P0            116W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+srun: error: tg11307: task 0: Exited with exit code 1
+srun: Terminating StepId=418167.0
+
+======== GPU REPORT ========
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Mon Aug 17 16:58:21 2026
+Driver Version                                         : 580.159.04
+CUDA Version                                           : 13.0
+
+Attached GPUs                                          : 4
+GPU 00000000:4E:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1469000
+            GPU Utilization                            : 0 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 1460 MiB
+            Time                                       : 133668 ms
+            Is Running                                 : 0
+
+GPU 00000000:5F:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1469001
+            GPU Utilization                            : 83 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 1460 MiB
+            Time                                       : 133999 ms
+            Is Running                                 : 0
+
+GPU 00000000:CB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1469002
+            GPU Utilization                            : 82 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 1460 MiB
+            Time                                       : 133774 ms
+            Is Running                                 : 0
+
+GPU 00000000:DB:00.0
+    Accounting Mode                                    : Enabled
+    Accounting Mode Buffer Size                        : 4000
+    Accounted Processes
+        Process ID                                     : 1469003
+            GPU Utilization                            : 82 %
+            Memory Utilization                         : 0 %
+            Max memory usage                           : 1460 MiB
+            Time                                       : 133826 ms
+            Is Running                                 : 0
+
+Mon Aug 17 16:58:21 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H100 80GB HBM3          On  |   00000000:4E:00.0 Off |                    0 |
+| N/A   39C    P0             71W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H100 80GB HBM3          On  |   00000000:5F:00.0 Off |                    0 |
+| N/A   38C    P0             72W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H100 80GB HBM3          On  |   00000000:CB:00.0 Off |                    0 |
+| N/A   38C    P0             74W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H100 80GB HBM3          On  |   00000000:DB:00.0 Off |                    0 |
+| N/A   38C    P0             73W /  700W |       0MiB /  81559MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+

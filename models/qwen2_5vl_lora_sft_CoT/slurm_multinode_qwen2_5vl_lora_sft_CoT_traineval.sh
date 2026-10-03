@@ -68,11 +68,11 @@ fi
 export PYTHONUNBUFFERED=1
 
 if [[ "$RUNNING_MODE" == "SHELL" ]]; then
-    export SLURM_TMPDIR="/tmp"
+	export SLURM_TMPDIR="/tmp"
 fi
 
 if [[ "$CLUSTER" == "RORQUAL" ]]; then
-    export SCANNET_H5_DIR="/project/def-wangcs/indrisch/scratch_saves/ScanNet_h5/scans"
+	export SCANNET_H5_DIR="/project/def-wangcs/indrisch/scratch_saves/ScanNet_h5/scans"
 fi
 
 # H5 roots (override per-cluster if needed)
@@ -92,22 +92,22 @@ echo "YAML_FILE: $YAML_FILE"
 echo "OUTPUT_DIR: $OUTPUT_DIR"
 echo "RESUME_CKPT: $RESUME_CKPT"
 if [[ -n "$RESUME_CKPT" && "$RESUME_CKPT" != "null" && "$RESUME_CKPT" != "None" ]]; then
-    if [[ ! -d "$RESUME_CKPT" ]]; then
-        echo "Error: resume checkpoint not found: $RESUME_CKPT"
-        exit 1
-    fi
-    if [[ ! -f "$RESUME_CKPT/trainer_state.json" || ! -f "$RESUME_CKPT/scheduler.pt" ]]; then
-        echo "Error: resume checkpoint incomplete (need trainer_state.json + scheduler.pt): $RESUME_CKPT"
-        exit 1
-    fi
+	if [[ ! -d "$RESUME_CKPT" ]]; then
+		echo "Error: resume checkpoint not found: $RESUME_CKPT"
+		exit 1
+	fi
+	if [[ ! -f "$RESUME_CKPT/trainer_state.json" || ! -f "$RESUME_CKPT/scheduler.pt" ]]; then
+		echo "Error: resume checkpoint incomplete (need trainer_state.json + scheduler.pt): $RESUME_CKPT"
+		exit 1
+	fi
 else
-    echo "No resume checkpoint (fresh start from epoch 0)."
-    RESUME_CKPT=""
+	echo "No resume checkpoint (fresh start from epoch 0)."
+	RESUME_CKPT=""
 fi
 
 if [[ ! -f "$YAML_FILE" ]]; then
-    echo "Error: YAML config not found: $YAML_FILE"
-    exit 1
+	echo "Error: YAML config not found: $YAML_FILE"
+	exit 1
 fi
 
 # ----- Node-local dataset staging (once per node, before training) -----
@@ -206,9 +206,9 @@ run_llamafactory_apptainer() {
 	# torchrun once per node with the correct --node_rank. The outer
 	# 2-node SLURM wrapper must start this script through srun so that
 	# one parent process exists on every allocated node.
-	export NNODES="${SLURM_NNODES}" && echo "NNODES: ${NNODES}"
-	export NODE_RANK="${SLURM_NODEID}" && echo "NODE_RANK: ${NODE_RANK}"
-	export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE}}" && echo "MASTER_ADDR: ${MASTER_ADDR}"
+	export NNODES="${SLURM_NNODES:-1}" && echo "NNODES: ${NNODES}"
+	export NODE_RANK="${SLURM_NODEID:-0}" && echo "NODE_RANK: ${NODE_RANK}"
+  export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE:-$(hostname)}}" && echo "MASTER_ADDR: ${MASTER_ADDR}"
 	export MASTER_PORT="${MASTER_PORT:-29500}" && echo "MASTER_PORT: ${MASTER_PORT}"
 	export NPROC_PER_NODE="4" && echo "NPROC_PER_NODE: ${NPROC_PER_NODE}"
 
@@ -421,6 +421,61 @@ elif [[ "$CLUSTER" == "RORQUAL" ]]; then
 		pushd ${PROJECT_DIR}
 		llamafactory-cli train ${YAML_FILE}
 
+  else
+		echo "Invalid running mode: $RUNNING_MODE"
+		exit 1
+	fi
+
+elif [[ "$CLUSTER" == "TAMIA" ]]; then
+
+	if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
+
+		module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+
+		echo "=== HOST DIAGNOSTICS ==="
+		echo "HOSTNAME: $(hostname)"
+		echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
+		nvidia-smi
+		echo "=== END HOST DIAGNOSTICS ==="
+
+		run_llamafactory_apptainer
+
+	elif [[ "$RUNNING_MODE" == "VENV" ]]; then
+
+		module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+
+		echo "Copying venv to local storage..."
+		cp -a /scratch/i/indrisch/venv_llamafactory_py313/ ${SLURM_TMPDIR}/venv_llamafactory_py313
+		source ${SLURM_TMPDIR}/venv_llamafactory_py313/bin/activate
+
+		export PYTHONUNBUFFERED=1
+		export NCCL_DEBUG=INFO
+		export TORCH_CUDA_ARCH_LIST="9.0"
+		export FORCE_TORCHRUN=1
+		export HF_HUB_OFFLINE=1
+		export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
+		export HF_DATASETS_OFFLINE="${HF_DATASETS_OFFLINE:-1}"
+		# YAML cache_dir stays on HF_HUB_CACHE for Qwen snapshots. Arrow cache
+		# must not: /project is often 100% full ("Not enough disk space").
+		export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-${SLURM_TMPDIR}/hf_datasets}"
+		mkdir -p "${HF_DATASETS_CACHE}"
+		export HF_DATASETS_DISABLE_FILE_LOCKING=1
+		export DATASETS_DISABLE_FILE_LOCKING=1
+		export WANDB_MODE=offline
+		export WANDB_DIR="${WANDB_DIR}"
+		export WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb"
+		export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
+		mkdir -p "${TRITON_CACHE_DIR}" "${WANDB_CACHE_DIR}"
+		export DISABLE_VERSION_CHECK=1
+		export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+		export SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR
+		export PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}"
+		echo "HF_DATASETS_CACHE: ${HF_DATASETS_CACHE}"
+
+		pushd ${PROJECT_DIR}
+		llamafactory-cli train ${YAML_FILE}
+
+
 	elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
 
 		module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
@@ -434,7 +489,9 @@ elif [[ "$CLUSTER" == "RORQUAL" ]]; then
 		nvidia-smi
 		echo "=== END HOST DIAGNOSTICS ==="
 
-		run_llamafactory_apptainer
+		#apptainer exec --overlay /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/overlay_0.img --env TORCH_DEVICE_BACKEND_AUTOLOAD=0 --env PYTHONNOUSERSITE=1 /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory_latest-910b-ubuntu.sif bash -> the original; this container is incomplete 
+    #apptainer exec --overlay /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/overlay.img /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif bash -> better, but not generalized
+    run_llamafactory_apptainer
 
 	else
 		echo "Invalid running mode: $RUNNING_MODE"
@@ -576,7 +633,7 @@ elif [[ "$CLUSTER" == "KILLARNEY" ]]; then
 			# LLaMA-Factory launcher reads these and invokes torchrun once per node.
 			export NNODES="${SLURM_NNODES}"
 			export NODE_RANK="${SLURM_NODEID}"
-			export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE}}"
+			export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE:-$(hostname)}}"
 			export MASTER_PORT="${MASTER_PORT:-29500}"
 			export NPROC_PER_NODE="4"
 

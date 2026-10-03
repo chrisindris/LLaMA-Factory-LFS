@@ -236,6 +236,13 @@
     "ms_hub_url": "AI-ModelScope/sharegpt_gpt4",
     "formatting": "sharegpt"
   },
+  "sgsc_b2b_entities": {
+    "hf_hub_url": "Nooxus-AI/NOO-Verified-Global-Entities",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages"
+    }
+  },
   "ultrachat_200k": {
     "hf_hub_url": "HuggingFaceH4/ultrachat_200k",
     "ms_hub_url": "AI-ModelScope/ultrachat_200k",
@@ -470,6 +477,14 @@
   },
   "ultrachat_de": {
     "hf_hub_url": "mayflowergmbh/ultra-chat_de"
+  },
+  "dlr_web": {
+    "hf_hub_url": "Attention1115/DLR-Web",
+    "split": "full",
+    "columns": {
+      "prompt": "question",
+      "response": "response"
+    }
   },
   "dpo_en_demo": {
     "file_name": "dpo_en_demo.json",
@@ -732,7 +747,7 @@
     "folder": "python"
   },
   "SQA3D": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_8",
@@ -748,7 +763,7 @@
     }
   },
   "SQA3Devery16": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_16",
@@ -764,7 +779,7 @@
     }
   },
   "SQA3Devery24": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa/snapshots/ce5c54adc1608d1726730c9ff334e65b6dd70e46/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_24",
@@ -780,7 +795,7 @@
     }
   },
   "SQA3Devery24_R12C12F12X62": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62/snapshots/4aacd59535c1a6d4927311648bd440ff54f09d6d/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R.12_C.12_F.12_X.62/snapshots/4aacd59535c1a6d4927311648bd440ff54f09d6d/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_24",
@@ -796,7 +811,7 @@
     }
   },
   "SQA3Devery24_R1C0F0X0": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R1.0_C0.0_F0.0_X0.0/snapshots/f5169156040efd5f186d4d7b5ecd7ae3b8411a3d/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R1.0_C0.0_F0.0_X0.0/snapshots/f5169156040efd5f186d4d7b5ecd7ae3b8411a3d/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_24",
@@ -812,7 +827,7 @@
     }
   },
   "SQA3Devery24_R0C1F0X0": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C1.0_F0.0_X0.0/snapshots/cd6673598d0ac0c9d3e27e56ca6e6cc39b5b4c8a/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C1.0_F0.0_X0.0/snapshots/cd6673598d0ac0c9d3e27e56ca6e6cc39b5b4c8a/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_24",
@@ -828,7 +843,7 @@
     }
   },
   "SQA3Devery24_R0C0F0X1": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C0.0_F0.0_X1.0/snapshots/5ddae9b0014107ad9be6f45639c74c14641c2d63/data/",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--llamafactory-sqa3d-traces-multiimage-vqa_R0.0_C0.0_F0.0_X1.0/snapshots/5ddae9b0014107ad9be6f45639c74c14641c2d63/data/",
     "formatting": "alpaca",
     "columns": {
       "prompt": "question_with_image_tags_every_24",
@@ -844,12 +859,14 @@
     }
   },
   "Scene30k": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/13b41da710700aed32c928c81b8f5e433134eb75/data/train-00000-of-00001.parquet",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--Scene30K/snapshots/4e9bc1a04479fedfbb6ee791b7cd55fc6a2804f5/train-00000-of-00001.with_question_id.formatted.parquet",
     "formatting": "alpaca",
     "columns": {
+      "system": "formatting_instruction",
       "prompt": "question_with_image_tags",
       "response": "cot",
-      "images": "images_every_24"
+      "images": "images_every_24",
+      "question_id": "question_id"
     },
     "tags": {
       "role_tag": "role",
@@ -859,23 +876,86 @@
     }
   },
   "SpatialSSRL_coldstart": {
-    "file_name": "/scratch/indrisch/huggingface/hub/datasets--internlm--Spatial-SSRL-81k/snapshots/54b82086060a5612f95588b4979446da2282bcd9/SFT-coldstart.json",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/476dff589138ba1f87258d676fb1a7fb1dfa24ff/SFT-coldstart.with_question_id.formatted.json",
     "formatting": "alpaca",
     "columns": {
       "prompt": "instruction",
-      "query": "input",
       "response": "output",
-      "images": "images"
+      "images": "images",
+      "question_id": "question_id"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
     }
   },
   "3DThinker10k": {
-    "file_name": "3DThinker-10K/out/3dthinker10k_cot.with_question_id.jsonl",
+    "file_name": "${HF_HUB_CACHE}/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/bfa0a5a95683fa71c5a8b28b6560e2d5b7b71f0c/3dthinker10k_cot.with_question_id.formatted.jsonl",
     "formatting": "alpaca",
     "columns": {
       "system": "system",
       "prompt": "instruction",
       "response": "output",
-      "images": "images"
+      "images": "images",
+      "question_id": "question_id"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "Scene30k_eval16": {
+    "file_name": "cot_eval16/Scene30k_eval16.json",
+    "formatting": "alpaca",
+    "columns": {
+      "system": "formatting_instruction",
+      "prompt": "question_with_image_tags",
+      "response": "cot",
+      "images": "images_every_24",
+      "question_id": "question_id"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "SpatialSSRL_eval16": {
+    "file_name": "cot_eval16/SpatialSSRL_eval16.json",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "response": "output",
+      "images": "images",
+      "question_id": "question_id"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "3DThinker10k_eval16": {
+    "file_name": "cot_eval16/3DThinker10k_eval16.jsonl",
+    "formatting": "alpaca",
+    "columns": {
+      "system": "system",
+      "prompt": "instruction",
+      "response": "output",
+      "images": "images",
+      "question_id": "question_id"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
     }
   }
 }
