@@ -15,6 +15,72 @@ from huggingface_hub import HfApi, upload_folder, create_repo
 from huggingface_hub.utils import HfHubHTTPError
 
 
+# Local HF hub cache folder, e.g. models--Qwen--Qwen2.5-VL-7B-Instruct.
+_HF_MODEL_CACHE_RE = re.compile(r'(?:^|/)(models--[^/\s]+)')
+# Frontmatter key only. Do not match "- base_model:adapter:..." tags.
+_BASE_MODEL_LINE_RE = re.compile(r'(?m)^base_model:[ \t]*(.*?)[ \t]*$')
+
+
+def hub_id_from_base_model(base_model):
+    """Map a Hugging Face cache path to ``org/name``. Leave other values unchanged.
+
+    ``.../models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/<hash>`` becomes
+    ``Qwen/Qwen2.5-VL-7B-Instruct``. ``--`` is the cache separator for ``/``.
+    """
+    text = base_model.strip().strip("'\"")
+    match = _HF_MODEL_CACHE_RE.search(text)
+    if not match:
+        return text
+    parts = match.group(1).split('--')
+    if len(parts) < 2:
+        return text
+    return '/'.join(parts[1:])
+
+
+def _readme_base_model_value(content):
+    match = _BASE_MODEL_LINE_RE.search(content)
+    if not match:
+        return ''
+    return match.group(1).strip().strip("'\"")
+
+
+def rewrite_readme_base_model(readme_path, fallback_base_model=''):
+    """Replace every copy of this README's ``base_model`` value with ``org/name``.
+
+    Returns True when the file was written.
+    """
+    readme_path = Path(readme_path)
+    content = readme_path.read_text(encoding='utf-8')
+    raw = _readme_base_model_value(content) or fallback_base_model.strip()
+    if not raw:
+        return False
+    hub_id = hub_id_from_base_model(raw)
+    updated = content
+    if raw != hub_id and raw in updated:
+        updated = updated.replace(raw, hub_id)
+
+    def _fill_empty(match):
+        current = match.group(1).strip().strip("'\"")
+        if current:
+            return match.group(0)
+        return 'base_model: %s' % hub_id
+
+    updated = _BASE_MODEL_LINE_RE.sub(_fill_empty, updated)
+    if updated == content:
+        return False
+    readme_path.write_text(updated, encoding='utf-8')
+    print('Rewrote %s: base_model %s -> %s' % (readme_path, raw, hub_id))
+    return True
+
+
+def rewrite_checkpoint_readmes(checkpoint_path, fallback_base_model=''):
+    """Rewrite every README.md under ``checkpoint_path`` (not only the top one)."""
+    checkpoint_path = Path(checkpoint_path)
+    readmes = sorted(path for path in checkpoint_path.rglob('README.md') if path.is_file())
+    for readme in readmes:
+        rewrite_readme_base_model(readme, fallback_base_model=fallback_base_model)
+
+
 def upload_lora_checkpoint(
     checkpoint_path: str,
     repo_id: str,
@@ -60,32 +126,16 @@ def upload_lora_checkpoint(
     
     if not base_model:
         raise ValueError("base_model_name_or_path not found in adapter_config.json")
-    
-    # Fix README.md if it exists and has empty base_model
-    readme_path = checkpoint_path / "README.md"
-    if readme_path.exists():
-        with open(readme_path, 'r', encoding='utf-8') as f:
-            readme_content = f.read()
-        
-        # Fix empty base_model in YAML frontmatter
-        # Match: base_model: '' or base_model: "" or base_model: (empty)
-        # Pattern matches only empty base_model values
-        pattern = r"base_model:\s*(''|\"\"|)\s*\n"
-        if re.search(pattern, readme_content):
-            readme_content = re.sub(
-                pattern,
-                f'base_model: {base_model}\n',
-                readme_content
-            )
-            # Write back the fixed README.md
-            with open(readme_path, 'w', encoding='utf-8') as f:
-                f.write(readme_content)
-            print(f"Fixed README.md: set base_model to {base_model}")
-    
+
+    # README cards store the local cache path (base_model and base_model:adapter tags).
+    # Replace every copy with org/name before the folder is uploaded.
+    rewrite_checkpoint_readmes(checkpoint_path, fallback_base_model=base_model)
+    hub_base_model = hub_id_from_base_model(base_model)
+
     print(f"Uploading checkpoint from: {checkpoint_path}")
     print(f"Repository: {repo_id}")
     print(f"Private: {private}")
-    print(f"Base model: {base_model}")
+    print(f"Base model: {hub_base_model}")
     
     # Initialize HuggingFace API
     api = HfApi(token=token)

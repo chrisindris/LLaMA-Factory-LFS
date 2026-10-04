@@ -7,10 +7,16 @@ to HuggingFace Hub.
 """
 
 import os
+import sys
 import argparse
 from pathlib import Path
+
+# Sibling import works when this file is launched from another working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 from huggingface_hub import HfApi, upload_folder, create_repo
 from huggingface_hub.utils import HfHubHTTPError
+from upload_model_checkpoint import rewrite_checkpoint_readmes
 
 
 def upload_merged_checkpoint(
@@ -46,7 +52,10 @@ def upload_merged_checkpoint(
             f"No config.json found in {checkpoint_path}. "
             "Are you sure this is a merged model directory?"
         )
-    
+
+    # Same local-cache base_model paths show up in merged model cards.
+    rewrite_checkpoint_readmes(checkpoint_path)
+
     print(f"Uploading merged checkpoint from: {checkpoint_path}")
     print(f"Repository: {repo_id}")
     print(f"Private: {private}")

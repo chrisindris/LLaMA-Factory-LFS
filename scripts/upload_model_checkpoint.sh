@@ -41,6 +41,8 @@ while [[ $# -gt 0 ]]; do
       echo "Usage:"
       echo "  $0 --id <ID> --checkpoint <CHECKPOINT_DIR> --wandb-log <WANDB_LOG> [--commit-message <MESSAGE>] [--no-wandb-upload]"
       echo "  $0 --out <OUT_FILE_OR_DIR> [--commit-message <MESSAGE>] [--no-wandb-upload]"
+      echo "  *predictions*.json in the parent of the checkpoint is logged to the same W&B run."
+      echo "  --no-wandb-upload skips both wandb sync and those tables."
       exit 0
       ;;
     *)
@@ -164,7 +166,7 @@ module load python/3.12 cuda/12.6 opencv/4.12.0
 module load arrow
 
 source $VENV_DATASET_UPLOAD/bin/activate
-export HF_TOKEN=$(cat /home/i/indrisch/TOKENS/cvis-tmu-organization-token.txt)
+export HF_TOKEN=$(cat /home/indrisch/TOKENS/cvis-tmu-organization-token.txt)
 
 # --- run commands ---
 
@@ -173,8 +175,26 @@ python upload_model_checkpoint.py \
   --repo-id "cvis-tmu/$ID" \
   --commit-message "$COMMIT_MESSAGE"
 
+# Prediction dumps live next to the checkpoint dir (*predictions*.json), not inside it.
+# Sync first so --id exists, then append tables to that same run.
+wandb_status=0
 if [[ -z "$NO_WANDB_UPLOAD" ]]; then
-  wandb sync "$WANDB_LOG" --id "$ID"
+  wandb sync "$WANDB_LOG" \
+    --id "$ID" \
+    --entity "${WANDB_ENTITY:-cvis_tmu}" \
+    --project "${WANDB_PROJECT:-llamafactory}" \
+    || wandb_status=$?
+  if [[ "$wandb_status" -eq 0 ]]; then
+    python "$PROJECT_DIR/debug/logging_analysis/log_json_to_hf_table.py" \
+      --predictions-dir "$(dirname "$CHECKPOINT")" \
+      --id "$ID" \
+      --entity "${WANDB_ENTITY:-cvis_tmu}" \
+      --project "${WANDB_PROJECT:-llamafactory}" \
+      || wandb_status=$?
+  fi
 fi
 
 deactivate
+if [[ "$wandb_status" -ne 0 ]]; then
+  exit "$wandb_status"
+fi

@@ -98,7 +98,12 @@ if [[ ${PRESET} == "FULL_SETUP_LATEST" ]]; then
 
   hf download --max-workers=4 cvis-tmu/Scene30K --repo-type dataset --revision d094c4d0297f42915f6bdbd744504fbc96b3a646 
   hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type dataset --revision a64cb299ed3e8892f9f75f35607890b64e232451 
-  hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset --revision e4359d66da7adc78993f2ad163253c81eb0baf70 
+  hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset --revision e4359d66da7adc78993f2ad163253c81eb0baf70
+
+elif [[ ${PRESET} == "UNIFIED_FORMAT_UNMERGED" ]]; then
+
+  hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_traininglog
+  hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_groksettings_traininglog
 
 fi
 

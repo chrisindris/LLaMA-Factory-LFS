@@ -57,6 +57,8 @@ elif [[ "$PS1" == *"trig"* ]] || [[ "$HOSTNAME" == *"trig"* ]]; then
     CLUSTER="TRILLIUM"
 elif [[ "$PS1" == *"klogin"* ]] || [[ "$HOSTNAME" == *"klogin"* ]] || [[ "$PS1" == *"kn"* ]] || [[ "$HOSTNAME" == *"kn"* ]]; then
     CLUSTER="KILLARNEY"
+elif [[ "$PS1" == *"vulcan"* ]] || [[ "$HOSTNAME" == *"vulcan"* ]] || [[ "$PS1" == *"rack"* ]] || [[ "$HOSTNAME" == *"rack"* ]]; then
+    CLUSTER="VULCAN"
 else
     echo "Warning: Could not detect cluster from PS1 or HOSTNAME. Defaulting to RORQUAL."
     CLUSTER="RORQUAL"
