@@ -215,7 +215,7 @@ class DataEngine(Dataset):
 if __name__ == "__main__":
     """
     python -m llamafactory.v1.core.data_engine --train_dataset data/v1_sft_demo.yaml
-    python -m llamafactory.v1.core.data_engine --train_dataset data/v1_dpo_demo.yaml
+    python -m llamafactory.v1.core.data_engine --train_dataset examples/v1/datasets/v1_dpo_demo.yaml
     """
     from ..config.arg_parser import get_args
 

@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import json
 import os
 import subprocess
 import sys
@@ -50,7 +51,7 @@ peft_config:
     target_modules: all
 
 ### data
-train_dataset: data/v1_dpo_demo.yaml
+train_dataset: {dataset_config}
 
 ### training
 output_dir: {output_dir}
@@ -68,11 +69,26 @@ dpo_label_smoothing: 0.0
 sample_backend: hf
 max_new_tokens: 128
 """
+
+    # Native v1 records are generated locally, independently of sample datasets.
+    def messages(answer):
+        return [
+            {"role": "user", "content": [{"type": "text", "value": "Say hello."}], "loss_weight": 0.0},
+            {"role": "assistant", "content": [{"type": "text", "value": answer}], "loss_weight": 1.0},
+        ]
+
+    records = tmp_path / "pairs.jsonl"
+    records.write_text(
+        json.dumps({"chosen_messages": messages("Hello!"), "rejected_messages": messages("Goodbye!")}) + "\n"
+    )
+    dataset_config = tmp_path / "dataset.yaml"
+    dataset_config.write_text(f"pairs:\n  path: {records}\n  source: local\n")
+
     # Create output directory
     output_dir = tmp_path / "outputs"
     output_dir.mkdir(parents=True, exist_ok=True)
     config_file = tmp_path / "config.yaml"
-    config_file.write_text(config_yaml.format(output_dir=str(output_dir)))
+    config_file.write_text(config_yaml.format(output_dir=str(output_dir), dataset_config=str(dataset_config)))
 
     # Set up environment variables
     env = os.environ.copy()

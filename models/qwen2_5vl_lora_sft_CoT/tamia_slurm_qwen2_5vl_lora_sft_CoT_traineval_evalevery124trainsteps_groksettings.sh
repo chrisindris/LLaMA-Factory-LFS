@@ -21,7 +21,7 @@
 # - This will be followed up by grok's suggested ablation study (array job).
 #  
 #  Prereqs:
-#  - Create ${PROJECT_DIR}/data/control_tokens.yaml (token -> description dict for desc_init) --> DONE!
+#  - Create ${PROJECT_DIR}/examples/train_lora/cot_control_tokens.yaml (token -> description dict for desc_init) --> DONE!
 #  - Ensure all datasets have only the think and answer tags -> DONE!
 #  - Ensure that the 16 eval samples we use are the SAME (8 Scene30k + 4 SpatialSSRL + 4 3DThinker). Train on the parent mixes minus those frozen question_ids (`exclude_eval_from_train`).
 #  - Check with AI (give it the llamafactory output instructions and the settings we are using) to suggest alternative optimizers (adam/badam/galore/apollo) [though this is more for memory] or lora settings. Perhaps nonzero --lora-dropout could help? -> keep adam, use nonzero --lora-dropout
@@ -36,7 +36,7 @@
 # 2. We could change --repetition_penalty=1.1 to slightly prevent repetition, though this does not affect the training, only the eval output. We'd want to adjust this for when we are benchmarking.
 # Changes (tokens):
 # 2. --compute_accuracy set to True to compute token-level accuracy (good for evaluating fine-grained model predictions, tracking lang model performance, diagnosing prediction errors)
-# 3. --new_special_tokens_config: ${PROJECT_DIR}/data/control_tokens.yaml: token->description dict (not the AddedToken list in control_tokens.json)
+# 3. --new_special_tokens_config: ${PROJECT_DIR}/examples/train_lora/cot_control_tokens.yaml: token->description dict (not the AddedToken list in control_tokens.json)
 # 4. --init_special_tokens: desc_init_w_noise 
 # 5. --additional_target: embed_tokens,lm_head: we do this because we will define LoRA freezes base model weights, but since the new tokens have uninitialized embeddings we need to ensure that the embed_tokens and lm_head are unfrozen to adjust to them.
 # 6. --skip_special_tokens False
@@ -284,7 +284,7 @@ cmd_args=(
     --lora_dropout 0.05 # reduce LoRA adapter overfitting
     --compute_accuracy true # we will compute the token accuracy too
     --repetition_penalty 1.1 # slightly prevents repetition; this is only for eval, we'd want to set this when benchmarking.
-    --new_special_tokens_config "${PROJECT_DIR}/data/control_tokens.yaml" # token->description dict for desc_init; not the AddedToken list in control_tokens.json
+    --new_special_tokens_config "${PROJECT_DIR}/examples/train_lora/cot_control_tokens.yaml" # token->description dict for desc_init; not the AddedToken list in control_tokens.json
     --init_special_tokens desc_init_w_noise # initialize special tokens with semantic + random noise
     --skip_special_tokens false # ensure that the special tokens are not ignored
     --additional_target embed_tokens,lm_head # need to unfreeze some model (non-LoRA) weights to adapt to the special tokens
@@ -303,7 +303,7 @@ python "${PROJECT_DIR}/scripts/utils/modify_yaml.py" \
 
 # Fail fast: new_special_tokens_config must be a token->description dict (job 445127
 # crashed because control_tokens.json is a HuggingFace AddedToken list).
-python - "${PROJECT_DIR}/data/control_tokens.yaml" <<'PY'
+python - "${PROJECT_DIR}/examples/train_lora/cot_control_tokens.yaml" <<'PY'
 import sys
 from ruamel.yaml import YAML
 
@@ -312,7 +312,7 @@ cfg = YAML(typ="safe").load(open(path, encoding="utf-8"))
 if not isinstance(cfg, dict):
     raise SystemExit(
         f"new_special_tokens_config must be a dict mapping tokens to descriptions. "
-        f"Got {type(cfg).__name__} from {path}. Use data/control_tokens.yaml, not control_tokens.json."
+        f"Got {type(cfg).__name__} from {path}. Use examples/train_lora/cot_control_tokens.yaml, not control_tokens.json."
     )
 print(f"Special-token descriptions ({len(cfg)}): {list(cfg)}")
 PY

@@ -3,6 +3,11 @@
 # Run: bash scripts/tests/test_portable_env.sh
 set -uo pipefail
 
+# Cluster shell initialization may rewrite CLUSTER before child bash starts.
+# These assertions supply their own profiles and test defaults independently.
+export BASH_ENV=/dev/null
+unset TORCH_CUDA_ARCH_LIST
+
 FAILED=0
 PASS_COUNT=0
 

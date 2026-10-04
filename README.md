@@ -1022,3 +1022,48 @@ If this work is helpful, please kindly cite as:
 ## Acknowledgement
 
 This repo benefits from [PEFT](https://github.com/huggingface/peft), [TRL](https://github.com/huggingface/trl), [QLoRA](https://github.com/artidoro/qlora) and [FastChat](https://github.com/lm-sys/FastChat). Thanks for their wonderful works.
+
+
+## Portable prepared CoT datasets
+
+Prepare annotations once on a login/workstation with the existing Parquet dependencies:
+
+```bash
+python scripts/prepare_cot_annotations.py \
+  --scene30k /path/to/original_scene30k.parquet \
+  --spatialssrl /path/to/original_spatialssrl.json \
+  --thinker10k /path/to/original_thinker10k.jsonl \
+  --output-dir data/annotations/cot-v1
+```
+
+The bundle contains the three normalized annotation files, a registry with relative paths,
+and a manifest with source/output checksums, record counts, and preparation version.
+The formatter preserves question IDs and image paths/order. Its registry includes the
+Spatial-SSRL question in `input` and Scene30k's `formatting_instruction` system prompt.
+Existing output directories are never overwritten; use a new directory for a new version.
+
+Git contains preparation code and configuration. Dataset records, sample media, downloaded
+models, and generated annotations are supplied separately. The existing `data/annotations/`
+and `data/h5/` exclusions cover prepared assets; there is no blanket `data/` exclusion.
+The optional v1 DPO/multimodal configurations live in `examples/v1/datasets/` and are
+independent of CoT training. Their local example records must also be supplied separately.
+
+On another machine, clone the code and copy `data/annotations/cot-v1/`, `data/h5/`,
+`.cache/huggingface/`, `containers/`, and `apptainer/` (or provide a compatible virtual
+environment). Preserve relative internal links in the model cache. Update `scripts/site.env`
+for the destination cluster and run:
+
+```bash
+python scripts/prepare_cot_annotations.py --verify data/annotations/cot-v1
+PREFLIGHT=1 bash models/qwen2_5vl_lora_sft_CoT/portable_body_qwen2_5vl_lora_sft_CoT_traineval.sh
+cd models/qwen2_5vl_lora_sft_CoT
+mkdir -p out
+sbatch -A <gpu-account> portable_slurm_qwen2_5vl_lora_sft_CoT_traineval.sh
+```
+
+To select another prepared bundle, export `PORTABLE_COT_BUNDLE=/path/to/bundle` before
+preflight/submission. The launcher passes that validated directory to training and binds
+it into Apptainer. Staging and normal submission never rerun formatting or overwrite its
+registry. Full checksum verification runs after transfer; submission performs a lightweight
+schema/file check. Ordinary training tokenization and image preprocessing still run or
+use their existing caches. The portable default continues to log every 10 steps.

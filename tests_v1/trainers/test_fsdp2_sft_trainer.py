@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import json
 import os
 import subprocess
 import sys
@@ -41,7 +42,7 @@ init_config:
     name: init_on_meta
 
 ### data
-train_dataset: data/v1_sft_demo.yaml
+train_dataset: {dataset_config}
 
 ### training
 output_dir: {output_dir}
@@ -56,11 +57,20 @@ max_steps: 1
 sample_backend: hf
 max_new_tokens: 128
 """
+    records = tmp_path / "samples.jsonl"
+    messages = [
+        {"role": "user", "content": [{"type": "text", "value": "Say hello."}], "loss_weight": 0.0},
+        {"role": "assistant", "content": [{"type": "text", "value": "Hello!"}], "loss_weight": 1.0},
+    ]
+    records.write_text(json.dumps({"messages": messages}) + "\n")
+    dataset_config = tmp_path / "dataset.yaml"
+    dataset_config.write_text(f"samples:\n  path: {records}\n  source: local\n")
+
     # Create output directory
     output_dir = tmp_path / "outputs"
     output_dir.mkdir(parents=True, exist_ok=True)
     config_file = tmp_path / "config.yaml"
-    config_file.write_text(config_yaml.format(output_dir=str(output_dir)))
+    config_file.write_text(config_yaml.format(output_dir=str(output_dir), dataset_config=str(dataset_config)))
 
     # Set up environment variables
     env = os.environ.copy()

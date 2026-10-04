@@ -12,7 +12,7 @@ dist_config:
   dcp_path: null
 
 ### data
-train_dataset: data/v1_multimodal_demo.yaml
+train_dataset: examples/v1/datasets/v1_multimodal_demo.yaml
 
 ### training
 output_dir: outputs/test_multimodal

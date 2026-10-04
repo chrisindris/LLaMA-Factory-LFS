@@ -108,7 +108,7 @@ eval_dataset: Scene30k_eval16,SpatialSSRL_eval16,3DThinker10k_eval16
 lora_dropout: 0.05
 compute_accuracy: true
 repetition_penalty: 1.1
-new_special_tokens_config: /scratch/i/indrisch//LLaMA-Factory-LFS/data/control_tokens.yaml
+new_special_tokens_config: /scratch/i/indrisch//LLaMA-Factory-LFS/examples/train_lora/cot_control_tokens.yaml
 init_special_tokens: desc_init_w_noise
 skip_special_tokens: false
 additional_target: embed_tokens,lm_head
