@@ -473,11 +473,20 @@ def test_qwen3_vl_plugin():
 @pytest.mark.runs_on(["cpu", "mps"])
 @pytest.mark.skipif(not is_transformers_version_greater_than("4.57.0"), reason="Requires transformers>=4.57.0")
 @pytest.mark.skipif(not is_pyav_available(), reason="Requires pyav")
-def test_qwen3_vl_plugin_video_path():
-    video_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "..", "data", "mllm_demo_data", "1.mp4")
-    video_path = os.path.abspath(video_path)
-    if not os.path.exists(video_path):
-        pytest.skip(f"Video file not found: {video_path}")
+def test_qwen3_vl_plugin_video_path(tmp_path):
+    import av
+
+    video_path = str(tmp_path / "sample.mp4")
+    with av.open(video_path, mode="w") as container:
+        stream = container.add_stream("mpeg4", rate=25)
+        stream.width = stream.height = 32
+        stream.pix_fmt = "yuv420p"
+        for _ in range(243):  # 9.72 seconds, matching the sampling assertions below.
+            frame = av.VideoFrame.from_image(Image.new("RGB", (32, 32), "white"))
+            for packet in stream.encode(frame):
+                container.mux(packet)
+        for packet in stream.encode():
+            container.mux(packet)
 
     tokenizer_module = _load_tokenizer_module(model_name_or_path="Qwen/Qwen3-VL-30B-A3B-Instruct")
     processor = tokenizer_module["processor"]

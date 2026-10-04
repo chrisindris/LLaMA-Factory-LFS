@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import json
 from pathlib import Path
 
 import pytest
@@ -21,8 +22,7 @@ from llamafactory.hparams import ModelArguments
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-CONTROL_TOKENS_YAML = REPO_ROOT / "data" / "control_tokens.yaml"
-CONTROL_TOKENS_JSON = REPO_ROOT / "data" / "control_tokens.json"
+CONTROL_TOKENS_YAML = REPO_ROOT / "examples" / "train_lora" / "cot_control_tokens.yaml"
 
 
 def test_control_tokens_yaml_loads_as_description_dict():
@@ -36,11 +36,13 @@ def test_control_tokens_yaml_loads_as_description_dict():
     assert args.init_special_tokens == "desc_init_w_noise"
 
 
-def test_control_tokens_json_list_raises_value_error_not_logger_crash():
+def test_control_tokens_json_list_raises_value_error_not_logger_crash(tmp_path):
+    config = tmp_path / "tokens.json"
+    config.write_text(json.dumps([{"content": "<think>", "special": True}]))
     with pytest.raises(ValueError, match="dictionary mapping tokens to descriptions"):
         ModelArguments(
             model_name_or_path="dummy",
-            new_special_tokens_config=str(CONTROL_TOKENS_JSON),
+            new_special_tokens_config=str(config),
         )
 
 

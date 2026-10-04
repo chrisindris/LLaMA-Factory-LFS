@@ -6,7 +6,7 @@
 #
 # Modes:
 #   PREFLIGHT=1 <this script>        check paths and exit (safe on a login node)
-#   PORTABLE_STAGE=1 <this script>   create repo-relative symlinks + registry, exit
+#   PORTABLE_STAGE=1 <this script>   stage optional asset links; validate prepared bundle, exit
 #   RUNNING_MODE=APPTAINER           run llamafactory-cli inside the SIF (default)
 #   RUNNING_MODE=VENV                run llamafactory-cli from VENV_LLAMAFACTORY
 #   RUNNING_MODE=SHELL               open a shell inside the SIF
@@ -37,7 +37,16 @@ if [[ -n "${PREFLIGHT:-}" ]]; then
 	exit $?
 fi
 
+# The validated bundle owns its registry. Select a different bundle through
+# PORTABLE_COT_BUNDLE so preflight and training always check the same input.
+for argument in "$@"; do
+	if [[ "${argument}" == dataset_dir=* || "${argument}" == --dataset_dir* ]]; then
+		echo "Use PORTABLE_COT_BUNDLE to select the prepared dataset directory." >&2
+		exit 1
+	fi
+done
 portable_preflight || exit 1
+set -- "dataset_dir=${PORTABLE_COT_BUNDLE}" "media_dir=${MEDIA_DIR}" "$@"
 
 # AllianceCan module stack. Absent on a workstation, which is fine.
 if command -v module >/dev/null 2>&1; then
@@ -73,7 +82,7 @@ run_in_apptainer() {
 	# Bind only paths that exist; Apptainer fails on a missing bind source.
 	local candidate
 	for candidate in "${PROJECT_DIR}" "${HF_HUB_CACHE}" "${SCANNET_H5_DIR}" \
-		"${SPATIALSSRL_H5_DIR}" "${THINKER10K_H5_DIR}" "${MEDIA_DIR}" "${HOME}"; do
+		"${SPATIALSSRL_H5_DIR}" "${THINKER10K_H5_DIR}" "${MEDIA_DIR}" "${PORTABLE_COT_BUNDLE}" "${HOME}"; do
 		_bind_once "${candidate}"
 	done
 

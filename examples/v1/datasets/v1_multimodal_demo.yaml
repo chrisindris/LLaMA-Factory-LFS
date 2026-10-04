@@ -1,0 +1,3 @@
+multimodal_demo:
+  path: data/annotations/v1-demos/v1_multimodal_demo.jsonl
+  source: local

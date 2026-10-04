@@ -15,10 +15,9 @@ lora_target: all
 ### dataset
 # CoT mix: Scene30k + SpatialSSRL_coldstart + 3DThinker10k (full concat each epoch).
 #
-# Every path here is relative to the repo root, which the job body sets as the
-# working directory. dataset_dir points at the GENERATED registry written by
-# `PORTABLE_STAGE=1 ...portable_body_...sh`, whose file_name values resolve
-# repo-relative. The original data/dataset_info.json is never modified.
+# Prepared annotations are copied separately from Git. Their registry owns
+# the field mappings; the launcher selects PORTABLE_COT_BUNDLE and validates it.
+# Run scripts/prepare_cot_annotations.py once before transferring the bundle.
 #
 # H5 image roots come from the environment, not from media_dir:
 #   SCANNET_H5_DIR, SPATIALSSRL_H5_DIR, THINKER10K_H5_DIR
@@ -26,7 +25,7 @@ lora_target: all
 # required. media_dir below is only a filesystem join prefix for Scene30k-style
 # relative paths. Override either on the CLI, e.g. `... media_dir=/other/root`.
 dataset: Scene30k,SpatialSSRL_coldstart,3DThinker10k
-dataset_dir: data/annotations
+dataset_dir: data/annotations/cot-v1
 mix_strategy: concat
 media_dir: data/h5/ScanNet_h5
 template: qwen2_vl

@@ -284,10 +284,15 @@ def test_required_relative_entry_that_exists_passes(tmp_path):
 
 
 def test_thinker10k_portable_registry_reads_question_ids(tmp_path):
-    source = REPO_ROOT / "data" / "dataset_info.json"
+    annotation = tmp_path / "thinker.jsonl"
+    annotation.write_text(json.dumps({"question_id": "3DThinker10k_0"}) + "\n")
+    source = tmp_path / "dataset_info.json"
+    source.write_text(
+        json.dumps({"3DThinker10k": {"file_name": str(annotation), "columns": {"question_id": "question_id"}}})
+    )
     dest = tmp_path / "annotations" / "dataset_info.json"
 
-    assert mpdi.main(["--source", str(source), "--dest", str(dest), "--no-symlinks", "--require", "3DThinker10k"]) == 0
+    assert mpdi.main(["--source", str(source), "--dest", str(dest), "--require", "3DThinker10k"]) == 0
 
     entry = json.loads(dest.read_text(encoding="utf-8"))["3DThinker10k"]
     annotation = (dest.parent / entry["file_name"]).resolve()

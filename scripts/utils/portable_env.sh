@@ -124,7 +124,7 @@ portable_detect_cluster() {
 # Every variable this library resolves. Used to enforce precedence around
 # site.env; keep in sync with portable_set_paths and portable_set_offline.
 PORTABLE_MANAGED_VARS=(
-	CLUSTER RUNNING_MODE
+	CLUSTER RUNNING_MODE PORTABLE_COT_BUNDLE
 	HF_HOME HF_HUB_CACHE TRANSFORMERS_CACHE HUGGINGFACE_HUB_CACHE HF_DATASETS_CACHE
 	HF_HUB_DISABLE_XET SIF_FILE VENV_LLAMAFACTORY APPTAINER_OVERLAY
 	SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR MEDIA_DIR
@@ -269,6 +269,7 @@ portable_set_paths() {
 	_portable_default SPATIALSSRL_H5_DIR "${PROJECT_DIR}/data/h5/Spatial-SSRL_images_h5"
 	_portable_default THINKER10K_H5_DIR "${PROJECT_DIR}/data/h5/3DThinker10K_images_h5"
 	_portable_default MEDIA_DIR "${PROJECT_DIR}/data/h5/ScanNet_h5"
+	_portable_default PORTABLE_COT_BUNDLE "${PROJECT_DIR}/data/annotations/cot-v1"
 
 	# Caches prefer $SLURM_TMPDIR: node-local scratch is much faster than shared
 	# storage and the scheduler reaps it. They are deliberately absent from
@@ -400,7 +401,17 @@ portable_preflight() {
 	_portable_pf_require "scannet_h5" "${SCANNET_H5_DIR}"
 	_portable_pf_require "spatialssrl_h5" "${SPATIALSSRL_H5_DIR}"
 	_portable_pf_require "thinker10k_h5" "${THINKER10K_H5_DIR}"
-	_portable_pf_require "dataset_registry" "${PROJECT_DIR}/data/annotations/dataset_info.json"
+	local bundle="${PORTABLE_COT_BUNDLE:-${PROJECT_DIR}/data/annotations/cot-v1}"
+	_portable_pf_require "dataset_registry" "${bundle}/dataset_info.json"
+	_portable_pf_require "bundle_manifest" "${bundle}/manifest.json"
+	if [[ -f "${bundle}/manifest.json" ]]; then
+		if python3 "${PROJECT_DIR}/scripts/prepare_cot_annotations.py" --preflight "${bundle}"; then
+			_portable_pf_row "OK" "prepared_annotations" "${bundle}"
+		else
+			_portable_pf_row "BAD" "prepared_annotations" "prepare or transfer a complete cot-v1 bundle"
+			_PORTABLE_PF_RC=1
+		fi
+	fi
 
 	if [[ -n "${PORTABLE_YAML_FILE:-}" ]]; then
 		_portable_pf_require "train_yaml" "${PORTABLE_YAML_FILE}"
@@ -484,7 +495,7 @@ _portable_link() {
 	echo "portable_env: linked ${link} -> ${target}" >&2
 }
 
-# Create the repo-relative staging tree and regenerate the portable registry.
+# Stage optional runtime/image links and validate the prepared annotation bundle.
 # Idempotent. Run explicitly with PORTABLE_STAGE=1; never called during training.
 portable_stage_assets() {
 	local rc=0
@@ -504,23 +515,10 @@ portable_stage_assets() {
 	_portable_link "${PROJECT_DIR}/data/h5/Spatial-SSRL_images_h5" "${PORTABLE_SRC_SPATIALSSRL_H5:-}" || rc=1
 	_portable_link "${PROJECT_DIR}/data/h5/3DThinker10K_images_h5" "${PORTABLE_SRC_THINKER10K_H5:-}" || rc=1
 
-	# Forward site.env redirects for external annotations. Scene30k and
-	# SpatialSSRL_coldstart need local sources on this cluster; 3DThinker10k
-	# defaults to the checked-in, repo-relative file unless overridden.
-	local -a gen_args=(
-		--source "${PROJECT_DIR}/data/dataset_info.json"
-		--dest "${PROJECT_DIR}/data/annotations/dataset_info.json"
-		--require "${PORTABLE_REQUIRED_DATASETS:-Scene30k,SpatialSSRL_coldstart,3DThinker10k}"
-	)
-	[[ -n "${PORTABLE_SRC_SCENE30K_ANNOTATION:-}" ]] &&
-		gen_args+=(--override "Scene30k=${PORTABLE_SRC_SCENE30K_ANNOTATION}")
-	[[ -n "${PORTABLE_SRC_SPATIALSSRL_ANNOTATION:-}" ]] &&
-		gen_args+=(--override "SpatialSSRL_coldstart=${PORTABLE_SRC_SPATIALSSRL_ANNOTATION}")
-	[[ -n "${PORTABLE_SRC_THINKER10K_ANNOTATION:-}" ]] &&
-		gen_args+=(--override "3DThinker10k=${PORTABLE_SRC_THINKER10K_ANNOTATION}")
-
-	echo "portable_env: generating data/annotations/dataset_info.json" >&2
-	python3 "${PROJECT_DIR}/scripts/make_portable_dataset_info.py" "${gen_args[@]}" || rc=1
+	# Annotation preparation is explicit. Staging never regenerates its registry
+	# or silently falls back to raw/cache annotations.
+	python3 "${PROJECT_DIR}/scripts/prepare_cot_annotations.py" \
+		--preflight "${PORTABLE_COT_BUNDLE:-${PROJECT_DIR}/data/annotations/cot-v1}" || rc=1
 
 	return "${rc}"
 }
