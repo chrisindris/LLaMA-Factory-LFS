@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import json
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -723,3 +724,45 @@ def test_zero3_generate_dump_uses_engine_and_synced_gpus():
     assert engine.generate_kwargs["synced_gpus"] is True
     assert inner.generate_kwargs is not None
     assert inner.generate_kwargs.get("synced_gpus") is True
+
+
+def test_eval_predictions_wandb_log_does_not_set_step(monkeypatch):
+    from llamafactory.train.sft.trainer import CustomSeq2SeqTrainer
+
+    logged = {}
+
+    class _Table:
+        def __init__(self, columns, data):
+            self.columns = columns
+            self.data = data
+
+    class _Wandb:
+        run = object()
+
+        @staticmethod
+        def Table(columns, data):
+            return _Table(columns, data)
+
+        @staticmethod
+        def log(*args, **kwargs):
+            logged["args"] = args
+            logged["kwargs"] = kwargs
+
+    monkeypatch.setitem(sys.modules, "wandb", _Wandb)
+    trainer = SimpleNamespace(args=SimpleNamespace(report_to=["wandb"]))
+    CustomSeq2SeqTrainer._log_eval_predictions_to_wandb(
+        trainer,
+        [("Scene30k_q1", "answer one"), ("SpatialSSRL_coldstart_q2", "answer two")],
+        124,
+    )
+
+    assert "step" not in logged["kwargs"]
+    assert len(logged["args"]) == 1
+    payload = logged["args"][0]
+    assert payload["train/global_step"] == 124
+    table = payload["eval_predictions"]
+    assert table.columns == ["question_id", "dataset", "prediction"]
+    assert table.data == [
+        ["Scene30k_q1", "Scene30k", "answer one"],
+        ["SpatialSSRL_coldstart_q2", "SpatialSSRL_coldstart", "answer two"],
+    ]

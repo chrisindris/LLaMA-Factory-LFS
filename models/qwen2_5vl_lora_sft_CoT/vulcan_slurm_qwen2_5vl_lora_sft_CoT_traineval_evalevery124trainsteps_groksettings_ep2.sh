@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_groksettings-%j.out
 #SBATCH --cpus-per-task=64
-#SBATCH --time=1-00:00:00
+#SBATCH --time=0-17:00:00
 #SBATCH --mem=0
 #SBATCH --gpus-per-node=4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
@@ -82,8 +82,8 @@ EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_grokset
 export DATASET_INFO_PATH=$(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "dataset_info.json")
 
 # ----- DEFAULT ARGUMENTS -----
-export STARTING_EPOCH="${STARTING_EPOCH:-0}"
-export ENDING_EPOCH="${ENDING_EPOCH:-1}"
+export STARTING_EPOCH="${STARTING_EPOCH:-1}"
+export ENDING_EPOCH="${ENDING_EPOCH:-2}"
 export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-309}" # val_size_equivalent=0.1 on 43835 -> 39451, minus X eval16 overlaps; 4 GPU, bs=2, ga=8 -> 616 if X=0. Scale as 4/num_gpus * 2/batch_size * 616 (NOTE: the other cluster uses 617, and we needed 309 here, so we use 617)
 export TOTAL_EPOCHS="${TOTAL_EPOCHS:-5}" # 
 

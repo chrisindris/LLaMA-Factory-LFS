@@ -703,7 +703,8 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         columns = ["question_id", "dataset", "prediction"]
         data = [[qid, _dataset_from_question_id(qid), text] for qid, text in pairs]
         table = wandb.Table(columns=columns, data=data)
-        wandb.log({"eval_predictions": table}, step=step)
+        # Do not pass step=. HF's WandbCallback logs without it, and step=global_step jumps W&B's _step.
+        wandb.log({"eval_predictions": table, "train/global_step": step})
 
     def _deepspeed_zero3_enabled(self) -> bool:
         r"""True if this trainer is running DeepSpeed ZeRO-3.

@@ -1,15 +1,15 @@
 #!/bin/bash
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
-#SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_groksettings-%j.out
+#SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_bugfixlogging-%j.out
 #SBATCH --cpus-per-task=64
-#SBATCH --time=1-00:00:00
+#SBATCH --time=0-17:00:00
 #SBATCH --mem=0
 #SBATCH --gpus-per-node=4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
 #SBATCH --mail-type=ALL
 
-# ===  vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_groksettings.sh  ===
+# ===  vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_bugfixlogging.sh  ===
 # Same as vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps.sh except:
 # - train logging and eval every 124 rather than every 10 steps (saves time)
 # - approx same eval set size as when we use val_size = 0.1 (i.e. 616 steps per epoch; note that before it was 617 but we used 620)
@@ -55,7 +55,7 @@
 #
 # Submit from models/qwen2_5vl_lora_sft_CoT/ so SLURM out/
 # lands next to this script:
-#   sbatch vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_groksettings.sh
+#   sbatch vulcan_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_bugfixlogging.sh
 #
 # Uses vulcan_qwen2_5vl_lora_sft_CoT_traineval.yaml via the shared
 # worker (CLUSTER-detected path).
@@ -74,7 +74,7 @@
 # - we have some hardcoded paths in use, perhaps we can put them into env.sh? -> done!
 # - make sure that the YAML we write to is named according to the experiment. -> done!
 
-EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_groksettings"
+EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_bugfixlogging"
 
 # --- for reading cluster-specific settings ---
 . $(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "env.sh")
@@ -227,12 +227,12 @@ TEMPLATE_YAML="${PROJECT_DIR}/examples/train_lora/trillium_qwen2_5vl_lora_sft_Co
 # |------------
 # | Create a copy of TEMPLATE_YAML at ...epoch${ENDING_EPOCH}.yaml (cluster-prefixed).
 # | Always set:
-# |   output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_groksettings_ep${ENDING_EPOCH}/
+# |   output_dir: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_bugfixlogging_ep${ENDING_EPOCH}/
 # |   stop_at_global_step: $((ENDING_EPOCH * STEPS_PER_EPOCH))
 # |
 # | If STARTING_EPOCH > 0 (resume):
 # |   resume_from_checkpoint / adapter_name_or_path:
-# |     ${PROJECT_DIR}/saves/.../CoT_traineval_evalevery124trainsteps_groksettings_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))
+# |     ${PROJECT_DIR}/saves/.../CoT_traineval_evalevery124trainsteps_bugfixlogging_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))
 # |   allow_warm_start_resume / require_resume_bundle as warm-start defaults
 # |
 # | If STARTING_EPOCH == 0 (fresh start, like trillium_*_CoT_traineval.yaml):
@@ -247,7 +247,7 @@ if [ -z "${YAML_FILE:-}" ]; then
   echo "YAML_FILE: ${YAML_FILE}"
 fi
 
-export OUTPUT_DIR_SAVES="saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_groksettings_ep${ENDING_EPOCH}/" && echo "OUTPUT_DIR_SAVES: ${OUTPUT_DIR_SAVES}"
+export OUTPUT_DIR_SAVES="saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_bugfixlogging_ep${ENDING_EPOCH}/" && echo "OUTPUT_DIR_SAVES: ${OUTPUT_DIR_SAVES}"
 export OUTPUT_DIR="${PROJECT_DIR}/${OUTPUT_DIR_SAVES}" && echo "OUTPUT_DIR: ${OUTPUT_DIR}"
 
 # The Trillium template hard-codes cache_dir=/scratch/indrisch/huggingface/hub.
@@ -262,7 +262,7 @@ if [[ ! -d "${QWEN_CACHE}/snapshots" ]]; then
 fi
 
 if [[ "${STARTING_EPOCH}" -gt 0 ]]; then
-  export RESUME_CKPT="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_groksettings_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))"
+  export RESUME_CKPT="${PROJECT_DIR}/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_bugfixlogging_ep${STARTING_EPOCH}/checkpoint-$((STARTING_EPOCH * STEPS_PER_EPOCH))"
 else
   export RESUME_CKPT=null
 fi
@@ -336,13 +336,11 @@ cmd_args=(
     --init_special_tokens desc_init_w_noise # initialize special tokens with semantic + random noise
     --skip_special_tokens false # ensure that the special tokens are not ignored
     --additional_target embed_tokens,lm_head # need to unfreeze some model (non-LoRA) weights to adapt to the special tokens
-    --warmup_ratio 0.03 # use 102 steps (0.15 epoch) rather than 342 steps (0.5 epoch) for warmup
-    --lr_scheduler_type cosine_with_min_lr
-    --lr_scheduler_kwargs '{"min_lr_rate": 0.1}' # min lr is 10% of max; quote JSON so bash does not split on the colon/space
+    --warmup_ratio 0.02 # use 68 steps (0.1 epoch) rather than 342 steps (0.5 epoch) for warmup
+    --lr_scheduler_kwargs '{"num_cycles": 0.4}' # HF cosine; quote JSON so bash does not split on the colon/space
     --eval_prediction_mode generate # more accurate to external benchmark behaviour, though it would take longer
     --eval_dump_max_new_tokens 1024 # hard cap for dump generate; keeps NCCL eval gathers from waiting on 2048-token loops
     --do_sample false # greedy dump generate; sampling looped <|im_start|> and timed out NCCL
-    --learning_rate 2.0e-5 # half of the previous max lr
 )
 
 # L40S: keep Killarney image/cutoff caps and additional_target. ZeRO-3 offload is
