@@ -167,6 +167,7 @@ module load arrow
 
 source $VENV_DATASET_UPLOAD/bin/activate
 export HF_TOKEN=$(cat /home/indrisch/TOKENS/cvis-tmu-organization-token.txt)
+export WANDB_API_KEY=$(cat /home/indrisch/TOKENS/wandb-forge.txt)
 
 # --- run commands ---
 

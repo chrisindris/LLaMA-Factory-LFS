@@ -27,12 +27,37 @@
 
 # DISABLE_VERSION_CHECK=1 python merge_lora_for_resume.py --base-model /scratch/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/ --adapter-checkpoint /scratch/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs/snapshots/586c43def596efe688aa2d9f262959fd209de425/ --output-dir ../models/qwen2_5vl_lora_sft_CoT_merged/
 
-DISABLE_VERSION_CHECK=1 python merge_lora_for_resume.py \
-  --base-model /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5 \
-  --adapter-checkpoint /project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_traininglog/snapshots/ff3afeb8a8799cc7a1285a1b967d2d4f7a8aa7c8/ \
-  --output-dir ../models/qwen2_5vl_lora_sft_CoT_unifiedformat_merged/
+# DISABLE_VERSION_CHECK=1 python merge_lora_for_resume.py \
+#   --base-model /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5 \
+#   --adapter-checkpoint /project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_traininglog/snapshots/ff3afeb8a8799cc7a1285a1b967d2d4f7a8aa7c8/ \
+#   --output-dir ../models/qwen2_5vl_lora_sft_CoT_unifiedformat_merged/
+#
+# DISABLE_VERSION_CHECK=1 python merge_lora_for_resume.py \
+#   --base-model /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5 \
+#   --adapter-checkpoint /project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_groksettings_traininglog/snapshots/37de75c70714cf7b0a1a8ad101b2241577971897/ \
+#   --output-dir ../models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_merged/
+
+# DISABLE_VERSION_CHECK=1 python merge_lora_for_resume.py \
+#   --base-model /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5 \
+#   --adapter-checkpoint /project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_groksettings_traininglogfixed/snapshots/a254dbcd277c0b80b082ecff6d2f91bdffa81953/ \
+#   --output-dir ../models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglogfixed_ep1_merged/
+#
+# DISABLE_VERSION_CHECK=1 python merge_lora_for_resume.py \
+#   --base-model /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5 \
+#   --adapter-checkpoint /project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs_unifiedformat_groksettings_traininglog/snapshots/47903b8f0cce87d5c93b409d78cf1667df8c278e/ \
+#   --output-dir ../models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglogfixed_ep2_merged/
+#
+# DISABLE_VERSION_CHECK=1 python merge_lora_for_resume.py \
+#   --base-model /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5 \
+#   --adapter-checkpoint /project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_traininglogfixed/snapshots/1afaaa1574de5b57a35352f85cbaa23527720031/ \
+#   --output-dir ../models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglogfixed_ep1_merged/
 
 DISABLE_VERSION_CHECK=1 python merge_lora_for_resume.py \
   --base-model /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5 \
-  --adapter-checkpoint /project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_groksettings_traininglog/snapshots/37de75c70714cf7b0a1a8ad101b2241577971897/ \
-  --output-dir ../models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_merged/
+  --adapter-checkpoint /project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_traininglog/snapshots/a68355fad201e1162bb3993888ec3811089584e9/ \
+  --output-dir ../models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/
+
+DISABLE_VERSION_CHECK=1 python merge_lora_for_resume.py \
+  --base-model /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5 \
+  --adapter-checkpoint /project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_groksettings_traininglog/snapshots/909bef9d27869c7c13e83118209ebcf07f9ed370/ \
+  --output-dir ../models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/
