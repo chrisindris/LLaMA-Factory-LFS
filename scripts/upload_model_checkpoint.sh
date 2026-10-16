@@ -174,7 +174,7 @@ python upload_model_checkpoint.py \
   --commit-message "$COMMIT_MESSAGE"
 
 if [[ -z "$NO_WANDB_UPLOAD" ]]; then
-  wandb sync "$WANDB_LOG" --id "$ID"
+  wandb sync "$WANDB_LOG" --id "${ID}_tamia"
 fi
 
 deactivate

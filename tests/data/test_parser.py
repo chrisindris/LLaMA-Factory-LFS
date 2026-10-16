@@ -109,6 +109,30 @@ def test_scene30k_entry_uses_hf_hub_cache(clear_hf_cache_env, monkeypatch: pytes
 
 
 @pytest.mark.runs_on(["cpu", "mps"])
+def test_eval16_entries_use_hf_hub_cache(clear_hf_cache_env, monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("HF_HUB_CACHE", "/tmp/fake_hub")
+    expected = {
+        "Scene30k_eval16": (
+            "/tmp/fake_hub/datasets--cvis-tmu--Scene30K/snapshots/"
+            "d094c4d0297f42915f6bdbd744504fbc96b3a646/Scene30k_eval16.json"
+        ),
+        "SpatialSSRL_eval16": (
+            "/tmp/fake_hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/"
+            "e4359d66da7adc78993f2ad163253c81eb0baf70/SpatialSSRL_eval16.json"
+        ),
+        "3DThinker10k_eval16": (
+            "/tmp/fake_hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/"
+            "a64cb299ed3e8892f9f75f35607890b64e232451/3DThinker10k_eval16.jsonl"
+        ),
+    }
+    names = list(expected)
+    attrs = get_dataset_list(names, DATA_DIR)
+    assert [attr.dataset_name for attr in attrs] == [expected[name] for name in names]
+    for path in expected.values():
+        assert os.path.join("data", path) == path
+
+
+@pytest.mark.runs_on(["cpu", "mps"])
 def test_cache_relative_file_name(clear_hf_cache_env, monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setenv("HF_HUB_CACHE", "/tmp/hub")
     under = cache_relative_file_name("/tmp/hub/datasets--x/file.parquet")

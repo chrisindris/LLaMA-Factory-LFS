@@ -14,6 +14,7 @@
 
 import os
 from typing import TYPE_CHECKING, Any, Optional, TypedDict
+from packaging.version import parse as parse_version
 
 import torch
 from transformers import (
@@ -25,7 +26,12 @@ from transformers import (
     AutoProcessor,
     AutoTokenizer,
 )
-from trl import AutoModelForCausalLMWithValueHead
+
+import trl
+if parse_version(trl.__version__) >= parse_version("0.27.0"):
+    from trl.experimental.ppo import AutoModelForCausalLMWithValueHead
+else:
+    from trl.models.modeling_value_head import AutoModelForCausalLMWithValueHead
 
 from ..extras import logging
 from ..extras.misc import count_parameters, skip_check_imports, try_download_model_from_other_hub

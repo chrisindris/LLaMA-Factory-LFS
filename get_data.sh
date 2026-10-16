@@ -89,14 +89,14 @@ if [[ ${PRESET} == "FULL_SETUP_LATEST" ]]; then
   # apptainer (optional); see `scripts/sysconfig.json`
 
   # annotations; see `data/dataset_info.json`
-  hf download --max-workers=4 cvis-tmu/Scene30K --repo-type dataset --revision cb95b1d90e903d7e187822a82d3048fa83b8d896 
-  hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type dataset --revision 1df383987669bed64185e793f1c8136911a7b7ea 
-  hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset --revision d4bc8d8b4eca4c2e61135888f9e4f1721c9dedc7 
+  hf download --max-workers=4 cvis-tmu/Scene30K --repo-type dataset --revision d094c4d0297f42915f6bdbd744504fbc96b3a646 
+  hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type dataset --revision a64cb299ed3e8892f9f75f35607890b64e232451 
+  hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset --revision e4359d66da7adc78993f2ad163253c81eb0baf70 
 
 fi
 
 # hf download --max-workers=7 moonshotai/Kimi-VL-A3B-Thinking-2506 # model for generating traces (the "teacher")
-# hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct --revision cc594898137f460bfe9f0759e9844b3ce807cfb5 # model we will use as a student (in addition to LLaVa-3D)
+hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct --revision cc594898137f460bfe9f0759e9844b3ce807cfb5 --force-download # model we will use as a student (in addition to LLaVa-3D)
 # hf download --max-workers=4 Qwen/Qwen2.5-7B-Instruct-1M  # text-only long-context model used to assess the traces
 #hf download --max-workers=4 Qwen/Qwen2.5-7B-Instruct # text-only model used to assess the traces; the 1M version doesn't seem to load
 #hf download --max-workers=4 Qwen/Qwen2.5-0.5B-Instruct # text-only model used to assess the traces; the 1M version doesn't seem to load
@@ -208,6 +208,9 @@ fi
 
 # New .sif optimized for the latest LLaMA-Factory (after latest-hiyouga-changes)
 # hf download --max-workers=4 cvis-tmu/compute_canada_sif_files llamafactory-latest.sif --repo-type dataset
+
+hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_traininglog --force-download
+hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_groksettings_traininglog --force-download
 
 deactivate
 # rm -r temp_env

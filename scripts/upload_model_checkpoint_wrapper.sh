@@ -401,9 +401,21 @@
 #     --wandb-log /scratch/indrisch/LLaMA-Factory/wandb/wandb/offline-run-20260808_121046-pv9hkxtx \
 #     --commit-message "Qwen2.5-VL-7B LoRA adapter. Trained for 3 epoch (1860 steps) on 4x H100 GPUs (job: 713342 on Trillium). Dataset: Scene30k + SpatialSSRL_coldstart + 3DThinker10k (mix_strategy=concat)" \
 
+# ./upload_model_checkpoint.sh \
+#     --id qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_traininglog \
+#     --checkpoint /scratch/i/indrisch/LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/checkpoint-620/ \
+#     --wandb-log /scratch/i/indrisch/LLaMA-Factory-LFS/wandb/wandb/offline-run-20260826_025740-4t1r1hgh \
+#     --commit-message "Qwen2.5-VL-7B LoRA adapter. Trained for 1 epoch (620 steps) on 4x H100 GPUs (job: 428685 on TamIA). Dataset: Scene30k + SpatialSSRL_coldstart + 3DThinker10k (mix_strategy=concat). It is identical to qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs, but here we log batch predictions every 10 training steps and log the evaluation subset after 1 epoch."
+
 ./upload_model_checkpoint.sh \
-    --id qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_traininglog \
-    --checkpoint /scratch/i/indrisch/LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_resume_ep1/checkpoint-620/ \
-    --wandb-log /scratch/i/indrisch/LLaMA-Factory-LFS/wandb/wandb/offline-run-20260826_025740-4t1r1hgh \
-    --commit-message "Qwen2.5-VL-7B LoRA adapter. Trained for 1 epoch (620 steps) on 4x H100 GPUs (job: 428685 on TamIA). Dataset: Scene30k + SpatialSSRL_coldstart + 3DThinker10k (mix_strategy=concat). It is identical to qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs, but here we log batch predictions every 10 training steps and log the evaluation subset after 1 epoch."
+    --id qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_traininglog \
+    --checkpoint /scratch/i/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_ep1/checkpoint-617/ \
+    --wandb-log /scratch/i/indrisch/LLaMA-Factory-LFS/wandb/wandb/offline-run-20261009_195643-u3xncyp3 \
+    --commit-message "Qwen2.5-VL-7B LoRA adapter. Trained for 1 epoch (617 steps) on 4x H100 GPUs (job: 500214 on TamIA). Refer to tamia_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps.sh and the associated .yaml for training settings. Dataset: Scene30k + SpatialSSRL_coldstart + 3DThinker10k; see run log for dataset version (unifiedformat). Training, and eval on 16 held-out examples, logged every 124 steps. Note that, like on Vulcan, wandb logging shows strange behaviour in terms of logging frequency (check job *.out for log)"
+
+./upload_model_checkpoint.sh \
+    --id qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_groksettings_traininglog \
+    --checkpoint /scratch/i/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery124trainsteps_groksettings_ep1/checkpoint-617/ \
+    --wandb-log /scratch/i/indrisch/LLaMA-Factory-LFS/wandb/wandb/offline-run-20261009_195632-6w97u011 \
+    --commit-message "Qwen2.5-VL-7B LoRA adapter. Trained for 1 epoch (617 steps) on 4x H100 GPUs (job: 500215 on TamIA). Refer to tamia_slurm_qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_groksettings.sh and the associated .yaml for training settings. Dataset: Scene30k + SpatialSSRL_coldstart + 3DThinker10k; see run log for dataset version (unifiedformat). Training, and eval on 16 held-out examples, logged every 124 steps. Note that, like on Vulcan, wandb logging shows strange behaviour in terms of logging frequency (check job *.out for log)"
 

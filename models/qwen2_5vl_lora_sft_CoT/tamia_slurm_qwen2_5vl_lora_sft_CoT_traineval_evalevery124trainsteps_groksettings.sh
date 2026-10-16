@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --output=out/%N-qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_groksettings-%j.out
 #SBATCH --cpus-per-task=48
-#SBATCH --time=1-00:00:00
+#SBATCH --time=0-20:00:00
 #SBATCH --mem=0
 #SBATCH --gpus-per-node=h100:4
 #SBATCH --mail-user=christopher.indris@torontomu.ca
@@ -86,7 +86,7 @@ EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval_evalevery124trainsteps_grokset
 # ----- DEFAULT ARGUMENTS -----
 export STARTING_EPOCH="${STARTING_EPOCH:-0}"
 export ENDING_EPOCH="${ENDING_EPOCH:-1}"
-export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-616}" # val_size_equivalent=0.1 on 43835 -> 39451, minus X eval16 overlaps; 4 GPU, bs=2, ga=8 -> 616 if X=0. Scale as 4/num_gpus * 616
+export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-617}" # val_size_equivalent=0.1 on 43835 -> 39451, minus X eval16 overlaps; 4 GPU, bs=2, ga=8 -> 616 if X=0. Scale as 4/num_gpus * 616 (EDIT: even with removal, it is 617.)
 export TOTAL_EPOCHS="${TOTAL_EPOCHS:-5}" # 
 
 # ----- ARGUMENT PARSING -----
@@ -151,9 +151,9 @@ echo "RUNNING_MODE: $RUNNING_MODE"
 # export THINKER10K_ANN_SRC="${HF_HUB_CACHE}/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/4dd9eb7f24b03c4e9f1265c7e177325cadec9d2d/3dthinker10k_cot.with_question_id.formatted.jsonl"
 export DATASET_INFO_PATH=$(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "dataset_info.json")
 
-export SCENE30K_ANN_SRC="/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/cb95b1d90e903d7e187822a82d3048fa83b8d896/train-00000-of-00001.with_question_id.unifiedformat.parquet"
-export SPATIALSSRL_ANN_SRC="/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/d4bc8d8b4eca4c2e61135888f9e4f1721c9dedc7/SFT-coldstart.with_question_id.unifiedformat.json"
-export THINKER10K_ANN_SRC="/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/1df383987669bed64185e793f1c8136911a7b7ea/3dthinker10k_cot.with_question_id.unifiedformat.jsonl"
+# export SCENE30K_ANN_SRC="/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/cb95b1d90e903d7e187822a82d3048fa83b8d896/train-00000-of-00001.with_question_id.unifiedformat.parquet"
+# export SPATIALSSRL_ANN_SRC="/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/d4bc8d8b4eca4c2e61135888f9e4f1721c9dedc7/SFT-coldstart.with_question_id.unifiedformat.json"
+# export THINKER10K_ANN_SRC="/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/1df383987669bed64185e793f1c8136911a7b7ea/3dthinker10k_cot.with_question_id.unifiedformat.jsonl"
 
 export SCENE30K_ANN_SRC="$(jq -r '.["Scene30k"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SCENE30K_ANN_SRC: ${SCENE30K_ANN_SRC}"
 export SPATIALSSRL_ANN_SRC="$(jq -r '.["SpatialSSRL_coldstart"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SPATIALSSRL_ANN_SRC: ${SPATIALSSRL_ANN_SRC}"
@@ -272,11 +272,11 @@ cmd_args=(
     --preprocessing_num_workers "${PREPROCESSING_NUM_WORKERS}"
     --dataloader_num_workers "${DATALOADER_NUM_WORKERS}"
     --ddp_timeout "${TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC}" # avoid NCCL timeouts
-    --train_prediction_interval 124 # save the training every 10 steps
+    --train_prediction_interval 124 # save the training every 124 steps
     --train_prediction_max_samples 0 # no cap
-    --eval_steps 124 # to run an evaluation (and log it) every 10 training steps.
+    --eval_steps 124 # to run an evaluation (and log it) every 124 training steps.
     --eval_on_start true # to eval on the base qwen
-    --eval_strategy steps # to ensure that we eval every 10 steps not every 10 epochs
+    --eval_strategy steps # to ensure that we eval every X steps not every X epochs
     --eval_dataset Scene30k_eval16,SpatialSSRL_eval16,3DThinker10k_eval16 # frozen 8+4+4 probe
     --val_size 0 # eval_dataset cannot be combined with val_size>0
     --val_size_equivalent 0.1 # train size as if val_size=0.1 (39451 before dropping X eval16 overlaps)

@@ -42,9 +42,32 @@ if [[ -z "${COT_EVAL16_DIR:-}" ]]; then
 		COT_EVAL16_DIR="data/cot_eval16"
 	fi
 fi
-: "${SCENE30K_EVAL16_SRC:=${COT_EVAL16_DIR}/Scene30k_eval16.json}"
-: "${SPATIALSSRL_EVAL16_SRC:=${COT_EVAL16_DIR}/SpatialSSRL_eval16.json}"
-: "${THINKER10K_EVAL16_SRC:=${COT_EVAL16_DIR}/3DThinker10k_eval16.jsonl}"
+# Same snapshots as data/dataset_info.json. Fall back to the repo copy when the
+# hub snapshot is absent (other clusters may not have it yet).
+_scene30k_eval16_cache="${_hf_cache}/datasets--cvis-tmu--Scene30K/snapshots/d094c4d0297f42915f6bdbd744504fbc96b3a646/Scene30k_eval16.json"
+_spatial_eval16_cache="${_hf_cache}/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/e4359d66da7adc78993f2ad163253c81eb0baf70/SpatialSSRL_eval16.json"
+_thinker_eval16_cache="${_hf_cache}/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/a64cb299ed3e8892f9f75f35607890b64e232451/3DThinker10k_eval16.jsonl"
+if [[ -z "${SCENE30K_EVAL16_SRC:-}" ]]; then
+	if [[ -n "${_hf_cache}" && -f "${_scene30k_eval16_cache}" ]]; then
+		SCENE30K_EVAL16_SRC="${_scene30k_eval16_cache}"
+	else
+		SCENE30K_EVAL16_SRC="${COT_EVAL16_DIR}/Scene30k_eval16.json"
+	fi
+fi
+if [[ -z "${SPATIALSSRL_EVAL16_SRC:-}" ]]; then
+	if [[ -n "${_hf_cache}" && -f "${_spatial_eval16_cache}" ]]; then
+		SPATIALSSRL_EVAL16_SRC="${_spatial_eval16_cache}"
+	else
+		SPATIALSSRL_EVAL16_SRC="${COT_EVAL16_DIR}/SpatialSSRL_eval16.json"
+	fi
+fi
+if [[ -z "${THINKER10K_EVAL16_SRC:-}" ]]; then
+	if [[ -n "${_hf_cache}" && -f "${_thinker_eval16_cache}" ]]; then
+		THINKER10K_EVAL16_SRC="${_thinker_eval16_cache}"
+	else
+		THINKER10K_EVAL16_SRC="${COT_EVAL16_DIR}/3DThinker10k_eval16.jsonl"
+	fi
+fi
 
 # H5 source roots (workers usually export these before sourcing).
 : "${SCANNET_H5_DIR:=/scratch/indrisch/ScanNet_h5/scans}"

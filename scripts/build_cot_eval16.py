@@ -43,9 +43,9 @@ DEFAULT_DATASET_INFO = Path("data/dataset_info.json")
 DEFAULT_OUT_DIR = Path("data/cot_eval16")
 
 LOCAL_FALLBACKS = {
-    "Scene30k": Path("data/train-00000-of-00001.with_question_id.formatted.parquet"),
-    "SpatialSSRL_coldstart": Path("data/SFT-coldstart.with_question_id.formatted.json"),
-    "3DThinker10k": Path("data/3dthinker10k_cot.with_question_id.formatted.jsonl"),
+    "Scene30k": Path("data/train-00000-of-00001.with_question_id.unifiedformat.parquet"),
+    "SpatialSSRL_coldstart": Path("data/SFT-coldstart.with_question_id.unifiedformat.json"),
+    "3DThinker10k": Path("data/3dthinker10k_cot.with_question_id.unifiedformat.jsonl"),
 }
 
 OUTPUT_NAMES = {

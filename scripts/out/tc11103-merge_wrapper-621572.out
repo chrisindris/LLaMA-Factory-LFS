@@ -1,0 +1,85 @@
+
+Lmod is automatically replacing "gcc/12.3" with "go/1.26.5".
+
+
+Lmod is automatically replacing "go/1.26.5" with "gcc/12.3".
+
+
+Activating Modules:
+  1) cuda/12.6           3) gcccore/.12.3        5) opencv/4.14.0     7) pmix/4.2.4
+  2) flexiblas/3.3.1     4) libfabric/1.18.0     6) openmpi/4.1.5
+
+
+The following have been reloaded with a version change:
+  1) opencv/4.14.0 => opencv/4.12.0     2) python/3.13.2 => python/3.12.4
+
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+Planned export arguments:
+{
+  "model_name_or_path": "/project/6110552/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5",
+  "adapter_name_or_path": "/project/6110552/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_traininglog/snapshots/a68355fad201e1162bb3993888ec3811089584e9",
+  "template": "qwen2_vl",
+  "trust_remote_code": true,
+  "export_dir": "/scratch/i/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_merged",
+  "export_size": 5,
+  "export_device": "cpu",
+  "export_legacy_format": false
+}
+include_resume_bundle: True
+resume_bundle_source: /project/6110552/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_traininglog/snapshots/a68355fad201e1162bb3993888ec3811089584e9
+[WARNING|2026-10-16 05:28:28] llamafactory.extras.misc:163 >> Version checking has been disabled, may lead to unexpected behaviors.
+/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/model/loader.py:32: TRLExperimentalWarning: You are importing from 'trl.experimental'. APIs here are unstable and may change or be removed without notice. Silence this warning by setting environment variable TRL_EXPERIMENTAL_SILENCE=1.
+  from trl.experimental.ppo import AutoModelForCausalLMWithValueHead
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/scripts/merge_lora_for_resume.py", line 398, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/scripts/merge_lora_for_resume.py", line 342, in main
+    export_model = load_export_model()
+                   ^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/scripts/merge_lora_for_resume.py", line 61, in load_export_model
+    from llamafactory.train.tuner import export_model
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 47, in <module>
+    from .ppo import run_ppo
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/ppo/__init__.py", line 15, in <module>
+    from .workflow import run_ppo
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/ppo/workflow.py", line 25, in <module>
+    from .trainer import CustomPPOTrainer
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/ppo/trainer.py", line 35, in <module>
+    from trl import PPOConfig, PPOTrainer
+ImportError: cannot import name 'PPOConfig' from 'trl' (/scratch/i/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/trl/__init__.py). Did you mean: 'DPOConfig'?
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+Planned export arguments:
+{
+  "model_name_or_path": "/project/6110552/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5",
+  "adapter_name_or_path": "/project/6110552/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_groksettings_traininglog/snapshots/909bef9d27869c7c13e83118209ebcf07f9ed370",
+  "template": "qwen2_vl",
+  "trust_remote_code": true,
+  "export_dir": "/scratch/i/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_merged",
+  "export_size": 5,
+  "export_device": "cpu",
+  "export_legacy_format": false
+}
+include_resume_bundle: True
+resume_bundle_source: /project/6110552/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_groksettings_traininglog/snapshots/909bef9d27869c7c13e83118209ebcf07f9ed370
+[WARNING|2026-10-16 05:28:42] llamafactory.extras.misc:163 >> Version checking has been disabled, may lead to unexpected behaviors.
+/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/model/loader.py:32: TRLExperimentalWarning: You are importing from 'trl.experimental'. APIs here are unstable and may change or be removed without notice. Silence this warning by setting environment variable TRL_EXPERIMENTAL_SILENCE=1.
+  from trl.experimental.ppo import AutoModelForCausalLMWithValueHead
+Traceback (most recent call last):
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/scripts/merge_lora_for_resume.py", line 398, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/scripts/merge_lora_for_resume.py", line 342, in main
+    export_model = load_export_model()
+                   ^^^^^^^^^^^^^^^^^^^
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/scripts/merge_lora_for_resume.py", line 61, in load_export_model
+    from llamafactory.train.tuner import export_model
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 47, in <module>
+    from .ppo import run_ppo
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/ppo/__init__.py", line 15, in <module>
+    from .workflow import run_ppo
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/ppo/workflow.py", line 25, in <module>
+    from .trainer import CustomPPOTrainer
+  File "/scratch/i/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/ppo/trainer.py", line 35, in <module>
+    from trl import PPOConfig, PPOTrainer
+ImportError: cannot import name 'PPOConfig' from 'trl' (/scratch/i/indrisch/venv_llamafactory_cu126/lib/python3.12/site-packages/trl/__init__.py). Did you mean: 'DPOConfig'?
