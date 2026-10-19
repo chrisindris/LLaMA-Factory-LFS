@@ -44,6 +44,9 @@ get_cluster_settings() {
 	elif [[ "${PS1:-}" == *"tamia"* ]] || [[ "$HOSTNAME" == *"tamia"* ]] || [[ "${PS1:-}" == *"tg"* ]] || [[ "$HOSTNAME" == *"tg"* ]]; then
 		export CLUSTER="${CLUSTER:-TAMIA}"
 		export RUNNING_MODE="${RUNNING_MODE:-VENV}"
+  elif [[ "${PS1:-}" == *"vulcan"* ]] || [[ "$HOSTNAME" == *"vulcan"* ]] || [[ "${PS1:-}" == *"rack"* ]] || [[ "$HOSTNAME" == *"rack"* ]] || [[ "${PS1:-}" == *"compute"* ]] || [[ "$HOSTNAME" == *"compute"* ]]; then
+		export CLUSTER="${CLUSTER:-VULCAN}"
+		export RUNNING_MODE="${RUNNING_MODE:-VENV}"
 	elif [[ "$HOSTNAME" == *"nibi"* ]] || [[ "${PS1:-}" == *"nibi"* ]] || [[ "${PS1:-}" == *"g"* ]] || [[ "$HOSTNAME" == *"g"* ]] || [[ "${PS1:-}" == *"c"* ]] || [[ "$HOSTNAME" == *"c"* ]]; then
 		export CLUSTER="${CLUSTER:-NIBI}"
 		export RUNNING_MODE="${RUNNING_MODE:-APPTAINER}"
@@ -84,8 +87,30 @@ for key, value in sysconfigtool.read_all('${CLUSTER}').items():
 ")"
 }
 
+load_modules(){
+  # based on the venv type, load the appropriate modules.
+  if [[ "$VENV_LLAMAFACTORY" == *py313* ]]; then
+    echo "[env.sh load_modules]: Setting up environment for py313 and CUDA 12.x"
+    module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+  elif [[ "$VENV_LLAMAFACTORY" == *cu12* ]]; then
+    echo "[env.sh load_modules]: Setting up environment for py312 and CUDA 12.x"
+    module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
+    module load python/3.12 cuda/12.6 opencv/4.12.0
+    module load arrow apptainer
+  elif [[ "$VENV_LLAMAFACTORY" == *cu13* ]]; then
+    echo "[env.sh load_modules]: Setting up environment for py312 and CUDA 13.x"
+    module load StdEnv gcc openmpi python/3.12 cuda/13.2 opencv arrow apptainer
+  else
+    echo "Error: The specified VENV_LLAMAFACTORY at $VENV_LLAMAFACTORY does not appear to be configured for a supported CUDA version. Please set VENV_LLAMAFACTORY to a virtual environment that has been set up with supported CUDA support."
+    exit 1
+  fi 
+}
+
+
 get_project_dir
 
 get_cluster_settings
 
 get_sysconfig_settings
+
+load_modules

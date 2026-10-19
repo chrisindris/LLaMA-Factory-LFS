@@ -23,7 +23,12 @@ from ..extras import logging
 from .model_utils.misc import find_all_linear_modules, find_expanded_modules
 from .model_utils.quantization import QuantizationMethod
 from .model_utils.unsloth import get_unsloth_peft_model, load_unsloth_peft_model
-from .model_utils.visual import COMPOSITE_MODELS, get_forbidden_modules, patch_target_modules
+from .model_utils.visual import (
+    COMPOSITE_MODELS,
+    apply_frozen_vision_no_grad,
+    get_forbidden_modules,
+    patch_target_modules,
+)
 
 
 if TYPE_CHECKING:
@@ -358,5 +363,8 @@ def init_adapter(
         )
     else:
         raise NotImplementedError(f"Unknown finetuning type: {finetuning_args.finetuning_type}.")
+
+    if is_trainable:
+        apply_frozen_vision_no_grad(model)
 
     return model

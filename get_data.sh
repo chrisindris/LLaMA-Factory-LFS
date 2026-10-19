@@ -87,11 +87,24 @@ echo "HF_HUB_DISABLE_XET: $HF_HUB_DISABLE_XET"
 if [[ ${PRESET} == "FULL_SETUP_LATEST" ]]; then
 
   # apptainer (optional); see `scripts/sysconfig.json`
+  hf download --max-workers=4 cvis-tmu/compute_canada_sif_files llamafactory-latest.sif --repo-type dataset --revision e769ca401d054fa2cbdd5fa86e7e6c111e46cdd4
+
+  # overlay (optional)
 
   # annotations; see `data/dataset_info.json`
+
+  # base models 
+  hf download --max-workers=5 Qwen/Qwen2.5-VL-7B-Instruct --revision cc594898137f460bfe9f0759e9844b3ce807cfb5
+
   hf download --max-workers=4 cvis-tmu/Scene30K --repo-type dataset --revision d094c4d0297f42915f6bdbd744504fbc96b3a646 
   hf download --max-workers=4 cvis-tmu/3dthinker-10k-mcq --repo-type dataset --revision a64cb299ed3e8892f9f75f35607890b64e232451 
-  hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset --revision e4359d66da7adc78993f2ad163253c81eb0baf70 
+  hf download --max-workers=4 cvis-tmu/Spatial-SSRL-81k --repo-type dataset --revision e4359d66da7adc78993f2ad163253c81eb0baf70
+
+elif [[ ${PRESET} == "UNIFIED_FORMAT_UNMERGED" ]]; then
+
+  hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_groksettings_traininglogfixed
+  hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_2epochs_unifiedformat_groksettings_traininglog
+  hf download --max-workers=4 cvis-tmu/qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_traininglogfixed
 
 fi
 

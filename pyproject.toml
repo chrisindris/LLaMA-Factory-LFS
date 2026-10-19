@@ -84,7 +84,7 @@ Homepage = "https://github.com/hiyouga/LLaMA-Factory"
 Repository = "https://github.com/hiyouga/LLaMA-Factory"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/llamafactory"]
+packages = ["src/llamafactory", "scripts"]
 
 [tool.hatch.version]
 path = "src/llamafactory/extras/env.py"

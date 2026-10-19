@@ -26,11 +26,21 @@ import json
 import os
 import re
 import sys
+import subprocess
 from pathlib import Path
 from typing import Any
+from scripts.sysconfigtool import read as configread
 
 _HF_CACHE_VAR_RE = re.compile(r"\$\{(HF_HUB_CACHE|HF_HOME)\}|\$(HF_HUB_CACHE|HF_HOME)(?![A-Za-z0-9_])")
 
+PROJECT_DIR_NAME = re.match(r".*(LLaMA-Factory[^/]*).*", os.getcwd(), re.DOTALL).group(1) 
+PROJECT_DIR = os.path.join(os.getcwd().partition(PROJECT_DIR_NAME)[0], PROJECT_DIR_NAME)
+CLUSTER = re.match(r".*(CLUSTER: ([^\n]*)).*", subprocess.run([os.path.join(PROJECT_DIR, 'scripts', 'utils', 'env.sh')], shell=True, capture_output=True, text=True).stdout, re.DOTALL).group(2)
+
+HF_HUB_CACHE = configread(CLUSTER, 'HF_HUB_CACHE')
+
+with open(os.path.join(PROJECT_DIR, 'data', 'dataset_info.json')) as f:
+    dataset_info = json.load(f)
 
 COUNTS = {
     "Scene30k": 8,
@@ -38,14 +48,14 @@ COUNTS = {
     "3DThinker10k": 4,
 }
 
-DEFAULT_CSV = Path("debug/logging_analysis/out/eval_compare/detailed_predictions.csv")
-DEFAULT_DATASET_INFO = Path("data/dataset_info.json")
-DEFAULT_OUT_DIR = Path("data/cot_eval16")
+DEFAULT_CSV = Path(PROJECT_DIR + "/debug/logging_analysis/out/eval_compare/detailed_predictions.csv")
+DEFAULT_DATASET_INFO = Path(PROJECT_DIR + "/data/dataset_info.json")
+DEFAULT_OUT_DIR = Path(PROJECT_DIR + "/data/cot_eval16")
 
 LOCAL_FALLBACKS = {
-    "Scene30k": Path("data/train-00000-of-00001.with_question_id.unifiedformat.parquet"),
-    "SpatialSSRL_coldstart": Path("data/SFT-coldstart.with_question_id.unifiedformat.json"),
-    "3DThinker10k": Path("data/3dthinker10k_cot.with_question_id.unifiedformat.jsonl"),
+    "Scene30k": dataset_info['Scene30k']['file_name'].replace('${HF_HUB_CACHE}', HF_HUB_CACHE),
+    "SpatialSSRL_coldstart": dataset_info['SpatialSSRL_coldstart']['file_name'].replace('${HF_HUB_CACHE}', HF_HUB_CACHE),
+    "3DThinker10k": dataset_info['3DThinker10k']['file_name'].replace('${HF_HUB_CACHE}', HF_HUB_CACHE),
 }
 
 OUTPUT_NAMES = {

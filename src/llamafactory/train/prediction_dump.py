@@ -284,18 +284,23 @@ def decode_teacher_forced_batch(
     tokenizer,
     skip_special_tokens: bool = True,
 ) -> list[str]:
-    r"""Greedy decode response tokens from teacher-forced logits.
+    r"""Greedy decode response tokens from teacher-forced logits or token ids.
 
-    For each batch row, takes argmax logits at positions where labels != IGNORE_INDEX
-    (shifted by one for causal LM: logits[:, t] predicts labels[:, t+1]... standard
-    HF causal models use logits[..., :-1] vs labels[..., 1:]).
+    For each batch row, takes predicted tokens at positions where labels != IGNORE_INDEX
+    (shifted by one for causal LM: pred[:, t] predicts labels[:, t+1]). Accepts 3D
+    logits ``[B, S, V]`` or 2D token ids ``[B, S]`` from chunked lm_head argmax.
     """
     if logits is None or labels is None:
         return []
 
     # Align next-token prediction: pred at position t predicts token t+1.
-    # Argmax in-place on a view; do not keep a shifted logits copy (VL vocab is huge).
-    pred_ids = logits[:, :-1, :].argmax(dim=-1)
+    # 2D preds are already token ids (chunked lm_head argmax). 3D is full vocab.
+    if logits.dim() == 2:
+        pred_ids = logits[:, :-1]
+    elif logits.dim() == 3:
+        pred_ids = logits[:, :-1, :].argmax(dim=-1)
+    else:
+        raise ValueError(f"teacher-forced dump expects 2D token ids or 3D logits, got dim={logits.dim()}")
     labels_cpu = labels[:, 1:].detach().cpu()
     pred_ids_cpu = pred_ids.cpu()
     del pred_ids

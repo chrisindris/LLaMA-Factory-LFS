@@ -1,0 +1,36 @@
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: VULCAN
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: l40s
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory-LFS
+SIF_FILE: /scratch/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_py313/
+SCANNET_H5_DIR: /project/aip-wangcs/shared/ScanNet_h5/scans/
+SPATIALSSRL_H5_DIR: /project/aip-wangcs/shared/Spatial-SSRL_images_h5/
+THINKER10K_H5_DIR: /project/aip-wangcs/shared/3DThinker10K_images_h5/
+SLURM_TMPDIR: /tmp
+RUNNING_MODE: VENV
+SCENE30K_ANN_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/4e9bc1a04479fedfbb6ee791b7cd55fc6a2804f5/train-00000-of-00001.with_question_id.formatted.parquet
+SPATIALSSRL_ANN_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/476dff589138ba1f87258d676fb1a7fb1dfa24ff/SFT-coldstart.with_question_id.formatted.json
+THINKER10K_ANN_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/bfa0a5a95683fa71c5a8b28b6560e2d5b7b71f0c/3dthinker10k_cot.with_question_id.formatted.jsonl
+SCENE30K_EVAL16_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/4e9bc1a04479fedfbb6ee791b7cd55fc6a2804f5/Scene30k_eval16.json
+SPATIALSSRL_EVAL16_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/476dff589138ba1f87258d676fb1a7fb1dfa24ff/SpatialSSRL_eval16.json
+THINKER10K_EVAL16_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/bfa0a5a95683fa71c5a8b28b6560e2d5b7b71f0c/3DThinker10k_eval16.jsonl
+Error: no local HF snapshot for 
+Expected snapshots under: /project/aip-wangcs/indrisch/huggingface/hub/models--/snapshots

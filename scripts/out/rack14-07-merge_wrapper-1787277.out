@@ -1,0 +1,1206 @@
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+Planned export arguments:
+{
+  "model_name_or_path": "/project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5",
+  "adapter_name_or_path": "/project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_traininglog/snapshots/a68355fad201e1162bb3993888ec3811089584e9",
+  "template": "qwen2_vl",
+  "trust_remote_code": true,
+  "export_dir": "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged",
+  "export_size": 5,
+  "export_device": "cpu",
+  "export_legacy_format": false
+}
+include_resume_bundle: True
+resume_bundle_source: /project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_traininglog/snapshots/a68355fad201e1162bb3993888ec3811089584e9
+[WARNING|2026-10-16 03:20:56] llamafactory.extras.misc:163 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO|configuration_utils.py:778] 2026-10-16 03:21:04,390 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/config.json
+[INFO|configuration_utils.py:856] 2026-10-16 03:21:04,439 >> Model config Qwen2_5_VLConfig {
+  "architectures": [
+    "Qwen2_5_VLForConditionalGeneration"
+  ],
+  "dtype": "bfloat16",
+  "image_token_id": 151655,
+  "model_type": "qwen2_5_vl",
+  "text_config": {
+    "attention_dropout": 0.0,
+    "bos_token_id": 151643,
+    "dtype": "bfloat16",
+    "eos_token_id": 151645,
+    "hidden_act": "silu",
+    "hidden_size": 3584,
+    "initializer_range": 0.02,
+    "intermediate_size": 18944,
+    "layer_types": [
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention"
+    ],
+    "max_position_embeddings": 128000,
+    "max_window_layers": 28,
+    "model_type": "qwen2_5_vl_text",
+    "num_attention_heads": 28,
+    "num_hidden_layers": 28,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_section": [
+        16,
+        24,
+        24
+      ],
+      "rope_theta": 1000000.0,
+      "rope_type": "default",
+      "type": "mrope"
+    },
+    "sliding_window": null,
+    "use_cache": true,
+    "use_sliding_window": false,
+    "vocab_size": 152064
+  },
+  "tie_word_embeddings": false,
+  "transformers_version": "5.8.0",
+  "video_token_id": 151656,
+  "vision_config": {
+    "depth": 32,
+    "fullatt_block_indexes": [
+      7,
+      15,
+      23,
+      31
+    ],
+    "hidden_act": "silu",
+    "hidden_size": 1280,
+    "in_channels": 3,
+    "in_chans": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 3420,
+    "model_type": "qwen2_5_vl_vision",
+    "num_heads": 16,
+    "out_hidden_size": 3584,
+    "patch_size": 14,
+    "spatial_merge_size": 2,
+    "spatial_patch_size": 14,
+    "temporal_patch_size": 2,
+    "tokens_per_second": 2,
+    "window_size": 112
+  },
+  "vision_end_token_id": 151653,
+  "vision_start_token_id": 151652,
+  "vision_token_id": 151654
+}
+
+[INFO|image_processing_base.py:342] 2026-10-16 03:21:04,857 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|processing_utils.py:1122] 2026-10-16 03:21:04,862 >> loading configuration file None
+[INFO|image_processing_base.py:342] 2026-10-16 03:21:04,863 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[WARNING|logging.py:340] 2026-10-16 03:21:04,863 >> The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|image_processing_base.py:342] 2026-10-16 03:21:04,877 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:385] 2026-10-16 03:21:04,877 >> Image processor Qwen2VLImageProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "merge_size": 2,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|configuration_utils.py:778] 2026-10-16 03:21:04,877 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/config.json
+[INFO|configuration_utils.py:856] 2026-10-16 03:21:04,889 >> Model config Qwen2_5_VLConfig {
+  "architectures": [
+    "Qwen2_5_VLForConditionalGeneration"
+  ],
+  "dtype": "bfloat16",
+  "image_token_id": 151655,
+  "model_type": "qwen2_5_vl",
+  "text_config": {
+    "attention_dropout": 0.0,
+    "bos_token_id": 151643,
+    "dtype": "bfloat16",
+    "eos_token_id": 151645,
+    "hidden_act": "silu",
+    "hidden_size": 3584,
+    "initializer_range": 0.02,
+    "intermediate_size": 18944,
+    "layer_types": [
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention"
+    ],
+    "max_position_embeddings": 128000,
+    "max_window_layers": 28,
+    "model_type": "qwen2_5_vl_text",
+    "num_attention_heads": 28,
+    "num_hidden_layers": 28,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_section": [
+        16,
+        24,
+        24
+      ],
+      "rope_theta": 1000000.0,
+      "rope_type": "default",
+      "type": "mrope"
+    },
+    "sliding_window": null,
+    "use_cache": true,
+    "use_sliding_window": false,
+    "vocab_size": 152064
+  },
+  "tie_word_embeddings": false,
+  "transformers_version": "5.8.0",
+  "video_token_id": 151656,
+  "vision_config": {
+    "depth": 32,
+    "fullatt_block_indexes": [
+      7,
+      15,
+      23,
+      31
+    ],
+    "hidden_act": "silu",
+    "hidden_size": 1280,
+    "in_channels": 3,
+    "in_chans": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 3420,
+    "model_type": "qwen2_5_vl_vision",
+    "num_heads": 16,
+    "out_hidden_size": 3584,
+    "patch_size": 14,
+    "spatial_merge_size": 2,
+    "spatial_patch_size": 14,
+    "temporal_patch_size": 2,
+    "tokens_per_second": 2,
+    "window_size": 112
+  },
+  "vision_end_token_id": 151653,
+  "vision_start_token_id": 151652,
+  "vision_token_id": 151654
+}
+
+[INFO|video_processing_utils.py:684] 2026-10-16 03:21:05,174 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:684] 2026-10-16 03:21:05,176 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:727] 2026-10-16 03:21:05,176 >> Video processor Qwen2VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+[INFO|processing_utils.py:1199] 2026-10-16 03:21:05,177 >> Processor Qwen2_5_VLProcessor:
+- image_processor: Qwen2VLImageProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "merge_size": 2,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2Tokenizer(name_or_path='/project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5', vocab_size=151643, model_max_length=131072, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>'}, added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151647: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151648: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151649: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151650: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151651: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151652: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151653: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151654: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151655: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151656: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151657: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151658: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151659: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151660: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151661: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151662: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151663: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151664: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+})
+- video_processor: Qwen2VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+
+{
+  "image_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "image_mean": [
+      0.48145466,
+      0.4578275,
+      0.40821073
+    ],
+    "image_processor_type": "Qwen2VLImageProcessor",
+    "image_std": [
+      0.26862954,
+      0.26130258,
+      0.27577711
+    ],
+    "merge_size": 2,
+    "patch_size": 14,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "size": {
+      "longest_edge": 12845056,
+      "shortest_edge": 3136
+    },
+    "temporal_patch_size": 2
+  },
+  "processor_class": "Qwen2_5_VLProcessor",
+  "video_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "do_sample_frames": false,
+    "image_mean": [
+      0.48145466,
+      0.4578275,
+      0.40821073
+    ],
+    "image_std": [
+      0.26862954,
+      0.26130258,
+      0.27577711
+    ],
+    "max_frames": 768,
+    "merge_size": 2,
+    "min_frames": 4,
+    "patch_size": 14,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "return_metadata": false,
+    "size": {
+      "longest_edge": 12845056,
+      "shortest_edge": 3136
+    },
+    "temporal_patch_size": 2,
+    "video_processor_type": "Qwen2VLVideoProcessor"
+  }
+}
+
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['aeva', 'alpaca', 'bailing', 'bailing_v2', 'breeze', 'chatglm3', 'chatml', 'chatml_de', 'cohere', 'cpm4', 'dbrx', 'deepseek', 'deepseek3', 'deepseekcoder', 'deepseekr1', 'default', 'dots_ocr', 'empty', 'ernie', 'ernie_nothink']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 125
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+[INFO|configuration_utils.py:778] 2026-10-16 03:21:05,210 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/config.json
+[INFO|configuration_utils.py:856] 2026-10-16 03:21:05,222 >> Model config Qwen2_5_VLConfig {
+  "architectures": [
+    "Qwen2_5_VLForConditionalGeneration"
+  ],
+  "dtype": "bfloat16",
+  "image_token_id": 151655,
+  "model_type": "qwen2_5_vl",
+  "text_config": {
+    "attention_dropout": 0.0,
+    "bos_token_id": 151643,
+    "dtype": "bfloat16",
+    "eos_token_id": 151645,
+    "hidden_act": "silu",
+    "hidden_size": 3584,
+    "initializer_range": 0.02,
+    "intermediate_size": 18944,
+    "layer_types": [
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention"
+    ],
+    "max_position_embeddings": 128000,
+    "max_window_layers": 28,
+    "model_type": "qwen2_5_vl_text",
+    "num_attention_heads": 28,
+    "num_hidden_layers": 28,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_section": [
+        16,
+        24,
+        24
+      ],
+      "rope_theta": 1000000.0,
+      "rope_type": "default",
+      "type": "mrope"
+    },
+    "sliding_window": null,
+    "use_cache": true,
+    "use_sliding_window": false,
+    "vocab_size": 152064
+  },
+  "tie_word_embeddings": false,
+  "transformers_version": "5.8.0",
+  "video_token_id": 151656,
+  "vision_config": {
+    "depth": 32,
+    "fullatt_block_indexes": [
+      7,
+      15,
+      23,
+      31
+    ],
+    "hidden_act": "silu",
+    "hidden_size": 1280,
+    "in_channels": 3,
+    "in_chans": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 3420,
+    "model_type": "qwen2_5_vl_vision",
+    "num_heads": 16,
+    "out_hidden_size": 3584,
+    "patch_size": 14,
+    "spatial_merge_size": 2,
+    "spatial_patch_size": 14,
+    "temporal_patch_size": 2,
+    "tokens_per_second": 2,
+    "window_size": 112
+  },
+  "vision_end_token_id": 151653,
+  "vision_start_token_id": 151652,
+  "vision_token_id": 151654
+}
+
+[WARNING|logging.py:340] 2026-10-16 03:21:05,222 >> `torch_dtype` is deprecated! Use `dtype` instead!
+[INFO|2026-10-16 03:21:05] llamafactory.model.model_utils.attention:147 >> Attention backend request: auto | FlashAttention-2 available: True | SDPA available: True
+[INFO|2026-10-16 03:21:05] llamafactory.model.model_utils.kv_cache:147 >> KV cache is enabled for faster generation.
+[INFO|modeling_utils.py:766] 2026-10-16 03:21:05,777 >> loading weights file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/model.safetensors.index.json
+[INFO|modeling_utils.py:839] 2026-10-16 03:21:05,779 >> Will use dtype=torch.bfloat16 as defined in model's config object
+[INFO|configuration_utils.py:1086] 2026-10-16 03:21:05,781 >> Generate config GenerationConfig {
+  "output_attentions": false,
+  "output_hidden_states": false,
+  "use_cache": true
+}
+
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:  29%|██▉       | 214/729 [00:00<00:00, 2025.02it/s]Loading weights:  57%|█████▋    | 417/729 [00:00<00:00, 1371.24it/s]Loading weights:  81%|████████▏ | 594/729 [00:00<00:00, 1508.86it/s]Loading weights: 100%|██████████| 729/729 [00:00<00:00, 1607.53it/s]
+[INFO|configuration_utils.py:1037] 2026-10-16 03:21:51,306 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/generation_config.json
+[INFO|configuration_utils.py:1086] 2026-10-16 03:21:51,307 >> Generate config GenerationConfig {
+  "bos_token_id": 151643,
+  "do_sample": true,
+  "eos_token_id": [
+    151645,
+    151643
+  ],
+  "pad_token_id": 151643,
+  "repetition_penalty": 1.05,
+  "temperature": 1e-06
+}
+
+[INFO|dynamic_module_utils.py:441] 2026-10-16 03:21:51,308 >> Could not locate the custom_generate/generate.py inside /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5.
+[INFO|2026-10-16 03:21:51] llamafactory.model.model_utils.attention:147 >> Resolved attention implementation in config: sdpa
+[INFO|2026-10-16 03:21:51] llamafactory.model.model_utils.attention:147 >> Using torch SDPA for faster training and inference.
+/scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/peft/tuners/tuners_utils.py:1225: UserWarning: Model has `tie_word_embeddings=True` and a tied layer is part of the adapter, but `ensure_weight_tying` is not set to True. This can lead to complications, for example when merging the adapter or converting your model to formats other than safetensors. Check the discussion here: https://github.com/huggingface/peft/issues/2777
+  warnings.warn(msg)
+[INFO|2026-10-16 03:22:51] llamafactory.model.adapter:147 >> Merged 1 adapter(s).
+[INFO|2026-10-16 03:22:51] llamafactory.model.adapter:147 >> Loaded adapter(s): /project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_traininglog/snapshots/a68355fad201e1162bb3993888ec3811089584e9
+[INFO|2026-10-16 03:22:51] llamafactory.model.loader:147 >> all params: 8,292,166,656
+[INFO|2026-10-16 03:22:51] llamafactory.train.tuner:147 >> Convert model dtype to: torch.bfloat16.
+[INFO|configuration_utils.py:542] 2026-10-16 03:22:54,820 >> Configuration saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/config.json
+[INFO|configuration_utils.py:875] 2026-10-16 03:22:54,822 >> Configuration saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/generation_config.json
+Warning: The cache directory for DeepSpeed Triton autotune, /home/indrisch/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+Writing model shards:   0%|          | 0/4 [00:00<?, ?it/s]Writing model shards:  25%|██▌       | 1/4 [00:10<00:32, 10.82s/it]Writing model shards:  50%|█████     | 2/4 [00:21<00:21, 10.73s/it]Writing model shards:  75%|███████▌  | 3/4 [00:32<00:10, 10.84s/it]Writing model shards: 100%|██████████| 4/4 [00:39<00:00,  9.19s/it]Writing model shards: 100%|██████████| 4/4 [00:39<00:00,  9.78s/it]
+[INFO|modeling_utils.py:3509] 2026-10-16 03:23:34,027 >> The model is bigger than the maximum size per checkpoint (5GB) and is going to be split in 4 checkpoint shards. You can find where each parameters has been saved in the index located at /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/model.safetensors.index.json.
+[INFO|tokenization_utils_base.py:3281] 2026-10-16 03:23:34,031 >> chat template saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/chat_template.jinja
+[INFO|tokenization_utils_base.py:2114] 2026-10-16 03:23:34,032 >> tokenizer config file saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/tokenizer_config.json
+[INFO|tokenization_utils_base.py:3281] 2026-10-16 03:23:34,162 >> chat template saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/chat_template.jinja
+[INFO|tokenization_utils_base.py:2114] 2026-10-16 03:23:34,164 >> tokenizer config file saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/tokenizer_config.json
+[INFO|processing_utils.py:881] 2026-10-16 03:23:34,270 >> chat template saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/chat_template.jinja
+[INFO|processing_utils.py:899] 2026-10-16 03:23:34,273 >> processor saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/processor_config.json
+[INFO|2026-10-16 03:23:34] llamafactory.train.tuner:147 >> Ollama modelfile saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/Modelfile
+
+Packaged resume bundle -> /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/resume_bundle
+  classification: weights_only
+  resume_capable: False
+  manifest: /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/resume_bundle/resume_manifest.json
+
+Wrote merge manifest: /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged/merge_manifest.json
+WARNING: Resume bundle incomplete (missing: trainer_state, scheduler, optimizer). Warm-start only.
+
+WARNING: Without a complete resume_bundle, this merged output is a warm-start artifact only.
+
+Merged model is ready.
+
+Warm-start training only (no optim/LoRA continuity):
+---
+### model
+model_name_or_path: /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_traininglog_ep1_merged
+# adapter_name_or_path: null
+
+### train
+resume_from_checkpoint: null
+---
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+Planned export arguments:
+{
+  "model_name_or_path": "/project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5",
+  "adapter_name_or_path": "/project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_groksettings_traininglog/snapshots/909bef9d27869c7c13e83118209ebcf07f9ed370",
+  "template": "qwen2_vl",
+  "trust_remote_code": true,
+  "export_dir": "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged",
+  "export_size": 5,
+  "export_device": "cpu",
+  "export_legacy_format": false
+}
+include_resume_bundle: True
+resume_bundle_source: /project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_groksettings_traininglog/snapshots/909bef9d27869c7c13e83118209ebcf07f9ed370
+[WARNING|2026-10-16 03:24:03] llamafactory.extras.misc:163 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO|configuration_utils.py:778] 2026-10-16 03:24:05,235 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/config.json
+[INFO|configuration_utils.py:856] 2026-10-16 03:24:05,254 >> Model config Qwen2_5_VLConfig {
+  "architectures": [
+    "Qwen2_5_VLForConditionalGeneration"
+  ],
+  "dtype": "bfloat16",
+  "image_token_id": 151655,
+  "model_type": "qwen2_5_vl",
+  "text_config": {
+    "attention_dropout": 0.0,
+    "bos_token_id": 151643,
+    "dtype": "bfloat16",
+    "eos_token_id": 151645,
+    "hidden_act": "silu",
+    "hidden_size": 3584,
+    "initializer_range": 0.02,
+    "intermediate_size": 18944,
+    "layer_types": [
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention"
+    ],
+    "max_position_embeddings": 128000,
+    "max_window_layers": 28,
+    "model_type": "qwen2_5_vl_text",
+    "num_attention_heads": 28,
+    "num_hidden_layers": 28,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_section": [
+        16,
+        24,
+        24
+      ],
+      "rope_theta": 1000000.0,
+      "rope_type": "default",
+      "type": "mrope"
+    },
+    "sliding_window": null,
+    "use_cache": true,
+    "use_sliding_window": false,
+    "vocab_size": 152064
+  },
+  "tie_word_embeddings": false,
+  "transformers_version": "5.8.0",
+  "video_token_id": 151656,
+  "vision_config": {
+    "depth": 32,
+    "fullatt_block_indexes": [
+      7,
+      15,
+      23,
+      31
+    ],
+    "hidden_act": "silu",
+    "hidden_size": 1280,
+    "in_channels": 3,
+    "in_chans": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 3420,
+    "model_type": "qwen2_5_vl_vision",
+    "num_heads": 16,
+    "out_hidden_size": 3584,
+    "patch_size": 14,
+    "spatial_merge_size": 2,
+    "spatial_patch_size": 14,
+    "temporal_patch_size": 2,
+    "tokens_per_second": 2,
+    "window_size": 112
+  },
+  "vision_end_token_id": 151653,
+  "vision_start_token_id": 151652,
+  "vision_token_id": 151654
+}
+
+[INFO|image_processing_base.py:342] 2026-10-16 03:24:05,564 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|processing_utils.py:1122] 2026-10-16 03:24:05,567 >> loading configuration file None
+[INFO|image_processing_base.py:342] 2026-10-16 03:24:05,567 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[WARNING|logging.py:340] 2026-10-16 03:24:05,567 >> The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|image_processing_base.py:342] 2026-10-16 03:24:05,577 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|image_processing_base.py:385] 2026-10-16 03:24:05,578 >> Image processor Qwen2VLImageProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "merge_size": 2,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|configuration_utils.py:778] 2026-10-16 03:24:05,578 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/config.json
+[INFO|configuration_utils.py:856] 2026-10-16 03:24:05,590 >> Model config Qwen2_5_VLConfig {
+  "architectures": [
+    "Qwen2_5_VLForConditionalGeneration"
+  ],
+  "dtype": "bfloat16",
+  "image_token_id": 151655,
+  "model_type": "qwen2_5_vl",
+  "text_config": {
+    "attention_dropout": 0.0,
+    "bos_token_id": 151643,
+    "dtype": "bfloat16",
+    "eos_token_id": 151645,
+    "hidden_act": "silu",
+    "hidden_size": 3584,
+    "initializer_range": 0.02,
+    "intermediate_size": 18944,
+    "layer_types": [
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention"
+    ],
+    "max_position_embeddings": 128000,
+    "max_window_layers": 28,
+    "model_type": "qwen2_5_vl_text",
+    "num_attention_heads": 28,
+    "num_hidden_layers": 28,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_section": [
+        16,
+        24,
+        24
+      ],
+      "rope_theta": 1000000.0,
+      "rope_type": "default",
+      "type": "mrope"
+    },
+    "sliding_window": null,
+    "use_cache": true,
+    "use_sliding_window": false,
+    "vocab_size": 152064
+  },
+  "tie_word_embeddings": false,
+  "transformers_version": "5.8.0",
+  "video_token_id": 151656,
+  "vision_config": {
+    "depth": 32,
+    "fullatt_block_indexes": [
+      7,
+      15,
+      23,
+      31
+    ],
+    "hidden_act": "silu",
+    "hidden_size": 1280,
+    "in_channels": 3,
+    "in_chans": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 3420,
+    "model_type": "qwen2_5_vl_vision",
+    "num_heads": 16,
+    "out_hidden_size": 3584,
+    "patch_size": 14,
+    "spatial_merge_size": 2,
+    "spatial_patch_size": 14,
+    "temporal_patch_size": 2,
+    "tokens_per_second": 2,
+    "window_size": 112
+  },
+  "vision_end_token_id": 151653,
+  "vision_start_token_id": 151652,
+  "vision_token_id": 151654
+}
+
+[INFO|video_processing_utils.py:684] 2026-10-16 03:24:05,872 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:684] 2026-10-16 03:24:05,873 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/preprocessor_config.json
+[INFO|video_processing_utils.py:727] 2026-10-16 03:24:05,873 >> Video processor Qwen2VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+[INFO|processing_utils.py:1199] 2026-10-16 03:24:05,874 >> Processor Qwen2_5_VLProcessor:
+- image_processor: Qwen2VLImageProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "merge_size": 2,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2Tokenizer(name_or_path='/project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5', vocab_size=151643, model_max_length=131072, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>'}, added_tokens_decoder={
+	151643: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151644: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151645: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151646: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151647: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151648: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151649: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151650: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151651: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151652: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151653: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151654: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151655: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151656: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	151657: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151658: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151659: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151660: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151661: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151662: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151663: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	151664: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+})
+- video_processor: Qwen2VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": false,
+  "image_mean": [
+    0.48145466,
+    0.4578275,
+    0.40821073
+  ],
+  "image_std": [
+    0.26862954,
+    0.26130258,
+    0.27577711
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 14,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 12845056,
+    "shortest_edge": 3136
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen2VLVideoProcessor"
+}
+
+
+{
+  "image_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "image_mean": [
+      0.48145466,
+      0.4578275,
+      0.40821073
+    ],
+    "image_processor_type": "Qwen2VLImageProcessor",
+    "image_std": [
+      0.26862954,
+      0.26130258,
+      0.27577711
+    ],
+    "merge_size": 2,
+    "patch_size": 14,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "size": {
+      "longest_edge": 12845056,
+      "shortest_edge": 3136
+    },
+    "temporal_patch_size": 2
+  },
+  "processor_class": "Qwen2_5_VLProcessor",
+  "video_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "do_sample_frames": false,
+    "image_mean": [
+      0.48145466,
+      0.4578275,
+      0.40821073
+    ],
+    "image_std": [
+      0.26862954,
+      0.26130258,
+      0.27577711
+    ],
+    "max_frames": 768,
+    "merge_size": 2,
+    "min_frames": 4,
+    "patch_size": 14,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "return_metadata": false,
+    "size": {
+      "longest_edge": 12845056,
+      "shortest_edge": 3136
+    },
+    "temporal_patch_size": 2,
+    "video_processor_type": "Qwen2VLVideoProcessor"
+  }
+}
+
+[DEBUG get_template_and_fix_tokenizer] Requested template: qwen2_vl
+[DEBUG get_template_and_fix_tokenizer] Available templates: ['aeva', 'alpaca', 'bailing', 'bailing_v2', 'breeze', 'chatglm3', 'chatml', 'chatml_de', 'cohere', 'cpm4', 'dbrx', 'deepseek', 'deepseek3', 'deepseekcoder', 'deepseekr1', 'default', 'dots_ocr', 'empty', 'ernie', 'ernie_nothink']...
+[DEBUG get_template_and_fix_tokenizer] Total templates registered: 125
+[DEBUG get_template_and_fix_tokenizer] videor1 in TEMPLATES: True
+[DEBUG get_template_and_fix_tokenizer] qwen3_5 in TEMPLATES: True
+[INFO|configuration_utils.py:778] 2026-10-16 03:24:05,907 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/config.json
+[INFO|configuration_utils.py:856] 2026-10-16 03:24:05,919 >> Model config Qwen2_5_VLConfig {
+  "architectures": [
+    "Qwen2_5_VLForConditionalGeneration"
+  ],
+  "dtype": "bfloat16",
+  "image_token_id": 151655,
+  "model_type": "qwen2_5_vl",
+  "text_config": {
+    "attention_dropout": 0.0,
+    "bos_token_id": 151643,
+    "dtype": "bfloat16",
+    "eos_token_id": 151645,
+    "hidden_act": "silu",
+    "hidden_size": 3584,
+    "initializer_range": 0.02,
+    "intermediate_size": 18944,
+    "layer_types": [
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention",
+      "full_attention"
+    ],
+    "max_position_embeddings": 128000,
+    "max_window_layers": 28,
+    "model_type": "qwen2_5_vl_text",
+    "num_attention_heads": 28,
+    "num_hidden_layers": 28,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_section": [
+        16,
+        24,
+        24
+      ],
+      "rope_theta": 1000000.0,
+      "rope_type": "default",
+      "type": "mrope"
+    },
+    "sliding_window": null,
+    "use_cache": true,
+    "use_sliding_window": false,
+    "vocab_size": 152064
+  },
+  "tie_word_embeddings": false,
+  "transformers_version": "5.8.0",
+  "video_token_id": 151656,
+  "vision_config": {
+    "depth": 32,
+    "fullatt_block_indexes": [
+      7,
+      15,
+      23,
+      31
+    ],
+    "hidden_act": "silu",
+    "hidden_size": 1280,
+    "in_channels": 3,
+    "in_chans": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 3420,
+    "model_type": "qwen2_5_vl_vision",
+    "num_heads": 16,
+    "out_hidden_size": 3584,
+    "patch_size": 14,
+    "spatial_merge_size": 2,
+    "spatial_patch_size": 14,
+    "temporal_patch_size": 2,
+    "tokens_per_second": 2,
+    "window_size": 112
+  },
+  "vision_end_token_id": 151653,
+  "vision_start_token_id": 151652,
+  "vision_token_id": 151654
+}
+
+[WARNING|logging.py:340] 2026-10-16 03:24:05,919 >> `torch_dtype` is deprecated! Use `dtype` instead!
+[INFO|2026-10-16 03:24:05] llamafactory.model.model_utils.attention:147 >> Attention backend request: auto | FlashAttention-2 available: True | SDPA available: True
+[INFO|2026-10-16 03:24:05] llamafactory.model.model_utils.kv_cache:147 >> KV cache is enabled for faster generation.
+[INFO|modeling_utils.py:766] 2026-10-16 03:24:06,292 >> loading weights file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/model.safetensors.index.json
+[INFO|modeling_utils.py:839] 2026-10-16 03:24:06,292 >> Will use dtype=torch.bfloat16 as defined in model's config object
+[INFO|configuration_utils.py:1086] 2026-10-16 03:24:06,294 >> Generate config GenerationConfig {
+  "output_attentions": false,
+  "output_hidden_states": false,
+  "use_cache": true
+}
+
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights: 100%|██████████| 729/729 [00:00<00:00, 42729.04it/s]
+[INFO|configuration_utils.py:1037] 2026-10-16 03:24:46,212 >> loading configuration file /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5/generation_config.json
+[INFO|configuration_utils.py:1086] 2026-10-16 03:24:46,213 >> Generate config GenerationConfig {
+  "bos_token_id": 151643,
+  "do_sample": true,
+  "eos_token_id": [
+    151645,
+    151643
+  ],
+  "pad_token_id": 151643,
+  "repetition_penalty": 1.05,
+  "temperature": 1e-06
+}
+
+[INFO|dynamic_module_utils.py:441] 2026-10-16 03:24:46,213 >> Could not locate the custom_generate/generate.py inside /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5.
+[INFO|2026-10-16 03:24:46] llamafactory.model.model_utils.attention:147 >> Resolved attention implementation in config: sdpa
+[INFO|2026-10-16 03:24:46] llamafactory.model.model_utils.attention:147 >> Using torch SDPA for faster training and inference.
+/scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/peft/tuners/tuners_utils.py:1225: UserWarning: Model has `tie_word_embeddings=True` and a tied layer is part of the adapter, but `ensure_weight_tying` is not set to True. This can lead to complications, for example when merging the adapter or converting your model to formats other than safetensors. Check the discussion here: https://github.com/huggingface/peft/issues/2777
+  warnings.warn(msg)
+[INFO|2026-10-16 03:25:45] llamafactory.model.adapter:147 >> Merged 1 adapter(s).
+[INFO|2026-10-16 03:25:45] llamafactory.model.adapter:147 >> Loaded adapter(s): /project/aip-wangcs/indrisch/huggingface/hub/models--cvis-tmu--qwen2_5vl-7b-lora-sft-CoT_traineval_1epochs_unifiedformat_groksettings_traininglog/snapshots/909bef9d27869c7c13e83118209ebcf07f9ed370
+[INFO|2026-10-16 03:25:45] llamafactory.model.loader:147 >> all params: 8,292,166,656
+[INFO|2026-10-16 03:25:45] llamafactory.train.tuner:147 >> Convert model dtype to: torch.bfloat16.
+[INFO|configuration_utils.py:542] 2026-10-16 03:25:47,568 >> Configuration saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/config.json
+[INFO|configuration_utils.py:875] 2026-10-16 03:25:47,570 >> Configuration saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/generation_config.json
+Warning: The cache directory for DeepSpeed Triton autotune, /home/indrisch/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+Writing model shards:   0%|          | 0/4 [00:00<?, ?it/s]Writing model shards:  25%|██▌       | 1/4 [00:10<00:31, 10.61s/it]Writing model shards:  50%|█████     | 2/4 [00:20<00:19,  9.96s/it]Writing model shards:  75%|███████▌  | 3/4 [00:31<00:10, 10.63s/it]Writing model shards: 100%|██████████| 4/4 [00:38<00:00,  9.07s/it]Writing model shards: 100%|██████████| 4/4 [00:38<00:00,  9.56s/it]
+[INFO|modeling_utils.py:3509] 2026-10-16 03:26:25,874 >> The model is bigger than the maximum size per checkpoint (5GB) and is going to be split in 4 checkpoint shards. You can find where each parameters has been saved in the index located at /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/model.safetensors.index.json.
+[INFO|tokenization_utils_base.py:3281] 2026-10-16 03:26:25,878 >> chat template saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/chat_template.jinja
+[INFO|tokenization_utils_base.py:2114] 2026-10-16 03:26:25,880 >> tokenizer config file saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/tokenizer_config.json
+[INFO|tokenization_utils_base.py:3281] 2026-10-16 03:26:26,015 >> chat template saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/chat_template.jinja
+[INFO|tokenization_utils_base.py:2114] 2026-10-16 03:26:26,016 >> tokenizer config file saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/tokenizer_config.json
+[INFO|processing_utils.py:881] 2026-10-16 03:26:26,111 >> chat template saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/chat_template.jinja
+[INFO|processing_utils.py:899] 2026-10-16 03:26:26,113 >> processor saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/processor_config.json
+[INFO|2026-10-16 03:26:26] llamafactory.train.tuner:147 >> Ollama modelfile saved in /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/Modelfile
+
+Packaged resume bundle -> /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/resume_bundle
+  classification: weights_only
+  resume_capable: False
+  manifest: /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/resume_bundle/resume_manifest.json
+
+Wrote merge manifest: /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged/merge_manifest.json
+WARNING: Resume bundle incomplete (missing: trainer_state, scheduler, optimizer). Warm-start only.
+
+WARNING: Without a complete resume_bundle, this merged output is a warm-start artifact only.
+
+Merged model is ready.
+
+Warm-start training only (no optim/LoRA continuity):
+---
+### model
+model_name_or_path: /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT_unifiedformat_groksettings_traininglog_ep1_merged
+# adapter_name_or_path: null
+
+### train
+resume_from_checkpoint: null
+---

@@ -74,6 +74,8 @@ EXPERIMENT_NAME="qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps"
 # --- for reading cluster-specific settings ---
 . $(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "env.sh")
 
+export DATASET_INFO_PATH=$(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "dataset_info.json")
+
 # ----- DEFAULT ARGUMENTS -----
 export STARTING_EPOCH="${STARTING_EPOCH:-0}"
 export ENDING_EPOCH="${ENDING_EPOCH:-1}"
@@ -130,20 +132,20 @@ fi
 echo "SLURM_TMPDIR: $SLURM_TMPDIR"
 echo "RUNNING_MODE: $RUNNING_MODE"
 
+# --- set the paths to the datasets on this cluster ---
+
 # these should be exported through sysconfig.json 
 # export SCANNET_H5_DIR="/scratch/i/indrisch/ScanNet_h5/scans"
 # export SPATIALSSRL_H5_DIR="/scratch/i/indrisch/Spatial-SSRL_images_h5"
 # export THINKER10K_H5_DIR="/scratch/i/indrisch/3DThinker10K_images_h5/"
 
-# Must match data/dataset_info.json (formatted CoT mix). Job 445260 staged the
-# unformatted Scene30k parquet, which has no formatting_instruction column.
-# export SCENE30K_ANN_SRC="${HF_HUB_CACHE}/datasets--cvis-tmu--Scene30K/snapshots/84a202a417f455f197879495c81b1095f1cf8f53/train-00000-of-00001.with_question_id.formatted.parquet"
-# export SPATIALSSRL_ANN_SRC="${HF_HUB_CACHE}/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/d8e2fabf27e68f41c997b4e7532c67758668c0bd/SFT-coldstart.with_question_id.formatted.json"
-# export THINKER10K_ANN_SRC="${HF_HUB_CACHE}/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/4dd9eb7f24b03c4e9f1265c7e177325cadec9d2d/3dthinker10k_cot.with_question_id.formatted.jsonl"
-export DATASET_INFO_PATH=$(find $(REGEX="(.*LLaMA-Factory[^/]*).*" && [[ $PWD =~ $REGEX ]] && echo "${BASH_REMATCH[1]}") -name "dataset_info.json")
 export SCENE30K_ANN_SRC="$(jq -r '.["Scene30k"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SCENE30K_ANN_SRC: ${SCENE30K_ANN_SRC}"
 export SPATIALSSRL_ANN_SRC="$(jq -r '.["SpatialSSRL_coldstart"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SPATIALSSRL_ANN_SRC: ${SPATIALSSRL_ANN_SRC}"
 export THINKER10K_ANN_SRC="$(jq -r '.["3DThinker10k"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "THINKER10K_ANN_SRC: ${THINKER10K_ANN_SRC}"
+
+export SCENE30K_EVAL16_SRC="$(jq -r '.["Scene30k_eval16"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SCENE30K_EVAL16_SRC: ${SCENE30K_EVAL16_SRC}"
+export SPATIALSSRL_EVAL16_SRC="$(jq -r '.["SpatialSSRL_eval16"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "SPATIALSSRL_EVAL16_SRC: ${SPATIALSSRL_EVAL16_SRC}"
+export THINKER10K_EVAL16_SRC="$(jq -r '.["3DThinker10k_eval16"].file_name' "${DATASET_INFO_PATH}" | envsubst)" && echo "THINKER10K_EVAL16_SRC: ${THINKER10K_EVAL16_SRC}"
 
 # --- setting python environment ---
 

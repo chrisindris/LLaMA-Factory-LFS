@@ -1,0 +1,455 @@
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: VULCAN
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: l40s
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory-LFS
+SIF_FILE: /scratch/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_py313/
+SCANNET_H5_DIR: /project/aip-wangcs/shared/ScanNet_h5/scans/
+SPATIALSSRL_H5_DIR: /project/aip-wangcs/shared/Spatial-SSRL_images_h5/
+THINKER10K_H5_DIR: /project/aip-wangcs/shared/3DThinker10K_images_h5/
+SLURM_TMPDIR: /tmp
+RUNNING_MODE: VENV
+SCENE30K_ANN_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/4e9bc1a04479fedfbb6ee791b7cd55fc6a2804f5/train-00000-of-00001.with_question_id.formatted.parquet
+SPATIALSSRL_ANN_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/476dff589138ba1f87258d676fb1a7fb1dfa24ff/SFT-coldstart.with_question_id.formatted.json
+THINKER10K_ANN_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/bfa0a5a95683fa71c5a8b28b6560e2d5b7b71f0c/3dthinker10k_cot.with_question_id.formatted.jsonl
+SCENE30K_EVAL16_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/4e9bc1a04479fedfbb6ee791b7cd55fc6a2804f5/Scene30k_eval16.json
+SPATIALSSRL_EVAL16_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/476dff589138ba1f87258d676fb1a7fb1dfa24ff/SpatialSSRL_eval16.json
+THINKER10K_EVAL16_SRC: /project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/bfa0a5a95683fa71c5a8b28b6560e2d5b7b71f0c/3DThinker10k_eval16.jsonl
+MODEL_NAME_OR_PATH: /project/aip-wangcs/indrisch/huggingface/hub/models--Qwen--Qwen2.5-VL-7B-Instruct/snapshots/cc594898137f460bfe9f0759e9844b3ce807cfb5
+
+Lmod is automatically replacing "gcc/12.3" with "go/1.26.5".
+
+
+Lmod is automatically replacing "go/1.26.5" with "gcc/12.3".
+
+
+Activating Modules:
+  1) cuda/12.6           3) gcccore/.12.3        5) opencv/4.14.0     7) pmix/4.2.4
+  2) flexiblas/3.3.1     4) libfabric/1.18.0     6) openmpi/4.1.5
+
+Copying venv to local storage...
+VENV_LLAMAFACTORY: /tmp/venv
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: pip in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.2.1)
+Requirement already satisfied: setuptools in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (84.0.0+computecanada)
+Requirement already satisfied: wheel in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (0.48.0)
+Requirement already satisfied: packaging>=24.0 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from wheel) (26.3+computecanada)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: packaging in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (26.3+computecanada)
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v4, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Requirement already satisfied: huggingface_hub in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (1.31.0)
+Requirement already satisfied: ruamel.yaml in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (0.19.1+computecanada)
+Requirement already satisfied: click<9.0.0,>=8.4.2 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (8.5.0+computecanada)
+Requirement already satisfied: filelock>=3.10.0 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (3.32.6)
+Requirement already satisfied: fsspec>=2023.5.0 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (2025.3.0+computecanada)
+Requirement already satisfied: hf-xet<2.0.0,>=1.5.2 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (1.6.0+computecanada)
+Requirement already satisfied: httpx<1,>=0.23.0 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (0.28.1+computecanada)
+Requirement already satisfied: packaging>=20.9 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (26.3+computecanada)
+Requirement already satisfied: pyyaml>=5.1 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (6.0.3+computecanada)
+Requirement already satisfied: tqdm>=4.42.1 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.70.0+computecanada)
+Requirement already satisfied: typing-extensions>=4.1.0 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from huggingface_hub) (4.16.0+computecanada)
+Requirement already satisfied: anyio in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (4.15.1)
+Requirement already satisfied: certifi in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (1.0.9+computecanada)
+Requirement already satisfied: idna in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpx<1,>=0.23.0->huggingface_hub) (3.19)
+Requirement already satisfied: h11>=0.16 in /scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages (from httpcore==1.*->httpx<1,>=0.23.0->huggingface_hub) (0.16.0+computecanada)
+YAML_FILE: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/examples/train_lora/vulcan_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps_groksettings_ablation_taskid2_epoch1_job886844.yaml
+OUTPUT_DIR_SAVES: saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_groksettings_ablation_taskid2_ep1/
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_groksettings_ablation_taskid2_ep1/
+CACHE_DIR: /project/aip-wangcs/indrisch/huggingface/hub
+RESUME_CKPT: null
+GPU NAME: NVIDIA L40S
+GPU TYPE: L40S
+Special-token descriptions (4): ['<think>', '</think>', '<answer>', '</answer>']
+Warning: frozen eval ID manifest missing: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/data/cot_eval16/question_ids.json
+SLURM_JOB_NODELIST: rack11-11
+SLURM_NNODES: 1
+HEAD_NODE: rack11-11
+HEAD_NODE: rack11-11
+MASTER_ADDR: rack11-11
+MASTER_PORT: 29500
+PROJECT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS
+SYSCONFIG_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts
+UTILS_DIR_PATH: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts/utils
+PYTHONPATH: /cvmfs/soft.computecanada.ca/easybuild/python/site-packages:/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/clang/18.1.8/lib/python:/cvmfs/soft.computecanada.ca/custom/python/site-packages:/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/scripts:/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/scripts/utils:/project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts:/project/aip-wangcs/indrisch//LLaMA-Factory-LFS/scripts/utils
+WANDB_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/wandb/
+CLUSTER: VULCAN
+RUNNING_MODE: VENV
+TORCH_CUDA_ARCH_LIST: 8.0
+HF_HOME: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_CACHE: /project/aip-wangcs/indrisch/huggingface/hub
+HF_HUB_DISABLE_XET: 1
+TRITON_CACHE_DIR: /project/aip-wangcs/indrisch/.triton_cache
+VLLM_HOME: /project/aip-wangcs/indrisch/vllm_experiments/
+VLLM_CONFIG_DIR: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CONFIG_ROOT: /project/aip-wangcs/indrisch/.config/vllm
+VLLM_CACHE_ROOT: /project/aip-wangcs/indrisch/.cache/vllm
+BEST_GPU: l40s
+FLASHINFER_WORKSPACE_BASE: /project/aip-wangcs/indrisch/
+LLAMAFACTORY_HOME: /project/aip-wangcs/indrisch/LLaMA-Factory-LFS
+SIF_FILE: /scratch/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif
+MEDIA_DIR: None
+VENV_DATASET_UPLOAD: /scratch/indrisch/venv_llamafactory_py313/
+VENV_LLAMAFACTORY: /scratch/indrisch/venv_llamafactory_py313/
+SCANNET_H5_DIR: /project/aip-wangcs/shared/ScanNet_h5/scans/
+SPATIALSSRL_H5_DIR: /project/aip-wangcs/shared/Spatial-SSRL_images_h5/
+THINKER10K_H5_DIR: /project/aip-wangcs/shared/3DThinker10K_images_h5/
+SCANNET_H5_DIR: /project/aip-wangcs/shared/ScanNet_h5/scans/
+SPATIALSSRL_H5_DIR: /project/aip-wangcs/shared/Spatial-SSRL_images_h5/
+THINKER10K_H5_DIR: /project/aip-wangcs/shared/3DThinker10K_images_h5/
+CLUSTER: VULCAN
+YAML_FILE: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/examples/train_lora/vulcan_qwen2_5vl_lora_sft_CoT_traineval_evalevery10trainsteps_groksettings_ablation_taskid2_epoch1_job886844.yaml
+OUTPUT_DIR: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/saves/qwen2_5vl-7b/lora/sft/CoT_traineval_evalevery10trainsteps_groksettings_ablation_taskid2_ep1/
+RESUME_CKPT: null
+No resume checkpoint (fresh start from epoch 0).
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00] === Node-local CoT dataset staging ===
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00] HOST=rack11-11 SLURM_NODEID=0 SLURM_NNODES=1
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00] NODE_LOCAL_DATA_ROOT=/tmp/cot_stage
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00] STAGE_COPY_JOBS=32 STAGE_STAGGER_SEC=0
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00] Sources:
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00]   SCENE30K_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Scene30K/snapshots/4e9bc1a04479fedfbb6ee791b7cd55fc6a2804f5/train-00000-of-00001.with_question_id.formatted.parquet
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00]   SPATIALSSRL_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--Spatial-SSRL-81k/snapshots/476dff589138ba1f87258d676fb1a7fb1dfa24ff/SFT-coldstart.with_question_id.formatted.json
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00]   THINKER10K_ANN_SRC=/project/aip-wangcs/indrisch/huggingface/hub/datasets--cvis-tmu--3dthinker-10k-mcq/snapshots/bfa0a5a95683fa71c5a8b28b6560e2d5b7b71f0c/3dthinker10k_cot.with_question_id.formatted.jsonl
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00]   SCANNET_H5_DIR(src)=/project/aip-wangcs/shared/ScanNet_h5/scans/
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00]   SPATIALSSRL_H5_DIR(src)=/project/aip-wangcs/shared/Spatial-SSRL_images_h5/
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00]   THINKER10K_H5_DIR(src)=/project/aip-wangcs/shared/3DThinker10K_images_h5/
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00] Free space on /tmp/cot_stage: 7410399170560 bytes (need ~128849018880)
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00] Copying annotations...
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00] Annotations done in 0s
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00] Copying ScanNet H5 tree...
+[stage rack11-11 node=0 2026-09-12T04:47:07-06:00] Copying 700 entries from /project/aip-wangcs/shared/ScanNet_h5/scans/ -> /tmp/cot_stage/media/ScanNet_h5/scans (jobs=32)
+[stage rack11-11 node=0 2026-09-12T04:47:10-06:00] ScanNet done in 3s
+[stage rack11-11 node=0 2026-09-12T04:47:10-06:00] Copying Spatial-SSRL H5 tree...
+[stage rack11-11 node=0 2026-09-12T04:47:10-06:00] Copying 13 entries from /project/aip-wangcs/shared/Spatial-SSRL_images_h5/ -> /tmp/cot_stage/media/Spatial-SSRL_images_h5 (jobs=32)
+[stage rack11-11 node=0 2026-09-12T04:48:06-06:00] Spatial-SSRL done in 56s
+[stage rack11-11 node=0 2026-09-12T04:48:06-06:00] Copying 3DThinker H5 tree...
+[stage rack11-11 node=0 2026-09-12T04:48:06-06:00] Copying 2 entries from /project/aip-wangcs/shared/3DThinker10K_images_h5/ -> /tmp/cot_stage/media/3DThinker10K_images_h5 (jobs=32)
+[stage rack11-11 node=0 2026-09-12T04:48:09-06:00] 3DThinker done in 3s
+Wrote local dataset_info (6 entries) -> /tmp/cot_stage/dataset_dir/dataset_info.json
+  Scene30k: /tmp/cot_stage/annotations/Scene30k.parquet
+  SpatialSSRL_coldstart: /tmp/cot_stage/annotations/SpatialSSRL_coldstart.json
+  3DThinker10k: /tmp/cot_stage/annotations/3dthinker10k_cot.jsonl
+  Scene30k_eval16: /tmp/cot_stage/annotations/Scene30k_eval16.json
+  SpatialSSRL_eval16: /tmp/cot_stage/annotations/SpatialSSRL_eval16.json
+  3DThinker10k_eval16: /tmp/cot_stage/annotations/3DThinker10k_eval16.jsonl
+[stage rack11-11 node=0 2026-09-12T04:48:09-06:00] VERIFY OK under /tmp/cot_stage
+[stage rack11-11 node=0 2026-09-12T04:48:09-06:00] === Staging complete in 62s ===
+[stage rack11-11 node=0 2026-09-12T04:48:09-06:00] LOCAL_DATASET_DIR=/tmp/cot_stage/dataset_dir
+[stage rack11-11 node=0 2026-09-12T04:48:09-06:00] LOCAL_MEDIA_DIR=/tmp/cot_stage/media/ScanNet_h5
+[stage rack11-11 node=0 2026-09-12T04:48:09-06:00] SCANNET_H5_DIR=/tmp/cot_stage/media/ScanNet_h5/scans
+[stage rack11-11 node=0 2026-09-12T04:48:09-06:00] SPATIALSSRL_H5_DIR=/tmp/cot_stage/media/Spatial-SSRL_images_h5
+[stage rack11-11 node=0 2026-09-12T04:48:09-06:00] THINKER10K_H5_DIR=/tmp/cot_stage/media/3DThinker10K_images_h5
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda4       6.9T  244G  6.7T   4% /tmp
+Patched YAML -> /tmp/cot_stage/train.yaml
+  dataset_dir: /tmp/cot_stage/dataset_dir
+  media_dir: /tmp/cot_stage/media/ScanNet_h5
+YAML_FILE (node-local): /tmp/cot_stage/train.yaml
+LOCAL_DATASET_DIR: /tmp/cot_stage/dataset_dir
+LOCAL_MEDIA_DIR: /tmp/cot_stage/media/ScanNet_h5
+SCANNET_H5_DIR (local): /tmp/cot_stage/media/ScanNet_h5/scans
+SPATIALSSRL_H5_DIR (local): /tmp/cot_stage/media/Spatial-SSRL_images_h5
+THINKER10K_H5_DIR (local): /tmp/cot_stage/media/3DThinker10K_images_h5
+Copying venv to local storage...
+HF_DATASETS_CACHE: /tmp/hf_datasets
+/project/aip-wangcs/indrisch/LLaMA-Factory-LFS /project/aip-wangcs/indrisch/LLaMA-Factory-LFS/models/qwen2_5vl_lora_sft_CoT
+[INFO|2026-09-12 04:48:42] llamafactory.launcher:147 >> Initializing 4 distributed tasks at: rack11-11:29500
+W0912 04:48:43.737000 1808122 torch/distributed/run.py:766] 
+W0912 04:48:43.737000 1808122 torch/distributed/run.py:766] *****************************************
+W0912 04:48:43.737000 1808122 torch/distributed/run.py:766] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0912 04:48:43.737000 1808122 torch/distributed/run.py:766] *****************************************
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[INFO] Running in WANDB offline mode
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[INFO] Running in WANDB offline mode
+[INFO] Running in WANDB offline mode
+[DEBUG template.py] Module template.py loaded completely. Total templates registered: 125
+[WARNING|2026-09-12 04:48:51] llamafactory.extras.misc:163 >> Version checking has been disabled, may lead to unexpected behaviors.
+[INFO] Running in WANDB offline mode
+[INFO|2026-09-12 04:48:54] llamafactory.hparams.model_args:147 >> Loaded 4 special tokens with descriptions from: /project/aip-wangcs/indrisch//LLaMA-Factory-LFS/data/control_tokens.yaml
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+rack11-11:1808124:1808124 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to eth0
+rack11-11:1808124:1808124 [0] NCCL INFO Bootstrap: Using eth0:172.26.93.171<0>
+rack11-11:1808124:1808124 [0] NCCL INFO cudaDriverVersion 13020
+rack11-11:1808124:1808124 [0] NCCL INFO NCCL version 2.26.2+cuda12.6
+rack11-11:1808124:1808124 [0] NCCL INFO Comm config Blocking set to 1
+rack11-11:1808124:1808744 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal net plugin.
+rack11-11:1808124:1808744 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to eth0
+rack11-11:1808124:1808744 [0] NCCL INFO NCCL_IB_HCA set to bnxt_re0
+rack11-11:1808124:1808744 [0] NCCL INFO NET/IB : Using [0]bnxt_re0:1/RoCE [RO]; OOB eth0:172.26.93.171<0>
+rack11-11:1808124:1808744 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+rack11-11:1808124:1808744 [0] NCCL INFO Using network IB
+rack11-11:1808124:1808744 [0] NCCL INFO DMA-BUF is available on GPU device 0
+rack11-11:1808124:1808744 [0] NCCL INFO ncclCommInitRankConfig comm 0x3faf8a10 rank 0 nranks 4 cudaDev 0 nvmlDev 0 busId 4a000 commId 0x205036c7ea621e2c - Init START
+rack11-11:1808125:1808125 [1] NCCL INFO cudaDriverVersion 13020
+rack11-11:1808125:1808125 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to eth0
+rack11-11:1808125:1808125 [1] NCCL INFO Bootstrap: Using eth0:172.26.93.171<0>
+rack11-11:1808125:1808125 [1] NCCL INFO NCCL version 2.26.2+cuda12.6
+rack11-11:1808125:1808125 [1] NCCL INFO Comm config Blocking set to 1
+rack11-11:1808127:1808127 [3] NCCL INFO cudaDriverVersion 13020
+rack11-11:1808127:1808127 [3] NCCL INFO NCCL_SOCKET_IFNAME set by environment to eth0
+rack11-11:1808127:1808127 [3] NCCL INFO Bootstrap: Using eth0:172.26.93.171<0>
+rack11-11:1808127:1808127 [3] NCCL INFO NCCL version 2.26.2+cuda12.6
+rack11-11:1808127:1808127 [3] NCCL INFO Comm config Blocking set to 1
+rack11-11:1808126:1808126 [2] NCCL INFO cudaDriverVersion 13020
+rack11-11:1808126:1808126 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to eth0
+rack11-11:1808126:1808126 [2] NCCL INFO Bootstrap: Using eth0:172.26.93.171<0>
+rack11-11:1808126:1808126 [2] NCCL INFO NCCL version 2.26.2+cuda12.6
+rack11-11:1808126:1808126 [2] NCCL INFO Comm config Blocking set to 1
+rack11-11:1808125:1808759 [1] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal net plugin.
+rack11-11:1808125:1808759 [1] NCCL INFO NCCL_SOCKET_IFNAME set by environment to eth0
+rack11-11:1808125:1808759 [1] NCCL INFO NCCL_IB_HCA set to bnxt_re0
+rack11-11:1808127:1808760 [3] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal net plugin.
+rack11-11:1808125:1808759 [1] NCCL INFO NET/IB : Using [0]bnxt_re0:1/RoCE [RO]; OOB eth0:172.26.93.171<0>
+rack11-11:1808127:1808760 [3] NCCL INFO NCCL_SOCKET_IFNAME set by environment to eth0
+rack11-11:1808127:1808760 [3] NCCL INFO NCCL_IB_HCA set to bnxt_re0
+rack11-11:1808125:1808759 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+rack11-11:1808125:1808759 [1] NCCL INFO Using network IB
+rack11-11:1808125:1808759 [1] NCCL INFO DMA-BUF is available on GPU device 1
+rack11-11:1808125:1808759 [1] NCCL INFO ncclCommInitRankConfig comm 0x20a799b0 rank 1 nranks 4 cudaDev 1 nvmlDev 1 busId 61000 commId 0x205036c7ea621e2c - Init START
+rack11-11:1808127:1808760 [3] NCCL INFO NET/IB : Using [0]bnxt_re0:1/RoCE [RO]; OOB eth0:172.26.93.171<0>
+rack11-11:1808127:1808760 [3] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+rack11-11:1808127:1808760 [3] NCCL INFO Using network IB
+rack11-11:1808127:1808760 [3] NCCL INFO DMA-BUF is available on GPU device 3
+rack11-11:1808127:1808760 [3] NCCL INFO ncclCommInitRankConfig comm 0x359767a0 rank 3 nranks 4 cudaDev 3 nvmlDev 3 busId e1000 commId 0x205036c7ea621e2c - Init START
+rack11-11:1808124:1808744 [0] NCCL INFO RAS client listening socket at ::1<28028>
+rack11-11:1808126:1808762 [2] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal net plugin.
+rack11-11:1808126:1808762 [2] NCCL INFO NCCL_SOCKET_IFNAME set by environment to eth0
+rack11-11:1808126:1808762 [2] NCCL INFO NCCL_IB_HCA set to bnxt_re0
+rack11-11:1808126:1808762 [2] NCCL INFO NET/IB : Using [0]bnxt_re0:1/RoCE [RO]; OOB eth0:172.26.93.171<0>
+rack11-11:1808126:1808762 [2] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+rack11-11:1808126:1808762 [2] NCCL INFO Using network IB
+rack11-11:1808126:1808762 [2] NCCL INFO DMA-BUF is available on GPU device 2
+rack11-11:1808126:1808762 [2] NCCL INFO ncclCommInitRankConfig comm 0x4554e430 rank 2 nranks 4 cudaDev 2 nvmlDev 2 busId ca000 commId 0x205036c7ea621e2c - Init START
+rack11-11:1808125:1808759 [1] NCCL INFO RAS client listening socket at ::1<28028>
+rack11-11:1808126:1808762 [2] NCCL INFO RAS client listening socket at ::1<28028>
+rack11-11:1808127:1808760 [3] NCCL INFO RAS client listening socket at ::1<28028>
+rack11-11:1808126:1808762 [2] NCCL INFO Bootstrap timings total 0.000713 (create 0.000022, send 0.000077, recv 0.000260, ring 0.000073, delay 0.000000)
+rack11-11:1808125:1808759 [1] NCCL INFO Bootstrap timings total 0.107152 (create 0.000026, send 0.000090, recv 0.106555, ring 0.000143, delay 0.000000)
+rack11-11:1808127:1808760 [3] NCCL INFO Bootstrap timings total 0.101424 (create 0.000024, send 0.000082, recv 0.000139, ring 0.000052, delay 0.000000)
+rack11-11:1808124:1808744 [0] NCCL INFO Bootstrap timings total 0.253106 (create 0.000026, send 0.000080, recv 0.146136, ring 0.100830, delay 0.000000)
+rack11-11:1808126:1808762 [2] NCCL INFO Setting affinity for GPU 2 to aaaaaaaa,aaaaaaaa
+rack11-11:1808126:1808762 [2] NCCL INFO NVLS multicast support is not available on dev 2
+rack11-11:1808124:1808744 [0] NCCL INFO Setting affinity for GPU 0 to 55555555,55555555
+rack11-11:1808124:1808744 [0] NCCL INFO NVLS multicast support is not available on dev 0
+rack11-11:1808125:1808759 [1] NCCL INFO Setting affinity for GPU 1 to 55555555,55555555
+rack11-11:1808125:1808759 [1] NCCL INFO NVLS multicast support is not available on dev 1
+rack11-11:1808127:1808760 [3] NCCL INFO Setting affinity for GPU 3 to aaaaaaaa,aaaaaaaa
+rack11-11:1808127:1808760 [3] NCCL INFO NVLS multicast support is not available on dev 3
+rack11-11:1808126:1808762 [2] NCCL INFO comm 0x4554e430 rank 2 nRanks 4 nNodes 1 localRanks 4 localRank 2 MNNVL 0
+rack11-11:1808126:1808762 [2] NCCL INFO Trees [0] 3/-1/-1->2->1 [1] 3/-1/-1->2->1
+rack11-11:1808126:1808762 [2] NCCL INFO P2P Chunksize set to 131072
+rack11-11:1808125:1808759 [1] NCCL INFO comm 0x20a799b0 rank 1 nRanks 4 nNodes 1 localRanks 4 localRank 1 MNNVL 0
+rack11-11:1808127:1808760 [3] NCCL INFO comm 0x359767a0 rank 3 nRanks 4 nNodes 1 localRanks 4 localRank 3 MNNVL 0
+rack11-11:1808125:1808759 [1] NCCL INFO Trees [0] 2/-1/-1->1->0 [1] 2/-1/-1->1->0
+rack11-11:1808125:1808759 [1] NCCL INFO P2P Chunksize set to 131072
+rack11-11:1808124:1808744 [0] NCCL INFO comm 0x3faf8a10 rank 0 nRanks 4 nNodes 1 localRanks 4 localRank 0 MNNVL 0
+rack11-11:1808124:1808744 [0] NCCL INFO Channel 00/02 : 0 1 2 3
+rack11-11:1808124:1808744 [0] NCCL INFO Channel 01/02 : 0 1 2 3
+rack11-11:1808124:1808744 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1
+rack11-11:1808124:1808744 [0] NCCL INFO P2P Chunksize set to 131072
+rack11-11:1808124:1808744 [0] NCCL INFO Check P2P Type intraNodeP2pSupport 0 directMode 0
+rack11-11:1808127:1808760 [3] NCCL INFO Trees [0] -1/-1/-1->3->2 [1] -1/-1/-1->3->2
+rack11-11:1808127:1808760 [3] NCCL INFO P2P Chunksize set to 131072
+rack11-11:1808126:1808770 [2] NCCL INFO [Proxy Service] Device 2 CPU core 21
+rack11-11:1808126:1808772 [2] NCCL INFO [Proxy Service UDS] Device 2 CPU core 23
+rack11-11:1808125:1808771 [1] NCCL INFO [Proxy Service] Device 1 CPU core 44
+rack11-11:1808125:1808773 [1] NCCL INFO [Proxy Service UDS] Device 1 CPU core 46
+rack11-11:1808127:1808774 [3] NCCL INFO [Proxy Service] Device 3 CPU core 61
+rack11-11:1808124:1808775 [0] NCCL INFO [Proxy Service] Device 0 CPU core 54
+rack11-11:1808127:1808776 [3] NCCL INFO [Proxy Service UDS] Device 3 CPU core 5
+rack11-11:1808124:1808777 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 56
+rack11-11:1808126:1808762 [2] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+rack11-11:1808126:1808762 [2] NCCL INFO 2 coll channels, 2 collnet channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+rack11-11:1808125:1808759 [1] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+rack11-11:1808125:1808759 [1] NCCL INFO 2 coll channels, 2 collnet channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+rack11-11:1808124:1808744 [0] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+rack11-11:1808124:1808744 [0] NCCL INFO 2 coll channels, 2 collnet channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+rack11-11:1808127:1808760 [3] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 512 | 512
+rack11-11:1808127:1808760 [3] NCCL INFO 2 coll channels, 2 collnet channels, 0 nvls channels, 2 p2p channels, 2 p2p channels per peer
+rack11-11:1808124:1808744 [0] NCCL INFO CC Off, workFifoBytes 1048576
+rack11-11:1808125:1808759 [1] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+rack11-11:1808127:1808760 [3] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+rack11-11:1808126:1808762 [2] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+rack11-11:1808127:1808760 [3] NCCL INFO ncclCommInitRankConfig comm 0x359767a0 rank 3 nranks 4 cudaDev 3 nvmlDev 3 busId e1000 commId 0x205036c7ea621e2c - Init COMPLETE
+rack11-11:1808125:1808759 [1] NCCL INFO ncclCommInitRankConfig comm 0x20a799b0 rank 1 nranks 4 cudaDev 1 nvmlDev 1 busId 61000 commId 0x205036c7ea621e2c - Init COMPLETE
+rack11-11:1808126:1808762 [2] NCCL INFO ncclCommInitRankConfig comm 0x4554e430 rank 2 nranks 4 cudaDev 2 nvmlDev 2 busId ca000 commId 0x205036c7ea621e2c - Init COMPLETE
+rack11-11:1808125:1808759 [1] NCCL INFO Init timings - ncclCommInitRankConfig: rank 1 nranks 4 total 0.27 (kernels 0.12, alloc 0.01, bootstrap 0.11, allgathers 0.00, topo 0.01, graphs 0.00, connections 0.01, rest 0.00)
+rack11-11:1808127:1808760 [3] NCCL INFO Init timings - ncclCommInitRankConfig: rank 3 nranks 4 total 0.26 (kernels 0.12, alloc 0.01, bootstrap 0.10, allgathers 0.00, topo 0.01, graphs 0.00, connections 0.02, rest 0.00)
+rack11-11:1808126:1808762 [2] NCCL INFO Init timings - ncclCommInitRankConfig: rank 2 nranks 4 total 0.16 (kernels 0.11, alloc 0.01, bootstrap 0.00, allgathers 0.01, topo 0.01, graphs 0.00, connections 0.01, rest 0.01)
+rack11-11:1808124:1808744 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+rack11-11:1808124:1808744 [0] NCCL INFO ncclCommInitRankConfig comm 0x3faf8a10 rank 0 nranks 4 cudaDev 0 nvmlDev 0 busId 4a000 commId 0x205036c7ea621e2c - Init COMPLETE
+rack11-11:1808124:1808744 [0] NCCL INFO Init timings - ncclCommInitRankConfig: rank 0 nranks 4 total 0.47 (kernels 0.16, alloc 0.02, bootstrap 0.25, allgathers 0.00, topo 0.01, graphs 0.01, connections 0.01, rest 0.00)
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+[rank2]:     run_exp()
+[rank2]:     ~~~~~~~^^
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+[rank2]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank2]:     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 112, in _training_function
+[rank2]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank2]:                                                                              ~~~~~~~~~~~~~~^^^^^^
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 642, in get_train_args
+[rank2]:     model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+[rank2]:                                                                              ~~~~~~~~~~~~~~~~~^^^^^^
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 320, in _parse_train_args
+[rank2]:     return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+[rank2]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 162, in _parse_args
+[rank2]:     return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+[rank2]:            ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/hf_argparser.py", line 383, in parse_dict
+[rank2]:     raise ValueError(f"Some keys are not used by the HfArgumentParser: {sorted(unused_keys)}")
+[rank2]: ValueError: Some keys are not used by the HfArgumentParser: ['image_max_pixels 131072']
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+[rank3]:     run_exp()
+[rank3]:     ~~~~~~~^^
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+[rank3]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank3]:     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 112, in _training_function
+[rank3]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank3]:                                                                              ~~~~~~~~~~~~~~^^^^^^
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 642, in get_train_args
+[rank3]:     model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+[rank3]:                                                                              ~~~~~~~~~~~~~~~~~^^^^^^
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 320, in _parse_train_args
+[rank3]:     return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+[rank3]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 162, in _parse_args
+[rank3]:     return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+[rank3]:            ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/hf_argparser.py", line 383, in parse_dict
+[rank3]:     raise ValueError(f"Some keys are not used by the HfArgumentParser: {sorted(unused_keys)}")
+[rank3]: ValueError: Some keys are not used by the HfArgumentParser: ['image_max_pixels 131072']
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+[rank1]:     run_exp()
+[rank1]:     ~~~~~~~^^
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+[rank1]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank1]:     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 112, in _training_function
+[rank1]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank1]:                                                                              ~~~~~~~~~~~~~~^^^^^^
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 642, in get_train_args
+[rank1]:     model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+[rank1]:                                                                              ~~~~~~~~~~~~~~~~~^^^^^^
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 320, in _parse_train_args
+[rank1]:     return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+[rank1]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 162, in _parse_args
+[rank1]:     return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+[rank1]:            ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/hf_argparser.py", line 383, in parse_dict
+[rank1]:     raise ValueError(f"Some keys are not used by the HfArgumentParser: {sorted(unused_keys)}")
+[rank1]: ValueError: Some keys are not used by the HfArgumentParser: ['image_max_pixels 131072']
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 185, in <module>
+[rank0]:     run_exp()
+[rank0]:     ~~~~~~~^^
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 219, in run_exp
+[rank0]:     _training_function(config={"args": args, "callbacks": callbacks})
+[rank0]:     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/train/tuner.py", line 112, in _training_function
+[rank0]:     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(args)
+[rank0]:                                                                              ~~~~~~~~~~~~~~^^^^^^
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 642, in get_train_args
+[rank0]:     model_args, data_args, training_args, finetuning_args, generating_args = _parse_train_args(args)
+[rank0]:                                                                              ~~~~~~~~~~~~~~~~~^^^^^^
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 320, in _parse_train_args
+[rank0]:     return _parse_args(parser, args, allow_extra_keys=allow_extra_keys)
+[rank0]:   File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/hparams/parser.py", line 162, in _parse_args
+[rank0]:     return parser.parse_dict(args, allow_extra_keys=allow_extra_keys)
+[rank0]:            ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/transformers/hf_argparser.py", line 383, in parse_dict
+[rank0]:     raise ValueError(f"Some keys are not used by the HfArgumentParser: {sorted(unused_keys)}")
+[rank0]: ValueError: Some keys are not used by the HfArgumentParser: ['image_max_pixels 131072']
+[rank0]:[W912 04:48:57.330583213 ProcessGroupNCCL.cpp:1479] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+rack11-11:1808126:1808829 [2] NCCL INFO comm 0x4554e430 rank 2 nranks 4 cudaDev 2 busId ca000 - Abort COMPLETE
+rack11-11:1808124:1808831 [0] NCCL INFO comm 0x3faf8a10 rank 0 nranks 4 cudaDev 0 busId 4a000 - Abort COMPLETE
+rack11-11:1808127:1808825 [3] NCCL INFO comm 0x359767a0 rank 3 nranks 4 cudaDev 3 busId e1000 - Abort COMPLETE
+rack11-11:1808125:1808827 [1] NCCL INFO comm 0x20a799b0 rank 1 nranks 4 cudaDev 1 busId 61000 - Abort COMPLETE
+W0912 04:48:59.070000 1808122 torch/distributed/elastic/multiprocessing/api.py:900] Sending process 1808124 closing signal SIGTERM
+W0912 04:48:59.072000 1808122 torch/distributed/elastic/multiprocessing/api.py:900] Sending process 1808125 closing signal SIGTERM
+W0912 04:48:59.075000 1808122 torch/distributed/elastic/multiprocessing/api.py:900] Sending process 1808126 closing signal SIGTERM
+E0912 04:48:59.273000 1808122 torch/distributed/elastic/multiprocessing/api.py:874] failed (exitcode: 1) local_rank: 3 (pid: 1808127) of binary: /scratch/indrisch/venv_llamafactory_py313/bin/python
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_py313/bin/torchrun", line 6, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/run.py", line 892, in main
+    run(args)
+    ~~~^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/run.py", line 883, in run
+    elastic_launch(
+    ~~~~~~~~~~~~~~~
+        config=config,
+        ~~~~~~~~~~~~~~
+        entrypoint=cmd,
+        ~~~~~~~~~~~~~~~
+    )(*cmd_args)
+    ~^^^^^^^^^^^
+  File "/scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/launcher/api.py", line 139, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/scratch/indrisch/venv_llamafactory_py313/lib/python3.13/site-packages/torch/distributed/launcher/api.py", line 270, in launch_agent
+    raise ChildFailedError(
+    ...<2 lines>...
+    )
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-09-12_04:48:59
+  host      : rack11-11
+  rank      : 3 (local_rank: 3)
+  exitcode  : 1 (pid: 1808127)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/scratch/indrisch/venv_llamafactory_py313/bin/llamafactory-cli", line 6, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/cli.py", line 29, in main
+    launcher.launch()
+    ~~~~~~~~~~~~~~~^^
+  File "/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py", line 115, in launch
+    process = subprocess.run(
+        (
+    ...<14 lines>...
+        check=True,
+    )
+  File "/cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v4/Compiler/gcccore/python/3.13.2/lib/python3.13/subprocess.py", line 579, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['torchrun', '--nnodes', '1', '--node_rank', '0', '--nproc_per_node', '4', '--master_addr', 'rack11-11', '--master_port', '29500', '/project/aip-wangcs/indrisch/LLaMA-Factory-LFS/src/llamafactory/launcher.py', '/tmp/cot_stage/train.yaml']' returned non-zero exit status 1.
+srun: error: rack11-11: task 0: Exited with exit code 1
+srun: Terminating StepId=886844.0

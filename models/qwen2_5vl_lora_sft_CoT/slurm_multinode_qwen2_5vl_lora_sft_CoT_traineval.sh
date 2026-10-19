@@ -57,6 +57,20 @@ export STEPS_PER_EPOCH="${STEPS_PER_EPOCH:-620}"
 
 EXPERIMENT_NAME="multinode_qwen2_5vl_lora_sft_CoT_traineval"
 
+# Vulcan and Tamia set SLURM_TMPDIR=/tmp: the node-wide local disk, not a
+# per-job directory. Nest this job's stage and caches so two jobs on the
+# same node do not share /tmp/cot_stage. Wrappers that already namespaced
+# the path (anything other than bare /tmp) are left alone.
+if [[ "${RUNNING_MODE}" != "SHELL" && ( "${CLUSTER}" == "VULCAN" || "${CLUSTER}" == "TAMIA" ) ]]; then
+	case "${SLURM_TMPDIR:-/tmp}" in
+		/tmp|/tmp/)
+			export SLURM_TMPDIR="/tmp/${EXPERIMENT_NAME}_${SLURM_JOB_ID:-$$}"
+			mkdir -p "${SLURM_TMPDIR}"
+			;;
+	esac
+fi
+echo "SLURM_TMPDIR: ${SLURM_TMPDIR:-unset} (host=$(hostname))"
+
 # --- H5 roots (override per-cluster if needed) ---
 
 if [[ "$CLUSTER" == "RORQUAL" ]]; then
@@ -164,6 +178,32 @@ if [[ "${STAGE_DATASETS_LOCAL}" != "1" ]]; then
 fi
 
 # ----- EXPERIMENT -----
+
+# LLaMA-Factory defaults NODE_RANK to 0. Each srun task must set it from
+# SLURM_NODEID. If every node launches torchrun --node_rank 0, both agents
+# write torchelastic/role_info/0 and wait until timeout for role_info/1
+# (job 1217367, DistStoreError after 900s).
+export_multinode_torchrun_env() {
+	export NNODES="${SLURM_NNODES:-1}"
+	if [[ "${NNODES}" -ge 2 && -z "${SLURM_NODEID:-}" ]]; then
+		echo "ERROR: SLURM_NNODES=${NNODES} but SLURM_NODEID is unset on $(hostname)."
+		echo "Refusing to launch: NODE_RANK would default to 0 on every node."
+		exit 1
+	fi
+	export NODE_RANK="${SLURM_NODEID:-0}"
+	export MASTER_ADDR="${MASTER_ADDR:-${HEAD_NODE:-$(hostname)}}"
+	export MASTER_PORT="${MASTER_PORT:-29500}"
+	if [[ "${NNODES}" -ge 2 ]]; then
+		export NCCL_ASYNC_ERROR_HANDLING="${NCCL_ASYNC_ERROR_HANDLING:-1}"
+		export TORCH_NCCL_ASYNC_ERROR_HANDLING="${TORCH_NCCL_ASYNC_ERROR_HANDLING:-1}"
+		export NCCL_SOCKET_IFNAME="${NCCL_SOCKET_IFNAME:-^docker0,lo}"
+	fi
+	echo "NNODES: ${NNODES}"
+	echo "NODE_RANK: ${NODE_RANK} (SLURM_NODEID=${SLURM_NODEID:-unset} HOST=$(hostname))"
+	echo "MASTER_ADDR: ${MASTER_ADDR}"
+	echo "MASTER_PORT: ${MASTER_PORT}"
+	echo "NCCL_SOCKET_IFNAME: ${NCCL_SOCKET_IFNAME:-unset}"
+}
 
 # Note: binding host nvcc via -B $(dirname $(which nvcc)) does not work
 # reliably on these clusters; use the CUDA toolkit inside the SIF instead.
@@ -371,6 +411,8 @@ if [[ "$CLUSTER" == "NIBI" ]]; then
 		python3 -c "import torch; print('CUDA available:', torch.cuda.is_available()); print('Device count:', torch.cuda.device_count())"
 		echo "=== END VENV DIAGNOSTICS ==="
 
+		export_multinode_torchrun_env
+
 		pushd /scratch/indrisch/LLaMA-Factory
 		llamafactory-cli train ${YAML_FILE}
 
@@ -417,6 +459,8 @@ elif [[ "$CLUSTER" == "RORQUAL" ]]; then
 		export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
 		export DISABLE_VERSION_CHECK=1
 		export SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR
+
+		export_multinode_torchrun_env
 
 		pushd ${PROJECT_DIR}
 		llamafactory-cli train ${YAML_FILE}
@@ -471,6 +515,83 @@ elif [[ "$CLUSTER" == "TAMIA" ]]; then
 		export SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR
 		export PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}"
 		echo "HF_DATASETS_CACHE: ${HF_DATASETS_CACHE}"
+
+		export_multinode_torchrun_env
+
+		pushd ${PROJECT_DIR}
+		llamafactory-cli train ${YAML_FILE}
+
+
+	elif [[ "$RUNNING_MODE" == "SHELL" ]]; then
+
+		module load StdEnv/2023 gcc/12.3 openmpi/4.1.5
+		module load python/3.12 cuda/12.6 opencv/4.12.0
+		module load arrow
+		module load apptainer
+
+		echo "=== HOST DIAGNOSTICS ==="
+		echo "HOSTNAME: $(hostname)"
+		echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
+		nvidia-smi
+		echo "=== END HOST DIAGNOSTICS ==="
+
+		#apptainer exec --overlay /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/overlay_0.img --env TORCH_DEVICE_BACKEND_AUTOLOAD=0 --env PYTHONNOUSERSITE=1 /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory_latest-910b-ubuntu.sif bash -> the original; this container is incomplete 
+    #apptainer exec --overlay /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/overlay.img /scratch/i/indrisch/LLaMA-Factory-LFS/apptainer/llamafactory-latest.sif bash -> better, but not generalized
+    run_llamafactory_apptainer
+
+	else
+		echo "Invalid running mode: $RUNNING_MODE"
+		exit 1
+	fi
+
+elif [[ "$CLUSTER" == "VULCAN" ]]; then
+
+	if [[ "$RUNNING_MODE" == "APPTAINER" ]]; then
+
+		module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+
+		echo "=== HOST DIAGNOSTICS ==="
+		echo "HOSTNAME: $(hostname)"
+		echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
+		nvidia-smi
+		echo "=== END HOST DIAGNOSTICS ==="
+
+		run_llamafactory_apptainer
+
+	elif [[ "$RUNNING_MODE" == "VENV" ]]; then
+
+		module load StdEnv gcc openmpi python/3.13 cuda/12.6 opencv arrow apptainer hwloc/2.9.1
+
+    echo "activating venv ${VENV_LLAMAFACTORY}"
+    source "${VENV_LLAMAFACTORY}/bin/activate"
+		#echo "Copying venv to local storage..."
+		#cp -a "${VENV_LLAMAFACTORY}" ${SLURM_TMPDIR}/venv_llamafactory_py313
+		#source ${SLURM_TMPDIR}/venv_llamafactory_py313/bin/activate
+
+		export PYTHONUNBUFFERED=1
+		export NCCL_DEBUG=INFO
+		export FORCE_TORCHRUN=1
+		export HF_HUB_OFFLINE=1
+		export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
+		export HF_DATASETS_OFFLINE="${HF_DATASETS_OFFLINE:-1}"
+		# YAML cache_dir stays on HF_HUB_CACHE for Qwen snapshots. Arrow cache
+		# must not: /project is often 100% full ("Not enough disk space").
+		export HF_DATASETS_CACHE="${HF_DATASETS_CACHE:-${SLURM_TMPDIR}/hf_datasets}"
+		mkdir -p "${HF_DATASETS_CACHE}"
+		export HF_DATASETS_DISABLE_FILE_LOCKING=1
+		export DATASETS_DISABLE_FILE_LOCKING=1
+		export WANDB_MODE=offline
+		export WANDB_DIR="${WANDB_DIR}"
+		export WANDB_CACHE_DIR="${SLURM_TMPDIR}/.cache/wandb"
+		export TRITON_CACHE_DIR="${SLURM_TMPDIR}/.triton_cache"
+		mkdir -p "${TRITON_CACHE_DIR}" "${WANDB_CACHE_DIR}"
+		export DISABLE_VERSION_CHECK=1
+		export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+		export SCANNET_H5_DIR SPATIALSSRL_H5_DIR THINKER10K_H5_DIR
+		export PYTHONPATH="${PROJECT_DIR}/src:${PYTHONPATH:-}"
+		echo "HF_DATASETS_CACHE: ${HF_DATASETS_CACHE}"
+
+		export_multinode_torchrun_env
 
 		pushd ${PROJECT_DIR}
 		llamafactory-cli train ${YAML_FILE}

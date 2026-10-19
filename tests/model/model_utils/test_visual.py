@@ -24,7 +24,12 @@ from llamafactory.extras.packages import is_transformers_version_greater_than
 from llamafactory.hparams import FinetuningArguments, ModelArguments
 from llamafactory.model.adapter import _setup_freeze_tuning, _setup_full_tuning, init_adapter
 from llamafactory.model.model_utils.misc import find_all_linear_modules
-from llamafactory.model.model_utils.visual import COMPOSITE_MODELS, autocast_projector_dtype, patch_target_modules
+from llamafactory.model.model_utils.visual import (
+    COMPOSITE_MODELS,
+    apply_frozen_vision_no_grad,
+    autocast_projector_dtype,
+    patch_target_modules,
+)
 
 
 class _MossVLFixture(torch.nn.Module):
@@ -227,3 +232,26 @@ def test_visual_model_save_load():
         assert "model.layers.0.self_attn.q_proj.weight" in loaded_model_weight
 
     assert "model.layers.0.self_attn.q_proj.weight" in saved_model_weight
+
+
+def test_apply_frozen_vision_no_grad_skips_backward():
+    class _Vision(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.linear = torch.nn.Linear(4, 4)
+
+        def forward(self, x):
+            return self.linear(x)
+
+    class _Model(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.visual = _Vision()
+
+    model = _Model()
+    for param in model.visual.parameters():
+        param.requires_grad = False
+    apply_frozen_vision_no_grad(model)
+    x = torch.randn(2, 4, requires_grad=True)
+    y = model.visual(x)
+    assert y.requires_grad is False
